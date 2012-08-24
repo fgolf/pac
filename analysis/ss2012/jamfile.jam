@@ -1,0 +1,145 @@
+# jamfile for the ss 2012 analysis 
+# -------------------------------------------------------------------- #
+
+lib ss2012_tools_static
+  : # sources
+    ./source/ScaleFactors.cc
+    ./source/SameSignTree.cc
+    ./source/SkimChainSSB.cc
+    ./source/SSB2012.cc
+    ./source/SignalRegion.cc
+    /ROOT
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+    <link>static
+  : # default-build
+  : # usage-requirements
+    <include>./include
+  ;
+
+lib ss2012_tools_interactive
+  : # sources
+    ./source/SignalRegion.cc
+    [ rootcint Dict
+     : 
+       <define>__RTINT__
+       <include>./include
+       <include>./source
+       <header>SignalRegion.h
+       <linkdef>LinkDef.h
+    ]
+    # requirements
+    /ROOT
+    /AnalysisTools//AnalysisToolsInteractive/<link>shared
+    /SimpleTable//SimpleTableInteractive/<link>shared
+  : # requirements
+    <include>./include
+    <include>./source
+    <link>shared
+  : # default-build
+  : # usage-requirements
+    <include>./include
+  ;
+
+exe ss2012_analysis
+  : # sources
+    ./source/ss2012_analysis.cc
+    ./source/AnalysisLooper.cc
+    ss2012_tools_static
+    # dependent packages
+    /ROOT
+    /MiniFWLite/<link>shared
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /RootTools//RootToolsStatic/<link>static
+    /FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTableStatic/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_analysis
+  : # sources
+    ./source/ss2012_analysis.cc
+    ./source/AnalysisLooper.cc
+    ss2012_tools_static
+    # dependent packages
+    /ROOT
+    /MiniFWLite/<link>shared
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /RootTools//RootToolsStatic/<link>static
+    /FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTableStatic/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_plots
+  : # sources
+    ./source/ss2012_plots.cc
+    ./source/PlotLooper.cc
+    ss2012_tools_static
+    # dependent packages
+    /ROOT
+    /MiniFWLite/<link>shared
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /RootTools//RootToolsStatic/<link>static
+    /boost//program_options/<link>static
+  : # requirements
+		<define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_merge_babies
+  : # sources
+    ./source/ss2012_merge_babies.cc
+    ss2012_tools_static
+    # dependent packages
+    /ROOT
+    /MiniFWLite/<link>shared
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /RootTools//RootToolsStatic/<link>static
+    /boost//program_options/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_plots
+  : # sources
+    ./source/ss2012_plots.cc
+    ./source/PlotLooper.cc
+    ./source/SSB.cc
+    # dependent packages
+    /ROOT
+    /MiniFWLite/<link>shared
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /RootTools//RootToolsStatic/<link>static
+    /boost//program_options/<link>static
+  : # requirements
+		<define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+# install libs/exes
+default-install ss2012_merge_babies ;
+default-install ss2012_analysis ;
+default-install ss2012_plots ;
+default-install ss2012_tools_interactive ;

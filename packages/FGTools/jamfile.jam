@@ -1,0 +1,39 @@
+# libs for FGTools 
+# -------------------------------------------------------------------- #
+
+lib fgtools
+  : # sources
+   	#[ glob $(FGTOOLS)/source/*.cc ]
+		./source/BabyDorkIdentifier.cc
+		./source/DileptonHypType.cc
+		./source/EfficiencyModelTools.cc
+		./source/FakeRateType.cc
+		./source/GenParticleStruct.cc
+		#./source/ScaleFactors.cc
+		./source/browseStacks.cc
+		./source/eff.cc
+		./source/eff2.cc
+		./source/fliprate_egun.cc
+		./source/getMyHistosNames.cc
+		./source/goodrun.cc
+		./source/histio.cc
+		./source/histtools.cc
+		./source/makeChain.cc
+		./source/makeProjectionPlots.cc
+		./source/printFRtable.cc
+		./source/tdrStyle.cc
+		./source/tools.cc
+		./source/vtxreweight.cc
+    # dependent packages
+    /AnalysisTools/<link>static
+    /CMS2/<link>static
+    /CMS2_CORE/<link>static
+    /ROOT
+  : # requirements
+    <link>static
+    <include>$(FGTOOLS)/include
+  : # default-build
+  : # usage-requirements
+    <include>$(FGTOOLS)/include
+  ;
+

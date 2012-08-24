@@ -1,0 +1,23 @@
+# libs for CMS2 NtupleMacros/CORE
+# -------------------------------------------------------------------- #
+
+lib cms2_core
+  : # sources
+   [ glob $(CMS2_CORE)/CORE/*.cc ]
+   [ glob $(CMS2_CORE)/CORE/jetsmear/*.cc ]
+    # dependent packages
+    /CMS2
+    /ROOT
+  : # requirements
+    <include>$(CMS2_CORE)
+    <include>$(CMS2_CORE)/CORE
+    <include>$(CMS2_CORE)/CORE/jetsmear
+  : # default-build
+    <link>static
+    <link>shared
+  : # usage-requirements
+    <include>$(CMS2_CORE)
+    <include>$(CMS2_CORE)/CORE
+    <include>$(CMS2_CORE)/CORE/jetsmear
+  ;
+

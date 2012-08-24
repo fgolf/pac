@@ -1,0 +1,77 @@
+# jamroot for RWK1 project
+
+# imports 
+import ./tools/default-install ;
+import ./tools/rootcint ;
+import type ;
+import os ;
+
+# register .C files for ROOT macros
+type.register-suffixes C : CPP ; 
+
+# change the suffix from dylib to so on MACOSX
+type.change-generated-target-suffix SHARED_LIB : <target-os>darwin : so ;
+
+# path to project
+path-constant PAC : ./ ;
+
+# build directory
+path-constant build-dir   : ./bin/temp ;
+
+# install exe directory
+path-constant install-dir : ./bin ;
+
+# install lib directory
+path-constant install-lib : ./lib ;
+
+# define the project
+project pac
+  : build-dir
+    $(build-dir)
+  : default-build release
+  ;
+
+set-install-dir $(install-dir) ;
+
+# External Sources and programs
+# ----------------------------------------------------------------------#
+
+# BOOST
+local boost_current = [ os.environ BOOST_CURRENT ] ;
+use-project /boost : $(boost_current) ;
+
+# ROOT
+local rootsys = [ os.environ ROOTSYS ] ;
+path-constant ROOT_PATH : $(rootsys) ;
+use-project /ROOT       : ./externals/build/root ;
+
+# MiniFWLite
+path-constant MINIFWLITE_PATH : ./externals/source/MiniFWLite ;
+use-project /MiniFWLite       : ./externals/build/MiniFWLite ;
+
+# SimpleTable
+path-constant SIMPLETABLE_PATH : ./externals/source/SimpleTable ;
+use-project /SimpleTable       : ./externals/build/SimpleTable ;
+
+# CMS2_CORE
+local cms2_core_tag = HEAD ;
+path-constant CMS2_CORE : ./externals/source/cms2_core/$(cms2_core_tag) ;
+use-project /CMS2_CORE  : ./externals/build/cms2_core ;
+
+# reusable packages 
+# ----------------------------------------------------------------------#
+
+# ROOT tools
+use-project /RootTools : ./packages/RootTools ;
+
+# Frank's tools
+path-constant FGTOOLS : ./packages/FGTools ;
+use-project /FGTools  : ./packages/FGTools ;
+
+# Analysis tools
+use-project /AnalysisTools : ./packages/AnalysisTools ;
+
+# CMS2
+local cms2_header_tag = 05.03.09 ;
+path-constant CMS2 : ./packages/cms2/$(cms2_header_tag) ;
+use-project /CMS2  : ./packages/cms2 ;

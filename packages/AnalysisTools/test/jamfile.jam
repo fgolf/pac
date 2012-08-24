@@ -1,0 +1,16 @@
+# testing fwlite 
+
+exe test_fwlite
+	    : # sources
+	    ./source/test_fwlite.cpp
+	    /ROOT
+	    /CMSSW
+	    /RootTools//RootToolsStatic/<link>static
+	    : # requirements
+	    : # default-build
+	    : # usage-requirements
+	    ;
+
+
+default-install test_fwlite ;
+

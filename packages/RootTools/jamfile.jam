@@ -1,0 +1,162 @@
+# Jamfile for RootTools
+
+#imports 
+import os ;
+
+# see if CMSSW is set
+local cmssw = [ os.environ CMSSW_BASE ] ;
+
+if $(cmssw) = ""  
+{
+  # non CMSSW for interactive use
+  lib RootToolsInteractive 
+      : # sources
+        ./source/MiscTools.cc
+        ./source/TH1Container.cc
+        ./source/TH1Overlay.cc
+        ./source/Keyboard.cc
+        ./source/PrintFakeRateTable.cc
+        ./source/DrawAllBranches.cc
+        ./source/MergeTChain.cc
+        ./source/is_equal.cc
+        ./source/is_zero.cc
+        ./source/TDRStyle.cc
+        ./source/CompareContentsOfTTrees.cc
+        [
+          rootcint Dict
+            : # requirements
+              <define>__RTINT__
+              <include>./include
+              <include>./source
+              <header>rt/MiscTools.h
+              <header>rt/TH1Container.h
+              <header>rt/TH1Overlay.h
+              <header>rt/PrintFakeRateTable.h
+              <header>rt/DrawAllBranches.h
+              <header>rt/MergeTChain.h
+              <header>rt/CompareContentsOfTTrees.h
+              <header>rt/is_equal.h
+              <header>rt/TDRStyle.h
+              <header>rt/is_zero.h
+              <linkdef>LinkDef.h
+        ]
+        # dependent packages
+        /ROOT
+        /boost//headers          
+        /boost//filesystem
+      : # requirements 
+        <define>__RTINT__
+        <include>./include
+        <include>./source 
+      : # default-build
+      : # usage-requirements
+        <include>./include
+        <include>./source 
+      ;
+}
+else
+{
+  # CMSSW for interactive use
+  lib RootToolsInteractiveCMSSW 
+      : # sources
+        ./source/MiscTools.cc
+        ./source/TH1Container.cc
+        ./source/TH1Overlay.cc
+        ./source/Keyboard.cc
+        ./source/PrintFakeRateTable.cc
+        ./source/DrawAllBranches.cc
+        ./source/MergeTChain.cc
+        ./source/is_equal.cc
+        ./source/is_zero.cc
+        ./source/TDRStyle.cc
+        ./source/CompareContentsOfTTrees.cc
+        [
+          rootcint Dict
+            : # requirements
+              <define>__RTINT__
+              <include>./include
+              <include>./source
+              <header>rt/MiscTools.h
+              <header>rt/TH1Container.h
+              <header>rt/TH1Overlay.h
+              <header>rt/PrintFakeRateTable.h
+              <header>rt/DrawAllBranches.h
+              <header>rt/CompareContentsOfTTrees.h
+              <header>rt/MergeTChain.h
+              <header>rt/is_equal.h
+              <header>rt/is_equal.h
+              <header>rt/is_zero.h
+              <header>rt/TDRStyle.h
+              <linkdef>LinkDef.h
+        ]
+        # dependent packages
+        /ROOT
+        /boost//headers          
+        /boost//filesystem
+      : # requirements 
+        <define>__RTINT__
+        <include>./include
+        <include>./source 
+      : # default-build
+      : # usage-requirements
+        <include>./include
+        <include>./source 
+      ;
+}
+
+# static version
+lib RootToolsStatic
+    : # sources
+      ./source/MiscTools.cc
+      ./source/TH1Container.cc
+      ./source/TH1Overlay.cc
+      ./source/Keyboard.cc
+      ./source/PrintFakeRateTable.cc
+      ./source/DrawAllBranches.cc
+      ./source/MergeTChain.cc
+      ./source/CompareContentsOfTTrees.cc
+      ./source/is_equal.cc
+      ./source/TDRStyle.cc
+      ./source/is_zero.cc
+      # dependent packages
+      /ROOT
+      /boost//headers/<link>static
+      /boost//filesystem/<link>static
+    : # requirements 
+      <link>static
+      <include>./include
+      <include>./source 
+    : # default-build
+    : # usage-requirements
+      <include>./include
+      <include>./source 
+    ;
+
+#exe merge_tchain
+#    : # sources
+#      ./source/merge_tchain.cc
+#      # dependent packages
+#      /ROOT
+#      /RootTools//RootToolsStatic/<link>static
+#      /boost//program_options/<link>static
+#      /MiniFWLite/<link>shared
+#    : # requirements 
+#      <include>./include
+#      <include>./source
+#    : # default-build
+#    : # usage-requirements
+#    ;
+
+
+# install
+# -----------------------------------------------------#
+#default-install merge_tchain ;
+
+if $(cmssw) = ""  
+{
+  default-install RootToolsInteractive ;
+}
+else
+{
+  default-install RootToolsInteractiveCMSSW ;
+}

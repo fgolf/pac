@@ -1,0 +1,34 @@
+# Analysis Tools jamfile
+
+lib AnalysisToolsStatic 
+  : # sources
+    ./source/Constants.cc
+    ./source/ScanChain.cc
+    ./source/AnalysisBase.cc
+    ./source/AnalysisWithHist.cc
+    ./source/AnalysisWithTree.cc
+    ./source/LorentzVectorObject.cc
+    ./source/DorkyEventIdentifier.cc
+    ./source/DileptonHypType.cc
+    ./source/VtxReweight.cc
+    ./source/GoodRun.cc
+    ./source/Sample.cc
+    ./source/DileptonTree.cc
+    ./source/SingleLeptonTree.cc
+    ./source/EventInfoTree.cc
+    /CMS2
+    /CMS2_CORE
+    # dependent packages
+    /ROOT
+    /RootTools//RootToolsStatic/<link>static
+    /boost//headers/<link>static
+    /boost//filesystem/<link>static
+  : # requirements 
+    <link>static
+    <include>./include
+    <include>./source 
+  : # default-build
+  : # usage-requirements
+    <include>./include
+    <include>./source 
+  ;

@@ -1,0 +1,52 @@
+# rule to generate the ROOT dictionaries in BOOST.BUILD
+
+import feature ;
+import property-set ;
+import generate ;
+import "class" : new ;
+
+feature.feature header  : : free ;
+feature.feature linkdef : : free ;
+
+actions rootcint-action
+{
+    #echo ----- rootcint: Source Files -----
+    #echo $(>)
+    #echo ----- rootcint: Output Files -----
+    #echo $(<)
+
+    #echo ----- rootcint: Command -----
+    #echo rootcint -v3 -f $(<) -c $(>)
+    rootcint -v3 -f $(<) -c $(>)
+}
+
+rule rootcint-command ( target : sources * : properties * )
+{
+    local ps = [ property-set.create $(properties) ] ;
+    local defines  = [ $(ps).get <define>  ] ;
+    local includes = [ $(ps).get <include> ] ;
+    local headers  = [ $(ps).get <header>  ] ;
+    local linkdefs = [ $(ps).get <linkdef> ] ;
+
+    local defines-list  = -D$(defines:J=" -D") ;
+    local includes-list = -I$(includes:J=" -I") ;
+
+    local args = $(defines-list) $(includes-list) $(headers) $(linkdefs) ;
+    rootcint-action $(target) : $(args) ;
+}
+
+rule rootcint-generating-rule ( project name : property-set : sources * )
+{
+    local a = [ new action $(sources) : rootcint.rootcint-command : $(property-set) ] ;
+    local result = [ new file-target $(name) : CPP : $(project) : $(a) ] ;
+    return $(result) ;
+}
+
+rule rootcint ( name : requirements * )
+{
+    return [ generate.generate $(name) : : $(requirements) <generating-rule>@rootcint.rootcint-generating-rule ] ;
+}
+
+IMPORT $(__name__) : rootcint                 : : rootcint                          ;
+IMPORT $(__name__) : rootcint-generating-rule : : rootcint.rootcint-generating-rule ;
+IMPORT $(__name__) : rootcint-command         : : rootcint.rootcint-command         ;
