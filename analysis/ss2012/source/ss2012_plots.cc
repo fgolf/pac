@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include "TChain.h"
-#include "ScanChainSSB2012.h"
-#include "PlotLooper.new.h"
+#include "ScanChainSSB.h"
+#include "PlotLooper.h"
 #include "rt/RootTools.h"
 #include "SignalRegion.h"
 #include <boost/program_options.hpp>
@@ -159,7 +159,7 @@ try
 	}
 
     // scan the chain
-    ScanChainSSB2012
+    ScanChainSSB
     (
         chain,
         PlotLooper

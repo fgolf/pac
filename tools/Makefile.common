@@ -58,9 +58,10 @@ define include_analysis_tools
 endef
 
 # include CMS2 Headers
+cms2_header_tag := 05.03.09
 define include_cms2_header
-	CPPFLAGS      += $(addprefix -I,$(project_dir)/packages/cms2/header/05.03.09)
-	CPPFLAGS      += $(addprefix -I,$(project_dir)/packages/cms2/header/05.03.09/fake_dir_since_nobody_knows_proper_code_building_etiquette)
+	CPPFLAGS      += $(addprefix -I,$(project_dir)/packages/cms2/$(cms2_header_tag)/header)
+	CPPFLAGS      += $(addprefix -I,$(project_dir)/packages/cms2/$(cms2_header_tag)/header/fake_dir_since_nobody_knows_proper_code_building_etiquette)
 	LDFLAGS       += -L$(project_lib)
 	LDFLAGS       += -lCMS2Header
 endef
@@ -103,7 +104,6 @@ endef
 
 # include CMS2 Header
 #cms2_header_tag := 05.02.28
-cms2_header_tag := 05.03.09
 
 # additional global setup 
 # ----------------------------------------------------------------------- #

@@ -10,15 +10,16 @@ lib AnalysisToolsStatic
     ./source/LorentzVectorObject.cc
     ./source/DorkyEventIdentifier.cc
     ./source/DileptonHypType.cc
+    ./source/DileptonChargeType.cc
     ./source/VtxReweight.cc
     ./source/GoodRun.cc
     ./source/Sample.cc
     ./source/DileptonTree.cc
     ./source/SingleLeptonTree.cc
     ./source/EventInfoTree.cc
+    # dependent packages
     /CMS2
     /CMS2_CORE
-    # dependent packages
     /ROOT
     /RootTools//RootToolsStatic/<link>static
     /boost//headers/<link>static
@@ -32,3 +33,39 @@ lib AnalysisToolsStatic
     <include>./include
     <include>./source 
   ;
+
+lib AnalysisToolsInteractive 
+  : # sources
+    ./source/Sample.cc
+    ./source/DileptonHypType.cc
+    ./source/DileptonChargeType.cc
+    [ rootcint Dict
+        : # requirements
+          <define>__RTINT__
+          <include>./include
+          <include>./source
+          <header>at/Sample.h
+          <header>at/DileptonHypType.h
+          <header>at/DileptonChargeType.h
+          <linkdef>LinkDef.h
+    ]
+   # dependent packages
+    #/CMS2
+    #/CMS2_CORE
+    /ROOT
+    /RootTools//RootToolsInteractive/<link>shared
+  : # requirements 
+    <link>shared
+    <include>./include
+    <include>./source 
+  : # default-build
+  : # usage-requirements
+    <include>./include
+    <include>./source 
+  ;
+
+
+# install
+# -----------------------------------------------------#
+
+#default-install AnalysisToolsInteractive ;

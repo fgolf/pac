@@ -1,22 +1,61 @@
 #include "at/DileptonHypType.h"
 #include <stdexcept> 
 
-namespace at {
+namespace at 
+{
 
     DileptonHypType::value_type hyp_typeToHypType (int hyp_type)
     {
-        switch (hyp_type) {
-        case 0:
-            return DileptonHypType::DILEPTON_MUMU;
-        case 1: case 2:
-            return DileptonHypType::DILEPTON_EMU;
-        case 3:
-            return DileptonHypType::DILEPTON_EE;
-        default:
-            throw std::domain_error("ERROR: at::hyp_typeToHypTeyp: hyp_type out of bounds -- must be less than 4.");
-        }
+        switch (hyp_type) 
+        {
+            case 0: return DileptonHypType::MUMU;
+            case 1: return DileptonHypType::EMU;
+            case 2: return DileptonHypType::EMU;
+            case 3: return DileptonHypType::EE;
+            default:
+                throw std::domain_error("ERROR: at::hyp_typeToHypType: hyp_type out of bounds -- must be less than 4.");
+        };
 
-        return DileptonHypType::DILEPTON_ALL;
+        return DileptonHypType::ALL;
     }
 
+    std::string GetDileptonHypTypeName(const DileptonHypType::value_type& hyp_type)
+    {
+        switch (hyp_type) 
+        {
+            case DileptonHypType::ALL:  return "ll";
+            case DileptonHypType::MUMU: return "mm";
+            case DileptonHypType::EMU:  return "em";
+            case DileptonHypType::EE:   return "ee";
+            default:
+                throw std::domain_error("ERROR: at::GetDileptonHypeName: hyp_type out of bounds");
+        };
+    }
+
+    std::string GetDileptonHypTypeTitle(const DileptonHypType::value_type& hyp_type)
+    {
+        switch (hyp_type) 
+        {
+            case DileptonHypType::ALL:  return "ll";
+            case DileptonHypType::MUMU: return "#mu#mu";
+            case DileptonHypType::EMU:  return "e#mu";
+            case DileptonHypType::EE:   return "ee";
+            default:
+                throw std::domain_error("ERROR: at::GetDileptonHypeTitle: hyp_type out of bounds");
+        };
+    }
+
+    std::string GetDileptonHypTypeLatex(const DileptonHypType::value_type& hyp_type)
+    {
+        switch (hyp_type) 
+        {
+            case DileptonHypType::ALL:  return "\\ell\\ell";
+            case DileptonHypType::MUMU: return "\\mu\\mu";
+            case DileptonHypType::EMU:  return "e\\mu";
+            case DileptonHypType::EE:   return "ee";
+            default:
+                throw std::domain_error("ERROR: at::GetDileptonHypeTitle: hyp_type out of bounds");
+        };
+    }
 }
+

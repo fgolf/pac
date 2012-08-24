@@ -72,10 +72,10 @@ void DileptonTree::FillCommon (int idx)
     dilep_deta = lep1.p4.eta() - lep2.p4.eta();
     dilep_dr   = ROOT::Math::VectorUtil::DeltaR(lep1.p4, lep2.p4);
 
-    if (abs(lep1.mc3id) == 11 && abs(lep2.mc3id) == 11) {dilep_gen_type = at::DileptonHypType::DILEPTON_EE;  }
-    if (abs(lep1.mc3id) == 13 && abs(lep2.mc3id) == 13) {dilep_gen_type = at::DileptonHypType::DILEPTON_MUMU;}
-    if (abs(lep1.mc3id) == 11 && abs(lep2.mc3id) == 13) {dilep_gen_type = at::DileptonHypType::DILEPTON_EMU; }
-    if (abs(lep1.mc3id) == 13 && abs(lep2.mc3id) == 11) {dilep_gen_type = at::DileptonHypType::DILEPTON_EMU; }
+    if (abs(lep1.mc3id) == 11 && abs(lep2.mc3id) == 11) {dilep_gen_type = at::DileptonHypType::EE;  }
+    if (abs(lep1.mc3id) == 13 && abs(lep2.mc3id) == 13) {dilep_gen_type = at::DileptonHypType::MUMU;}
+    if (abs(lep1.mc3id) == 11 && abs(lep2.mc3id) == 13) {dilep_gen_type = at::DileptonHypType::EMU; }
+    if (abs(lep1.mc3id) == 13 && abs(lep2.mc3id) == 11) {dilep_gen_type = at::DileptonHypType::EMU; }
 
     fiduciality = GetFiduciality(lep1.p4, lep2.p4);
 }

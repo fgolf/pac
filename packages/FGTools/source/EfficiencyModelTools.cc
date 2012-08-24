@@ -322,7 +322,7 @@ std::vector<std::pair<GenParticleStruct, GenParticleStruct> > efftools::makeGenH
     return glepPairs;
 }
 
-std::pair<GenParticleStruct, GenParticleStruct> efftools::getGenHyp (float pt1_cut, float pt2_cut, HypType::value_type hypType) {
+std::pair<GenParticleStruct, GenParticleStruct> efftools::getGenHyp (float pt1_cut, float pt2_cut, at::DileptonChargeType::value_type hypType) {
 
     float min_pt = std::min(pt1_cut, pt2_cut);
     float max_pt = std::max(pt1_cut, pt2_cut);
@@ -332,7 +332,7 @@ std::pair<GenParticleStruct, GenParticleStruct> efftools::getGenHyp (float pt1_c
 
     GenParticleStruct gp = GenParticleStruct(0, 999999, 0., 0., 0, 999999, 0., 0.);
     std::pair<GenParticleStruct, GenParticleStruct> good_gen_hyp = std::make_pair(gp, gp);
-    DileptonHypType::value_type good_hyp_type = DileptonHypType::DILEPTON_ALL;
+    DileptonHypType::value_type good_hyp_type = DileptonHypType::ALL;
     for (unsigned int idx = 0; idx < npairs; idx++) {
         
         GenParticleStruct gp1 = glepPairs.at(idx).first;
@@ -344,9 +344,9 @@ std::pair<GenParticleStruct, GenParticleStruct> efftools::getGenHyp (float pt1_c
         int gid2    = (abs(gp2.id_) == 15) ? gp2.did_  : gp2.id_;
 
         // require SS
-        if (gid1 * gid2 < 0 && hypType == HypType::DILEPTON_SS)
+        if (gid1 * gid2 < 0 && hypType == at::DileptonChargeType::SS)
             continue;
-        else if (gid1 * gid2 > 0 && hypType == HypType::DILEPTON_OS)
+        else if (gid1 * gid2 > 0 && hypType == at::DileptonChargeType::OS)
             continue;
 
         if (std::min(gpt1, gpt2) < min_pt)
@@ -356,10 +356,10 @@ std::pair<GenParticleStruct, GenParticleStruct> efftools::getGenHyp (float pt1_c
             continue;
 
         DileptonHypType::value_type tmp_type = getHypType(gid1, gid2);
-        if (tmp_type == DileptonHypType::DILEPTON_ALL)
+        if (tmp_type == DileptonHypType::ALL)
             continue;
 
-        if (good_hyp_type == DileptonHypType::DILEPTON_ALL) {
+        if (good_hyp_type == DileptonHypType::ALL) {
             good_hyp_type = tmp_type;
             good_gen_hyp = glepPairs.at(idx);
         }
@@ -478,16 +478,16 @@ bool efftools::leptonOverlapsWithParton(LorentzVector p4, float parton_pt, float
 DileptonHypType::value_type efftools::getHypType (int id1, int id2) {
     
     if (abs(id1) != 11 && abs(id1) != 13)
-        return DileptonHypType::DILEPTON_ALL;
+        return DileptonHypType::ALL;
     if (abs(id2) != 11 && abs(id2) != 13)
-        return DileptonHypType::DILEPTON_ALL;
+        return DileptonHypType::ALL;
 
     if (abs(id1) == 11 && abs(id2) == 11)
-        return DileptonHypType::DILEPTON_EE;
+        return DileptonHypType::EE;
     else if (abs(id1) == 13 && abs(id2) == 13)
-        return DileptonHypType::DILEPTON_MUMU;
+        return DileptonHypType::MUMU;
     else
-        return DileptonHypType::DILEPTON_EMU;
+        return DileptonHypType::EMU;
 }
 
 

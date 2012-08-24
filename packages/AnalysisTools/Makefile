@@ -17,6 +17,7 @@ sources         := AnalysisBase.cc         \
 				   Constants.cc            \
 				   DorkyEventIdentifier.cc \
 				   DileptonHypType.cc      \
+				   DileptonChargeType.cc   \
 				   VtxReweight.cc          \
 				   GoodRun.cc              \
 				   Sample.cc               \

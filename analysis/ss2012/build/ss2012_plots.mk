@@ -11,9 +11,10 @@ include ../../tools/Makefile.common
 # source files
 programs        := ss2012_plots.exe
 program_dir_rel := analysis/ss2012
-sources         := ss2012_plots.new.cc \
-    			    PlotLooper.new.cc \
+sources         := ss2012_plots.cc \
+    			    PlotLooper.cc \
     			    ScaleFactors.cc \
+    			    SignalRegion.cc \
     				source/SSB2012.cc
 include_dir     := include source
 defines         := __NON_ROOT_BUILD__

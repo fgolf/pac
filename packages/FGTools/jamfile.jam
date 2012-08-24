@@ -5,7 +5,7 @@ lib fgtools
   : # sources
    	#[ glob $(FGTOOLS)/source/*.cc ]
 		./source/BabyDorkIdentifier.cc
-		./source/DileptonHypType.cc
+		#./source/DileptonHypType.cc
 		./source/EfficiencyModelTools.cc
 		./source/FakeRateType.cc
 		./source/GenParticleStruct.cc

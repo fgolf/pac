@@ -3,6 +3,7 @@
 
 #include "GenParticleStruct.h"
 #include "at/DileptonHypType.h"
+#include "at/DileptonChargeType.h"
 #include <utility>
 #include <vector>
 #include "Math/LorentzVector.h"
@@ -30,7 +31,7 @@ namespace efftools {
     std::vector<std::pair<GenParticleStruct, GenParticleStruct> > makeGenHyps (float eta_cut = 2.4, bool removeLeptonsOverlappingWithPartons = false);
 
     // choose the best hyp for same sign analysis given lepton pt cuts and type (SS, OS, ALL)
-    std::pair<GenParticleStruct, GenParticleStruct> getGenHyp (float pt1_cut, float pt2_cut, at::HypType::value_type hypType);
+    std::pair<GenParticleStruct, GenParticleStruct> getGenHyp (float pt1_cut, float pt2_cut, at::DileptonChargeType::value_type hypType);
 
     // calculate gen ht
     float getGenHT(float pt_cut, float eta_cut);

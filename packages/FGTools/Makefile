@@ -12,7 +12,6 @@ include ../../tools/Makefile.common
 libraries       := libFGTools.so
 package_dir_rel := packages/FGTools
 sources         := BabyDorkIdentifier.cc \
-					DileptonHypType.cc \
 					EfficiencyModelTools.cc \
 					FakeRateType.cc \
 					GenParticleStruct.cc \
@@ -30,6 +29,7 @@ sources         := BabyDorkIdentifier.cc \
 					tools.cc \
 					histio.cc \
 					vtxreweight.cc
+					#DileptonHypType.cc \
 					#ScaleFactors.cc # temporarilty removed until i found the right place for this 
 include_dir      := include
 
@@ -37,9 +37,11 @@ include_dir      := include
 # additional libraries
 # ----------------------------------------------------------------------- #
 
-# CMS2 Header 
+# CMS2
 $(eval $(include_cms2_header))
 $(eval $(include_cms2_core))
+
+# Analysis Tools
 $(eval $(include_analysis_tools))
 
 # package setup

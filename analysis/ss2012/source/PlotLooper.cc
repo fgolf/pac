@@ -1,4 +1,4 @@
-#include "PlotLooper.new.h"
+#include "PlotLooper.h"
 #include <iostream>
 #include <algorithm>
 #include <tr1/array>

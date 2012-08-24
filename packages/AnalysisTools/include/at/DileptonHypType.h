@@ -1,31 +1,34 @@
-// -*- C++ -*-
 #ifndef DILEPTONHYPTYPE_H
 #define DILEPTONHYPTYPE_H
 
-namespace at {
-    
-    struct HypType {
-        enum value_type {
-            DILEPTON_SS,
-            DILEPTON_OS,
+#include <string>
+
+namespace at 
+{
+    // flavor
+    struct DileptonHypType
+    {
+        enum value_type
+        {
+            ALL,
+            MUMU,
+            EMU,
+            EE,
             static_size
         };
     };
 
-    struct DileptonHypType {
-        enum value_type {
-            DILEPTON_ALL,
-            DILEPTON_MUMU,
-            DILEPTON_EMU,
-            DILEPTON_EE,
-            static_size
-        };
-    };
+    // return the name of the name the DileptonHypType
+    std::string GetDileptonHypTypeName(const DileptonHypType::value_type& hyp_type);
 
-    static const char dilepton_hypo_names[][128] = { "all", "mm", "em", "ee" };
+    // return the title for ROOT of the name the DileptonHypType
+    std::string GetDileptonHypTypeTitle(const DileptonHypType::value_type& hyp_type);
 
-    DileptonHypType::value_type hyp_typeToHypType (int hyp_type);
+    // return the title for latex of the name the DileptonHypType
+    std::string GetDileptonHypTypeLatex(const DileptonHypType::value_type& hyp_type);
 
+    // convert the int to a DileptonHypType
+    DileptonHypType::value_type hyp_typeToHypType(int hyp_type);
 };
 
-#endif
+#endif // DILEPTONHYPTYPE_H

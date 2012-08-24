@@ -9,7 +9,7 @@
 #include "TBenchmark.h"
 
 // SSB baby
-#include "SSB.h"
+#include "SSB2012.h"
 
 // tools
 #include "rt/RootTools.h"

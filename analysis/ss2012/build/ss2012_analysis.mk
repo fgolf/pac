@@ -11,8 +11,8 @@ include ../../tools/Makefile.common
 # source files
 programs        := ss2012_analysis.exe
 program_dir_rel := analysis/ss2012
-sources         := ss2012_analysis.new.cc \
-    			    AnalysisLooper.new.cc \
+sources         := ss2012_analysis.cc \
+    			    AnalysisLooper.cc \
     			    SameSignTree.cc \
     			    ScaleFactors.cc 
 include_dir     := include

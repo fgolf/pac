@@ -12,7 +12,7 @@
 // analysis
 #include "at/ScanChain.h"
 #include "at/Sample.h"
-#include "AnalysisLooper.new.h"
+#include "AnalysisLooper.h"
 
 // BOOST
 #include <boost/program_options.hpp>
