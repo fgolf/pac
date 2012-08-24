@@ -63,26 +63,6 @@ exe ss2012_analysis
   : # usage-requirements
   ;
 
-exe ss2012_analysis
-  : # sources
-    ./source/ss2012_analysis.cc
-    ./source/AnalysisLooper.cc
-    ss2012_tools_static
-    # dependent packages
-    /ROOT
-    /MiniFWLite/<link>shared
-    /AnalysisTools//AnalysisToolsStatic/<link>static
-    /RootTools//RootToolsStatic/<link>static
-    /FGTools/<link>static
-    /boost//program_options/<link>static
-    /SimpleTable//SimpleTableStatic/<link>static
-  : # requirements
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
-
 exe ss2012_plots
   : # sources
     ./source/ss2012_plots.cc
@@ -113,25 +93,6 @@ exe ss2012_merge_babies
     /RootTools//RootToolsStatic/<link>static
     /boost//program_options/<link>static
   : # requirements
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
-
-exe ss2012_plots
-  : # sources
-    ./source/ss2012_plots.cc
-    ./source/PlotLooper.cc
-    ./source/SSB.cc
-    # dependent packages
-    /ROOT
-    /MiniFWLite/<link>shared
-    /AnalysisTools//AnalysisToolsStatic/<link>static
-    /RootTools//RootToolsStatic/<link>static
-    /boost//program_options/<link>static
-  : # requirements
-		<define>__NON_ROOT_BUILD__
     <include>./include
     <include>./source
   : # default-build
