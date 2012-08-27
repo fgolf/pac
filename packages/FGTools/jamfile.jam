@@ -25,7 +25,7 @@ lib fgtools
 		./source/tools.cc
 		./source/vtxreweight.cc
     # dependent packages
-    /AnalysisTools/<link>static
+    /AnalysisTools//AnalysisToolsStatic/<link>static
     /CMS2/<link>static
     /CMS2_CORE/<link>static
     /ROOT
