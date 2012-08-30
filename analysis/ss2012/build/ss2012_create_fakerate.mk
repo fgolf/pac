@@ -9,15 +9,14 @@ include ${PAC}/tools/Makefile.common
 # ----------------------------------------------------------------------- #
 
 # source files
-programs        := ss2012_plots.exe
+programs        := ss2012_create_fakerate.exe
 program_dir_rel := analysis/ss2012
-sources         := ss2012_plots.cc \
-    			    PlotLooper.cc \
-    			    ScaleFactors.cc \
-    			    SignalRegion.cc \
-    				source/SSB2012.cc
+sources         := ss2012_create_fakerate.cc \
+    			    FakeRateBabyLooper.cc \
+    			    ScanChainFRB.cc \
+    			    FakeRateBaby.cc 
 include_dir     := include source
-defines         := __NON_ROOT_BUILD__
+defines         := 
 
 # additional libraries
 # ----------------------------------------------------------------------- #
@@ -38,7 +37,7 @@ $(eval $(include_mini_fwlite))
 $(eval $(include_simple_table))
 
 # Frank's tools
-#$(eval $(include_fg_tools))
+$(eval $(include_fg_tools))
 
 # CMS2 
 $(eval $(include_cms2_header))

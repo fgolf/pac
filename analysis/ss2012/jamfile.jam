@@ -99,8 +99,45 @@ exe ss2012_merge_babies
   : # usage-requirements
   ;
 
+lib fake_rate_baby
+  : # sources
+    ./source/ScanChainFRB.cc
+    ./source/FakeRateBaby.cc
+    # dependent packages
+    /ROOT
+    /RootTools//RootToolsStatic/<link>static
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+    <include>./include
+    <include>./source
+  ;
+
+exe ss2012_create_fakerate
+  : # sources
+    ./source/ss2012_create_fakerate.cc
+    ./source/FakeRateBabyLooper.cc
+    # dependent packages
+    fake_rate_baby/<link>static
+    /ROOT
+    /MiniFWLite/<link>shared
+    /RootTools//RootToolsStatic/<link>static
+    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /boost//program_options/<link>static
+    /boost//headers/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
 # install libs/exes
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
 default-install ss2012_plots ;
 default-install ss2012_tools_interactive ;
+default-install ss2012_create_fakerate ;

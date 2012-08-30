@@ -8,21 +8,21 @@
 #include "TTreeCache.h"
 #include "TBenchmark.h"
 
-// SSB baby
-#include "SSB2012.h"
+// FakeRate baby
+#include "FakeRateBaby.h"
 
 // tools
 #include "rt/RootTools.h"
-//#include "at/DorkyEventIdentifier.h"
+#include "at/DorkyEventIdentifier.h"
 
 // Peform an analysis on a CMS2 ntuple.
 template <typename Function>
-int ScanChainSSB
+int ScanChainFRB
 (
     TChain* chain, 
     Function analyze, 
     long num_events,
-    bool is_data,
+    bool fast,
     bool verbose
 )
 {
@@ -44,7 +44,6 @@ int ScanChainSSB
     bmark.Start("benchmark");
 
     // events counts and max events
-    int i_permilleOld = 0;
     long num_events_total = 0;
     long num_events_chain = (num_events >= 0 && num_events < chain->GetEntries()) ? num_events : chain->GetEntries();
     int duplicates = 0;
@@ -60,9 +59,12 @@ int ScanChainSSB
         {
             continue;
         }
-        TTreeCache::SetLearnEntries(10);
-        tree->SetCacheSize(128*1024*1024);
-        samesignbtag.Init(tree);
+        if (fast)
+        {
+            TTreeCache::SetLearnEntries(10);
+            tree->SetCacheSize(128*1024*1024);
+        }
+        fake_rate_baby.Init(tree);
 
         // Loop over Events in current file
         if (num_events_total >= num_events_chain) continue;
@@ -75,32 +77,24 @@ int ScanChainSSB
             if (num_events_total >= num_events_chain) continue;
 
             // load the entry
-            tree->LoadTree(event);
-            samesignbtag.GetEntry(event);
+            if (fast) tree->LoadTree(event);
+            fake_rate_baby.GetEntry(event);
             ++num_events_total;
 
-            // check for dupiclate run and events (only for data)
-			//if (is_data)
-			//{
-			//	at::DorkyEventIdentifier id = {frb::run(), frb::evt(), frb::ls()};
-			//	if (is_duplicate(id))
-			//	{
-			//		if (verbose)
-			//		{
-			//			cout << "Duplicate event:\t" << id.run << ", " << id.event << ", " << id.lumi << endl;
-			//		}
-			//		duplicates++;
-			//		continue;
-			//	}
-			//}
+            // check for dupiclate run and events
+            at::DorkyEventIdentifier id = {frb::run(), frb::evt(), frb::ls()};
+            if (is_duplicate(id))
+            {
+                if (verbose)
+                {
+                    cout << "Duplicate event:\t" << id.run << ", " << id.event << ", " << id.lumi << endl;
+                }
+                duplicates++;
+                continue;
+            }
 
             // pogress
-            int i_permille = (int)floor(1000 * num_events_total / float(num_events_chain));
-            if (i_permille != i_permilleOld) {
-                printf("  \015\033[32m ---> \033[1m\033[31m%4.1f%%" "\033[0m\033[32m <---\033[0m\015", i_permille/10.);
-                fflush(stdout);
-                i_permilleOld = i_permille;
-            }
+            FakeRateBaby::progress(num_events_total, num_events_chain);
 
             // analysis
             analyze(event);
@@ -128,14 +122,7 @@ int ScanChainSSB
     bmark.Stop("benchmark");
     cout << endl;
     cout << num_events_total << " Events Processed" << endl;
-	if (is_data)
-	{
-    	cout << duplicates << " Duplicate Events" << endl;
-	}
-	else
-	{
-    	cout << " No Duplicate removal peformed" << endl;
-	}
+    cout << duplicates << " Duplicate Events" << endl;
     cout << "------------------------------" << endl;
     cout << "CPU  Time:	" << Form("%.01f", bmark.GetCpuTime("benchmark" )) << endl;
     cout << "Real Time:	" << Form("%.01f", bmark.GetRealTime("benchmark")) << endl;
