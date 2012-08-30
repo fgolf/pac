@@ -59,6 +59,7 @@ exe ss2012_analysis
   : # requirements
     <include>./include
     <include>./source
+    <define>__NON_ROOT_BUILD__
   : # default-build
   : # usage-requirements
   ;

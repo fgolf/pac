@@ -224,7 +224,7 @@ int FakeRateBabyLooper::operator()(long event)
         // ----------------------------------------------------------------------------------------------------------------------------//
         //
         // which dataset
-        bool is_data = m_dataset=="data";
+        bool is_data = rt::string_contains(m_dataset, "data");
         bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
         bool is_el = (m_lepton=="el") ? abs(id())==11 : false;
 

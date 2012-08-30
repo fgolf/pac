@@ -81,8 +81,10 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 {
 	//rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
     //std::string path = "plots/fake_rates/muons_920pb";
-	rt::TH1Container hc("plots/fake_rates/muons_5p1fb/muons_5p1fb.root");
-    std::string path = "plots/fake_rates/muons_5p1fb";
+	//rt::TH1Container hc("plots/fake_rates/muons_5p1fb/muons_5p1fb.root");
+    //std::string path = "plots/fake_rates/muons_5p1fb";
+	rt::TH1Container hc("plots/fake_rates/muons_2012Cv2/muons_2012Cv2.root");
+    std::string path = "plots/fake_rates/muons_2012Cv2";
 
     //std::string path = "plots/fake_rates/data/23May";
 	//rt::TH1Container hc("plots/mu_plus/data/mu_plus.root");
@@ -99,7 +101,7 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 
 	//float lumi = 0.920;
 	//float lumi = 3.95;
-	float lumi = 5.1;
+	float lumi = 0.0;
 	//std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 	//std::string title = Form("#mu^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 	std::string title = Form("#mu^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);

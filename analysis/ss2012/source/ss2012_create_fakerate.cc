@@ -79,12 +79,12 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
         const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_2012Cv2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_2012Cv2";
         if (channel=="mu")
         {
-            chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v2_AOD/merged/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/merged/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
         }
         else if (channel=="el")
         {
-            chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v2_AOD/merged/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
         }
     }    
     else
