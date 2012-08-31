@@ -166,6 +166,7 @@ namespace at
             } // end event loop
 
             // close current file
+            file->Close();
             delete file;
 
         } // end file loop

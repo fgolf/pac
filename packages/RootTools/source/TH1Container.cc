@@ -482,7 +482,8 @@ void TH1Container::Print(const std::string& dir_name, const std::string& suffix,
 
 // verbosity setting
 #ifdef __RTINT__  
-bool  TH1Container::impl::verbose = true;
+//bool  TH1Container::impl::verbose = true;
+bool  TH1Container::impl::verbose = false;
 #else
 bool  TH1Container::impl::verbose = false;
 #endif

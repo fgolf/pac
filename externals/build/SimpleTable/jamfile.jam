@@ -1,6 +1,6 @@
 # jamfile for Ian's Simple Table 
 
-lib SimpleTableInteractive
+lib SimpleTable
   : # sources
     $(SIMPLETABLE_PATH)/CNumBase.cpp
     $(SIMPLETABLE_PATH)/CTable.cpp
@@ -14,22 +14,6 @@ lib SimpleTableInteractive
     # dependent packages
     /ROOT
   : # requirements 
-    <link>shared
-    <include>$(SIMPLETABLE_PATH)
-  : # default-build
-  : # usage-requirements
-    <include>$(SIMPLETABLE_PATH)
-  ;
-
-
-lib SimpleTableStatic
-  : # sources
-    $(SIMPLETABLE_PATH)/CNumBase.cpp
-    $(SIMPLETABLE_PATH)/CTable.cpp
-    # dependent packages
-    /ROOT
-  : # requirements 
-    <link>static
     <include>$(SIMPLETABLE_PATH)
   : # default-build
   : # usage-requirements
@@ -39,13 +23,13 @@ lib SimpleTableStatic
 exe test_ctable
   : # sources
     $(SIMPLETABLE_PATH)/test.cpp
+    SimpleTable/<link>static
     # dependent packages
-    /SimpleTable//SimpleTableStatic/<link>static
     /ROOT
   : # requirements 
   : # default-build
   : # usage-requirements
   ;
 
-default-install SimpleTableInteractive ;
-default-install test_ctable ;
+#default-install SimpleTable ;
+#default-install test_ctable ;

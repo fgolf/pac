@@ -1,9 +1,8 @@
 # libs for FGTools 
 # -------------------------------------------------------------------- #
 
-lib fgtools
+lib FGTools
   : # sources
-   	#[ glob $(FGTOOLS)/source/*.cc ]
 		./source/BabyDorkIdentifier.cc
 		#./source/DileptonHypType.cc
 		./source/EfficiencyModelTools.cc
@@ -25,15 +24,13 @@ lib fgtools
 		./source/tools.cc
 		./source/vtxreweight.cc
     # dependent packages
-    /AnalysisTools//AnalysisToolsStatic/<link>static
-    /CMS2/<link>static
-    /CMS2_CORE/<link>static
+    /CMS2
+    /CMS2_CORE
+    /AnalysisTools
     /ROOT
   : # requirements
-    <link>static
     <include>$(FGTOOLS)/include
   : # default-build
   : # usage-requirements
     <include>$(FGTOOLS)/include
   ;
-

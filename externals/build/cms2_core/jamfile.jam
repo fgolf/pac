@@ -12,12 +12,12 @@ lib cms2_core
     <include>$(CMS2_CORE)
     <include>$(CMS2_CORE)/CORE
     <include>$(CMS2_CORE)/CORE/jetsmear
+    <include>$(CMS2_CORE)/CORE/jetcorr
   : # default-build
-    <link>static
-    <link>shared
   : # usage-requirements
     <include>$(CMS2_CORE)
     <include>$(CMS2_CORE)/CORE
     <include>$(CMS2_CORE)/CORE/jetsmear
+    <include>$(CMS2_CORE)/CORE/jetcorr
   ;
 

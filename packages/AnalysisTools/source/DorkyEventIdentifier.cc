@@ -24,7 +24,7 @@ namespace at
         return true;
     }
 
-    std::set<DorkyEventIdentifier> already_seen;
+    static std::set<DorkyEventIdentifier> already_seen;
     bool is_duplicate (const DorkyEventIdentifier &id) 
     {
         std::pair<std::set<DorkyEventIdentifier>::const_iterator, bool> ret = already_seen.insert(id);

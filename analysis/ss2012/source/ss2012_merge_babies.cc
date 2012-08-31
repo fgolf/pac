@@ -14,9 +14,6 @@ bool keep_all_events(long)
 int main(int argc, char* argv[])
 try
 {
-    // set the style
-    rt::SetStyle("emruoi");
-
     using namespace std;
 
     // inputs
@@ -98,7 +95,7 @@ try
     // merge the tree
     TChain* chain = rt::CreateTChainFromCommaSeperatedList(input_file, "tree");
 
-    // run the skim and do not cut events except for duplicates and bad runs
+    //// run the skim and do not cut events except for duplicates and bad runs
     rt::mkdir(rt::dirname(output_file), /*force=*/true);
     int number_of_events = -1;
     

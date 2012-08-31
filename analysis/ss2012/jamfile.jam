@@ -1,65 +1,61 @@
 # jamfile for the ss 2012 analysis 
 # -------------------------------------------------------------------- #
 
-lib ss2012_tools_static
+lib ssb2012
   : # sources
-    ./source/ScaleFactors.cc
-    ./source/SameSignTree.cc
-    ./source/SkimChainSSB.cc
     ./source/SSB2012.cc
-    ./source/SignalRegion.cc
     /ROOT
-    /AnalysisTools//AnalysisToolsStatic/<link>static
   : # requirements
     <include>./include
     <include>./source
-    <link>static
   : # default-build
   : # usage-requirements
     <include>./include
   ;
 
-lib ss2012_tools_interactive
+lib ss2012_tools
   : # sources
+    ./source/ScaleFactors.cc
+    ./source/SameSignTree.cc
+    ./source/SkimChainSSB.cc
     ./source/SignalRegion.cc
     [ rootcint Dict
      : 
-       <define>__RTINT__
        <include>./include
        <include>./source
        <header>SignalRegion.h
        <linkdef>LinkDef.h
     ]
-    # requirements
+    # dependent packages
+    ssb2012
     /ROOT
-    /AnalysisTools//AnalysisToolsInteractive/<link>shared
-    /SimpleTable//SimpleTableInteractive/<link>shared
+    /AnalysisTools
   : # requirements
     <include>./include
     <include>./source
-    <link>shared
   : # default-build
   : # usage-requirements
     <include>./include
+    <include>./source
   ;
 
 exe ss2012_analysis
   : # sources
     ./source/ss2012_analysis.cc
     ./source/AnalysisLooper.cc
-    ss2012_tools_static
     # dependent packages
     /ROOT
+    ss2012_tools/<link>static
     /MiniFWLite/<link>shared
-    /AnalysisTools//AnalysisToolsStatic/<link>static
-    /RootTools//RootToolsStatic/<link>static
+    /AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
     /FGTools/<link>static
     /boost//program_options/<link>static
-    /SimpleTable//SimpleTableStatic/<link>static
+    /SimpleTable/<link>static
   : # requirements
+    <define>__NON_ROOT_BUILD__
     <include>./include
     <include>./source
-    <define>__NON_ROOT_BUILD__
   : # default-build
   : # usage-requirements
   ;
@@ -68,13 +64,14 @@ exe ss2012_plots
   : # sources
     ./source/ss2012_plots.cc
     ./source/PlotLooper.cc
-    ss2012_tools_static
     # dependent packages
+    ss2012_tools/<link>static
     /ROOT
     /MiniFWLite/<link>shared
-    /AnalysisTools//AnalysisToolsStatic/<link>static
-    /RootTools//RootToolsStatic/<link>static
+    /AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
     /boost//program_options/<link>static
+    /SimpleTable/<link>static
   : # requirements
 		<define>__NON_ROOT_BUILD__
     <include>./include
@@ -86,12 +83,12 @@ exe ss2012_plots
 exe ss2012_merge_babies
   : # sources
     ./source/ss2012_merge_babies.cc
-    ss2012_tools_static
     # dependent packages
+    ss2012_tools/<link>static
     /ROOT
     /MiniFWLite/<link>shared
-    /AnalysisTools//AnalysisToolsStatic/<link>static
-    /RootTools//RootToolsStatic/<link>static
+    #/AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
     /boost//program_options/<link>static
   : # requirements
     <include>./include
@@ -106,8 +103,8 @@ lib fake_rate_baby
     ./source/FakeRateBaby.cc
     # dependent packages
     /ROOT
-    /RootTools//RootToolsStatic/<link>static
-    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /RootTools
+    /AnalysisTools
   : # requirements
     <include>./include
     <include>./source
@@ -125,8 +122,8 @@ exe ss2012_create_fakerate
     fake_rate_baby/<link>static
     /ROOT
     /MiniFWLite/<link>shared
-    /RootTools//RootToolsStatic/<link>static
-    /AnalysisTools//AnalysisToolsStatic/<link>static
+    /RootTools//RootTools/<link>static
+    /AnalysisTools/<link>static
     /boost//program_options/<link>static
     /boost//headers/<link>static
   : # requirements
@@ -136,9 +133,54 @@ exe ss2012_create_fakerate
   : # usage-requirements
   ;
 
+# FG's background tools
+lib ss2012_bkgd_tools
+  : # sources
+		./FGBkgd2/doAllBkgdPlots.cc
+		./FGBkgd2/makeBkgdEstimatePlots.cc
+		./FGBkgd2/printYieldsTable.cc
+		./FGBkgd2/printEventList.cc
+		./FGBkgd2/FakeRatePrediction.cc
+		./FGBkgd2/ChargeFlipPrediction.cc
+		./FGBkgd2/getTotalBackgroundPrediction.cc
+		./FGBkgd2/makeBkgdEstimatePlots.cc
+		./FGBkgd2/doAllBkgdPlots.cc
+		./FGBkgd2/printFRtable.cc
+    ssb2012
+	 	[ rootcint Dict
+	 	  : # requirements
+	 	    <include>./FGBkgd2
+	 	    <include>$(PAC)/packages/cms2/05.03.09/header
+	 	    <include>$(PAC)/packages/AnalysisTools/include
+				#<header>SignalRegion.h
+				<header>printYieldsTable.h
+				<header>printEventList.h
+				<header>FakeRatePrediction.h
+			  <header>ChargeFlipPrediction.h
+				<header>EventType.h
+				<header>Samples.h
+	 	    #<header>DileptonHypType.h
+				<header>doAllBkgdPlots.h
+		    <header>printFRtable.h
+				<header>makeBkgdEstimatePlots.h
+				<header>getTotalBackgroundPrediction.h
+	 	    <linkdef>libs/LinkDef.h
+	 	]
+    # dependent packages
+    /ROOT
+		/FGTools
+    /MiniFWLite
+    /boost//filesystem
+  : # requirements
+    <include>./FGBkgd2
+  : # default-build
+  : # usage-requirements
+  ;
+
 # install libs/exes
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
 default-install ss2012_plots ;
-default-install ss2012_tools_interactive ;
+default-install ss2012_tools ;
 default-install ss2012_create_fakerate ;
+default-install ss2012_bkgd_tools ;

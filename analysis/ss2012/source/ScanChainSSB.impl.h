@@ -54,7 +54,8 @@ int ScanChainSSB
 
     while ((current_file = (TFile*)file_iter.Next()))
     {
-        TFile *file = new TFile(current_file->GetTitle());
+        //TFile *file = new TFile(current_file->GetTitle());
+        TFile *file = current_file;
         TTree *tree = dynamic_cast<TTree*>(file->Get(tree_name.c_str()));
         if (not tree)
         {
@@ -108,9 +109,9 @@ int ScanChainSSB
         } // end event loop
 
         // Clean Up
-        delete tree;
+        //delete tree;
         file->Close();
-        delete file;
+        //delete file;
     }
 
     // print warning if the totals don't line up

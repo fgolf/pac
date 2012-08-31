@@ -13,6 +13,8 @@ bool ValidDatasetName(const std::string& dataset)
         return true;
     if (dataset == "data2012Cv2")
         return true;
+    if (dataset == "data2012ABr")
+        return true;
     return false;
 }
 
@@ -74,6 +76,7 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
             chain->Add(Form("%s/DoubleElectron_Run2012B-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
         }
     }    
+    // 2012C prompt v2
     else if (dataset == "data2012Cv2")
     {
         const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_2012Cv2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_2012Cv2";
@@ -85,6 +88,24 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
         else if (channel=="el")
         {
             chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
+        }
+    }    
+    // 2012A/B rereco 13Jul2012 and 06Aug2012 recovery
+    else if (dataset == "data2012ABr")
+    {
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_submit2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_submit2";
+        if (channel=="mu")
+        {
+            chain->Add(Form("%s/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleMu_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
+        }
+        else if (channel=="el")
+        {
+            chain->Add(Form("%s/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
         }
     }    
     else
