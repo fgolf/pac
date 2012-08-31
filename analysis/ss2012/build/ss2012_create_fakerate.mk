@@ -1,6 +1,5 @@
 # ----------------------------------------------------------------------- #
-# Makefile for RootTools library
-# creates an interative shared lib to use with ROOT or stand alone c++ code
+# Makefile for ss2012_create_fakerate.exe 
 # ----------------------------------------------------------------------- #
 
 include ${PAC}/tools/Makefile.common

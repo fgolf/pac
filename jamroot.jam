@@ -58,6 +58,11 @@ local cms2_core_tag = HEAD ;
 path-constant CMS2_CORE : ./externals/source/cms2_core/$(cms2_core_tag) ;
 use-project /CMS2_CORE  : ./externals/build/cms2_core ;
 
+# CMS2_FRB
+local cms2_frb_tag = HEAD ;
+path-constant CMS2_FRB : ./externals/source/cms2_frb/$(cms2_frb_tag) ;
+use-project /CMS2_FRB  : ./externals/build/cms2_frb ;
+
 # reusable packages 
 # ----------------------------------------------------------------------#
 
