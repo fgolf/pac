@@ -28,6 +28,7 @@ lib ss2012_tools
     ]
     # dependent packages
     ssb2012
+    /CMS2
     /ROOT
     /AnalysisTools
   : # requirements
@@ -133,54 +134,75 @@ exe ss2012_create_fakerate
   : # usage-requirements
   ;
 
-# FG's background tools
-lib ss2012_bkgd_tools
+# quick and dirty cms2 looper
+exe ss2012_quick_check
   : # sources
-		./FGBkgd2/doAllBkgdPlots.cc
-		./FGBkgd2/makeBkgdEstimatePlots.cc
-		./FGBkgd2/printYieldsTable.cc
-		./FGBkgd2/printEventList.cc
-		./FGBkgd2/FakeRatePrediction.cc
-		./FGBkgd2/ChargeFlipPrediction.cc
-		./FGBkgd2/getTotalBackgroundPrediction.cc
-		./FGBkgd2/makeBkgdEstimatePlots.cc
-		./FGBkgd2/doAllBkgdPlots.cc
-		./FGBkgd2/printFRtable.cc
-    ssb2012
-	 	[ rootcint Dict
-	 	  : # requirements
-	 	    <include>./FGBkgd2
-	 	    <include>$(PAC)/packages/cms2/05.03.09/header
-	 	    <include>$(PAC)/packages/AnalysisTools/include
-				#<header>SignalRegion.h
-				<header>printYieldsTable.h
-				<header>printEventList.h
-				<header>FakeRatePrediction.h
-			  <header>ChargeFlipPrediction.h
-				<header>EventType.h
-				<header>Samples.h
-	 	    #<header>DileptonHypType.h
-				<header>doAllBkgdPlots.h
-		    <header>printFRtable.h
-				<header>makeBkgdEstimatePlots.h
-				<header>getTotalBackgroundPrediction.h
-	 	    <linkdef>libs/LinkDef.h
-	 	]
+    ./source/ss2012_quick_check.cc
+    #ss2012_tools_static
     # dependent packages
     /ROOT
-		/FGTools
-    /MiniFWLite
-    /boost//filesystem
+    /MiniFWLite/<link>shared
+    /AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    #/FGTools/<link>static
+    #/boost//program_options/<link>static
+    #/SimpleTable//SimpleTableStatic/<link>static
   : # requirements
-    <include>./FGBkgd2
+    <include>./include
+    <include>./source
   : # default-build
   : # usage-requirements
   ;
+
+# FG's background tools
+#lib ss2012_bkgd_tools
+#  : # sources
+#		./FGBkgd2/doAllBkgdPlots.cc
+#		./FGBkgd2/makeBkgdEstimatePlots.cc
+#		./FGBkgd2/printYieldsTable.cc
+#		./FGBkgd2/printEventList.cc
+#		./FGBkgd2/FakeRatePrediction.cc
+#		./FGBkgd2/ChargeFlipPrediction.cc
+#		./FGBkgd2/getTotalBackgroundPrediction.cc
+#		./FGBkgd2/makeBkgdEstimatePlots.cc
+#		./FGBkgd2/doAllBkgdPlots.cc
+#		./FGBkgd2/printFRtable.cc
+#    ssb2012
+#	 	[ rootcint Dict
+#	 	  : # requirements
+#	 	    <include>./FGBkgd2
+#	 	    <include>$(PAC)/packages/cms2/05.03.09/header
+#	 	    <include>$(PAC)/packages/AnalysisTools/include
+#				#<header>SignalRegion.h
+#				<header>printYieldsTable.h
+#				<header>printEventList.h
+#				<header>FakeRatePrediction.h
+#			  <header>ChargeFlipPrediction.h
+#				<header>EventType.h
+#				<header>Samples.h
+#	 	    #<header>DileptonHypType.h
+#				<header>doAllBkgdPlots.h
+#		    <header>printFRtable.h
+#				<header>makeBkgdEstimatePlots.h
+#				<header>getTotalBackgroundPrediction.h
+#	 	    <linkdef>libs/LinkDef.h
+#	 	]
+#    # dependent packages
+#    /ROOT
+#		/FGTools
+#    /MiniFWLite
+#    /boost//filesystem
+#  : # requirements
+#    <include>./FGBkgd2
+#  : # default-build
+#  : # usage-requirements
+#  ;
 
 # install libs/exes
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
 default-install ss2012_plots ;
 default-install ss2012_tools ;
+default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
-default-install ss2012_bkgd_tools ;
+#default-install ss2012_bkgd_tools ;

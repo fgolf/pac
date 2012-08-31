@@ -12,7 +12,9 @@ include ${PAC}/tools/Makefile.common
 programs        := ss2012_merge_babies.exe
 program_dir_rel := analysis/ss2012
 sources         := ss2012_merge_babies.cc \
-include_dir     := include
+				   SSB2012.cc      	\
+				   SkimChainSSB.cc	
+include_dir     := include source
 defines         := 
 
 # additional libraries

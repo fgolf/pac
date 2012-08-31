@@ -3,7 +3,7 @@
 # creates an shared lib
 # ----------------------------------------------------------------------- #
 
-include ../../tools/Makefile.common
+include ${PAC}/tools/Makefile.common
 
 # specifiy the sources here
 # ----------------------------------------------------------------------- #

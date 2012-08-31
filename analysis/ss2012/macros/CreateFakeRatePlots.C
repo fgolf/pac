@@ -79,12 +79,17 @@ void CountElectronNumDen(TH1* h_num, TH1* h_den, const std::string& title)
 
 void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 {
-	//rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
-    //std::string path = "plots/fake_rates/muons_920pb";
+	rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
+    std::string path = "plots/fake_rates/muons_920pb";
+	float lumi = 0.920;
+
 	//rt::TH1Container hc("plots/fake_rates/muons_5p1fb/muons_5p1fb.root");
     //std::string path = "plots/fake_rates/muons_5p1fb";
-	rt::TH1Container hc("plots/fake_rates/muons_2012Cv2/muons_2012Cv2.root");
-    std::string path = "plots/fake_rates/muons_2012Cv2";
+	//float lumi = 5.1;
+
+	//rt::TH1Container hc("plots/fake_rates/muons_2012Cv2/muons_2012Cv2.root");
+    //std::string path = "plots/fake_rates/muons_2012Cv2";
+	//float lumi = 0.0;
 
     //std::string path = "plots/fake_rates/data/23May";
 	//rt::TH1Container hc("plots/mu_plus/data/mu_plus.root");
@@ -99,12 +104,10 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 	rt::SetTDRStyle();
 	gStyle->SetTitleBorderSize(0);
 
-	//float lumi = 0.920;
 	//float lumi = 3.95;
-	float lumi = 0.0;
-	//std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 	//std::string title = Form("#mu^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
-	std::string title = Form("#mu^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
+	//std::string title = Form("#mu^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 
     // Fake Rates
     float max = 0.5;
@@ -171,21 +174,35 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     //std::string path = "plots/fake_rates/data/23May";
 	//rt::TH1Container hc("plots/el_plus/data/el_plus.root");
     //std::string path = "plots/fake_rates/data/el_plus";
-	rt::TH1Container hc("plots/el_minus/data/el_minus.root");
-    std::string path = "plots/fake_rates/data/el_minus";
+	//rt::TH1Container hc("plots/el_minus/data/el_minus.root");
+    //std::string path = "plots/fake_rates/data/el_minus";
 	//rt::TH1Container hc("plots/electrons_3p95/data/electrons_3p95.root");
     //std::string path = "plots/fake_rates/data/20Jun";
-	std::map<std::string, rt::TH1Overlay> p;
+
+	//rt::TH1Container hc("plots/fake_rates/electrons_920pb/electrons_920pb.root");
+    //std::string path = "plots/fake_rates/electrons_920pb";
+	//float lumi = 0.920;
+
+	//rt::TH1Container hc("plots/fake_rates/electrons_5p1fb/electrons_5p1fb.root");
+    //std::string path = "plots/fake_rates/electrons_5p1fb";
+	//float lumi = 5.1;
+
+	//rt::TH1Container hc("plots/fake_rates/electrons_2012ABr/electrons_2012ABr.root");
+    //std::string path = "plots/fake_rates/electrons_2012ABr";
+	//float lumi = 5.1;
+
+	rt::TH1Container hc("plots/fake_rates/electrons_2012Cv2/electrons_2012Cv2.root");
+    std::string path = "plots/fake_rates/electrons_2012Cv2";
+	float lumi = 0.0;
 
 	// set style
 	rt::SetTDRStyle();
 	gStyle->SetTitleBorderSize(0);
 
-	float lumi = 0.920;
 	//float lumi = 3.95;
-	//std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 	//std::string title = Form("e^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
-	std::string title = Form("e^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
+	//std::string title = Form("e^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 
     // Fake Rates
     float max = 0.6;
@@ -198,6 +215,7 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     Style_t s60 = 24;
 
     // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
+	std::map<std::string, rt::TH1Overlay> p;
     p["p_elfr_vs_nvtxs"] = rt::TH1Overlay(Form("%s;# vtxs;TL ratio", title.c_str()), "sb::off lg::top_left");
     p["p_elfr_vs_nvtxs"].Add(hc["h_elfr20c_vs_nvtxs"], "away jet p_{T} > 20 GeV", c20, 2, s20);
     p["p_elfr_vs_nvtxs"].Add(hc["h_elfr40c_vs_nvtxs"], "away jet p_{T} > 40 GeV", c40, 2, s40);
@@ -205,7 +223,7 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     p["p_elfr_vs_nvtxs"].SetYAxisRange(0, max);
     p["p_elfr_vs_nvtxs"].SetLegendOption("p");
     p["p_elfr_vs_nvtxs"].SetLegendTextSize(0.042);
-    p["p_elfr_vs_nvtxs"].AddText("Electrons"           , 0.75, 0.835);
+    p["p_elfr_vs_nvtxs"].AddText("Electrons"         , 0.75, 0.835);
     p["p_elfr_vs_nvtxs"].AddText("p^{e}_{T} > 20 GeV", 0.75, 0.775);
 
     p["p_elfr_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top_left");
@@ -224,7 +242,7 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     p["p_elfr_vs_eta"].SetYAxisRange(0, max);
     p["p_elfr_vs_eta"].SetLegendOption("p");
     p["p_elfr_vs_eta"].SetLegendTextSize(0.042);
-    p["p_elfr_vs_eta"].AddText("Electrons"          , 0.75, 0.835);
+    p["p_elfr_vs_eta"].AddText("Electrons"         , 0.75, 0.835);
     p["p_elfr_vs_eta"].AddText("p^{e}_{T} > 20 GeV", 0.75, 0.775);
 
     CountMuonNumDen(hc["h_el_num20c"], hc["h_el_fo20c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 20");

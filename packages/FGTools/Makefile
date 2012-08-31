@@ -3,7 +3,7 @@
 # creates an interative shared lib to use with ROOT or stand alone c++ code
 # ----------------------------------------------------------------------- #
 
-include ../../tools/Makefile.common
+include ${PAC}/tools/Makefile.common
 
 # specifiy the sources here
 # ----------------------------------------------------------------------- #

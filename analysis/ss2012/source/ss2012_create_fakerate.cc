@@ -60,9 +60,9 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
     boost::shared_ptr<TChain> chain(new TChain("tree"));
     if (dataset == "data")
     {
-        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_3p95fb/"  : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_3p95fb/";
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_5p098ifb/": "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_5p098ifb/";
+        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_5p098ifb/": "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_5p098ifb/";
         if (channel=="mu")
         {
             chain->Add(Form("%s/SingleMu_Run2012A-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
@@ -91,7 +91,6 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
         }
     }    
     // 2012A/B rereco 13Jul2012 and 06Aug2012 recovery
-    else if (dataset == "data2012ABr")
     {
         const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_submit2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_submit2";
         if (channel=="mu")
@@ -108,10 +107,6 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
             chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
         }
     }    
-    else
-    {
-        throw std::runtime_error("ERROR: need valid option (\"data\")");
-    }
 
     return chain;
 }

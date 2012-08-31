@@ -32,6 +32,11 @@ namespace at
         };
     }
 
+    std::string GetDileptonHypTypeName(int hyp_type)
+    {
+		return GetDileptonHypTypeName(static_cast<DileptonHypType::value_type>(hyp_type));
+    }
+
     std::string GetDileptonHypTypeTitle(const DileptonHypType::value_type& hyp_type)
     {
         switch (hyp_type) 

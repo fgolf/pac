@@ -20,6 +20,7 @@ namespace at
 
     // return the name of the name the DileptonHypType
     std::string GetDileptonHypTypeName(const DileptonHypType::value_type& hyp_type);
+    std::string GetDileptonHypTypeName(int hyp_type);
 
     // return the title for ROOT of the name the DileptonHypType
     std::string GetDileptonHypTypeTitle(const DileptonHypType::value_type& hyp_type);

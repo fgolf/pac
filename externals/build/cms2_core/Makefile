@@ -3,7 +3,7 @@
 # creates an shared lib
 # ----------------------------------------------------------------------- #
 
-include ../../../tools/Makefile.common
+include ${PAC}/tools/Makefile.common
 
 # specifiy the sources here
 # ----------------------------------------------------------------------- #
@@ -42,8 +42,11 @@ package_dir := $(project_dir)/$(package_dir_rel)
 
 include_dir := $(addprefix $(strip $(package_dir))/,$(include_dir))
 
-sources     := $(call add-path,$(package_dir),$(sources))
-source_dir  := $(sort $(dir $(sources)))
+#sources     := $(call add-path,$(package_dir),$(sources))
+#source_dir  := $(sort $(dir $(sources)))
+source_dir  := $(package_dir)
+sources     := $(call add-path,$(source_dir),$(sources))
+
 
 object_dir  := $(call add-path,$(project_obj),$(package_dir_rel))
 objects     := $(call source-to-object,$(sources),$(object_dir)) 

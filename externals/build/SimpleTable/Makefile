@@ -1,4 +1,4 @@
-include ../../../tools/Makefile.common
+include ${PAC}/tools/Makefile.common
 
 target        := $(call add-path,$(project_lib),libSimpleTable.so)
 external_path := $(call add-path,$(project_dir),externals/source/SimpleTable)
