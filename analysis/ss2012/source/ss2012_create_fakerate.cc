@@ -40,8 +40,8 @@ bool ValidLeptonName(const std::string& channel)
         return true;
     if (channel == "el")
         return true;
-    if (channel == "both")
-        return true;
+//    if (channel == "both")
+//        return true;
     return false;
 }
 
@@ -62,6 +62,7 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
     // full 8.4 /fb of 2012AB reprocessed and 2012C
     if (dataset == "data")
     {
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";     // 920 /pb
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_3p95fb/"  : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_3p95fb/";
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_5p098ifb/": "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_5p098ifb/";
         if (channel=="mu")
@@ -159,13 +160,13 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"          , "print this menu")
-        ("nev"           , po::value<long>(&number_of_events)         , "number of events to run on (-1 == all)"                   )
-        ("lumi"          , po::value<float>(&lumi)                    , "luminosity (default is 1.0 fb)"                           )
-        ("dataset"       , po::value<std::string>(&dataset)           , "name of dataset (valid options: \"data\")"                )
-        ("channel"       , po::value<std::string>(&channel)           , "name of channel (valid options: \"mu\", \"el\", \"both\")")
-        ("root_file_name", po::value<std::string>(&root_file_name)    , "name of output root file"                                 )
-        ("suffix"        , po::value<std::string>(&suffix)            , "suffix to pring (png, eps, pdf).  empty for nonf"         )
-        ("charge"        , po::value<int>(&charge)                    , "-1: +ve, -1: -ve, 0: both"                                )
+        ("nev"           , po::value<long>(&number_of_events)         , "number of events to run on (-1 == all)"           )
+        ("lumi"          , po::value<float>(&lumi)                    , "luminosity (default is 1.0 fb)"                   )
+        ("dataset"       , po::value<std::string>(&dataset)           , "name of dataset"                                  )
+        ("channel"       , po::value<std::string>(&channel)           , "name of channel (valid options: \"mu\", \"el\")"  )
+        ("root_file_name", po::value<std::string>(&root_file_name)    , "name of output root file"                         )
+        ("suffix"        , po::value<std::string>(&suffix)            , "suffix to pring (png, eps, pdf).  empty for nonf" )
+        ("charge"        , po::value<int>(&charge)                    , "-1: +ve, -1: -ve, 0: both"                        )
         ;
 
     po::variables_map vm;
