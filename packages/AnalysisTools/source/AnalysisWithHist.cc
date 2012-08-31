@@ -26,7 +26,7 @@ namespace at
     {
         // write output
         cout << "Writing histogram root file to: " << m_root_file->GetName() << endl;
-        m_hist_container.Write(m_root_file->GetName());
+        m_hist_container.Write(m_root_file.get());
         if (m_print)
         {
             std::string output_print_path = rt::dirname(m_root_file->GetName()) + "/" + m_suffix;

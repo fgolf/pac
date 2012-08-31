@@ -191,9 +191,14 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     //std::string path = "plots/fake_rates/electrons_2012ABr";
 	//float lumi = 5.1;
 
-	rt::TH1Container hc("plots/fake_rates/electrons_2012Cv2/electrons_2012Cv2.root");
-    std::string path = "plots/fake_rates/electrons_2012Cv2";
-	float lumi = 0.0;
+	//rt::TH1Container hc("plots/fake_rates/electrons_2012Cv2/electrons_2012Cv2.root");
+    //std::string path = "plots/fake_rates/electrons_2012Cv2";
+	//float lumi = 2.9;
+
+	rt::TH1Container hc("plots/fake_rates/electrons_8p68fb/electrons_8p68fb.root");
+    std::string path = "plots/fake_rates/electrons_8p68fb";
+	float lumi = 8.68;
+
 
 	// set style
 	rt::SetTDRStyle();
@@ -245,9 +250,9 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     p["p_elfr_vs_eta"].AddText("Electrons"         , 0.75, 0.835);
     p["p_elfr_vs_eta"].AddText("p^{e}_{T} > 20 GeV", 0.75, 0.775);
 
-    CountMuonNumDen(hc["h_el_num20c"], hc["h_el_fo20c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 20");
-    CountMuonNumDen(hc["h_el_num40c"], hc["h_el_fo40c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 40");
-    CountMuonNumDen(hc["h_el_num60c"], hc["h_el_fo60c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 60");
+    CountElectronNumDen(hc["h_el_num20c"], hc["h_el_fo20c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 20");
+    CountElectronNumDen(hc["h_el_num40c"], hc["h_el_fo40c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 40");
+    CountElectronNumDen(hc["h_el_num60c"], hc["h_el_fo60c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 60");
 
     // print
     if (suffix=="all")

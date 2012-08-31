@@ -102,7 +102,7 @@ int ScanChainFRB
         } // end event loop
 
         // Clean Up
-        delete tree;
+        //delete tree;
         file->Close();
         delete file;
     }
