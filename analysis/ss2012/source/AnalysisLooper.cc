@@ -91,7 +91,7 @@ void CompareHyps(std::pair<size_t, DileptonChargeType::value_type>& best_hyp, si
 }
 
 // set then numerator bool
-bool IsNumerator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is_l1)
+bool IsNumerator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is_lt)
 {
     if (hyp.second == DileptonChargeType::static_size)
     {
@@ -103,21 +103,15 @@ bool IsNumerator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is
         case DileptonChargeType::SS: return true; break;
         case DileptonChargeType::SF: 
         {
-            bool l1_num = samesign::isNumeratorLepton(hyp_lt_id().at(hyp.first), hyp_lt_index().at(hyp.first));
-            bool l2_num = samesign::isNumeratorLepton(hyp_ll_id().at(hyp.first), hyp_ll_index().at(hyp.first));
-
-            if (hyp_lt_p4().at(hyp.first).pt() > hyp_lt_p4().at(hyp.first).pt())
+            bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.first), cms2.hyp_lt_index().at(hyp.first));
+            bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.first), cms2.hyp_ll_index().at(hyp.first));
+            if (lt_num && !ll_num)
             {
-                std::swap(l1_num, l2_num);
+                return is_lt ? true : false;
             }
-
-            if (l1_num && !l2_num)
+            if (!lt_num && ll_num)
             {
-                return is_l1 ? true : false;
-            }
-            if (!l1_num && l2_num)
-            {
-                return is_l1 ? false : true;
+                return is_lt ? false : true;
             }
             break;
         }
@@ -126,7 +120,7 @@ bool IsNumerator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is
     return false;
 }
 
-bool IsDenominator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is_l1)
+bool IsDenominator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is_lt)
 {
     if (hyp.second == DileptonChargeType::static_size)
     {
@@ -134,25 +128,19 @@ bool IsDenominator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool 
     }
     switch (hyp.second)
     {
-        case DileptonChargeType::DF: return true; break;
-        case DileptonChargeType::SS: return false; break;
+        case DileptonChargeType::DF: return false; break;
+        case DileptonChargeType::SS: return true; break;
         case DileptonChargeType::SF: 
         {
-            bool l1_num = samesign::isNumeratorLepton(hyp_lt_id().at(hyp.first), hyp_lt_index().at(hyp.first));
-            bool l2_num = samesign::isNumeratorLepton(hyp_ll_id().at(hyp.first), hyp_ll_index().at(hyp.first));
-
-            if (hyp_lt_p4().at(hyp.first).pt() > hyp_lt_p4().at(hyp.first).pt())
+            bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.first), cms2.hyp_lt_index().at(hyp.first));
+            bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.first), cms2.hyp_ll_index().at(hyp.first));
+            if (lt_num && !ll_num)
             {
-                std::swap(l1_num, l2_num);
+                return is_lt ? false : true;
             }
-
-            if (l1_num && !l2_num)
+            if (!lt_num && ll_num)
             {
-                return is_l1 ? false : true;
-            }
-            if (!l1_num && l2_num)
-            {
-                return is_l1 ? true : false;
+                return is_lt ? true : false;
             }
             break;
         }
@@ -584,24 +572,40 @@ int SSAnalysisLooper::Analyze(long event)
         // set lepton info (lep1 is higher pT lepton, lep2 is lower pT lepton)
         float lt_pt = hyp_lt_p4().at(hyp_idx).pt();
         float ll_pt = hyp_ll_p4().at(hyp_idx).pt();
+        bool lt_fo  = IsDenominator(best_hyp, /*is_lt=*/true);  
+        bool lt_num = IsNumerator  (best_hyp, /*is_lt=*/true);  
+        bool ll_fo  = IsDenominator(best_hyp, /*is_lt=*/false);  
+        bool ll_num = IsNumerator  (best_hyp, /*is_lt=*/false);  
 
         int lep1_id;
         int lep1_idx;
         int lep2_id;
         int lep2_idx;
+        bool lep1_fo = false;
+        bool lep1_num = false;
+        bool lep2_fo = false;
+        bool lep2_num = false;
         if (lt_pt > ll_pt)
         {
             lep1_id  = cms2.hyp_lt_id().at(hyp_idx);
             lep1_idx = cms2.hyp_lt_index().at(hyp_idx); 
+            lep1_fo  = lt_fo;
+            lep1_num = lt_num;
             lep2_id  = cms2.hyp_ll_id().at(hyp_idx);    
             lep2_idx = cms2.hyp_ll_index().at(hyp_idx); 
+            lep2_fo  = ll_fo;
+            lep2_num = ll_num;
         }
         else
         {
             lep1_id  = cms2.hyp_ll_id().at(hyp_idx);
             lep1_idx = cms2.hyp_ll_index().at(hyp_idx); 
+            lep1_fo  = ll_fo;
+            lep1_num = ll_num;
             lep2_id  = cms2.hyp_lt_id().at(hyp_idx);    
             lep2_idx = cms2.hyp_lt_index().at(hyp_idx); 
+            lep2_fo  = lt_fo;
+            lep2_num = lt_num;
         }
 
         m_evt.lep1.cordetiso   = m_evt.lep1.detiso   - (log(m_evt.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep1.p4.pt()); // check that I have the correct formula 
@@ -612,8 +616,8 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.lep1.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
         m_evt.lep1.dbeta       = (abs(lep1_id)==13) ? mus_isoR03_pf_PUPt().at(lep1_idx) : -99999.0;
         m_evt.lep1.dbeta04     = (abs(lep1_id)==13) ? mus_isoR04_pf_PUPt().at(lep1_idx) : -99999.0;
-        m_evt.lep1.is_fo       = IsDenominator(best_hyp, /*is_l1=*/true);  
-        m_evt.lep1.is_num      = IsNumerator  (best_hyp, /*is_l1=*/true);  
+        m_evt.lep1.is_fo       = lep1_fo;
+        m_evt.lep1.is_num      = lep1_num;
         m_evt.lep1.is_conv     = false; 
         m_evt.lep1.is_loosemu  = false; 
         //m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, evt_pfmet_type1cor(), evt_pfmetPhi_type1cor());
@@ -631,8 +635,8 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.lep2.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
         m_evt.lep2.dbeta       = (abs(lep2_id)==13) ? mus_isoR03_pf_PUPt().at(lep2_idx) : -99999.0;
         m_evt.lep2.dbeta04     = (abs(lep2_id)==13) ? mus_isoR04_pf_PUPt().at(lep2_idx) : -99999.0;
-        m_evt.lep2.is_fo       = IsDenominator(best_hyp, /*is_l1=*/false);
-        m_evt.lep2.is_num      = IsNumerator  (best_hyp, /*is_l1=*/false);
+        m_evt.lep2.is_fo       = lep2_fo; 
+        m_evt.lep2.is_num      = lep2_num;
         m_evt.lep2.is_conv     = false; 
         m_evt.lep2.is_loosemu  = false; 
         m_evt.lep2.mt          = rt::Mt(m_evt.lep2.p4, evt_pfmet(), evt_pfmetPhi());
