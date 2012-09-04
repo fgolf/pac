@@ -106,3 +106,28 @@ SignalRegionInfo GetSignalRegionInfo(unsigned int signal_region_number)
     SignalRegion::value_type signal_region = static_cast<SignalRegion::value_type>(signal_region_number); 
     return GetSignalRegionInfo(signal_region); 
 }
+
+// passes signal region
+bool PassesSignalRegion(const SignalRegion::value_type& signal_region)
+{
+    using namespace ssb;
+    switch (signal_region)
+    {
+        case SignalRegion::sr0 : return (ht() > 80.0   && pfmet() >  0.0 );
+        case SignalRegion::sr1 : return (ht() > 80.0   && pfmet() > 30.0 );
+        case SignalRegion::sr2 : return (ht() > 80.0   && pfmet() > 30.0 && is_pp());
+        case SignalRegion::sr3 : return (ht() > 200.0  && pfmet() > 50.0 );
+        case SignalRegion::sr4 : return (ht() > 200.0  && pfmet() > 120.0);
+        case SignalRegion::sr5 : return (ht() > 320.0  && pfmet() > 50.0 );
+        case SignalRegion::sr6 : return (ht() > 320.0  && pfmet() > 120.0);
+        case SignalRegion::sr7 : return (ht() > 200.0  && pfmet() > 50.0 && nbtags()>=3);
+        case SignalRegion::sr8 : return (ht() > 320.0);
+        default: return false;
+    }
+    return false;
+}
+
+bool PassesSignalRegion(unsigned int signal_region_number)
+{
+    return PassesSignalRegion(static_cast<SignalRegion::value_type>(signal_region_number));
+}

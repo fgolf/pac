@@ -7,15 +7,15 @@ struct SignalRegion
 {
     enum value_type
     {
-        sr0,
-        sr1,
-        sr2,
-        sr3,
-        sr4,
-        sr5,
-        sr6,
-        sr7,
-        sr8,
+        sr0, // baseline
+        sr1, // HT > 80, MET > 30
+        sr2, // HT > 80, MET > 30, ++
+        sr3, // HT > 200, MET > 50
+        sr4, // HT > 200, MET > 120
+        sr5, // HT > 320, MET > 50
+        sr6, // HT > 320, MET > 120
+        sr7, // HT > 200, MET > 50, # btags >= 3
+        sr8, // HT > 320, no MET cut
         static_size
     };
 };
@@ -35,5 +35,9 @@ SignalRegion::value_type GetSignalRegionFromName(const std::string& signal_regio
 SignalRegionInfo GetSignalRegionInfo(const SignalRegion::value_type& signal_region);
 SignalRegionInfo GetSignalRegionInfo(const std::string& signal_region_name);
 SignalRegionInfo GetSignalRegionInfo(unsigned int signal_region_number);
+
+// passes signal rgion
+bool PassesSignalRegion(const SignalRegion::value_type& signal_region);
+bool PassesSignalRegion(unsigned int signal_region_number);
 
 #endif // SIGNALREGIONS_H

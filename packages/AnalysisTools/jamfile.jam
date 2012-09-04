@@ -12,6 +12,7 @@ lib AnalysisTools
     ./source/DileptonHypType.cc
     ./source/DileptonChargeType.cc
     ./source/VtxReweight.cc
+    ./source/PrintIdIsoInfo.cc
     ./source/GoodRun.cc
     ./source/Sample.cc
     ./source/DileptonTree.cc

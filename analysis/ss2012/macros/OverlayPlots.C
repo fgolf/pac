@@ -25,8 +25,8 @@ void OverlayPlots(float scale = 3.95, int signal_region = 0, const std::string& 
     //samples.push_back(sample_t("t1tttt_mglu1100_mlsp100", "T1tttt (m_{glu} = 1100, m_{LSP} = 100)", kBlack    )); 
     //samples.push_back(sample_t("t1tttt_mglu600_mlsp100" , "T1tttt (m_{glu} = 600, m_{LSP} = 100)" , kRed      )); 
     //samples.push_back(sample_t("t1tttt_mglu600_mlsp0" , "T1tttt (600, 0)" , kRed      , 22)); 
-    samples.push_back(sample_t("t1tttt_mglu1100_mlsp0"  , "T1tttt (1100, 0)"  , kBlack    , 20)); 
-    samples.push_back(sample_t("t1tttt_mglu1100_mlsp600", "T1tttt (1100, 600)", kRed      , 22)); 
+    //samples.push_back(sample_t("t1tttt_mglu1100_mlsp0"  , "T1tttt (1100, 0)"  , kBlack    , 20)); 
+    //samples.push_back(sample_t("t1tttt_mglu1100_mlsp600", "T1tttt (1100, 600)", kRed      , 22)); 
     samples.push_back(sample_t("ttw"                    , "t#bar{t}W"         , kBlue-7   ,  0));
     samples.push_back(sample_t("ttz"                    , "t#bar{t}Z"         , kGreen+2  ,  0));
     samples.push_back(sample_t("ttjets"                 , "t#bar{t}+jets"     , kYellow-7 ,  0));

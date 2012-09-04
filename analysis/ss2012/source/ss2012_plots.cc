@@ -21,11 +21,12 @@ try
     long number_of_events           = -1;
     std::string input_file          = "";
     std::string output_file         = "";
-    std::string fake_rate_file_name = "plots/data/data40c_pt35.root";
-    std::string fake_rate_hist_name = "h_mufr40c";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_23May2012.root";
+    std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string suffix              = "";
     std::string vtxreweight_file    = "";
     std::string sample_name         = "";
+    bool do_scale_factors           = true;
     float m_glu                     = 1000;
     float m_lsp                     = 100;
     unsigned int num_btags          = 0;
@@ -42,11 +43,12 @@ try
         ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                             )
         ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"             )
         ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                 )
-        ("fr_hist"  , po::value<std::string>(&fake_rate_hist_name), "fake rate hist name"                                 )
+        ("fl_hist"  , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                 )
         ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)")
         ("suffix"   , po::value<std::string>(&suffix)             , "suffix to pring (png, eps, pdf).  empty for none"    )
         ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                           )
         ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                )
+        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"             )
         ("mglu"     , po::value<float>(&m_glu)                    , "gluino mass"                                         )
         ("mlsp"     , po::value<float>(&m_lsp)                    , "LSP mass"                                            )
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                          )
@@ -169,8 +171,9 @@ try
             signal_region,
             vtxreweight_file,
             fake_rate_file_name,
-            fake_rate_hist_name,
+            flip_rate_file_name,
             num_btags,
+            do_scale_factors,
             m_glu,
             m_lsp,
             lumi,

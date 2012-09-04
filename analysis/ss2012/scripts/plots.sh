@@ -5,11 +5,11 @@ samples=(t1tttt ttw ttz)
 
 # command line options for ss2012_plots
 signal_region=${1:-0}
-lumi=20.0
+lumi=3.95
 nbtags=2
 #suffix="\"png\""
 suffix="\"eps\""
-options=" --nbtags $nbtags --sr $signal_region"
+options=" --nbtags $nbtags --sr $signal_region --lumi $lumi"
 
 function make_hists
 {
@@ -24,14 +24,22 @@ function make_hists
 # make the hists
 #make_hists t1tttt "--output plots/sr${signal_region}/t1tttt_mglu600_mlsp0.root  --mglu  600 --mlsp 0 $options"
 #make_hists t1tttt "--output plots/sr${signal_region}/t1tttt_mglu600_mlsp100.root  --mglu  600 --mlsp 100 $options"
-make_hists t1tttt_fastsim "--output plots/sr${signal_region}/t1tttt_mglu1100_mlsp0.root --mglu 1100 --mlsp 0 $options"
-make_hists t1tttt_fastsim "--output plots/sr${signal_region}/t1tttt_mglu1100_mlsp600.root --mglu 1100 --mlsp 600 $options"
-make_hists ttz     "$options"
-make_hists ttw     "$options"
-make_hists ttjets  "$options"
+#make_hists t1tttt_fastsim "--output plots/sr${signal_region}/t1tttt_mglu1100_mlsp0.root --mglu 1100 --mlsp 0 $options"
+#make_hists t1tttt_fastsim "--output plots/sr${signal_region}/t1tttt_mglu1100_mlsp600.root --mglu 1100 --mlsp 600 $options"
+make_hists data    "$options"
+#make_hists ttjets  "$options"
 make_hists wz      "$options"
 make_hists zz      "$options"
+make_hists ttg     "$options"
+make_hists ttw     "$options"
+make_hists ttww    "$options"
+make_hists ttz     "$options"
+make_hists wwg     "$options"
+make_hists www     "$options"
+make_hists wwz     "$options"
+make_hists wzz     "$options"
+make_hists zzz     "$options"
 
 # overlay the hists
-root -b -q -l "macros/OverlayPlots.C+ ($lumi, $signal_region, $suffix)"
+#root -b -q -l "macros/OverlayPlots.C+ ($lumi, $signal_region, $suffix)"
 

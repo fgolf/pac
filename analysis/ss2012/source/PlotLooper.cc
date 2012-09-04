@@ -11,6 +11,7 @@
 #include "at/VtxReweight.h"
 #include "at/DileptonHypType.h"
 #include "at/DileptonChargeType.h"
+#include "SignalRegion.h"
 #include "SSB2012.h"
 //#include "CTable.h"
 
@@ -19,39 +20,6 @@ typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > v
 using namespace std;
 using namespace at;
 
-bool PassesSignalRegion(SignalRegion::value_type signal_region)
-{
-    using namespace ssb;
-    switch (signal_region)
-    {
-        case SignalRegion::sr0 : return (ht() > 80.0  && pfmet() >  0.0);
-        case SignalRegion::sr1 : return (ht() > 80.0  && pfmet() > 30.0);
-        //case 10: return (njets() >= 4);
-        //case 11: return (ht() > 300   && pfmet() > 150  && njets() >= 4 && nbtags() >= 3) || (ht() > 450.0 && pfmet() > 150.0 && njets() >= 4 && nbtags() == 2);
-        //case 12: return (ht() > 240.0 && pfmet() > 150  && njets() >= 4 && nbtags() >= 3) || (ht() > 240.0 && pfmet() > 200.0 && njets() >= 5 && nbtags() == 2);
-        //case 13: return (ht() > 240.0 && pfmet() > 150  && njets() >= 4 && nbtags() >= 3) || (ht() > 400.0 && pfmet() > 200.0 && njets() >= 4 && nbtags() == 2);
-        //case 20: return (ht() > 80.0  && pfmet() > 0.0  && nbtags() == 2);
-        //case 21: return (ht() > 80.0  && pfmet() > 0.0  && nbtags() >= 3);
-        //case 22: return (njets() >= 4 && nbtags() == 2);
-        //case 23: return (njets() >= 4 && nbtags() >= 3);
-        //case 24: return (njets() >= 5 && nbtags() == 2);
-        //case 25: return (njets() >= 5 && nbtags() >= 3);
-        //case 26: return (pfmet() > 200.0 && njets() >= 4 && nbtags() == 2);
-        //case 27: return (pfmet() > 150.0 && njets() >= 4 && nbtags() >= 3);
-        //case 28: return (pfmet() > 200.0 && njets() >= 5 && nbtags() == 2);
-        //case 29: return (pfmet() > 150.0 && njets() >= 5 && nbtags() >= 3);
-        //case 30: return (ht() > 400.0 && pfmet() > 200.0 && njets() >= 4 && nbtags() == 2);
-        //case 31: return ((njets() >= 4 && nbtags() == 2) || (njets() >= 4 && nbtags() >= 3));
-        //case 32: return ((njets() >= 5 && nbtags() == 2) || (njets() >= 5 && nbtags() >= 3));
-        //case 33: return ((pfmet() > 200.0 && njets() >= 4 && nbtags() == 2) || (pfmet() > 150.0 && njets() >= 4 && nbtags() >= 3));
-        //case 34: return ((pfmet() > 200.0 && njets() >= 5 && nbtags() == 2) || (pfmet() > 150.0 && njets() >= 5 && nbtags() >= 3));
-        //case 35: return ((ht() > 400.0 && pfmet() > 200.0 && njets() >= 4 && nbtags() == 2) || (pfmet() > 150.0 && njets() >= 4 && nbtags() >= 3));
-        //case 40 : return (ht() > 80.0  && pfmet() >  0.0 && nbtags() == 2);
-        default: return false;
-    }
-    return false;
-}
-
 // construct:
 PlotLooper::PlotLooper
 (
@@ -59,9 +27,10 @@ PlotLooper::PlotLooper
     at::Sample::value_type sample,
     SignalRegion::value_type signal_region,
     const std::string& vtxreweight_file_name,
-    const std::string& fr_file_name,
-    const std::string& fr_hist_name,
+    const std::string& fake_rate_file_name,
+    const std::string& flip_rate_file_name,
     unsigned int num_btags,
+    bool do_scale_factors,
     float mass_glu,
     float mass_lsp,
     float lumi,
@@ -74,6 +43,7 @@ PlotLooper::PlotLooper
     , m_verbose(verbose)
     , m_is_data(at::SampleIsData(sample))
     , m_do_vtx_reweight(not vtxreweight_file_name.empty())
+    , m_do_scale_factors(do_scale_factors)
     , m_nbtags(num_btags)
     , m_mass_glu(mass_glu)
     , m_mass_lsp(mass_lsp)
@@ -86,6 +56,26 @@ PlotLooper::PlotLooper
         cout << "using vertex reweight file : " << vtxreweight_file_name << endl;
         set_vtxreweight_rootfile(vtxreweight_file_name.c_str(), m_verbose);
     }
+
+    // set the fake rate histograms
+    std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
+    cout << "using FR file : " << fake_rate_file->GetName() << endl;
+    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_mufr40c")->Clone()));
+    h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_elfr40c")->Clone()));
+    if (not h_mufr) {throw std::runtime_error("ERROR: SSAnalysisLooper: h_mufr40c doesn't exist");}
+    h_mufr->SetDirectory(0);
+    if (not h_elfr) {throw std::runtime_error("ERROR: SSAnalysisLooper: h_elfr40c doesn't exist");}
+    h_elfr->SetDirectory(0);
+
+    cout << "using mu FR hist : " << h_mufr->GetName() << endl;
+    cout << "using el FR hist : " << h_elfr->GetName() << endl;
+
+    // set the fake rate histograms
+    std::auto_ptr<TFile> flip_rate_file(rt::OpenRootFile(flip_rate_file_name));
+    cout << "using FL file : " << flip_rate_file->GetName() << endl;
+    h_flip.reset(dynamic_cast<TH2F*>(flip_rate_file->Get("flipRate")->Clone()));
+    if (not h_flip) {throw std::runtime_error("ERROR: SSAnalysisLooper: flipRate doesn't exist");}
+    h_flip->SetDirectory(0);
 
     // begin job
     BeginJob();
@@ -128,6 +118,8 @@ void PlotLooper::EndJob()
     rt::TH1Container& hc = m_hist_container;
     TH1::SetDefaultSumw2(true);
 
+    hc.Add(new TH1F("h_lumi"   , "integrated lumi used for these plots", 10000, 0, 100));
+
     // Fake Counts
     //hc.Add(new TH1F("h_vtx_eff_den", "# vtxs (denominator); #vtxs;Events", vtx_bins.size()-1, vtx_bins.data()));
     //hc.Add(new TH1F("h_vtx_eff_num", "# vtxs (numerator); #vtxs;Events"  , vtx_bins.size()-1, vtx_bins.data()));
@@ -147,52 +139,55 @@ void PlotLooper::EndJob()
             string qn = GetDileptonChargeTypeName(charge_type);
             string qt = GetDileptonChargeTypeTitle(charge_type);
 
+            // name and title suffixes
+            string ns = Form("_%s_%s"   ,  chn.c_str(), qn.c_str());
+            string ts = Form(" (%s, %s)",  cht.c_str(), qn.c_str());
+
             //cout << Form("%s %s %s %s", ch_name.c_str(), ch_title.c_str(), q_name.c_str(), q_title.c_str()) << endl;
-            hc.Add(new TH1F(Form("h_yield_%s_%s", chn.c_str(), qn.c_str()), Form("yields (%s, %s);yield;Events", cht.c_str(), qt.c_str()), 3, 0, 3));
+            hc.Add(new TH1F(Form("h_yield%s"   , ns.c_str()), Form("yields%s;yield;Events"                      , ts.c_str()), 3 ,  0      , 3   ));
+            //hc.Add(new TH1F(Form("h_nvtxs%s"   , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                     , ts.c_str()), 20 , 0     ,  40  ));
+            //hc.Add(new TH1F(Form("h_pt1%s"     , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"   , ts.c_str()), 25 , 0     , 250  ));
+            //hc.Add(new TH1F(Form("h_pt2%s"     , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"    , ts.c_str()), 25 , 0     , 250  ));
+            //hc.Add(new TH1F(Form("h_eta1%s"    , ns.c_str()), Form("Higher p_{T} lepton%s;#eta;Events"          , ts.c_str()), 10 , -2.5  , 2.5  ));
+            //hc.Add(new TH1F(Form("h_eta2%s"    , ns.c_str()), Form("Lower p_{T} lepton%s;#eta;Events"           , ts.c_str()), 10 , -2.5  , 2.5  ));
+            //hc.Add(new TH1F(Form("h_phi1%s"    , ns.c_str()), Form("Higher p_{T} lepton%s;#phi;Events"          , ts.c_str()),  5 , -3.5  , 3.5  ));
+            //hc.Add(new TH1F(Form("h_phi2%s"    , ns.c_str()), Form("Lower p_{T} lepton%s;#phi;Events"           , ts.c_str()),  5 , -3.5  , 3.5  ));
+            //hc.Add(new TH1F(Form("h_d01%s"     , ns.c_str()), Form("Higher p_{T} lepton%s;d_{0} (cm);Events"    , ts.c_str()), 25 , -0.05 , 0.05 ));
+            //hc.Add(new TH1F(Form("h_d02%s"     , ns.c_str()), Form("Lower p_{T} lepton%s;d_{0} (cm);Events"     , ts.c_str()), 25 , -0.05 , 0.05 ));
+            //hc.Add(new TH1F(Form("h_dz1%s"     , ns.c_str()), Form("Higher p_{T} lepton%s;d_{z} (cm);Events"    , ts.c_str()), 25 , -0.1  , 0.1  ));
+            //hc.Add(new TH1F(Form("h_dz2%s"     , ns.c_str()), Form("Lower p_{T} lepton%s;d_{z} (cm);Events"     , ts.c_str()), 25 , -0.1  , 0.1  ));
+            //hc.Add(new TH1F(Form("h_pt1_mu%s"  , ns.c_str()), Form("Higher p_{T} muon%s;p_{T} (GeV);Events"     , ts.c_str()), 25 , 0     , 250  ));
+            //hc.Add(new TH1F(Form("h_pt2_mu%s"  , ns.c_str()), Form("Lower p_{T} muon%s;p_{T} (GeV);Events"      , ts.c_str()), 25 , 0     , 250  ));
+            //hc.Add(new TH1F(Form("h_eta1_mu%s" , ns.c_str()), Form("Higher p_{T} muon%s;#eta;Events"            , ts.c_str()), 10 , -2.5  , 2.5  ));
+            //hc.Add(new TH1F(Form("h_eta2_mu%s" , ns.c_str()), Form("Lower p_{T} muon%s;#eta;Events"             , ts.c_str()), 10 , -2.5  , 2.5  ));
+            //hc.Add(new TH1F(Form("h_phi1_mu%s" , ns.c_str()), Form("Higher p_{T} muon%s;#phi;Events"            , ts.c_str()),  5 , -3.5  , 3.5  ));
+            //hc.Add(new TH1F(Form("h_phi2_mu%s" , ns.c_str()), Form("Lower p_{T} muon%s;#phi;Events"             , ts.c_str()),  5 , -3.5  , 3.5  ));
+            //hc.Add(new TH1F(Form("h_d01_mu%s"  , ns.c_str()), Form("Higher p_{T} muon%s;d_{0} (cm);Events"      , ts.c_str()), 25 , -0.05 , 0.05 ));
+            //hc.Add(new TH1F(Form("h_d02_mu%s"  , ns.c_str()), Form("Lower p_{T} muon%s;d_{0} (cm);Events"       , ts.c_str()), 25 , -0.05 , 0.05 ));
+            //hc.Add(new TH1F(Form("h_dz1_mu%s"  , ns.c_str()), Form("Higher p_{T} muon%s;d_{z} (cm);Events"      , ts.c_str()), 25 , -0.1  , 0.1  ));
+            //hc.Add(new TH1F(Form("h_dz2_mu%s"  , ns.c_str()), Form("Lower p_{T} muon%s;d_{z} (cm);Events"       , ts.c_str()), 25 , -0.1  , 0.1  ));
+            //hc.Add(new TH1F(Form("h_iso1_mu%s" , ns.c_str()), Form("Higher p_{T} muon%s;Iso;Events"             , ts.c_str()), 10 , 0     , 1.0  ));
+            //hc.Add(new TH1F(Form("h_iso2_mu%s" , ns.c_str()), Form("Lower p_{T} muon%s;Iso;Events"              , ts.c_str()), 10 , 0     , 1.0  ));
+            //hc.Add(new TH1F(Form("h_pt1_el%s"  , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events" , ts.c_str()), 25 , 0     , 250  ));
+            //hc.Add(new TH1F(Form("h_pt2_el%s"  , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"  , ts.c_str()), 25 , 0     , 250  ));
+            //hc.Add(new TH1F(Form("h_eta1_el%s" , ns.c_str()), Form("Higher p_{T} electron%s;#eta;Events"        , ts.c_str()), 10 , -2.5  , 2.5  ));
+            //hc.Add(new TH1F(Form("h_eta2_el%s" , ns.c_str()), Form("Lower p_{T} electron%s;#eta;Events"         , ts.c_str()), 10 , -2.5  , 2.5  ));
+            //hc.Add(new TH1F(Form("h_phi1_el%s" , ns.c_str()), Form("Higher p_{T} electron%s;#phi;Events"        , ts.c_str()),  5 , -3.5  , 3.5  ));
+            //hc.Add(new TH1F(Form("h_phi2_el%s" , ns.c_str()), Form("Lower p_{T} electron%s;#phi;Events"         , ts.c_str()),  5 , -3.5  , 3.5  ));
+            //hc.Add(new TH1F(Form("h_d01_el%s"  , ns.c_str()), Form("Higher p_{T} electron%s;d_{0} (cm);Events"  , ts.c_str()), 25 , -0.05 , 0.05 ));
+            //hc.Add(new TH1F(Form("h_d02_el%s"  , ns.c_str()), Form("Lower p_{T} electron%s;d_{0} (cm);Events"   , ts.c_str()), 25 , -0.05 , 0.05 ));
+            //hc.Add(new TH1F(Form("h_dz1_el%s"  , ns.c_str()), Form("Higher p_{T} electron%s;d_{z} (cm);Events"  , ts.c_str()), 25 , -0.1  , 0.1  ));
+            //hc.Add(new TH1F(Form("h_dz2_el%s"  , ns.c_str()), Form("Lower p_{T} electron%s;d_{z} (cm);Events"   , ts.c_str()), 25 , -0.1  , 0.1  ));
+            //hc.Add(new TH1F(Form("h_iso1_el%s" , ns.c_str()), Form("Higher p_{T} electron%s;Iso;Events"         , ts.c_str()), 10 , 0     , 1.0  ));
+            //hc.Add(new TH1F(Form("h_iso2_el%s" , ns.c_str()), Form("Lower p_{T} electron%s;Iso;Events"          , ts.c_str()), 10 , 0     , 1.0  ));
+            //hc.Add(new TH1F(Form("h_ht%s"      , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                 , ts.c_str()), 20 , 0     , 1000 ));
+            //hc.Add(new TH1F(Form("h_mt%s"      , ns.c_str()), Form("m_{T}%s;m_{T} (GeV);Events"                 , ts.c_str()), 16 , 0     , 800  ));
+            //hc.Add(new TH1F(Form("h_met%s"     , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"            , ts.c_str()), 16 , 0     , 800  ));
+            //hc.Add(new TH1F(Form("h_nbtags%s"  , ns.c_str()), Form("# btags%s;# btags;Events"                   , ts.c_str()), 10 , 0     , 10   ));
+            //hc.Add(new TH1F(Form("h_njets%s"   , ns.c_str()), Form("# jets%s;# jets;Events"                     , ts.c_str()), 10 , 0     , 10   ));
         }
     }
 
-    //hc.Add(new TH1F("h_nvtxs"   , "# vtxs; #vtxs;Events"                     , 20 , 0     ,  40  ));
-    //hc.Add(new TH1F("h_pt1"     , "Higher p_{T} lepton;p_{T} (GeV);Events"   , 25 , 0     , 250  ));
-    //hc.Add(new TH1F("h_pt2"     , "Lower p_{T} lepton;p_{T} (GeV);Events"    , 25 , 0     , 250  ));
-    //hc.Add(new TH1F("h_eta1"    , "Higher p_{T} lepton;#eta;Events"          , 10 , -2.5  , 2.5  ));
-    //hc.Add(new TH1F("h_eta2"    , "Lower p_{T} lepton;#eta;Events"           , 10 , -2.5  , 2.5  ));
-    //hc.Add(new TH1F("h_phi1"    , "Higher p_{T} lepton;#phi;Events"          ,  5 , -3.5  , 3.5  ));
-    //hc.Add(new TH1F("h_phi2"    , "Lower p_{T} lepton;#phi;Events"           ,  5 , -3.5  , 3.5  ));
-    //hc.Add(new TH1F("h_d01"     , "Higher p_{T} lepton;d_{0} (cm);Events"    , 25 , -0.05 , 0.05 ));
-    //hc.Add(new TH1F("h_d02"     , "Lower p_{T} lepton;d_{0} (cm);Events"     , 25 , -0.05 , 0.05 ));
-    //hc.Add(new TH1F("h_dz1"     , "Higher p_{T} lepton;d_{z} (cm);Events"    , 25 , -0.1  , 0.1  ));
-    //hc.Add(new TH1F("h_dz2"     , "Lower p_{T} lepton;d_{z} (cm);Events"     , 25 , -0.1  , 0.1  ));
-    //hc.Add(new TH1F("h_pt1_mu"  , "Higher p_{T} muon;p_{T} (GeV);Events"     , 25 , 0     , 250  ));
-    //hc.Add(new TH1F("h_pt2_mu"  , "Lower p_{T} muon;p_{T} (GeV);Events"      , 25 , 0     , 250  ));
-    //hc.Add(new TH1F("h_eta1_mu" , "Higher p_{T} muon;#eta;Events"            , 10 , -2.5  , 2.5  ));
-    //hc.Add(new TH1F("h_eta2_mu" , "Lower p_{T} muon;#eta;Events"             , 10 , -2.5  , 2.5  ));
-    //hc.Add(new TH1F("h_phi1_mu" , "Higher p_{T} muon;#phi;Events"            ,  5 , -3.5  , 3.5  ));
-    //hc.Add(new TH1F("h_phi2_mu" , "Lower p_{T} muon;#phi;Events"             ,  5 , -3.5  , 3.5  ));
-    //hc.Add(new TH1F("h_d01_mu"  , "Higher p_{T} muon;d_{0} (cm);Events"      , 25 , -0.05 , 0.05 ));
-    //hc.Add(new TH1F("h_d02_mu"  , "Lower p_{T} muon;d_{0} (cm);Events"       , 25 , -0.05 , 0.05 ));
-    //hc.Add(new TH1F("h_dz1_mu"  , "Higher p_{T} muon;d_{z} (cm);Events"      , 25 , -0.1  , 0.1  ));
-    //hc.Add(new TH1F("h_dz2_mu"  , "Lower p_{T} muon;d_{z} (cm);Events"       , 25 , -0.1  , 0.1  ));
-    //hc.Add(new TH1F("h_iso1_mu" , "Higher p_{T} muon;Iso;Events"             , 10 , 0     , 1.0  ));
-    //hc.Add(new TH1F("h_iso2_mu" , "Lower p_{T} muon;Iso;Events"              , 10 , 0     , 1.0  ));
-    //hc.Add(new TH1F("h_pt1_el"  , "Higher p_{T} electron;p_{T} (GeV);Events" , 25 , 0     , 250  ));
-    //hc.Add(new TH1F("h_pt2_el"  , "Lower p_{T} electron;p_{T} (GeV);Events"  , 25 , 0     , 250  ));
-    //hc.Add(new TH1F("h_eta1_el" , "Higher p_{T} electron;#eta;Events"        , 10 , -2.5  , 2.5  ));
-    //hc.Add(new TH1F("h_eta2_el" , "Lower p_{T} electron;#eta;Events"         , 10 , -2.5  , 2.5  ));
-    //hc.Add(new TH1F("h_phi1_el" , "Higher p_{T} electron;#phi;Events"        ,  5 , -3.5  , 3.5  ));
-    //hc.Add(new TH1F("h_phi2_el" , "Lower p_{T} electron;#phi;Events"         ,  5 , -3.5  , 3.5  ));
-    //hc.Add(new TH1F("h_d01_el"  , "Higher p_{T} electron;d_{0} (cm);Events"  , 25 , -0.05 , 0.05 ));
-    //hc.Add(new TH1F("h_d02_el"  , "Lower p_{T} electron;d_{0} (cm);Events"   , 25 , -0.05 , 0.05 ));
-    //hc.Add(new TH1F("h_dz1_el"  , "Higher p_{T} electron;d_{z} (cm);Events"  , 25 , -0.1  , 0.1  ));
-    //hc.Add(new TH1F("h_dz2_el"  , "Lower p_{T} electron;d_{z} (cm);Events"   , 25 , -0.1  , 0.1  ));
-    //hc.Add(new TH1F("h_iso1_el" , "Higher p_{T} electron;Iso;Events"         , 10 , 0     , 1.0  ));
-    //hc.Add(new TH1F("h_iso2_el" , "Lower p_{T} electron;Iso;Events"          , 10 , 0     , 1.0  ));
-    //hc.Add(new TH1F("h_ht"      , "H_{T};H_{T} (GeV);Events"                 , 20 , 0     , 1000 ));
-    //hc.Add(new TH1F("h_mt"      , "m_{T};m_{T} (GeV);Events"                 , 16 , 0     , 800  ));
-    //hc.Add(new TH1F("h_met"     , "MET;E_{T}^{miss} (GeV);Events"            , 16 , 0     , 800  ));
-    //hc.Add(new TH1F("h_nbtags"  , "# btags;# btags;Events"                   , 10 , 0     , 10   ));
-    //hc.Add(new TH1F("h_njets"   , "# jets;# jets;Events"                     , 10 , 0     , 10   ));
-        
     return;
 }
 
@@ -214,6 +209,14 @@ int PlotLooper::operator()(long event)
 
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
+
+        if (is_real_data() && !is_good_lumi())
+        {
+            return 0;
+        }
+        {
+            hc["h_lumi"]->Fill(m_lumi);
+        }
        
         // mm events for now
         //if (type() != 1)
@@ -259,12 +262,6 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
-        // require both leptons to be truth matched
-        //if (not (leptru1() && leptru2()))
-        //{
-        //    return 0;
-        //}
-
         // select m_gluino and m_lsp
         if (m_sample == at::Sample::t1tttt)
         {
@@ -290,6 +287,49 @@ int PlotLooper::operator()(long event)
         }
         m_lumi = is_real_data() ? 1.0 : m_lumi;
         float evt_weight = m_lumi * scale1fb() * vtxw;
+
+        // apply scale factors
+        if (m_do_scale_factors && !is_real_data())
+        {
+            evt_weight *= sf_lepeff();
+            if (m_nbtags>=2)
+            {
+                if (m_signal_region == SignalRegion::sr7)
+                {
+                    evt_weight *= (nbtags() >= 3 ? sf_nbtag3() : 1.0);
+                }
+                else
+                {
+                    evt_weight *= (nbtags() >= 2 ? sf_nbtag() : 1.0);
+                }
+            }
+        }
+
+        // fake/flip weight
+        float fr1 = 1.0;
+        float fr2 = 1.0;
+        float fl1 = 1.0;
+        float fl2 = 1.0;
+        switch (charge_type)
+        {
+            case DileptonChargeType::SF: 
+                fr1 = lep1_is_fo() * GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
+                fr2 = lep2_is_fo() * GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+                evt_weight *= fr1/(1.0 - fr1) + fr2/(1.0 - fr2); 
+                break;
+            case DileptonChargeType::DF: 
+                fr1 = GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
+                fr2 = GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+                evt_weight *= fr1/(1.0 - fr1) * fr2/(1.0 - fr2); 
+                break;
+            case DileptonChargeType::OS: 
+                fl1 = GetFlipRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
+                fl2 = GetFlipRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+                evt_weight *= fl1/(1.0 - fl1) + fl2/(1.0 - fl2); 
+                break;
+            default:
+                break;
+        }
        
         // basic yields       
         rt::Fill(hc[Form("h_yield_ll_%s", qn.c_str())], 1, evt_weight);
@@ -433,3 +473,58 @@ int PlotLooper::operator()(long event)
     // analysis end
     return 0;
 } 
+
+float PlotLooper::GetFakeRateValue(int lep_id, float pt, float eta) const 
+{
+    using namespace tas;
+
+    if (!h_mufr)
+    {
+        if (m_verbose) {std::cout << "h_mufr is NULL! returing zero..." << std::endl;}
+        return 0.0;
+    }
+
+    if (!h_elfr)
+    {
+        if (m_verbose) {std::cout << "h_elfr is NULL! returing zero..." << std::endl;}
+        return 0.0;
+    }
+
+    if (abs(lep_id)==13) 
+    {
+        float max_pt = h_mufr->GetYaxis()->GetXmax()-0.01;
+        int pt_bin   = h_mufr->GetYaxis()->FindBin(min(pt, max_pt));
+        int eta_bin  = h_mufr->GetXaxis()->FindBin(fabs(eta));
+        return h_mufr->GetBinContent(eta_bin, pt_bin);
+    }
+    else if (abs(lep_id)==11) 
+    {
+        float max_pt = h_elfr->GetYaxis()->GetXmax()-0.01;
+        int pt_bin   = h_elfr->GetYaxis()->FindBin(min(pt, max_pt));
+        int eta_bin  = h_elfr->GetXaxis()->FindBin(fabs(eta));
+        return h_elfr->GetBinContent(eta_bin, pt_bin);
+    }
+    return 0.0;
+}
+
+float PlotLooper::GetFlipRateValue(int lep_id, float pt, float eta) const 
+{
+    using namespace tas;
+
+    // only applies to electrons
+    if (abs(lep_id) != 11)
+    {
+        return 0.0;
+    }
+
+    if (!h_flip)
+    {
+        if (m_verbose) {std::cout << "h_flip is NULL! returing zero..." << std::endl;}
+        return 0.0;
+    }
+
+    float max_pt = h_flip->GetYaxis()->GetXmax()-0.01;
+    int pt_bin   = h_flip->GetYaxis()->FindBin(min(pt, max_pt));
+    int eta_bin  = h_flip->GetXaxis()->FindBin(fabs(eta));
+    return h_flip->GetBinContent(eta_bin, pt_bin);
+}

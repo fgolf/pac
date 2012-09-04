@@ -219,6 +219,19 @@ lib ss2012_bkgd_tools
   : # usage-requirements
   ;
 
+exe test_bkgd2
+  : # sources
+    ./FGBkgd2/test_bkgd2.cc
+    ss2012_bkgd_tools/<link>static
+    # dependent packages
+    /ROOT
+  : # requirements
+    <include>./FGBkgd2
+  : # default-build
+  : # usage-requirements
+  ;
+
+
 # install libs/exes
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
@@ -228,3 +241,4 @@ default-install ss2012_tools ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
 default-install ss2012_bkgd_tools ;
+#default-install test_bkgd2 ;

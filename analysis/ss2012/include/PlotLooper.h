@@ -6,6 +6,7 @@
 #include "SignalRegion.h"
 #include <string>
 #include <tr1/array>
+#include <tr1/memory>
 #include <vector>
 #include "TH2F.h"
 
@@ -19,9 +20,10 @@ class PlotLooper : public at::AnalysisWithHist
 			 at::Sample::value_type sample,
              SignalRegion::value_type signal_region = SignalRegion::sr0,
              const std::string& vtxreweight_file_name = "",
-             const std::string& fr_file_name = "",
-             const std::string& fr_hist_name = "",
+             const std::string& fake_rate_file_name = "",
+             const std::string& flip_rate_file_name = "",
              unsigned int num_btags = 0,
+             bool do_scale_factors = true,
 			 float mass_glu = 1000,
 			 float mass_lsp = 100,
 			 float lumi = 1.0,
@@ -47,14 +49,24 @@ class PlotLooper : public at::AnalysisWithHist
         bool m_verbose;
 		bool m_is_data;
 		bool m_do_vtx_reweight;
+        bool m_do_scale_factors;
         unsigned int m_nbtags;
 		float m_mass_glu;
 		float m_mass_lsp;
 		at::Sample::value_type m_sample;
         SignalRegion::value_type m_signal_region;
 
+        // fake/flip rate hists
+        std::tr1::shared_ptr<TH2F> h_mufr;
+        std::tr1::shared_ptr<TH2F> h_elfr;
+        std::tr1::shared_ptr<TH2F> h_flip;
+
         // 0 mm, 1 em, 2 ee, 3 all
         std::tr1::array<float, 4> m_count_ss;
+
+        // methods
+        float GetFakeRateValue(int lep_id, float pt, float eta) const;
+        float GetFlipRateValue(int lep_id, float pt, float eta) const; 
 };
 
 #endif // SS_FAKEPREDLOOPER_HPP
