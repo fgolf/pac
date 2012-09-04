@@ -1,4 +1,5 @@
 #include "SignalRegion.h"
+#include "SSB2012.h"
 #include <stdexcept>
 
 SignalRegionInfo s_SignalRegionInfos[] = 

@@ -15,6 +15,8 @@ bool ValidDatasetName(const std::string& dataset)
         return true;
     if (dataset == "data2012ABr")
         return true;
+    if (dataset == "data2012ABv1")
+        return true;
     return false;
 }
 
@@ -62,16 +64,23 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
     // full 8.4 /fb of 2012AB reprocessed and 2012C
     if (dataset == "data")
     {
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";     // 920 /pb
+        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";     // 920 /pb
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_3p95fb/"  : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_3p95fb/";
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_5p098ifb/": "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_5p098ifb/";
         if (channel=="mu")
         {
             // don't have all of these yet
-            //chain->Add(Form("%s/SingleMu_Run2012A-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-            //chain->Add(Form("%s/SingleMu_Run2012B-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-            //chain->Add(Form("%s/DoubleMu_Run2012A-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-            //chain->Add(Form("%s/DoubleMu_Run2012B-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
+        	const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_submit2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_submit2/";  
+			chain->Add(Form("%s/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root"         , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
         }
         else if (channel=="el")
         {
@@ -81,6 +90,7 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
             chain->Add(Form("%s/FakeRate20May2012_submit2/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/FakeRate20May2012_submit2/DoubleElectron_Run2012C-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/FakeRate20May2012/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
+			
         }
     }    
     // 2012 AB prompt v1
@@ -117,14 +127,18 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
         }
     }    
     // 2012A/B rereco 13Jul2012 and 06Aug2012 recovery
+    else if (dataset == "data2012ABr")
     {
         const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_submit2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_submit2";
         if (channel=="mu")
         {
+        	const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_submit2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_submit2/";  
             chain->Add(Form("%s/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleMu_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
+			chain->Add(Form("%s/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
         }
         else if (channel=="el")
         {

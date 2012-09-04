@@ -79,16 +79,24 @@ void CountElectronNumDen(TH1* h_num, TH1* h_den, const std::string& title)
 
 void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 {
-	rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
-    std::string path = "plots/fake_rates/muons_920pb";
-	float lumi = 0.920;
+	//rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
+    //std::string path = "plots/fake_rates/muons_920pb";
+	//float lumi = 0.920;
 
-	//rt::TH1Container hc("plots/fake_rates/muons_5p1fb/muons_5p1fb.root");
-    //std::string path = "plots/fake_rates/muons_5p1fb";
+	rt::TH1Container hc("plots/fake_rates/muons_5p1/muons_5p1.root");
+    std::string path = "plots/fake_rates/muons_5p1";
+	float lumi = 5.1;
+
+	//rt::TH1Container hc("plots/fake_rates/muons_5p1_rereco/muons_5p1_rereco.root");
+    //std::string path = "plots/fake_rates/muons_5p1_rereco";
 	//float lumi = 5.1;
 
 	//rt::TH1Container hc("plots/fake_rates/muons_2012Cv2/muons_2012Cv2.root");
     //std::string path = "plots/fake_rates/muons_2012Cv2";
+	//float lumi = 0.0;
+
+	//rt::TH1Container hc("plots/fake_rates/muons_8p68/muons_8p68.root");
+    //std::string path = "plots/fake_rates/muons_8p68";
 	//float lumi = 0.0;
 
     //std::string path = "plots/fake_rates/data/23May";

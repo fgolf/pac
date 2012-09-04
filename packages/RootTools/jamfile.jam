@@ -83,7 +83,7 @@ lib RootTools
 #      ./source/merge_tchain.cc
 #      # dependent packages
 #      /ROOT
-#      /RootTools/<link>static
+#      RootTools/<link>static
 #      /boost//program_options/<link>static
 #      /MiniFWLite/<link>shared
 #    : # requirements 
