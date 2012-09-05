@@ -5,7 +5,9 @@ samples=(t1tttt ttw ttz)
 
 # command line options for ss2012_plots
 signal_region=${1:-0}
-lumi=3.95
+lumi=${2:-1.0}
+#lumi=9.71
+#lumi=5.05
 nbtags=2
 #suffix="\"png\""
 suffix="\"eps\""

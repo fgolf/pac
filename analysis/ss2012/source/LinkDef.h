@@ -12,18 +12,19 @@
 #pragma link C++ nestedtypedef;
 
 // namespaces
+#pragma link C++ namespace ss; 
 
 // typedefs
-#pragma link C++ enum SignalRegion::value_type;
+#pragma link C++ enum ss::SignalRegion::value_type;
 
 // templated classes
 
 // classes or structs
-#pragma link C++ struct SignalRegion;
+#pragma link C++ struct ss::SignalRegion;
 
 // functions
-#pragma link C++ function GetSignalRegionFromName;
-#pragma link C++ function GetSignalRegionInfo;
-#pragma link C++ function GetSignalRegionInfo;
+#pragma link C++ function ss::GetSignalRegionFromName;
+#pragma link C++ function ss::GetSignalRegionInfo;
+#pragma link C++ function ss::GetSignalRegionInfo;
 
 #endif // __CINT__

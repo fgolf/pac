@@ -40,26 +40,26 @@ lib ss2012_tools
     <include>./source
   ;
 
-exe ss2012_analysis_old
-  : # sources
-    ./source/ss2012_analysis.old.cc
-    ./source/AnalysisLooper.old.cc
-    # dependent packages
-    /ROOT
-    ss2012_tools/<link>static
-    /MiniFWLite/<link>shared
-    /AnalysisTools/<link>static
-    /RootTools//RootTools/<link>static
-    /FGTools/<link>static
-    /boost//program_options/<link>static
-    /SimpleTable/<link>static
-  : # requirements
-    <define>__NON_ROOT_BUILD__
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
+#exe ss2012_analysis_old
+#  : # sources
+#    ./source/ss2012_analysis.old.cc
+#    ./source/AnalysisLooper.old.cc
+#    # dependent packages
+#    /ROOT
+#    ss2012_tools/<link>static
+#    /MiniFWLite/<link>shared
+#    /AnalysisTools/<link>static
+#    /RootTools//RootTools/<link>static
+#    /FGTools/<link>static
+#    /boost//program_options/<link>static
+#    /SimpleTable/<link>static
+#  : # requirements
+#    <define>__NON_ROOT_BUILD__
+#    <include>./include
+#    <include>./source
+#  : # default-build
+#  : # usage-requirements
+#  ;
 
 exe ss2012_analysis
   : # sources
@@ -212,6 +212,7 @@ lib ss2012_bkgd_tools
     /ROOT
 		/FGTools
     /MiniFWLite
+    /AnalysisTools
     /boost//filesystem
   : # requirements
     <include>./FGBkgd2
@@ -222,8 +223,9 @@ lib ss2012_bkgd_tools
 exe test_bkgd2
   : # sources
     ./FGBkgd2/test_bkgd2.cc
-    ss2012_bkgd_tools/<link>static
     # dependent packages
+    ss2012_bkgd_tools/<link>static
+    /MiniFWLite/<link>shared
     /ROOT
   : # requirements
     <include>./FGBkgd2
@@ -235,10 +237,10 @@ exe test_bkgd2
 # install libs/exes
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
-default-install ss2012_analysis_old ;
+#default-install ss2012_analysis_old ;
 default-install ss2012_plots ;
 default-install ss2012_tools ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
 default-install ss2012_bkgd_tools ;
-#default-install test_bkgd2 ;
+default-install test_bkgd2 ;

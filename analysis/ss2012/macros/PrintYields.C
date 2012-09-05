@@ -278,6 +278,7 @@ void PrintYields(unsigned int signal_region_num = 0)
         //yields_bkgd[i].Print(); 
     }
     Yield yield_pred = yield_mc;
+    yield_pred.title = "pred";
     yield_pred += yield_fake;
     yield_pred += yield_flip;
 
@@ -303,7 +304,7 @@ void PrintYields(unsigned int signal_region_num = 0)
 
     CTable t_yields;
     t_yields.useTitle();
-    t_yields.setTitle(Form("yields for SS 2012 SR %d", signal_region_num));
+    t_yields.setTitle(Form("yields for SS 2012 SR %d (%s)", signal_region_num, ss::GetSignalRegionInfo(signal_region_num).title.c_str()));
     t_yields.setColLabel("ee", 0);
     t_yields.setColLabel("mm", 1);
     t_yields.setColLabel("em", 2);

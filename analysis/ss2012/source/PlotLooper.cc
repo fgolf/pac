@@ -19,6 +19,7 @@ typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > v
 
 using namespace std;
 using namespace at;
+using namespace ss;
 
 // construct:
 PlotLooper::PlotLooper
@@ -107,6 +108,11 @@ void PlotLooper::EndJob()
 }
 
 // binning contants
+//std::tr1::array<float, 5> el_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
+//std::tr1::array<float, 6> el_pt_bins  = {{10.,15.,20.,25.,35.,55.}};
+//std::tr1::array<float, 5> mu_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
+//std::tr1::array<float, 6> mu_pt_bins  = {{5.,10.,15.,20.,25.,35.}};
+
 //std::tr1::array<float, 9> mu_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 //std::tr1::array<float, 9> el_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 //std::tr1::array<float, 7> vtx_bins = {{ 0.0, 10.0, 15, 20, 25, 30.0, 40.0}};
@@ -210,13 +216,13 @@ int PlotLooper::operator()(long event)
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
-        if (is_real_data() && !is_good_lumi())
-        {
-            return 0;
-        }
-        {
-            hc["h_lumi"]->Fill(m_lumi);
-        }
+        //if (is_real_data() && !is_good_lumi())
+        //{
+        //    return 0;
+        //}
+        //{
+        //    hc["h_lumi"]->Fill(m_lumi);
+        //}
        
         // mm events for now
         //if (type() != 1)
@@ -224,7 +230,7 @@ int PlotLooper::operator()(long event)
         //    return 0;
         //}
 
-        // only keep good lumi (data only)
+        // only keep good lumi (data only) -- is_good_lumi branch not set
         //if (is_real_data() && not is_good_lumi())
         //{
         //    return 0;
@@ -256,11 +262,20 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
-        // passes signal region
-        if (not PassesSignalRegion(m_signal_region))
+        // passes signal region (treet signal region 2 seperately for the OS)
+        if (charge_type == DileptonChargeType::OS && m_signal_region == SignalRegion::sr2)
+        {
+            // only keep even events for the flip background in SR2
+            if (event%2 != 0 || not PassesSignalRegion(SignalRegion::sr1))
+            {
+                return 0;
+            }
+        } 
+        else if (not PassesSignalRegion(m_signal_region))
         {
             return 0;
         }
+
 
         // select m_gluino and m_lsp
         if (m_sample == at::Sample::t1tttt)
