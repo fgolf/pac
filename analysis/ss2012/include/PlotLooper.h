@@ -3,6 +3,7 @@
 
 #include "at/AnalysisWithHist.h"
 #include "at/Sample.h"
+#include "at/DileptonHypType.h"
 #include "SignalRegion.h"
 #include <string>
 #include <tr1/array>
@@ -61,12 +62,29 @@ class PlotLooper : public at::AnalysisWithHist
         std::tr1::shared_ptr<TH2F> h_elfr;
         std::tr1::shared_ptr<TH2F> h_flip;
 
-        // 0 mm, 1 em, 2 ee, 3 all
-        std::tr1::array<float, 4> m_count_ss;
-
         // methods
         float GetFakeRateValue(int lep_id, float pt, float eta) const;
+        float GetFakeRateError(int lep_id, float pt, float eta) const;
+
         float GetFlipRateValue(int lep_id, float pt, float eta) const; 
+        float GetFlipRateError(int lep_id, float pt, float eta) const; 
+
+        TH1F GetSingleFakePredRaw() const;
+        TH1F GetDoubleFakePred() const;
+
+        void FillDoubleFakeHist();
+        void FillDoubleFakeHist
+        (
+            TH2F* hist, 
+            const at::DileptonHypType::value_type& hyp, 
+            int id1, 
+            float pt1, 
+            float eta1, 
+            int id2, 
+            float pt2, 
+            float eta2, 
+            float weight
+        );
 };
 
 #endif // SS_FAKEPREDLOOPER_HPP

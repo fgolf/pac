@@ -151,11 +151,7 @@ try
         {
             if (is_data)
             {
-                input_file = Form("babies/53X/%s.root", sample_name.c_str());
-                //input_file = "babies/52X/data_2012AB_prompt_5p05.root";
-                //input_file = "babies/53X/data_2012AB_13july2012_5p21_promptjson.root";
-                //input_file = "babies/53X/data_2012AB_13july2012_5p21.root";
-                //input_file = "babies/52X/data_2012AB_prompt_5p1.root";
+                input_file = "babies/52X/data.root";
             }
             else
             {

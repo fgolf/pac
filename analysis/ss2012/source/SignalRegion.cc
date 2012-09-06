@@ -7,56 +7,56 @@ ss::SignalRegionInfo s_SignalRegionInfos[] =
     {
         // name
         "sr0", 
-        // title,
-        "baseline" 
+        // ROOT title
+        "baseline"
     },
     {
         // name
         "sr1", 
-        // title,
-        "ht80met30" 
+        // ROOT title
+        "H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV"
     },
     {
         // name
         "sr2", 
-        // title,
-        "ht80met30pp" 
+        // ROOT title
+        "H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++"
     },
     {
         // name
         "sr3", 
-        // title,
-        "ht200met50" 
+        // ROOT title
+        "H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV, ++"
     },
     {
         // name
         "sr4", 
-        // title,
-        "ht200met120" 
+        // ROOT title
+        "H_{T} > 200 GeV, E_{T}^{miss} > 120 GeV, ++"
     },
     {
         // name
         "sr5", 
-        // title,
-        "ht320met50" 
+        // ROOT title
+        "H_{T} > 320 GeV, E_{T}^{miss} > 50 GeV, ++"
     },
     {
         // name
         "sr6", 
-        // title,
-        "ht320met120" 
+        // ROOT title
+        "H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV, ++"
     },
     {
         // name
         "sr7", 
-        // title,
-        "ht200met50gte3btag" 
+        // ROOT title
+        "H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV, # btags #geq 3"
     },
     {
         // name
         "sr8", 
-        // title,
-        "ht320nomet" 
+        // ROOT title
+        "H_{T} > 320 GeV, E_{T}^{miss} > 0 GeV"
     }
 };
 

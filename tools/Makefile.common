@@ -27,6 +27,7 @@ RM    := rm -f
 SED   := sed
 MKDIR := mkdir -p
 RMDIR := rm -rf 
+DEBUG := 0
 
 # reusable libraries
 # ----------------------------------------------------------------------- #
@@ -113,14 +114,20 @@ CPPFLAGS += $(ROOTCFLAGS)
 LDFLAGS  += $(ROOTLIBS) 
 
 # default LINK.o is for c compiler -- need to link with c++ compiler
-LINK.o   = $(CXX) $(LDFLAGS) $(TARGET_ARCH) 
+LINK.o = $(CXX) $(LDFLAGS) $(TARGET_ARCH) 
 
 # make a shared library 
 SHAREDLIB.cpp = $(CXX) $(ROOTLIBS) $(CPPFLAGS) $(LDFLAGS) $(SOFLAGS) $(TARGET_ARCH) -fPIC -o
 SHAREDLIB.cc  = $(SHAREDLIB.cpp) 
 
 # ROOT is missing the GenVector in its default setup 
-LDFLAGS  += -lGenVector -lEG
+LDFLAGS += -lGenVector -lEG
+
+# load debug symbols
+ifeq ($(DEBUG),1)
+	CPPFLAGS += -g 
+endif
+
 
 # resusable macros
 # ----------------------------------------------------------------------- #

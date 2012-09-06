@@ -29,6 +29,7 @@ class TH1Container
         
         // add a histogram to the container 
         // (default is to skip duplicates, set overwite to write over)
+        // WARNING: This take ownership of the hist pointer and will delete when the TH1Container goes out of scope! 
         void Add(TH1* hist_ptr, bool overwrite = false);
         void Add(TH1* hist_ptr, const std::string& option, bool overwrite = false);
 

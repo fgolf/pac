@@ -61,6 +61,12 @@ TH1Container::TH1Container(const std::string& file_name, const std::string& root
 
 TH1Container::~TH1Container()
 {
+#ifdef __RTINT__
+    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    {
+        delete iter->second; 
+    }
+#endif
 }
 
 
@@ -152,9 +158,10 @@ void TH1Container::Add(TH1* hist_ptr, bool overwrite)
         cout << "TH1Container::add(): Adding " << name << endl;
     }
 
-#ifndef __RTINT__  // non interactive, I want to be in charge of deleting
+//#ifndef __RTINT__  
+// non interactive, I want to be in charge of deleting
     hist_ptr->SetDirectory(0);
-#endif
+//#endif
     m_pimpl->hist_map.insert(pair<string, rt::TH1Ptr>(name, rt::TH1Ptr(hist_ptr)));
     return;
 }

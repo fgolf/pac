@@ -169,7 +169,7 @@ float EffectiveArea03(int id, int idx)
 }
 
 // place holder until I figure out the right thing
-float EffectiveArea04(int id, int idx)
+float EffectiveArea04(int, int)
 {
     return -99999.0;
 }

@@ -133,10 +133,10 @@ void FakeRateBabyLooper::EndJob()
 // binning contants
 std::tr1::array<float, 9> mu_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 std::tr1::array<float, 9> el_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
-std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
+std::tr1::array<float, 5> el_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
+std::tr1::array<float, 5> mu_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
-std::tr1::array<float, 5> mu_eta_bins = {{0.0, 1.0, 1.5, 2.0, 2.4}};
-std::tr1::array<float, 5> el_eta_bins = {{0.0, 1.0, 1.5, 2.0, 2.4}};
+std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
 
 // book hists 
  void FakeRateBabyLooper::BookHists()

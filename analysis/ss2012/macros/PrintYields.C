@@ -166,7 +166,7 @@ void SetErrorsToBogus(Yield& y)
 
 // get the yields per sample
 
-Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num = 0)
+Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // sample
     //at::Sample::value_type sample = at::GetSampleFromName(sample_name);
@@ -175,13 +175,12 @@ Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num =
     //SignalRegion::value_type signal_region = static_cast<SignalRegion::value_type>(signal_region_num); 
 
     // hists  
-    rt::TH1Container hc(Form("plots/sr%d/%s.root", signal_region_num, sample_name.c_str()));
-    //hc.List();
+    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
-    pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee_ss"]);
-    pair<double, double> mm = rt::IntegralAndError(hc["h_yield_mm_ss"]);
-    pair<double, double> em = rt::IntegralAndError(hc["h_yield_em_ss"]);
-    pair<double, double> ll = rt::IntegralAndError(hc["h_yield_ll_ss"]);
+    pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee"]);
+    pair<double, double> mm = rt::IntegralAndError(hc["h_yield_mm"]);
+    pair<double, double> em = rt::IntegralAndError(hc["h_yield_em"]);
+    pair<double, double> ll = rt::IntegralAndError(hc["h_yield_ll"]);
     Yield yield(sample_name, ee, mm, em, ll);
     //yield.Print();
 
@@ -190,60 +189,66 @@ Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num =
 }
 
 // get the fake yields per sample
-Yield GetDFYield(const std::string sample_name, unsigned int signal_region_num = 0)
+Yield GetDFYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-    rt::TH1Container hc(Form("plots/sr%d/%s.root", signal_region_num, sample_name.c_str()));
+    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
-    pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee_df"]);
-    pair<double, double> mm = rt::IntegralAndError(hc["h_yield_mm_df"]);
-    pair<double, double> em = rt::IntegralAndError(hc["h_yield_em_df"]);
-    pair<double, double> ll = rt::IntegralAndError(hc["h_yield_ll_df"]);
+    pair<double, double> ee(hc["h_df_pred"]->GetBinContent(1), hc["h_df_pred"]->GetBinError(1));
+    pair<double, double> em(hc["h_df_pred"]->GetBinContent(2), hc["h_df_pred"]->GetBinError(2));
+    pair<double, double> mm(hc["h_df_pred"]->GetBinContent(3), hc["h_df_pred"]->GetBinError(3));
+    pair<double, double> ll(hc["h_df_pred"]->GetBinContent(4), hc["h_df_pred"]->GetBinError(4));
     Yield yield("DF", ee, mm, em, ll);
+    yield.title = "DF";
 
     // done
     return yield;
 }
 
 // get the fake yields per sample
-Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num = 0)
+Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-    rt::TH1Container hc(Form("plots/sr%d/%s.root", signal_region_num, sample_name.c_str()));
+    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
-    pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee_sf"]);
-    pair<double, double> mm = rt::IntegralAndError(hc["h_yield_mm_sf"]);
-    pair<double, double> em = rt::IntegralAndError(hc["h_yield_em_sf"]);
-    pair<double, double> ll = rt::IntegralAndError(hc["h_yield_ll_sf"]);
+    pair<double, double> ee(hc["h_sf_pred"]->GetBinContent(1), hc["h_sf_pred"]->GetBinError(1));
+    pair<double, double> em(hc["h_sf_pred"]->GetBinContent(2), hc["h_sf_pred"]->GetBinError(2));
+    pair<double, double> mm(hc["h_sf_pred"]->GetBinContent(3), hc["h_sf_pred"]->GetBinError(3));
+    pair<double, double> ll(hc["h_sf_pred"]->GetBinContent(4), hc["h_sf_pred"]->GetBinError(4));
     Yield yield("SF", ee, mm, em, ll);
-    Yield y_df = GetDFYield(sample_name, signal_region_num);
-    yield = yield - 2*y_df;
+    yield.title = "SF";
 
     // done
     return yield;
 }
 
 // get the fake yields per sample
-Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num = 0)
+Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
-    Yield y_sf = GetSFYield(sample_name, signal_region_num);
-    Yield y_df = GetDFYield(sample_name, signal_region_num);
-    y_sf += y_df;
+    // hists  
+    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
+
+    Yield sf = GetSFYield(sample_name, signal_region_num, output_path);
+    Yield df = GetDFYield(sample_name, signal_region_num, output_path);
+    sf += df;  
+    sf.title = "SF + DF";
+
     // done
-    return y_sf;
+    return sf;
 }
 
 // get the fake yields per sample
-Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num = 0)
+Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-    rt::TH1Container hc(Form("plots/sr%d/%s.root", signal_region_num, sample_name.c_str()));
+    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
-    pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee_os"]);
-    pair<double, double> mm = rt::IntegralAndError(hc["h_yield_mm_os"]);
-    pair<double, double> em = rt::IntegralAndError(hc["h_yield_em_os"]);
-    pair<double, double> ll = rt::IntegralAndError(hc["h_yield_ll_os"]);
+    pair<double, double> ee = rt::IntegralAndError(hc["h_flip_pred_ee"]);
+    pair<double, double> mm = rt::IntegralAndError(hc["h_flip_pred_mm"]);
+    pair<double, double> em = rt::IntegralAndError(hc["h_flip_pred_em"]);
+    pair<double, double> ll = rt::IntegralAndError(hc["h_flip_pred_ll"]);
     Yield yield("Flips", ee, mm, em, ll);
+    yield.title = "Flips";
 
     // done
     return yield;
@@ -251,26 +256,34 @@ Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num
 
 
 // print the yields
-void PrintYields(unsigned int signal_region_num = 0)
+void PrintYields(unsigned int signal_region_num = 0, const std::string output_path = "")
 {
-    Yield yield_data(GetSSYield("data", signal_region_num));
-    Yield yield_sf(GetSFYield("data", signal_region_num)); yield_sf.title = "SF";
-    Yield yield_df(GetDFYield("data", signal_region_num)); yield_df.title = "DF";
-    Yield yield_fake(GetFakeYield("data", signal_region_num)); yield_fake.title = "SF + DF";
-    Yield yield_flip(GetFlipYield("data", signal_region_num)); yield_flip.title = "Flips";
+    Yield yield_data(GetSSYield("data", signal_region_num, output_path));
+    Yield yield_sf(GetSFYield("data", signal_region_num, output_path));
+    Yield yield_df(GetDFYield("data", signal_region_num, output_path));
+    Yield yield_fake(GetFakeYield("data", signal_region_num, output_path));
+    Yield yield_flip(GetFlipYield("data", signal_region_num, output_path));
+
+    // special case for SR2
+    if (signal_region_num==2)
+    {
+        yield_flip = 0.5*GetFlipYield("data", 1, output_path);
+        yield_flip.title = "Flip";
+    }
+
     Yield yield_mc("total MC");
     vector<Yield> yields_bkgd;
-    yields_bkgd.push_back(GetSSYield("wz"  , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("zz"  , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("ttg" , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("ttw" , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("ttww", signal_region_num));
-    yields_bkgd.push_back(GetSSYield("ttz" , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("wwg" , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("www" , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("wwz" , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("wzz" , signal_region_num));
-    yields_bkgd.push_back(GetSSYield("zzz" , signal_region_num));
+    yields_bkgd.push_back(GetSSYield("wz"  , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("zz"  , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttg" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttw" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttww", signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttz" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wwg" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("www" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wwz" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wzz" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("zzz" , signal_region_num, output_path));
 
     for (size_t i = 0; i != yields_bkgd.size(); i++)
     {
@@ -283,10 +296,10 @@ void PrintYields(unsigned int signal_region_num = 0)
     yield_pred += yield_flip;
 
     // set pred errors to zero to we know they are wrong 
-    SetErrorsToBogus(yield_sf);
-    SetErrorsToBogus(yield_df);
-    SetErrorsToBogus(yield_fake);
-    SetErrorsToBogus(yield_pred);
+    //SetErrorsToBogus(yield_sf);
+    //SetErrorsToBogus(yield_df);
+    //SetErrorsToBogus(yield_fake);
+    //SetErrorsToBogus(yield_pred);
 
     vector<Yield> yields;
     for (size_t i = 0; i != yields_bkgd.size(); i++)

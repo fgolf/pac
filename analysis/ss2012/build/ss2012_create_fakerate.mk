@@ -15,7 +15,7 @@ sources         := ss2012_create_fakerate.cc \
     			    ScanChainFRB.cc \
     			    FakeRateBaby.cc 
 include_dir     := include source
-defines         := 
+defines         := __NON_ROOT_BUILD__
 
 # additional libraries
 # ----------------------------------------------------------------------- #
