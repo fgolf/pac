@@ -149,14 +149,15 @@ try
         is_signal = (at::GetSampleInfo(sample).type == at::SampleType::signal);
         if (input_file.empty())
         {
-            if (is_data)
-            {
-                input_file = "babies/52X/data.root";
-            }
-            else
-            {
-                input_file = Form("babies/52X/%s.root", sample_name.c_str());
-            }
+            input_file = Form("babies/%s.root", sample_name.c_str());
+            //if (is_data)
+            //{
+            //    input_file = "babies/52X/data.root";
+            //}
+            //else
+            //{
+            //    input_file = Form("babies/52X/%s.root", sample_name.c_str());
+            //}
         }
         if (output_file.empty())
         {
