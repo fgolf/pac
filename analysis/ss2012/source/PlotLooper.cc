@@ -108,10 +108,10 @@ void PlotLooper::EndJob()
 
     // 0 ee, 2 em, 2 mm, 3 ll
     std::tr1::array<int, 4> yield_ss;
-    yield_ss[0] = hc["h_yield_ee"]->GetEntries();
-    yield_ss[1] = hc["h_yield_em"]->GetEntries();
-    yield_ss[2] = hc["h_yield_mm"]->GetEntries();
-    yield_ss[3] = hc["h_yield_ll"]->GetEntries();
+    yield_ss[0] = static_cast<int>(hc["h_yield_ee"]->GetEntries());
+    yield_ss[1] = static_cast<int>(hc["h_yield_em"]->GetEntries());
+    yield_ss[2] = static_cast<int>(hc["h_yield_mm"]->GetEntries());
+    yield_ss[3] = static_cast<int>(hc["h_yield_ll"]->GetEntries());
 
     // DF prediction (raw)
     hc.Add(dynamic_cast<TH1F*>(GetDoubleFakePred().Clone()));  // this is poor -- fix it later
