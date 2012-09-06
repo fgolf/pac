@@ -255,7 +255,6 @@ std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
             // name and title suffixes
             string ns = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
             string ts = Form(" (%s)",  GetDileptonHypTypeTitle(hyp_type).c_str());
-            cout << ns << endl;
 
             // yields
             hc.Add(new TH1F(Form("h_yield%s", ns.c_str()), Form("yields%s;yield;Events", ts.c_str()), 3, 0, 3));
@@ -278,7 +277,6 @@ std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
             // name and title suffixes
             string ns = Form("_%s"  ,  GetDileptonChargeTypeName(charge_type).c_str());
             string ts = Form(" (%s)",  GetDileptonChargeTypeTitle(charge_type).c_str());
-            cout << ns << endl;
 
             // SS kinematic plots
             hc.Add(new TH1F(Form("h_nvtxs%s" , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                    , ts.c_str()), 20 , 0     ,  40 ));
@@ -751,9 +749,9 @@ TH1F PlotLooper::GetDoubleFakePred() const
     std::tr1::array<float, 4> df_pred_err;
 
     // DF pt/eta distribtution
-    for (at::DileptonHypType::value_type hyp = at::DileptonHypType::MUMU; hyp != at::DileptonHypType::static_size; hyp++)
+    for (unsigned int i = 1; i != at::DileptonHypType::static_size; i++)
     {
-        //const at::DileptonHypType::value_type hyp = at::DileptonHypType::EE;
+        const at::DileptonHypType::value_type hyp = static_cast<at::DileptonHypType::value_type>(i);
         string ns = Form("_%s",  GetDileptonHypTypeName(hyp).c_str());
         TH2F& h_df = *dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+ns]);
 
