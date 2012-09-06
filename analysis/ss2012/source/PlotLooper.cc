@@ -324,10 +324,10 @@ int PlotLooper::operator()(long event)
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
         // only keep good lumi (data only) -- is_good_lumi branch not set
-        if (is_real_data() && not is_good_lumi())
-        {
-            return 0;
-        }
+        //if (is_real_data() && not is_good_lumi())
+        //{
+        //    return 0;
+        //}
 
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
@@ -691,26 +691,20 @@ TH1F PlotLooper::GetSingleFakePredRaw() const
         }
         else 
         {
- ///////////////////////////
- /// NEEED TODO !!!!!!!!!!!
- ///////////////////////////
-            //float el_max = h_elfr->GetMaximum();
-            //float mu_max = h_mufr->GetMaximum();
-            //switch (hyp)
-            //{
-            //    case DileptonHypType::EE: 
-            //        sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2);        
-            //        break;
-            //    case DileptonHypType::MUMU: 
-            //        sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2);
-            //        break;
-            //    case DileptonHypType::EMU: 
-            //        sfs.at(i).err = (mu_max/(1.0 - mu_max) * el_max/(1.0 - el_max));
-            //        break;
-            //    default:
-            //        sfs.at(i).err = 0.0; 
-            //        break;
-            //};
+            float el_max = h_elfr->GetMaximum();
+            float mu_max = h_mufr->GetMaximum();
+            if (abs(sfs.at(i).id)==13)
+            {
+                sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2);
+            }
+            else if (abs(sfs.at(i).id)==11)
+            {
+                sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2);
+            }
+            else
+            {
+                sfs.at(i).err = 0.0;
+            }
         }
     }
 
