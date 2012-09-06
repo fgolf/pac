@@ -798,8 +798,8 @@ TH1F PlotLooper::GetDoubleFakePred() const
                 float e1 = 0.0;                                         // get value of fake rate 2 for this eta, pt bin
                 float e2 = 0.0;                                         // get error on fake rate 2 for this eta, pt bin
 
-                int bin1;
-                int bin2;
+                int bin1 = 0;
+                int bin2 = 0;
                 switch (hyp)
                 {
                     case DileptonHypType::EE: 

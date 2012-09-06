@@ -30,9 +30,10 @@ template <typename T> T* get(const boost::shared_ptr<T> &p) {return p.get();}
 
 using namespace std;
 
+typedef const boost::shared_ptr<TH1> TH1Ptr;
+
 namespace rt
 {
-
 
 // declare data struct
 // ---------------------------------------------------------------------------------------- //
@@ -40,7 +41,7 @@ namespace rt
 struct TH1Container::impl
 {
     static bool verbose;
-    map<string, rt::TH1Ptr> hist_map;
+    map<string, TH1Ptr> hist_map;
 };
 
 // constructors
@@ -61,21 +62,21 @@ TH1Container::TH1Container(const std::string& file_name, const std::string& root
 
 TH1Container::~TH1Container()
 {
-#ifdef __RTINT__
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
-    {
-        delete iter->second; 
-    }
-#endif
+//#ifdef __RTINT__
+//    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+//    {
+//        delete iter->second; 
+//    }
+//#endif
 }
 
 
 TH1Container::TH1Container(const TH1Container& rhs)
     : m_pimpl(new TH1Container::impl)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = rhs.m_pimpl->hist_map.begin(); iter != rhs.m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = rhs.m_pimpl->hist_map.begin(); iter != rhs.m_pimpl->hist_map.end(); iter++)
     {
-        m_pimpl->hist_map[iter->first] = rt::TH1Ptr(dynamic_cast<TH1*>(iter->second->Clone()));   
+        m_pimpl->hist_map[iter->first] = TH1Ptr(dynamic_cast<TH1*>(iter->second->Clone()));   
     }
     return;
 }
@@ -104,7 +105,7 @@ TH1Container& TH1Container::operator=(const TH1Container& rhs)
 TH1Container TH1Container::operator+(const TH1Container& rhs)
 {
     TH1Container temp(*this);
-    for (map<string, rt::TH1Ptr>::const_iterator iter = rhs.m_pimpl->hist_map.begin(); iter != rhs.m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = rhs.m_pimpl->hist_map.begin(); iter != rhs.m_pimpl->hist_map.end(); iter++)
     {
         if(temp.Contains(iter->first))
             temp[iter->first]->Add(get(iter->second));
@@ -158,11 +159,11 @@ void TH1Container::Add(TH1* hist_ptr, bool overwrite)
         cout << "TH1Container::add(): Adding " << name << endl;
     }
 
-//#ifndef __RTINT__  
+#ifndef __RTINT__  
 // non interactive, I want to be in charge of deleting
+#endif
     hist_ptr->SetDirectory(0);
-//#endif
-    m_pimpl->hist_map.insert(pair<string, rt::TH1Ptr>(name, rt::TH1Ptr(hist_ptr)));
+    m_pimpl->hist_map.insert(pair<string, TH1Ptr>(name, TH1Ptr(hist_ptr)));
     return;
 }
 
@@ -175,7 +176,7 @@ void TH1Container::Add(TH1* hist_ptr, const std::string& option, bool overwrite)
 // set the directory of the hists (needed for draw)
 void TH1Container::SetDirectory(TDirectory* dir)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetDirectory(dir);
     }
@@ -286,7 +287,7 @@ void TH1Container::Load(const std::string& file_name, const std::string& root_fi
             // I want to be in charge of deleting
             hist_ptr->SetDirectory(0);
             string name(hist_ptr->GetName());
-            m_pimpl->hist_map.insert(pair<string, rt::TH1Ptr>(name, rt::TH1Ptr(hist_ptr)));
+            m_pimpl->hist_map.insert(pair<string, TH1Ptr>(name, TH1Ptr(hist_ptr)));
         }
     }
     file->Close();
@@ -299,7 +300,7 @@ void TH1Container::List() const
     cout << "TH1Container::List(): listing all histograms in the container" << endl;
     cout <<  "  " << setw(15) << left << "Hist Type" << "\t" << setw(15) << left << "Hist Name" << "\t" << "Hist Title" << endl; 
     cout <<  "-----------------------------------------------------------------------" << endl; 
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         cout <<  "  " << setw(15) << left << iter->second->ClassName() << "\t" << setw(15) << left << iter->first 
              << "\t" << iter->second->GetTitle() << endl;
@@ -335,9 +336,9 @@ void draw(TH1* h)
 void TH1Container::View()
 {
     usage();
-    map<string, rt::TH1Ptr>::const_iterator begin_iter = m_pimpl->hist_map.begin();
-    map<string, rt::TH1Ptr>::const_iterator end_iter   = m_pimpl->hist_map.end();
-    map<string, rt::TH1Ptr>::const_iterator iter       = begin_iter;
+    map<string, TH1Ptr>::const_iterator begin_iter = m_pimpl->hist_map.begin();
+    map<string, TH1Ptr>::const_iterator end_iter   = m_pimpl->hist_map.end();
+    map<string, TH1Ptr>::const_iterator iter       = begin_iter;
 
     // draw the first one
     draw(iter->second);
@@ -379,7 +380,7 @@ void TH1Container::View()
 
 void TH1Container::Scale(double scale, const std::string& option)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->Scale(scale, option.c_str());
     }
@@ -388,7 +389,7 @@ void TH1Container::Scale(double scale, const std::string& option)
 
 void TH1Container::Sumw2()
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         if (!iter->second->GetSumw2N())
         {
@@ -400,7 +401,7 @@ void TH1Container::Sumw2()
 
 void TH1Container::SetLineColor(Color_t color)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetLineColor(color);
     }
@@ -409,7 +410,7 @@ void TH1Container::SetLineColor(Color_t color)
 
 void TH1Container::SetLineStyle(Style_t style)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetLineStyle(style);
     }
@@ -418,7 +419,7 @@ void TH1Container::SetLineStyle(Style_t style)
 
 void TH1Container::SetLineWidth(Width_t width)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetLineWidth(width);
     }
@@ -427,7 +428,7 @@ void TH1Container::SetLineWidth(Width_t width)
 
 void TH1Container::SetMarkerColor(Color_t color)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetMarkerColor(color);
     }
@@ -436,7 +437,7 @@ void TH1Container::SetMarkerColor(Color_t color)
 
 void TH1Container::SetMarkerSize(Size_t size)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetMarkerSize(size);
     }
@@ -445,7 +446,7 @@ void TH1Container::SetMarkerSize(Size_t size)
 
 void TH1Container::SetMarkerStyle(Style_t style)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetMarkerStyle(style);
     }
@@ -454,7 +455,7 @@ void TH1Container::SetMarkerStyle(Style_t style)
 
 void TH1Container::SetOption(const std::string& option)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetOption(option.c_str());
     }
@@ -463,7 +464,7 @@ void TH1Container::SetOption(const std::string& option)
 
 void TH1Container::SetStats(bool stats)
 {
-    for (map<string, rt::TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
     {
         iter->second->SetStats(stats);
     }

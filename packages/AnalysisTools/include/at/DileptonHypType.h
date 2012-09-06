@@ -10,10 +10,10 @@ namespace at
     {
         enum value_type
         {
-            ALL,
-            MUMU,
-            EMU,
-            EE,
+            ALL,  // 0
+            MUMU, // 1
+            EMU,  // 2
+            EE,   // 3
             static_size
         };
     };
