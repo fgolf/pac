@@ -228,6 +228,8 @@ void PlotLooper::EndJob()
 }
 
 // binning contants
+//std::tr1::array<float, 5> el_eta_bins = {{0.0, 1.0, 1.5, 2.0, 2.5}};
+//std::tr1::array<float, 5> mu_eta_bins = {{0.0, 1.0, 1.5, 2.0, 2.5}};
 std::tr1::array<float, 5> el_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 5> mu_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
@@ -340,6 +342,10 @@ int PlotLooper::operator()(long event)
 
         // dilepton hyp type: 1 mm, 2 em, 3ee
         DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
+        //if (hyp_type != DileptonHypType::EMU)
+        //{
+        //    return 0;
+        //}
 
         // two jet events
         if (njets() < 2)
@@ -671,7 +677,10 @@ TH1F PlotLooper::GetSingleFakePredRaw() const
                 float bin_pred_err = pow(bin_count*f,2) * (pow(e/f, 2) + pow(bin_err/bin_count, 2)); 
                 sf_raw += bin_pred; 
                 sf_err += !rt::is_zero(bin_pred) ? bin_pred_err : 0.0;
-                //cout << Form("pt %f eta %f f %f bin_count %f sf_raw %f", pt, eta, f, bin_count, sf_raw) << endl;
+                //if (!rt::is_zero(bin_count))
+                //{
+                //    cout << Form("id %u pt %f eta %f f %f e %f bin_count %f sf_raw %f", sfs.at(i).id, pt, eta, f, e, bin_count, sf_raw) << endl;
+                //}
             }
         }
         sfs.at(i).raw = sf_raw;
@@ -932,48 +941,36 @@ TH1F PlotLooper::GetDoubleFakePred() const
     return h_df_pred;
 }
 
-std::pair<int, int> DoubleFakeBinLookup(int id1, float pt1, float eta1, int id2, float pt2, float eta2)
+int DoubleFakeBinLookup(int id, float pt, float eta)
 {
-    float max_pt  = (id1 == 11 ? el_pt_bins.back()   : mu_pt_bins.back() );
-    float min_pt  = (id1 == 11 ? el_pt_bins.front()  : mu_pt_bins.front());
-    float max_eta = (id1 == 11 ? el_eta_bins.back()  : mu_eta_bins.back());
-    float min_eta = (id1 == 11 ? el_eta_bins.front() : mu_eta_bins.front());
+    id  = abs(id);
+    eta = fabs(eta);
 
-    eta1 = fabs(eta1);
-    eta2 = fabs(eta2);
-    eta1 = eta1 >= max_eta ? max_eta-0.001 : eta1;
-    eta2 = eta2 >= max_eta ? max_eta-0.001 : eta2;
-    pt1  = pt1  >= max_pt  ? max_pt-0.001  : pt1;
-    pt2  = pt2  >= max_pt  ? max_pt-0.001  : pt2;
-    id1  = abs(id1);
-    id2  = abs(id2);
+    float max_pt  = (id == 11 ? el_pt_bins.back()   : mu_pt_bins.back() );
+    float min_pt  = (id == 11 ? el_pt_bins.front()  : mu_pt_bins.front());
+    float max_eta = (id == 11 ? el_eta_bins.back()  : mu_eta_bins.back());
+    float min_eta = (id == 11 ? el_eta_bins.front() : mu_eta_bins.front());
 
-    if (pt1 < min_pt || pt2 < min_pt || eta1 > max_eta || eta2 > max_eta || eta1 < min_eta+0.001 || eta2 < min_eta+0.001)
+    eta = eta >= max_eta ? max_eta-0.001 : eta;
+    pt  = pt  >= max_pt  ? max_pt-0.001  : pt;
+    if (pt < min_pt || eta > max_eta || eta < min_eta+0.001)
     {
-        return std::make_pair(-1, -1);
+        return -1;
     }
    
     static TH2F h_mu_bins("h_mu_bins", "h_mu_bins", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data());
     static TH2F h_el_bins("h_el_bins", "h_el_bins", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data());
+    TH2F& h_l_bins = id==11 ? h_el_bins : h_mu_bins;
 
-    TH2F& h_l1_bins = id1==11 ? h_el_bins : h_mu_bins;
-    TH2F& h_l2_bins = id2==11 ? h_el_bins : h_mu_bins;
+    int etabin = h_l_bins.GetXaxis()->FindBin(eta);
+    int ptbin  = h_l_bins.GetYaxis()->FindBin(pt);
 
-    int etabin1 = h_l1_bins.GetXaxis()->FindBin(eta1);
-    int etabin2 = h_l2_bins.GetXaxis()->FindBin(eta2);
-    int ptbin1  = h_l1_bins.GetYaxis()->FindBin(pt1);
-    int ptbin2  = h_l2_bins.GetYaxis()->FindBin(pt2);
+    if(ptbin <= 0)  {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: ptbin <= 0" );}
+    if(etabin <= 0) {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: etabin <= 0");}
 
-    if(ptbin1 <= 0)  {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: ptbin1 <= 0" );}
-    if(ptbin2 <= 0)  {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: ptbin2 <= 0" );}
-    if(etabin1 <= 0) {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: etabin1 <= 0");}
-    if(etabin2 <= 0) {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: etabin2 <= 0");}
-
-    int xbin = (ptbin1-1) * h_l1_bins.GetNbinsX() + etabin1;
-    int ybin = (ptbin2-1) * h_l2_bins.GetNbinsX() + etabin2;
-
-    //cout << Form("pt1 %f eta1 %f pt1_bin %u eta1_bin %u pt2 %f eta2 %f pt2_bin %u eta2_bin %u", pt1, eta1, ptbin1, etabin1, pt2, eta2, ptbin2, etabin2) << endl;
-    return std::make_pair(xbin, ybin);
+    int bin = (ptbin-1) * h_l_bins.GetNbinsX() + etabin;
+    //cout << Form("id %u pt %f eta %f pt_bin %u eta_bin %u", id, pt, eta, ptbin, etabin) << endl;
+    return bin;
 }
 
 void PlotLooper::FillDoubleFakeHist
@@ -989,13 +986,13 @@ void PlotLooper::FillDoubleFakeHist
     float weight
 )
 {
-    std::pair<int, int> bins = DoubleFakeBinLookup(id1, pt1, eta1, id2, pt2, eta2);
+    std::pair<int, int> bins(DoubleFakeBinLookup(id1, pt1, eta1), DoubleFakeBinLookup(id2, pt2, eta2));
     if (hyp == at::DileptonHypType::EMU && abs(id1) == 13)
     {
-       bins = DoubleFakeBinLookup(id2, pt2, eta2, id1, pt1, eta1);
+        bins = std::make_pair(DoubleFakeBinLookup(id2, pt2, eta2), DoubleFakeBinLookup(id1, pt1, eta1));
     }
-    
     float value = hist->GetBinContent(bins.first, bins.second);
+
     value += weight;
     hist->SetBinContent(bins.first, bins.second, value);
     hist->SetBinError(bins.first, bins.second, weight * sqrt(value/weight));
