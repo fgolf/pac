@@ -23,6 +23,7 @@ sources         := AnalysisBase.cc         \
 				   Sample.cc               \
 				   LorentzVectorObject.cc  \
 				   ScanChain.cc 		   \
+				   SkimChain.cc 		   \
 				   EventInfoTree.cc        \
 				   SingleLeptonTree.cc     \
 				   DileptonTree.cc	
