@@ -102,6 +102,23 @@ exe ss2012_plots
   : # usage-requirements
   ;
 
+exe ss2012_skim
+  : # sources
+    ./source/ss2012_skim.cc
+    # dependent packages
+    ss2012_tools/<link>static
+    /ROOT
+    /MiniFWLite/<link>shared
+    /AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
 exe ss2012_merge_babies
   : # sources
     ./source/ss2012_merge_babies.cc
@@ -178,20 +195,20 @@ exe ss2012_quick_check
 # FG's background tools
 lib ss2012_bkgd_tools
   : # sources
-		./FGBkgd2/doAllBkgdPlots.cc
-		./FGBkgd2/makeBkgdEstimatePlots.cc
-		./FGBkgd2/printYieldsTable.cc
-		./FGBkgd2/printEventList.cc
-		./FGBkgd2/FakeRatePrediction.cc
-		./FGBkgd2/ChargeFlipPrediction.cc
-		./FGBkgd2/getTotalBackgroundPrediction.cc
-		./FGBkgd2/makeBkgdEstimatePlots.cc
-		./FGBkgd2/doAllBkgdPlots.cc
-		./FGBkgd2/printFRtable.cc
+		./FGBkgd/doAllBkgdPlots.cc
+		./FGBkgd/makeBkgdEstimatePlots.cc
+		./FGBkgd/printYieldsTable.cc
+		./FGBkgd/printEventList.cc
+		./FGBkgd/FakeRatePrediction.cc
+		./FGBkgd/ChargeFlipPrediction.cc
+		./FGBkgd/getTotalBackgroundPrediction.cc
+		./FGBkgd/makeBkgdEstimatePlots.cc
+		./FGBkgd/doAllBkgdPlots.cc
+		./FGBkgd/printFRtable.cc
     ssb2012
 	 	[ rootcint Dict
 	 	  : # requirements
-	 	    <include>./FGBkgd2
+	 	    <include>./FGBkgd
 	 	    <include>$(PAC)/packages/cms2/05.03.09/header
 	 	    <include>$(PAC)/packages/AnalysisTools/include
 				#<header>SignalRegion.h
@@ -213,22 +230,23 @@ lib ss2012_bkgd_tools
 		/FGTools
     /MiniFWLite
     /AnalysisTools
+    /RootTools
     /boost//filesystem
   : # requirements
-    <include>./FGBkgd2
+    <include>./FGBkgd
   : # default-build
   : # usage-requirements
   ;
 
-exe test_bkgd2
+exe test_bkgd
   : # sources
-    ./FGBkgd2/test_bkgd2.cc
+    ./FGBkgd/test_bkgd.cc
     # dependent packages
     ss2012_bkgd_tools/<link>static
     /MiniFWLite/<link>shared
     /ROOT
   : # requirements
-    <include>./FGBkgd2
+    <include>./FGBkgd
   : # default-build
   : # usage-requirements
   ;
@@ -238,9 +256,10 @@ exe test_bkgd2
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
 #default-install ss2012_analysis_old ;
+default-install ss2012_skim ;
 default-install ss2012_plots ;
 default-install ss2012_tools ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
 default-install ss2012_bkgd_tools ;
-default-install test_bkgd2 ;
+default-install test_bkgd ;

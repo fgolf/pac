@@ -26,25 +26,25 @@ ss::SignalRegionInfo s_SignalRegionInfos[] =
         // name
         "sr3", 
         // ROOT title
-        "H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV, ++"
+        "H_{T} > 200 GeV, E_{T}^{miss} > 120 GeV"
     },
     {
         // name
         "sr4", 
         // ROOT title
-        "H_{T} > 200 GeV, E_{T}^{miss} > 120 GeV, ++"
+        "H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV"
     },
     {
         // name
         "sr5", 
         // ROOT title
-        "H_{T} > 320 GeV, E_{T}^{miss} > 50 GeV, ++"
+        "H_{T} > 320 GeV, E_{T}^{miss} > 50 GeV"
     },
     {
         // name
         "sr6", 
         // ROOT title
-        "H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV, ++"
+        "H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV"
     },
     {
         // name
@@ -118,8 +118,8 @@ namespace ss
             case SignalRegion::sr0 : return (ht() > 80.0   && pfmet() >  0.0 );
             case SignalRegion::sr1 : return (ht() > 80.0   && pfmet() > 30.0 );
             case SignalRegion::sr2 : return (ht() > 80.0   && pfmet() > 30.0 && is_pp());
-            case SignalRegion::sr3 : return (ht() > 200.0  && pfmet() > 50.0 );
-            case SignalRegion::sr4 : return (ht() > 200.0  && pfmet() > 120.0);
+            case SignalRegion::sr3 : return (ht() > 200.0  && pfmet() > 120.0);
+            case SignalRegion::sr4 : return (ht() > 200.0  && pfmet() > 50.0 );
             case SignalRegion::sr5 : return (ht() > 320.0  && pfmet() > 50.0 );
             case SignalRegion::sr6 : return (ht() > 320.0  && pfmet() > 120.0);
             case SignalRegion::sr7 : return (ht() > 200.0  && pfmet() > 50.0 && nbtags()>=3);

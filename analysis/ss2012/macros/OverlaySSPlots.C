@@ -95,19 +95,19 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     p["p_pt2"].Add(hc_mc  ["h_pt2_ss"  ], "MC", mc_color);
     p["p_pt2"].AddText(t1);
 
-    p["p_ht"] = rt::TH1Overlay(Form("%s;E^{miss}_{T} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_right");
-    p["p_ht"].Add(hc_data["h_ht_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
-    p["p_ht"].Add(hc_data["h_ht_os"  ], "flips", flip_color);
-    p["p_ht"].Add(hc_data["h_ht_fake"], "fakes", fake_color);
-    p["p_ht"].Add(hc_mc  ["h_ht_ss"  ], "MC", mc_color);
-    p["p_ht"].AddText(t1);
-
-    p["p_met"] = rt::TH1Overlay(Form("%s;H_{T} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_met"] = rt::TH1Overlay(Form("%s;E^{miss}_{T} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_met"].Add(hc_data["h_met_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_met"].Add(hc_data["h_met_os"  ], "flips", flip_color);
     p["p_met"].Add(hc_data["h_met_fake"], "fakes", fake_color);
     p["p_met"].Add(hc_mc  ["h_met_ss"  ], "MC", mc_color);
     p["p_met"].AddText(t1);
+
+    p["p_ht"] = rt::TH1Overlay(Form("%s;H_{T} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_ht"].Add(hc_data["h_ht_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_ht"].Add(hc_data["h_ht_os"  ], "flips", flip_color);
+    p["p_ht"].Add(hc_data["h_ht_fake"], "fakes", fake_color);
+    p["p_ht"].Add(hc_mc  ["h_ht_ss"  ], "MC", mc_color);
+    p["p_ht"].AddText(t1);
 
     t1.SetX(0.65); t1.SetY(0.6);
     p["p_nbtags"] = rt::TH1Overlay(Form("%s;# btags;Events", title.c_str()), "sb::off dt::stack lg::top_right");

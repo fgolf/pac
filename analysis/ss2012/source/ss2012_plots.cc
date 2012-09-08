@@ -28,6 +28,7 @@ try
     std::string vtxreweight_file    = "";
     std::string sample_name         = "";
     bool do_scale_factors           = true;
+    bool check_good_lumi            = false;
     float m_glu                     = 1000;
     float m_lsp                     = 100;
     unsigned int num_btags          = 0;
@@ -50,6 +51,7 @@ try
         ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                           )
         ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                )
         ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"             )
+        ("gr"       , po::value<bool>(&check_good_lumi)           , "for data, check the is_good_lumi() method"           )
         ("mglu"     , po::value<float>(&m_glu)                    , "gluino mass"                                         )
         ("mlsp"     , po::value<float>(&m_lsp)                    , "LSP mass"                                            )
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                          )
@@ -183,6 +185,7 @@ try
             flip_rate_file_name,
             num_btags,
             do_scale_factors,
+            check_good_lumi, 
             m_glu,
             m_lsp,
             lumi,

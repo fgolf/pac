@@ -301,20 +301,21 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     //SetErrorsToBogus(yield_fake);
     //SetErrorsToBogus(yield_pred);
 
+    // collect all the yields
     vector<Yield> yields;
     for (size_t i = 0; i != yields_bkgd.size(); i++)
     {
         yields.push_back(yields_bkgd[i]);
     }
-    yields.push_back(yield_mc);
     yields.push_back(yield_sf);
     yields.push_back(yield_df);
     yields.push_back(yield_fake);
     yields.push_back(yield_flip);
+    yields.push_back(yield_mc);
     yields.push_back(yield_pred);
     yields.push_back(yield_data);
 
-
+    // print the table
     CTable t_yields;
     t_yields.useTitle();
     t_yields.setTitle(Form("yields for SS 2012 SR %d (%s)", signal_region_num, ss::GetSignalRegionInfo(signal_region_num).title.c_str()));
@@ -343,4 +344,80 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     }
     t_yields.print();
     //t_yields.saveTex("test.tex");
+}
+
+// print the summary table 
+void PrintSummaryYields(const std::string output_path = "")
+{
+    // table for output
+    CTable t_yields;
+    t_yields.useTitle();
+    t_yields.setTitle("summary table for SS 2012 yields and background predictions");
+
+    // fill the columns
+    for (unsigned int signal_region_num = 0; signal_region_num != 9; signal_region_num++)
+    {
+        Yield yield_data(GetSSYield  ("data", signal_region_num, output_path));
+        Yield yield_sf  (GetSFYield  ("data", signal_region_num, output_path));
+        Yield yield_df  (GetDFYield  ("data", signal_region_num, output_path));
+        Yield yield_fake(GetFakeYield("data", signal_region_num, output_path));
+        Yield yield_flip(GetFlipYield("data", signal_region_num, output_path));
+
+        // special case for SR2
+        if (signal_region_num==2)
+        {
+            yield_flip = 0.5*GetFlipYield("data", 1, output_path);
+            yield_flip.title = "Flip";
+        }
+
+        Yield yield_mc("total MC");
+        vector<Yield> yields_bkgd;
+        yields_bkgd.push_back(GetSSYield("wz"  , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("zz"  , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttg" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttw" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttww", signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttz" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wwg" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("www" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wwz" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wzz" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("zzz" , signal_region_num, output_path));
+        for (size_t i = 0; i != yields_bkgd.size(); i++)
+        {
+            yield_mc += yields_bkgd[i];
+        }
+        Yield yield_pred = yield_mc;
+        yield_pred.title = "pred";
+        yield_pred += yield_fake;
+        yield_pred += yield_flip;
+
+        // collect all the yields
+        vector<Yield> yields;
+        yields.push_back(yield_fake);
+        yields.push_back(yield_flip);
+        yields.push_back(yield_mc);
+        yields.push_back(yield_pred);
+        yields.push_back(yield_data);
+
+        // print the table
+        t_yields.setColLabel(Form("sr%u", signal_region_num), signal_region_num);
+        for (size_t i = 0; i != yields.size(); i++)
+        {
+            const Yield& y = yields[i];
+            t_yields.setRowLabel(y.title, i);
+            if (y.title == "data")
+            {
+                t_yields.setCell(static_cast<int>(y.ll), i, signal_region_num);
+            }
+            else 
+            {
+                t_yields.setCell(rt::pm(y.ll, y.dll, "1.2"), i, signal_region_num);
+            }
+        }
+        //t_yields.saveTex("test.tex");
+    } // loop over SRs
+
+    // print the table
+    t_yields.print();
 }

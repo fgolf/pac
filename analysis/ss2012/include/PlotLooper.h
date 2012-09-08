@@ -25,6 +25,7 @@ class PlotLooper : public at::AnalysisWithHist
              const std::string& flip_rate_file_name = "",
              unsigned int num_btags = 0,
              bool do_scale_factors = true,
+             bool bheck_good_lumi = false,
 			 float mass_glu = 1000,
 			 float mass_lsp = 100,
 			 float lumi = 1.0,
@@ -51,6 +52,7 @@ class PlotLooper : public at::AnalysisWithHist
 		bool m_is_data;
 		bool m_do_vtx_reweight;
         bool m_do_scale_factors;
+        bool m_check_good_lumi;
         unsigned int m_nbtags;
 		float m_mass_glu;
 		float m_mass_lsp;

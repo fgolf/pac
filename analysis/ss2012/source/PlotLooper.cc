@@ -32,6 +32,7 @@ PlotLooper::PlotLooper
     const std::string& flip_rate_file_name,
     unsigned int num_btags,
     bool do_scale_factors,
+    bool check_good_lumi,
     float mass_glu,
     float mass_lsp,
     float lumi,
@@ -45,6 +46,7 @@ PlotLooper::PlotLooper
     , m_is_data(at::SampleIsData(sample))
     , m_do_vtx_reweight(not vtxreweight_file_name.empty())
     , m_do_scale_factors(do_scale_factors)
+    , m_check_good_lumi(check_good_lumi)
     , m_nbtags(num_btags)
     , m_mass_glu(mass_glu)
     , m_mass_lsp(mass_lsp)
@@ -120,9 +122,9 @@ void PlotLooper::EndJob()
     std::tr1::array<string, 4> df;
     for (size_t i = 0; i != df_pred.size(); i++)
     {
-    df_pred[i] = hc["h_df_pred"]->GetBinContent(i+1);
-    df_err[i]  = hc["h_df_pred"]->GetBinError(i+1);
-    df[i]      = rt::pm(df_pred[i], df_err[i]);
+        df_pred[i] = hc["h_df_pred"]->GetBinContent(i+1);
+        df_err[i]  = hc["h_df_pred"]->GetBinError(i+1);
+        df[i]      = rt::pm(df_pred[i], df_err[i]);
     }
 
     // SF prediction (raw)
@@ -132,9 +134,9 @@ void PlotLooper::EndJob()
     std::tr1::array<string, 4> sf_raw;
     for (size_t i = 0; i != sf_raw_pred.size(); i++)
     {
-    sf_raw_pred[i] = hc["h_sf_pred_raw"]->GetBinContent(i+1);
-    sf_raw_err[i]  = hc["h_sf_pred_raw"]->GetBinError(i+1);
-    sf_raw[i]      = rt::pm(sf_raw_pred[i], sf_raw_err[i]);
+        sf_raw_pred[i] = hc["h_sf_pred_raw"]->GetBinContent(i+1);
+        sf_raw_err[i]  = hc["h_sf_pred_raw"]->GetBinError(i+1);
+        sf_raw[i]      = rt::pm(sf_raw_pred[i], sf_raw_err[i]);
     }
 
     // SF prediction
@@ -144,11 +146,11 @@ void PlotLooper::EndJob()
     hc.Add(new TH1F("h_sf_pred", "SF prediction", 4, 0, 4));
     for (size_t i = 0; i != sf_pred.size(); i++)
     {
-    sf_pred[i] = sf_raw_pred[i] - 2.0*df_pred[i]; 
-    sf_err[i] = sqrt(pow(sf_raw_err[i], 2) + pow(2.0*df_err[i], 2)); 
-    hc["h_sf_pred"]->SetBinContent(i+1, sf_pred[i]);
-    hc["h_sf_pred"]->SetBinError(i+1, sf_err[i]);
-    sf[i] = rt::pm(sf_pred[i], sf_err[i]);
+        sf_pred[i] = sf_raw_pred[i] - 2.0*df_pred[i]; 
+        sf_err[i] = sqrt(pow(sf_raw_err[i], 2) + pow(2.0*df_err[i], 2)); 
+        hc["h_sf_pred"]->SetBinContent(i+1, sf_pred[i]);
+        hc["h_sf_pred"]->SetBinError(i+1, sf_err[i]);
+        sf[i] = rt::pm(sf_pred[i], sf_err[i]);
     }
 
     // Fake prediction
@@ -171,10 +173,11 @@ void PlotLooper::EndJob()
     std::tr1::array<string, 4> flip;
     for (size_t i = 0; i != df_pred.size(); i++)
     {
-    flip[i] = rt::pm(flip_pred_err[i].first, flip_pred_err[i].second);
+        flip[i] = rt::pm(flip_pred_err[i].first, flip_pred_err[i].second);
     }
 
     // SS kinematic plots (fake prediction)
+    // TODO -- propagate the errors on these
     hc.Add(dynamic_cast<TH1*>(hc["h_nvtxs_sf" ]->Clone("h_nvtxs_fake" )));
     hc.Add(dynamic_cast<TH1*>(hc["h_pt1_sf"   ]->Clone("h_pt1_fake"   )));
     hc.Add(dynamic_cast<TH1*>(hc["h_pt2_sf"   ]->Clone("h_pt2_fake"   )));
@@ -217,27 +220,23 @@ void PlotLooper::EndJob()
     t_yields.useTitle();
     t_yields.setTitle("yields table");
     t_yields.setTable() (                 "ee",        "mm",        "em",        "ll")
-        ("SF raw" ,   sf_raw[0],   sf_raw[2],   sf_raw[1],   sf_raw[3])
-        ("DF"     ,       df[0],       df[2],       df[1],       df[3])
-        ("SF"     ,       sf[0],       sf[2],       sf[1],       sf[3])
-        ("SF + DF",     fake[0],     fake[2],     fake[1],     fake[3])
-        ("flips"  ,     flip[0],     flip[2],     flip[1],     flip[3])
-        ("yield"  , yield_ss[0], yield_ss[2], yield_ss[1], yield_ss[3]);
+                        ("SF raw" ,   sf_raw[0],   sf_raw[2],   sf_raw[1],   sf_raw[3])
+                        ("DF"     ,       df[0],       df[2],       df[1],       df[3])
+                        ("SF"     ,       sf[0],       sf[2],       sf[1],       sf[3])
+                        ("SF + DF",     fake[0],     fake[2],     fake[1],     fake[3])
+                        ("flips"  ,     flip[0],     flip[2],     flip[1],     flip[3])
+                        ("yield"  , yield_ss[0], yield_ss[2], yield_ss[1], yield_ss[3]);
     t_yields.print();
     //hc.List();
 }
 
 // binning contants
-//std::tr1::array<float, 5> el_eta_bins = {{0.0, 1.0, 1.5, 2.0, 2.5}};
-//std::tr1::array<float, 5> mu_eta_bins = {{0.0, 1.0, 1.5, 2.0, 2.5}};
 std::tr1::array<float, 5> el_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 5> mu_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
 std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
-
 //std::tr1::array<float, 9> mu_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 //std::tr1::array<float, 9> el_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
-//std::tr1::array<float, 7> vtx_bins = {{ 0.0, 10.0, 15, 20, 25, 30.0, 40.0}};
 
 // book hists 
  void PlotLooper::BookHists()
@@ -324,10 +323,10 @@ int PlotLooper::operator()(long event)
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
         // only keep good lumi (data only) -- is_good_lumi branch not set
-        //if (is_real_data() && not is_good_lumi())
-        //{
-        //    return 0;
-        //}
+        if (m_check_good_lumi && is_real_data() && not is_good_lumi())
+        {
+            return 0;
+        }
 
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
@@ -671,8 +670,8 @@ TH1F PlotLooper::GetSingleFakePredRaw() const
                 float eta = h_sf.GetXaxis()->GetBinCenter(etabin);
                 float f = GetFakeRateValue(sfs.at(i).id, pt, eta);
                 float e = GetFakeRateError(sfs.at(i).id, pt, eta);
-                e = e / pow(1.0 - f, 2);
                 f = f / (1.0 - f);
+                e = e / pow(1.0 - f, 2);
                 float bin_pred = (bin_count * f); 
                 float bin_pred_err = pow(bin_count*f,2) * (pow(e/f, 2) + pow(bin_err/bin_count, 2)); 
                 sf_raw += bin_pred; 
@@ -693,34 +692,74 @@ TH1F PlotLooper::GetSingleFakePredRaw() const
         {
             float el_max = h_elfr->GetMaximum();
             float mu_max = h_mufr->GetMaximum();
-            if (abs(sfs.at(i).id)==13)
+            //if (abs(sfs.at(i).id)==13)
+            //{
+            //    sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2);
+            //}
+            //else if (abs(sfs.at(i).id)==11)
+            //{
+            //    sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2);
+            //}
+            //else
+            //{
+            //    sfs.at(i).err = 0.0;
+            //}
+            switch(i)
             {
-                sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2);
+                case 0 : sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2); break;
+                case 1 : sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2); break;
+                case 2 : sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2); break; 
+                case 3 : sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2); break;
+                default: sfs.at(i).err = 0.00;                            break;
             }
-            else if (abs(sfs.at(i).id)==11)
-            {
-                sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2);
-            }
-            else
-            {
-                sfs.at(i).err = 0.0;
-            }
+            sfs.at(i).err = sqrt(sfs.at(i).err);
         }
     }
 
-    // fill the histogram
-    std::tr1::array<float, 4> sf_raw;
-    sf_raw[0] = sfs[0].raw;
-    sf_raw[1] = sfs[2].raw + sfs[3].raw;
-    sf_raw[2] = sfs[1].raw;
-    sf_raw[3] = sfs[0].raw + sfs[1].raw + sfs[2].raw + sfs[3].raw;
+    // translate indices (0 ee, 1 em, 2 mm, 3 ll)
 
-    // translate to event level indices (0 ee, 1 em, 2 mm, 3 ll)
-    std::tr1::array<float, 4> sf_err;
+    // mm
+    std::tr1::array<float, 4> sf_raw = {{0, 0, 0, 0}};
+    sf_raw[0] = sfs[0].raw;
+    sf_raw[2] = sfs[1].raw;
+
+    // ee
+    std::tr1::array<float, 4> sf_err = {{0, 0, 0, 0}};
     sf_err[0] = sfs[0].err;
-    sf_err[1] = sqrt(pow(sfs[2].err,2) + pow(sfs[3].err,2));
     sf_err[2] = sfs[1].err;
-    sf_err[3] = sqrt(pow(sfs[1].err,2) + pow(sfs[2].err,2) + pow(sfs[2].err,2) + pow(sfs[3].err,2));
+
+    // combine for el 
+    sf_raw[1] = sfs[2].raw + sfs[3].raw;
+    if (not rt::is_zero(sfs[2].err) && not rt::is_zero(sfs[3].err))
+    {
+        sf_err[1] = sqrt(pow(sfs[2].err,2) + pow(sfs[3].err,2));
+    }
+    else if (not rt::is_zero(sfs[2].err))
+    {
+        sf_err[1] = sfs[2].err;
+    }
+    else if (not rt::is_zero(sfs[3].err))
+    {
+        sf_err[1] = sfs[3].err;
+    }
+    else
+    {
+        sf_err[1] = std::max(sfs[2].err, sfs[3].err);
+    }
+
+    // combine for ll
+    sf_raw[3] = sf_raw[0] + sf_raw[1] + sf_raw[2];
+    if (not rt::is_zero(sf_raw[3])) 
+    {
+        sf_err[3] += not rt::is_zero(sf_raw[0]) ? pow(sf_err[0], 2) : 0.0;
+        sf_err[3] += not rt::is_zero(sf_raw[1]) ? pow(sf_err[1], 2) : 0.0;
+        sf_err[3] += not rt::is_zero(sf_raw[2]) ? pow(sf_err[2], 2) : 0.0;
+        sf_err[3] = sqrt(sf_err[3]); 
+    }
+    else       
+    {
+        sf_err[3] = std::max(std::max(sf_err[1], sf_err[2]), sf_err[3]);
+    }
 
     h_sf_pred.SetBinContent(1, sf_raw[0]); h_sf_pred.SetBinError(1, sf_err[0]);
     h_sf_pred.SetBinContent(2, sf_raw[1]); h_sf_pred.SetBinError(2, sf_err[1]);
@@ -748,8 +787,8 @@ TH1F PlotLooper::GetDoubleFakePred() const
     const rt::TH1Container& hc = m_hist_container;
 
     // DF prediction (pt, eta) 
-    std::tr1::array<float, 4> df_pred;
-    std::tr1::array<float, 4> df_pred_err;
+    std::tr1::array<float, 4> df_pred     = {{0, 0, 0, 0}};
+    std::tr1::array<float, 4> df_pred_err = {{0, 0, 0, 0}};
 
     // DF pt/eta distribtution
     for (unsigned int i = 1; i != at::DileptonHypType::static_size; i++)
@@ -922,9 +961,19 @@ TH1F PlotLooper::GetDoubleFakePred() const
         df_pred_err[hyp] = pred_error_total;
     }
 
-    // ll
-    df_pred    [DileptonHypType::ALL] = df_pred[1] + df_pred[2] + df_pred[3]; 
-    df_pred_err[DileptonHypType::ALL] = sqrt(pow(df_pred_err[1],2) + pow(df_pred_err[2],2) + pow(df_pred_err[3],2));
+    // combine for ll
+    df_pred[DileptonHypType::ALL] = df_pred[1] + df_pred[2] + df_pred[3]; 
+    if (not rt::is_zero(df_pred[DileptonHypType::ALL])) 
+    {
+        df_pred_err[DileptonHypType::ALL] += not rt::is_zero(df_pred[1]) ? pow(df_pred_err[1], 2) : 0.0;
+        df_pred_err[DileptonHypType::ALL] += not rt::is_zero(df_pred[2]) ? pow(df_pred_err[2], 2) : 0.0;
+        df_pred_err[DileptonHypType::ALL] += not rt::is_zero(df_pred[3]) ? pow(df_pred_err[3], 2) : 0.0;
+        df_pred_err[DileptonHypType::ALL] = sqrt(df_pred_err[DileptonHypType::ALL]); 
+    }
+    else       
+    {
+        df_pred_err[DileptonHypType::ALL] = std::max(std::max(df_pred_err[1], df_pred_err[2]), df_pred_err[3]);
+    }
 
     // switching from hyp indices (ll 0, mm 1, em 2, ee 3) --> (ee 0, em 1, mm 2, ll 3) 
     TH1F h_df_pred("h_df_pred", "DF prediction", 4, 0, 4);
@@ -934,6 +983,22 @@ TH1F PlotLooper::GetDoubleFakePred() const
     h_df_pred.SetBinContent(4, df_pred[0]); h_df_pred.SetBinError(4, df_pred_err[0]);
     return h_df_pred;
 }
+
+//void CombinedFakePred()
+//{
+//    TH1F& h_df_pred     = *hc["h_df_pred"    ];
+//    TH1F& h_sf_pred_raw = *hc["h_sf_pred_raw"];
+//    TH1F h_df_pred("h_sf_pred", "SF prediction", 4, 0, 4);
+//    h_df_pred.SetBinContent(1, sf_pred_raw.GetBinContent(1) - 2 * df_pred.GetBinContent(1)); 
+//    h_df_pred.SetBinContent(2, sf_pred_raw.GetBinContent(2) - 2 * df_pred.GetBinContent(2)); 
+//    h_df_pred.SetBinContent(3, sf_pred_raw.GetBinContent(3) - 2 * df_pred.GetBinContent(3)); 
+//    h_df_pred.SetBinContent(4, sf_pred_raw.GetBinContent(4) - 2 * df_pred.GetBinContent(4)); 
+//
+//    h_df_pred.SetBinContent(1, sf_pred_raw.GetBinContent(1) - df_pred.GetBinContent(1)); 
+//    h_df_pred.SetBinContent(2, sf_pred_raw.GetBinContent(2) - df_pred.GetBinContent(2)); 
+//    h_df_pred.SetBinContent(3, sf_pred_raw.GetBinContent(3) - df_pred.GetBinContent(3)); 
+//    h_df_pred.SetBinContent(4, sf_pred_raw.GetBinContent(4) - df_pred.GetBinContent(4)); 
+//}
 
 int DoubleFakeBinLookup(int id, float pt, float eta)
 {

@@ -42,4 +42,4 @@ make_hists zzz     "$options"
 #root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"png\")"
 #root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"eps\")"
 #mkdir -p tables
-#root -b -q -l "macros/PrintYields.C+    ($signal_region, \"$out_path\")" >> tables/yields_${out_path}.txt
+root -b -q -l "macros/PrintYields.C+    ($signal_region, \"$out_path\")" #>> tables/yields_${out_path}.txt

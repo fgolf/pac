@@ -16,7 +16,7 @@
 #include "at/DorkyEventIdentifier.h"
 #include "at/GoodRun.h"
 
-// Peform an filter on a CMS2 ntuple.
+// Peform an filter on a SSB ntuple.
 template <typename Function>
 int SkimChainSSB
 (

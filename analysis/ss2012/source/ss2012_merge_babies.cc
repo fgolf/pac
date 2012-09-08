@@ -56,14 +56,14 @@ try
     { 
         //if (!rt::exists(input_file))
         //{
-        //    cout << "ERROR: ss2012_plots: input file " << input_file << " not found" << endl;
+        //    cout << "ERROR: ss2012_skim: input file " << input_file << " not found" << endl;
         //    cout << desc << "\n";
         //    return 1;
         //}
     }
     else
     {
-        cout << "ERROR: ss2012_plots: input file " << input_file << " not specified." << endl;
+        cout << "ERROR: ss2012_skim: input file " << input_file << " not specified." << endl;
         cout << desc << "\n";
         return 1;
     }
@@ -73,7 +73,7 @@ try
     { 
         if (!rt::exists(run_list))
         {
-            cout << "ERROR: ss2012_plots: run_list " << run_list << " not found" << endl;
+            cout << "ERROR: ss2012_skim: run_list " << run_list << " not found" << endl;
             cout << desc << "\n";
             return 1;
         }
