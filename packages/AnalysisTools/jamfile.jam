@@ -4,6 +4,7 @@ lib AnalysisTools
   : # sources
     ./source/Constants.cc
     ./source/ScanChain.cc
+    ./source/SkimChain.cc
     ./source/AnalysisBase.cc
     ./source/AnalysisWithHist.cc
     ./source/AnalysisWithTree.cc
