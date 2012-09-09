@@ -32,6 +32,7 @@ class SSAnalysisLooper : public at::AnalysisWithTree
             bool sparms = false,
             int jetMetScale = 0,
             bool is_fast_sim = false,
+			bool sync_print = false,
             bool verbose = false
         );
 
@@ -54,6 +55,7 @@ class SSAnalysisLooper : public at::AnalysisWithTree
         bool m_is_fast_sim;
         bool m_filter_bad_runs;
         bool m_sparms;
+		bool m_sync_print;
         bool m_verbose;
 
         // 0 mm, 1 em, 2 ee

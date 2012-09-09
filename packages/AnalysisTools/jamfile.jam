@@ -33,7 +33,7 @@ lib AnalysisTools
     /CMS2
     /CMS2_CORE
     /ROOT
-    /RootTools
+    /RootTools//RootTools
     /boost//headers
     /boost//filesystem
   : # requirements 

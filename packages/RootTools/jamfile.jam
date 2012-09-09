@@ -78,32 +78,23 @@ lib RootTools
       <include>./source 
     ;
 
-#exe merge_tchain
-#    : # sources
-#      ./source/merge_tchain.cc
-#      # dependent packages
-#      /ROOT
-#      RootTools/<link>static
-#      /boost//program_options/<link>static
-#      /MiniFWLite/<link>shared
-#    : # requirements 
-#      <include>./include
-#      <include>./source
-#    : # default-build
-#    : # usage-requirements
-#    ;
+exe merge_tchain
+    : # sources
+      ./source/merge_tchain.cc
+      # dependent packages
+      /ROOT
+      RootTools/<link>static
+      /boost//program_options/<link>static
+      /MiniFWLite/<link>shared
+    : # requirements 
+      <include>./include
+      <include>./source
+    : # default-build
+    : # usage-requirements
+    ;
 
 
 # install
 # -----------------------------------------------------#
-#default-install merge_tchain ;
-#default-install RootTools/<link>shared ;
-
-#if $(cmssw) = ""  
-#{
-#  default-install RootToolsInteractive ;
-#}
-#else
-#{
-#  default-install RootToolsInteractiveCMSSW ;
-#}
+default-install merge_tchain ;
+default-install RootTools : <link>shared ;

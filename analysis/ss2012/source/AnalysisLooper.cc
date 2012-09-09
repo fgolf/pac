@@ -21,6 +21,7 @@
 #include "at/DileptonChargeType.h"
 #include "at/VtxReweight.h"
 #include "at/GoodRun.h"
+#include "at/PrintIdIsoInfo.h"
 #include "rt/RootTools.h"
 #include "CTable.h"
 #include "GenParticleStruct.h"
@@ -223,6 +224,99 @@ void SetBtagDiscriminator(const vector<LorentzVector>& jets_p4, vector<float>& j
 //    }
 //}
 
+void PrintForSync(int ihyp, enum JetType jet_type, float jet_met_scale)
+{
+	// convenience
+	const LorentzVector& lt_p4 = hyp_lt_p4().at(ihyp);
+	const LorentzVector& ll_p4 = hyp_ll_p4().at(ihyp);
+	int lt_id                  = hyp_lt_id().at(ihyp);
+	int ll_id                  = hyp_ll_id().at(ihyp);
+	int lt_idx                 = hyp_lt_index().at(ihyp);
+	int ll_idx                 = hyp_ll_index().at(ihyp);
+	bool lt_passes_id          = samesign::isGoodLepton(lt_id, lt_idx);
+	bool ll_passes_id          = samesign::isGoodLepton(ll_id, ll_idx);
+	float lt_iso               = (abs(lt_id) == 11) ? samesign::electronIsolationPF2012(lt_idx) : muonIsoValuePF2012_deltaBeta(lt_idx);
+	float ll_iso               = (abs(ll_id) == 11) ? samesign::electronIsolationPF2012(ll_idx) : muonIsoValuePF2012_deltaBeta(ll_idx);
+
+	// channel names
+	const size_t n_channel_names = 4; 
+	const std::string channel_names[n_channel_names] = {"All", "MM", "EM", "EE"};
+
+	int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
+	int num_btags = samesign::nBtaggedJets(ihyp, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0);
+
+	// print the leptons sorted by pT
+	LorentzVector l1_p4        = lt_p4;
+	float         l1_pt        = lt_p4.pt();
+	int           l1_id        = lt_id;
+	int           l1_idx       = lt_idx;
+	float         l1_iso       = lt_iso;
+	bool          l1_passes_id = lt_passes_id;
+	LorentzVector l2_p4        = ll_p4;
+	float         l2_pt        = ll_p4.pt();
+	int           l2_id        = ll_id;
+	int           l2_idx       = ll_idx;
+	float         l2_iso       = ll_iso;
+	bool          l2_passes_id = ll_passes_id;
+	if (l2_pt > l1_pt)
+	{
+		std::swap(l1_p4        ,l2_p4       );
+		std::swap(l1_pt        ,l2_pt       );
+		std::swap(l1_id        ,l2_id       );
+		std::swap(l1_idx       ,l2_idx      );
+		std::swap(l1_iso       ,l2_iso      );
+		std::swap(l1_passes_id ,l2_passes_id);
+	}
+
+	float ht  = samesign::sumJetPt(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, jet_met_scale);
+	float met = evt_pfmet_type1cor();
+	int type  = at::hyp_typeToHypType(hyp_type().at(ihyp));
+
+	if (samesign::isNumeratorHypothesis(ihyp))
+	{
+		//cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
+		cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
+				evt_run(), evt_lumiBlock(), evt_event(),
+				channel_names[type].c_str(),
+				l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
+				l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
+				met,
+				ht,
+				num_jets,
+				num_btags) << endl;
+	}
+	else
+	{
+		cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
+				evt_run(), evt_lumiBlock(), evt_event(),
+				channel_names[type].c_str(),
+				l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
+				l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
+				met,
+				"-",
+				"-",
+				"-") << endl;
+	}
+
+	//if (evt_run() == 191247 && evt_lumiBlock() == 189 && evt_event() == 281392234)
+	//if (evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 91075424)
+	//if ((evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 91551153))
+	//if ((evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 90509753))
+	//if ((evt_run() == 190736 && evt_lumiBlock() == 143 && evt_event() == 147343009))
+	//if ((evt_run() == 190736 && evt_lumiBlock() == 143 && evt_event() == 147655281))
+	//if ((evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93008232))
+	//if ((evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 92441355))
+	//if ((evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
+	//if ((evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
+	if ((evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
+	{
+		cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx);
+		cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx);
+		cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
+		cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
+	}
+}
+
 // construct:
 SSAnalysisLooper::SSAnalysisLooper
 (
@@ -237,6 +331,7 @@ SSAnalysisLooper::SSAnalysisLooper
      bool sparms,
      int  jetMetScale,
      bool is_fast_sim,
+	 bool sync_print,
      bool verbose
 )
     : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
@@ -245,6 +340,7 @@ SSAnalysisLooper::SSAnalysisLooper
     , m_jetMetScale(jetMetScale)
     , m_is_fast_sim(is_fast_sim)
     , m_sparms(sparms)
+	, m_sync_print(sync_print)
     , m_verbose(verbose)
 {
     // set vertex weight file
@@ -317,6 +413,14 @@ void SSAnalysisLooper::BeginJob()
     // initialize branches
     m_evt.Reset();
     m_evt.SetBranches(*m_tree);
+
+	if (m_sync_print)
+	{
+		cout << "Run | LS | Event | channel | " 
+			    "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
+				"Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
+				"MET | HT | nJets | nbJets" << endl;
+	}
 }
 
 
@@ -347,16 +451,20 @@ int SSAnalysisLooper::Analyze(long event)
 {
     try
     {
-        //// select specific events
-        //if (evt_isRealData() && !(evt_run() == 195915 && evt_lumiBlock() == 636 && evt_event() == 928975370))
-        //{
-        //    return 0;
-        //}
-        //else
-        //{
-        //    cout << Form("run %d, ls %d, evt %d", evt_run(), evt_lumiBlock(), evt_event()) << endl; 
-        //    //return 0; 
-        //}
+        // select specific events
+        //if (!(evt_run() == 191247 && evt_lumiBlock() == 189 && evt_event() == 281392234))
+        //if (!(evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 91075424))
+        //if (!(evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 90509753))
+        //if (!(evt_run() == 190736 && evt_lumiBlock() == 143 && evt_event() == 147343009))
+        //if (!(evt_run() == 190736 && evt_lumiBlock() == 143 && evt_event() == 147655281))
+        //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93008232))  no good vtx
+        //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 92441355))
+        //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
+        //if (!(evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
+        if (!(evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
+        {
+            return 0;
+        }
 
         // Reset Tree Variables
         // --------------------------------------------------------------------------------------------------------- //
@@ -437,13 +545,6 @@ int SSAnalysisLooper::Analyze(long event)
                 continue;
             }
 
-            // check extra Z veto
-            if (samesign::makesExtraZ(ihyp))
-            {
-                if (m_verbose) {std::cout << "fails btag extra Z veto requirement" << std::endl;}
-                continue;
-            }
-
             // check if hyp passes trigger
             if (!samesign::passesTrigger(hyp_type().at(ihyp)))
             {
@@ -462,6 +563,19 @@ int SSAnalysisLooper::Analyze(long event)
             // check if hyp passes lepton kinematics
             if (fabs(lt_p4.Eta())>2.4 || lt_p4.Pt()<20.0) continue;
             if (fabs(ll_p4.Eta())>2.4 || ll_p4.Pt()<20.0) continue;
+
+			// print for syncing
+			if (m_sync_print)
+			{
+				PrintForSync(ihyp, jet_type, m_jetMetScale);
+			}
+
+            // check extra Z veto
+            if (samesign::makesExtraZ(ihyp))
+            {
+                if (m_verbose) {std::cout << "fails btag extra Z veto requirement" << std::endl;}
+                continue;
+            }
 
             // check if event passes num_jet cut
             //int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
@@ -959,9 +1073,6 @@ int SSAnalysisLooper::Analyze(long event)
                 if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[3] += scale;
             }
         }
-
-        //PrintForSync(m_evt);
-
     }
     catch (std::exception& e)
     {

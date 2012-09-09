@@ -880,6 +880,12 @@ namespace rt
 	        else
 	            chain = MakeTChain(full_path.c_str(), treename.c_str(), chain);
 	    }
+
+        // check the chain
+        if (!chain)
+        {
+            throw std::runtime_error("ERROR RT::CreateTChainFromCommaSeperatedList -- chain is NULL");
+        }
 	
 	    return chain;
 	}

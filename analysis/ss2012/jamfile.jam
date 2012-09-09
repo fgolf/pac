@@ -142,7 +142,7 @@ lib fake_rate_baby
     ./source/FakeRateBaby.cc
     # dependent packages
     /ROOT
-    /RootTools
+    /RootTools//RootTools
     /AnalysisTools
   : # requirements
     <include>./include
@@ -230,7 +230,7 @@ lib ss2012_bkgd_tools
 		/FGTools
     /MiniFWLite
     /AnalysisTools
-    /RootTools
+    /RootTools//RootTools
     /boost//filesystem
   : # requirements
     <include>./FGBkgd

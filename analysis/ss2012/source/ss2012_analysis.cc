@@ -43,6 +43,7 @@ try
     std::string sample_name         = "data";
     std::string vtxreweight_file    = "";
     std::string good_run_list       = "";
+    bool sync_print                 = false;
     bool sparms                     = false;
     bool switchSigns                = false;
     int jetMetScale                 = 0;
@@ -67,8 +68,9 @@ try
         ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                        )
         ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
         ("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
+        ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync"                                                                    )
         ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                        )
-        ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                   )
+        ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                    )
         ;
 
     po::variables_map vm;
@@ -229,6 +231,7 @@ try
             sparms,
 	    	jetMetScale,
 	    	isFastSim,
+            sync_print,
             verbose
         ),
         number_of_events,

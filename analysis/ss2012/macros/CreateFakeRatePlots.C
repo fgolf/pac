@@ -348,3 +348,22 @@ void PrintFRTables(const std::string lepton="mu")
     }
 }
 
+
+void PrintFRRatioPlot()
+{
+	rt::TH1Container hc_mu0p92("data/fake_rates/ssFR_data_standard_23May2012.root");
+	rt::TH1Container hc_mu8p68("plots/fake_rates/muons_8p68/muons_8p68.root"      );
+
+	TH1F* h_mufr_ratio_vs_pt = dynamic_cast<TH1F*>(hc_mu8p68["h_mufr40c_vs_pt"]->Clone("h_mufr_ratio_vs_pt"));
+	h_mufr_ratio_vs_pt->SetTitle("ratio of #mu fake rates (8.86 FR/0.92 FR);;p_{T} (GeV)");
+	h_mufr_ratio_vs_pt->Divide(hc_mu0p92["h_mufr40c_vs_pt"]);
+	h_mufr_ratio_vs_pt->Draw();
+
+	//rt::TH1Container hc_el0p92("data/fake_rates/ssFR_data_standard_23May2012.root"      );
+	//rt::TH1Container hc_el8p86("plots/fake_rates/electrons_8p68fb/electrons_8p68fb.root");
+
+	//TH1F* h_elfr_ratio = dynamic_cast<TH1F*>(h_elfr8p86->Clone("h_mufr_ratio"));
+	//h_elfr_ratio->SetTitle("ratio of #mu fake rates (8.86 FR/0.92 FR);|#eta|;p_{T} (GeV)");
+	//h_elfr_ratio->Divide(h_elfr0p92);
+	//h_elfr_ratio->Draw();
+}
