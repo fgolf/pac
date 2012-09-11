@@ -25,7 +25,7 @@ function make_hists
 #make_hists t1tttt "--output plots/sr${signal_region}/t1tttt_mglu600_mlsp100.root  --mglu  600 --mlsp 100 $options"
 #make_hists t1tttt_fastsim "--output plots/sr${signal_region}/t1tttt_mglu1100_mlsp0.root --mglu 1100 --mlsp 0 $options"
 #make_hists t1tttt_fastsim "--output plots/sr${signal_region}/t1tttt_mglu1100_mlsp600.root --mglu 1100 --mlsp 600 $options"
-make_hists data    "$options --gr 1"
+make_hists data    "$options"
 make_hists wz      "$options"
 make_hists zz      "$options"
 make_hists ttg     "$options"
