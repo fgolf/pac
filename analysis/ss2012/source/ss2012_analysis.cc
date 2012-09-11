@@ -207,8 +207,9 @@ try
         {
             output_file = Form("babies/%s.root", rt::filename(sample_name).c_str());
         }
-		chain = new TChain("Events");
-		chain->Add(input_file.c_str());
+		//chain = new TChain("Events");
+		//chain->Add(input_file.c_str());
+        chain = rt::CreateTChainFromCommaSeperatedList(input_file, "Events");
 	}
 
     cout << "sample has " << chain->GetEntries() << " entries" << endl;

@@ -224,7 +224,7 @@ void SetBtagDiscriminator(const vector<LorentzVector>& jets_p4, vector<float>& j
 //    }
 //}
 
-void PrintForSync(int ihyp, enum JetType jet_type, float jet_met_scale)
+void PrintForSync(int ihyp, enum JetType jet_type, int jet_met_scale)
 {
 	// convenience
 	const LorentzVector& lt_p4 = hyp_lt_p4().at(ihyp);
@@ -308,13 +308,13 @@ void PrintForSync(int ihyp, enum JetType jet_type, float jet_met_scale)
 	//if ((evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 92441355))
 	//if ((evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
 	//if ((evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
-	if ((evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
-	{
-		cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx);
-		cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx);
-		cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
-		cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
-	}
+	//if ((evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
+	//{
+	//	cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx);
+	//	cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx);
+	//	cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
+	//	cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
+	//}
 }
 
 // construct:
@@ -461,10 +461,10 @@ int SSAnalysisLooper::Analyze(long event)
         //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 92441355))
         //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
         //if (!(evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
-        if (!(evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
-        {
-            return 0;
-        }
+        //if (!(evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
+        //{
+        //    return 0;
+        //}
 
         // Reset Tree Variables
         // --------------------------------------------------------------------------------------------------------- //
