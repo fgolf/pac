@@ -82,7 +82,7 @@ public:
     float ht30;    
     float rho;
     float rho_iso;
-    float sf_trig;
+    float sf_dileptrig;
     float sf_lepeff;
     bool trig_mm;
     bool trig_em;

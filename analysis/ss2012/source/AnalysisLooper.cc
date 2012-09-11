@@ -841,7 +841,7 @@ int SSAnalysisLooper::Analyze(long event)
         if (!evt_isRealData())
         {
             // scale factor for trigger efficiency
-            m_evt.sf_trig        = dilepTriggerScaleFactor(hyp_idx);
+            m_evt.sf_dileptrig     = dilepTriggerScaleFactor(hyp_idx);
             //m_evt.lep1.sf_trig   = triggerScaleFactor(TrigEffType::LeadDbl, lep1_id, m_evt.lep1.p4);  // this doesn't seem right
             //m_evt.lep2.sf_trig   = triggerScaleFactor(TrigEffType::LeadDbl, lep2_id, m_evt.lep2.p4);  // this doesn't seem right
 

@@ -31,13 +31,13 @@ make_hists ttg     "$options"
 make_hists ttw     "$options"
 make_hists ttww    "$options"
 make_hists ttz     "$options"
-make_hists wwg     "$options"
+#make_hists wwg     "$options"
 make_hists www     "$options"
 make_hists wwz     "$options"
-make_hists wzz     "$options"
+#make_hists wzz     "$options"
 make_hists zzz     "$options"
 
 # overlay the hists
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"png\")"
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"eps\")"
-root -b -q -l "macros/PrintYields.C+    ($signal_region, \"$out_path\")" >> tables/yields_${out_path}.txt
+#root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"png\")"
+#root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"eps\")"
+root -b -q -l "macros/PrintYields.C+    ($signal_region, \"$out_path\")" #>> tables/yields_${out_path}.txt

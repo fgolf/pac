@@ -255,8 +255,8 @@ void PlotLooper::EndJob()
                         ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
                         ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
                         ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
-                        ("Flips"  ,   flip.ee.str(),   flip.mm.str(),   flip.em.str(),   flip.ll.str())
-                        ("yield"  ,     yield_ss[0],      yield_ss[1],    yield_ss[2],     yield_ss[3]);
+                        ("Flips"  ,    flip.ee.str(),    flip.mm.str(),    flip.em.str(),    flip.ll.str())
+                        ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
     t_yields.print();
 }
 
@@ -427,6 +427,7 @@ int PlotLooper::operator()(long event)
         if (m_do_scale_factors && !is_real_data())
         {
             evt_weight *= sf_lepeff();
+            evt_weight *= sf_dileptrig();
             if (m_nbtags>=2)
             {
                 if (m_signal_region == SignalRegion::sr7)

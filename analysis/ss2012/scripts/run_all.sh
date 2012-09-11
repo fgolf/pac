@@ -3,8 +3,8 @@
 mkdir -p $PAC/analysis/ss2012/logs
 nev=${1:--1}
 
-# data
-ss2012_analysis.exe --nev $nev --sample data --ntuple_type ss_skim_data  --run_list json/Cert_190456-195947_8TeV_PromptReco_Collisions12_v2_cms2.txt > logs/data.log 2>&1 &
+# data (3.95 /fb -- ICHEP)
+#ss2012_analysis.exe --nev $nev --sample data --ntuple_type ss_skim_data  --run_list json/Cert_190456-195947_8TeV_PromptReco_Collisions12_v2_cms2.txt > logs/data.log 2>&1 &
 
 # background
 # specifiying the sample

@@ -206,7 +206,7 @@ namespace ssb {
 	bool &trig_mm() { return samesignbtag.trig_mm(); }
 	bool &trig_em() { return samesignbtag.trig_em(); }
 	bool &trig_ee() { return samesignbtag.trig_ee(); }
-	float &sf_trig() { return samesignbtag.sf_trig(); }
+	float &sf_dileptrig() { return samesignbtag.sf_dileptrig(); }
 	float &sf_lepeff() { return samesignbtag.sf_lepeff(); }
 	float &sparm0() { return samesignbtag.sparm0(); }
 	float &sparm1() { return samesignbtag.sparm1(); }

@@ -634,9 +634,9 @@ protected:
 	bool	trig_ee_;
 	TBranch *trig_ee_branch;
 	bool trig_ee_isLoaded;
-	float	sf_trig_;
-	TBranch *sf_trig_branch;
-	bool sf_trig_isLoaded;
+	float	sf_dileptrig_;
+	TBranch *sf_dileptrig_branch;
+	bool sf_dileptrig_isLoaded;
 	float	sf_lepeff_;
 	TBranch *sf_lepeff_branch;
 	bool sf_lepeff_isLoaded;
@@ -1832,10 +1832,10 @@ void Init(TTree *tree) {
 		trig_ee_branch = tree->GetBranch("trig_ee");
 		trig_ee_branch->SetAddress(&trig_ee_);
 	}
-	sf_trig_branch = 0;
-	if (tree->GetBranch("sf_trig") != 0) {
-		sf_trig_branch = tree->GetBranch("sf_trig");
-		sf_trig_branch->SetAddress(&sf_trig_);
+	sf_dileptrig_branch = 0;
+	if (tree->GetBranch("sf_dileptrig") != 0) {
+		sf_dileptrig_branch = tree->GetBranch("sf_dileptrig");
+		sf_dileptrig_branch->SetAddress(&sf_dileptrig_);
 	}
 	sf_lepeff_branch = 0;
 	if (tree->GetBranch("sf_lepeff") != 0) {
@@ -2193,7 +2193,7 @@ void GetEntry(unsigned int idx)
 		trig_mm_isLoaded = false;
 		trig_em_isLoaded = false;
 		trig_ee_isLoaded = false;
-		sf_trig_isLoaded = false;
+		sf_dileptrig_isLoaded = false;
 		sf_lepeff_isLoaded = false;
 		sparm0_isLoaded = false;
 		sparm1_isLoaded = false;
@@ -2443,7 +2443,7 @@ void LoadAllBranches()
 	if (trig_mm_branch != 0) trig_mm();
 	if (trig_em_branch != 0) trig_em();
 	if (trig_ee_branch != 0) trig_ee();
-	if (sf_trig_branch != 0) sf_trig();
+	if (sf_dileptrig_branch != 0) sf_dileptrig();
 	if (sf_lepeff_branch != 0) sf_lepeff();
 	if (sparm0_branch != 0) sparm0();
 	if (sparm1_branch != 0) sparm1();
@@ -5662,20 +5662,20 @@ void LoadAllBranches()
 		}
 		return trig_ee_;
 	}
-	float &sf_trig()
+	float &sf_dileptrig()
 	{
-		if (not sf_trig_isLoaded) {
-			if (sf_trig_branch != 0) {
-				sf_trig_branch->GetEntry(index);
+		if (not sf_dileptrig_isLoaded) {
+			if (sf_dileptrig_branch != 0) {
+				sf_dileptrig_branch->GetEntry(index);
 				#ifdef PARANOIA
 				#endif // #ifdef PARANOIA
 			} else { 
-				printf("branch sf_trig_branch does not exist!\n");
+				printf("branch sf_dileptrig_branch does not exist!\n");
 				exit(1);
 			}
-			sf_trig_isLoaded = true;
+			sf_dileptrig_isLoaded = true;
 		}
-		return sf_trig_;
+		return sf_dileptrig_;
 	}
 	float &sf_lepeff()
 	{
@@ -6567,7 +6567,7 @@ namespace ssb {
 	bool &trig_mm();
 	bool &trig_em();
 	bool &trig_ee();
-	float &sf_trig();
+	float &sf_dileptrig();
 	float &sf_lepeff();
 	float &sparm0();
 	float &sparm1();
