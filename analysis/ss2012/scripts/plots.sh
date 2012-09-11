@@ -14,7 +14,7 @@ function make_hists
 {
     local sample=$1
     local args=$2
-    cmd="ss2012_plots --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+    cmd="ss2012_plots --gr 1 --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
     echo $cmd
     eval $cmd
 }

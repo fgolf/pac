@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "TChain.h"
-#include "CMS2.h"
+//#include "CMS2.h"
 #include "CORE/muonSelections.h"
 #include "CORE/electronSelections.h"
 #include "CORE/ssSelections.h"

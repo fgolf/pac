@@ -15,6 +15,9 @@ sources         := SSB2012.cc      	\
 				   ScaleFactors.cc 	\
 				   SameSignTree.cc 	\
 				   SkimChainSSB.cc	\
+				   PredSummary.cc   \
+				   FakeRatePrediction.cc \
+				   FlipRatePrediction.cc \
 				   SignalRegion.cc 
 include_dir     := include source 
 defines         := 

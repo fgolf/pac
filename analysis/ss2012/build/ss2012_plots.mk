@@ -11,10 +11,7 @@ include ${PAC}/tools/Makefile.common
 programs        := ss2012_plots.exe
 program_dir_rel := analysis/ss2012
 sources         := ss2012_plots.cc \
-    			    PlotLooper.cc \
-    			    ScaleFactors.cc \
-    			    SignalRegion.cc \
-    				source/SSB2012.cc
+    			    PlotLooper.cc 
 include_dir     := include source
 defines         := __NON_ROOT_BUILD__
 
@@ -38,6 +35,9 @@ $(eval $(include_simple_table))
 
 # Frank's tools
 #$(eval $(include_fg_tools))
+
+# ss2012_tools 
+$(eval $(include_ss2012_tools))
 
 # CMS2 
 $(eval $(include_cms2_header))

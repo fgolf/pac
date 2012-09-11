@@ -12,6 +12,9 @@
 #include "at/DileptonHypType.h"
 #include "at/DileptonChargeType.h"
 #include "SignalRegion.h"
+#include "PredSummary.h"
+#include "FakeRatePrediction.h"
+#include "FlipRatePrediction.h"
 #include "SSB2012.h"
 #include "CTable.h"
 
@@ -59,6 +62,8 @@ PlotLooper::PlotLooper
         cout << "using vertex reweight file : " << vtxreweight_file_name << endl;
         set_vtxreweight_rootfile(vtxreweight_file_name.c_str(), m_verbose);
     }
+    count_ee = 0;
+    count_em = 0;
 
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
@@ -108,73 +113,98 @@ void PlotLooper::EndJob()
         hc.List();
     }
 
-    // 0 ee, 2 em, 2 mm, 3 ll
+    // -----------------------------------------------------------------------------//
+
+    // 0 ee, 1 mm, 2 em, 3 ll
     std::tr1::array<int, 4> yield_ss;
     yield_ss[0] = static_cast<int>(hc["h_yield_ee"]->GetEntries());
-    yield_ss[1] = static_cast<int>(hc["h_yield_em"]->GetEntries());
-    yield_ss[2] = static_cast<int>(hc["h_yield_mm"]->GetEntries());
+    yield_ss[1] = static_cast<int>(hc["h_yield_mm"]->GetEntries());
+    yield_ss[2] = static_cast<int>(hc["h_yield_em"]->GetEntries());
     yield_ss[3] = static_cast<int>(hc["h_yield_ll"]->GetEntries());
 
-    // DF prediction (raw)
-    hc.Add(dynamic_cast<TH1F*>(GetDoubleFakePred().Clone()));  // this is poor -- fix it later
-    std::tr1::array<float, 4> df_pred;
-    std::tr1::array<float, 4> df_err;
-    std::tr1::array<string, 4> df;
-    for (size_t i = 0; i != df_pred.size(); i++)
-    {
-        df_pred[i] = hc["h_df_pred"]->GetBinContent(i+1);
-        df_err[i]  = hc["h_df_pred"]->GetBinError(i+1);
-        df[i]      = rt::pm(df_pred[i], df_err[i]);
-    }
+    // Fake predictions
+    // -----------------------------------------------------------------------------//
+    FakeRatePrediction frp(h_mufr.get(), h_elfr.get(), m_lumi);
+    frp.ComputeAllFakePredictions
+    (
+        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
+        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
+        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
+        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"])
+    );
 
-    // SF prediction (raw)
-    hc.Add(dynamic_cast<TH1F*>(GetSingleFakePredRaw().Clone()));  // this is poor -- fix it later
-    std::tr1::array<float, 4> sf_raw_pred;
-    std::tr1::array<float, 4> sf_raw_err;
-    std::tr1::array<string, 4> sf_raw;
-    for (size_t i = 0; i != sf_raw_pred.size(); i++)
-    {
-        sf_raw_pred[i] = hc["h_sf_pred_raw"]->GetBinContent(i+1);
-        sf_raw_err[i]  = hc["h_sf_pred_raw"]->GetBinError(i+1);
-        sf_raw[i]      = rt::pm(sf_raw_pred[i], sf_raw_err[i]);
-    }
+    // SF (raw)
+    PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
+    hc.Add(new TH1F("h_sf_pred_raw", "SF prediction, raw", 4, 0, 4));
+    hc["h_sf_pred_raw"]->SetBinContent(1, sf_raw.ee.value);
+    hc["h_sf_pred_raw"]->SetBinContent(2, sf_raw.mm.value);
+    hc["h_sf_pred_raw"]->SetBinContent(3, sf_raw.em.value);
+    hc["h_sf_pred_raw"]->SetBinContent(4, sf_raw.ll.value);
+    hc["h_sf_pred_raw"]->SetBinError(1, sf_raw.ee.error);
+    hc["h_sf_pred_raw"]->SetBinError(2, sf_raw.mm.error);
+    hc["h_sf_pred_raw"]->SetBinError(3, sf_raw.em.error);
+    hc["h_sf_pred_raw"]->SetBinError(4, sf_raw.ll.error);
 
-    // SF prediction
-    std::tr1::array<float, 4> sf_pred;
-    std::tr1::array<float, 4> sf_err;
-    std::tr1::array<string, 4> sf;
+    // DF
+    PredSummary df = frp.GetDoubleFakePrediction();
+    hc.Add(new TH1F("h_df_pred", "DF prediction", 4, 0, 4));
+    hc["h_df_pred"]->SetBinContent(1, df.ee.value);
+    hc["h_df_pred"]->SetBinContent(2, df.mm.value);
+    hc["h_df_pred"]->SetBinContent(3, df.em.value);
+    hc["h_df_pred"]->SetBinContent(4, df.ll.value);
+    hc["h_df_pred"]->SetBinError(1, df.ee.error);
+    hc["h_df_pred"]->SetBinError(2, df.mm.error);
+    hc["h_df_pred"]->SetBinError(3, df.em.error);
+    hc["h_df_pred"]->SetBinError(4, df.ll.error);
+
+    // SF 
+    PredSummary sf = frp.GetSingleFakePrediction();
     hc.Add(new TH1F("h_sf_pred", "SF prediction", 4, 0, 4));
-    for (size_t i = 0; i != sf_pred.size(); i++)
-    {
-        sf_pred[i] = sf_raw_pred[i] - 2.0*df_pred[i]; 
-        sf_err[i] = sqrt(pow(sf_raw_err[i], 2) + pow(2.0*df_err[i], 2)); 
-        hc["h_sf_pred"]->SetBinContent(i+1, sf_pred[i]);
-        hc["h_sf_pred"]->SetBinError(i+1, sf_err[i]);
-        sf[i] = rt::pm(sf_pred[i], sf_err[i]);
-    }
+    hc["h_sf_pred"]->SetBinContent(1, sf.ee.value);
+    hc["h_sf_pred"]->SetBinContent(2, sf.mm.value);
+    hc["h_sf_pred"]->SetBinContent(3, sf.em.value);
+    hc["h_sf_pred"]->SetBinContent(4, sf.ll.value);
+    hc["h_sf_pred"]->SetBinError(1, sf.ee.error);
+    hc["h_sf_pred"]->SetBinError(2, sf.mm.error);
+    hc["h_sf_pred"]->SetBinError(3, sf.em.error);
+    hc["h_sf_pred"]->SetBinError(4, sf.ll.error);
 
-    // Fake prediction
-    std::tr1::array<float, 4> fake_pred;
-    std::tr1::array<float, 4> fake_err;
-    std::tr1::array<string, 4> fake;
-    for (size_t i = 0; i != df_pred.size(); i++)
-    {
-    fake_pred[i] = sf_pred[i] + df_pred[i]; 
-    fake_err[i] = sqrt(pow(sf_err[i], 2) + pow(df_err[i], 2)); 
-    fake[i] = rt::pm(fake_pred[i], fake_err[i]);
-    }
+    // Fakes 
+    PredSummary fake = frp.GetFakePrediction();
+    hc.Add(new TH1F("h_fake_pred", "fake prediction", 4, 0, 4));
+    hc["h_fake_pred"]->SetBinContent(1, fake.ee.value);
+    hc["h_fake_pred"]->SetBinContent(2, fake.mm.value);
+    hc["h_fake_pred"]->SetBinContent(3, fake.em.value);
+    hc["h_fake_pred"]->SetBinContent(4, fake.ll.value);
+    hc["h_fake_pred"]->SetBinError(1, fake.ee.error);
+    hc["h_fake_pred"]->SetBinError(2, fake.mm.error);
+    hc["h_fake_pred"]->SetBinError(3, fake.em.error);
+    hc["h_fake_pred"]->SetBinError(4, fake.ll.error);
 
-    // Flip prediction
-    std::tr1::array<std::pair<float, float>, 4> flip_pred_err;
-    flip_pred_err[0] = rt::IntegralAndError(hc["h_flip_pred_ee"]);
-    flip_pred_err[1] = rt::IntegralAndError(hc["h_flip_pred_em"]);
-    flip_pred_err[2] = rt::IntegralAndError(hc["h_flip_pred_mm"]);
-    flip_pred_err[3] = rt::IntegralAndError(hc["h_flip_pred_ll"]);
-    std::tr1::array<string, 4> flip;
-    for (size_t i = 0; i != df_pred.size(); i++)
-    {
-        flip[i] = rt::pm(flip_pred_err[i].first, flip_pred_err[i].second);
-    }
+    // Flip predictions
+    // -----------------------------------------------------------------------------//
+    FlipRatePrediction flp(h_flip.get(), m_lumi);
+    flp.ComputeAllFlipPredictions
+    (
+        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]),
+        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_em"])
+    );
+
+    // Flip 
+    PredSummary flip = flp.GetFlipPrediction();
+    hc.Add(new TH1F("h_flip_pred", "flip prediction", 4, 0, 4));
+    hc["h_flip_pred"]->SetBinContent(1, flip.ee.value);
+    hc["h_flip_pred"]->SetBinContent(2, flip.mm.value);
+    hc["h_flip_pred"]->SetBinContent(3, flip.em.value);
+    hc["h_flip_pred"]->SetBinContent(4, flip.ll.value);
+    hc["h_flip_pred"]->SetBinError(1, flip.ee.error);
+    hc["h_flip_pred"]->SetBinError(2, flip.mm.error);
+    hc["h_flip_pred"]->SetBinError(3, flip.em.error);
+    hc["h_flip_pred"]->SetBinError(4, flip.ll.error);
+
 
     // SS kinematic plots (fake prediction)
     // TODO -- propagate the errors on these
@@ -219,15 +249,15 @@ void PlotLooper::EndJob()
     CTable t_yields;
     t_yields.useTitle();
     t_yields.setTitle("yields table");
-    t_yields.setTable() (                 "ee",        "mm",        "em",        "ll")
-                        ("SF raw" ,   sf_raw[0],   sf_raw[2],   sf_raw[1],   sf_raw[3])
-                        ("DF"     ,       df[0],       df[2],       df[1],       df[3])
-                        ("SF"     ,       sf[0],       sf[2],       sf[1],       sf[3])
-                        ("SF + DF",     fake[0],     fake[2],     fake[1],     fake[3])
-                        ("flips"  ,     flip[0],     flip[2],     flip[1],     flip[3])
-                        ("yield"  , yield_ss[0], yield_ss[2], yield_ss[1], yield_ss[3]);
+    string f = "1.2";
+    t_yields.setTable() (                      "ee",            "mm",            "em",            "ll")
+                        ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
+                        ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
+                        ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
+                        ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
+                        ("Flips"  ,   flip.ee.str(),   flip.mm.str(),   flip.em.str(),   flip.ll.str())
+                        ("yield"  ,     yield_ss[0],      yield_ss[1],    yield_ss[2],     yield_ss[3]);
     t_yields.print();
-    //hc.List();
 }
 
 // binning contants
@@ -237,6 +267,8 @@ std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
 std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
 //std::tr1::array<float, 9> mu_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 //std::tr1::array<float, 9> el_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
+std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 2.1, 2.2, 2.4 }};
+std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45., 50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100. }};
 
 // book hists 
  void PlotLooper::BookHists()
@@ -249,6 +281,7 @@ std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
 
         hc.Add(new TH1F("h_lumi"   , "integrated lumi used for these plots", 10000, 0, 100));
 
+        // basic yield plots
         for (size_t i = 0; i != at::DileptonHypType::static_size; i++)
         {
             at::DileptonHypType::value_type hyp_type       = static_cast<at::DileptonHypType::value_type>(i);
@@ -261,16 +294,18 @@ std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
             hc.Add(new TH1F(Form("h_yield%s", ns.c_str()), Form("yields%s;yield;Events", ts.c_str()), 3, 0, 3));
 
             // SF plots
-            hc.Add(new TH2F(Form("h_sf_mufo_pt_vs_eta%s", ns.c_str()), Form("#mu FO p_{T} vs |#eta|%s;|#eta|;p_{T};Events"     , ts.c_str()),mu_eta_bins.size()-1,mu_eta_bins.data(),mu_pt_bins.size()-1,mu_pt_bins.data()));
-            hc.Add(new TH2F(Form("h_sf_elfo_pt_vs_eta%s", ns.c_str()), Form("electron FO p_{T} vs |#eta|%s;|#eta|;p_{T};Events", ts.c_str()),el_eta_bins.size()-1,el_eta_bins.data(),el_pt_bins.size()-1,el_pt_bins.data()));
+            hc.Add(new TH2F(Form("h_sf_mufo_pt_vs_eta%s", ns.c_str()), Form("#mu FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)"     , ts.c_str()),mu_eta_bins.size()-1,mu_eta_bins.data(),mu_pt_bins.size()-1,mu_pt_bins.data()));
+            hc.Add(new TH2F(Form("h_sf_elfo_pt_vs_eta%s", ns.c_str()), Form("electron FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()),el_eta_bins.size()-1,el_eta_bins.data(),el_pt_bins.size()-1,el_pt_bins.data()));
 
             // DF plots
-            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO p_{T} vs |#eta|%s;|#eta|;p_{T}Events", ts.c_str()), 20, 0, 20, 20, 0, 20));
-
-            // DF plots
-            hc.Add(new TH1F(Form("h_flip_pred%s", ns.c_str()), Form("OS flip prediction%s;yield;Events", ts.c_str()), 3, 0, 3));
+            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()), 20, 0, 20, 20, 0, 20));
         }
 
+        // OS plots (for flip pred)
+        hc.Add(new TH2F("h_os_fo_pt_vs_eta_ee", "OS FO (ee ) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)" , 136, 0, 136, 136, 0, 136)); 
+        hc.Add(new TH2F("h_os_fo_pt_vs_eta_em", "OS FO (e#mu) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
+
+        // kinematic plots
         for (size_t i = 0; i != at::DileptonChargeType::static_size; i++)
         {
             at::DileptonChargeType::value_type charge_type  = static_cast<at::DileptonChargeType::value_type>(i);
@@ -440,6 +475,29 @@ int PlotLooper::operator()(long event)
             FillDoubleFakeHist(dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
         }
 
+        // OS
+        if (is_os())
+        {
+
+            const LorentzVector& l1_p4 = lep1_p4();
+            const LorentzVector& l2_p4 = lep2_p4();
+            int l1_id                  = lep1_pdgid();
+            int l2_id                  = lep2_pdgid();
+
+            float weight = (m_signal_region != SignalRegion::sr2) ? evt_weight : 0.5*evt_weight;
+            if (hyp_type == DileptonHypType::EE) 
+            {
+                FillDoubleFlipHist(dynamic_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]), l1_p4.pt(), l1_p4.eta(), l2_p4.pt(), l2_p4.eta(), weight);
+                count_ee++;
+            }
+            else if (hyp_type == DileptonHypType::EMU) 
+            {
+                count_em++;
+                if      (abs(l1_id) == 11) {rt::Fill2D(hc["h_os_fo_pt_vs_eta_em"], fabs(l1_p4.eta()), l1_p4.pt(), weight);}
+                else if (abs(l2_id) == 11) {rt::Fill2D(hc["h_os_fo_pt_vs_eta_em"], fabs(l2_p4.eta()), l2_p4.pt(), weight);}
+            }
+        }
+
         // fake rate and flip factor for kinematic plots
         float fr1 = 0.0;
         float fr2 = 0.0;
@@ -467,13 +525,6 @@ int PlotLooper::operator()(long event)
             default:
                 break;
         };
-
-        // OS
-        if (is_os())
-        {
-            rt::Fill(hc["h_flip_pred"+hs], 1, evt_weight);  
-            rt::Fill(hc["h_flip_pred_ll"], 1, evt_weight);  
-        }
 
         // SS kinematic plots
         const LorentzVector& p41 = lep1_p4();
@@ -624,382 +675,6 @@ float PlotLooper::GetFlipRateError(int lep_id, float pt, float eta) const
     return h_flip->GetBinError(eta_bin, pt_bin);
 }
 
-// book keeping struct
-struct singlefake_t
-{
-    singlefake_t(int id_, float raw_, float err_, TH2F* h_)
-        : id(id_)
-          , raw(raw_)
-          , err(err_)
-          , h(h_)
-    {}
-    int id;
-    float raw;
-    float err;
-    TH2F* h;
-};
-
-TH1F PlotLooper::GetSingleFakePredRaw() const
-{
-    // convenience alias
-    const rt::TH1Container& hc = m_hist_container;
-
-    // SF prediction (pt, eta) 
-    TH1F h_sf_pred("h_sf_pred_raw", "SF prediction, raw", 4, 0, 4);
-
-    std::vector<singlefake_t> sfs;
-    sfs.push_back(singlefake_t(11, 0.0, 0.0, static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"])));
-    sfs.push_back(singlefake_t(13, 0.0, 0.0, static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"])));
-    sfs.push_back(singlefake_t(11, 0.0, 0.0, static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"])));
-    sfs.push_back(singlefake_t(13, 0.0, 0.0, static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"])));
-
-    // get the prediction
-    for (size_t i = 0; i != sfs.size(); i++)
-    {
-        TH2F& h_sf = *sfs.at(i).h;
-        //float nfo_sf = h_sf.GetEntries();
-        float sf_raw = 0.0;
-        float sf_err = 0.0;
-        for (int ptbin = 1; ptbin != h_sf.GetNbinsY()+1; ptbin++)
-        {  
-            for (int etabin = 1; etabin != h_sf.GetNbinsX()+1; etabin++)
-            {  
-                float bin_count = h_sf.GetBinContent(etabin, ptbin);
-                float bin_err   = h_sf.GetBinError(etabin, ptbin);
-                float pt  = h_sf.GetYaxis()->GetBinCenter(ptbin);
-                float eta = h_sf.GetXaxis()->GetBinCenter(etabin);
-                float f = GetFakeRateValue(sfs.at(i).id, pt, eta);
-                float e = GetFakeRateError(sfs.at(i).id, pt, eta);
-                f = f / (1.0 - f);
-                e = e / pow(1.0 - f, 2);
-                float bin_pred = (bin_count * f); 
-                float bin_pred_err = pow(bin_count*f,2) * (pow(e/f, 2) + pow(bin_err/bin_count, 2)); 
-                sf_raw += bin_pred; 
-                sf_err += !rt::is_zero(bin_pred) ? bin_pred_err : 0.0;
-                //if (!rt::is_zero(bin_count))
-                //{
-                //    cout << Form("id %u pt %f eta %f f %f e %f bin_count %f sf_raw %f", sfs.at(i).id, pt, eta, f, e, bin_count, sf_raw) << endl;
-                //}
-            }
-        }
-        sfs.at(i).raw = sf_raw;
-
-        if (!rt::is_zero(sf_err))
-        {
-            sfs.at(i).err = sqrt(sf_err);
-        }
-        else 
-        {
-            float el_max = h_elfr->GetMaximum();
-            float mu_max = h_mufr->GetMaximum();
-            //if (abs(sfs.at(i).id)==13)
-            //{
-            //    sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2);
-            //}
-            //else if (abs(sfs.at(i).id)==11)
-            //{
-            //    sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2);
-            //}
-            //else
-            //{
-            //    sfs.at(i).err = 0.0;
-            //}
-            switch(i)
-            {
-                case 0 : sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2); break;
-                case 1 : sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2); break;
-                case 2 : sfs.at(i).err = pow((el_max/(1.0 - el_max)), 2); break; 
-                case 3 : sfs.at(i).err = pow((mu_max/(1.0 - mu_max)), 2); break;
-                default: sfs.at(i).err = 0.00;                            break;
-            }
-            sfs.at(i).err = sqrt(sfs.at(i).err);
-        }
-    }
-
-    // translate indices (0 ee, 1 em, 2 mm, 3 ll)
-
-    // mm
-    std::tr1::array<float, 4> sf_raw = {{0, 0, 0, 0}};
-    sf_raw[0] = sfs[0].raw;
-    sf_raw[2] = sfs[1].raw;
-
-    // ee
-    std::tr1::array<float, 4> sf_err = {{0, 0, 0, 0}};
-    sf_err[0] = sfs[0].err;
-    sf_err[2] = sfs[1].err;
-
-    // combine for el 
-    sf_raw[1] = sfs[2].raw + sfs[3].raw;
-    if (not rt::is_zero(sfs[2].err) && not rt::is_zero(sfs[3].err))
-    {
-        sf_err[1] = sqrt(pow(sfs[2].err,2) + pow(sfs[3].err,2));
-    }
-    else if (not rt::is_zero(sfs[2].err))
-    {
-        sf_err[1] = sfs[2].err;
-    }
-    else if (not rt::is_zero(sfs[3].err))
-    {
-        sf_err[1] = sfs[3].err;
-    }
-    else
-    {
-        sf_err[1] = std::max(sfs[2].err, sfs[3].err);
-    }
-
-    // combine for ll
-    sf_raw[3] = sf_raw[0] + sf_raw[1] + sf_raw[2];
-    if (not rt::is_zero(sf_raw[3])) 
-    {
-        sf_err[3] += not rt::is_zero(sf_raw[0]) ? pow(sf_err[0], 2) : 0.0;
-        sf_err[3] += not rt::is_zero(sf_raw[1]) ? pow(sf_err[1], 2) : 0.0;
-        sf_err[3] += not rt::is_zero(sf_raw[2]) ? pow(sf_err[2], 2) : 0.0;
-        sf_err[3] = sqrt(sf_err[3]); 
-    }
-    else       
-    {
-        sf_err[3] = std::max(std::max(sf_err[1], sf_err[2]), sf_err[3]);
-    }
-
-    h_sf_pred.SetBinContent(1, sf_raw[0]); h_sf_pred.SetBinError(1, sf_err[0]);
-    h_sf_pred.SetBinContent(2, sf_raw[1]); h_sf_pred.SetBinError(2, sf_err[1]);
-    h_sf_pred.SetBinContent(3, sf_raw[2]); h_sf_pred.SetBinError(3, sf_err[2]);
-    h_sf_pred.SetBinContent(4, sf_raw[3]); h_sf_pred.SetBinError(4, sf_err[3]);
-    return h_sf_pred;
-}
-
-// book keeping struct
-//struct doublefake_t
-//{
-//    doublefake_t(float pred_, float err_, TH2F* h_)
-//        , pred(pred_)
-//        , err(err_)
-//        , h(h_)
-//    {}
-//    float pred;
-//    float err;
-//    TH2F* h;
-//};
-
-TH1F PlotLooper::GetDoubleFakePred() const
-{
-    // convenience alias
-    const rt::TH1Container& hc = m_hist_container;
-
-    // DF prediction (pt, eta) 
-    std::tr1::array<float, 4> df_pred     = {{0, 0, 0, 0}};
-    std::tr1::array<float, 4> df_pred_err = {{0, 0, 0, 0}};
-
-    // DF pt/eta distribtution
-    for (unsigned int i = 1; i != at::DileptonHypType::static_size; i++)
-    {
-        const at::DileptonHypType::value_type hyp = static_cast<at::DileptonHypType::value_type>(i);
-        string ns = Form("_%s",  GetDileptonHypTypeName(hyp).c_str());
-        TH2F& h_df = *dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+ns]);
-
-        const unsigned int xbin_min  = 1;
-        const unsigned int ybin_min  = 1;
-        const unsigned int xbin_max  = h_df.GetXaxis()->GetNbins()+1;
-        const unsigned int ybin_max  = h_df.GetYaxis()->GetNbins()+1;
-        const unsigned int neta_bins = el_eta_bins.size()-1;
-
-        static TH2F h_mu_bins("h_mu_bins", "h_mu_bins", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data());
-        static TH2F h_el_bins("h_el_bins", "h_el_bins", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data());
-        TH2F* h_l1_bins = NULL;
-        TH2F* h_l2_bins = NULL; 
-        switch (hyp)
-        {
-            case DileptonHypType::EE  : h_l1_bins = &h_el_bins; h_l2_bins = &h_el_bins; break;
-            case DileptonHypType::MUMU: h_l1_bins = &h_mu_bins; h_l2_bins = &h_mu_bins; break;
-            case DileptonHypType::EMU : h_l1_bins = &h_el_bins; h_l2_bins = &h_mu_bins; break;
-            default:
-                throw std::domain_error("ERROR PlotLooper::GetDoubleFakePred -- hyp type invalid");
-                break;
-        };
-
-        Float_t pred_total       = 0.0;
-        Float_t pred_error_total = 0.0;
-        for (unsigned int xbin = xbin_min; xbin < xbin_max; xbin++) 
-        {
-            for (unsigned int ybin = ybin_min; ybin < ybin_max; ybin++) 
-            {
-                int xbin1 = ((xbin - xbin_min) % neta_bins) + 1;
-                int ybin1 = ((xbin - xbin1 + 1 - xbin_min) / neta_bins) + 1;
-                int xbin2 = ((ybin - ybin_min) % neta_bins) + 1;
-                int ybin2 = ((ybin - xbin2 + 1 - ybin_min) / neta_bins) + 1;
-
-                float eta1 = h_l1_bins->GetXaxis()->GetBinCenter(xbin1);
-                float eta2 = h_l2_bins->GetXaxis()->GetBinCenter(xbin2);
-                float pt1  = h_l1_bins->GetYaxis()->GetBinCenter(ybin1);
-                float pt2  = h_l2_bins->GetYaxis()->GetBinCenter(ybin2);
-
-                float nFO     = h_df.GetBinContent(xbin, ybin);      // number of denominator not numerator objects for this eta, pt bin
-                float nFO_err = h_df.GetBinError(xbin, ybin);        // number error on number of of denominator not numerator objects for this eta, pt bin
-                float f1 = 0.0;                                         // get value of fake rate 1 for this eta, pt bin
-                float f2 = 0.0;                                         // get error on fake rate 1 for this eta, pt bin
-                float e1 = 0.0;                                         // get value of fake rate 2 for this eta, pt bin
-                float e2 = 0.0;                                         // get error on fake rate 2 for this eta, pt bin
-
-                int bin1 = 0;
-                int bin2 = 0;
-                switch (hyp)
-                {
-                    case DileptonHypType::EE: 
-                        f1 = GetFakeRateValue(11, pt1, eta1); 
-                        f2 = GetFakeRateValue(11, pt2, eta2); 
-                        bin1 = h_elfr->GetBin(xbin1, xbin2);
-                        bin2 = h_elfr->GetBin(xbin1, xbin2);
-                        break;
-                    case DileptonHypType::MUMU: 
-                        f1 = GetFakeRateValue(13, pt1, eta1); 
-                        f2 = GetFakeRateValue(13, pt2, eta2); 
-                        bin1 = h_mufr->GetBin(xbin1, xbin2);
-                        bin2 = h_mufr->GetBin(xbin1, xbin2);
-                        break;
-                    case DileptonHypType::EMU: 
-                        f1 = GetFakeRateValue(11, pt1, eta1); 
-                        f2 = GetFakeRateValue(13, pt2, eta2); 
-                        bin1 = h_elfr->GetBin(xbin1, xbin2);
-                        bin2 = h_mufr->GetBin(xbin1, xbin2);
-                        break;
-                    default:
-                        break;
-                };
-
-                // ok, have all of the inputs, calculate prediction and error for this bin
-                // start with calculating fr/(1-fr) for this bin for each fake rate
-                f1 = f1 / (1.0 - f1);
-                f2 = f2 / (1.0 - f2);
-                Float_t pred = f1 * f2 * nFO;
-
-                // now, need to get errors on these terms, be careful
-                // start with hardest part, error on f
-                //
-                // start with basic equation: (sigma_f/f)^2 = (sigma_num/num)^2 + (sigma_den/den)^2 - 2 * (sigma_num/num) * (sigma_den/den) * rho_num_den
-                // f is the value fr from above
-                // num is the value f from above
-                // den is 1 - f
-                //
-                // sigma_num is the value fake rate error from above
-                // sigma_den is also the value FRerror from above (the error on 1 - A is just the error on A)
-                // 
-                // the numerator and denominator are completely anti-correlated, so rho_num_den is -1
-                // 
-                // combining all of this we can simplify the above to be
-                //
-                // (sigma_z/z)^2 = (sigma_num/num)^2 + (sigma_num/(1-num))^2 + 2 * sigma_num^2 * (1/num) * (1/(1-num))
-                // (sigma_z/z)^2 = sigma_num^2 * [1/num + 1/(1-num)]^2
-                // sigma_z = z * sigma_num * (1/(num * (1-num)))
-                // sigma_z = sigma_num * (1 - num)^{-2}
-                //
-                e1 = e1 * pow((1.0 - f1), -2);
-                e2 = e2 * pow((1.0 - f2), -2);
-
-                // if we have a same flavor final state (either EE or MM)
-                // and both leptons are in the same eta, pt bin
-                // then the FR for each leg will come from the same bin
-                // and thus the two FR factors will be completely correlated.
-                // We need to account for this in the uncertainty calculation.
-                float pred_error;
-                if (nFO == 0)
-                {
-                    pred_error = 0.0;
-                }
-                else if (hyp == DileptonHypType::EMU || bin1 != bin2) 
-                {             
-                    // now that we have the error on fr/(1-fr), the error on the prediction is just the sum of this error and the error on FO count added in quadrature
-                    // (sigma_pred/pred)^2 = (sigma_fr/fr)^2 + (sigma_fo/fo)^2
-                    pred_error = pred * sqrt(pow(e1/f1, 2) + pow(e2/f2, 2) + pow(nFO_err/nFO, 2));
-                }
-                else 
-                {
-                    float totalFRfactor = f1 * f2;
-
-                    // now that we have the error on each factor of fr/(1-fr), the error on the product when they are completely correlated is
-                    // define FRprod = (FR_1 / (1 - FR_1)) * (FR_2 / (1 - FR_2)) = fr1 * fr2
-                    // (sigma_FRprod/FRprod)^2 = (sigma_fr1/fr)^2 + (sigma_fr2/fr2)^2 + 2 * (sigma_fr1/fr1) * (sigma_fr2/fr2) * rho_fr1_fr2
-                    // since the terms are completely correlated, rho_fr1_fr2 = 1, and thus
-                    //
-                    // (sigma_FRprod/FRprod)^2 = (sigma_fr1/fr1 + sigma_fr2/fr2)^2
-                    // sigma_FRprod = FRprod * (sigma_fr1/fr1 + sigma_fr2/fr2) = fr2 * sigma_fr1 + fr1 *sigma_fr2
-                    float totalFRerror  = (f2 * e1 + f1 * e2);
-                    pred_error = pred * sqrt(pow(totalFRerror/totalFRfactor, 2) + pow(nFO_err/nFO, 2));
-                }
-
-                // now increment the total values
-                pred_total += pred;
-                pred_error_total += pow(pred_error, 2);
-            }
-        }
-
-        // finish the error
-        if (!rt::is_zero(pred_total))
-        {
-            pred_error_total = sqrt(pred_error_total);
-        }
-        else 
-        {
-            float el_max = h_elfr->GetMaximum();
-            float mu_max = h_mufr->GetMaximum();
-            switch (hyp)
-            {
-                case DileptonHypType::EE: 
-                    pred_error_total = pow((el_max/(1.0 - el_max)), 2);        
-                    break;
-                case DileptonHypType::MUMU: 
-                    pred_error_total = pow((mu_max/(1.0 - mu_max)), 2);
-                    break;
-                case DileptonHypType::EMU: 
-                    pred_error_total = (mu_max/(1.0 - mu_max) * el_max/(1.0 - el_max));
-                    break;
-                default:
-                    pred_error_total = 0.0; 
-                    break;
-            };
-        }
-        df_pred[hyp]     = pred_total; 
-        df_pred_err[hyp] = pred_error_total;
-    }
-
-    // combine for ll
-    df_pred[DileptonHypType::ALL] = df_pred[1] + df_pred[2] + df_pred[3]; 
-    if (not rt::is_zero(df_pred[DileptonHypType::ALL])) 
-    {
-        df_pred_err[DileptonHypType::ALL] += not rt::is_zero(df_pred[1]) ? pow(df_pred_err[1], 2) : 0.0;
-        df_pred_err[DileptonHypType::ALL] += not rt::is_zero(df_pred[2]) ? pow(df_pred_err[2], 2) : 0.0;
-        df_pred_err[DileptonHypType::ALL] += not rt::is_zero(df_pred[3]) ? pow(df_pred_err[3], 2) : 0.0;
-        df_pred_err[DileptonHypType::ALL] = sqrt(df_pred_err[DileptonHypType::ALL]); 
-    }
-    else       
-    {
-        df_pred_err[DileptonHypType::ALL] = std::max(std::max(df_pred_err[1], df_pred_err[2]), df_pred_err[3]);
-    }
-
-    // switching from hyp indices (ll 0, mm 1, em 2, ee 3) --> (ee 0, em 1, mm 2, ll 3) 
-    TH1F h_df_pred("h_df_pred", "DF prediction", 4, 0, 4);
-    h_df_pred.SetBinContent(1, df_pred[3]); h_df_pred.SetBinError(1, df_pred_err[3]);
-    h_df_pred.SetBinContent(2, df_pred[2]); h_df_pred.SetBinError(2, df_pred_err[2]);
-    h_df_pred.SetBinContent(3, df_pred[1]); h_df_pred.SetBinError(3, df_pred_err[1]);
-    h_df_pred.SetBinContent(4, df_pred[0]); h_df_pred.SetBinError(4, df_pred_err[0]);
-    return h_df_pred;
-}
-
-//void CombinedFakePred()
-//{
-//    TH1F& h_df_pred     = *hc["h_df_pred"    ];
-//    TH1F& h_sf_pred_raw = *hc["h_sf_pred_raw"];
-//    TH1F h_df_pred("h_sf_pred", "SF prediction", 4, 0, 4);
-//    h_df_pred.SetBinContent(1, sf_pred_raw.GetBinContent(1) - 2 * df_pred.GetBinContent(1)); 
-//    h_df_pred.SetBinContent(2, sf_pred_raw.GetBinContent(2) - 2 * df_pred.GetBinContent(2)); 
-//    h_df_pred.SetBinContent(3, sf_pred_raw.GetBinContent(3) - 2 * df_pred.GetBinContent(3)); 
-//    h_df_pred.SetBinContent(4, sf_pred_raw.GetBinContent(4) - 2 * df_pred.GetBinContent(4)); 
-//
-//    h_df_pred.SetBinContent(1, sf_pred_raw.GetBinContent(1) - df_pred.GetBinContent(1)); 
-//    h_df_pred.SetBinContent(2, sf_pred_raw.GetBinContent(2) - df_pred.GetBinContent(2)); 
-//    h_df_pred.SetBinContent(3, sf_pred_raw.GetBinContent(3) - df_pred.GetBinContent(3)); 
-//    h_df_pred.SetBinContent(4, sf_pred_raw.GetBinContent(4) - df_pred.GetBinContent(4)); 
-//}
-
 int DoubleFakeBinLookup(int id, float pt, float eta)
 {
     id  = abs(id);
@@ -1056,4 +731,48 @@ void PlotLooper::FillDoubleFakeHist
     hist->SetBinContent(bins.first, bins.second, value);
     hist->SetBinError(bins.first, bins.second, weight * sqrt(value/weight));
     //cout << GetDileptonHypTypeName(hyp) << "\t" << bins.first << "\t" << bins.second << "\t" << value << "\t" << weight * sqrt(value/weight) << endl;
+}
+
+int DoubleFlipBinLookup(float pt, float eta)
+{
+    float max_pt  = el_flip_pt_bins.back();
+    float min_pt  = el_flip_pt_bins.front();
+    float max_eta = el_flip_eta_bins.back();
+    float min_eta = el_flip_eta_bins.front();
+    
+    eta = fabs(eta);
+    eta = eta >= max_eta ? max_eta-0.001 : eta;
+    pt  = pt  >= max_pt  ? max_pt-0.001  : pt;
+    if (pt < min_pt || eta > max_eta || eta < min_eta+0.001)
+    {
+        return -1;
+    }
+   
+    static TH2F h_bins("h_bins", "h_bins", el_flip_eta_bins.size()-1, el_flip_eta_bins.data(), el_flip_pt_bins.size()-1, el_flip_pt_bins.data());
+    int etabin = h_bins.GetXaxis()->FindBin(eta);
+    int ptbin  = h_bins.GetYaxis()->FindBin(pt);
+
+    if(ptbin <= 0)  {throw std::domain_error("ERROR: PlotLooper::DoubleFlipBinLookup: ptbin <= 0" );}
+    if(etabin <= 0) {throw std::domain_error("ERROR: PlotLooper::DoubleFlipBinLookup: etabin <= 0");}
+
+    int bin = (ptbin-1) * h_bins.GetNbinsX() + etabin;
+    return bin;
+}
+
+void PlotLooper::FillDoubleFlipHist
+(
+    TH2F* hist, 
+    float pt1, 
+    float eta1, 
+    float pt2, 
+    float eta2, 
+    float weight
+)
+{
+    std::pair<int, int> bins(DoubleFlipBinLookup(pt1, eta1), DoubleFlipBinLookup(pt2, eta2));
+    //cout << Form("b1 %d b2 %d", bins.first, bins.second) << endl;
+    float value = hist->GetBinContent(bins.first, bins.second);
+    value += weight;
+    hist->SetBinContent(bins.first, bins.second, value);
+    hist->SetBinError(bins.first, bins.second, weight * sqrt(value/weight));
 }

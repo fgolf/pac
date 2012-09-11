@@ -19,6 +19,9 @@ lib ss2012_tools
     ./source/SameSignTree.cc
     ./source/SkimChainSSB.cc
     ./source/SignalRegion.cc
+    ./source/PredSummary.cc
+    ./source/FakeRatePrediction.cc
+    ./source/FlipRatePrediction.cc
     [ rootcint Dict
      : 
        <include>./include
@@ -30,7 +33,8 @@ lib ss2012_tools
     ssb2012
     /CMS2
     /ROOT
-    /AnalysisTools
+    /AnalysisTools//AnalysisTools
+    /RootTools//RootTools
   : # requirements
     <include>./include
     <include>./source

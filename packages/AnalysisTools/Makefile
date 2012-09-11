@@ -26,6 +26,7 @@ sources         := AnalysisBase.cc         \
 				   SkimChain.cc 		   \
 				   EventInfoTree.cc        \
 				   SingleLeptonTree.cc     \
+				   PrintIdIsoInfo.cc       \
 				   DileptonTree.cc	
 include_dir     := include source 
 

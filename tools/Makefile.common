@@ -95,6 +95,14 @@ define include_simple_table
 	LDFLAGS       += -lSimpleTable
 endef
 
+# include ss2012_tools 
+define include_ss2012_tools
+	CPPFLAGS      += $(addprefix -I,$(project_dir)/analysis/ss2012/include)
+	LDFLAGS       += -L$(project_lib)
+	LDFLAGS       += -lss2012_tools
+endef
+
+
 ## include FakeRateTools
 #define include_fake_rate_tools
 #	CPPFLAGS      += $(addprefix -I,$(project_dir)/programs/analysis/FakeRateStudy/include)

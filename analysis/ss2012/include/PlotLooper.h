@@ -64,6 +64,9 @@ class PlotLooper : public at::AnalysisWithHist
         std::tr1::shared_ptr<TH2F> h_elfr;
         std::tr1::shared_ptr<TH2F> h_flip;
 
+        int count_ee;
+        int count_em;
+
         // methods
         float GetFakeRateValue(int lep_id, float pt, float eta) const;
         float GetFakeRateError(int lep_id, float pt, float eta) const;
@@ -71,10 +74,6 @@ class PlotLooper : public at::AnalysisWithHist
         float GetFlipRateValue(int lep_id, float pt, float eta) const; 
         float GetFlipRateError(int lep_id, float pt, float eta) const; 
 
-        TH1F GetSingleFakePredRaw() const;
-        TH1F GetDoubleFakePred() const;
-
-        void FillDoubleFakeHist();
         void FillDoubleFakeHist
         (
             TH2F* hist, 
@@ -83,6 +82,16 @@ class PlotLooper : public at::AnalysisWithHist
             float pt1, 
             float eta1, 
             int id2, 
+            float pt2, 
+            float eta2, 
+            float weight
+        );
+
+        void FillDoubleFlipHist
+        (
+            TH2F* hist, 
+            float pt1, 
+            float eta1, 
             float pt2, 
             float eta2, 
             float weight

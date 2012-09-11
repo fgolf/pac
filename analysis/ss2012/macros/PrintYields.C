@@ -228,13 +228,15 @@ Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num
     // hists  
     rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
-    Yield sf = GetSFYield(sample_name, signal_region_num, output_path);
-    Yield df = GetDFYield(sample_name, signal_region_num, output_path);
-    sf += df;  
-    sf.title = "SF + DF";
+    pair<double, double> ee(hc["h_fake_pred"]->GetBinContent(1), hc["h_fake_pred"]->GetBinError(1));
+    pair<double, double> mm(hc["h_fake_pred"]->GetBinContent(2), hc["h_fake_pred"]->GetBinError(2));
+    pair<double, double> em(hc["h_fake_pred"]->GetBinContent(3), hc["h_fake_pred"]->GetBinError(3));
+    pair<double, double> ll(hc["h_fake_pred"]->GetBinContent(4), hc["h_fake_pred"]->GetBinError(4));
+    Yield yield("Fakes", ee, mm, em, ll);
+    yield.title = "Fakes";
 
     // done
-    return sf;
+    return yield;
 }
 
 // get the fake yields per sample
@@ -243,10 +245,14 @@ Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num
     // hists  
     rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
-    pair<double, double> ee = rt::IntegralAndError(hc["h_flip_pred_ee"]);
-    pair<double, double> mm = rt::IntegralAndError(hc["h_flip_pred_mm"]);
-    pair<double, double> em = rt::IntegralAndError(hc["h_flip_pred_em"]);
-    pair<double, double> ll = rt::IntegralAndError(hc["h_flip_pred_ll"]);
+    //pair<double, double> ee = rt::IntegralAndError(hc["h_flip_pred_ee"]);
+    //pair<double, double> mm = rt::IntegralAndError(hc["h_flip_pred_mm"]);
+    //pair<double, double> em = rt::IntegralAndError(hc["h_flip_pred_em"]);
+    //pair<double, double> ll = rt::IntegralAndError(hc["h_flip_pred_ll"]);
+    pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
+    pair<double, double> mm(hc["h_flip_pred"]->GetBinContent(2), hc["h_flip_pred"]->GetBinError(2));
+    pair<double, double> em(hc["h_flip_pred"]->GetBinContent(3), hc["h_flip_pred"]->GetBinError(3));
+    pair<double, double> ll(hc["h_flip_pred"]->GetBinContent(4), hc["h_flip_pred"]->GetBinError(4));
     Yield yield("Flips", ee, mm, em, ll);
     yield.title = "Flips";
 
