@@ -55,7 +55,8 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     hc_mc += rt::TH1Container(Form("plots/%s/%s/zz.root" , path.c_str(), sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttw.root", path.c_str(), sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttz.root", path.c_str(), sr.name.c_str()));
-
+    
+    rt::mkdir(Form("plots/%s/%s/kin/", path.c_str(), sr.name.c_str()), true);
 
 	// set style
 	//rt::SetTDRStyle();
