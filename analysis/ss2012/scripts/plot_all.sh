@@ -8,14 +8,16 @@ out_path=${3:-}
 nbtags=2
 #suffix="\"png\""
 suffix="\"eps\""
-options=" --nbtags $nbtags --gr 1 --sr $signal_region --lumi $lumi"
+#options=" --nbtags $nbtags --gr 1 --sr $signal_region --lumi $lumi"
+options=" --nbtags $nbtags --sr $signal_region --lumi $lumi"
 mkdir -p logs
 
 function make_hists
 {
     local sample=$1
     local args=$2
-    cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+    #cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+    cmd="ss2012_plots --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
     echo $cmd
     eval $cmd
 }

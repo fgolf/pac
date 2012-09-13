@@ -25,23 +25,23 @@ FlipRatePrediction::FlipRatePrediction(TH2* flip_rate, float scale)
 // methods:
 Pred FlipRatePrediction::SingleFlipPrediction(const TH2F* foHist)
 {
-    Float_t pred_total       = 0.0;
-    Float_t pred_error_total = 0.0;
+    double pred_total       = 0.0;
+    double pred_error_total = 0.0;
 
     for (Int_t xbin = 1; xbin < h_flip_rate->GetXaxis()->GetNbins()+1; xbin++) 
 	{
         for (Int_t ybin = 1; ybin < h_flip_rate->GetYaxis()->GetNbins()+1; ybin++) 
 		{
             Int_t bin = h_flip_rate->GetBin(xbin, ybin);
-            Float_t nFOs = foHist->GetBinContent(bin);       // number of electrons from OS emu pairs in this eta, pt bin
-            Float_t nFOsError = foHist->GetBinError(bin);    // number error on the number of electrons from OS emu pairs for this eta, pt bin
-            Float_t FRvalue = h_flip_rate->GetBinContent(bin); // get value of flip rate for this eta, pt bin
-            Float_t FRerror = h_flip_rate->GetBinError(bin);   // get error on flip rate for this eta, pt bin
+            double nFOs = foHist->GetBinContent(bin);       // number of electrons from OS emu pairs in this eta, pt bin
+            double nFOsError = foHist->GetBinError(bin);    // number error on the number of electrons from OS emu pairs for this eta, pt bin
+            double FRvalue = h_flip_rate->GetBinContent(bin); // get value of flip rate for this eta, pt bin
+            double FRerror = h_flip_rate->GetBinError(bin);   // get error on flip rate for this eta, pt bin
 
             // ok, have all of the inputs, calculate prediction and error for this bin
             // start with calculating fr/(1-fr) for this bin
-            Float_t fr = FRvalue / (1 - FRvalue);
-            Float_t pred = fr * nFOs;
+            double fr = FRvalue / (1 - FRvalue);
+            double pred = fr * nFOs;
 
             // now, need to get errors on these terms, be careful
             // start with hardest part, error on fr
@@ -63,12 +63,12 @@ Pred FlipRatePrediction::SingleFlipPrediction(const TH2F* foHist)
             // sigma_f = f * sigma_num * (1/(num * (1-num)))
             // sigma_f = sigma_num * (1 - num)^{-2}
             //
-            Float_t frError = FRerror * pow((1 - FRvalue), -2);
+            double frError = FRerror * pow((1 - FRvalue), -2);
 
             // now that we have the error on fr/(1-fr), the error on the prediction is just the 
 			// sum of this error and the error on FO count added in quadrature
             // (sigma_pred/pred)^2 = (sigma_fr/fr)^2 + (sigma_fo/fo)^2
-            Float_t pred_error = 0.0;
+            double pred_error = 0.0;
             if (nFOs > 0 && pred > 0.0)
 			{
                 pred_error = pred * sqrt(pow(frError/fr, 2) + pow(nFOsError/nFOs, 2));
@@ -89,8 +89,8 @@ Pred FlipRatePrediction::SingleFlipPrediction(const TH2F* foHist)
 Pred FlipRatePrediction::DoubleFlipPrediction(const TH2F* foHist)
 {
     const unsigned int NETA_BINS = 8;
-    Float_t pred_total       = 0.;
-    Float_t pred_error_total = 0.;
+    double pred_total       = 0.;
+    double pred_error_total = 0.;
     const unsigned int MAX_XBIN = foHist->GetXaxis()->GetNbins()+1;
     const unsigned int MAX_YBIN = foHist->GetYaxis()->GetNbins()+1;
     for (unsigned int  xbin = 1; xbin < MAX_XBIN; xbin++) 
@@ -106,18 +106,18 @@ Pred FlipRatePrediction::DoubleFlipPrediction(const TH2F* foHist)
             Int_t bin1 = h_flip_rate->GetBin(xbin1, ybin1);
             Int_t bin2 = h_flip_rate->GetBin(xbin2, ybin2);
 
-            Float_t nFOs = foHist->GetBinContent(xbin, ybin);      // number of electrons from OS ee pairs for this eta, pt bin
-            Float_t nFOsError = foHist->GetBinError(xbin, ybin);   // number error on number of electrons from OS ee pairs for this eta, pt bin
-            Float_t FRvalue1 = h_flip_rate->GetBinContent(bin1);   // get value of fake rate 1 for this eta, pt bin
-            Float_t FRerror1 = h_flip_rate->GetBinError(bin1);     // get error on fake rate 1 for this eta, pt bin
-            Float_t FRvalue2 = h_flip_rate->GetBinContent(bin2);   // get value of fake rate 2 for this eta, pt bin
-            Float_t FRerror2 = h_flip_rate->GetBinError(bin2);     // get error on fake rate 2 for this eta, pt bin
+            double nFOs = foHist->GetBinContent(xbin, ybin);      // number of electrons from OS ee pairs for this eta, pt bin
+            double nFOsError = foHist->GetBinError(xbin, ybin);   // number error on number of electrons from OS ee pairs for this eta, pt bin
+            double FRvalue1 = h_flip_rate->GetBinContent(bin1);   // get value of fake rate 1 for this eta, pt bin
+            double FRerror1 = h_flip_rate->GetBinError(bin1);     // get error on fake rate 1 for this eta, pt bin
+            double FRvalue2 = h_flip_rate->GetBinContent(bin2);   // get value of fake rate 2 for this eta, pt bin
+            double FRerror2 = h_flip_rate->GetBinError(bin2);     // get error on fake rate 2 for this eta, pt bin
             
             // ok, have all of the inputs, calculate prediction and error for this bin
             // start with calculating fr/(1-fr) for this bin for each fake rate
-            Float_t fr1 = FRvalue1 / (1 - FRvalue1);
-            Float_t fr2 = FRvalue2 / (1 - FRvalue2);
-            Float_t pred = (fr1 + fr2) * nFOs;
+            double fr1 = FRvalue1 / (1 - FRvalue1);
+            double fr2 = FRvalue2 / (1 - FRvalue2);
+            double pred = (fr1 + fr2) * nFOs;
 
             // now, need to get errors on these terms, be careful
             // start with hardest part, error on fr
@@ -139,17 +139,17 @@ Pred FlipRatePrediction::DoubleFlipPrediction(const TH2F* foHist)
             // sigma_f = f * sigma_num * (1/(num * (1-num)))
             // sigma_f = sigma_num * (1 - num)^{-2}
             //
-            Float_t frError1 = FRerror1 * pow((1 - FRvalue1), -2);
-            Float_t frError2 = FRerror2 * pow((1 - FRvalue2), -2);
+            double frError1 = FRerror1 * pow((1 - FRvalue1), -2);
+            double frError2 = FRerror2 * pow((1 - FRvalue2), -2);
 
             // if we have a same flavor final state (either EE or MM)
             // and both leptons are in the same eta, pt bin
             // then the FR for each leg will come from the same bin
             // and thus the two FR factors will be completely correlated.
             // We need to account for this in the uncertainty calculation.
-            Float_t pred_error;
+            double pred_error;
             //if (nFOs == 0 || is_zero(FRvalue1 * FRvalue2))
-            if (nFOs == 0 || (FRvalue1 * FRvalue2)==0)
+            if (nFOs == 0 || (FRvalue1 * FRvalue2)<1e-12)
 			{
                 pred_error = 0.0;
 			}
@@ -162,7 +162,7 @@ Pred FlipRatePrediction::DoubleFlipPrediction(const TH2F* foHist)
             }
             else 
 			{
-                Float_t totalFRfactor = FRvalue1 * FRvalue2;
+                double totalFRfactor = FRvalue1 * FRvalue2;
 
                 // now that we have the error on each factor of fr/(1-fr), the error on the product when they are completely correlated is
                 // define FRprod = (FR_1 / (1 - FR_1)) * (FR_2 / (1 - FR_2)) = fr1 * fr2
@@ -171,7 +171,7 @@ Pred FlipRatePrediction::DoubleFlipPrediction(const TH2F* foHist)
                 //
                 // (sigma_FRprod/FRprod)^2 = (sigma_fr1/fr1 + sigma_fr2/fr2)^2
                 // sigma_FRprod = FRprod * (sigma_fr1/fr1 + sigma_fr2/fr2) = fr2 * sigma_fr1 + fr1 *sigma_fr2
-                Float_t totalFRerror  = (fr2 * frError1 + fr1 * frError2);
+                double totalFRerror  = (fr2 * frError1 + fr1 * frError2);
                 pred_error = pred * sqrt(pow(totalFRerror/totalFRfactor, 2) + pow(nFOsError/nFOs, 2));
             }
             
