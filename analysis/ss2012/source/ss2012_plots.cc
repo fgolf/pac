@@ -32,6 +32,7 @@ try
     float m_glu                     = 1000;
     float m_lsp                     = 100;
     unsigned int num_btags          = 0;
+    unsigned int num_jets           = 2;
     unsigned int signal_region_num  = 0;
     float lumi                      = 1.0;
     bool verbose                    = false;
@@ -49,6 +50,7 @@ try
         ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)")
         ("suffix"   , po::value<std::string>(&suffix)             , "suffix to pring (png, eps, pdf).  empty for none"    )
         ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                           )
+        ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                            )
         ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                )
         ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"             )
         ("gr"       , po::value<bool>(&check_good_lumi)           , "for data, check the is_good_lumi() method"           )
@@ -151,7 +153,8 @@ try
         is_signal = (at::GetSampleInfo(sample).type == at::SampleType::signal);
         if (input_file.empty())
         {
-            //input_file = Form("babies/%s.root", sample_name.c_str());
+            input_file = Form("babies/%s.root", sample_name.c_str());
+	    /*
             if (is_data)
             {
                 //input_file = "babies/52X/data.root";
@@ -162,6 +165,7 @@ try
                 input_file = Form("babies/52X/%s.root", sample_name.c_str());
                 //input_file = Form("babies/53X/%s.root", sample_name.c_str());
             }
+	    */
         }
         if (output_file.empty())
         {
@@ -186,6 +190,7 @@ try
             fake_rate_file_name,
             flip_rate_file_name,
             num_btags,
+	    num_jets,
             do_scale_factors,
             check_good_lumi, 
             m_glu,
