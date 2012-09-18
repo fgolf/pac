@@ -6,18 +6,19 @@ lumi=${2:-1.0}
 out_path=${3:-}
 
 nbtags=2
+njets=2
 #suffix="\"png\""
 suffix="\"eps\""
 #options=" --nbtags $nbtags --gr 1 --sr $signal_region --lumi $lumi"
-options=" --nbtags $nbtags --sr $signal_region --lumi $lumi"
+options=" --nbtags $nbtags --sr $signal_region --lumi $lumi --njets $njets"
 mkdir -p logs
 
 function make_hists
 {
     local sample=$1
     local args=$2
-    #cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
-    cmd="ss2012_plots --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+    cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+    #cmd="ss2012_plots --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
     echo $cmd
     eval $cmd
 }
@@ -42,6 +43,6 @@ make_hists zzz     "$options"
 
 # overlay the hists
 #root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"png\")"
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"eps\")"
+root -b -q -l "macros/OverlaySSPlots.C++ ($lumi, $signal_region, \"$out_path\", \"eps\")"
 mkdir -p tables
-root -b -q -l "macros/PrintYields.C+    ($signal_region, \"$out_path\")" >> tables/yields_${out_path}.txt
+root -b -q -l "macros/PrintYields.C++    ($signal_region, \"$out_path\")" >> tables/yields_${out_path}.txt
