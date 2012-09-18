@@ -163,6 +163,104 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_njets", suffix.c_str()));
     delete h_pred;
 
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_lepdphi"] = rt::TH1Overlay(Form("%s;#Delta#Phi(lep1, lep2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_lepdphi"].Add(hc_data["h_lepdphi_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_lepdphi"].Add(hc_data["h_lepdphi_os"  ], "flips", flip_color);
+    p["p_lepdphi"].Add(hc_data["h_lepdphi_fake"], "fakes", fake_color);
+    p["p_lepdphi"].Add(hc_mc  ["h_lepdphi_ss"  ], "MC"   , mc_color);
+    p["p_lepdphi"].AddText(t1);
+    p["p_lepdphi"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_lepdphi_fake"], hc_data["h_lepdphi_os"], hc_mc["h_lepdphi_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_lepdphi", suffix.c_str()));
+    delete h_pred;
+
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_lepdeta"] = rt::TH1Overlay(Form("%s;#Delta#eta(lep1, lep2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_lepdeta"].Add(hc_data["h_lepdeta_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_lepdeta"].Add(hc_data["h_lepdeta_os"  ], "flips", flip_color);
+    p["p_lepdeta"].Add(hc_data["h_lepdeta_fake"], "fakes", fake_color);
+    p["p_lepdeta"].Add(hc_mc  ["h_lepdeta_ss"  ], "MC"   , mc_color);
+    p["p_lepdeta"].AddText(t1);
+    p["p_lepdeta"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_lepdeta_fake"], hc_data["h_lepdeta_os"], hc_mc["h_lepdeta_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_lepdeta", suffix.c_str()));
+    delete h_pred;
+
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_lepdr"] = rt::TH1Overlay(Form("%s;#DeltaR(lep1, lep2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_lepdr"].Add(hc_data["h_lepdr_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_lepdr"].Add(hc_data["h_lepdr_os"  ], "flips", flip_color);
+    p["p_lepdr"].Add(hc_data["h_lepdr_fake"], "fakes", fake_color);
+    p["p_lepdr"].Add(hc_mc  ["h_lepdr_ss"  ], "MC"   , mc_color);
+    p["p_lepdr"].AddText(t1);
+    p["p_lepdr"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_lepdr_fake"], hc_data["h_lepdr_os"], hc_mc["h_lepdr_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_lepdr", suffix.c_str()));
+    delete h_pred;
+
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_drlepb"] = rt::TH1Overlay(Form("%s;#DeltaR(lep, btag);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_drlepb"].Add(hc_data["h_drlepb_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_drlepb"].Add(hc_data["h_drlepb_os"  ], "flips", flip_color);
+    p["p_drlepb"].Add(hc_data["h_drlepb_fake"], "fakes", fake_color);
+    p["p_drlepb"].Add(hc_mc  ["h_drlepb_ss"  ], "MC"   , mc_color);
+    p["p_drlepb"].AddText(t1);
+    p["p_drlepb"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_drlepb_fake"], hc_data["h_drlepb_os"], hc_mc["h_drlepb_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_drlepb", suffix.c_str()));
+    delete h_pred;
+
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_btagdr"] = rt::TH1Overlay(Form("%s;#DeltaR(btag1, btag2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_btagdr"].Add(hc_data["h_btagdr_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_btagdr"].Add(hc_data["h_btagdr_os"  ], "flips", flip_color);
+    p["p_btagdr"].Add(hc_data["h_btagdr_fake"], "fakes", fake_color);
+    p["p_btagdr"].Add(hc_mc  ["h_btagdr_ss"  ], "MC"   , mc_color);
+    p["p_btagdr"].AddText(t1);
+    p["p_btagdr"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_btagdr_fake"], hc_data["h_btagdr_os"], hc_mc["h_btagdr_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_btagdr", suffix.c_str()));
+    delete h_pred;
+
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_drjetb"] = rt::TH1Overlay(Form("%s;#DeltaR(btag, jet);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_drjetb"].Add(hc_data["h_drjetb_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_drjetb"].Add(hc_data["h_drjetb_os"  ], "flips", flip_color);
+    p["p_drjetb"].Add(hc_data["h_drjetb_fake"], "fakes", fake_color);
+    p["p_drjetb"].Add(hc_mc  ["h_drjetb_ss"  ], "MC"   , mc_color);
+    p["p_drjetb"].AddText(t1);
+    p["p_drjetb"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_drjetb_fake"], hc_data["h_drjetb_os"], hc_mc["h_drjetb_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_drjetb", suffix.c_str()));
+    delete h_pred;
+
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_ptjetlep"] = rt::TH1Overlay(Form("%s;jet p_{T} / lep p_{T} - 1;Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_ptjetlep"].Add(hc_data["h_ptjetlep_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_ptjetlep"].Add(hc_data["h_ptjetlep_os"  ], "flips", flip_color);
+    p["p_ptjetlep"].Add(hc_data["h_ptjetlep_fake"], "fakes", fake_color);
+    p["p_ptjetlep"].Add(hc_mc  ["h_ptjetlep_ss"  ], "MC"   , mc_color);
+    p["p_ptjetlep"].AddText(t1);
+    p["p_ptjetlep"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_ptjetlep_fake"], hc_data["h_ptjetlep_os"], hc_mc["h_ptjetlep_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_ptjetlep", suffix.c_str()));
+    delete h_pred;
+
     // write
 //    rt::Print(p, Form("plots/%s/%s/kin", path.c_str(), sr.name.c_str()), suffix);
 }
