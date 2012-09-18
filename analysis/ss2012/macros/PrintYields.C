@@ -3,6 +3,8 @@
 #include "SignalRegion.h"
 #include "CTable.h"
 
+using namespace std;
+
 // a simple yield struct
 
 struct Yield
@@ -175,6 +177,7 @@ Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num =
     //SignalRegion::value_type signal_region = static_cast<SignalRegion::value_type>(signal_region_num); 
 
     // hists  
+
     rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
     pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee"]);
