@@ -86,6 +86,7 @@ namespace rt
         if (!output_folder.empty())
         {
             hc.Print(output_folder, suffix);
+			CopyIndexPhp(output_folder);
         }
 
         // done

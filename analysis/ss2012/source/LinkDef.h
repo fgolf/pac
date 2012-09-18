@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------//
-// SS2012 Tools LinkDef.h Kelley 2011-05-01
+// SS2012 Tools LinkDef.h Kelley 2012-09-07
 //------------------------------------------------------------------------//
 
 #ifdef __CINT__  // interpreter and ACLiC
@@ -26,5 +26,6 @@
 #pragma link C++ function ss::GetSignalRegionFromName;
 #pragma link C++ function ss::GetSignalRegionInfo;
 #pragma link C++ function ss::GetSignalRegionInfo;
+#pragma link C++ function ss::SetSignalRegionAliases;
 
 #endif // __CINT__

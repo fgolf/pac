@@ -734,8 +734,7 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.lep1.dbeta04     = (abs(lep1_id)==13) ? mus_isoR04_pf_PUPt().at(lep1_idx) : -99999.0;
         m_evt.lep1.is_fo       = lep1_fo;
         m_evt.lep1.is_num      = lep1_num;
-        m_evt.lep1.is_conv     = false; 
-        m_evt.lep1.is_loosemu  = false; 
+        //m_evt.lep1.is_conv     = false; 
         //m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, evt_pfmet_type1cor(), evt_pfmetPhi_type1cor());
         m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, evt_pfmet(), evt_pfmetPhi());
         m_evt.lep1.passes_id   = samesign::isGoodLepton(lep1_id, lep1_idx);
@@ -753,8 +752,7 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.lep2.dbeta04     = (abs(lep2_id)==13) ? mus_isoR04_pf_PUPt().at(lep2_idx) : -99999.0;
         m_evt.lep2.is_fo       = lep2_fo; 
         m_evt.lep2.is_num      = lep2_num;
-        m_evt.lep2.is_conv     = false; 
-        m_evt.lep2.is_loosemu  = false; 
+        //m_evt.lep2.is_conv     = false; 
         m_evt.lep2.mt          = rt::Mt(m_evt.lep2.p4, evt_pfmet(), evt_pfmetPhi());
         m_evt.lep2.passes_id   = samesign::isGoodLepton(lep2_id, lep2_idx);
         m_evt.lep2.passes_iso  = samesign::isIsolatedLepton(lep2_id, lep2_idx);
@@ -768,25 +766,27 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.event_info.corpfmet_phi = evt_pfmetPhi_type1cor();
         
         // should we recalculate the met??
-        if (m_jetMetScale != 0) 
-        {  
-            ROOT::Math::XYVector cmet;
-            float metx = evt_pfmet_type1cor() * cos(evt_pfmetPhi_type1cor());
-            float mety = evt_pfmet_type1cor() * sin(evt_pfmetPhi_type1cor());
-            // get uncorrected jets
-            vector<LorentzVector> ujets = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            for (size_t u = 0; u != ujets.size(); u++) 
-            {
-                float px   = ujets.at(u).px();
-                float py   = ujets.at(u).py();
-                float pt   = ujets.at(u).pt();
-                float eta  = ujets.at(u).pt();
-                float corr = getJetMetSyst(m_jetMetScale, pt, eta);
-                cmet.SetXY(metx - (corr-1.)*px, mety - (corr-1.)*py);
-            }
-            m_evt.event_info.corpfmet     = cmet.r(); 
-            m_evt.event_info.corpfmet_phi = cmet.phi();
-        }
+        //if (m_jetMetScale != 0) 
+        //{  
+        //    ROOT::Math::XYVector cmet;
+        //    float metx = evt_pfmet_type1cor() * cos(evt_pfmetPhi_type1cor());
+        //    float mety = evt_pfmet_type1cor() * sin(evt_pfmetPhi_type1cor());
+        //    // get uncorrected jets
+        //    vector<LorentzVector> ujets = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
+        //    for (size_t u = 0; u != ujets.size(); u++) 
+        //    {
+        //        float px   = ujets.at(u).px();
+        //        float py   = ujets.at(u).py();
+        //        float pt   = ujets.at(u).pt();
+        //        float eta  = ujets.at(u).pt();
+        //        float corr = getJetMetSyst(m_jetMetScale, pt, eta);
+        //        metx = metx - (corr-1.)*px;
+        //        mety = mety - (corr-1.)*py;
+        //    }
+        //    cmet.SetXY(metx - (corr-1.)*px, mety - (corr-1.)*py);
+        //    m_evt.event_info.corpfmet     = cmet.r(); 
+        //    m_evt.event_info.corpfmet_phi = cmet.phi();
+        //}
 
         // SS specific event level info
         m_evt.ht           = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale);
@@ -802,31 +802,44 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.no_extraz    = (not samesign::makesExtraZ(hyp_idx));
 
         // njets, nbtags, HT and MET for JES systematics
-        if (!evt_isRealData()) {
-            m_evt.njets_dwn  = samesign::nJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*m_jetMetScale=*/-1);
+        if (!evt_isRealData()) 
+        {
+            m_evt.njets_dwn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*m_jetMetScale=*/-1);
             m_evt.nbtags_dwn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*m_jetMetScale=*/-1);
-            m_evt.ht_dwn     = samesign::sumJetPt(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*m_jetMetScale=*/-1);
+            m_evt.ht_dwn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*m_jetMetScale=*/-1);
 
-            m_evt.njets_up  = samesign::nJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*m_jetMetScale=*/11);
+            m_evt.njets_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*m_jetMetScale=*/1);
             m_evt.nbtags_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*m_jetMetScale=*/1);
-            m_evt.ht_up     = samesign::sumJetPt(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*m_jetMetScale=*/1);
+            m_evt.ht_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*m_jetMetScale=*/1);
 
-            // ROOT::Math::XYVector cmet_dwn;
-            // ROOT::Math::XYVector cmet_up;
-            // float metx = evt_pfmet_type1cor() * cos(evt_pfmetPhi_type1cor());
-            // float mety = evt_pfmet_type1cor() * sin(evt_pfmetPhi_type1cor());
-            // // get uncorrected jets
-            // vector<LorentzVector> ujets = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            // for (size_t u = 0; u != ujets.size(); u++) 
-            // {
-            //     float px   = ujets.at(u).px();
-            //     float py   = ujets.at(u).py();
-            //     float pt   = ujets.at(u).pt();
-            //     float eta  = ujets.at(u).pt();
-            //     float corr_dwn = getJetMetSyst(/*m_jetMetScale=*/-1, pt, eta);
-            //     float corr_up = getJetMetSyst(/*m_jetMetScale=*/1, pt, eta);
-            //     cmet.SetXY(metx - (corr-1.)*px, mety - (corr-1.)*py);
-            // }
+            // MET
+            ROOT::Math::XYVector cmet_up;
+            ROOT::Math::XYVector cmet_dn;
+            float metx_up = evt_pfmet_type1cor() * cos(evt_pfmetPhi_type1cor());
+            float metx_dn = evt_pfmet_type1cor() * cos(evt_pfmetPhi_type1cor());
+            float mety_up = evt_pfmet_type1cor() * sin(evt_pfmetPhi_type1cor());
+            float mety_dn = evt_pfmet_type1cor() * sin(evt_pfmetPhi_type1cor());
+            // get uncorrected jets
+            vector<LorentzVector> ujets = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
+            for (size_t u = 0; u != ujets.size(); u++) 
+            {
+                float px   = ujets.at(u).px();
+                float py   = ujets.at(u).py();
+                float pt   = ujets.at(u).pt();
+                float eta  = ujets.at(u).pt();
+                float corr_up = getJetMetSyst(/*jetMetScale=*/ 1, pt, eta);
+                float corr_dn = getJetMetSyst(/*jetMetScale=*/-1, pt, eta);
+                metx_up = metx_up - (corr_up-1.0)*px;
+                mety_up = mety_up - (corr_up-1.0)*py;
+                metx_dn = metx_dn - (corr_dn-1.0)*px;
+                mety_dn = mety_dn - (corr_dn-1.0)*py;
+            }
+            cmet_up.SetXY(metx_up, mety_up);
+            cmet_dn.SetXY(metx_dn, mety_dn);
+            m_evt.pfmet_up      = cmet_up.r(); 
+            //m_evt.pfmet_phi_up  = cmet_up.phi();
+            m_evt.pfmet_dwn     = cmet_dn.r(); 
+            //m_evt.pfmet_phi_dwn = cmet_dn.phi();
         }
 
         // Gen level info
@@ -1116,12 +1129,7 @@ int SSAnalysisLooper::Analyze(long event)
                 double iso_val = muonIsoValuePF2012_deltaBeta(midx);
                 if (iso_val > 0.2) continue;
 
-                if (!cms2.mus_pid_PFMuon().at(midx))
-                    continue;
-
-                bool is_global  = ((cms2.mus_type().at(midx) & (1<<1)) == (1<<1));
-                bool is_tracker = ((cms2.mus_type().at(midx) & (1<<2)) == (1<<2));
-                if (!is_global && !is_tracker)
+                if (!passes_muid_wp2012(midx, mu2012_tightness::LOOSE))
                     continue;
 
                 double dr = rt::DeltaR(cms2.mus_p4().at(midx), m_evt.lep1.p4);
@@ -1146,12 +1154,7 @@ int SSAnalysisLooper::Analyze(long event)
                 double iso_val = muonIsoValuePF2012_deltaBeta(midx);
                 if (iso_val > 0.2) continue;
 
-                if (!cms2.mus_pid_PFMuon().at(midx))
-                    continue;
-
-                bool is_global  = ((cms2.mus_type().at(midx) & (1<<1)) == (1<<1));
-                bool is_tracker = ((cms2.mus_type().at(midx) & (1<<2)) == (1<<2));
-                if (!is_global && !is_tracker)
+                if (!passes_muid_wp2012(midx, mu2012_tightness::LOOSE))
                     continue;
 
                 double dr = rt::DeltaR(cms2.mus_p4().at(midx), m_evt.lep2.p4);

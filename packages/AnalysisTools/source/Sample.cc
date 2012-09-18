@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-//#include <stdexcept>
+#include <iostream>
 #include "TChain.h"
 #include "TColor.h"
 
@@ -270,6 +270,20 @@ namespace at
             Sample::t1tttt_fastsim,
             // color
             kBlue
+        },
+        {
+            // name
+            "sbottomtop", 
+            // title,
+            "SbottomTop", 
+            // ntuple_path
+            "SbottomTopv6_macneill_8TeV/V05-02-28/*.root",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::sbottomtop,
+            // color
+            kBlue
         }
     };
 
@@ -380,13 +394,14 @@ namespace at
     {
         switch (ntuple) 
         {
-            case NtupleType::cms2:         return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_2_3_patch4_V05-02-27/";
-            case NtupleType::cms2mc:       return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
-            case NtupleType::cms2mc_53X:   return "/nfs-3/userdata/rwkelley/postprocessed/";
-            case NtupleType::ss_skim_data: return "/nfs-7/userdata/rwkelley/skims/ss2012/23Jun/nobtag/";
-            case NtupleType::ss_skim_mc:   return "/nfs-7/userdata/rwkelley/skims/ss2012/22May/nobtag/";
-            case NtupleType::tensor:       return "/Users/rwk7t/Data/2012/";
-            default:                       return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
+            case NtupleType::cms2:            return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_2_3_patch4_V05-02-27/";
+            case NtupleType::cms2mc:          return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
+            case NtupleType::cms2mc_53X:      return "/nfs-3/userdata/rwkelley/postprocessed/";
+            case NtupleType::ss_skim_data:    return "/nfs-7/userdata/rwkelley/skims/ss2012/23Jun/nobtag/";
+            case NtupleType::ss_skim_mc:      return "/nfs-7/userdata/rwkelley/skims/ss2012/22May/nobtag/";
+            case NtupleType::ss_skim_mc_53X:  return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/";
+            case NtupleType::tensor:          return "/Users/rwk7t/Data/2012/";
+            default:                          return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
         };
 
         return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
@@ -394,12 +409,13 @@ namespace at
 
 	NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name)
 	{
-		if (ntuple_type_name == "cms2"         ) return NtupleType::cms2;
-		if (ntuple_type_name == "cms2mc"       ) return NtupleType::cms2mc;
-		if (ntuple_type_name == "cms2mc_53X"   ) return NtupleType::cms2mc_53X;
-		if (ntuple_type_name == "ss_skim_data" ) return NtupleType::ss_skim_data;
-		if (ntuple_type_name == "ss_skim_mc"   ) return NtupleType::ss_skim_mc;
-		if (ntuple_type_name == "tensor"       ) return NtupleType::tensor;
+		if (ntuple_type_name == "cms2"          ) return NtupleType::cms2;
+		if (ntuple_type_name == "cms2mc"        ) return NtupleType::cms2mc;
+		if (ntuple_type_name == "cms2mc_53X"    ) return NtupleType::cms2mc_53X;
+		if (ntuple_type_name == "ss_skim_data"  ) return NtupleType::ss_skim_data;
+		if (ntuple_type_name == "ss_skim_mc"    ) return NtupleType::ss_skim_mc;
+		if (ntuple_type_name == "ss_skim_mc_53X") return NtupleType::ss_skim_mc_53X;
+		if (ntuple_type_name == "tensor"        ) return NtupleType::tensor;
 
         // throw string is not valid 
         throw std::domain_error("ERROR: at::GetNtupleTypeFromName(std::string): ntuple type name not found!");

@@ -177,8 +177,8 @@ void SingleLeptonTree::FillCommon (int id, int idx)
         }
 
         // didn't compile
-        //is_loosemu = passes_muid_wp2012(idx, mu2012_tightness::LOOSE);
-        //is_tightmu = passes_muid_wp2012(idx, mu2012_tightness::TIGHT);
+        is_loosemu = passes_muid_wp2012(idx, mu2012_tightness::LOOSE);
+        is_tightmu = passes_muid_wp2012(idx, mu2012_tightness::TIGHT);
 
         trkiso  = cms2.mus_iso03_sumPt().at(idx);
         ecaliso = cms2.mus_iso03_emEt().at(idx);

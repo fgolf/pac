@@ -2,6 +2,7 @@
 #define SIGNALREGIONS_H
 
 #include <string>
+#include "TTree.h"
 
 namespace ss
 {
@@ -41,6 +42,9 @@ namespace ss
     // passes signal rgion
     bool PassesSignalRegion(const SignalRegion::value_type& signal_region);
     bool PassesSignalRegion(unsigned int signal_region_number);
+
+	// set aliases for TTree
+    void SetSignalRegionAliases(TTree& tree, int nbtags = 2, int njets = 2);
 
 } // namespace ss
 

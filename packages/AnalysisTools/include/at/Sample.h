@@ -30,6 +30,7 @@ namespace at
 			zzz,
             t1tttt,
             t1tttt_fastsim,
+            sbottomtop,
             static_size
         };
     };
@@ -69,6 +70,7 @@ namespace at
             cms2mc_53X,
             ss_skim_data,
             ss_skim_mc,
+            ss_skim_mc_53X,
             tensor,
             static_size
         };

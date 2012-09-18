@@ -134,4 +134,19 @@ namespace ss
         return PassesSignalRegion(static_cast<SignalRegion::value_type>(signal_region_number));
     }
 
+	// set aliases for TTree
+    void SetSignalRegionAliases(TTree& tree, int nbtags, int njets)
+    {
+		string cut = Form("is_ss && nbtags>=%d && njets>=%d");
+        tree.SetAlias("sr0", (cut + " && ht > 80.0   && pfmet >  0.0"             ).c_str()); 
+        tree.SetAlias("sr1", (cut + " && ht > 80.0   && pfmet > 30.0"             ).c_str()); 
+        tree.SetAlias("sr2", (cut + " && ht > 80.0   && pfmet > 30.0 && is_pp"    ).c_str()); 
+        tree.SetAlias("sr3", (cut + " && ht > 200.0  && pfmet > 120.0"            ).c_str()); 
+        tree.SetAlias("sr4", (cut + " && ht > 200.0  && pfmet > 50.0"             ).c_str()); 
+        tree.SetAlias("sr5", (cut + " && ht > 320.0  && pfmet > 50.0"             ).c_str()); 
+        tree.SetAlias("sr6", (cut + " && ht > 320.0  && pfmet > 120.0"            ).c_str()); 
+        tree.SetAlias("sr7", (cut + " && ht > 200.0  && pfmet > 50.0 && nbtags>=3").c_str()); 
+        tree.SetAlias("sr8", (cut + " && ht > 320.0"                              ).c_str()); 
+    }
+
 } // namespace ss
