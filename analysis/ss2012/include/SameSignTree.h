@@ -89,6 +89,18 @@ public:
     bool trig_ee;
 
     //
+    // for JES sysetmatics
+    //
+    int njets_dwn;
+    int njets_up;
+    int nbtags_dwn;
+    int nbtags_up;
+    float ht_dwn;
+    float ht_up;
+    float pfmet_dwn;
+    float pfmet_up;
+
+    //
     // susy parameters
     //
     float sparm0;
@@ -120,20 +132,24 @@ public:
     //
     LorentzVector lep1_nearbjet_p4;
     LorentzVector lep1_nearjet_p4;
+    LorentzVector lep1_nearlep_p4;
     float lep1_wfr;
     float lep1_wflip;
     float lep1_nearbjet_dr;
     float lep1_nearjet_dr;
+    float lep1_nearlep_dr;
 
     //
     // reco lepton 2 info
     //
     LorentzVector lep2_nearbjet_p4;
     LorentzVector lep2_nearjet_p4;
+    LorentzVector lep2_nearlep_p4;
     float lep2_wfr;
     float lep2_wflip;
     float lep2_nearbjet_dr;
     float lep2_nearjet_dr;
+    float lep2_nearlep_dr;
 
     //
     // eff and scale factors

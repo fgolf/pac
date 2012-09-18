@@ -246,4 +246,6 @@ namespace ssb {
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4() { return samesignbtag.vjets_nearjet_p4(); }
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4() { return samesignbtag.vbjets_p4(); }
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4() { return samesignbtag.vbjets_nearjet_p4(); }
+	vector<bool> &vbtags() { return samesignbtag.vbtags(); }
+	vector<float> &vbjets_nearjet_dr() { return samesignbtag.vbjets_nearjet_dr(); }
 }

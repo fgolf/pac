@@ -752,6 +752,12 @@ protected:
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vbjets_nearjet_p4_;
 	TBranch *vbjets_nearjet_p4_branch;
 	bool vbjets_nearjet_p4_isLoaded;
+	vector<bool> *vbtags_;
+	TBranch *vbtags_branch;
+	bool vbtags_isLoaded;
+	vector<float> *vbjets_nearjet_dr_;
+	TBranch *vbjets_nearjet_dr_branch;
+	bool vbjets_nearjet_dr_isLoaded;
 public: 
 void Init(TTree *tree) {
 	lep1_p4_branch = 0;
@@ -1980,6 +1986,16 @@ void Init(TTree *tree) {
 		bjets_dr12_branch = tree->GetBranch("bjets_dr12");
 		bjets_dr12_branch->SetAddress(&bjets_dr12_);
 	}
+	vbtags_branch = 0;
+	if (tree->GetBranch("vbtags") != 0) {
+		vbtags_branch = tree->GetBranch("vbtags");
+		vbtags_branch->SetAddress(&vbtags_);
+	}
+	vbjets_nearjet_dr_branch = 0;
+	if (tree->GetBranch("vbjets_nearjet_dr") != 0) {
+		vbjets_nearjet_dr_branch = tree->GetBranch("vbjets_nearjet_dr");
+		vbjets_nearjet_dr_branch->SetAddress(&vbjets_nearjet_dr_);
+	}
   tree->SetMakeClass(0);
 }
 void GetEntry(unsigned int idx) 
@@ -2231,6 +2247,8 @@ void GetEntry(unsigned int idx)
 		vjets_nearjet_p4_isLoaded = false;
 		vbjets_p4_isLoaded = false;
 		vbjets_nearjet_p4_isLoaded = false;
+		vbtags_isLoaded = false;
+		vbjets_nearjet_dr_isLoaded = false;
 	}
 
 void LoadAllBranches() 
@@ -2481,6 +2499,8 @@ void LoadAllBranches()
 	if (vjets_nearjet_p4_branch != 0) vjets_nearjet_p4();
 	if (vbjets_p4_branch != 0) vbjets_p4();
 	if (vbjets_nearjet_p4_branch != 0) vbjets_nearjet_p4();
+	if (vbtags_branch != 0) vbtags();
+	if (vbjets_nearjet_dr_branch != 0) vbjets_nearjet_dr();
 }
 
 	unsigned int &run()
@@ -5668,6 +5688,32 @@ void LoadAllBranches()
 		}
 		return *vbjets_nearjet_p4_;
 	}
+	vector<bool> &vbtags()
+	{
+		if (not vbtags_isLoaded) {
+			if (vbtags_branch != 0) {
+				vbtags_branch->GetEntry(index);
+			} else { 
+				printf("branch vbtags_branch does not exist!\n");
+				exit(1);
+			}
+			vbtags_isLoaded = true;
+		}
+		return *vbtags_;
+	}
+	vector<float> &vbjets_nearjet_dr()
+	{
+		if (not vbjets_nearjet_dr_isLoaded) {
+			if (vbjets_nearjet_dr_branch != 0) {
+				vbjets_nearjet_dr_branch->GetEntry(index);
+			} else { 
+				printf("branch vbjets_nearjet_dr_branch does not exist!\n");
+				exit(1);
+			}
+			vbjets_nearjet_dr_isLoaded = true;
+		}
+		return *vbjets_nearjet_dr_;
+	}
 
   static void progress( int nEventsTotal, int nEventsChain ){
     int period = 1000;
@@ -5941,5 +5987,7 @@ namespace ssb {
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4();
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4();
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4();
+	vector<bool> &vbtags();
+	vector<float> &vbjets_nearjet_dr();
 }
 #endif

@@ -34,6 +34,7 @@ PlotLooper::PlotLooper
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
     unsigned int num_btags,
+    unsigned int num_jets,
     bool do_scale_factors,
     bool check_good_lumi,
     float mass_glu,
@@ -42,7 +43,7 @@ PlotLooper::PlotLooper
     bool verbose,
     bool print,
     const std::string& suffix
-)
+    )
     : at::AnalysisWithHist(root_file_name, print, suffix)
     , m_lumi(lumi)
     , m_verbose(verbose)
@@ -51,6 +52,7 @@ PlotLooper::PlotLooper
     , m_do_scale_factors(do_scale_factors)
     , m_check_good_lumi(check_good_lumi)
     , m_nbtags(num_btags)
+    , m_njets(num_jets)
     , m_mass_glu(mass_glu)
     , m_mass_lsp(mass_lsp)
     , m_sample(sample)
@@ -113,8 +115,6 @@ void PlotLooper::EndJob()
         hc.List();
     }
 
-    // -----------------------------------------------------------------------------//
-
     // 0 ee, 1 mm, 2 em, 3 ll
     std::tr1::array<int, 4> yield_ss;
     yield_ss[0] = static_cast<int>(hc["h_yield_ee"]->GetEntries());
@@ -126,15 +126,15 @@ void PlotLooper::EndJob()
     // -----------------------------------------------------------------------------//
     FakeRatePrediction frp(h_mufr.get(), h_elfr.get(), m_lumi);
     frp.ComputeAllFakePredictions
-    (
-        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
-        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
-        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
-        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
-        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"]),
-        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"]),
-        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"])
-    );
+        (
+            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
+            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
+            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
+            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
+            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"]),
+            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"]),
+            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"])
+            );
 
     // SF (raw)
     PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
@@ -188,10 +188,10 @@ void PlotLooper::EndJob()
     // -----------------------------------------------------------------------------//
     FlipRatePrediction flp(h_flip.get(), m_lumi);
     flp.ComputeAllFlipPredictions
-    (
-        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]),
-        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_em"])
-    );
+        (
+            static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]),
+            static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_em"])
+            );
 
     // Flip 
     PredSummary flip = flp.GetFlipPrediction();
@@ -208,42 +208,63 @@ void PlotLooper::EndJob()
 
     // SS kinematic plots (fake prediction)
     // TODO -- propagate the errors on these
-    hc.Add(dynamic_cast<TH1*>(hc["h_nvtxs_sf" ]->Clone("h_nvtxs_fake" )));
-    hc.Add(dynamic_cast<TH1*>(hc["h_pt1_sf"   ]->Clone("h_pt1_fake"   )));
-    hc.Add(dynamic_cast<TH1*>(hc["h_pt2_sf"   ]->Clone("h_pt2_fake"   )));
-    hc.Add(dynamic_cast<TH1*>(hc["h_pt1_el_sf"]->Clone("h_pt1_el_fake")));
-    hc.Add(dynamic_cast<TH1*>(hc["h_pt2_el_sf"]->Clone("h_pt2_el_fake")));
-    hc.Add(dynamic_cast<TH1*>(hc["h_pt1_mu_sf"]->Clone("h_pt1_mu_fake")));
-    hc.Add(dynamic_cast<TH1*>(hc["h_pt2_mu_sf"]->Clone("h_pt2_mu_fake")));
-    hc.Add(dynamic_cast<TH1*>(hc["h_ht_sf"    ]->Clone("h_ht_fake"    )));
-    hc.Add(dynamic_cast<TH1*>(hc["h_mt_sf"    ]->Clone("h_mt_fake"    )));
-    hc.Add(dynamic_cast<TH1*>(hc["h_met_sf"   ]->Clone("h_met_fake"   )));
-    hc.Add(dynamic_cast<TH1*>(hc["h_nbtags_sf"]->Clone("h_nbtags_fake")));
-    hc.Add(dynamic_cast<TH1*>(hc["h_njets_sf" ]->Clone("h_njets_fake" )));
-    hc["h_nvtxs_fake" ]->Add(hc["h_nvtxs_df" ], -1.0);
-    hc["h_pt1_fake"   ]->Add(hc["h_pt1_df"   ], -1.0);
-    hc["h_pt2_fake"   ]->Add(hc["h_pt2_df"   ], -1.0);
-    hc["h_pt1_el_fake"]->Add(hc["h_pt1_el_df"], -1.0);
-    hc["h_pt2_el_fake"]->Add(hc["h_pt2_el_df"], -1.0);
-    hc["h_pt1_mu_fake"]->Add(hc["h_pt1_mu_df"], -1.0);
-    hc["h_pt2_mu_fake"]->Add(hc["h_pt2_mu_df"], -1.0);
-    hc["h_ht_fake"    ]->Add(hc["h_ht_df"    ], -1.0);
-    hc["h_mt_fake"    ]->Add(hc["h_mt_df"    ], -1.0);
-    hc["h_met_fake"   ]->Add(hc["h_met_df"   ], -1.0);
-    hc["h_nbtags_fake"]->Add(hc["h_nbtags_df"], -1.0);
-    hc["h_njets_fake" ]->Add(hc["h_njets_df" ], -1.0);
-    hc["h_nvtxs_fake" ]->SetTitle("# vtxs (fake); #vtxs;Events"                    );
-    hc["h_pt1_fake"   ]->SetTitle("Higher p_{T} lepton (fake);p_{T} (GeV);Events"  );
-    hc["h_pt2_fake"   ]->SetTitle("Lower p_{T} lepton (fake);p_{T} (GeV);Events"   );
-    hc["h_pt1_el_fake"]->SetTitle("Higher p_{T} electron (fake);p_{T} (GeV);Events");
-    hc["h_pt2_el_fake"]->SetTitle("Lower p_{T} electron (fake);p_{T} (GeV);Events" );
-    hc["h_pt1_mu_fake"]->SetTitle("Higher p_{T} electron (fake);p_{T} (GeV);Events");
-    hc["h_pt2_mu_fake"]->SetTitle("Lower p_{T} electron (fake);p_{T} (GeV);Events" );
-    hc["h_ht_fake"    ]->SetTitle("H_{T};H_{T} (GeV) (fake);Events"                );
-    hc["h_mt_fake"    ]->SetTitle("m_{T};m_{T} (GeV) (fake);Events"                );
-    hc["h_met_fake"   ]->SetTitle("MET;E_{T}^{miss} (GeV) (fake);Events"           );
-    hc["h_nbtags_fake"]->SetTitle("# btags;# btags (fake);Events"                  );
-    hc["h_njets_fake" ]->SetTitle("# jets (fake);# jets;Events"                    );
+    hc.Add(dynamic_cast<TH1*>(hc["h_nvtxs_sf"    ]->Clone("h_nvtxs_fake"    )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_pt1_sf"      ]->Clone("h_pt1_fake"      )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_pt2_sf"      ]->Clone("h_pt2_fake"      )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_pt1_el_sf"   ]->Clone("h_pt1_el_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_pt2_el_sf"   ]->Clone("h_pt2_el_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_pt1_mu_sf"   ]->Clone("h_pt1_mu_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_pt2_mu_sf"   ]->Clone("h_pt2_mu_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_ht_sf"       ]->Clone("h_ht_fake"       )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_mt_sf"       ]->Clone("h_mt_fake"       )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_met_sf"      ]->Clone("h_met_fake"      )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_nbtags_sf"   ]->Clone("h_nbtags_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_njets_sf"    ]->Clone("h_njets_fake"    )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_lepdphi_sf"  ]->Clone("h_lepdphi_fake"  )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_lepdeta_sf"  ]->Clone("h_lepdeta_fake"  )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_lepdr_sf"    ]->Clone("h_lepdr_fake"    )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_drlepb_sf"   ]->Clone("h_drlepb_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_btagdr_sf"   ]->Clone("h_btagdr_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_drjetb_sf"   ]->Clone("h_drjetb_fake"   )));
+    hc.Add(dynamic_cast<TH1*>(hc["h_ptjetlep_sf" ]->Clone("h_ptjetlep_fake" )));
+    hc["h_nvtxs_fake"    ]->Add(hc["h_nvtxs_df"    ], -1.0);
+    hc["h_pt1_fake"      ]->Add(hc["h_pt1_df"      ], -1.0);
+    hc["h_pt2_fake"      ]->Add(hc["h_pt2_df"      ], -1.0);
+    hc["h_pt1_el_fake"   ]->Add(hc["h_pt1_el_df"   ], -1.0);
+    hc["h_pt2_el_fake"   ]->Add(hc["h_pt2_el_df"   ], -1.0);
+    hc["h_pt1_mu_fake"   ]->Add(hc["h_pt1_mu_df"   ], -1.0);
+    hc["h_pt2_mu_fake"   ]->Add(hc["h_pt2_mu_df"   ], -1.0);
+    hc["h_ht_fake"       ]->Add(hc["h_ht_df"       ], -1.0);
+    hc["h_mt_fake"       ]->Add(hc["h_mt_df"       ], -1.0);
+    hc["h_met_fake"      ]->Add(hc["h_met_df"      ], -1.0);
+    hc["h_nbtags_fake"   ]->Add(hc["h_nbtags_df"   ], -1.0);
+    hc["h_njets_fake"    ]->Add(hc["h_njets_df"    ], -1.0);
+    hc["h_lepdphi_fake"  ]->Add(hc["h_lepdphi_df"  ], -1.0);
+    hc["h_lepdeta_fake"  ]->Add(hc["h_lepdeta_df"  ], -1.0);
+    hc["h_lepdr_fake"    ]->Add(hc["h_lepdr_df"    ], -1.0);
+    hc["h_drlepb_fake"   ]->Add(hc["h_drlepb_df"   ], -1.0);
+    hc["h_btagdr_fake"   ]->Add(hc["h_btagdr_df"   ], -1.0);
+    hc["h_drjetb_fake"   ]->Add(hc["h_drjetb_df"   ], -1.0);
+    hc["h_ptjetlep_fake" ]->Add(hc["h_ptjetlep_df" ], -1.0);
+    hc["h_nvtxs_fake"    ]->SetTitle("# vtxs (fake); #vtxs;Events"                                       );
+    hc["h_pt1_fake"      ]->SetTitle("Higher p_{T} lepton (fake);p_{T} (GeV);Events"                     );
+    hc["h_pt2_fake"      ]->SetTitle("Lower p_{T} lepton (fake);p_{T} (GeV);Events"                      );
+    hc["h_pt1_el_fake"   ]->SetTitle("Higher p_{T} electron (fake);p_{T} (GeV);Events"                   );
+    hc["h_pt2_el_fake"   ]->SetTitle("Lower p_{T} electron (fake);p_{T} (GeV);Events"                    );
+    hc["h_pt1_mu_fake"   ]->SetTitle("Higher p_{T} electron (fake);p_{T} (GeV);Events"                   );
+    hc["h_pt2_mu_fake"   ]->SetTitle("Lower p_{T} electron (fake);p_{T} (GeV);Events"                    );
+    hc["h_ht_fake"       ]->SetTitle("H_{T};H_{T} (GeV) (fake);Events"                                   );
+    hc["h_mt_fake"       ]->SetTitle("m_{T};m_{T} (GeV) (fake);Events"                                   );
+    hc["h_met_fake"      ]->SetTitle("MET;E_{T}^{miss} (GeV) (fake);Events"                              );
+    hc["h_nbtags_fake"   ]->SetTitle("# btags;# btags (fake);Events"                                     );
+    hc["h_njets_fake"    ]->SetTitle("# jets (fake);# jets;Events"                                       );
+    hc["h_lepdphi_fake"  ]->SetTitle("#Delta#Phi(lep1,lep2);Delta#Phi(lep1,lep2);Events"                 );
+    hc["h_lepdeta_fake"  ]->SetTitle("#Delta#eta(lep1,lep2);Delta#eta(lep1,lep2);Events"                 );
+    hc["h_lepdr_fake"    ]->SetTitle("#DeltaR(lep1,lep2);#DeltaR(lep1,lep2);Events"                      );
+    hc["h_drlepb_fake"   ]->SetTitle("#DeltaR(lep,btag);#DeltaR(lep,btag);Events"                        );
+    hc["h_btagdr_fake"   ]->SetTitle("#DeltaR(btag1,btag2);#DeltaR(btag1,btag2);Events"                  );
+    hc["h_drjetb_fake"   ]->SetTitle("#DeltaR(btag,jet);#DeltaR(btag,jet);Events"                        );
+    hc["h_ptjetlep_fake" ]->SetTitle("p_{T}^{jet}/p)_{T}^{lep} - 1.;p_{T}^{jet}/p)_{T}^{lep} - 1.;Events");
 
     // print the output
     CTable t_yields;
@@ -251,12 +272,12 @@ void PlotLooper::EndJob()
     t_yields.setTitle("yields table");
     string f = "1.2";
     t_yields.setTable() (                      "ee",            "mm",            "em",            "ll")
-                        ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
-                        ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
-                        ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
-                        ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
-                        ("Flips"  ,    flip.ee.str(),    flip.mm.str(),    flip.em.str(),    flip.ll.str())
-                        ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
+        ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
+        ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
+        ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
+        ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
+        ("Flips"  ,    flip.ee.str(),    flip.mm.str(),    flip.em.str(),    flip.ll.str())
+        ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
     t_yields.print();
 }
 
@@ -271,7 +292,7 @@ std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 
 std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45., 50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100. }};
 
 // book hists 
- void PlotLooper::BookHists()
+void PlotLooper::BookHists()
 {
     try
     {
@@ -315,18 +336,25 @@ std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45
             string ts = Form(" (%s)",  GetDileptonChargeTypeTitle(charge_type).c_str());
 
             // SS kinematic plots
-            hc.Add(new TH1F(Form("h_nvtxs%s" , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                    , ts.c_str()), 20 , 0     ,  40 ));
-            hc.Add(new TH1F(Form("h_pt1%s"   , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"  , ts.c_str()), 25 , 0     , 250 ));
-            hc.Add(new TH1F(Form("h_pt2%s"   , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"   , ts.c_str()), 25 , 0     , 250 ));
-            hc.Add(new TH1F(Form("h_pt1_el%s", ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events", ts.c_str()), 25 , 0     , 250 ));
-            hc.Add(new TH1F(Form("h_pt2_el%s", ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events" , ts.c_str()), 25 , 0     , 250 ));
-            hc.Add(new TH1F(Form("h_pt1_mu%s", ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events", ts.c_str()), 25 , 0     , 250 ));
-            hc.Add(new TH1F(Form("h_pt2_mu%s", ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events" , ts.c_str()), 25 , 0     , 250 ));
-            hc.Add(new TH1F(Form("h_ht%s"    , ns.c_str()), Form("H_{T};H_{T} (GeV)%s;Events"                , ts.c_str()), 20 , 0     , 1000));
-            hc.Add(new TH1F(Form("h_mt%s"    , ns.c_str()), Form("m_{T};m_{T} (GeV)%s;Events"                , ts.c_str()), 16 , 0     , 800 ));
-            hc.Add(new TH1F(Form("h_met%s"   , ns.c_str()), Form("MET;E_{T}^{miss} (GeV)%s;Events"           , ts.c_str()), 16 , 0     , 800 ));
-            hc.Add(new TH1F(Form("h_nbtags%s", ns.c_str()), Form("# btags;# btags%s;Events"                  , ts.c_str()), 10 , 0     , 10  ));
-            hc.Add(new TH1F(Form("h_njets%s" , ns.c_str()), Form("# jets%s;# jets;Events"                    , ts.c_str()), 10 , 0     , 10  ));
+            hc.Add(new TH1F(Form("h_nvtxs%s"   , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                    , ts.c_str()), 20 , 0     , 40  ));
+            hc.Add(new TH1F(Form("h_pt1%s"     , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"  , ts.c_str()), 25 , 0     , 250 ));
+            hc.Add(new TH1F(Form("h_pt2%s"     , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"   , ts.c_str()), 25 , 0     , 250 ));
+            hc.Add(new TH1F(Form("h_pt1_el%s"  , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events", ts.c_str()), 25 , 0     , 250 ));
+            hc.Add(new TH1F(Form("h_pt2_el%s"  , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events" , ts.c_str()), 25 , 0     , 250 ));
+            hc.Add(new TH1F(Form("h_pt1_mu%s"  , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events", ts.c_str()), 25 , 0     , 250 ));
+            hc.Add(new TH1F(Form("h_pt2_mu%s"  , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events" , ts.c_str()), 25 , 0     , 250 ));
+            hc.Add(new TH1F(Form("h_ht%s"      , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                , ts.c_str()), 20 , 0     , 1000));
+            hc.Add(new TH1F(Form("h_mt%s"      , ns.c_str()), Form("m_{T}%s;m_{T} (GeV);Events"                , ts.c_str()), 16 , 0     , 800 ));
+            hc.Add(new TH1F(Form("h_met%s"     , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"           , ts.c_str()), 16 , 0     , 800 ));
+            hc.Add(new TH1F(Form("h_nbtags%s"  , ns.c_str()), Form("# btags%s;# btags;Events"                  , ts.c_str()), 10 , 0     , 10  ));
+            hc.Add(new TH1F(Form("h_njets%s"   , ns.c_str()), Form("# jets%s;# jets;Events"                    , ts.c_str()), 10 , 0     , 10  ));
+            hc.Add(new TH1F(Form("h_lepdphi%s" , ns.c_str()), Form("#Delta#Phi(lep1, lep2)%s;Events"           , ts.c_str()), 32 , 0     , 3.2 ));
+            hc.Add(new TH1F(Form("h_lepdeta%s" , ns.c_str()), Form("#Delta#Eta(lep1, lep2)%s;Events"           , ts.c_str()), 25 , -2.5  , 2.5 ));
+            hc.Add(new TH1F(Form("h_lepdr%s"   , ns.c_str()), Form("#Delta#R(lep1, lep2)%s;Events"             , ts.c_str()), 40 , 0     , 4.  ));
+            hc.Add(new TH1F(Form("h_drlepb%s"  , ns.c_str()), Form("#Delta#R(lep, btag)%s;Events"              , ts.c_str()), 40 , 0     , 4.  ));
+            hc.Add(new TH1F(Form("h_btagdr%s"  , ns.c_str()), Form("#Delta#R(btag1, btag2)%s;Events"           , ts.c_str()), 40 , 0     , 4.  ));
+            hc.Add(new TH1F(Form("h_drjetb%s"  , ns.c_str()), Form("#Delta#R(btag, jet)%s;Events"              , ts.c_str()), 40 , 0     , 4.  ));
+            hc.Add(new TH1F(Form("h_ptjetlep%s", ns.c_str()), Form("jet p_{T} / lep p_{T} - 1%s;p_{T}^{jet}/p_{T}^{lep} - 1;Events", ts.c_str()), 50 , 0.   , 5.0 ));
         }
 
         return;
@@ -382,7 +410,7 @@ int PlotLooper::operator()(long event)
         //}
 
         // two jet events
-        if (njets() < 2)
+        if (njets() < static_cast<int>(m_njets))
         {
             return 0;
         }
@@ -506,25 +534,25 @@ int PlotLooper::operator()(long event)
         float fl2 = 0.0;
         switch(charge_type)
         {
-            case DileptonChargeType::SS: 
-                break;
-            case DileptonChargeType::SF: 
-                fr1 = lep1_is_fo() * GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
-                fr2 = lep2_is_fo() * GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
-                evt_weight *= fr1/(1.0 - fr1) + fr2/(1.0 - fr2); 
-                break;
-            case DileptonChargeType::DF:
-                fr1 = GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
-                fr2 = GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
-                evt_weight *= fr1/(1.0 - fr1) * fr2/(1.0 - fr2); 
-                break;
-            case DileptonChargeType::OS:
-                fl1 = GetFlipRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
-                fl2 = GetFlipRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
-                evt_weight *= fl1/(1.0 - fl1) + fl2/(1.0 - fl2); 
-                break;
-            default:
-                break;
+        case DileptonChargeType::SS: 
+            break;
+        case DileptonChargeType::SF: 
+            fr1 = lep1_is_fo() * GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
+            fr2 = lep2_is_fo() * GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+            evt_weight *= fr1/(1.0 - fr1) + fr2/(1.0 - fr2); 
+            break;
+        case DileptonChargeType::DF:
+            fr1 = GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
+            fr2 = GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+            evt_weight *= fr1/(1.0 - fr1) * fr2/(1.0 - fr2); 
+            break;
+        case DileptonChargeType::OS:
+            fl1 = GetFlipRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
+            fl2 = GetFlipRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+            evt_weight *= fl1/(1.0 - fl1) + fl2/(1.0 - fl2); 
+            break;
+        default:
+            break;
         };
 
         // SS kinematic plots
@@ -539,7 +567,31 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_met"   +qs], pfmet()   , evt_weight);
         rt::Fill(hc["h_nbtags"+qs], nbtags()  , evt_weight);
         rt::Fill(hc["h_njets" +qs], njets()   , evt_weight);
+
+        double dphi_lep = fabs(ROOT::Math::VectorUtil::DeltaPhi(p41, p42));
+        rt::Fill(hc["h_lepdphi"+qs], dphi_lep, evt_weight);
         
+        double deta_lep = fabs(p41.eta() - p42.eta());
+        rt::Fill(hc["h_lepdeta"+qs], deta_lep, evt_weight);
+        
+        double dr_lep = ROOT::Math::VectorUtil::DeltaR(p41, p42);
+        rt::Fill(hc["h_lepdr"+qs], dr_lep, evt_weight);
+
+        rt::Fill(hc["h_drlepb"+qs], lep1_nearbjet_dr(), evt_weight);
+        rt::Fill(hc["h_drlepb"+qs], lep2_nearbjet_dr(), evt_weight);
+        
+        rt::Fill(hc["h_btagdr"+qs], bjets_dr12(), evt_weight);
+
+        for (unsigned int idx = 0; idx < vbjets_nearjet_dr().size(); idx++) {
+            rt::Fill(hc["h_drjetb"+qs], vbjets_nearjet_dr().at(idx), evt_weight);
+        }
+
+        double rlep1 = (lep1_nearjet_p4().pt() / p41.pt()) - 1.;
+        rt::Fill(hc["h_ptjetlep"+qs], rlep1, evt_weight);
+
+        double rlep2 = (lep2_nearjet_p4().pt() / p42.pt()) - 1.;
+        rt::Fill(hc["h_ptjetlep"+qs], rlep2, evt_weight);
+
         if (abs(lep1_pdgid())==13) 
         {
             rt::Fill(hc["h_pt1_mu"+qs], p41.pt(), evt_weight);
@@ -719,7 +771,7 @@ void PlotLooper::FillDoubleFakeHist
     float pt2, 
     float eta2, 
     float weight
-)
+    )
 {
     std::pair<int, int> bins(DoubleFakeBinLookup(id1, pt1, eta1), DoubleFakeBinLookup(id2, pt2, eta2));
     if (hyp == at::DileptonHypType::EMU && abs(id1) == 13)
@@ -768,7 +820,7 @@ void PlotLooper::FillDoubleFlipHist
     float pt2, 
     float eta2, 
     float weight
-)
+    )
 {
     std::pair<int, int> bins(DoubleFlipBinLookup(pt1, eta1), DoubleFlipBinLookup(pt2, eta2));
     //cout << Form("b1 %d b2 %d", bins.first, bins.second) << endl;
