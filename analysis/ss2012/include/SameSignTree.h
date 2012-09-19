@@ -77,6 +77,7 @@ public:
     int nbtags20;
     int nbtags30;
     float vtxw;
+    float mt;
     float ht;
     float ht20;
     float ht30;    
@@ -91,14 +92,28 @@ public:
     //
     // for JES sysetmatics
     //
-    int njets_dwn;
+    int njets_dn;
     int njets_up;
-    int nbtags_dwn;
+    int nbtags_dn;
     int nbtags_up;
-    float ht_dwn;
+    float ht_dn;
     float ht_up;
-    float pfmet_dwn;
+    int njets20_dn;
+    int njets20_up;
+    int nbtags20_dn;
+    int nbtags20_up;
+    float ht20_dn;
+    float ht20_up;
+    int njets30_dn;
+    int njets30_up;
+    int nbtags30_dn;
+    int nbtags30_up;
+    float ht30_dn;
+    float ht30_up;
+    float pfmet_dn;
     float pfmet_up;
+    float pfmet_phi_dn;
+    float pfmet_phi_up;
 
     //
     // susy parameters

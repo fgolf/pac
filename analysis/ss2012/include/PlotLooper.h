@@ -13,90 +13,90 @@
 
 class PlotLooper : public at::AnalysisWithHist
 {
-public:
-    // construct:
-    PlotLooper
-    (
-        const std::string& root_file_name,
-        at::Sample::value_type sample,
-        ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
-        const std::string& vtxreweight_file_name = "",
-        const std::string& fake_rate_file_name = "",
-        const std::string& flip_rate_file_name = "",
-        unsigned int num_btags = 0,
-        unsigned int num_jets = 0,
-        bool do_scale_factors = true,
-        bool bheck_good_lumi = false,
-        float mass_glu = 1000,
-        float mass_lsp = 100,
-        float lumi = 1.0,
-        bool verbose = false,
-        bool print = false,
-        const std::string& suffix = "png"
+    public:
+        // construct:
+        PlotLooper
+        (
+             const std::string& root_file_name,
+             at::Sample::value_type sample,
+             ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
+             const std::string& vtxreweight_file_name = "",
+             const std::string& fake_rate_file_name = "",
+             const std::string& flip_rate_file_name = "",
+             unsigned int num_btags = 0,
+             unsigned int num_jets = 0,
+             bool do_scale_factors = true,
+             bool bheck_good_lumi = false,
+             float mass_glu = 1000,
+             float mass_lsp = 100,
+             float lumi = 1.0,
+             bool verbose = false,
+             bool print = false,
+             const std::string& suffix = "png"
         );
 
-    // destroy:
-    ~PlotLooper();
+        // destroy:
+        ~PlotLooper();
 
-    // function operator:
-    int operator()(long event);
+        // function operator:
+        int operator()(long event);
 
-    // members
-    virtual void BeginJob();
-    virtual void EndJob();
-    virtual void BookHists();
+        // members
+        virtual void BeginJob();
+        virtual void EndJob();
+        virtual void BookHists();
 
-private:
-    // members
-    float m_lumi;
-    bool m_verbose;
-    bool m_is_data;
-    bool m_do_vtx_reweight;
-    bool m_do_scale_factors;
-    bool m_check_good_lumi;
-    unsigned int m_nbtags;
-    unsigned int m_njets;
-    float m_mass_glu;
-    float m_mass_lsp;
-    at::Sample::value_type m_sample;
-    ss::SignalRegion::value_type m_signal_region;
+    private:
+        // members
+        float m_lumi;
+        bool m_verbose;
+        bool m_is_data;
+        bool m_do_vtx_reweight;
+        bool m_do_scale_factors;
+        bool m_check_good_lumi;
+        unsigned int m_nbtags;
+        unsigned int m_njets;
+        float m_mass_glu;
+        float m_mass_lsp;
+        at::Sample::value_type m_sample;
+        ss::SignalRegion::value_type m_signal_region;
 
-    // fake/flip rate hists
-    std::tr1::shared_ptr<TH2F> h_mufr;
-    std::tr1::shared_ptr<TH2F> h_elfr;
-    std::tr1::shared_ptr<TH2F> h_flip;
+        // fake/flip rate hists
+        std::tr1::shared_ptr<TH2F> h_mufr;
+        std::tr1::shared_ptr<TH2F> h_elfr;
+        std::tr1::shared_ptr<TH2F> h_flip;
 
-    int count_ee;
-    int count_em;
+        int count_ee;
+        int count_em;
 
-    // methods
-    float GetFakeRateValue(int lep_id, float pt, float eta) const;
-    float GetFakeRateError(int lep_id, float pt, float eta) const;
+        // methods
+        float GetFakeRateValue(int lep_id, float pt, float eta) const;
+        float GetFakeRateError(int lep_id, float pt, float eta) const;
 
-    float GetFlipRateValue(int lep_id, float pt, float eta) const; 
-    float GetFlipRateError(int lep_id, float pt, float eta) const; 
+        float GetFlipRateValue(int lep_id, float pt, float eta) const; 
+        float GetFlipRateError(int lep_id, float pt, float eta) const; 
 
-    void FillDoubleFakeHist
-    (
-        TH2F* hist, 
-        const at::DileptonHypType::value_type& hyp, 
-        int id1, 
-        float pt1, 
-        float eta1, 
-        int id2, 
-        float pt2, 
-        float eta2, 
-        float weight
-        );
+        void FillDoubleFakeHist
+        (
+             TH2F* hist, 
+             const at::DileptonHypType::value_type& hyp, 
+             int id1, 
+             float pt1, 
+             float eta1, 
+             int id2, 
+             float pt2, 
+             float eta2, 
+             float weight
+         );
 
-    void FillDoubleFlipHist
-    (
-        TH2F* hist, 
-        float pt1, 
-        float eta1, 
-        float pt2, 
-        float eta2, 
-        float weight
+        void FillDoubleFlipHist
+        (
+            TH2F* hist, 
+            float pt1, 
+            float eta1, 
+            float pt2, 
+            float eta2, 
+            float weight
         );
 };
 

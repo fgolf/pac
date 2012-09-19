@@ -56,21 +56,9 @@ function merge
 #input_files="${input_files},${input_path}/MuEG_Run2012B-13Jul2012-v1_AOD/*.root"
 #merge data_2012AB_13july2012_5p1_promptjson $input_files
 
-# 2012A/B reprocessed with prompt json
-#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/03Aug
-#output_path=babies/53X
-#run_list=\"\"
-#input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
-#input_files="${input_files},${input_path}/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"
-#input_files="${input_files},${input_path}/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"
-#input_files="${input_files},${input_path}/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root"
-#input_files="${input_files},${input_path}/MuEG_Run2012A-13Jul2012-v1_AOD/*.root"
-#input_files="${input_files},${input_path}/MuEG_Run2012B-13Jul2012-v1_AOD/*.root"
-#merge data_2012AB_13july2012_nojson $input_files
-
 # 2012A/B reprocessed
-#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/03Aug
-#output_path=babies/53X
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/17Sep
+#output_path=babies2
 #run_list=json/Cert_190456-196531_8TeV_13Jul2012ReReco_Collisions12_cms2.txt # 5p21
 #input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
 #input_files="${input_files},${input_path}/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"
@@ -81,8 +69,8 @@ function merge
 #merge data_2012AB_13july2012_5p21 $input_files
 
 # 2012A/B reprocessed
-#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/03Aug
-#output_path=babies/53X
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/17Sep
+#output_path=babies2
 #run_list=json/Cert_190782-190949_8TeV_06Aug2012ReReco_Collisions12_cms2.txt # 0.082 /fb 
 #input_files="${input_files},${input_path}/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root"
 #input_files="${input_files},${input_path}/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root"
@@ -108,9 +96,9 @@ function merge
 ##merge data_2012AB_rereco_9p71 $input_files
 
 # 2012 C
-#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/03Aug
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/17Sep
 #run_list=json/Cert_190456-201678_8TeV_PromptReco_Collisions12_cms2.txt   # 9.707 for prompt
-#output_path=babies/53X
+#output_path=babies2
 #input_files="${input_path}/DoubleMu_Run2012C-PromptReco-v1_AOD/*.root"
 #input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
 #input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v1_AOD/*.root"
@@ -120,7 +108,8 @@ function merge
 #merge data_2012Cv12_4p61 $input_files
 
 # merge into one baby
-output_path=babies/53X
+input_path=babies2
+output_path=babies2
 run_list=\"\"
 input_files="${output_path}/data_2012Cv12_4p61.root"
 input_files="${input_files},${output_path}/data_2012AB_06aug2012_0p082.root"

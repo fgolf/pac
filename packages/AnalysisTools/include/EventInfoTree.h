@@ -32,7 +32,7 @@ public:
     unsigned int ls;
     unsigned int evt;
     at::Sample::value_type sample;
-    char dataset[200];
+    TString dataset;
     bool is_real_data;
 
     //
@@ -42,8 +42,8 @@ public:
     int vtx_idx;
     float pfmet;
     float pfmet_phi;
-    float corpfmet;
-    float corpfmet_phi;    
+    float uncorpfmet;
+    float uncorpfmet_phi;    
 
     //
     // some gen event level info

@@ -3,7 +3,8 @@
 
 #include "at/AnalysisWithTree.h"
 #include "Math/LorentzVector.h"
-//#include "boost/shared_ptr.hpp"
+#include "jetcorr/FactorizedJetCorrector.h"
+#include "metSelections.h"
 #include <tr1/array>
 #include <tr1/memory>
 #include <vector>
@@ -28,9 +29,11 @@ class SSAnalysisLooper : public at::AnalysisWithTree
             const std::string& fake_rate_hist_name = "h_mufr40c",
             const std::string& vtxreweight_file_name = "",
             const std::string& goodrun_file_name = "",
+            const std::string& jec_prefix = "",
+            const std::string& jetcorr_path = "",
             double luminosity = 1.0,
+            unsigned int num_jets = 2,
             bool sparms = false,
-            int jetMetScale = 0,
             bool is_fast_sim = false,
 			bool sync_print = false,
             bool verbose = false
@@ -51,12 +54,14 @@ class SSAnalysisLooper : public at::AnalysisWithTree
         // members:
         at::Sample::value_type m_sample;
         double m_lumi;
-        int  m_jetMetScale;
+        unsigned int m_njets;
         bool m_is_fast_sim;
         bool m_filter_bad_runs;
         bool m_sparms;
 		bool m_sync_print;
         bool m_verbose;
+        std::tr1::shared_ptr<FactorizedJetCorrector> m_jet_corrector;
+        //MetCorrector* m_met_corrector;
 
         // 0 mm, 1 em, 2 ee
         std::tr1::array<float, 4> m_count_ss;

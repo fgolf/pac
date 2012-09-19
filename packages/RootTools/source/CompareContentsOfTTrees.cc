@@ -163,11 +163,19 @@ namespace rt
 
             // fill hist 1
             string h1_draw = Form("%s>>h1_%s", branch.name.c_str(), branch.name.c_str());
+            if (string_contains(branch.classname, "ROOT::Math::LorentzVector"))
+            {
+                h1_draw = Form("%s.mass()>>h1_%s", branch.name.c_str(), branch.name.c_str());
+            }
             tree1->Draw(h1_draw.c_str(), "", "goff", num_entries);
             TH1F* h1 = dynamic_cast<TH1F*>(gDirectory->Get(h1_name.c_str()));
 
             // fill hist 2
             string h2_draw = Form("%s>>h2_%s", branch.name.c_str(), branch.name.c_str());
+            if (string_contains(branch.classname, "ROOT::Math::LorentzVector"))
+            {
+                h2_draw = Form("%s.mass()>>h2_%s", branch.name.c_str(), branch.name.c_str());
+            }
             tree2->Draw(h2_draw.c_str(), "", "goff", num_entries);
             TH1F* h2 = dynamic_cast<TH1F*>(gDirectory->Get(h2_name.c_str()));
 
@@ -191,6 +199,10 @@ namespace rt
 
             // fill hist 1
             string h1_draw = Form("%s>>h1_%s", branch.name.c_str(), branch.name.c_str());
+            if (string_contains(branch.classname, "ROOT::Math::LorentzVector"))
+            {
+                h1_draw = Form("%s.mass()>>h1_%s", branch.name.c_str(), branch.name.c_str());
+            }
             tree1->Draw(h1_draw.c_str(), "", "goff", num_entries);
             TH1F* h1 = dynamic_cast<TH1F*>(gDirectory->Get(h1_name.c_str()));
 
@@ -212,6 +224,10 @@ namespace rt
 
             // fill hist 1
             string h2_draw = Form("%s>>h2_%s", branch.name.c_str(), branch.name.c_str());
+            if (string_contains(branch.classname, "ROOT::Math::LorentzVector"))
+            {
+                h2_draw = Form("%s.mass()>>h2_%s", branch.name.c_str(), branch.name.c_str());
+            }
             tree1->Draw(h2_draw.c_str(), "", "goff", num_entries);
             TH1F* h2 = dynamic_cast<TH1F*>(gDirectory->Get(h2_name.c_str()));
 

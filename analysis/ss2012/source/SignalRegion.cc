@@ -115,15 +115,15 @@ namespace ss
         using namespace ssb;
         switch (signal_region)
         {
-            case SignalRegion::sr0 : return (ht() > 80.0   && pfmet() >  0.0 );
-            case SignalRegion::sr1 : return (ht() > 80.0   && pfmet() > 30.0 );
-            case SignalRegion::sr2 : return (ht() > 80.0   && pfmet() > 30.0 && is_pp());
-            case SignalRegion::sr3 : return (ht() > 200.0  && pfmet() > 120.0);
-            case SignalRegion::sr4 : return (ht() > 200.0  && pfmet() > 50.0 );
-            case SignalRegion::sr5 : return (ht() > 320.0  && pfmet() > 50.0 );
-            case SignalRegion::sr6 : return (ht() > 320.0  && pfmet() > 120.0);
-            case SignalRegion::sr7 : return (ht() > 200.0  && pfmet() > 50.0 && nbtags()>=3);
-            case SignalRegion::sr8 : return (ht() > 320.0);
+            case SignalRegion::sr0  : return (ht() > 80.0   && pfmet() >  0.0 );
+            case SignalRegion::sr1  : return (ht() > 80.0   && pfmet() > 30.0 );
+            case SignalRegion::sr2  : return (ht() > 80.0   && pfmet() > 30.0 && is_pp());
+            case SignalRegion::sr3  : return (ht() > 200.0  && pfmet() > 120.0);
+            case SignalRegion::sr4  : return (ht() > 200.0  && pfmet() > 50.0 );
+            case SignalRegion::sr5  : return (ht() > 320.0  && pfmet() > 50.0 );
+            case SignalRegion::sr6  : return (ht() > 320.0  && pfmet() > 120.0);
+            case SignalRegion::sr7  : return (ht() > 200.0  && pfmet() > 50.0 && nbtags()>=3);
+            case SignalRegion::sr8  : return (ht() > 320.0);
             default: return false;
         }
         return false;
@@ -137,7 +137,7 @@ namespace ss
 	// set aliases for TTree
     void SetSignalRegionAliases(TTree& tree, int nbtags, int njets)
     {
-		string cut = Form("is_ss && nbtags>=%d && njets>=%d");
+		string cut = Form("is_ss && nbtags>=%d && njets>=%d", nbtags, njets);
         tree.SetAlias("sr0", (cut + " && ht > 80.0   && pfmet >  0.0"             ).c_str()); 
         tree.SetAlias("sr1", (cut + " && ht > 80.0   && pfmet > 30.0"             ).c_str()); 
         tree.SetAlias("sr2", (cut + " && ht > 80.0   && pfmet > 30.0 && is_pp"    ).c_str()); 
