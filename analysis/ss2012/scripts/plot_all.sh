@@ -9,7 +9,7 @@ nbtags=2
 njets=2
 #suffix="\"png\""
 suffix="\"eps\""
-#options=" --nbtags $nbtags --gr 1 --sr $signal_region --lumi $lumi"
+#options=" --nbtags $nbtags --gr 1 --sr $signal_region --lumi $lumi --fr data/fake_rates/ssFR_data_standard_12Sep2012.root"
 options=" --nbtags $nbtags --sr $signal_region --lumi $lumi --fr data/fake_rates/ssFR_data_standard_12Sep2012.root"
 mkdir -p logs
 
@@ -35,6 +35,7 @@ make_hists www     "$options"
 make_hists wwz     "$options"
 make_hists wzz     "$options"
 make_hists zzz     "$options"
+#make_hists wmwmqq  "$options"
 
 # overlay the hists
 #root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"png\")"
