@@ -148,9 +148,9 @@ try
     else // use the sample
     {
         cout << "processing "  << sample_name << endl;
-        sample = at::GetSampleFromName(sample_name);
+        sample    = at::GetSampleFromName(sample_name);
         is_data   = (at::GetSampleInfo(sample).type == at::SampleType::data);
-        is_signal = (at::GetSampleInfo(sample).type == at::SampleType::signal);
+        is_signal = false; // not used 
         if (input_file.empty())
         {
             input_file = Form("babies/%s.root", sample_name.c_str());

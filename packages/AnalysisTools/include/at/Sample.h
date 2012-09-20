@@ -15,22 +15,27 @@ namespace at
             data,
             dy,
             ttw,
-            ttw_53X,
-            ttw_fastsim,
             ttz,
-			ttg,
-			ttww,
+            ttg,
+            ttww,
             ttjets,
             zz,
             wz,
-			wwg,
-			www,
-			wwz,
-			wzz,
-			zzz,
+            ww,
+            wwg,
+            www,
+            wwz,
+            wzz,
+            zzz,
             t1tttt,
             t1tttt_fastsim,
             sbottomtop,
+            wgstar,
+            wmwmqq,
+            wpwpqq,
+            ww_ds,
+            lm6,
+            lm9,
             static_size
         };
     };
@@ -41,7 +46,6 @@ namespace at
         enum value_type
         {
             data,
-            signal,
             susy,
             rare,
             bkgd,
@@ -52,11 +56,12 @@ namespace at
     // Sample Infomation
     struct SampleInfo
     {
-        std::string name;
-        std::string title;
-        std::string ntuple_path;
-        SampleType::value_type type;
-        Sample::value_type process;
+        std::string name;            // short name
+        std::string title;           // ROOT TLatex title
+        std::string latex;           // real latex title
+        std::string ntuple_path;     // logical name for path
+        SampleType::value_type type; // classification
+        Sample::value_type process;  // redundant process enum
         Color_t color; 
     };
 
@@ -66,12 +71,7 @@ namespace at
         enum value_type
         {
             cms2,
-            cms2mc,
-            cms2mc_53X,
-            ss_skim_data,
-            ss_skim_mc,
-            ss_skim_mc_53X,
-            tensor,
+            ss_skim,
             static_size
         };
     };
@@ -94,13 +94,16 @@ namespace at
     // function to filter samples by process
     bool FilterByProcess(const Sample::value_type& sample);
 
-	// check if the sampe is real data
-	bool SampleIsData(const Sample::value_type& sample);
+    // check if the sampe is real data
+    bool SampleIsData(const Sample::value_type& sample);
+
+    // samlpe type from name
+    SampleType::value_type GetSampleTypeFromName(const std::string& sample_type_name);
 
     // get path to ntuple
-	std::string GetNtuplePath(const std::string& ntuple_type_name);
-    std::string GetNtuplePath(const NtupleType::value_type& ntuple);
-	NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name);
+    std::string GetNtuplePath(const std::string& ntuple_type_name, const std::string& sample_type_name);
+    std::string GetNtuplePath(const NtupleType::value_type& ntuple, const SampleType::value_type sample_type);
+    NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name);
 
 } // namespace at
 

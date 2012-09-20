@@ -186,15 +186,11 @@ try
 
 	// input
     TChain* chain  = NULL;
-    bool is_data   = false;
-    bool is_signal = false;
     at::Sample::value_type sample = at::Sample::static_size; 
 	if (input_file.empty())
 	{
         cout << "processing "  << sample_name << endl;
         sample = at::GetSampleFromName(sample_name);
-        is_data   = (at::GetSampleInfo(sample).type == at::SampleType::data);
-        is_signal = (at::GetSampleInfo(sample).type == at::SampleType::signal);
         chain = at::GetSampleTChain(sample, at::GetNtupleTypeFromName(ntuple_type_name));
         if (output_file.empty())
         {

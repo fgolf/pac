@@ -51,16 +51,16 @@ bool SelectSameSign(long event)
         }
 
         // jet type
-        JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
+        //JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
 
         // require 2 jets
         //int njets = jet_pf_corrector  ? samesign::nJets(ihyp, jet_pf_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0) : 
         //                                samesign::nJets(ihyp, jet_type,                   /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
-        int njets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
-        if (njets < 2)
-        {
-            continue;
-        }
+        //int njets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
+        //if (njets < 2)
+        //{
+        //    continue;
+        //}
 
         // need at least one good vertex
         int nGoodVertices = numberOfGoodVertices();

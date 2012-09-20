@@ -17,15 +17,26 @@ namespace at
         {
             // name
             "data", 
-            // title,
+            // title
             "2012 data", 
+            // latex
+            "data",
             // ntuple_path
-            "DoubleElectron_Run2012A-PromptReco-v1_AOD/*.root," 
-            "DoubleElectron_Run2012B-PromptReco-v1_AOD/*.root," 
-            "DoubleMu_Run2012A-PromptReco-v1_AOD/*.root," 
-            "DoubleMu_Run2012B-PromptReco-v1_AOD/*.root," 
-            "MuEG_Run2012A-PromptReco-v1_AOD/*.root," 
-            "MuEG_Run2012B-PromptReco-v1_AOD/*.root", 
+            "DoubleMu_Run2012B-13Jul2012-v4_AOD,"
+            "DoubleMu_Run2012A-13Jul2012-v1_AOD,"
+            "DoubleMu_Run2012A-recover-06Aug2012-v1_AOD,"
+            "DoubleMu_Run2012C-PromptReco-v1_AOD,"
+            "DoubleMu_Run2012C-PromptReco-v2_AOD,"
+            "DoubleElectron_Run2012B-13Jul2012-v1_AOD,"
+            "DoubleElectron_Run2012A-13Jul2012-v1_AOD,"
+            "DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD,"
+            "DoubleElectron_Run2012C-PromptReco-v1_AOD,"
+            "DoubleElectron_Run2012C-PromptReco-v2_AOD,"
+            "MuEG_Run2012B-13Jul2012-v1_AOD,"
+            "MuEG_Run2012A-13Jul2012-v1_AOD,"
+            "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
+            "MuEG_Run2012C-PromptReco-v1_AOD,"
+            "MuEG_Run2012C-PromptReco-v2_AOD",
             // SampleType 
             SampleType::data,
             // Sample
@@ -37,9 +48,11 @@ namespace at
             // name
             "dy", 
             // title,
+            "DY #rightarrow ll", 
+            // latex
             "DY \\rightarrow \\ell \\ell", 
             // ntuple_path
-            "DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12-PU_S7_START52_V9-v2/V05-02-27/*.root", 
+            "DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1", 
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -50,10 +63,12 @@ namespace at
         {
             // name
             "ttw", 
-            // title,
+            // title
+            "t#bar{t}W", 
+            // latex
             "t\\overline{t}W", 
             // ntuple_path
-            "TTWJets_8TeV-madgraph_Summer12-PU_S7_START52_V9-v1/V05-02-28/*.root", 
+            "TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1", 
             // SampleType 
             SampleType::rare,
             // Sample
@@ -63,39 +78,13 @@ namespace at
         },
         {
             // name
-            "ttw_53X", 
-            // title,
-            "t\\overline{t}W", 
-            // ntuple_path
-            "TTWJets_8TeV-madgraph_Summer12-PU_S7_START52_V9-v1/*.root", 
-            // SampleType 
-            SampleType::rare,
-            // Sample
-            Sample::ttw_53X,
-            // color
-            kBlue
-        },
-        {
-            // name
-            "ttw_fastsim", 
-            // title,
-            "t\\overline{t}W", 
-            // ntuple_path
-            "8TeV_TTWJets_FastSim_525_Summer12-v1_InTimePU_START52_V9-v1/*.root",
-            // SampleType 
-            SampleType::rare,
-            // Sample
-            Sample::ttw_fastsim,
-            // color
-            kBlue
-        },
-        {
-            // name
             "ttz", 
-            // title,
+            // title
+            "t#bar{t}Z", 
+            // latex
             "t\\overline{t}Z", 
             // ntuple_path
-            "TTZJets_8TeV-madgraph_v2_Summer12-PU_S7_START52_V9-v1/V05-02-28/*.root", 
+            "TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1", 
             // SampleType 
             SampleType::rare,
             // Sample
@@ -106,10 +95,12 @@ namespace at
         {
             // name
             "ttg", 
-            // title,
+            // title
+            "t#bar{t}#gamma", 
+            // latex
             "t\\overline{t}\\gamma", 
             // ntuple_path
-            "TTGJets_8TeV-madgraph_Summer12-PU_S7_START52_V9-v1/V05-02-28/V05-02-28/*.root",
+            "TTGJets_8TeV-madgraph_Summer12-PU_S7_START52_V9-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -120,10 +111,12 @@ namespace at
         {
             // name
             "ttww", 
-            // title,
+            // title
+            "t\\overline{t}WW", 
+            // latex
             "t\\overline{t}WW", 
             // ntuple_path
-            "8TeV_TTWWJets_FastSim_525_Summer12-v3_StoreResults-InTimePU_START52_V9-v3/V05-02-28/*.root",
+            "TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -134,10 +127,12 @@ namespace at
         {
             // name
             "ttjets", 
-            // title,
+            // title
+            "t#bar{t}+jets", 
+            // latex
             "t\\overline{t}+jets", 
             // ntuple_path
-            "TTJets_TuneZ2star_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v1/V05-02-27/*.root",
+            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -148,10 +143,12 @@ namespace at
         {
             // name
             "zz", 
-            // title,
+            // title
+            "ZZ", 
+            // latex
             "ZZ", 
             // ntuple_path
-            "ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v3/V05-02-27/*.root",
+            "ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -162,10 +159,12 @@ namespace at
         {
             // name
             "wz", 
-            // title,
+            // title
             "WZ", 
+            // latex 
+            "WZ",
             // ntuple_path
-            "WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v2/V05-02-27/*.root",
+            "WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -175,11 +174,29 @@ namespace at
         },
         {
             // name
+            "ww", 
+            // title
+            "WW", 
+            // latex
+            "WW", 
+            // ntuple_path
+            "WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::ww,
+            // color
+            kBlue
+        },
+        {
+            // name
             "wwg", 
-            // title,
+            // title
+            "WW#gamma", 
+            // latex 
             "WW\\gamma", 
             // ntuple_path
-            "8TeV_WWGJets_FastSim_525_Summer12-v3_StoreResults-InTimePU_START52_V9-v3/V05-02-28/*.root",
+            "WWGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -190,10 +207,12 @@ namespace at
         {
             // name
             "www", 
-            // title,
+            // title
+            "WWW", 
+            // latex
             "WWW", 
             // ntuple_path
-            "8TeV_WWWJets_FastSim_525_Summer12-v3_StoreResults-InTimePU_START52_V9-v3/V05-02-28/*.root",
+            "WWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -204,10 +223,12 @@ namespace at
         {
             // name
             "wwz", 
-            // title,
+            // title
+            "WWZ", 
+            // latex
             "WWZ", 
             // ntuple_path
-            "8TeV_WWZNoGstarJets_FastSim_525_Summer12-v3_StoreResults-InTimePU_START52_V9-v3/V05-02-28/*.root",
+            "WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -218,10 +239,12 @@ namespace at
         {
             // name
             "wzz", 
-            // title,
+            // title
+            "WZZ", 
+            // latex
             "WZZ", 
             // ntuple_path
-            "/*.root",
+            "WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -232,10 +255,12 @@ namespace at
         {
             // name
             "zzz", 
-            // title,
+            // title
+            "ZZZ", 
+            // latex
             "ZZZ", 
             // ntuple_path
-            "/*.root",
+            "ZZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -246,10 +271,12 @@ namespace at
         {
             // name
             "t1tttt", 
-            // title,
+            // title
+            "T1tttt", 
+            // latex
             "T1tttt", 
             // ntuple_path
-            "SMS-T1ttttProtoScan_Mgluino-350to1200_mLSP-0to400_8TeV-Pythia6Z_StoreResults-PU_START52_V5_FullSim-v1/*.root", 
+            "SMS-T1ttttProtoScan_Mgluino-350to1200_mLSP-0to400_8TeV-Pythia6Z_StoreResults-PU_START52_V5_FullSim-v1", 
             // SampleType 
             SampleType::susy,
             // Sample
@@ -260,10 +287,12 @@ namespace at
         {
             // name
             "t1tttt_fastsim", 
-            // title,
+            // title
+            "T1tttt", 
+            // latex 
             "T1tttt", 
             // ntuple_path
-            "SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1/*.root",
+            "SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -274,14 +303,112 @@ namespace at
         {
             // name
             "sbottomtop", 
-            // title,
+            // title
+            "SbottomTop", 
+            // latex 
             "SbottomTop", 
             // ntuple_path
-            "SbottomTopv6_macneill_8TeV/V05-02-28/*.root",
+            "SbottomTopv6_macneill_8TeV",
             // SampleType 
             SampleType::susy,
             // Sample
             Sample::sbottomtop,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wgstar", 
+            // title
+            "W#gamma^{*}", 
+            // latex 
+            "W\\gamma^{*}", 
+            // ntuple_path
+            "WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::wgstar,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wmwmqq", 
+            // title
+            "WmWmqq", 
+            // latex
+            "WmWmqq", 
+            // ntuple_path
+            "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::wmwmqq,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wpwpqq", 
+            // titlej
+            "WpWpqq", 
+            // latex
+            "WpWpqq", 
+            // ntuple_path
+            "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::wpwpqq,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "ww_ds", 
+            // title
+            "WW DoubleScattering", 
+            // latex
+            "WW DoubleScattering", 
+            // ntuple_path
+            "WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13/*.root",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::ww_ds,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "lm6", 
+            // title
+            "SUSY LM6", 
+            // latex
+            "SUSY LM6",
+            // ntuple_path
+            "SUSY_LM6_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::lm6,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "lm9", 
+            // title
+            "SUSY LM9", 
+            // latex
+            "SUSY LM9", 
+            // ntuple_path
+            "SUSY_LM9_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::lm9,
             // color
             kBlue
         }
@@ -334,26 +461,45 @@ namespace at
     {
         using namespace std;
         string path = GetSampleInfo(sample).ntuple_path;
-        std::string prefix = GetNtuplePath(ntuple);
+        SampleType::value_type sample_type = GetSampleInfo(sample).type;
+        std::string prefix = GetNtuplePath(ntuple, sample_type);
+
 		if (sample == Sample::data && ntuple == NtupleType::cms2)
 		{
-			path = rt::string_replace_all(path, "*.root", "merged/*.root");	
+			path = rt::string_replace_all(path, ",", "/merged,");	
+            path.append("/merged");
 		}
-        // special case since T1tttt isn't in the standard location
+        if (sample != Sample::data && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-13,");
+            path.append("/V05-03-13");
+        }
+        // special case since T1tttt/SbottomTop are still 52X 
 		if 
         (
-            (sample == Sample::t1tttt && ntuple == NtupleType::cms2) ||
-            (sample == Sample::t1tttt_fastsim && ntuple == NtupleType::cms2)
+            (sample == Sample::t1tttt) ||
+            (sample == Sample::t1tttt_fastsim) ||
+            (sample == Sample::sbottomtop)
         )
-		{
-            prefix = "/hadoop/cms/store/user/cwelke/CMS2_V05-02-27/";
-			path = rt::string_replace_all(path, "*.root", "merged/*.root");	
-		}
-        if (sample != Sample::data && ntuple != NtupleType::cms2 && ntuple != NtupleType::cms2mc)
         {
-            path = rt::string_remove_all(path, "V05-02-27/");
-            path = rt::string_remove_all(path, "V05-02-28/");
+            if (ntuple == NtupleType::cms2)
+            {
+                prefix = "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
+                path = rt::string_replace_all(path, ",", "/merged,");	
+                path.append("/merged");
+            }
+            else if (ntuple == NtupleType::ss_skim)
+            {
+                prefix = "/nfs-7/userdata/rwkelley/skims/ss2012/52X/";
+                path = rt::string_replace_all(path, ",", "/V05-02-28,");
+                path.append("/V05-02-28");
+            }
         }
+        // append *.root at the end
+
+        path = rt::string_replace_all(path, ",", "/*.root,");
+        path.append("/*.root");
+
         return rt::CreateTChainFromCommaSeperatedList(path, "Events", prefix);
     }
 
@@ -390,40 +536,54 @@ namespace at
 	}
 
     // get path to ntuple
-    std::string GetNtuplePath(const NtupleType::value_type& ntuple)
+    std::string GetNtuplePath(const NtupleType::value_type& ntuple, const SampleType::value_type sample_type)
     {
-        switch (ntuple) 
+        if (sample_type == SampleType::data)
         {
-            case NtupleType::cms2:            return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_2_3_patch4_V05-02-27/";
-            case NtupleType::cms2mc:          return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
-            case NtupleType::cms2mc_53X:      return "/nfs-3/userdata/rwkelley/postprocessed/";
-            case NtupleType::ss_skim_data:    return "/nfs-7/userdata/rwkelley/skims/ss2012/23Jun/nobtag/";
-            case NtupleType::ss_skim_mc:      return "/nfs-7/userdata/rwkelley/skims/ss2012/22May/nobtag/";
-            case NtupleType::ss_skim_mc_53X:  return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/";
-            case NtupleType::tensor:          return "/Users/rwk7t/Data/2012/";
-            default:                          return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
-        };
-
-        return "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
+            switch (ntuple) 
+            {
+                case NtupleType::cms2:    return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_3_2_patch4_V05-03-13/";
+                case NtupleType::ss_skim: return "/nfs-7/userdata/rwkelley/skims/ss2012/08Sep_v2/";
+                default: {/*do nothing*/}
+            };
+        }
+        else
+        {
+            switch (ntuple) 
+            {
+                case NtupleType::cms2:      return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
+                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/";
+                default: {/*do nothing*/}
+            };
+        }
+        
+        return "";
     }
+
+	SampleType::value_type GetSampleTypeFromName(const std::string& sample_type_name)
+	{
+		if (sample_type_name == "data") return SampleType::data;
+		if (sample_type_name == "susy") return SampleType::susy;
+		if (sample_type_name == "rare") return SampleType::rare;
+		if (sample_type_name == "bkgd") return SampleType::bkgd;
+
+        // throw string is not valid 
+        throw std::domain_error("ERROR: at::GetSampleTypeFromName(std::string): ntuple type name not found!");
+	}
+
 
 	NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name)
 	{
-		if (ntuple_type_name == "cms2"          ) return NtupleType::cms2;
-		if (ntuple_type_name == "cms2mc"        ) return NtupleType::cms2mc;
-		if (ntuple_type_name == "cms2mc_53X"    ) return NtupleType::cms2mc_53X;
-		if (ntuple_type_name == "ss_skim_data"  ) return NtupleType::ss_skim_data;
-		if (ntuple_type_name == "ss_skim_mc"    ) return NtupleType::ss_skim_mc;
-		if (ntuple_type_name == "ss_skim_mc_53X") return NtupleType::ss_skim_mc_53X;
-		if (ntuple_type_name == "tensor"        ) return NtupleType::tensor;
+		if (ntuple_type_name == "cms2"   ) return NtupleType::cms2;
+		if (ntuple_type_name == "ss_skim") return NtupleType::ss_skim;
 
         // throw string is not valid 
         throw std::domain_error("ERROR: at::GetNtupleTypeFromName(std::string): ntuple type name not found!");
 	}
 
-	std::string GetNtuplePath(const std::string& ntuple_type_name)
+	std::string GetNtuplePath(const std::string& ntuple_type_name, const std::string& sample_type_name)
 	{
-		return GetNtuplePath(GetNtupleTypeFromName(ntuple_type_name));
+		return GetNtuplePath(GetNtupleTypeFromName(ntuple_type_name), GetSampleTypeFromName(sample_type_name));
 	}
 
 
