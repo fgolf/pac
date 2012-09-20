@@ -632,6 +632,30 @@ protected:
 	bool	trig_ee_;
 	TBranch *trig_ee_branch;
 	bool trig_ee_isLoaded;
+	int	njets_dwn_;
+	TBranch *njets_dwn_branch;
+	bool njets_dwn_isLoaded;
+	int	njets_up_;
+	TBranch *njets_up_branch;
+	bool njets_up_isLoaded;
+	int	nbtags_dwn_;
+	TBranch *nbtags_dwn_branch;
+	bool nbtags_dwn_isLoaded;
+	int	nbtags_up_;
+	TBranch *nbtags_up_branch;
+	bool nbtags_up_isLoaded;
+	float	ht_dwn_;
+	TBranch *ht_dwn_branch;
+	bool ht_dwn_isLoaded;
+	float	ht_up_;
+	TBranch *ht_up_branch;
+	bool ht_up_isLoaded;
+	float	pfmet_dwn_;
+	TBranch *pfmet_dwn_branch;
+	bool pfmet_dwn_isLoaded;
+	float	pfmet_up_;
+	TBranch *pfmet_up_branch;
+	bool pfmet_up_isLoaded;
 	float	sf_dileptrig_;
 	TBranch *sf_dileptrig_branch;
 	bool sf_dileptrig_isLoaded;
@@ -686,6 +710,9 @@ protected:
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_nearjet_p4_;
 	TBranch *lep1_nearjet_p4_branch;
 	bool lep1_nearjet_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_nearlep_p4_;
+	TBranch *lep1_nearlep_p4_branch;
+	bool lep1_nearlep_p4_isLoaded;
 	float	lep1_wfr_;
 	TBranch *lep1_wfr_branch;
 	bool lep1_wfr_isLoaded;
@@ -698,12 +725,21 @@ protected:
 	float	lep1_nearjet_dr_;
 	TBranch *lep1_nearjet_dr_branch;
 	bool lep1_nearjet_dr_isLoaded;
+	float	lep1_nearlep_dr_;
+	TBranch *lep1_nearlep_dr_branch;
+	bool lep1_nearlep_dr_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_nearbjet_p4_;
 	TBranch *lep2_nearbjet_p4_branch;
 	bool lep2_nearbjet_p4_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_nearjet_p4_;
 	TBranch *lep2_nearjet_p4_branch;
 	bool lep2_nearjet_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_nearlep_p4_;
+	TBranch *lep2_nearlep_p4_branch;
+	bool lep2_nearlep_p4_isLoaded;
+	float	lep2_nearlep_dr_;
+	TBranch *lep2_nearlep_dr_branch;
+	bool lep2_nearlep_dr_isLoaded;
 	float	lep2_wfr_;
 	TBranch *lep2_wfr_branch;
 	bool lep2_wfr_isLoaded;
@@ -855,6 +891,11 @@ void Init(TTree *tree) {
 		lep1_nearjet_p4_branch = tree->GetBranch("lep1_nearjet_p4");
 		lep1_nearjet_p4_branch->SetAddress(&lep1_nearjet_p4_);
 	}
+	lep1_nearlep_p4_branch = 0;
+	if (tree->GetBranch("lep1_nearlep_p4") != 0) {
+		lep1_nearlep_p4_branch = tree->GetBranch("lep1_nearlep_p4");
+		lep1_nearlep_p4_branch->SetAddress(&lep1_nearlep_p4_);
+	}
 	lep2_nearbjet_p4_branch = 0;
 	if (tree->GetBranch("lep2_nearbjet_p4") != 0) {
 		lep2_nearbjet_p4_branch = tree->GetBranch("lep2_nearbjet_p4");
@@ -864,6 +905,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("lep2_nearjet_p4") != 0) {
 		lep2_nearjet_p4_branch = tree->GetBranch("lep2_nearjet_p4");
 		lep2_nearjet_p4_branch->SetAddress(&lep2_nearjet_p4_);
+	}
+	lep2_nearlep_p4_branch = 0;
+	if (tree->GetBranch("lep2_nearlep_p4") != 0) {
+		lep2_nearlep_p4_branch = tree->GetBranch("lep2_nearlep_p4");
+		lep2_nearlep_p4_branch->SetAddress(&lep2_nearlep_p4_);
 	}
 	vgenb_p4_branch = 0;
 	if (tree->GetBranch("vgenb_p4") != 0) {
@@ -1836,6 +1882,46 @@ void Init(TTree *tree) {
 		trig_ee_branch = tree->GetBranch("trig_ee");
 		trig_ee_branch->SetAddress(&trig_ee_);
 	}
+	njets_dwn_branch = 0;
+	if (tree->GetBranch("njets_dwn") != 0) {
+		njets_dwn_branch = tree->GetBranch("njets_dwn");
+		njets_dwn_branch->SetAddress(&njets_dwn_);
+	}
+	njets_up_branch = 0;
+	if (tree->GetBranch("njets_up") != 0) {
+		njets_up_branch = tree->GetBranch("njets_up");
+		njets_up_branch->SetAddress(&njets_up_);
+	}
+	nbtags_dwn_branch = 0;
+	if (tree->GetBranch("nbtags_dwn") != 0) {
+		nbtags_dwn_branch = tree->GetBranch("nbtags_dwn");
+		nbtags_dwn_branch->SetAddress(&nbtags_dwn_);
+	}
+	nbtags_up_branch = 0;
+	if (tree->GetBranch("nbtags_up") != 0) {
+		nbtags_up_branch = tree->GetBranch("nbtags_up");
+		nbtags_up_branch->SetAddress(&nbtags_up_);
+	}
+	ht_dwn_branch = 0;
+	if (tree->GetBranch("ht_dwn") != 0) {
+		ht_dwn_branch = tree->GetBranch("ht_dwn");
+		ht_dwn_branch->SetAddress(&ht_dwn_);
+	}
+	ht_up_branch = 0;
+	if (tree->GetBranch("ht_up") != 0) {
+		ht_up_branch = tree->GetBranch("ht_up");
+		ht_up_branch->SetAddress(&ht_up_);
+	}
+	pfmet_dwn_branch = 0;
+	if (tree->GetBranch("pfmet_dwn") != 0) {
+		pfmet_dwn_branch = tree->GetBranch("pfmet_dwn");
+		pfmet_dwn_branch->SetAddress(&pfmet_dwn_);
+	}
+	pfmet_up_branch = 0;
+	if (tree->GetBranch("pfmet_up") != 0) {
+		pfmet_up_branch = tree->GetBranch("pfmet_up");
+		pfmet_up_branch->SetAddress(&pfmet_up_);
+	}
 	sf_dileptrig_branch = 0;
 	if (tree->GetBranch("sf_dileptrig") != 0) {
 		sf_dileptrig_branch = tree->GetBranch("sf_dileptrig");
@@ -1935,6 +2021,16 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("lep1_nearjet_dr") != 0) {
 		lep1_nearjet_dr_branch = tree->GetBranch("lep1_nearjet_dr");
 		lep1_nearjet_dr_branch->SetAddress(&lep1_nearjet_dr_);
+	}
+	lep1_nearlep_dr_branch = 0;
+	if (tree->GetBranch("lep1_nearlep_dr") != 0) {
+		lep1_nearlep_dr_branch = tree->GetBranch("lep1_nearlep_dr");
+		lep1_nearlep_dr_branch->SetAddress(&lep1_nearlep_dr_);
+	}
+	lep2_nearlep_dr_branch = 0;
+	if (tree->GetBranch("lep2_nearlep_dr") != 0) {
+		lep2_nearlep_dr_branch = tree->GetBranch("lep2_nearlep_dr");
+		lep2_nearlep_dr_branch->SetAddress(&lep2_nearlep_dr_);
 	}
 	lep2_wfr_branch = 0;
 	if (tree->GetBranch("lep2_wfr") != 0) {
@@ -2207,6 +2303,14 @@ void GetEntry(unsigned int idx)
 		trig_mm_isLoaded = false;
 		trig_em_isLoaded = false;
 		trig_ee_isLoaded = false;
+		njets_dwn_isLoaded = false;
+		njets_up_isLoaded = false;
+		nbtags_dwn_isLoaded = false;
+		nbtags_up_isLoaded = false;
+		ht_dwn_isLoaded = false;
+		ht_up_isLoaded = false;
+		pfmet_dwn_isLoaded = false;
+		pfmet_up_isLoaded = false;
 		sf_dileptrig_isLoaded = false;
 		sf_lepeff_isLoaded = false;
 		sparm0_isLoaded = false;
@@ -2225,12 +2329,16 @@ void GetEntry(unsigned int idx)
 		gen_ht_isLoaded = false;
 		lep1_nearbjet_p4_isLoaded = false;
 		lep1_nearjet_p4_isLoaded = false;
+		lep1_nearlep_p4_isLoaded = false;
 		lep1_wfr_isLoaded = false;
 		lep1_wflip_isLoaded = false;
 		lep1_nearbjet_dr_isLoaded = false;
 		lep1_nearjet_dr_isLoaded = false;
+		lep1_nearlep_dr_isLoaded = false;
 		lep2_nearbjet_p4_isLoaded = false;
 		lep2_nearjet_p4_isLoaded = false;
+		lep2_nearlep_p4_isLoaded = false;
+		lep2_nearlep_dr_isLoaded = false;
 		lep2_wfr_isLoaded = false;
 		lep2_wflip_isLoaded = false;
 		lep2_nearbjet_dr_isLoaded = false;
@@ -2459,6 +2567,14 @@ void LoadAllBranches()
 	if (trig_mm_branch != 0) trig_mm();
 	if (trig_em_branch != 0) trig_em();
 	if (trig_ee_branch != 0) trig_ee();
+	if (njets_dwn_branch != 0) njets_dwn();
+	if (njets_up_branch != 0) njets_up();
+	if (nbtags_dwn_branch != 0) nbtags_dwn();
+	if (nbtags_up_branch != 0) nbtags_up();
+	if (ht_dwn_branch != 0) ht_dwn();
+	if (ht_up_branch != 0) ht_up();
+	if (pfmet_dwn_branch != 0) pfmet_dwn();
+	if (pfmet_up_branch != 0) pfmet_up();
 	if (sf_dileptrig_branch != 0) sf_dileptrig();
 	if (sf_lepeff_branch != 0) sf_lepeff();
 	if (sparm0_branch != 0) sparm0();
@@ -2477,12 +2593,16 @@ void LoadAllBranches()
 	if (gen_ht_branch != 0) gen_ht();
 	if (lep1_nearbjet_p4_branch != 0) lep1_nearbjet_p4();
 	if (lep1_nearjet_p4_branch != 0) lep1_nearjet_p4();
+	if (lep1_nearlep_p4_branch != 0) lep1_nearlep_p4();
 	if (lep1_wfr_branch != 0) lep1_wfr();
 	if (lep1_wflip_branch != 0) lep1_wflip();
 	if (lep1_nearbjet_dr_branch != 0) lep1_nearbjet_dr();
 	if (lep1_nearjet_dr_branch != 0) lep1_nearjet_dr();
+	if (lep1_nearlep_dr_branch != 0) lep1_nearlep_dr();
 	if (lep2_nearbjet_p4_branch != 0) lep2_nearbjet_p4();
 	if (lep2_nearjet_p4_branch != 0) lep2_nearjet_p4();
+	if (lep2_nearlep_p4_branch != 0) lep2_nearlep_p4();
+	if (lep2_nearlep_dr_branch != 0) lep2_nearlep_dr();
 	if (lep2_wfr_branch != 0) lep2_wfr();
 	if (lep2_wflip_branch != 0) lep2_wflip();
 	if (lep2_nearbjet_dr_branch != 0) lep2_nearbjet_dr();
@@ -5168,6 +5288,110 @@ void LoadAllBranches()
 		}
 		return trig_ee_;
 	}
+	int &njets_dwn()
+	{
+		if (not njets_dwn_isLoaded) {
+			if (njets_dwn_branch != 0) {
+				njets_dwn_branch->GetEntry(index);
+			} else { 
+				printf("branch njets_dwn_branch does not exist!\n");
+				exit(1);
+			}
+			njets_dwn_isLoaded = true;
+		}
+		return njets_dwn_;
+	}
+	int &njets_up()
+	{
+		if (not njets_up_isLoaded) {
+			if (njets_up_branch != 0) {
+				njets_up_branch->GetEntry(index);
+			} else { 
+				printf("branch njets_up_branch does not exist!\n");
+				exit(1);
+			}
+			njets_up_isLoaded = true;
+		}
+		return njets_up_;
+	}
+	int &nbtags_dwn()
+	{
+		if (not nbtags_dwn_isLoaded) {
+			if (nbtags_dwn_branch != 0) {
+				nbtags_dwn_branch->GetEntry(index);
+			} else { 
+				printf("branch nbtags_dwn_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags_dwn_isLoaded = true;
+		}
+		return nbtags_dwn_;
+	}
+	int &nbtags_up()
+	{
+		if (not nbtags_up_isLoaded) {
+			if (nbtags_up_branch != 0) {
+				nbtags_up_branch->GetEntry(index);
+			} else { 
+				printf("branch nbtags_up_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags_up_isLoaded = true;
+		}
+		return nbtags_up_;
+	}
+	float &ht_dwn()
+	{
+		if (not ht_dwn_isLoaded) {
+			if (ht_dwn_branch != 0) {
+				ht_dwn_branch->GetEntry(index);
+			} else { 
+				printf("branch ht_dwn_branch does not exist!\n");
+				exit(1);
+			}
+			ht_dwn_isLoaded = true;
+		}
+		return ht_dwn_;
+	}
+	float &ht_up()
+	{
+		if (not ht_up_isLoaded) {
+			if (ht_up_branch != 0) {
+				ht_up_branch->GetEntry(index);
+			} else { 
+				printf("branch ht_up_branch does not exist!\n");
+				exit(1);
+			}
+			ht_up_isLoaded = true;
+		}
+		return ht_up_;
+	}
+	float &pfmet_dwn()
+	{
+		if (not pfmet_dwn_isLoaded) {
+			if (pfmet_dwn_branch != 0) {
+				pfmet_dwn_branch->GetEntry(index);
+			} else { 
+				printf("branch pfmet_dwn_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_dwn_isLoaded = true;
+		}
+		return pfmet_dwn_;
+	}
+	float &pfmet_up()
+	{
+		if (not pfmet_up_isLoaded) {
+			if (pfmet_up_branch != 0) {
+				pfmet_up_branch->GetEntry(index);
+			} else { 
+				printf("branch pfmet_up_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_up_isLoaded = true;
+		}
+		return pfmet_up_;
+	}
 	float &sf_dileptrig()
 	{
 		if (not sf_dileptrig_isLoaded) {
@@ -5402,6 +5626,19 @@ void LoadAllBranches()
 		}
 		return *lep1_nearjet_p4_;
 	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearlep_p4()
+	{
+		if (not lep1_nearlep_p4_isLoaded) {
+			if (lep1_nearlep_p4_branch != 0) {
+				lep1_nearlep_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_nearlep_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_nearlep_p4_isLoaded = true;
+		}
+		return *lep1_nearlep_p4_;
+	}
 	float &lep1_wfr()
 	{
 		if (not lep1_wfr_isLoaded) {
@@ -5454,6 +5691,19 @@ void LoadAllBranches()
 		}
 		return lep1_nearjet_dr_;
 	}
+	float &lep1_nearlep_dr()
+	{
+		if (not lep1_nearlep_dr_isLoaded) {
+			if (lep1_nearlep_dr_branch != 0) {
+				lep1_nearlep_dr_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_nearlep_dr_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_nearlep_dr_isLoaded = true;
+		}
+		return lep1_nearlep_dr_;
+	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4()
 	{
 		if (not lep2_nearbjet_p4_isLoaded) {
@@ -5479,6 +5729,32 @@ void LoadAllBranches()
 			lep2_nearjet_p4_isLoaded = true;
 		}
 		return *lep2_nearjet_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4()
+	{
+		if (not lep2_nearlep_p4_isLoaded) {
+			if (lep2_nearlep_p4_branch != 0) {
+				lep2_nearlep_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_nearlep_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_nearlep_p4_isLoaded = true;
+		}
+		return *lep2_nearlep_p4_;
+	}
+	float &lep2_nearlep_dr()
+	{
+		if (not lep2_nearlep_dr_isLoaded) {
+			if (lep2_nearlep_dr_branch != 0) {
+				lep2_nearlep_dr_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_nearlep_dr_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_nearlep_dr_isLoaded = true;
+		}
+		return lep2_nearlep_dr_;
 	}
 	float &lep2_wfr()
 	{
@@ -5758,6 +6034,7 @@ namespace ssb {
 	float &kfactor();
 	float &gen_met();
 	float &gen_met_phi();
+;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
 	bool &lep1_passes_id();
 	bool &lep1_passes_iso();
@@ -5947,6 +6224,14 @@ namespace ssb {
 	bool &trig_mm();
 	bool &trig_em();
 	bool &trig_ee();
+	int &njets_dwn();
+	int &njets_up();
+	int &nbtags_dwn();
+	int &nbtags_up();
+	float &ht_dwn();
+	float &ht_up();
+	float &pfmet_dwn();
+	float &pfmet_up();
 	float &sf_dileptrig();
 	float &sf_lepeff();
 	float &sparm0();
@@ -5965,12 +6250,16 @@ namespace ssb {
 	float &gen_ht();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearbjet_p4();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearlep_p4();
 	float &lep1_wfr();
 	float &lep1_wflip();
 	float &lep1_nearbjet_dr();
 	float &lep1_nearjet_dr();
+	float &lep1_nearlep_dr();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearjet_p4();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4();
+	float &lep2_nearlep_dr();
 	float &lep2_wfr();
 	float &lep2_wflip();
 	float &lep2_nearbjet_dr();

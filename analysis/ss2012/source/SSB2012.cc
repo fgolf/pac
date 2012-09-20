@@ -206,6 +206,14 @@ namespace ssb {
 	bool &trig_mm() { return samesignbtag.trig_mm(); }
 	bool &trig_em() { return samesignbtag.trig_em(); }
 	bool &trig_ee() { return samesignbtag.trig_ee(); }
+	int &njets_dwn() { return samesignbtag.njets_dwn(); }
+	int &njets_up() { return samesignbtag.njets_up(); }
+	int &nbtags_dwn() { return samesignbtag.nbtags_dwn(); }
+	int &nbtags_up() { return samesignbtag.nbtags_up(); }
+	float &ht_dwn() { return samesignbtag.ht_dwn(); }
+	float &ht_up() { return samesignbtag.ht_up(); }
+	float &pfmet_dwn() { return samesignbtag.pfmet_dwn(); }
+	float &pfmet_up() { return samesignbtag.pfmet_up(); }
 	float &sf_dileptrig() { return samesignbtag.sf_dileptrig(); }
 	float &sf_lepeff() { return samesignbtag.sf_lepeff(); }
 	float &sparm0() { return samesignbtag.sparm0(); }
@@ -224,12 +232,16 @@ namespace ssb {
 	float &gen_ht() { return samesignbtag.gen_ht(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearbjet_p4() { return samesignbtag.lep1_nearbjet_p4(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4() { return samesignbtag.lep1_nearjet_p4(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearlep_p4() { return samesignbtag.lep1_nearlep_p4(); }
 	float &lep1_wfr() { return samesignbtag.lep1_wfr(); }
 	float &lep1_wflip() { return samesignbtag.lep1_wflip(); }
 	float &lep1_nearbjet_dr() { return samesignbtag.lep1_nearbjet_dr(); }
 	float &lep1_nearjet_dr() { return samesignbtag.lep1_nearjet_dr(); }
+	float &lep1_nearlep_dr() { return samesignbtag.lep1_nearlep_dr(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4() { return samesignbtag.lep2_nearbjet_p4(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearjet_p4() { return samesignbtag.lep2_nearjet_p4(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4() { return samesignbtag.lep2_nearlep_p4(); }
+	float &lep2_nearlep_dr() { return samesignbtag.lep2_nearlep_dr(); }
 	float &lep2_wfr() { return samesignbtag.lep2_wfr(); }
 	float &lep2_wflip() { return samesignbtag.lep2_wflip(); }
 	float &lep2_nearbjet_dr() { return samesignbtag.lep2_nearbjet_dr(); }
