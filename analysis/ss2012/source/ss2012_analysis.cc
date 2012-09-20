@@ -5,7 +5,6 @@
 // ROOT
 #include "TChain.h"
 #include "TSystem.h"
-#include "Math/LorentzVector.h"
 
 // tools
 #include "rt/RootTools.h"
@@ -17,6 +16,8 @@
 
 // BOOST
 #include <boost/program_options.hpp>
+
+#include "Math/LorentzVector.h"
 
 // typdefs
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
@@ -42,12 +43,10 @@ try
     std::string sample_name         = "data";
     std::string vtxreweight_file    = "";
     std::string good_run_list       = "";
-    std::string jec_prefix          = "";
-    std::string jetcorr_path        = Form("%s/externals/source/cms2_core/HEAD/CORE/jetcorr/data", gSystem->Getenv("PAC"));
     bool sync_print                 = false;
     bool sparms                     = false;
     bool switchSigns                = false;
-    unsigned int num_jets           = 2;
+    int jetMetScale                 = 0;
     bool isFastSim                  = false;
 
     namespace po = boost::program_options;
@@ -59,20 +58,18 @@ try
         ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                                                 )
         ("gen_only"      , po::value<bool>(&gen_only)                   , "only fill gen variables"                                                           )
         ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                           )
-        ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim_mc, tensor, ...)"                                  )
+        ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, tensor, ...)"                                     )
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
         ("fr"            , po::value<std::string>(&fake_rate_file_name) , "fake rate file name (default: data/fake_rates/ssFR_data_standard_23May2012.root)"  )
         ("fl"            , po::value<std::string>(&flip_rate_file_name) , "flip rate file name (default: data/flip_rates/fliprate42X.root)"                   )
-        ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c)"                                     )  // to do for electrons
+        ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c)"                                     )  // to do for muons
         ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                              )
         ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                        )
-        ("jec"           , po::value<std::string>(&jec_prefix)          , "prefix for the JEC files (e.g. FT_53_V6).  Empty means default to JEC from ntuple" )
-        ("jetcorr_path"  , po::value<std::string>(&jetcorr_path)        , "path for the JEC files"                                                            )
         ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
         ("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
         ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync"                                                                    )
-        ("njets"         , po::value<unsigned int>(&num_jets)           , "unsiged jets"                                                                      )
+        ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                        )
         ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                    )
         ;
 
@@ -107,11 +104,9 @@ try
 		cout << "good_run_list      :\t" << good_run_list       << endl;
 		cout << "fake_rate_file_name:\t" << fake_rate_file_name << endl;
 		cout << "flip_rate_file_name:\t" << flip_rate_file_name << endl;
-		cout << "jec_prefix         :\t" << jec_prefix          << endl;
-		cout << "jetcorr_path       :\t" << jetcorr_path        << endl;
 		cout << "sparms             :\t" << sparms              << endl;
 		cout << "switchSigns        :\t" << switchSigns         << endl;
-		cout << "num_jets           :\t" << num_jets            << endl;
+		cout << "jetMetScale        :\t" << jetMetScale         << endl;
 		cout << "isFastSim          :\t" << isFastSim           << endl;
 	}
 
@@ -120,6 +115,13 @@ try
 
     // path to the analysis
     //std::string analysis_path = rt::getenv("SS");
+
+    // Make sure jetMetScale is kosher
+    if (jetMetScale < -1 || jetMetScale > 1) 
+	{
+		cout << "Illegal jetMetScale " << endl;
+		return 1;
+	}
 
     // check that vertex reweight file exists
     if (!vtxreweight_file.empty())
@@ -226,11 +228,9 @@ try
             fake_rate_hist_name,
             good_run_list,
             vtxreweight_file, 
-            jec_prefix,
-            jetcorr_path,
             luminosity,
-	    	num_jets,
             sparms,
+	    	jetMetScale,
 	    	isFastSim,
             sync_print,
             verbose
@@ -247,6 +247,12 @@ try
 	// cleanup
 	delete chain;
 
+    //TFile* f = TFile::Open(output_file.c_str(), "RECREATE");
+    //TTree* t = new TTree("tree", "tree");
+    //t->Write();
+    //f->Close();
+    //delete f;
+	
     // done
     return 0;
 }
