@@ -318,17 +318,49 @@ namespace at
         },
         {
             // name
-            "wgstar", 
+            "wgstar2e", 
             // title
-            "W#gamma^{*}", 
+            "W#gamma^{*} #rightarrow #nu2e", 
             // latex 
-            "W\\gamma^{*}", 
+            "W\\gamma^{*} \\ rightarrow \\nu 2e", 
             // ntuple_path
             "WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
-            Sample::wgstar,
+            Sample::wgstar2e,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wgstar2m", 
+            // title
+            "W#gamma^{*} #rightarrow #nu2#mu", 
+            // latex 
+            "W\\gamma^{*} \\ rightarrow \\nu 2\\mu", 
+            // ntuple_path
+            "WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::wgstar2m,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wgstar2t", 
+            // title
+            "W#gamma^{*} #rightarrow #nu2#tau", 
+            // latex 
+            "W\\gamma^{*} \\ rightarrow \\nu 2\\tau", 
+            // ntuple_path
+            "WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::wgstar2t,
             // color
             kBlue
         },
@@ -356,7 +388,7 @@ namespace at
             // latex
             "WpWpqq", 
             // ntuple_path
-            "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13",
+            "WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
