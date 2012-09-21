@@ -260,6 +260,34 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_ptjetlep", suffix.c_str()));
     delete h_pred;
 
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_ml3l"] = rt::TH1Overlay(Form("%s;M(lep, 3rd lep);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_ml3l"].Add(hc_data["h_ml3l_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_ml3l"].Add(hc_data["h_ml3l_os"  ], "flips", flip_color);
+    p["p_ml3l"].Add(hc_data["h_ml3l_fake"], "fakes", fake_color);
+    p["p_ml3l"].Add(hc_mc  ["h_ml3l_ss"  ], "MC"   , mc_color);
+    p["p_ml3l"].AddText(t1);
+    p["p_ml3l"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_ml3l_fake"], hc_data["h_ml3l_os"], hc_mc["h_ml3l_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_ml3l", suffix.c_str()));
+    delete h_pred;
+
+    t1.SetX(0.65); t1.SetY(0.6);
+    p["p_drlep3rdlep"] = rt::TH1Overlay(Form("%s;#DeltaR(lep, 3rd lep);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_drlep3rdlep"].Add(hc_data["h_drlep3rdlep_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
+    p["p_drlep3rdlep"].Add(hc_data["h_drlep3rdlep_os"  ], "flips", flip_color);
+    p["p_drlep3rdlep"].Add(hc_data["h_drlep3rdlep_fake"], "fakes", fake_color);
+    p["p_drlep3rdlep"].Add(hc_mc  ["h_drlep3rdlep_ss"  ], "MC"   , mc_color);
+    p["p_drlep3rdlep"].AddText(t1);
+    p["p_drlep3rdlep"].Draw();
+    h_pred = GetTotalPredHist(hc_data["h_drlep3rdlep_fake"], hc_data["h_drlep3rdlep_os"], hc_mc["h_drlep3rdlep_ss"]);
+    h_pred->SetStats(false);
+    h_pred->Draw("same E2");
+    c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_drlep3rdlep", suffix.c_str()));
+    delete h_pred;
+
     // write
 	rt::CopyIndexPhp(Form("plots/%s/%s/kin", path.c_str(), sr.name.c_str()));
 //    rt::Print(p, Form("plots/%s/%s/kin", path.c_str(), sr.name.c_str()), suffix);
