@@ -188,7 +188,12 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
            !branchtitle.EndsWith("/O") &&
            !branchtitle.BeginsWith("TString") &&
            !branchtitle.BeginsWith("TBits") &&
-           !branchclass.Contains("LorentzVector"))
+           !branchclass.Contains("LorentzVector") &&
+           !branchclass.Contains("int") &&   
+           !branchclass.Contains("uint") &&  
+           !branchclass.Contains("bool") &&  
+           !branchclass.Contains("float") && 
+           !branchclass.Contains("double"))
             continue;
 
 //        if (branchclass.Contains("LorentzVector"))
@@ -197,7 +202,6 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
 
         aliasarray->Add(fullarray->At(i));
     }
-  
   
     for(Int_t i = 0; i< aliasarray->GetSize(); ++i) {
     
