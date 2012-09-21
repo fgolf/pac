@@ -122,7 +122,7 @@ namespace ss
             case SignalRegion::sr4  : return (nbtags() >= 2 && njets() >= 4 && ht() > 200.0 && pfmet() > 50.0 );
             case SignalRegion::sr5  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() > 50.0 );
             case SignalRegion::sr6  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() > 120.0);
-            case SignalRegion::sr7  : return (nbtags() >= 2 && njets() >= 3 && ht() > 200.0 && pfmet() > 50.0 );
+            case SignalRegion::sr7  : return (nbtags() >= 3 && njets() >= 2 && ht() > 200.0 && pfmet() > 50.0 );
             case SignalRegion::sr8  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() >  0.0 );
             default: return false;
         }
