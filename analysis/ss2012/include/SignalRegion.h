@@ -11,14 +11,14 @@ namespace ss
         enum value_type
         {
             sr0, // baseline
-            sr1, // HT > 80, MET > 30
-            sr2, // HT > 80, MET > 30, ++
-            sr3, // HT > 200, MET > 50
-            sr4, // HT > 200, MET > 120
-            sr5, // HT > 320, MET > 50
-            sr6, // HT > 320, MET > 120
-            sr7, // HT > 200, MET > 50, # btags >= 3
-            sr8, // HT > 320, no MET cut
+            sr1, // #btags >= 2, #jets >= 2, HT > 80, MET > 30
+            sr2, // #btags >= 2, #jets >= 2, HT > 80, MET > 30, ++
+            sr3, // #btags >= 2, #jets >= 4, HT > 200, MET > 50
+            sr4, // #btags >= 2, #jets >= 4, HT > 200, MET > 120
+            sr5, // #btags >= 2, #jets >= 4, HT > 320, MET > 50
+            sr6, // #btags >= 2, #jets >= 4, HT > 320, MET > 120
+            sr7, // #btags >= 2, #jets >= 2, HT > 200, MET > 50
+            sr8, // #btags >= 2, #jets >= 4, HT > 320, no MET cut
             static_size
         };
     };
@@ -44,7 +44,7 @@ namespace ss
     bool PassesSignalRegion(unsigned int signal_region_number);
 
 	// set aliases for TTree
-    void SetSignalRegionAliases(TTree& tree, int nbtags = 2, int njets = 2);
+    void SetSignalRegionAliases(TTree& tree);
 
 } // namespace ss
 

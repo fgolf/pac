@@ -282,17 +282,23 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
 
     Yield yield_mc("total MC");
     vector<Yield> yields_bkgd;
-    yields_bkgd.push_back(GetSSYield("wz"  , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("zz"  , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("ttg" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("ttw" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("ttww", signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("ttz" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wwg" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("www" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wwz" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wzz" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("zzz" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wzz"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("zzz"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wgstar2e", signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wgstar2m", signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wgstar2t", signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wmwmqq"  , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wpwpqq"  , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_num, output_path));
 
     for (size_t i = 0; i != yields_bkgd.size(); i++)
     {
@@ -381,17 +387,23 @@ void PrintSummaryYields(const std::string output_path = "")
 
         Yield yield_mc("total MC");
         vector<Yield> yields_bkgd;
-        yields_bkgd.push_back(GetSSYield("wz"  , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("zz"  , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("ttg" , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("ttw" , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("ttww", signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("ttz" , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("wwg" , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("www" , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("wwz" , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("wzz" , signal_region_num, output_path));
-        yields_bkgd.push_back(GetSSYield("zzz" , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wzz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("zzz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wgstar2e", signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wgstar2m", signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wgstar2t", signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wmwmqq"  , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wpwpqq"  , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_num, output_path));
         for (size_t i = 0; i != yields_bkgd.size(); i++)
         {
             yield_mc += yields_bkgd[i];

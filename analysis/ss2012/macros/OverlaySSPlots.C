@@ -58,7 +58,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     
     rt::mkdir(Form("plots/%s/%s/kin/", path.c_str(), sr.name.c_str()), true);
 
-	// set style
+	// set style (FIXIT)
 	//rt::SetTDRStyle();
 	//gStyle->SetTitleBorderSize(0);
 	//gStyle->SetHistFillColor(kBlack);
@@ -66,16 +66,15 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     // title
 	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.3f fb^{-1}", lumi);
 
+	// colors
     Color_t data_color = kBlack;
     Color_t mc_color   = kCyan-5;
     Color_t fake_color = kRed-6;
     Color_t flip_color = kBlue-8;
 
-    //TLatex t1(0.35, 0.83, "H_{T} > 80 GeV"); 
-    //t1.SetTextSize(0.035);
-    //TLatex t1(0.35, 0.83, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
-    TLatex t1(0.20, 0.83, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
-    t1.SetTextSize(0.035);
+	// SR label
+    TLatex t1(0.11, 0.87, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
+    t1.SetTextSize(0.025);
 
     // overlays
     map<string, rt::TH1Overlay> p;
@@ -135,7 +134,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_ht", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_nbtags"] = rt::TH1Overlay(Form("%s;# btags;Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_nbtags"].Add(hc_data["h_nbtags_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_nbtags"].Add(hc_data["h_nbtags_os"  ], "flips", flip_color);
@@ -149,7 +148,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_nbtags", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_njets"] = rt::TH1Overlay(Form("%s;# jets;Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_njets"].Add(hc_data["h_njets_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_njets"].Add(hc_data["h_njets_os"  ], "flips", flip_color);
@@ -163,7 +162,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_njets", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_lepdphi"] = rt::TH1Overlay(Form("%s;#Delta#Phi(lep1, lep2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_lepdphi"].Add(hc_data["h_lepdphi_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_lepdphi"].Add(hc_data["h_lepdphi_os"  ], "flips", flip_color);
@@ -177,7 +176,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_lepdphi", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_lepdeta"] = rt::TH1Overlay(Form("%s;#Delta#eta(lep1, lep2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_lepdeta"].Add(hc_data["h_lepdeta_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_lepdeta"].Add(hc_data["h_lepdeta_os"  ], "flips", flip_color);
@@ -191,7 +190,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_lepdeta", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_lepdr"] = rt::TH1Overlay(Form("%s;#DeltaR(lep1, lep2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_lepdr"].Add(hc_data["h_lepdr_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_lepdr"].Add(hc_data["h_lepdr_os"  ], "flips", flip_color);
@@ -205,7 +204,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_lepdr", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_drlepb"] = rt::TH1Overlay(Form("%s;#DeltaR(lep, btag);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_drlepb"].Add(hc_data["h_drlepb_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_drlepb"].Add(hc_data["h_drlepb_os"  ], "flips", flip_color);
@@ -219,7 +218,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_drlepb", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_btagdr"] = rt::TH1Overlay(Form("%s;#DeltaR(btag1, btag2);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_btagdr"].Add(hc_data["h_btagdr_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_btagdr"].Add(hc_data["h_btagdr_os"  ], "flips", flip_color);
@@ -233,7 +232,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_btagdr", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_drjetb"] = rt::TH1Overlay(Form("%s;#DeltaR(btag, jet);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_drjetb"].Add(hc_data["h_drjetb_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_drjetb"].Add(hc_data["h_drjetb_os"  ], "flips", flip_color);
@@ -247,7 +246,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     c1.Print(Form("plots/%s/%s/kin/%s.%s", path.c_str(), sr.name.c_str(), "p_drjetb", suffix.c_str()));
     delete h_pred;
 
-    t1.SetX(0.65); t1.SetY(0.6);
+    //t1.SetX(0.65); t1.SetY(0.6);
     p["p_ptjetlep"] = rt::TH1Overlay(Form("%s;jet p_{T} / lep p_{T} - 1;Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_ptjetlep"].Add(hc_data["h_ptjetlep_ss"  ], /*is_data=*/true, "data", data_color, 2, 20);
     p["p_ptjetlep"].Add(hc_data["h_ptjetlep_os"  ], "flips", flip_color);
@@ -262,5 +261,6 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     delete h_pred;
 
     // write
+	rt::CopyIndexPhp(Form("plots/%s/%s/kin", path.c_str(), sr.name.c_str()));
 //    rt::Print(p, Form("plots/%s/%s/kin", path.c_str(), sr.name.c_str()), suffix);
 }

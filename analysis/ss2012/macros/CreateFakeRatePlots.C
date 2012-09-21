@@ -79,9 +79,9 @@ void CountElectronNumDen(TH1* h_num, TH1* h_den, const std::string& title)
 
 void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 {
-	//rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
-    //std::string path = "plots/fake_rates/muons_920pb";
-	//float lumi = 0.920;
+	rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
+    std::string path = "plots/fake_rates/muons_920pb";
+	float lumi = 0.920;
 
 	//rt::TH1Container hc("plots/fake_rates/muons_5p1/muons_5p1.root");
     //std::string path = "plots/fake_rates/muons_5p1";
@@ -95,9 +95,9 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
     //std::string path = "plots/fake_rates/muons_2012Cv2";
 	//float lumi = 3.0;
 
-	rt::TH1Container hc("plots/fake_rates/muons_8p8fb/muons_8p8fb.root");
-    std::string path = "plots/fake_rates/muons_8p8fb";
-	float lumi = 8.8;
+	//rt::TH1Container hc("plots/fake_rates/muons_8p8fb/muons_8p8fb.root");
+    //std::string path = "plots/fake_rates/muons_8p8fb";
+	//float lumi = 8.8;
 
     //std::string path = "plots/fake_rates/data/23May";
 	//rt::TH1Container hc("plots/mu_plus/data/mu_plus.root");
@@ -187,17 +187,17 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 	//rt::TH1Container hc("plots/electrons_3p95/data/electrons_3p95.root");
     //std::string path = "plots/fake_rates/data/20Jun";
 
-	//rt::TH1Container hc("plots/fake_rates/electrons_920pb/electrons_920pb.root");
-    //std::string path = "plots/fake_rates/electrons_920pb";
-	//float lumi = 0.920;
+	rt::TH1Container hc("plots/fake_rates/electrons_920pb/electrons_920pb.root");
+    std::string path = "plots/fake_rates/electrons_920pb";
+	float lumi = 0.920;
 
 	//rt::TH1Container hc("plots/fake_rates/electrons_5p1fb/electrons_5p1fb.root");
     //std::string path = "plots/fake_rates/electrons_5p1fb";
 	//float lumi = 5.1;
 
-	rt::TH1Container hc("plots/fake_rates/electrons_2012ABr/electrons_2012ABr.root");
-    std::string path = "plots/fake_rates/electrons_2012ABr";
-	float lumi = 5.2;
+	//rt::TH1Container hc("plots/fake_rates/electrons_2012ABr/electrons_2012ABr.root");
+    //std::string path = "plots/fake_rates/electrons_2012ABr";
+	//float lumi = 5.2;
 
 	//rt::TH1Container hc("plots/fake_rates/electrons_2012Cv2/electrons_2012Cv2.root");
     //std::string path = "plots/fake_rates/electrons_2012Cv2";

@@ -39,19 +39,17 @@ output_path=/nfs-7/userdata/rwkelley/babies/ss2012/52X/v1
 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/53X/v1
 output_path=/nfs-7/userdata/rwkelley/babies/ss2012/53X/v1
-#output_path=babies/53X
-#merge wz        WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge zz        ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttg       TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttjets    TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttw       TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttww      TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttz       TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wwg       WWGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge www       WWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wwz       WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wzz       WZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge zzz       ZZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wgstar    WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ww_ds     WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge wmwmqq      WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1 
+#output_path=babies
+merge wz        WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge zz        ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttg       TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttjets    TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttw       TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttww      TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttz       TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wwg       WWGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge www       WWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wwz       WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wzz       WZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge zzz       ZZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ww_ds     WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1

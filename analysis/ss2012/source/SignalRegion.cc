@@ -14,49 +14,49 @@ ss::SignalRegionInfo s_SignalRegionInfos[] =
         // name
         "sr1", 
         // ROOT title
-        "H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV"
+        "# btags #geq 2, # jets #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV"
     },
     {
         // name
         "sr2", 
         // ROOT title
-        "H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++"
+        "# btags #geq 2, # jets #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++"
     },
     {
         // name
         "sr3", 
         // ROOT title
-        "H_{T} > 200 GeV, E_{T}^{miss} > 120 GeV"
+        "# btags #geq 2, # jets #geq 4, H_{T} > 200 GeV, E_{T}^{miss} > 120 GeV"
     },
     {
         // name
         "sr4", 
         // ROOT title
-        "H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV"
+        "# btags #geq 2, # jets #geq 4, H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV"
     },
     {
         // name
         "sr5", 
         // ROOT title
-        "H_{T} > 320 GeV, E_{T}^{miss} > 50 GeV"
+        "# btags #geq 2, # jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 50 GeV"
     },
     {
         // name
         "sr6", 
         // ROOT title
-        "H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV"
+        "# btags #geq 2, # jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV"
     },
     {
         // name
         "sr7", 
         // ROOT title
-        "H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV, # btags #geq 3"
+        "# btags #geq 3, # jets #geq 2, H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV"
     },
     {
         // name
         "sr8", 
         // ROOT title
-        "H_{T} > 320 GeV, E_{T}^{miss} > 0 GeV"
+        "# btags #geq 2, # jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 0 GeV"
     }
 };
 
@@ -115,15 +115,15 @@ namespace ss
         using namespace ssb;
         switch (signal_region)
         {
-            case SignalRegion::sr0  : return (ht() > 80.0   && pfmet() >  0.0 );
-            case SignalRegion::sr1  : return (ht() > 80.0   && pfmet() > 30.0 );
-            case SignalRegion::sr2  : return (ht() > 80.0   && pfmet() > 30.0 && is_pp());
-            case SignalRegion::sr3  : return (ht() > 200.0  && pfmet() > 120.0);
-            case SignalRegion::sr4  : return (ht() > 200.0  && pfmet() > 50.0 );
-            case SignalRegion::sr5  : return (ht() > 320.0  && pfmet() > 50.0 );
-            case SignalRegion::sr6  : return (ht() > 320.0  && pfmet() > 120.0);
-            case SignalRegion::sr7  : return (ht() > 200.0  && pfmet() > 50.0 && nbtags()>=3);
-            case SignalRegion::sr8  : return (ht() > 320.0);
+            case SignalRegion::sr0  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() >  0.0 );
+            case SignalRegion::sr1  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 );
+            case SignalRegion::sr2  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 && is_pp());
+            case SignalRegion::sr3  : return (nbtags() >= 2 && njets() >= 4 && ht() > 200.0 && pfmet() > 120.0);
+            case SignalRegion::sr4  : return (nbtags() >= 2 && njets() >= 4 && ht() > 200.0 && pfmet() > 50.0 );
+            case SignalRegion::sr5  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() > 50.0 );
+            case SignalRegion::sr6  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() > 120.0);
+            case SignalRegion::sr7  : return (nbtags() >= 2 && njets() >= 3 && ht() > 200.0 && pfmet() > 50.0 );
+            case SignalRegion::sr8  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() >  0.0 );
             default: return false;
         }
         return false;
@@ -135,18 +135,17 @@ namespace ss
     }
 
 	// set aliases for TTree
-    void SetSignalRegionAliases(TTree& tree, int nbtags, int njets)
+    void SetSignalRegionAliases(TTree& tree)
     {
-		string cut = Form("is_ss && nbtags>=%d && njets>=%d", nbtags, njets);
-        tree.SetAlias("sr0", (cut + " && ht > 80.0   && pfmet >  0.0"             ).c_str()); 
-        tree.SetAlias("sr1", (cut + " && ht > 80.0   && pfmet > 30.0"             ).c_str()); 
-        tree.SetAlias("sr2", (cut + " && ht > 80.0   && pfmet > 30.0 && is_pp"    ).c_str()); 
-        tree.SetAlias("sr3", (cut + " && ht > 200.0  && pfmet > 120.0"            ).c_str()); 
-        tree.SetAlias("sr4", (cut + " && ht > 200.0  && pfmet > 50.0"             ).c_str()); 
-        tree.SetAlias("sr5", (cut + " && ht > 320.0  && pfmet > 50.0"             ).c_str()); 
-        tree.SetAlias("sr6", (cut + " && ht > 320.0  && pfmet > 120.0"            ).c_str()); 
-        tree.SetAlias("sr7", (cut + " && ht > 200.0  && pfmet > 50.0 && nbtags>=3").c_str()); 
-        tree.SetAlias("sr8", (cut + " && ht > 320.0"                              ).c_str()); 
+        tree.SetAlias("sr0", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet >  0.0"             ); 
+        tree.SetAlias("sr1", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0"             ); 
+        tree.SetAlias("sr2", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0 && is_pp"    ); 
+        tree.SetAlias("sr3", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 120.0"            ); 
+        tree.SetAlias("sr4", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 50.0"             ); 
+        tree.SetAlias("sr5", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 50.0"             ); 
+        tree.SetAlias("sr6", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 120.0"            ); 
+        tree.SetAlias("sr7", "nbtags>=2 && njets>=2 && ht > 200.0  && pfmet > 50.0"             ); 
+        tree.SetAlias("sr8", "nbtags>=2 && njets>=4 && ht > 320.0"                              ); 
     }
 
 } // namespace ss
