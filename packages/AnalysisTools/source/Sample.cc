@@ -160,7 +160,7 @@ namespace at
             // latex
             "t\\overline{t}\\gamma", 
             // ntuple_path
-            "TTGJets_8TeV-madgraph_Summer12-PU_S7_START52_V9-v1",
+            "TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -464,7 +464,7 @@ namespace at
             // latex
             "WW DoubleScattering", 
             // ntuple_path
-            "WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13/*.root",
+            "WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
