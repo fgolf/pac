@@ -102,23 +102,23 @@ bool IsNumerator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is
     }
     switch (hyp.second)
     {
-    case DileptonChargeType::DF: return false; break;
-    case DileptonChargeType::SS: return true; break;
-    case DileptonChargeType::SF: 
-    {
-        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.first), cms2.hyp_lt_index().at(hyp.first));
-        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.first), cms2.hyp_ll_index().at(hyp.first));
-        if (lt_num && !ll_num)
+        case DileptonChargeType::DF: return false; break;
+        case DileptonChargeType::SS: return true; break;
+        case DileptonChargeType::SF: 
         {
-            return is_lt ? true : false;
+            bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.first), cms2.hyp_lt_index().at(hyp.first));
+            bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.first), cms2.hyp_ll_index().at(hyp.first));
+            if (lt_num && !ll_num)
+            {
+                return is_lt ? true : false;
+            }
+            if (!lt_num && ll_num)
+            {
+                return is_lt ? false : true;
+            }
+            break;
         }
-        if (!lt_num && ll_num)
-        {
-            return is_lt ? false : true;
-        }
-        break;
-    }
-    default: return false;
+        default: return false;
     }
     return false;
 }
@@ -130,24 +130,24 @@ bool IsDenominator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool 
         return false;
     }
     switch (hyp.second)
-    {
-    case DileptonChargeType::DF: return false; break;
-    case DileptonChargeType::SS: return true; break;
-    case DileptonChargeType::SF: 
-    {
-        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.first), cms2.hyp_lt_index().at(hyp.first));
-        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.first), cms2.hyp_ll_index().at(hyp.first));
-        if (lt_num && !ll_num)
         {
-            return is_lt ? false : true;
-        }
-        if (!lt_num && ll_num)
+        case DileptonChargeType::DF: return false; break;
+        case DileptonChargeType::SS: return true; break;
+        case DileptonChargeType::SF: 
         {
-            return is_lt ? true : false;
+            bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.first), cms2.hyp_lt_index().at(hyp.first));
+            bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.first), cms2.hyp_ll_index().at(hyp.first));
+            if (lt_num && !ll_num)
+            {
+                return is_lt ? false : true;
+            }
+            if (!lt_num && ll_num)
+            {
+                return is_lt ? true : false;
+            }
+            break;
         }
-        break;
-    }
-    default: return false;
+        default: return false;
     }
     return false;
 }
@@ -240,6 +240,7 @@ void PrintForSync(int ihyp, enum JetType jet_type, int jet_met_scale)
     float lt_iso               = (abs(lt_id) == 11) ? samesign::electronIsolationPF2012(lt_idx) : muonIsoValuePF2012_deltaBeta(lt_idx);
     float ll_iso               = (abs(ll_id) == 11) ? samesign::electronIsolationPF2012(ll_idx) : muonIsoValuePF2012_deltaBeta(ll_idx);
 
+
     // channel names
     const size_t n_channel_names = 4; 
     const std::string channel_names[n_channel_names] = {"All", "MM", "EM", "EE"};
@@ -330,6 +331,7 @@ SSAnalysisLooper::SSAnalysisLooper
     const std::string& goodrun_file_name,
     const std::string& vtxreweight_file_name,
     double luminosity,
+    int njets,
     bool sparms,
     int  jetMetScale,
     bool is_fast_sim,
@@ -339,6 +341,7 @@ SSAnalysisLooper::SSAnalysisLooper
     : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
     , m_lumi(luminosity)
+    , m_njets(njets)
     , m_jetMetScale(jetMetScale)
     , m_is_fast_sim(is_fast_sim)
     , m_sparms(sparms)
@@ -464,6 +467,19 @@ int SSAnalysisLooper::Analyze(long event)
         //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
         //if (!(evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
         //if (!(evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
+        //if 
+        //(
+        //    not
+        //    (
+        //        evt_event() == 75924510  || // --> ee event, probably 2012B 13Jul2012 
+        //        evt_event() == 58926598  || // --> ee event, probably 2012B 13Jul2012
+        //        evt_event() == 261675757 || // , em event, probably 2012B 13Jul2012
+        //        evt_event() == 341568433 || // , em event, probably 2012B 13Jul2012
+        //        evt_event() == 113167649 || // , em 2021Cv2 
+        //        evt_event() == 27490600  || // , ee 2021Cv2 
+        //        evt_event() == 663249061    // , ee 2021Cv2 
+        //    )
+        //)
         //{
         //    return 0;
         //}
@@ -569,6 +585,7 @@ int SSAnalysisLooper::Analyze(long event)
             // print for syncing
             if (m_sync_print)
             {
+                cout << "printing for hyp index " << ihyp << endl;
                 PrintForSync(ihyp, jet_type, m_jetMetScale);
             }
 
@@ -644,15 +661,21 @@ int SSAnalysisLooper::Analyze(long event)
         unsigned int hyp_idx = best_hyp.first;
         DileptonChargeType::value_type event_type = best_hyp.second;
 
+        // all: 0, mm: 1, em: 2, ee: 3
+        DileptonHypType::value_type dilepton_type = hyp_typeToHypType(hyp_type().at(hyp_idx));
+
         // don't write events to the tree that don't pass hypothesis
         if (event_type == DileptonChargeType::static_size)
         {
             if (m_verbose) {std::cout << "fails good event type requirement" << std::endl;}
             return 0;
         }
-
-        // all: 0, mm: 1, em: 2, ee: 3
-        DileptonHypType::value_type dilepton_type = hyp_typeToHypType(hyp_type().at(hyp_idx));
+        else
+        {
+            if (m_verbose) {std::cout << "passes good dilepton type requirement: " << at::GetDileptonHypTypeName(dilepton_type) << std::endl;}
+            if (m_verbose) {std::cout << "passes good charege type requirement:  " << at::GetDileptonChargeTypeName(event_type) << std::endl;}
+            if (m_verbose) {std::cout << "good hyp index is : " << hyp_idx << std::endl;}
+        }
 
         // trigger info
         m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
@@ -940,8 +963,8 @@ int SSAnalysisLooper::Analyze(long event)
             }
         }
 
-        // only keep 2 jet events
-        if (m_evt.njets < 2)
+        // only keep m_njets events
+        if (m_evt.njets < m_njets)
         {
             return 0;
         }

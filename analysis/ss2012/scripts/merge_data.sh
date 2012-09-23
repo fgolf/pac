@@ -16,10 +16,40 @@ function merge
     #eval $cmd
 }
 
-# 2012A/B reprocessed
-input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/17Sep
-output_path=babies
-run_list=json/preapproval_cms2.txt # 11.38 
+# 2012ABC reprocessed
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/17Sep
+#output_path=temp
+#run_list=json/preapproval_cms2.txt # 11.38 
+#input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012C-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root"
+#merge data_2012ABC_preaproval_11p38 $input_files
+
+# 2012ABC reprocessed (no 2012C v1)
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/20Sep
+#output_path=babies
+#run_list=json/preapproval_cms2.txt # 10.88 
+#input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012C-PromptReco-v1_AOD/*.root"
+#merge data_2012Cv1_0p50fb $input_files
+
+# 2012A/B reprocessed (no 2012C v1)
+input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/21Sep
+output_path=babies2
+run_list=json/preapproval_cms2.txt # 10.88 
 input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"
@@ -29,10 +59,7 @@ input_files="${input_files},${input_path}/MuEG_Run2012B-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuEG_Run2012A-recover-06Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
-input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v2_AOD/*.root"
-input_files="${input_files},${input_path}/DoubleElectron_Run2012C-PromptReco-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root"
-merge data_2012ABC_preaproval_11p38 $input_files
+merge data_2012ABC_preaproval_10p88 $input_files

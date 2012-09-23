@@ -46,6 +46,7 @@ try
     bool sync_print                 = false;
     bool sparms                     = false;
     bool switchSigns                = false;
+    int num_jets                    = 0;
     int jetMetScale                 = 0;
     bool isFastSim                  = false;
 
@@ -69,6 +70,7 @@ try
         ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
         ("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
         ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync"                                                                    )
+        ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
         ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                        )
         ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                    )
         ;
@@ -225,6 +227,7 @@ try
             good_run_list,
             vtxreweight_file, 
             luminosity,
+            num_jets,
             sparms,
 	    	jetMetScale,
 	    	isFastSim,

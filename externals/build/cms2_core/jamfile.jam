@@ -3,10 +3,32 @@
 
 lib cms2_core
   : # sources
-   [ glob $(CMS2_CORE)/CORE/*.cc ]
+   #[ glob $(CMS2_CORE)/CORE/*.cc ]
+    $(CMS2_CORE)/CORE/conversionTools.cc
+    $(CMS2_CORE)/CORE/electronSelections.cc
+    $(CMS2_CORE)/CORE/electronSelectionsParameters.cc
+    $(CMS2_CORE)/CORE/eventSelections.cc
+    $(CMS2_CORE)/CORE/JetMETUncertainty.cc
+    $(CMS2_CORE)/CORE/jetSelections.cc
+    $(CMS2_CORE)/CORE/jetSmearingTools.cc
+    $(CMS2_CORE)/CORE/mcbtagSFuncert.cc
+    $(CMS2_CORE)/CORE/mcSelections.cc
+    $(CMS2_CORE)/CORE/mcSUSYkfactor.cc
+    $(CMS2_CORE)/CORE/metSelections.cc
+    $(CMS2_CORE)/CORE/MITConversionUtilities.cc
+    $(CMS2_CORE)/CORE/muonSelections.cc
+    $(CMS2_CORE)/CORE/photonSelections.cc
+    $(CMS2_CORE)/CORE/SimpleFakeRate.cc
+    $(CMS2_CORE)/CORE/ssSelections.cc
+    $(CMS2_CORE)/CORE/susySelections.cc
+    $(CMS2_CORE)/CORE/trackSelections.cc
+    $(CMS2_CORE)/CORE/triggerSuperModel.cc
+    $(CMS2_CORE)/CORE/triggerUtils.cc
+    $(CMS2_CORE)/CORE/ttbarSelections.cc
+    $(CMS2_CORE)/CORE/utilities.cc
    [ glob $(CMS2_CORE)/CORE/jetsmear/*.cc ]
     # dependent packages
-    /CMS2
+    /CMS2//cms2_header
     /ROOT
   : # requirements
     <include>$(CMS2_CORE)

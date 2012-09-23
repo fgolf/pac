@@ -28,6 +28,7 @@ class SSAnalysisLooper : public at::AnalysisWithTree
             const std::string& vtxreweight_file_name = "",
             const std::string& goodrun_file_name = "",
             double luminosity = 1.0,
+            int njets = 0,
             bool sparms = false,
             int jetMetScale = 0,
             bool is_fast_sim = false,
@@ -50,6 +51,7 @@ class SSAnalysisLooper : public at::AnalysisWithTree
         // members:
         at::Sample::value_type m_sample;
         double m_lumi;
+        int  m_njets;
         int  m_jetMetScale;
         bool m_is_fast_sim;
         bool m_filter_bad_runs;

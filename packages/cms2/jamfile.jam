@@ -9,8 +9,6 @@ lib cms2_header
   : # requirements
     <include>$(CMS2)/header
   : # default-build
-    <link>static
-    <link>shared
   : # usage-requirements
     <include>$(CMS2)/header
     <include>$(CMS2)/header/fake_dir_since_nobody_knows_proper_code_building_etiquette

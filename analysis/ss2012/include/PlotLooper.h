@@ -58,6 +58,7 @@ class PlotLooper : public at::AnalysisWithHist
         unsigned int m_njets;
         float m_mass_glu;
         float m_mass_lsp;
+        float m_scale1fb;
         at::Sample::value_type m_sample;
         ss::SignalRegion::value_type m_signal_region;
 

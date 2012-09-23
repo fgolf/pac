@@ -25,13 +25,73 @@ namespace at
             "DoubleMu_Run2012B-13Jul2012-v4_AOD,"
             "DoubleMu_Run2012A-13Jul2012-v1_AOD,"
             "DoubleMu_Run2012A-recover-06Aug2012-v1_AOD,"
-            "DoubleMu_Run2012C-PromptReco-v1_AOD,"
+            //"DoubleMu_Run2012C-PromptReco-v1_AOD,"
             "DoubleMu_Run2012C-PromptReco-v2_AOD,"
             "DoubleElectron_Run2012B-13Jul2012-v1_AOD,"
             "DoubleElectron_Run2012A-13Jul2012-v1_AOD,"
             "DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD,"
-            "DoubleElectron_Run2012C-PromptReco-v1_AOD,"
+            //"DoubleElectron_Run2012C-PromptReco-v1_AOD,"
             "DoubleElectron_Run2012C-PromptReco-v2_AOD,"
+            "MuEG_Run2012B-13Jul2012-v1_AOD,"
+            "MuEG_Run2012A-13Jul2012-v1_AOD,"
+            "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
+            //"MuEG_Run2012C-PromptReco-v1_AOD,"
+            "MuEG_Run2012C-PromptReco-v2_AOD",
+            // SampleType 
+            SampleType::data,
+            // Sample
+            Sample::data,
+            // color
+            kBlack
+        },
+        {
+            // name
+            "data2e", 
+            // title
+            "2012 data DoubleElectron", 
+            // latex
+            "data DoubleEl",
+            // ntuple_path
+            "DoubleElectron_Run2012B-13Jul2012-v1_AOD,"
+            "DoubleElectron_Run2012A-13Jul2012-v1_AOD,"
+            "DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD,"
+            //"DoubleElectron_Run2012C-PromptReco-v1_AOD,"
+            "DoubleElectron_Run2012C-PromptReco-v2_AOD",
+            // SampleType 
+            SampleType::data,
+            // Sample
+            Sample::data2e,
+            // color
+            kBlack
+        },
+        {
+            // name
+            "data2m", 
+            // title
+            "2012 data DoubleMu", 
+            // latex
+            "data DoubleMu",
+            // ntuple_path
+            "DoubleMu_Run2012B-13Jul2012-v4_AOD,"
+            "DoubleMu_Run2012A-13Jul2012-v1_AOD,"
+            "DoubleMu_Run2012A-recover-06Aug2012-v1_AOD,"
+            //"DoubleMu_Run2012C-PromptReco-v1_AOD,"
+            "DoubleMu_Run2012C-PromptReco-v2_AOD",
+            // SampleType 
+            SampleType::data,
+            // Sample
+            Sample::datame,
+            // color
+            kBlack
+        },
+        {
+            // name
+            "datame", 
+            // title
+            "2012 data MuEG", 
+            // latex
+            "data MuEG",
+            // ntuple_path
             "MuEG_Run2012B-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
@@ -40,7 +100,7 @@ namespace at
             // SampleType 
             SampleType::data,
             // Sample
-            Sample::data,
+            Sample::datame,
             // color
             kBlack
         },
@@ -575,7 +635,9 @@ namespace at
             switch (ntuple) 
             {
                 case NtupleType::cms2:    return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_3_2_patch4_V05-03-13/";
-                case NtupleType::ss_skim: return "/nfs-7/userdata/rwkelley/skims/ss2012/08Sep_v2/";
+                //case NtupleType::ss_skim: return "/nfs-7/userdata/rwkelley/skims/ss2012/08Sep_v2/";
+                //case NtupleType::ss_skim: return "/hadoop/cms/store/user/rwkelley/skims/ss2012/20Sep/";
+                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v2/";
                 default: {/*do nothing*/}
             };
         }
@@ -584,7 +646,8 @@ namespace at
             switch (ntuple) 
             {
                 case NtupleType::cms2:      return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
-                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/";
+                //case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/";
+                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v2/";
                 default: {/*do nothing*/}
             };
         }

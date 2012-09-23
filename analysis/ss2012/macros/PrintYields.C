@@ -215,8 +215,8 @@ Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num =
     rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
 
     pair<double, double> ee(hc["h_sf_pred"]->GetBinContent(1), hc["h_sf_pred"]->GetBinError(1));
-    pair<double, double> em(hc["h_sf_pred"]->GetBinContent(2), hc["h_sf_pred"]->GetBinError(2));
-    pair<double, double> mm(hc["h_sf_pred"]->GetBinContent(3), hc["h_sf_pred"]->GetBinError(3));
+    pair<double, double> mm(hc["h_sf_pred"]->GetBinContent(2), hc["h_sf_pred"]->GetBinError(2));
+    pair<double, double> em(hc["h_sf_pred"]->GetBinContent(3), hc["h_sf_pred"]->GetBinError(3));
     pair<double, double> ll(hc["h_sf_pred"]->GetBinContent(4), hc["h_sf_pred"]->GetBinError(4));
     Yield yield("SF", ee, mm, em, ll);
     yield.title = "SF";
@@ -379,11 +379,11 @@ void PrintSummaryYields(const std::string output_path = "")
         Yield yield_flip(GetFlipYield("data", signal_region_num, output_path));
 
         // special case for SR2
-        if (signal_region_num==2)
-        {
-            yield_flip = 0.5*GetFlipYield("data", 1, output_path);
-            yield_flip.title = "Flip";
-        }
+        //if (signal_region_num==2)
+        //{
+        //    yield_flip = 0.5*GetFlipYield("data", 1, output_path);
+        //    yield_flip.title = "Flip";
+        //}
 
         Yield yield_mc("total MC");
         vector<Yield> yields_bkgd;

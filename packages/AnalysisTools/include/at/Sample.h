@@ -13,6 +13,9 @@ namespace at
         enum value_type
         {
             data,
+            data2e,
+            data2m,
+            datame,
             dy,
             ttw,
             ttz,

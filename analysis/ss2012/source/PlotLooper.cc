@@ -131,15 +131,15 @@ void PlotLooper::EndJob()
     // -----------------------------------------------------------------------------//
     FakeRatePrediction frp(h_mufr.get(), h_elfr.get(), m_lumi);
     frp.ComputeAllFakePredictions
-        (
-            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
-            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
-            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
-            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
-            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"]),
-            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"]),
-            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"])
-            );
+    (
+        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
+        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
+        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
+        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"  ]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"  ]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"  ])
+    );
 
     // SF (raw)
     PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
@@ -193,10 +193,10 @@ void PlotLooper::EndJob()
     // -----------------------------------------------------------------------------//
     FlipRatePrediction flp(h_flip.get(), m_lumi);
     flp.ComputeAllFlipPredictions
-        (
-            static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]),
-            static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_em"])
-            );
+    (
+        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]),
+        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_em"])
+    );
 
     // Flip 
     PredSummary flip = flp.GetFlipPrediction();
@@ -469,6 +469,7 @@ int PlotLooper::operator()(long event)
         m_lumi = is_real_data() ? 1.0 : m_lumi;
         //float evt_weight = m_lumi * scale1fb() * vtxw;
         float evt_weight = m_lumi * vtxw;
+        m_scale1fb = scale1fb();
 
 		// T1tttt is not scaled properly (need make this automatic) 
         if (m_sample == at::Sample::t1tttt || m_sample == at::Sample::t1tttt_fastsim)

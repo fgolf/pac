@@ -31,7 +31,7 @@ lib ss2012_tools
     ]
     # dependent packages
     ssb2012
-    /CMS2
+    /CMS2//cms2_header
     /ROOT
     /AnalysisTools//AnalysisTools
     /RootTools//RootTools
@@ -44,27 +44,6 @@ lib ss2012_tools
     <include>./source
   ;
 
-#exe ss2012_analysis_old
-#  : # sources
-#    ./source/ss2012_analysis.old.cc
-#    ./source/AnalysisLooper.old.cc
-#    # dependent packages
-#    /ROOT
-#    ss2012_tools/<link>static
-#    /MiniFWLite/<link>shared
-#    /AnalysisTools/<link>static
-#    /RootTools//RootTools/<link>static
-#    /FGTools/<link>static
-#    /boost//program_options/<link>static
-#    /SimpleTable/<link>static
-#  : # requirements
-#    <define>__NON_ROOT_BUILD__
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#  ;
-
 exe ss2012_analysis
   : # sources
     ./source/ss2012_analysis.cc
@@ -73,11 +52,11 @@ exe ss2012_analysis
     /ROOT
     ss2012_tools/<link>static
     /MiniFWLite/<link>shared
-    /AnalysisTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
     /RootTools//RootTools/<link>static
-    /FGTools/<link>static
+    /FGTools//FGTools/<link>static
     /boost//program_options/<link>static
-    /SimpleTable/<link>static
+    /SimpleTable//SimpleTable/<link>static
   : # requirements
     <define>__NON_ROOT_BUILD__
     <include>./include
@@ -86,18 +65,38 @@ exe ss2012_analysis
   : # usage-requirements
   ;
 
+#exe ss2012_sync
+#  : # sources
+#    ./source/ss2012_sync.cc
+#    ./source/SyncLooper.cc
+#    # dependent packages
+#    ss2012_tools/<link>static
+#    /ROOT
+#    /MiniFWLite/<link>shared
+#    /AnalysisTools//AnalysisTools/<link>static
+#    /RootTools//RootTools/<link>static
+#    /boost//program_options/<link>static
+#    /SimpleTable//SimpleTable/<link>static
+#  : # requirements
+#		<define>__NON_ROOT_BUILD__
+#    <include>./include
+#    <include>./source
+#  : # default-build
+#  : # usage-requirements
+#  ;
+
 exe ss2012_plots
   : # sources
     ./source/ss2012_plots.cc
     ./source/PlotLooper.cc
     # dependent packages
-    ss2012_tools/<link>static
     /ROOT
+    ss2012_tools/<link>static
     /MiniFWLite/<link>shared
-    /AnalysisTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
     /RootTools//RootTools/<link>static
     /boost//program_options/<link>static
-    /SimpleTable/<link>static
+    /SimpleTable//SimpleTable/<link>static
   : # requirements
 		<define>__NON_ROOT_BUILD__
     <include>./include
@@ -110,10 +109,10 @@ exe ss2012_skim
   : # sources
     ./source/ss2012_skim.cc
     # dependent packages
-    ss2012_tools/<link>static
     /ROOT
+    ss2012_tools/<link>static
     /MiniFWLite/<link>shared
-    /AnalysisTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
     /RootTools//RootTools/<link>static
     /boost//program_options/<link>static
   : # requirements
@@ -130,7 +129,6 @@ exe ss2012_merge_babies
     ss2012_tools/<link>static
     /ROOT
     /MiniFWLite/<link>shared
-    #/AnalysisTools/<link>static
     /RootTools//RootTools/<link>static
     /boost//program_options/<link>static
   : # requirements
@@ -147,7 +145,7 @@ lib fake_rate_baby
     # dependent packages
     /ROOT
     /RootTools//RootTools
-    /AnalysisTools
+    /AnalysisTools//AnalysisTools
   : # requirements
     <include>./include
     <include>./source
@@ -162,11 +160,11 @@ exe ss2012_create_fakerate
     ./source/ss2012_create_fakerate.cc
     ./source/FakeRateBabyLooper.cc
     # dependent packages
-    fake_rate_baby/<link>static
     /ROOT
+    fake_rate_baby/<link>static
     /MiniFWLite/<link>shared
     /RootTools//RootTools/<link>static
-    /AnalysisTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
     /boost//program_options/<link>static
     /boost//headers/<link>static
   : # requirements
@@ -184,11 +182,10 @@ exe ss2012_quick_check
     # dependent packages
     /ROOT
     /MiniFWLite/<link>shared
-    /AnalysisTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
     /RootTools//RootTools/<link>static
-    #/FGTools/<link>static
     #/boost//program_options/<link>static
-    #/SimpleTable//SimpleTableStatic/<link>static
+    #/SimpleTable//SimpleTable/<link>static
   : # requirements
     <include>./include
     <include>./source
@@ -231,9 +228,9 @@ lib ss2012_bkgd_tools
 	 	]
     # dependent packages
     /ROOT
-		/FGTools
     /MiniFWLite
-    /AnalysisTools
+		/FGTools//FGTools
+    /AnalysisTools//AnalysisTools
     /RootTools//RootTools
     /boost//filesystem
   : # requirements
@@ -259,9 +256,9 @@ exe test_bkgd
 # install libs/exes
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
-#default-install ss2012_analysis_old ;
 default-install ss2012_skim ;
 default-install ss2012_plots ;
+#default-install ss2012_sync ;
 default-install ss2012_tools ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
