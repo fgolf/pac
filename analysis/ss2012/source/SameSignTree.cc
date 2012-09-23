@@ -92,6 +92,16 @@ void SameSignTree::Reset()
     sf_unc_nbtag3    = -999999.0;
     jets_dr12        = -999999.0;
     bjets_dr12       = -999999.0;
+    gen_lep1_p4      = LorentzVector(0, 0, 0, 0);
+    gen_lep1_pdgid   = -999999;
+    gen_lep2_p4      = LorentzVector(0, 0, 0, 0);
+    gen_lep2_pdgid   = -999999;    
+    gen_dilep_p4     = LorentzVector(0, 0, 0, 0);
+    gen_dilep_type   = at::DileptonHypType::static_size;
+    gen_dilep_mass   = -999999.0;
+    gen_dilep_dphi   = -999999.0;
+    gen_dilep_deta   = -999999.0;
+    gen_dilep_dr     = -999999.0;    
 
     vgenb_p4.clear();
     vjets_p4.clear();
@@ -194,5 +204,14 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("vbjets_nearjet_p4" , "vecLorentzVector"  , &vbjets_nearjet_p4   );
     tree.Branch("vbtags"            , "std::vector<bool>" , &vbtags              );
     tree.Branch("vbjets_nearjet_dr" , "vecd"              , &vbjets_nearjet_dr   );
+    tree.Branch("gen_lep1_p4"       , "LorentzVector"     , &gen_lep1_p4         );
+    tree.Branch("gen_lep1_pdgid"    , &gen_lep1_pdgid     , "gen_lep1_pdgid/I"   );
+    tree.Branch("gen_lep2_p4"       , "LorentzVector"     , &gen_lep2_p4         );
+    tree.Branch("gen_lep2_pdgid"    , &gen_lep2_pdgid     , "gen_lep2_pdgid/I"   );
+    tree.Branch("gen_dilep_p4"      , "LorentzVector"     , &gen_dilep_p4        );
+    tree.Branch("gen_dilep_type"    , &gen_dilep_type     , "gen_dilep_type/I"   );
+    tree.Branch("gen_dilep_mass"    , &gen_dilep_mass     , "gen_dilep_mass/F"   );
+    tree.Branch("gen_dilep_dphi"    , &gen_dilep_dphi     , "gen_dilep_dphi/F"   );
+    tree.Branch("gen_dilep_deta"    , &gen_dilep_deta     , "gen_dilep_deta/F"   );
+    tree.Branch("gen_dilep_dr"      , &gen_dilep_dr       , "gen_dilep_dr/F"     );
 }
-

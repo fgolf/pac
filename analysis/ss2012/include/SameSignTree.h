@@ -141,6 +141,7 @@ public:
     int gen_nbtags; 
     int gen_njets; 
     float gen_ht;
+    int gen_nleps;
 
     //
     // reco lepton 1 info
@@ -192,6 +193,28 @@ public:
     std::vector<bool> vbtags;
     vecd vbjets_nearjet_dr;
     float bjets_dr12;
+
+    //
+    // gen lep1 info
+    //
+    LorentzVector gen_lep1_p4;
+    int gen_lep1_pdgid;
+    
+    //
+    // gen lep2 info
+    //
+    LorentzVector gen_lep2_p4;
+    int gen_lep2_pdgid;
+    
+    //
+    // gen dilep hyp info
+    //
+    LorentzVector gen_dilep_p4;
+    at::DileptonHypType::value_type gen_dilep_type;
+    float gen_dilep_mass;
+    float gen_dilep_dphi;
+    float gen_dilep_deta;
+    float gen_dilep_dr;
 };
 
 #endif

@@ -879,6 +879,27 @@ int SSAnalysisLooper::Analyze(long event)
                 std::vector<LorentzVector> gen_jets = efftools::getGenJets(/*pt_cut=*/40.0, /*eta_cut=*/2.4);
                 m_evt.gen_njets   = gen_jets.size();
                 m_evt.vgenjets_p4 = gen_jets;
+
+                // gen dilep hyp
+                m_evt.gen_lep1_p4    = (abs(gen_hyp.first.id_) == 15) ? cms2.genps_lepdaughter_p4().at(gen_hyp.first.idx_).at(gen_hyp.first.didx_) : cms2.genps_p4().at(gen_hyp.first.idx_);
+                m_evt.gen_lep1_pdgid = (abs(gen_hyp.first.id_) == 15) ? gen_hyp.first.did_ : gen_hyp.first.id_;
+
+                m_evt.gen_lep2_p4    = (abs(gen_hyp.second.id_) == 15) ? cms2.genps_lepdaughter_p4().at(gen_hyp.second.idx_).at(gen_hyp.second.didx_) : cms2.genps_p4().at(gen_hyp.second.idx_);
+                m_evt.gen_lep2_pdgid = (abs(gen_hyp.second.id_) == 15) ? gen_hyp.second.did_ : gen_hyp.second.id_;
+
+                m_evt.gen_dilep_p4 = m_evt.gen_lep1_p4 + m_evt.gen_lep2_p4;
+                m_evt.gen_dilep_mass = m_evt.gen_dilep_p4.mass();
+
+                if (abs(m_evt.gen_lep1_pdgid*m_evt.gen_lep2_pdgid) == 121)
+                    m_evt.gen_dilep_type = at::DileptonHypType::EE;
+                else if (abs(m_evt.gen_lep1_pdgid*m_evt.gen_lep2_pdgid) == 169)
+                    m_evt.gen_dilep_type = at::DileptonHypType::MUMU;
+                else if (abs(m_evt.gen_lep1_pdgid*m_evt.gen_lep2_pdgid) == 143)
+                    m_evt.gen_dilep_type = at::DileptonHypType::EMU;
+
+                m_evt.gen_dilep_dphi = rt::DeltaPhi(m_evt.gen_lep1_p4, m_evt.gen_lep2_p4);
+                m_evt.gen_dilep_deta = rt::DeltaEta(m_evt.gen_lep1_p4, m_evt.gen_lep2_p4);
+                m_evt.gen_dilep_dr   = rt::DeltaR(m_evt.gen_lep1_p4, m_evt.gen_lep2_p4);
             }
         }
         
