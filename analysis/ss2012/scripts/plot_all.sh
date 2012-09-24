@@ -7,7 +7,7 @@ out_path=${3:-}
 
 nbtags=2
 njets=2
-options=" --nbtags $nbtags --sr $signal_region --lumi $lumi --fr data/fake_rates/ssFR_data_standard_12Sep2012.root"
+options=" --nbtags $nbtags --gr 1 --sr $signal_region --lumi $lumi --fr data/fake_rates/ssFR_data_standard_23Sep2012.root"
 mkdir -p logs
 
 function make_hists

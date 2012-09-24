@@ -127,6 +127,13 @@ void PlotLooper::EndJob()
     yield_ss[2] = static_cast<int>(rt::Integral(hc["h_yield_em"]));
     yield_ss[3] = static_cast<int>(rt::Integral(hc["h_yield_ll"]));
 
+    // set the error to the lumi*scale1fb if the yield < weight*0.5 
+    float weight = m_lumi * m_scale1fb;
+    if (rt::Integral(hc["h_yield_ee"]) < (weight * 0.5)) {hc["h_yield_ee"]->SetBinError(2, weight);}
+    if (rt::Integral(hc["h_yield_mm"]) < (weight * 0.5)) {hc["h_yield_mm"]->SetBinError(2, weight);}
+    if (rt::Integral(hc["h_yield_em"]) < (weight * 0.5)) {hc["h_yield_em"]->SetBinError(2, weight);}
+    if (rt::Integral(hc["h_yield_ll"]) < (weight * 0.5)) {hc["h_yield_ll"]->SetBinError(2, weight);}
+
     // Fake predictions
     // -----------------------------------------------------------------------------//
     FakeRatePrediction frp(h_mufr.get(), h_elfr.get(), m_lumi);

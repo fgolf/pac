@@ -14,7 +14,7 @@ void CreateHtVsMetPlot(bool btag2 = true, const std::string& suffix = "png")
     // set TDR style
     rt::SetTDRStyle();
 
-    float lumi = 11.38; // fb^-1
+    float lumi = 10.88; // fb^-1
 
     TChain e1("tree");
     e1.Add("babies/data.root");
@@ -23,7 +23,7 @@ void CreateHtVsMetPlot(bool btag2 = true, const std::string& suffix = "png")
     TH2F* h2_ht_vs_pfmet_baseline_em = new TH2F("h2_ht_vs_pfmet_baseline_em", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 600, 0, 600, 200, 0, 200);
     TH2F* h2_ht_vs_pfmet_baseline_ee = new TH2F("h2_ht_vs_pfmet_baseline_ee", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 600, 0, 600, 200, 0, 200);
 
-    TCut selection = btag2 ? "is_ss && njets>=2 && nbtags>=2" : "is_ss && njets>=2";
+    TCut selection = btag2 ? "is_ss && njets>=2 && nbtags>=2 && is_good_lumi" : "is_ss && njets>=2 && is_good_lumi";
 
     e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_mm", selection && "dilep_type==1", "goff");
     e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_em", selection && "dilep_type==2", "goff");

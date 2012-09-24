@@ -4,7 +4,7 @@ mkdir -p $PAC/analysis/ss2012/logs
 nev=${1:--1}
 ntuple_type=ss_skim
 verbose=0
-njets=2
+njets=0
 
 # do the merging
 function run
@@ -20,6 +20,7 @@ function run
 
 # samples 
 output=babies_jets2
+#output=babies
 run data     $output json/preapproval_cms2.txt
 run zz       $output 
 run wz       $output 

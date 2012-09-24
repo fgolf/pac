@@ -37,10 +37,10 @@ output_path=/nfs-7/userdata/rwkelley/babies/ss2012/52X/v1
 #merge wz          WZTo3LNu_TuneZ2star_8TeV_pythia6_tauola_Summer12-PU_S7_START52_V9-v1
 #merge zz          ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v3
 
-input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/53X/v3
+input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/53X/v4
 output_path=/nfs-7/userdata/rwkelley/babies/ss2012/53X/v3
-#output_path=babies2
-merge dy       DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
+#output_path=babies_njets0
+#merge dy       DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge wz       WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge zz       ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ww       WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
