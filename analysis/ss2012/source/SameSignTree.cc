@@ -15,7 +15,7 @@ void SameSignTree::Reset()
     DileptonTree::Reset();
 
     selection        = 0;
-    is_good_lumi     = false;
+    is_good_lumi     = true;
     njets            = -999999;
     njets20          = -999999;
     njets30          = -999999;

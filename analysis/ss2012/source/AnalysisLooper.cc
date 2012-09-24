@@ -492,6 +492,7 @@ int SSAnalysisLooper::Analyze(long event)
         // set good good runs 
         // --------------------------------------------------------------------------------------------------------- //
 
+        // default is true since it means we're not applying a good run list
         if (m_filter_bad_runs)
         {
             if (tas::evt_isRealData())

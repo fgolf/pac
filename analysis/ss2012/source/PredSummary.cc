@@ -44,7 +44,6 @@ Pred& Pred::operator-=(const Pred& rhs)
     if (is_zero(value) && is_zero(rhs.value))
     {
         temp.error = std::max(error, rhs.error);
-        //temp.error = sqrt(error*error + rhs.error*rhs.error);
     }
     else if (is_zero(value))
     {
