@@ -131,8 +131,8 @@ bool IsDenominator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool 
     }
     switch (hyp.second)
         {
-        case DileptonChargeType::DF: return false; break;
-        case DileptonChargeType::SS: return true; break;
+        case DileptonChargeType::DF: return true; break;
+        case DileptonChargeType::SS: return false; break;
         case DileptonChargeType::SF: 
         {
             bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.first), cms2.hyp_lt_index().at(hyp.first));
