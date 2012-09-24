@@ -110,7 +110,7 @@ namespace at
             // title,
             "DY #rightarrow ll", 
             // latex
-            "DY \\rightarrow \\ell \\ell", 
+            "$DY \\rightarrow \\ell \\ell$", 
             // ntuple_path
             "DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1", 
             // SampleType 
@@ -126,7 +126,7 @@ namespace at
             // title
             "t#bar{t}W", 
             // latex
-            "t\\overline{t}W", 
+            "$t\\overline{t}W$", 
             // ntuple_path
             "TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1", 
             // SampleType 
@@ -142,7 +142,7 @@ namespace at
             // title
             "t#bar{t}Z", 
             // latex
-            "t\\overline{t}Z", 
+            "$t\\overline{t}Z$", 
             // ntuple_path
             "TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1", 
             // SampleType 
@@ -158,7 +158,7 @@ namespace at
             // title
             "t#bar{t}#gamma", 
             // latex
-            "t\\overline{t}\\gamma", 
+            "$t\\overline{t}\\gamma$", 
             // ntuple_path
             "TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -172,9 +172,9 @@ namespace at
             // name
             "ttww", 
             // title
-            "t\\overline{t}WW", 
+            "t#bar{t}WW", 
             // latex
-            "t\\overline{t}WW", 
+            "$t\\overline{t}WW$", 
             // ntuple_path
             "TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -190,7 +190,7 @@ namespace at
             // title
             "t#bar{t}+jets", 
             // latex
-            "t\\overline{t}+jets", 
+            "$t\\overline{t}+jets$", 
             // ntuple_path
             "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -254,7 +254,7 @@ namespace at
             // title
             "WW#gamma", 
             // latex 
-            "WW\\gamma", 
+            "$WW\\gamma$", 
             // ntuple_path
             "WWGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -382,7 +382,7 @@ namespace at
             // title
             "W#gamma^{*} #rightarrow #nu2e", 
             // latex 
-            "W\\gamma^{*} \\ rightarrow \\nu 2e", 
+            "$W\\gamma^{*} \\rightarrow \\nu 2e$", 
             // ntuple_path
             "WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -398,7 +398,7 @@ namespace at
             // title
             "W#gamma^{*} #rightarrow #nu2#mu", 
             // latex 
-            "W\\gamma^{*} \\ rightarrow \\nu 2\\mu", 
+            "$W\\gamma^{*} \\rightarrow \\nu 2\\mu$", 
             // ntuple_path
             "WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -414,7 +414,7 @@ namespace at
             // title
             "W#gamma^{*} #rightarrow #nu2#tau", 
             // latex 
-            "W\\gamma^{*} \\ rightarrow \\nu 2\\tau", 
+            "$W\\gamma^{*} \\rightarrow \\nu 2\\tau$", 
             // ntuple_path
             "WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -428,9 +428,9 @@ namespace at
             // name
             "wmwmqq", 
             // title
-            "WmWmqq", 
+            "W^{-}W^{-}qq", 
             // latex
-            "WmWmqq", 
+            "$W^-W^-qq$", 
             // ntuple_path
             "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -444,9 +444,9 @@ namespace at
             // name
             "wpwpqq", 
             // titlej
-            "WpWpqq", 
+            "W^{+}W^{+}qq", 
             // latex
-            "WpWpqq", 
+            "$W^+W^+qq$", 
             // ntuple_path
             "WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -460,9 +460,9 @@ namespace at
             // name
             "ww_ds", 
             // title
-            "WW DoubleScattering", 
+            "WW DS", 
             // latex
-            "WW DoubleScattering", 
+            "WW DS", 
             // ntuple_path
             "WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -529,7 +529,7 @@ namespace at
         // throw if not found
         if (sample == Sample::static_size)
         {
-            throw std::domain_error("ERROR: at::GetSampleInfo(std::string): sample not found!");
+            throw std::domain_error(Form("ERROR: at::GetSampleInfo(std::string): sample %s not found!", sample_name.c_str()));
         }
 
         return sample; 
@@ -635,8 +635,6 @@ namespace at
             switch (ntuple) 
             {
                 case NtupleType::cms2:    return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_3_2_patch4_V05-03-13/";
-                //case NtupleType::ss_skim: return "/nfs-7/userdata/rwkelley/skims/ss2012/08Sep_v2/";
-                //case NtupleType::ss_skim: return "/hadoop/cms/store/user/rwkelley/skims/ss2012/20Sep/";
                 case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v2/";
                 default: {/*do nothing*/}
             };
@@ -646,7 +644,6 @@ namespace at
             switch (ntuple) 
             {
                 case NtupleType::cms2:      return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
-                //case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/";
                 case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v2/";
                 default: {/*do nothing*/}
             };
