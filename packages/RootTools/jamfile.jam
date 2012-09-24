@@ -85,7 +85,7 @@ exe merge_tchain
       /ROOT
       RootTools/<link>static
       /boost//program_options/<link>static
-      /MiniFWLite/<link>shared
+      /MiniFWLite//libMiniFWLite/<link>shared
     : # requirements 
       <include>./include
       <include>./source

@@ -23,7 +23,7 @@ lib SimpleTable
 exe test_ctable
   : # sources
     $(SIMPLETABLE_PATH)/test.cpp
-    SimpleTable
+    SimpleTable/<link>static
     # dependent packages
     /ROOT
   : # requirements 

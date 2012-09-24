@@ -19,9 +19,9 @@ void CreateHtVsMetPlot(bool btag2 = true, const std::string& suffix = "png")
     TChain e1("tree");
     e1.Add("babies/data.root");
 
-    TH2F* h2_ht_vs_pfmet_baseline_mm = new TH2F("h2_ht_vs_pfmet_baseline_mm", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 600, 0, 600, 200, 0, 200);
-    TH2F* h2_ht_vs_pfmet_baseline_em = new TH2F("h2_ht_vs_pfmet_baseline_em", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 600, 0, 600, 200, 0, 200);
-    TH2F* h2_ht_vs_pfmet_baseline_ee = new TH2F("h2_ht_vs_pfmet_baseline_ee", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 600, 0, 600, 200, 0, 200);
+    TH2F* h2_ht_vs_pfmet_baseline_mm = new TH2F("h2_ht_vs_pfmet_baseline_mm", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
+    TH2F* h2_ht_vs_pfmet_baseline_em = new TH2F("h2_ht_vs_pfmet_baseline_em", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
+    TH2F* h2_ht_vs_pfmet_baseline_ee = new TH2F("h2_ht_vs_pfmet_baseline_ee", Form("CMS Preliminary #sqrt{s} = 8 TeV, L_{int} = %2.2f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
 
     TCut selection = btag2 ? "is_ss && njets>=2 && nbtags>=2 && is_good_lumi" : "is_ss && njets>=2 && is_good_lumi";
 
@@ -61,7 +61,7 @@ void CreateHtVsMetPlot(bool btag2 = true, const std::string& suffix = "png")
     l1->Draw();
 
     // cut out region
-    const int n=5;
+    const int n=6;
     float x1[n], y1[n];
     for (Int_t i=0;i<n;i++)
     {
