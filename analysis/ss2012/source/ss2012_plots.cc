@@ -31,6 +31,7 @@ try
     bool check_good_lumi            = false;
     float m_glu                     = 1000;
     float m_lsp                     = 100;
+    float m_sf_flip                 = 0.8;
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
     unsigned int signal_region_num  = 0;
@@ -56,6 +57,7 @@ try
         ("gr"       , po::value<bool>(&check_good_lumi)           , "for data, check the is_good_lumi() method"                                         )
         ("mglu"     , po::value<float>(&m_glu)                    , "gluino mass"                                                                       )
         ("mlsp"     , po::value<float>(&m_lsp)                    , "LSP mass"                                                                          )
+        ("sf_flip"  , po::value<float>(&m_sf_flip)                , "scale factor for flips"                                                            )
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                                        )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                                         )
         ;
@@ -195,6 +197,7 @@ try
             check_good_lumi, 
             m_glu,
             m_lsp,
+            m_sf_flip,
             lumi,
             verbose,
             !suffix.empty(),  

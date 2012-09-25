@@ -12,6 +12,7 @@
 #include "at/DileptonHypType.h"
 #include "at/DileptonChargeType.h"
 #include "SignalRegion.h"
+#include "ScaleFactors.h"
 #include "PredSummary.h"
 #include "FakeRatePrediction.h"
 #include "FlipRatePrediction.h"
@@ -39,6 +40,7 @@ PlotLooper::PlotLooper
     bool check_good_lumi,
     float mass_glu,
     float mass_lsp,
+    float sf_flip,
     float lumi,
     bool verbose,
     bool print,
@@ -55,6 +57,7 @@ PlotLooper::PlotLooper
     , m_njets(num_jets)
     , m_mass_glu(mass_glu)
     , m_mass_lsp(mass_lsp)
+    , m_sf_flip(sf_flip)
     , m_sample(sample)
     , m_signal_region(signal_region)
 {
@@ -206,7 +209,7 @@ void PlotLooper::EndJob()
     );
 
     // Flip 
-    PredSummary flip = flp.GetFlipPrediction();
+    PredSummary flip = flp.GetFlipPrediction(m_sf_flip);
     hc.Add(new TH1F("h_flip_pred", "flip prediction", 4, 0, 4));
     hc["h_flip_pred"]->SetBinContent(1, flip.ee.value);
     hc["h_flip_pred"]->SetBinContent(2, flip.mm.value);
@@ -430,19 +433,19 @@ int PlotLooper::operator()(long event)
         //}
 
         // check that it passes the trigger requirement
-        bool passes_trigger = false;
-        switch (hyp_type)
-        {
-            case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
-            case DileptonHypType::EMU : passes_trigger = trig_em(); break;
-            case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
-            default: passes_trigger = false; break;
-        };
-        if (not passes_trigger)
-        {
-            //cout << "fails trigger" << endl;
-            return 0;
-        }
+        //bool passes_trigger = false;
+        //switch (hyp_type)
+        //{
+        //    case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
+        //    case DileptonHypType::EMU : passes_trigger = trig_em(); break;
+        //    case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
+        //    default: passes_trigger = false; break;
+        //};
+        //if (not passes_trigger)
+        //{
+        //    //cout << "fails trigger" << endl;
+        //    return 0;
+        //}
 
         // two jet events
         if (njets() < static_cast<int>(m_njets))
@@ -461,7 +464,6 @@ int PlotLooper::operator()(long event)
         {
             return 0;
         }
-
 
         // select m_gluino and m_lsp
         if 
@@ -516,6 +518,7 @@ int PlotLooper::operator()(long event)
         {
             evt_weight *= sf_lepeff();
             // evt_weight *= sf_dileptrig();  // applying trigger cut now on MC
+            evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger cut now on MC
             if (m_nbtags>=2)
             {
                 if (m_signal_region == SignalRegion::sr7)

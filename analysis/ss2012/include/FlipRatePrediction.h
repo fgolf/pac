@@ -32,7 +32,7 @@ public:
         TH2F* h_em 
     );
 
-    PredSummary GetFlipPrediction() const;
+    PredSummary GetFlipPrediction(float scale_factor = 1.0) const;
 
 private:
     // members: 

@@ -29,6 +29,7 @@ class PlotLooper : public at::AnalysisWithHist
              bool bheck_good_lumi = false,
              float mass_glu = 1000,
              float mass_lsp = 100,
+             float sf_flip = 1.0,
              float lumi = 1.0,
              bool verbose = false,
              bool print = false,
@@ -59,6 +60,7 @@ class PlotLooper : public at::AnalysisWithHist
         float m_mass_glu;
         float m_mass_lsp;
         float m_scale1fb;
+        float m_sf_flip;
         at::Sample::value_type m_sample;
         ss::SignalRegion::value_type m_signal_region;
 

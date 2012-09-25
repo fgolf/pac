@@ -206,7 +206,12 @@ void FlipRatePrediction::ComputeAllFlipPredictions
 	flip.ll = flip.ee + flip.mm + flip.em;
 }
    
-PredSummary FlipRatePrediction::GetFlipPrediction() const
+PredSummary FlipRatePrediction::GetFlipPrediction(float scale_factor) const
 {
-	return flip;
+    PredSummary temp(flip);
+    temp.ee = (scale_factor *temp.ee);
+    temp.em = (scale_factor *temp.em);
+    temp.mm = (scale_factor *temp.mm);
+    temp.ll = (scale_factor *temp.ll);
+	return temp;
 }

@@ -13,93 +13,26 @@ float dileptonTagAndProbeScaleFactor(int hyp_idx)
 float tagAndProbeScaleFactor(int id, float pt, float eta)
 {
     return 1.0; // decided to take one on Friday
-    //unsigned int aid  = abs(id);
-    //float feta = fabs(eta); 
+}
 
-    //if (aid == 11) {
-    //    if (feta < 0.1479) {
-    //        if (pt < 40.0 && pt > 20.0)
-    //            return 0.9947;
-    //        else if (pt > 40.0)
-    //            return 0.9967;
-    //        else
-    //            return 0.0;
-    //    }
-    //    else if (feta < 2.4) {
-    //        if (pt < 40.0 && pt > 20.0)
-    //            return 0.9638;
-    //        else if (pt > 40.0)
-    //            return 0.9768;
-    //        else
-    //            return 0.0;
-    //    }
-    //    else return 0.0;
-    //}
-    //else if (aid == 13) { 
-    //    if (feta < 0.1479) {
-    //        if (pt < 40.0 && pt > 20.0)
-    //            return 0.9863;
-    //        else if (pt > 40.)
-    //            return 0.9859;
-    //        else
-    //            return 0.;
-    //    }
-    //    else if (feta < 2.4) {
-    //        if (pt < 40. && pt > 20.)
-    //            return 0.9941;
-    //        else if (pt > 40.0)
-    //            return 0.9921;
-    //        else
-    //            return 0.0;
-    //    }
-    //    else return 0.0;
-    //}
+float dilepTriggerScaleFactor(at::DileptonHypType::value_type& hyp_type)
+{
+    // values supplied by UF (ICHEP values)
+    //if (hyp_type == DileptonHypType::EE)   {return 0.95;}
+    //if (hyp_type == DileptonHypType::MUMU) {return 0.88;}
+    //if (hyp_type == DileptonHypType::EMU)  {return 0.92;}
 
-    //return 0.0;
+    // values supplied by UF (ICHEP values)
+    if (hyp_type == at::DileptonHypType::EE)   {return 0.960;}
+    if (hyp_type == at::DileptonHypType::MUMU) {return 0.875;}
+    if (hyp_type == at::DileptonHypType::EMU)  {return 0.934;}
+    return 0.0;
 }
 
 float dilepTriggerScaleFactor(int hyp_idx)
 {
-	using namespace at;
-
-    DileptonHypType::value_type hyp_type = hyp_typeToHypType(cms2.hyp_type().at(hyp_idx));    
-
-    // values supplied by UF
-    if (hyp_type == DileptonHypType::EE)   {return 0.95;}
-    if (hyp_type == DileptonHypType::MUMU) {return 0.88;}
-    if (hyp_type == DileptonHypType::EMU)  {return 0.92;}
-    return 0.0;
-    //float eff_1l = 0.0;
-    //float eff_1t = 0.0;
-    //float eff_2l = 0.0;
-    //float eff_2t = 0.0;
-    //float eff_z  = 0.0;
-
-    //if (hyp_type == EE || hyp_type == MUMU) {
-    //    eff_1l  = triggerScaleFactor(TrigEffType::LeadDbl, cms2.hyp_lt_id().at(hyp_idx), cms2.hyp_lt_p4().at(hyp_idx));
-    //    eff_1t  = triggerScaleFactor(TrigEffType::TrailDbl, cms2.hyp_lt_id().at(hyp_idx), cms2.hyp_lt_p4().at(hyp_idx));
-    //    eff_2l  = triggerScaleFactor(TrigEffType::LeadDbl, cms2.hyp_ll_id().at(hyp_idx), cms2.hyp_ll_p4().at(hyp_idx));
-    //    eff_2t  = triggerScaleFactor(TrigEffType::TrailDbl, cms2.hyp_ll_id().at(hyp_idx), cms2.hyp_ll_p4().at(hyp_idx));
-    //    if (cms2.hyp_lt_p4().at(hyp_idx).pt() > cms2.hyp_ll_p4().at(hyp_idx).pt())
-    //        eff_z = triggerScaleFactor(TrigEffType::DzDbl, cms2.hyp_ll_id().at(hyp_idx), cms2.hyp_ll_p4().at(hyp_idx));
-    //    else
-    //        eff_z = triggerScaleFactor(TrigEffType::DzDbl, cms2.hyp_lt_id().at(hyp_idx), cms2.hyp_lt_p4().at(hyp_idx));
-
-    //    return (eff_1l * eff_2t + eff_1t * eff_2l - eff_1l * eff_2l) * eff_z;
-    //}
-    //else if (hyp_type == EMU) {
-    //    eff_1l  = triggerScaleFactor(TrigEffType::LeadDbl, cms2.hyp_lt_id().at(hyp_idx), cms2.hyp_lt_p4().at(hyp_idx));
-    //    eff_1t  = triggerScaleFactor(TrigEffType::TrailDbl, cms2.hyp_lt_id().at(hyp_idx), cms2.hyp_lt_p4().at(hyp_idx));
-    //    eff_2l  = triggerScaleFactor(TrigEffType::LeadDbl, cms2.hyp_ll_id().at(hyp_idx), cms2.hyp_ll_p4().at(hyp_idx));
-    //    eff_2t  = triggerScaleFactor(TrigEffType::TrailDbl, cms2.hyp_ll_id().at(hyp_idx), cms2.hyp_ll_p4().at(hyp_idx));
-    //    if (abs(cms2.hyp_ll_id().at(hyp_idx)) == 13)
-    //        eff_z = triggerScaleFactor(TrigEffType::DzDbl, cms2.hyp_ll_id().at(hyp_idx), cms2.hyp_ll_p4().at(hyp_idx));
-    //    else
-    //        eff_z = triggerScaleFactor(TrigEffType::DzDbl, cms2.hyp_lt_id().at(hyp_idx), cms2.hyp_lt_p4().at(hyp_idx));        
-
-    //    return (eff_1l * eff_2t + eff_1t * eff_2l - eff_1l * eff_2l) * sqrt(eff_z);
-    //}
-    //return 0.0;
+    at::DileptonHypType::value_type hyp_type = at::hyp_typeToHypType(cms2.hyp_type().at(hyp_idx));    
+    return dilepTriggerScaleFactor(hyp_type);
 }
 
 float triggerScaleFactor(const TrigEffType::value_type& trig_eff_type, int id, const LorentzVector &p4)
