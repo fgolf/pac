@@ -116,7 +116,6 @@ namespace ss
         switch (signal_region)
         {
             case SignalRegion::sr0  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() >  0.0 );
-            //case SignalRegion::sr0  : return (ht() > 80.0  && pfmet() >  0.0 );
             case SignalRegion::sr1  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 );
             case SignalRegion::sr2  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 && is_pp());
             case SignalRegion::sr3  : return (nbtags() >= 2 && njets() >= 4 && ht() > 200.0 && pfmet() > 120.0);
@@ -138,15 +137,15 @@ namespace ss
 	// set aliases for TTree
     void SetSignalRegionAliases(TTree& tree)
     {
-        tree.SetAlias("sr0", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet >  0.0"             ); 
-        tree.SetAlias("sr1", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0"             ); 
-        tree.SetAlias("sr2", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0 && is_pp"    ); 
-        tree.SetAlias("sr3", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 120.0"            ); 
-        tree.SetAlias("sr4", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 50.0"             ); 
-        tree.SetAlias("sr5", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 50.0"             ); 
-        tree.SetAlias("sr6", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 120.0"            ); 
-        tree.SetAlias("sr7", "nbtags>=2 && njets>=2 && ht > 200.0  && pfmet > 50.0"             ); 
-        tree.SetAlias("sr8", "nbtags>=2 && njets>=4 && ht > 320.0"                              ); 
+        tree.SetAlias("sr0", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet >  0.0"         ); 
+        tree.SetAlias("sr1", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0"         ); 
+        tree.SetAlias("sr2", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0 && is_pp"); 
+        tree.SetAlias("sr3", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 120.0"        ); 
+        tree.SetAlias("sr4", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 50.0"         ); 
+        tree.SetAlias("sr5", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 50.0"         ); 
+        tree.SetAlias("sr6", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 120.0"        ); 
+        tree.SetAlias("sr7", "nbtags>=2 && njets>=2 && ht > 200.0  && pfmet > 50.0"         ); 
+        tree.SetAlias("sr8", "nbtags>=2 && njets>=4 && ht > 320.0"                          ); 
     }
 
     void SetSignalRegionAliases(TTree* tree)

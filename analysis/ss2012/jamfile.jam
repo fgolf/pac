@@ -65,6 +65,27 @@ exe ss2012_analysis
   : # usage-requirements
   ;
 
+exe ss2012_outreach
+  : # sources
+    ./source/ss2012_outreach.cc
+    ./source/OutreachLooper.cc
+    # dependent packages
+    /ROOT
+    ss2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /FGTools//FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
 #exe ss2012_sync
 #  : # sources
 #    ./source/ss2012_sync.cc
@@ -259,6 +280,7 @@ default-install ss2012_analysis ;
 default-install ss2012_skim ;
 default-install ss2012_plots ;
 #default-install ss2012_sync ;
+default-install ss2012_outreach ;
 default-install ss2012_tools ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;

@@ -10,6 +10,7 @@ namespace ss
     {
         enum value_type
         {
+            // inclusive
             sr0, // baseline
             sr1, // #btags >= 2, #jets >= 2, HT > 80, MET > 30
             sr2, // #btags >= 2, #jets >= 2, HT > 80, MET > 30, ++

@@ -11,7 +11,7 @@ all:
 	$(MAKE) -f build/ss2012_skim.mk
 	$(MAKE) -f build/ss2012_plots.mk
 	$(MAKE) -f build/ss2012_quick_check.mk
-#	$(MAKE) -f build/ss2012_bkgd_pred.mk
+	$(MAKE) -f build/ss2012_outreach.mk
 
 clean:
 	$(MAKE) -f build/ss2012_tools.mk clean
@@ -21,6 +21,6 @@ clean:
 	$(MAKE) -f build/ss2012_plots.mk clean
 	$(MAKE) -f build/ss2012_merge_babies.mk clean
 	$(MAKE) -f build/ss2012_quick_check.mk clean
-#	$(MAKE) -f build/ss2012_bkgd_pred.mk clean
+	$(MAKE) -f build/ss2012_outreach.mk clean
 
 .PHONY: all clean
