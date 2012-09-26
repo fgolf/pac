@@ -38,48 +38,43 @@ public:
     // event level info
     EventInfoTree event_info;
 
-    // reco event level
+    // event level
     float ht;
     float met;
-    int nbjets;
+    int nbtags;
     int njets;
+    int nbjets_num;
+    int njets_num;
+    float gen_ht;
+    unsigned int dilep_type;
     std::vector<LorentzVector> vbjets_p4;
+    std::vector<bool> vbjets_num;
     std::vector<LorentzVector> vjets_p4;
+    std::vector<bool> vjets_num;
     float sf_dileptrig;
     float sf_lepeff;
-    float sf_nbtags;
+    float sf_nbtag;
+    float sf_nbtag3;
     int nvtxs;
     float vtxw;
     bool clean;
 
-    // gen event level 
-    float gen_met;
-    float gen_ht;
-    int gen_nbjets;
-    int gen_njets;
-    std::vector<LorentzVector> gen_vbjets_p4;
-    std::vector<LorentzVector> gen_vjets_p4;
-    unsigned int gen_dilep_type;
-
-    // gen lepton level
-    LorentzVector lep1_gen_p4;
-    bool lep1_from_tau;
-    bool lep1_gen_id;
-
-    LorentzVector lep2_gen_p4;
-    bool lep2_from_tau;
-    bool lep2_gen_id;
-
-    // reco lepton level
+    // lepton level
     LorentzVector lep1_p4;
-    int lep1_id;
+    LorentzVector lep1_gen_p4;
+    int lep1_pdgid;
+    bool lep1_matched;
+    bool lep1_from_tau;
     bool lep1_passes_id;
     bool lep1_passes_iso;
     float lep1_iso;
     bool lep1_num;
 
     LorentzVector lep2_p4;
-    int lep2_id;
+    LorentzVector lep2_gen_p4;
+    bool lep2_matched;
+    int lep2_pdgid;
+    bool lep2_from_tau;
     bool lep2_passes_id;
     bool lep2_passes_iso;
     float lep2_iso;
@@ -96,7 +91,7 @@ class OutreachLooper : public at::AnalysisWithTree
             const at::Sample::value_type& sample,
             double luminosity = 1.0,
             const std::string& vtxreweight_file_name = "",
-            const std::string& cut_string = "",
+            bool is_fast_sim = false,
             bool verbose = false
         );
 
@@ -116,21 +111,7 @@ class OutreachLooper : public at::AnalysisWithTree
         at::Sample::value_type m_sample;
         double m_lumi;
         bool m_verbose;
-        std::vector<std::string> m_vcuts;
-
-        // cut switches
-        bool m_useOS;                             
-        bool m_useSS;                             
-        //bool m_applyVertexMatching;                
-        //bool m_vetoLowMass;                        
-        //bool m_vetoJets;                           
-        //bool m_vetoMET;                            
-        //bool m_vetoHT;                             
-        //bool m_requireCleaning;                    
-        //bool m_vetoBjets;                          
-        //bool m_useVertexReweighting;               
-        //bool m_requireDilepHyp;                    
-        //bool m_removeLeptonsOverlappingWithPartons;
+        bool m_is_fastsim;
 
         // struct to hold tree values
         OutreachTree m_evt;

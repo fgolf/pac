@@ -36,11 +36,10 @@ try
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
     std::string sample_name         = "data";
-	std::string cut_string			= "";
     std::string vtxreweight_file    = "";
     //bool sparms                     = false;
     //int num_jets                    = 0;
-    //bool isFastSim                  = false;
+    bool is_fastsim                 = false;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -53,11 +52,10 @@ try
         ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, tensor, ...)"                                     )
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
-		("vcuts"		 , po::value<std::string>(&cut_string)          , "cvs list of cut strings"                                                           )
         ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                              )
         //("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
         //("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
-        //("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                    )
+        ("is_fastsim"    , po::value<bool>(&is_fastsim)                 , "use FastSim btag scale factors"                                                    )
         ;
 
     po::variables_map vm;
@@ -88,9 +86,9 @@ try
 		cout << "output_file        :\t" << output_file         << endl;
 		cout << "input_file         :\t" << input_file          << endl;
 		cout << "vtxreweight_file   :\t" << vtxreweight_file    << endl;
+		cout << "is_fastsim         :\t" << is_fastsim          << endl;
 		//cout << "sparms             :\t" << sparms              << endl;
 		//cout << "num_jets           :\t" << num_jets            << endl;
-		//cout << "isFastSim          :\t" << isFastSim           << endl;
 	}
 
     // do the main analysis
@@ -113,7 +111,7 @@ try
 	// output
     if (output_file.empty())
     {
-        output_file = Form("babies/outreach/%s.root", rt::filename(sample_name).c_str());
+        output_file = Form("babies_outreach/%s.root", rt::filename(sample_name).c_str());
     }
 
     cout << "sample has " << chain->GetEntries() << " entries" << endl;
@@ -129,7 +127,7 @@ try
             sample,
             luminosity,
 			vtxreweight_file,
-			cut_string,
+            is_fastsim,
             verbose
         ),
         number_of_events,

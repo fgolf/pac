@@ -101,7 +101,7 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 
 	rt::TH1Container hc("plots/fake_rates/muons/muons.root");
     std::string path = "plots/fake_rates/muons";
-	float lumi = 10.9;
+	float lumi = 10.45;
 
     //std::string path = "plots/fake_rates/data/23May";
 	//rt::TH1Container hc("plots/mu_plus/data/mu_plus.root");
@@ -213,7 +213,7 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 
 	rt::TH1Container hc("plots/fake_rates/electrons/electrons.root");
     std::string path = "plots/fake_rates/electrons";
-	float lumi = 10.9;
+	float lumi = 10.45;
 
 	// set style
 	rt::SetTDRStyle();

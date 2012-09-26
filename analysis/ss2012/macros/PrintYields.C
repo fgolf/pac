@@ -403,9 +403,10 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     if (print_latex)
     {
         // before table
-        string latex("\\begin{table}[ht!]\n"                                       ); 
-        latex.append("\\begin{center}\n"                                           ); 
-        latex.append("\\begin{tabular}{l|llll} \\hline\\hline\n"                   ); 
+        //string latex("\\begin{table}[ht!]\n"                                       ); 
+        //latex.append("\\begin{center}\n"                                           ); 
+        //latex.append("\\begin{tabular}{l|llll} \\hline\\hline\n"                   ); 
+        string latex("\\begin{tabular}{l|llll} \\hline\\hline\n"                   ); 
         latex.append("source & $ee$ & $\\mu\\mu$ & $e\\mu$ & $\\ell\\ell $ \\\\\n" ); 
         latex.append("\\hline\n"                                                   ); 
 
@@ -428,12 +429,12 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
                 latex_name = at::GetSampleInfo(y.title).latex;
             }
 
-            //if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            //else if (y.title == "Flips"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            //else if (y.title == "MC Pred" ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            //else if (y.title == "pred"    ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            //else                            {latex.append(y.GetLatex(latex_name));}
-            latex.append(y.GetLatex(latex_name));
+            if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            else if (y.title == "Flips"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            else if (y.title == "MC Pred" ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            else if (y.title == "pred"    ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            else                            {latex.append(y.GetLatex(latex_name));}
+            //latex.append(y.GetLatex(latex_name));
             latex.append(" \\\\\n");
 
             // add the line between sections
@@ -451,8 +452,8 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
         // after table
         latex.append("\\hline\\hline\n" ); 
         latex.append("\\end{tabular}\n" ); 
-        latex.append("\\end{center}\n"  ); 
-        latex.append("\\end{table}\n"   ); 
+        //latex.append("\\end{center}\n"  ); 
+        //latex.append("\\end{table}"     ); 
         cout << latex << endl;
     }
     else

@@ -228,11 +228,11 @@ int FakeRateBabyLooper::operator()(long event)
         bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
         bool is_el = (m_lepton=="el") ? abs(id())==11 : false;
 
-        // bad runs (for DCS file)
-        //if (run() < 190782)
-        //{
-        //    return 0;
-        //}
+        // quit for these runs 
+        if (run() > 202016) // just for preapproval for HCP
+        {
+            return 0;
+        }
         
         // check the charge
         switch (m_charge)
