@@ -37,9 +37,9 @@ try
     std::string ntuple_type_name    = "cms2";
     std::string sample_name         = "data";
     std::string vtxreweight_file    = "";
-    //bool sparms                     = false;
-    //int num_jets                    = 0;
+    bool sparms                     = false;
     bool is_fastsim                 = false;
+    //int num_jets                    = 0;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -53,9 +53,9 @@ try
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
         ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                              )
-        //("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
-        //("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
         ("is_fastsim"    , po::value<bool>(&is_fastsim)                 , "use FastSim btag scale factors"                                                    )
+        ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
+        //("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
         ;
 
     po::variables_map vm;
@@ -87,7 +87,7 @@ try
 		cout << "input_file         :\t" << input_file          << endl;
 		cout << "vtxreweight_file   :\t" << vtxreweight_file    << endl;
 		cout << "is_fastsim         :\t" << is_fastsim          << endl;
-		//cout << "sparms             :\t" << sparms              << endl;
+		cout << "sparms             :\t" << sparms              << endl;
 		//cout << "num_jets           :\t" << num_jets            << endl;
 	}
 
@@ -128,6 +128,7 @@ try
             luminosity,
 			vtxreweight_file,
             is_fastsim,
+            sparms,
             verbose
         ),
         number_of_events,

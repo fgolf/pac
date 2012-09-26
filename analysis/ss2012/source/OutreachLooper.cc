@@ -47,12 +47,15 @@ OutreachLooper::OutreachLooper
     double luminosity,
     const std::string& vtxreweight_file_name,
     bool is_fastsim,
+    bool sparms,
     bool verbose
 )
     : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 outreach")
     , m_sample(sample)
     , m_lumi(luminosity)
     , m_verbose(verbose)
+    , m_is_fastsim(is_fastsim)
+    , m_sparms(sparms)
 {
     // set vertex weight file
     if (!vtxreweight_file_name.empty())
@@ -193,6 +196,16 @@ int OutreachLooper::Analyze(long event)
         //    m_evt.sf_nbtag  = btagEventWeight (bjets.size(), bjets.at(0).pt(), bjets.at(1).pt(), bjets.at(2).pt(), bjets.at(3).pt(), m_is_fastsim);
         //    m_evt.sf_nbtag3 = btagEventWeight3(bjets.size(), bjets.at(0).pt(), bjets.at(1).pt(), bjets.at(2).pt(), bjets.at(3).pt(), m_is_fastsim);
         //}
+
+        // sparms parameters
+        if (m_sparms) 
+        {
+            int n_sparms = sparm_values().size();
+            if (n_sparms > 0) m_evt.sparm0 = sparm_values().at(0);
+            if (n_sparms > 1) m_evt.sparm1 = sparm_values().at(1);
+            if (n_sparms > 2) m_evt.sparm2 = sparm_values().at(2);
+            if (n_sparms > 3) m_evt.sparm3 = sparm_values().at(3);
+        }
 
         // HT
         m_evt.gen_ht = getGenHT(40, 2.4);
@@ -341,6 +354,11 @@ void OutreachTree::Reset()
     gen_ht              = -999999.0;
     dilep_type          = -999999;
 
+    sparm0              = -999999.0;
+    sparm1              = -999999.0;
+    sparm2              = -999999.0;
+    sparm3              = -999999.0;
+
     // lepton 
     lep1_from_tau       = false;
     lep1_pdgid          = -999999;
@@ -406,6 +424,10 @@ void OutreachTree::SetBranches(TTree &tree)
     tree.Branch("lep2_passes_id"  , &lep2_passes_id    , "lep2_passes_id/O"  ); 
     tree.Branch("lep2_passes_iso" , &lep2_passes_iso   , "lep2_passes_iso/O" ); 
     tree.Branch("lep2_num"        , &lep2_num          , "lep2_num/O"        ); 
+    tree.Branch("sparm0"          , &sparm0            , "sparm0/O"          ); 
+    tree.Branch("sparm1"          , &sparm1            , "sparm0/1"          ); 
+    tree.Branch("sparm2"          , &sparm2            , "sparm0/2"          ); 
+    tree.Branch("sparm3"          , &sparm3            , "sparm0/3"          ); 
     tree.Branch("lep1_gen_p4"     , "LorentzVector"    , &lep1_gen_p4        ); 
     tree.Branch("lep1_p4"         , "LorentzVector"    , &lep1_p4            ); 
     tree.Branch("lep2_gen_p4"     , "LorentzVector"    , &lep2_gen_p4        ); 

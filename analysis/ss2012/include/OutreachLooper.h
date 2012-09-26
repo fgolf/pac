@@ -59,6 +59,11 @@ public:
     float vtxw;
     bool clean;
 
+    float sparm0;
+    float sparm1;
+    float sparm2;
+    float sparm3;
+
     // lepton level
     LorentzVector lep1_p4;
     LorentzVector lep1_gen_p4;
@@ -92,6 +97,7 @@ class OutreachLooper : public at::AnalysisWithTree
             double luminosity = 1.0,
             const std::string& vtxreweight_file_name = "",
             bool is_fast_sim = false,
+            bool sparms = false,
             bool verbose = false
         );
 
@@ -112,6 +118,7 @@ class OutreachLooper : public at::AnalysisWithTree
         double m_lumi;
         bool m_verbose;
         bool m_is_fastsim;
+        bool m_sparms;
 
         // struct to hold tree values
         OutreachTree m_evt;
