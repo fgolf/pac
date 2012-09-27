@@ -95,7 +95,7 @@ namespace at
             "MuEG_Run2012B-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
-            "MuEG_Run2012C-PromptReco-v1_AOD,"
+            //"MuEG_Run2012C-PromptReco-v1_AOD,"
             "MuEG_Run2012C-PromptReco-v2_AOD",
             // SampleType 
             SampleType::data,
@@ -117,6 +117,73 @@ namespace at
             SampleType::bkgd,
             // Sample
             Sample::dy,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wjets", 
+            // title,
+            "W+jets #rightarrow l#nu", 
+            // latex
+            "$W+jets \\rightarrow \\ell \\nu$", 
+            // ntuple_path
+            "WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::wjets,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "tw", 
+            // title,
+            "tW", 
+            // latex
+            "tW", 
+            // ntuple_path
+            "T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::t_tw,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "t_schan", 
+            // title,
+            "t, s-channel", 
+            // latex
+            "t, s-channel", 
+            // ntuple_path
+            "T_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::t_schan,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "t_tchan", 
+            // title,
+            "t, t-channel", 
+            // latex
+            "t, t-channel", 
+            // ntuple_path
+            "T_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::t_tchan,
             // color
             kBlue
         },
