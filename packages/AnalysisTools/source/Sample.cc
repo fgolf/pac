@@ -447,9 +447,9 @@ namespace at
             // name
             "wgstar2e", 
             // title
-            "W#gamma^{*} #rightarrow #nu2e", 
+            "W#gamma^{*} #rightarrow l#nuee", 
             // latex 
-            "$W\\gamma^{*} \\rightarrow \\nu 2e$", 
+            "$W\\gamma^{*} \\rightarrow \\ell \\nu ee$", 
             // ntuple_path
             "WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -463,9 +463,9 @@ namespace at
             // name
             "wgstar2m", 
             // title
-            "W#gamma^{*} #rightarrow #nu2#mu", 
+            "W#gamma^{*} #rightarrow l#nu#mu#mu", 
             // latex 
-            "$W\\gamma^{*} \\rightarrow \\nu 2\\mu$", 
+            "$W\\gamma^{*} \\rightarrow \\ell \\nu \\mu\\mu$", 
             // ntuple_path
             "WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -479,9 +479,9 @@ namespace at
             // name
             "wgstar2t", 
             // title
-            "W#gamma^{*} #rightarrow #nu2#tau", 
+            "W#gamma^{*} #rightarrow l#nu#tau#tau", 
             // latex 
-            "$W\\gamma^{*} \\rightarrow \\nu 2\\tau$", 
+            "$W\\gamma^{*} \\rightarrow \ell \\nu \\tau \\tau$", 
             // ntuple_path
             "WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
