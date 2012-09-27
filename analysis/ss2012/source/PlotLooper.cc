@@ -465,6 +465,17 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
+        // apply gamma*/upsilon veto
+        bool has_gamma_cand = false;
+        if (hyp_type == DileptonHypType::EE || hyp_type == DileptonHypType::MUMU) 
+        {
+            
+        }
+        if (has_gamma_cand)
+        {
+            return 0;
+        }
+
         // select m_gluino and m_lsp
         if 
 		(

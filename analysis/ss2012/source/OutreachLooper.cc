@@ -424,10 +424,10 @@ void OutreachTree::SetBranches(TTree &tree)
     tree.Branch("lep2_passes_id"  , &lep2_passes_id    , "lep2_passes_id/O"  ); 
     tree.Branch("lep2_passes_iso" , &lep2_passes_iso   , "lep2_passes_iso/O" ); 
     tree.Branch("lep2_num"        , &lep2_num          , "lep2_num/O"        ); 
-    tree.Branch("sparm0"          , &sparm0            , "sparm0/O"          ); 
-    tree.Branch("sparm1"          , &sparm1            , "sparm0/1"          ); 
-    tree.Branch("sparm2"          , &sparm2            , "sparm0/2"          ); 
-    tree.Branch("sparm3"          , &sparm3            , "sparm0/3"          ); 
+    tree.Branch("sparm0"          , &sparm0            , "sparmO/F"          ); 
+    tree.Branch("sparm1"          , &sparm1            , "sparm1/F"          ); 
+    tree.Branch("sparm2"          , &sparm2            , "sparm2/F"          ); 
+    tree.Branch("sparm3"          , &sparm3            , "sparm3/F"          ); 
     tree.Branch("lep1_gen_p4"     , "LorentzVector"    , &lep1_gen_p4        ); 
     tree.Branch("lep1_p4"         , "LorentzVector"    , &lep1_p4            ); 
     tree.Branch("lep2_gen_p4"     , "LorentzVector"    , &lep2_gen_p4        ); 

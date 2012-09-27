@@ -78,6 +78,7 @@ void SameSignTree::Reset()
     lep1_nearbjet_dr = -999999.0;
     lep1_nearjet_dr  = -999999.0;
     lep1_nearlep_dr  = -999999.0;
+    lep1_nearlep_id  = -999999;
     lep2_nearbjet_p4 = LorentzVector(0, 0, 0, 0);
     lep2_nearjet_p4  = LorentzVector(0, 0, 0, 0);
     lep2_nearlep_p4  = LorentzVector(0, 0, 0, 0);
@@ -85,7 +86,7 @@ void SameSignTree::Reset()
     lep2_wflip       = -999999.0;
     lep2_nearbjet_dr = -999999.0;
     lep2_nearjet_dr  = -999999.0;
-    lep2_nearlep_dr  = -999999.0;
+    lep2_nearlep_id  = -999999;
     sf_nbtag         = -999999.0;
     sf_nbtag3        = -999999.0;
     sf_unc_nbtag     = -999999.0;
@@ -182,14 +183,16 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("lep1_nearbjet_dr"  , &lep1_nearbjet_dr   , "lep1_nearbjet_dr/F" );
     tree.Branch("lep1_nearjet_dr"   , &lep1_nearjet_dr    , "lep1_nearjet_dr/F"  );
     tree.Branch("lep1_nearlep_dr"   , &lep1_nearlep_dr    , "lep1_nearlep_dr/F"  );
+    tree.Branch("lep1_nearlep_id"   , &lep1_nearlep_id    , "lep1_nearlep_id/I"  );
     tree.Branch("lep2_nearbjet_p4"  , "LorentzVector"     , &lep2_nearbjet_p4    );
     tree.Branch("lep2_nearjet_p4"   , "LorentzVector"     , &lep2_nearjet_p4     );
     tree.Branch("lep2_nearlep_p4"   , "LorentzVector"     , &lep2_nearlep_p4     );
-    tree.Branch("lep2_nearlep_dr"   , &lep2_nearlep_dr    , "lep2_nearlep_dr/F"  );
     tree.Branch("lep2_wfr"          , &lep2_wfr           , "lep2_wfr/F"         );
     tree.Branch("lep2_wflip"        , &lep2_wflip         , "lep2_wflip/F"       );
     tree.Branch("lep2_nearbjet_dr"  , &lep2_nearbjet_dr   , "lep2_nearbjet_dr/F" );
     tree.Branch("lep2_nearjet_dr"   , &lep2_nearjet_dr    , "lep2_nearjet_dr/F"  );
+    tree.Branch("lep2_nearlep_dr"   , &lep2_nearlep_dr    , "lep2_nearlep_dr/F"  );
+    tree.Branch("lep2_nearlep_id"   , &lep2_nearlep_id    , "lep2_nearlep_id/I"  );
     tree.Branch("sf_nbtag"          , &sf_nbtag           , "sf_nbtag/F"         );
     tree.Branch("sf_nbtag3"         , &sf_nbtag3          , "sf_nbtag3/F"        );
     tree.Branch("sf_unc_nbtag"      , &sf_unc_nbtag       , "sf_unc_nbtag/F"     );

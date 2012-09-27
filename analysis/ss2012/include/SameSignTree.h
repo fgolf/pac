@@ -154,6 +154,7 @@ public:
     float lep1_nearbjet_dr;
     float lep1_nearjet_dr;
     float lep1_nearlep_dr;
+    int lep1_nearlep_id;
 
     //
     // reco lepton 2 info
@@ -166,6 +167,7 @@ public:
     float lep2_nearbjet_dr;
     float lep2_nearjet_dr;
     float lep2_nearlep_dr;
+    int lep2_nearlep_id;
 
     //
     // eff and scale factors

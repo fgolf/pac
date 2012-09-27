@@ -21,7 +21,7 @@ struct TrigEffType
 	};
 };
 
-float dilepTriggerScaleFactor(at::DileptonHypType::value_type& hyp_type);
+float dilepTriggerScaleFactor(const at::DileptonHypType::value_type& hyp_type);
 float dilepTriggerScaleFactor(int hyp_idx);
 float triggerScaleFactor(const TrigEffType::value_type& trig_eff_type, int id, const LorentzVector &p4);
 

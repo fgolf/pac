@@ -597,6 +597,13 @@ int SSAnalysisLooper::Analyze(long event)
                 continue;
             }
 
+            // check extra Gamma* veto
+            if (samesign::makesExtraGammaStar(ihyp))
+            {
+                if (m_verbose) {std::cout << "fails btag extra Gamma* veto requirement" << std::endl;}
+                continue;
+            }
+
             // check if event passes num_jet cut
             //int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
             //if (num_jets < 2)
@@ -1122,6 +1129,7 @@ int SSAnalysisLooper::Analyze(long event)
 
             if (closest_el.first >= 0) {
                 m_evt.lep1_nearlep_p4 = cms2.els_p4().at(closest_el.first);
+                m_evt.lep1_nearlep_id = -11 * cms2.els_charge().at(closest_el.first);
                 m_evt.lep1_nearlep_dr = closest_el.second;
             }                
         }
@@ -1150,6 +1158,7 @@ int SSAnalysisLooper::Analyze(long event)
 
             if (closest_el.first >= 0) {
                 m_evt.lep2_nearlep_p4 = cms2.els_p4().at(closest_el.first);
+                m_evt.lep2_nearlep_id = -11 * cms2.els_charge().at(closest_el.first);
                 m_evt.lep2_nearlep_dr = closest_el.second;
             }                
         }
@@ -1175,6 +1184,7 @@ int SSAnalysisLooper::Analyze(long event)
 
             if (closest_mu.first >= 0) {
                 m_evt.lep1_nearlep_p4 = cms2.mus_p4().at(closest_mu.first);
+                m_evt.lep1_nearlep_id = -13 * cms2.mus_charge().at(closest_mu.first);
                 m_evt.lep1_nearlep_dr = closest_mu.second;
             }                
         }
@@ -1200,6 +1210,7 @@ int SSAnalysisLooper::Analyze(long event)
 
             if (closest_mu.first >= 0) {
                 m_evt.lep2_nearlep_p4 = cms2.mus_p4().at(closest_mu.first);
+                m_evt.lep2_nearlep_id = -13 * cms2.mus_charge().at(closest_mu.first);
                 m_evt.lep2_nearlep_dr = closest_mu.second;
             }                
         }

@@ -15,7 +15,7 @@ float tagAndProbeScaleFactor(int id, float pt, float eta)
     return 1.0; // decided to take one on Friday
 }
 
-float dilepTriggerScaleFactor(at::DileptonHypType::value_type& hyp_type)
+float dilepTriggerScaleFactor(const at::DileptonHypType::value_type& hyp_type)
 {
     // values supplied by UF (ICHEP values)
     //if (hyp_type == DileptonHypType::EE)   {return 0.95;}
