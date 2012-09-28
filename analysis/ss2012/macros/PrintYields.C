@@ -347,6 +347,12 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     // The order matters for the formated tex table.
     Yield yield_mc("Total MC");
     vector<Yield> yields_bkgd;
+    yields_bkgd.push_back(GetSSYield("ttjets"  , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("t_schan" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("tw"      , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("dy"      , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("wjets"   , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ww"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, output_path));
@@ -370,8 +376,11 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     {
         yield_mc += yields_bkgd[i];
     }
-    Yield yield_mc_pred = yield_mc;
-    yield_mc_pred.title = "MC Pred";
+    Yield yield_mc_pred("MC Pred");
+    for (size_t i = 6; i != yields_bkgd.size(); i++)
+    {
+        yield_mc_pred += yields_bkgd[i];
+    }
 
     // set systematic uncertainties
     SetSysUncertainties(yield_fake   , 0.5);
@@ -438,6 +447,9 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
             latex.append(" \\\\\n");
 
             // add the line between sections
+            if (y.title == "ttjets"  ) {latex.append("\\hline\n"        );} 
+            if (y.title == "tw"      ) {latex.append("\\hline\n"        );} 
+            if (y.title == "ww"      ) {latex.append("\\hline\n"        );} 
             if (y.title == "zz"      ) {latex.append("\\hline\n"        );} 
             if (y.title == "zzz"     ) {latex.append("\\hline\n"        );} 
             if (y.title == "ww_ds"   ) {latex.append("\\hline\n"        );} 

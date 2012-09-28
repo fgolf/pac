@@ -14,6 +14,8 @@ namespace rt
         const std::string& output_folder = "", 
         const std::string& tree1_label = "tree1", 
         const std::string& tree2_label = "tree2", 
+        const std::string& selection = "", 
+        const std::string& option = "", 
         long num_entries = 1000000000,
         const std::string& suffix = "png"
     );

@@ -117,7 +117,7 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 	gStyle->SetTitleBorderSize(0);
 
 	//float lumi = 3.95;
-	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 	//std::string title = Form("#mu^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("#mu^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 
@@ -219,7 +219,7 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 	rt::SetTDRStyle();
 	gStyle->SetTitleBorderSize(0);
 
-	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.2f fb^{-1}", lumi);
 	//std::string title = Form("e^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("e^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 

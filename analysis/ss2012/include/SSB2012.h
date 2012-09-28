@@ -12,8 +12,10 @@
 #include <vector> 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 
+#define PARANOIA
+
 using namespace std; 
-class SSB {
+class SSB2012 {
 private: 
 protected: 
 	unsigned int index;
@@ -44,12 +46,12 @@ protected:
 	float	pfmet_phi_;
 	TBranch *pfmet_phi_branch;
 	bool pfmet_phi_isLoaded;
-	float	corpfmet_;
-	TBranch *corpfmet_branch;
-	bool corpfmet_isLoaded;
-	float	corpfmet_phi_;
-	TBranch *corpfmet_phi_branch;
-	bool corpfmet_phi_isLoaded;
+	float	uncorpfmet_;
+	TBranch *uncorpfmet_branch;
+	bool uncorpfmet_isLoaded;
+	float	uncorpfmet_phi_;
+	TBranch *uncorpfmet_phi_branch;
+	bool uncorpfmet_phi_isLoaded;
 	float	scale1fb_;
 	TBranch *scale1fb_branch;
 	bool scale1fb_isLoaded;
@@ -608,6 +610,9 @@ protected:
 	float	vtxw_;
 	TBranch *vtxw_branch;
 	bool vtxw_isLoaded;
+	float	mt_;
+	TBranch *mt_branch;
+	bool mt_isLoaded;
 	float	ht_;
 	TBranch *ht_branch;
 	bool ht_isLoaded;
@@ -632,30 +637,72 @@ protected:
 	bool	trig_ee_;
 	TBranch *trig_ee_branch;
 	bool trig_ee_isLoaded;
-	int	njets_dwn_;
-	TBranch *njets_dwn_branch;
-	bool njets_dwn_isLoaded;
+	int	njets_dn_;
+	TBranch *njets_dn_branch;
+	bool njets_dn_isLoaded;
 	int	njets_up_;
 	TBranch *njets_up_branch;
 	bool njets_up_isLoaded;
-	int	nbtags_dwn_;
-	TBranch *nbtags_dwn_branch;
-	bool nbtags_dwn_isLoaded;
+	int	nbtags_dn_;
+	TBranch *nbtags_dn_branch;
+	bool nbtags_dn_isLoaded;
 	int	nbtags_up_;
 	TBranch *nbtags_up_branch;
 	bool nbtags_up_isLoaded;
-	float	ht_dwn_;
-	TBranch *ht_dwn_branch;
-	bool ht_dwn_isLoaded;
+	float	ht_dn_;
+	TBranch *ht_dn_branch;
+	bool ht_dn_isLoaded;
 	float	ht_up_;
 	TBranch *ht_up_branch;
 	bool ht_up_isLoaded;
-	float	pfmet_dwn_;
-	TBranch *pfmet_dwn_branch;
-	bool pfmet_dwn_isLoaded;
+	int	njets20_dn_;
+	TBranch *njets20_dn_branch;
+	bool njets20_dn_isLoaded;
+	int	njets20_up_;
+	TBranch *njets20_up_branch;
+	bool njets20_up_isLoaded;
+	int	nbtags20_dn_;
+	TBranch *nbtags20_dn_branch;
+	bool nbtags20_dn_isLoaded;
+	int	nbtags20_up_;
+	TBranch *nbtags20_up_branch;
+	bool nbtags20_up_isLoaded;
+	float	ht20_dn_;
+	TBranch *ht20_dn_branch;
+	bool ht20_dn_isLoaded;
+	float	ht20_up_;
+	TBranch *ht20_up_branch;
+	bool ht20_up_isLoaded;
+	int	njets30_dn_;
+	TBranch *njets30_dn_branch;
+	bool njets30_dn_isLoaded;
+	int	njets30_up_;
+	TBranch *njets30_up_branch;
+	bool njets30_up_isLoaded;
+	int	nbtags30_dn_;
+	TBranch *nbtags30_dn_branch;
+	bool nbtags30_dn_isLoaded;
+	int	nbtags30_up_;
+	TBranch *nbtags30_up_branch;
+	bool nbtags30_up_isLoaded;
+	float	ht30_dn_;
+	TBranch *ht30_dn_branch;
+	bool ht30_dn_isLoaded;
+	float	ht30_up_;
+	TBranch *ht30_up_branch;
+	bool ht30_up_isLoaded;
+	float	pfmet_dn_;
+	TBranch *pfmet_dn_branch;
+	bool pfmet_dn_isLoaded;
 	float	pfmet_up_;
 	TBranch *pfmet_up_branch;
 	bool pfmet_up_isLoaded;
+	float	pfmet_phi_dn_;
+	TBranch *pfmet_phi_dn_branch;
+	bool pfmet_phi_dn_isLoaded;
+	float	pfmet_phi_up_;
+	TBranch *pfmet_phi_up_branch;
+	bool pfmet_phi_up_isLoaded;
 	float	sf_dileptrig_;
 	TBranch *sf_dileptrig_branch;
 	bool sf_dileptrig_isLoaded;
@@ -728,6 +775,9 @@ protected:
 	float	lep1_nearlep_dr_;
 	TBranch *lep1_nearlep_dr_branch;
 	bool lep1_nearlep_dr_isLoaded;
+	int	lep1_nearlep_id_;
+	TBranch *lep1_nearlep_id_branch;
+	bool lep1_nearlep_id_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_nearbjet_p4_;
 	TBranch *lep2_nearbjet_p4_branch;
 	bool lep2_nearbjet_p4_isLoaded;
@@ -737,9 +787,6 @@ protected:
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_nearlep_p4_;
 	TBranch *lep2_nearlep_p4_branch;
 	bool lep2_nearlep_p4_isLoaded;
-	float	lep2_nearlep_dr_;
-	TBranch *lep2_nearlep_dr_branch;
-	bool lep2_nearlep_dr_isLoaded;
 	float	lep2_wfr_;
 	TBranch *lep2_wfr_branch;
 	bool lep2_wfr_isLoaded;
@@ -752,6 +799,12 @@ protected:
 	float	lep2_nearjet_dr_;
 	TBranch *lep2_nearjet_dr_branch;
 	bool lep2_nearjet_dr_isLoaded;
+	float	lep2_nearlep_dr_;
+	TBranch *lep2_nearlep_dr_branch;
+	bool lep2_nearlep_dr_isLoaded;
+	int	lep2_nearlep_id_;
+	TBranch *lep2_nearlep_id_branch;
+	bool lep2_nearlep_id_isLoaded;
 	float	sf_nbtag_;
 	TBranch *sf_nbtag_branch;
 	bool sf_nbtag_isLoaded;
@@ -794,6 +847,36 @@ protected:
 	vector<float> *vbjets_nearjet_dr_;
 	TBranch *vbjets_nearjet_dr_branch;
 	bool vbjets_nearjet_dr_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *gen_lep1_p4_;
+	TBranch *gen_lep1_p4_branch;
+	bool gen_lep1_p4_isLoaded;
+	int	gen_lep1_pdgid_;
+	TBranch *gen_lep1_pdgid_branch;
+	bool gen_lep1_pdgid_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *gen_lep2_p4_;
+	TBranch *gen_lep2_p4_branch;
+	bool gen_lep2_p4_isLoaded;
+	int	gen_lep2_pdgid_;
+	TBranch *gen_lep2_pdgid_branch;
+	bool gen_lep2_pdgid_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *gen_dilep_p4_;
+	TBranch *gen_dilep_p4_branch;
+	bool gen_dilep_p4_isLoaded;
+	int	gen_dilep_type_;
+	TBranch *gen_dilep_type_branch;
+	bool gen_dilep_type_isLoaded;
+	float	gen_dilep_mass_;
+	TBranch *gen_dilep_mass_branch;
+	bool gen_dilep_mass_isLoaded;
+	float	gen_dilep_dphi_;
+	TBranch *gen_dilep_dphi_branch;
+	bool gen_dilep_dphi_isLoaded;
+	float	gen_dilep_deta_;
+	TBranch *gen_dilep_deta_branch;
+	bool gen_dilep_deta_isLoaded;
+	float	gen_dilep_dr_;
+	TBranch *gen_dilep_dr_branch;
+	bool gen_dilep_dr_isLoaded;
 public: 
 void Init(TTree *tree) {
 	lep1_p4_branch = 0;
@@ -941,6 +1024,21 @@ void Init(TTree *tree) {
 		vbjets_nearjet_p4_branch = tree->GetBranch("vbjets_nearjet_p4");
 		vbjets_nearjet_p4_branch->SetAddress(&vbjets_nearjet_p4_);
 	}
+	gen_lep1_p4_branch = 0;
+	if (tree->GetBranch("gen_lep1_p4") != 0) {
+		gen_lep1_p4_branch = tree->GetBranch("gen_lep1_p4");
+		gen_lep1_p4_branch->SetAddress(&gen_lep1_p4_);
+	}
+	gen_lep2_p4_branch = 0;
+	if (tree->GetBranch("gen_lep2_p4") != 0) {
+		gen_lep2_p4_branch = tree->GetBranch("gen_lep2_p4");
+		gen_lep2_p4_branch->SetAddress(&gen_lep2_p4_);
+	}
+	gen_dilep_p4_branch = 0;
+	if (tree->GetBranch("gen_dilep_p4") != 0) {
+		gen_dilep_p4_branch = tree->GetBranch("gen_dilep_p4");
+		gen_dilep_p4_branch->SetAddress(&gen_dilep_p4_);
+	}
   tree->SetMakeClass(1);
 	run_branch = 0;
 	if (tree->GetBranch("run") != 0) {
@@ -987,15 +1085,15 @@ void Init(TTree *tree) {
 		pfmet_phi_branch = tree->GetBranch("pfmet_phi");
 		pfmet_phi_branch->SetAddress(&pfmet_phi_);
 	}
-	corpfmet_branch = 0;
-	if (tree->GetBranch("corpfmet") != 0) {
-		corpfmet_branch = tree->GetBranch("corpfmet");
-		corpfmet_branch->SetAddress(&corpfmet_);
+	uncorpfmet_branch = 0;
+	if (tree->GetBranch("uncorpfmet") != 0) {
+		uncorpfmet_branch = tree->GetBranch("uncorpfmet");
+		uncorpfmet_branch->SetAddress(&uncorpfmet_);
 	}
-	corpfmet_phi_branch = 0;
-	if (tree->GetBranch("corpfmet_phi") != 0) {
-		corpfmet_phi_branch = tree->GetBranch("corpfmet_phi");
-		corpfmet_phi_branch->SetAddress(&corpfmet_phi_);
+	uncorpfmet_phi_branch = 0;
+	if (tree->GetBranch("uncorpfmet_phi") != 0) {
+		uncorpfmet_phi_branch = tree->GetBranch("uncorpfmet_phi");
+		uncorpfmet_phi_branch->SetAddress(&uncorpfmet_phi_);
 	}
 	scale1fb_branch = 0;
 	if (tree->GetBranch("scale1fb") != 0) {
@@ -1842,6 +1940,11 @@ void Init(TTree *tree) {
 		vtxw_branch = tree->GetBranch("vtxw");
 		vtxw_branch->SetAddress(&vtxw_);
 	}
+	mt_branch = 0;
+	if (tree->GetBranch("mt") != 0) {
+		mt_branch = tree->GetBranch("mt");
+		mt_branch->SetAddress(&mt_);
+	}
 	ht_branch = 0;
 	if (tree->GetBranch("ht") != 0) {
 		ht_branch = tree->GetBranch("ht");
@@ -1882,45 +1985,115 @@ void Init(TTree *tree) {
 		trig_ee_branch = tree->GetBranch("trig_ee");
 		trig_ee_branch->SetAddress(&trig_ee_);
 	}
-	njets_dwn_branch = 0;
-	if (tree->GetBranch("njets_dwn") != 0) {
-		njets_dwn_branch = tree->GetBranch("njets_dwn");
-		njets_dwn_branch->SetAddress(&njets_dwn_);
+	njets_dn_branch = 0;
+	if (tree->GetBranch("njets_dn") != 0) {
+		njets_dn_branch = tree->GetBranch("njets_dn");
+		njets_dn_branch->SetAddress(&njets_dn_);
 	}
 	njets_up_branch = 0;
 	if (tree->GetBranch("njets_up") != 0) {
 		njets_up_branch = tree->GetBranch("njets_up");
 		njets_up_branch->SetAddress(&njets_up_);
 	}
-	nbtags_dwn_branch = 0;
-	if (tree->GetBranch("nbtags_dwn") != 0) {
-		nbtags_dwn_branch = tree->GetBranch("nbtags_dwn");
-		nbtags_dwn_branch->SetAddress(&nbtags_dwn_);
+	nbtags_dn_branch = 0;
+	if (tree->GetBranch("nbtags_dn") != 0) {
+		nbtags_dn_branch = tree->GetBranch("nbtags_dn");
+		nbtags_dn_branch->SetAddress(&nbtags_dn_);
 	}
 	nbtags_up_branch = 0;
 	if (tree->GetBranch("nbtags_up") != 0) {
 		nbtags_up_branch = tree->GetBranch("nbtags_up");
 		nbtags_up_branch->SetAddress(&nbtags_up_);
 	}
-	ht_dwn_branch = 0;
-	if (tree->GetBranch("ht_dwn") != 0) {
-		ht_dwn_branch = tree->GetBranch("ht_dwn");
-		ht_dwn_branch->SetAddress(&ht_dwn_);
+	ht_dn_branch = 0;
+	if (tree->GetBranch("ht_dn") != 0) {
+		ht_dn_branch = tree->GetBranch("ht_dn");
+		ht_dn_branch->SetAddress(&ht_dn_);
 	}
 	ht_up_branch = 0;
 	if (tree->GetBranch("ht_up") != 0) {
 		ht_up_branch = tree->GetBranch("ht_up");
 		ht_up_branch->SetAddress(&ht_up_);
 	}
-	pfmet_dwn_branch = 0;
-	if (tree->GetBranch("pfmet_dwn") != 0) {
-		pfmet_dwn_branch = tree->GetBranch("pfmet_dwn");
-		pfmet_dwn_branch->SetAddress(&pfmet_dwn_);
+	njets20_dn_branch = 0;
+	if (tree->GetBranch("njets20_dn") != 0) {
+		njets20_dn_branch = tree->GetBranch("njets20_dn");
+		njets20_dn_branch->SetAddress(&njets20_dn_);
+	}
+	njets20_up_branch = 0;
+	if (tree->GetBranch("njets20_up") != 0) {
+		njets20_up_branch = tree->GetBranch("njets20_up");
+		njets20_up_branch->SetAddress(&njets20_up_);
+	}
+	nbtags20_dn_branch = 0;
+	if (tree->GetBranch("nbtags20_dn") != 0) {
+		nbtags20_dn_branch = tree->GetBranch("nbtags20_dn");
+		nbtags20_dn_branch->SetAddress(&nbtags20_dn_);
+	}
+	nbtags20_up_branch = 0;
+	if (tree->GetBranch("nbtags20_up") != 0) {
+		nbtags20_up_branch = tree->GetBranch("nbtags20_up");
+		nbtags20_up_branch->SetAddress(&nbtags20_up_);
+	}
+	ht20_dn_branch = 0;
+	if (tree->GetBranch("ht20_dn") != 0) {
+		ht20_dn_branch = tree->GetBranch("ht20_dn");
+		ht20_dn_branch->SetAddress(&ht20_dn_);
+	}
+	ht20_up_branch = 0;
+	if (tree->GetBranch("ht20_up") != 0) {
+		ht20_up_branch = tree->GetBranch("ht20_up");
+		ht20_up_branch->SetAddress(&ht20_up_);
+	}
+	njets30_dn_branch = 0;
+	if (tree->GetBranch("njets30_dn") != 0) {
+		njets30_dn_branch = tree->GetBranch("njets30_dn");
+		njets30_dn_branch->SetAddress(&njets30_dn_);
+	}
+	njets30_up_branch = 0;
+	if (tree->GetBranch("njets30_up") != 0) {
+		njets30_up_branch = tree->GetBranch("njets30_up");
+		njets30_up_branch->SetAddress(&njets30_up_);
+	}
+	nbtags30_dn_branch = 0;
+	if (tree->GetBranch("nbtags30_dn") != 0) {
+		nbtags30_dn_branch = tree->GetBranch("nbtags30_dn");
+		nbtags30_dn_branch->SetAddress(&nbtags30_dn_);
+	}
+	nbtags30_up_branch = 0;
+	if (tree->GetBranch("nbtags30_up") != 0) {
+		nbtags30_up_branch = tree->GetBranch("nbtags30_up");
+		nbtags30_up_branch->SetAddress(&nbtags30_up_);
+	}
+	ht30_dn_branch = 0;
+	if (tree->GetBranch("ht30_dn") != 0) {
+		ht30_dn_branch = tree->GetBranch("ht30_dn");
+		ht30_dn_branch->SetAddress(&ht30_dn_);
+	}
+	ht30_up_branch = 0;
+	if (tree->GetBranch("ht30_up") != 0) {
+		ht30_up_branch = tree->GetBranch("ht30_up");
+		ht30_up_branch->SetAddress(&ht30_up_);
+	}
+	pfmet_dn_branch = 0;
+	if (tree->GetBranch("pfmet_dn") != 0) {
+		pfmet_dn_branch = tree->GetBranch("pfmet_dn");
+		pfmet_dn_branch->SetAddress(&pfmet_dn_);
 	}
 	pfmet_up_branch = 0;
 	if (tree->GetBranch("pfmet_up") != 0) {
 		pfmet_up_branch = tree->GetBranch("pfmet_up");
 		pfmet_up_branch->SetAddress(&pfmet_up_);
+	}
+	pfmet_phi_dn_branch = 0;
+	if (tree->GetBranch("pfmet_phi_dn") != 0) {
+		pfmet_phi_dn_branch = tree->GetBranch("pfmet_phi_dn");
+		pfmet_phi_dn_branch->SetAddress(&pfmet_phi_dn_);
+	}
+	pfmet_phi_up_branch = 0;
+	if (tree->GetBranch("pfmet_phi_up") != 0) {
+		pfmet_phi_up_branch = tree->GetBranch("pfmet_phi_up");
+		pfmet_phi_up_branch->SetAddress(&pfmet_phi_up_);
 	}
 	sf_dileptrig_branch = 0;
 	if (tree->GetBranch("sf_dileptrig") != 0) {
@@ -2027,10 +2200,10 @@ void Init(TTree *tree) {
 		lep1_nearlep_dr_branch = tree->GetBranch("lep1_nearlep_dr");
 		lep1_nearlep_dr_branch->SetAddress(&lep1_nearlep_dr_);
 	}
-	lep2_nearlep_dr_branch = 0;
-	if (tree->GetBranch("lep2_nearlep_dr") != 0) {
-		lep2_nearlep_dr_branch = tree->GetBranch("lep2_nearlep_dr");
-		lep2_nearlep_dr_branch->SetAddress(&lep2_nearlep_dr_);
+	lep1_nearlep_id_branch = 0;
+	if (tree->GetBranch("lep1_nearlep_id") != 0) {
+		lep1_nearlep_id_branch = tree->GetBranch("lep1_nearlep_id");
+		lep1_nearlep_id_branch->SetAddress(&lep1_nearlep_id_);
 	}
 	lep2_wfr_branch = 0;
 	if (tree->GetBranch("lep2_wfr") != 0) {
@@ -2051,6 +2224,16 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("lep2_nearjet_dr") != 0) {
 		lep2_nearjet_dr_branch = tree->GetBranch("lep2_nearjet_dr");
 		lep2_nearjet_dr_branch->SetAddress(&lep2_nearjet_dr_);
+	}
+	lep2_nearlep_dr_branch = 0;
+	if (tree->GetBranch("lep2_nearlep_dr") != 0) {
+		lep2_nearlep_dr_branch = tree->GetBranch("lep2_nearlep_dr");
+		lep2_nearlep_dr_branch->SetAddress(&lep2_nearlep_dr_);
+	}
+	lep2_nearlep_id_branch = 0;
+	if (tree->GetBranch("lep2_nearlep_id") != 0) {
+		lep2_nearlep_id_branch = tree->GetBranch("lep2_nearlep_id");
+		lep2_nearlep_id_branch->SetAddress(&lep2_nearlep_id_);
 	}
 	sf_nbtag_branch = 0;
 	if (tree->GetBranch("sf_nbtag") != 0) {
@@ -2092,6 +2275,41 @@ void Init(TTree *tree) {
 		vbjets_nearjet_dr_branch = tree->GetBranch("vbjets_nearjet_dr");
 		vbjets_nearjet_dr_branch->SetAddress(&vbjets_nearjet_dr_);
 	}
+	gen_lep1_pdgid_branch = 0;
+	if (tree->GetBranch("gen_lep1_pdgid") != 0) {
+		gen_lep1_pdgid_branch = tree->GetBranch("gen_lep1_pdgid");
+		gen_lep1_pdgid_branch->SetAddress(&gen_lep1_pdgid_);
+	}
+	gen_lep2_pdgid_branch = 0;
+	if (tree->GetBranch("gen_lep2_pdgid") != 0) {
+		gen_lep2_pdgid_branch = tree->GetBranch("gen_lep2_pdgid");
+		gen_lep2_pdgid_branch->SetAddress(&gen_lep2_pdgid_);
+	}
+	gen_dilep_type_branch = 0;
+	if (tree->GetBranch("gen_dilep_type") != 0) {
+		gen_dilep_type_branch = tree->GetBranch("gen_dilep_type");
+		gen_dilep_type_branch->SetAddress(&gen_dilep_type_);
+	}
+	gen_dilep_mass_branch = 0;
+	if (tree->GetBranch("gen_dilep_mass") != 0) {
+		gen_dilep_mass_branch = tree->GetBranch("gen_dilep_mass");
+		gen_dilep_mass_branch->SetAddress(&gen_dilep_mass_);
+	}
+	gen_dilep_dphi_branch = 0;
+	if (tree->GetBranch("gen_dilep_dphi") != 0) {
+		gen_dilep_dphi_branch = tree->GetBranch("gen_dilep_dphi");
+		gen_dilep_dphi_branch->SetAddress(&gen_dilep_dphi_);
+	}
+	gen_dilep_deta_branch = 0;
+	if (tree->GetBranch("gen_dilep_deta") != 0) {
+		gen_dilep_deta_branch = tree->GetBranch("gen_dilep_deta");
+		gen_dilep_deta_branch->SetAddress(&gen_dilep_deta_);
+	}
+	gen_dilep_dr_branch = 0;
+	if (tree->GetBranch("gen_dilep_dr") != 0) {
+		gen_dilep_dr_branch = tree->GetBranch("gen_dilep_dr");
+		gen_dilep_dr_branch->SetAddress(&gen_dilep_dr_);
+	}
   tree->SetMakeClass(0);
 }
 void GetEntry(unsigned int idx) 
@@ -2107,8 +2325,8 @@ void GetEntry(unsigned int idx)
 		vtx_idx_isLoaded = false;
 		pfmet_isLoaded = false;
 		pfmet_phi_isLoaded = false;
-		corpfmet_isLoaded = false;
-		corpfmet_phi_isLoaded = false;
+		uncorpfmet_isLoaded = false;
+		uncorpfmet_phi_isLoaded = false;
 		scale1fb_isLoaded = false;
 		xsec_isLoaded = false;
 		kfactor_isLoaded = false;
@@ -2295,6 +2513,7 @@ void GetEntry(unsigned int idx)
 		nbtags20_isLoaded = false;
 		nbtags30_isLoaded = false;
 		vtxw_isLoaded = false;
+		mt_isLoaded = false;
 		ht_isLoaded = false;
 		ht20_isLoaded = false;
 		ht30_isLoaded = false;
@@ -2303,14 +2522,28 @@ void GetEntry(unsigned int idx)
 		trig_mm_isLoaded = false;
 		trig_em_isLoaded = false;
 		trig_ee_isLoaded = false;
-		njets_dwn_isLoaded = false;
+		njets_dn_isLoaded = false;
 		njets_up_isLoaded = false;
-		nbtags_dwn_isLoaded = false;
+		nbtags_dn_isLoaded = false;
 		nbtags_up_isLoaded = false;
-		ht_dwn_isLoaded = false;
+		ht_dn_isLoaded = false;
 		ht_up_isLoaded = false;
-		pfmet_dwn_isLoaded = false;
+		njets20_dn_isLoaded = false;
+		njets20_up_isLoaded = false;
+		nbtags20_dn_isLoaded = false;
+		nbtags20_up_isLoaded = false;
+		ht20_dn_isLoaded = false;
+		ht20_up_isLoaded = false;
+		njets30_dn_isLoaded = false;
+		njets30_up_isLoaded = false;
+		nbtags30_dn_isLoaded = false;
+		nbtags30_up_isLoaded = false;
+		ht30_dn_isLoaded = false;
+		ht30_up_isLoaded = false;
+		pfmet_dn_isLoaded = false;
 		pfmet_up_isLoaded = false;
+		pfmet_phi_dn_isLoaded = false;
+		pfmet_phi_up_isLoaded = false;
 		sf_dileptrig_isLoaded = false;
 		sf_lepeff_isLoaded = false;
 		sparm0_isLoaded = false;
@@ -2335,14 +2568,16 @@ void GetEntry(unsigned int idx)
 		lep1_nearbjet_dr_isLoaded = false;
 		lep1_nearjet_dr_isLoaded = false;
 		lep1_nearlep_dr_isLoaded = false;
+		lep1_nearlep_id_isLoaded = false;
 		lep2_nearbjet_p4_isLoaded = false;
 		lep2_nearjet_p4_isLoaded = false;
 		lep2_nearlep_p4_isLoaded = false;
-		lep2_nearlep_dr_isLoaded = false;
 		lep2_wfr_isLoaded = false;
 		lep2_wflip_isLoaded = false;
 		lep2_nearbjet_dr_isLoaded = false;
 		lep2_nearjet_dr_isLoaded = false;
+		lep2_nearlep_dr_isLoaded = false;
+		lep2_nearlep_id_isLoaded = false;
 		sf_nbtag_isLoaded = false;
 		sf_nbtag3_isLoaded = false;
 		sf_unc_nbtag_isLoaded = false;
@@ -2357,6 +2592,16 @@ void GetEntry(unsigned int idx)
 		vbjets_nearjet_p4_isLoaded = false;
 		vbtags_isLoaded = false;
 		vbjets_nearjet_dr_isLoaded = false;
+		gen_lep1_p4_isLoaded = false;
+		gen_lep1_pdgid_isLoaded = false;
+		gen_lep2_p4_isLoaded = false;
+		gen_lep2_pdgid_isLoaded = false;
+		gen_dilep_p4_isLoaded = false;
+		gen_dilep_type_isLoaded = false;
+		gen_dilep_mass_isLoaded = false;
+		gen_dilep_dphi_isLoaded = false;
+		gen_dilep_deta_isLoaded = false;
+		gen_dilep_dr_isLoaded = false;
 	}
 
 void LoadAllBranches() 
@@ -2371,8 +2616,8 @@ void LoadAllBranches()
 	if (vtx_idx_branch != 0) vtx_idx();
 	if (pfmet_branch != 0) pfmet();
 	if (pfmet_phi_branch != 0) pfmet_phi();
-	if (corpfmet_branch != 0) corpfmet();
-	if (corpfmet_phi_branch != 0) corpfmet_phi();
+	if (uncorpfmet_branch != 0) uncorpfmet();
+	if (uncorpfmet_phi_branch != 0) uncorpfmet_phi();
 	if (scale1fb_branch != 0) scale1fb();
 	if (xsec_branch != 0) xsec();
 	if (kfactor_branch != 0) kfactor();
@@ -2559,6 +2804,7 @@ void LoadAllBranches()
 	if (nbtags20_branch != 0) nbtags20();
 	if (nbtags30_branch != 0) nbtags30();
 	if (vtxw_branch != 0) vtxw();
+	if (mt_branch != 0) mt();
 	if (ht_branch != 0) ht();
 	if (ht20_branch != 0) ht20();
 	if (ht30_branch != 0) ht30();
@@ -2567,14 +2813,28 @@ void LoadAllBranches()
 	if (trig_mm_branch != 0) trig_mm();
 	if (trig_em_branch != 0) trig_em();
 	if (trig_ee_branch != 0) trig_ee();
-	if (njets_dwn_branch != 0) njets_dwn();
+	if (njets_dn_branch != 0) njets_dn();
 	if (njets_up_branch != 0) njets_up();
-	if (nbtags_dwn_branch != 0) nbtags_dwn();
+	if (nbtags_dn_branch != 0) nbtags_dn();
 	if (nbtags_up_branch != 0) nbtags_up();
-	if (ht_dwn_branch != 0) ht_dwn();
+	if (ht_dn_branch != 0) ht_dn();
 	if (ht_up_branch != 0) ht_up();
-	if (pfmet_dwn_branch != 0) pfmet_dwn();
+	if (njets20_dn_branch != 0) njets20_dn();
+	if (njets20_up_branch != 0) njets20_up();
+	if (nbtags20_dn_branch != 0) nbtags20_dn();
+	if (nbtags20_up_branch != 0) nbtags20_up();
+	if (ht20_dn_branch != 0) ht20_dn();
+	if (ht20_up_branch != 0) ht20_up();
+	if (njets30_dn_branch != 0) njets30_dn();
+	if (njets30_up_branch != 0) njets30_up();
+	if (nbtags30_dn_branch != 0) nbtags30_dn();
+	if (nbtags30_up_branch != 0) nbtags30_up();
+	if (ht30_dn_branch != 0) ht30_dn();
+	if (ht30_up_branch != 0) ht30_up();
+	if (pfmet_dn_branch != 0) pfmet_dn();
 	if (pfmet_up_branch != 0) pfmet_up();
+	if (pfmet_phi_dn_branch != 0) pfmet_phi_dn();
+	if (pfmet_phi_up_branch != 0) pfmet_phi_up();
 	if (sf_dileptrig_branch != 0) sf_dileptrig();
 	if (sf_lepeff_branch != 0) sf_lepeff();
 	if (sparm0_branch != 0) sparm0();
@@ -2599,14 +2859,16 @@ void LoadAllBranches()
 	if (lep1_nearbjet_dr_branch != 0) lep1_nearbjet_dr();
 	if (lep1_nearjet_dr_branch != 0) lep1_nearjet_dr();
 	if (lep1_nearlep_dr_branch != 0) lep1_nearlep_dr();
+	if (lep1_nearlep_id_branch != 0) lep1_nearlep_id();
 	if (lep2_nearbjet_p4_branch != 0) lep2_nearbjet_p4();
 	if (lep2_nearjet_p4_branch != 0) lep2_nearjet_p4();
 	if (lep2_nearlep_p4_branch != 0) lep2_nearlep_p4();
-	if (lep2_nearlep_dr_branch != 0) lep2_nearlep_dr();
 	if (lep2_wfr_branch != 0) lep2_wfr();
 	if (lep2_wflip_branch != 0) lep2_wflip();
 	if (lep2_nearbjet_dr_branch != 0) lep2_nearbjet_dr();
 	if (lep2_nearjet_dr_branch != 0) lep2_nearjet_dr();
+	if (lep2_nearlep_dr_branch != 0) lep2_nearlep_dr();
+	if (lep2_nearlep_id_branch != 0) lep2_nearlep_id();
 	if (sf_nbtag_branch != 0) sf_nbtag();
 	if (sf_nbtag3_branch != 0) sf_nbtag3();
 	if (sf_unc_nbtag_branch != 0) sf_unc_nbtag();
@@ -2621,6 +2883,16 @@ void LoadAllBranches()
 	if (vbjets_nearjet_p4_branch != 0) vbjets_nearjet_p4();
 	if (vbtags_branch != 0) vbtags();
 	if (vbjets_nearjet_dr_branch != 0) vbjets_nearjet_dr();
+	if (gen_lep1_p4_branch != 0) gen_lep1_p4();
+	if (gen_lep1_pdgid_branch != 0) gen_lep1_pdgid();
+	if (gen_lep2_p4_branch != 0) gen_lep2_p4();
+	if (gen_lep2_pdgid_branch != 0) gen_lep2_pdgid();
+	if (gen_dilep_p4_branch != 0) gen_dilep_p4();
+	if (gen_dilep_type_branch != 0) gen_dilep_type();
+	if (gen_dilep_mass_branch != 0) gen_dilep_mass();
+	if (gen_dilep_dphi_branch != 0) gen_dilep_dphi();
+	if (gen_dilep_deta_branch != 0) gen_dilep_deta();
+	if (gen_dilep_dr_branch != 0) gen_dilep_dr();
 }
 
 	unsigned int &run()
@@ -2628,6 +2900,8 @@ void LoadAllBranches()
 		if (not run_isLoaded) {
 			if (run_branch != 0) {
 				run_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch run_branch does not exist!\n");
 				exit(1);
@@ -2641,6 +2915,8 @@ void LoadAllBranches()
 		if (not ls_isLoaded) {
 			if (ls_branch != 0) {
 				ls_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ls_branch does not exist!\n");
 				exit(1);
@@ -2654,6 +2930,8 @@ void LoadAllBranches()
 		if (not evt_isLoaded) {
 			if (evt_branch != 0) {
 				evt_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch evt_branch does not exist!\n");
 				exit(1);
@@ -2667,6 +2945,8 @@ void LoadAllBranches()
 		if (not is_real_data_isLoaded) {
 			if (is_real_data_branch != 0) {
 				is_real_data_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_real_data_branch does not exist!\n");
 				exit(1);
@@ -2680,6 +2960,8 @@ void LoadAllBranches()
 		if (not sample_isLoaded) {
 			if (sample_branch != 0) {
 				sample_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sample_branch does not exist!\n");
 				exit(1);
@@ -2693,6 +2975,8 @@ void LoadAllBranches()
 		if (not nvtxs_isLoaded) {
 			if (nvtxs_branch != 0) {
 				nvtxs_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nvtxs_branch does not exist!\n");
 				exit(1);
@@ -2706,6 +2990,8 @@ void LoadAllBranches()
 		if (not vtx_idx_isLoaded) {
 			if (vtx_idx_branch != 0) {
 				vtx_idx_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vtx_idx_branch does not exist!\n");
 				exit(1);
@@ -2719,6 +3005,8 @@ void LoadAllBranches()
 		if (not pfmet_isLoaded) {
 			if (pfmet_branch != 0) {
 				pfmet_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfmet_branch does not exist!\n");
 				exit(1);
@@ -2732,6 +3020,8 @@ void LoadAllBranches()
 		if (not pfmet_phi_isLoaded) {
 			if (pfmet_phi_branch != 0) {
 				pfmet_phi_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfmet_phi_branch does not exist!\n");
 				exit(1);
@@ -2740,37 +3030,43 @@ void LoadAllBranches()
 		}
 		return pfmet_phi_;
 	}
-	float &corpfmet()
+	float &uncorpfmet()
 	{
-		if (not corpfmet_isLoaded) {
-			if (corpfmet_branch != 0) {
-				corpfmet_branch->GetEntry(index);
+		if (not uncorpfmet_isLoaded) {
+			if (uncorpfmet_branch != 0) {
+				uncorpfmet_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
-				printf("branch corpfmet_branch does not exist!\n");
+				printf("branch uncorpfmet_branch does not exist!\n");
 				exit(1);
 			}
-			corpfmet_isLoaded = true;
+			uncorpfmet_isLoaded = true;
 		}
-		return corpfmet_;
+		return uncorpfmet_;
 	}
-	float &corpfmet_phi()
+	float &uncorpfmet_phi()
 	{
-		if (not corpfmet_phi_isLoaded) {
-			if (corpfmet_phi_branch != 0) {
-				corpfmet_phi_branch->GetEntry(index);
+		if (not uncorpfmet_phi_isLoaded) {
+			if (uncorpfmet_phi_branch != 0) {
+				uncorpfmet_phi_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
-				printf("branch corpfmet_phi_branch does not exist!\n");
+				printf("branch uncorpfmet_phi_branch does not exist!\n");
 				exit(1);
 			}
-			corpfmet_phi_isLoaded = true;
+			uncorpfmet_phi_isLoaded = true;
 		}
-		return corpfmet_phi_;
+		return uncorpfmet_phi_;
 	}
 	float &scale1fb()
 	{
 		if (not scale1fb_isLoaded) {
 			if (scale1fb_branch != 0) {
 				scale1fb_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch scale1fb_branch does not exist!\n");
 				exit(1);
@@ -2784,6 +3080,8 @@ void LoadAllBranches()
 		if (not xsec_isLoaded) {
 			if (xsec_branch != 0) {
 				xsec_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch xsec_branch does not exist!\n");
 				exit(1);
@@ -2797,6 +3095,8 @@ void LoadAllBranches()
 		if (not kfactor_isLoaded) {
 			if (kfactor_branch != 0) {
 				kfactor_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch kfactor_branch does not exist!\n");
 				exit(1);
@@ -2810,6 +3110,8 @@ void LoadAllBranches()
 		if (not gen_met_isLoaded) {
 			if (gen_met_branch != 0) {
 				gen_met_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch gen_met_branch does not exist!\n");
 				exit(1);
@@ -2823,6 +3125,8 @@ void LoadAllBranches()
 		if (not gen_met_phi_isLoaded) {
 			if (gen_met_phi_branch != 0) {
 				gen_met_phi_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch gen_met_phi_branch does not exist!\n");
 				exit(1);
@@ -2836,6 +3140,14 @@ void LoadAllBranches()
 		if (not lep1_p4_isLoaded) {
 			if (lep1_p4_branch != 0) {
 				lep1_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_p4_->pt(), &e);
+				if (not isfinite(lep1_p4_->pt()) || e > 30) {
+					printf("branch lep1_p4_branch contains a bad float: %f\n", lep1_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_p4_branch does not exist!\n");
 				exit(1);
@@ -2849,6 +3161,8 @@ void LoadAllBranches()
 		if (not lep1_passes_id_isLoaded) {
 			if (lep1_passes_id_branch != 0) {
 				lep1_passes_id_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_passes_id_branch does not exist!\n");
 				exit(1);
@@ -2862,6 +3176,8 @@ void LoadAllBranches()
 		if (not lep1_passes_iso_isLoaded) {
 			if (lep1_passes_iso_branch != 0) {
 				lep1_passes_iso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_passes_iso_branch does not exist!\n");
 				exit(1);
@@ -2875,6 +3191,8 @@ void LoadAllBranches()
 		if (not lep1_is_num_isLoaded) {
 			if (lep1_is_num_branch != 0) {
 				lep1_is_num_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_num_branch does not exist!\n");
 				exit(1);
@@ -2888,6 +3206,8 @@ void LoadAllBranches()
 		if (not lep1_is_fo_isLoaded) {
 			if (lep1_is_fo_branch != 0) {
 				lep1_is_fo_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_fo_branch does not exist!\n");
 				exit(1);
@@ -2901,6 +3221,8 @@ void LoadAllBranches()
 		if (not lep1_charge_isLoaded) {
 			if (lep1_charge_branch != 0) {
 				lep1_charge_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_charge_branch does not exist!\n");
 				exit(1);
@@ -2914,6 +3236,8 @@ void LoadAllBranches()
 		if (not lep1_pdgid_isLoaded) {
 			if (lep1_pdgid_branch != 0) {
 				lep1_pdgid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_pdgid_branch does not exist!\n");
 				exit(1);
@@ -2927,6 +3251,8 @@ void LoadAllBranches()
 		if (not lep1_type_isLoaded) {
 			if (lep1_type_branch != 0) {
 				lep1_type_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_type_branch does not exist!\n");
 				exit(1);
@@ -2940,6 +3266,8 @@ void LoadAllBranches()
 		if (not lep1_d0_isLoaded) {
 			if (lep1_d0_branch != 0) {
 				lep1_d0_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_d0_branch does not exist!\n");
 				exit(1);
@@ -2953,6 +3281,8 @@ void LoadAllBranches()
 		if (not lep1_dz_isLoaded) {
 			if (lep1_dz_branch != 0) {
 				lep1_dz_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_dz_branch does not exist!\n");
 				exit(1);
@@ -2966,6 +3296,8 @@ void LoadAllBranches()
 		if (not lep1_mt_isLoaded) {
 			if (lep1_mt_branch != 0) {
 				lep1_mt_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_mt_branch does not exist!\n");
 				exit(1);
@@ -2979,6 +3311,8 @@ void LoadAllBranches()
 		if (not lep1_corpfiso_isLoaded) {
 			if (lep1_corpfiso_branch != 0) {
 				lep1_corpfiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_corpfiso_branch does not exist!\n");
 				exit(1);
@@ -2992,6 +3326,8 @@ void LoadAllBranches()
 		if (not lep1_pfiso_isLoaded) {
 			if (lep1_pfiso_branch != 0) {
 				lep1_pfiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_pfiso_branch does not exist!\n");
 				exit(1);
@@ -3005,6 +3341,8 @@ void LoadAllBranches()
 		if (not lep1_chiso_isLoaded) {
 			if (lep1_chiso_branch != 0) {
 				lep1_chiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_chiso_branch does not exist!\n");
 				exit(1);
@@ -3018,6 +3356,8 @@ void LoadAllBranches()
 		if (not lep1_emiso_isLoaded) {
 			if (lep1_emiso_branch != 0) {
 				lep1_emiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_emiso_branch does not exist!\n");
 				exit(1);
@@ -3031,6 +3371,8 @@ void LoadAllBranches()
 		if (not lep1_nhiso_isLoaded) {
 			if (lep1_nhiso_branch != 0) {
 				lep1_nhiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nhiso_branch does not exist!\n");
 				exit(1);
@@ -3044,6 +3386,8 @@ void LoadAllBranches()
 		if (not lep1_corpfiso04_isLoaded) {
 			if (lep1_corpfiso04_branch != 0) {
 				lep1_corpfiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_corpfiso04_branch does not exist!\n");
 				exit(1);
@@ -3057,6 +3401,8 @@ void LoadAllBranches()
 		if (not lep1_pfiso04_isLoaded) {
 			if (lep1_pfiso04_branch != 0) {
 				lep1_pfiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_pfiso04_branch does not exist!\n");
 				exit(1);
@@ -3070,6 +3416,8 @@ void LoadAllBranches()
 		if (not lep1_chiso04_isLoaded) {
 			if (lep1_chiso04_branch != 0) {
 				lep1_chiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_chiso04_branch does not exist!\n");
 				exit(1);
@@ -3083,6 +3431,8 @@ void LoadAllBranches()
 		if (not lep1_emiso04_isLoaded) {
 			if (lep1_emiso04_branch != 0) {
 				lep1_emiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_emiso04_branch does not exist!\n");
 				exit(1);
@@ -3096,6 +3446,8 @@ void LoadAllBranches()
 		if (not lep1_nhiso04_isLoaded) {
 			if (lep1_nhiso04_branch != 0) {
 				lep1_nhiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nhiso04_branch does not exist!\n");
 				exit(1);
@@ -3109,6 +3461,8 @@ void LoadAllBranches()
 		if (not lep1_cordetiso_isLoaded) {
 			if (lep1_cordetiso_branch != 0) {
 				lep1_cordetiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_cordetiso_branch does not exist!\n");
 				exit(1);
@@ -3122,6 +3476,8 @@ void LoadAllBranches()
 		if (not lep1_detiso_isLoaded) {
 			if (lep1_detiso_branch != 0) {
 				lep1_detiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_detiso_branch does not exist!\n");
 				exit(1);
@@ -3135,6 +3491,8 @@ void LoadAllBranches()
 		if (not lep1_trkiso_isLoaded) {
 			if (lep1_trkiso_branch != 0) {
 				lep1_trkiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_trkiso_branch does not exist!\n");
 				exit(1);
@@ -3148,6 +3506,8 @@ void LoadAllBranches()
 		if (not lep1_ecaliso_isLoaded) {
 			if (lep1_ecaliso_branch != 0) {
 				lep1_ecaliso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_ecaliso_branch does not exist!\n");
 				exit(1);
@@ -3161,6 +3521,8 @@ void LoadAllBranches()
 		if (not lep1_hcaliso_isLoaded) {
 			if (lep1_hcaliso_branch != 0) {
 				lep1_hcaliso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_hcaliso_branch does not exist!\n");
 				exit(1);
@@ -3174,6 +3536,8 @@ void LoadAllBranches()
 		if (not lep1_cordetiso04_isLoaded) {
 			if (lep1_cordetiso04_branch != 0) {
 				lep1_cordetiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_cordetiso04_branch does not exist!\n");
 				exit(1);
@@ -3187,6 +3551,8 @@ void LoadAllBranches()
 		if (not lep1_detiso04_isLoaded) {
 			if (lep1_detiso04_branch != 0) {
 				lep1_detiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_detiso04_branch does not exist!\n");
 				exit(1);
@@ -3200,6 +3566,8 @@ void LoadAllBranches()
 		if (not lep1_trkiso04_isLoaded) {
 			if (lep1_trkiso04_branch != 0) {
 				lep1_trkiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_trkiso04_branch does not exist!\n");
 				exit(1);
@@ -3213,6 +3581,8 @@ void LoadAllBranches()
 		if (not lep1_ecaliso04_isLoaded) {
 			if (lep1_ecaliso04_branch != 0) {
 				lep1_ecaliso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_ecaliso04_branch does not exist!\n");
 				exit(1);
@@ -3226,6 +3596,8 @@ void LoadAllBranches()
 		if (not lep1_hcaliso04_isLoaded) {
 			if (lep1_hcaliso04_branch != 0) {
 				lep1_hcaliso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_hcaliso04_branch does not exist!\n");
 				exit(1);
@@ -3239,6 +3611,8 @@ void LoadAllBranches()
 		if (not lep1_effarea_isLoaded) {
 			if (lep1_effarea_branch != 0) {
 				lep1_effarea_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_effarea_branch does not exist!\n");
 				exit(1);
@@ -3252,6 +3626,8 @@ void LoadAllBranches()
 		if (not lep1_effarea04_isLoaded) {
 			if (lep1_effarea04_branch != 0) {
 				lep1_effarea04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_effarea04_branch does not exist!\n");
 				exit(1);
@@ -3265,6 +3641,8 @@ void LoadAllBranches()
 		if (not lep1_dbeta_isLoaded) {
 			if (lep1_dbeta_branch != 0) {
 				lep1_dbeta_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_dbeta_branch does not exist!\n");
 				exit(1);
@@ -3278,6 +3656,8 @@ void LoadAllBranches()
 		if (not lep1_dbeta04_isLoaded) {
 			if (lep1_dbeta04_branch != 0) {
 				lep1_dbeta04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_dbeta04_branch does not exist!\n");
 				exit(1);
@@ -3291,6 +3671,8 @@ void LoadAllBranches()
 		if (not lep1_sf_lepeff_isLoaded) {
 			if (lep1_sf_lepeff_branch != 0) {
 				lep1_sf_lepeff_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_sf_lepeff_branch does not exist!\n");
 				exit(1);
@@ -3304,6 +3686,8 @@ void LoadAllBranches()
 		if (not lep1_sf_trig_isLoaded) {
 			if (lep1_sf_trig_branch != 0) {
 				lep1_sf_trig_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_sf_trig_branch does not exist!\n");
 				exit(1);
@@ -3317,6 +3701,14 @@ void LoadAllBranches()
 		if (not lep1_mcp4_isLoaded) {
 			if (lep1_mcp4_branch != 0) {
 				lep1_mcp4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_mcp4_->pt(), &e);
+				if (not isfinite(lep1_mcp4_->pt()) || e > 30) {
+					printf("branch lep1_mcp4_branch contains a bad float: %f\n", lep1_mcp4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_mcp4_branch does not exist!\n");
 				exit(1);
@@ -3330,6 +3722,14 @@ void LoadAllBranches()
 		if (not lep1_mc3p4_isLoaded) {
 			if (lep1_mc3p4_branch != 0) {
 				lep1_mc3p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_mc3p4_->pt(), &e);
+				if (not isfinite(lep1_mc3p4_->pt()) || e > 30) {
+					printf("branch lep1_mc3p4_branch contains a bad float: %f\n", lep1_mc3p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_mc3p4_branch does not exist!\n");
 				exit(1);
@@ -3343,6 +3743,14 @@ void LoadAllBranches()
 		if (not lep1_mc_momp4_isLoaded) {
 			if (lep1_mc_momp4_branch != 0) {
 				lep1_mc_momp4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_mc_momp4_->pt(), &e);
+				if (not isfinite(lep1_mc_momp4_->pt()) || e > 30) {
+					printf("branch lep1_mc_momp4_branch contains a bad float: %f\n", lep1_mc_momp4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_mc_momp4_branch does not exist!\n");
 				exit(1);
@@ -3356,6 +3764,8 @@ void LoadAllBranches()
 		if (not lep1_mcid_isLoaded) {
 			if (lep1_mcid_branch != 0) {
 				lep1_mcid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_mcid_branch does not exist!\n");
 				exit(1);
@@ -3369,6 +3779,8 @@ void LoadAllBranches()
 		if (not lep1_mc3id_isLoaded) {
 			if (lep1_mc3id_branch != 0) {
 				lep1_mc3id_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_mc3id_branch does not exist!\n");
 				exit(1);
@@ -3382,6 +3794,8 @@ void LoadAllBranches()
 		if (not lep1_momid_isLoaded) {
 			if (lep1_momid_branch != 0) {
 				lep1_momid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_momid_branch does not exist!\n");
 				exit(1);
@@ -3395,6 +3809,8 @@ void LoadAllBranches()
 		if (not lep1_mc3_momid_isLoaded) {
 			if (lep1_mc3_momid_branch != 0) {
 				lep1_mc3_momid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_mc3_momid_branch does not exist!\n");
 				exit(1);
@@ -3408,6 +3824,14 @@ void LoadAllBranches()
 		if (not lep1_gsf_p4_isLoaded) {
 			if (lep1_gsf_p4_branch != 0) {
 				lep1_gsf_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_gsf_p4_->pt(), &e);
+				if (not isfinite(lep1_gsf_p4_->pt()) || e > 30) {
+					printf("branch lep1_gsf_p4_branch contains a bad float: %f\n", lep1_gsf_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_gsf_p4_branch does not exist!\n");
 				exit(1);
@@ -3421,6 +3845,14 @@ void LoadAllBranches()
 		if (not lep1_ctf_p4_isLoaded) {
 			if (lep1_ctf_p4_branch != 0) {
 				lep1_ctf_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_ctf_p4_->pt(), &e);
+				if (not isfinite(lep1_ctf_p4_->pt()) || e > 30) {
+					printf("branch lep1_ctf_p4_branch contains a bad float: %f\n", lep1_ctf_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_ctf_p4_branch does not exist!\n");
 				exit(1);
@@ -3434,6 +3866,14 @@ void LoadAllBranches()
 		if (not lep1_sc_p4_isLoaded) {
 			if (lep1_sc_p4_branch != 0) {
 				lep1_sc_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_sc_p4_->pt(), &e);
+				if (not isfinite(lep1_sc_p4_->pt()) || e > 30) {
+					printf("branch lep1_sc_p4_branch contains a bad float: %f\n", lep1_sc_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_sc_p4_branch does not exist!\n");
 				exit(1);
@@ -3447,6 +3887,8 @@ void LoadAllBranches()
 		if (not lep1_q3agree_isLoaded) {
 			if (lep1_q3agree_branch != 0) {
 				lep1_q3agree_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_q3agree_branch does not exist!\n");
 				exit(1);
@@ -3460,6 +3902,8 @@ void LoadAllBranches()
 		if (not lep1_is_conv_isLoaded) {
 			if (lep1_is_conv_branch != 0) {
 				lep1_is_conv_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_conv_branch does not exist!\n");
 				exit(1);
@@ -3473,6 +3917,8 @@ void LoadAllBranches()
 		if (not lep1_qsc_isLoaded) {
 			if (lep1_qsc_branch != 0) {
 				lep1_qsc_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_qsc_branch does not exist!\n");
 				exit(1);
@@ -3486,6 +3932,8 @@ void LoadAllBranches()
 		if (not lep1_qctf_isLoaded) {
 			if (lep1_qctf_branch != 0) {
 				lep1_qctf_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_qctf_branch does not exist!\n");
 				exit(1);
@@ -3499,6 +3947,8 @@ void LoadAllBranches()
 		if (not lep1_qgsf_isLoaded) {
 			if (lep1_qgsf_branch != 0) {
 				lep1_qgsf_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_qgsf_branch does not exist!\n");
 				exit(1);
@@ -3512,6 +3962,8 @@ void LoadAllBranches()
 		if (not lep1_nmhits_isLoaded) {
 			if (lep1_nmhits_branch != 0) {
 				lep1_nmhits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nmhits_branch does not exist!\n");
 				exit(1);
@@ -3525,6 +3977,8 @@ void LoadAllBranches()
 		if (not lep1_eleid_veto_isLoaded) {
 			if (lep1_eleid_veto_branch != 0) {
 				lep1_eleid_veto_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_eleid_veto_branch does not exist!\n");
 				exit(1);
@@ -3538,6 +3992,8 @@ void LoadAllBranches()
 		if (not lep1_eleid_loose_isLoaded) {
 			if (lep1_eleid_loose_branch != 0) {
 				lep1_eleid_loose_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_eleid_loose_branch does not exist!\n");
 				exit(1);
@@ -3551,6 +4007,8 @@ void LoadAllBranches()
 		if (not lep1_eleid_medium_isLoaded) {
 			if (lep1_eleid_medium_branch != 0) {
 				lep1_eleid_medium_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_eleid_medium_branch does not exist!\n");
 				exit(1);
@@ -3564,6 +4022,8 @@ void LoadAllBranches()
 		if (not lep1_eleid_tight_isLoaded) {
 			if (lep1_eleid_tight_branch != 0) {
 				lep1_eleid_tight_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_eleid_tight_branch does not exist!\n");
 				exit(1);
@@ -3577,6 +4037,8 @@ void LoadAllBranches()
 		if (not lep1_dphiin_isLoaded) {
 			if (lep1_dphiin_branch != 0) {
 				lep1_dphiin_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_dphiin_branch does not exist!\n");
 				exit(1);
@@ -3590,6 +4052,8 @@ void LoadAllBranches()
 		if (not lep1_detain_isLoaded) {
 			if (lep1_detain_branch != 0) {
 				lep1_detain_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_detain_branch does not exist!\n");
 				exit(1);
@@ -3603,6 +4067,8 @@ void LoadAllBranches()
 		if (not lep1_sieie_isLoaded) {
 			if (lep1_sieie_branch != 0) {
 				lep1_sieie_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_sieie_branch does not exist!\n");
 				exit(1);
@@ -3616,6 +4082,8 @@ void LoadAllBranches()
 		if (not lep1_hoe_isLoaded) {
 			if (lep1_hoe_branch != 0) {
 				lep1_hoe_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_hoe_branch does not exist!\n");
 				exit(1);
@@ -3629,6 +4097,8 @@ void LoadAllBranches()
 		if (not lep1_ooemoop_isLoaded) {
 			if (lep1_ooemoop_branch != 0) {
 				lep1_ooemoop_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_ooemoop_branch does not exist!\n");
 				exit(1);
@@ -3642,6 +4112,8 @@ void LoadAllBranches()
 		if (not lep1_conv_dist_isLoaded) {
 			if (lep1_conv_dist_branch != 0) {
 				lep1_conv_dist_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_conv_dist_branch does not exist!\n");
 				exit(1);
@@ -3655,6 +4127,8 @@ void LoadAllBranches()
 		if (not lep1_conv_dcot_isLoaded) {
 			if (lep1_conv_dcot_branch != 0) {
 				lep1_conv_dcot_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_conv_dcot_branch does not exist!\n");
 				exit(1);
@@ -3668,6 +4142,14 @@ void LoadAllBranches()
 		if (not lep1_gfit_p4_isLoaded) {
 			if (lep1_gfit_p4_branch != 0) {
 				lep1_gfit_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_gfit_p4_->pt(), &e);
+				if (not isfinite(lep1_gfit_p4_->pt()) || e > 30) {
+					printf("branch lep1_gfit_p4_branch contains a bad float: %f\n", lep1_gfit_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_gfit_p4_branch does not exist!\n");
 				exit(1);
@@ -3681,6 +4163,8 @@ void LoadAllBranches()
 		if (not lep1_is_global_isLoaded) {
 			if (lep1_is_global_branch != 0) {
 				lep1_is_global_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_global_branch does not exist!\n");
 				exit(1);
@@ -3694,6 +4178,8 @@ void LoadAllBranches()
 		if (not lep1_is_tracker_isLoaded) {
 			if (lep1_is_tracker_branch != 0) {
 				lep1_is_tracker_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_tracker_branch does not exist!\n");
 				exit(1);
@@ -3707,6 +4193,8 @@ void LoadAllBranches()
 		if (not lep1_is_stamu_isLoaded) {
 			if (lep1_is_stamu_branch != 0) {
 				lep1_is_stamu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_stamu_branch does not exist!\n");
 				exit(1);
@@ -3720,6 +4208,8 @@ void LoadAllBranches()
 		if (not lep1_is_pfmu_isLoaded) {
 			if (lep1_is_pfmu_branch != 0) {
 				lep1_is_pfmu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_pfmu_branch does not exist!\n");
 				exit(1);
@@ -3733,6 +4223,8 @@ void LoadAllBranches()
 		if (not lep1_is_loosemu_isLoaded) {
 			if (lep1_is_loosemu_branch != 0) {
 				lep1_is_loosemu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_loosemu_branch does not exist!\n");
 				exit(1);
@@ -3746,6 +4238,8 @@ void LoadAllBranches()
 		if (not lep1_is_tightmu_isLoaded) {
 			if (lep1_is_tightmu_branch != 0) {
 				lep1_is_tightmu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_is_tightmu_branch does not exist!\n");
 				exit(1);
@@ -3759,6 +4253,8 @@ void LoadAllBranches()
 		if (not lep1_npixelhits_isLoaded) {
 			if (lep1_npixelhits_branch != 0) {
 				lep1_npixelhits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_npixelhits_branch does not exist!\n");
 				exit(1);
@@ -3772,6 +4268,8 @@ void LoadAllBranches()
 		if (not lep1_nsihits_isLoaded) {
 			if (lep1_nsihits_branch != 0) {
 				lep1_nsihits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nsihits_branch does not exist!\n");
 				exit(1);
@@ -3785,6 +4283,8 @@ void LoadAllBranches()
 		if (not lep1_nsilayers_isLoaded) {
 			if (lep1_nsilayers_branch != 0) {
 				lep1_nsilayers_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nsilayers_branch does not exist!\n");
 				exit(1);
@@ -3798,6 +4298,8 @@ void LoadAllBranches()
 		if (not lep1_nstahits_isLoaded) {
 			if (lep1_nstahits_branch != 0) {
 				lep1_nstahits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nstahits_branch does not exist!\n");
 				exit(1);
@@ -3811,6 +4313,8 @@ void LoadAllBranches()
 		if (not lep1_nstations_isLoaded) {
 			if (lep1_nstations_branch != 0) {
 				lep1_nstations_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nstations_branch does not exist!\n");
 				exit(1);
@@ -3824,6 +4328,8 @@ void LoadAllBranches()
 		if (not lep1_chi2_isLoaded) {
 			if (lep1_chi2_branch != 0) {
 				lep1_chi2_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_chi2_branch does not exist!\n");
 				exit(1);
@@ -3837,6 +4343,8 @@ void LoadAllBranches()
 		if (not lep1_ndof_isLoaded) {
 			if (lep1_ndof_branch != 0) {
 				lep1_ndof_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_ndof_branch does not exist!\n");
 				exit(1);
@@ -3850,6 +4358,8 @@ void LoadAllBranches()
 		if (not lep1_pterr_isLoaded) {
 			if (lep1_pterr_branch != 0) {
 				lep1_pterr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_pterr_branch does not exist!\n");
 				exit(1);
@@ -3863,6 +4373,8 @@ void LoadAllBranches()
 		if (not lep1_ecal_vetodep_isLoaded) {
 			if (lep1_ecal_vetodep_branch != 0) {
 				lep1_ecal_vetodep_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_ecal_vetodep_branch does not exist!\n");
 				exit(1);
@@ -3876,6 +4388,8 @@ void LoadAllBranches()
 		if (not lep1_hcal_vetodep_isLoaded) {
 			if (lep1_hcal_vetodep_branch != 0) {
 				lep1_hcal_vetodep_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_hcal_vetodep_branch does not exist!\n");
 				exit(1);
@@ -3889,6 +4403,14 @@ void LoadAllBranches()
 		if (not lep2_p4_isLoaded) {
 			if (lep2_p4_branch != 0) {
 				lep2_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_p4_->pt(), &e);
+				if (not isfinite(lep2_p4_->pt()) || e > 30) {
+					printf("branch lep2_p4_branch contains a bad float: %f\n", lep2_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_p4_branch does not exist!\n");
 				exit(1);
@@ -3902,6 +4424,8 @@ void LoadAllBranches()
 		if (not lep2_passes_id_isLoaded) {
 			if (lep2_passes_id_branch != 0) {
 				lep2_passes_id_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_passes_id_branch does not exist!\n");
 				exit(1);
@@ -3915,6 +4439,8 @@ void LoadAllBranches()
 		if (not lep2_passes_iso_isLoaded) {
 			if (lep2_passes_iso_branch != 0) {
 				lep2_passes_iso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_passes_iso_branch does not exist!\n");
 				exit(1);
@@ -3928,6 +4454,8 @@ void LoadAllBranches()
 		if (not lep2_is_num_isLoaded) {
 			if (lep2_is_num_branch != 0) {
 				lep2_is_num_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_num_branch does not exist!\n");
 				exit(1);
@@ -3941,6 +4469,8 @@ void LoadAllBranches()
 		if (not lep2_is_fo_isLoaded) {
 			if (lep2_is_fo_branch != 0) {
 				lep2_is_fo_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_fo_branch does not exist!\n");
 				exit(1);
@@ -3954,6 +4484,8 @@ void LoadAllBranches()
 		if (not lep2_charge_isLoaded) {
 			if (lep2_charge_branch != 0) {
 				lep2_charge_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_charge_branch does not exist!\n");
 				exit(1);
@@ -3967,6 +4499,8 @@ void LoadAllBranches()
 		if (not lep2_pdgid_isLoaded) {
 			if (lep2_pdgid_branch != 0) {
 				lep2_pdgid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_pdgid_branch does not exist!\n");
 				exit(1);
@@ -3980,6 +4514,8 @@ void LoadAllBranches()
 		if (not lep2_type_isLoaded) {
 			if (lep2_type_branch != 0) {
 				lep2_type_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_type_branch does not exist!\n");
 				exit(1);
@@ -3993,6 +4529,8 @@ void LoadAllBranches()
 		if (not lep2_d0_isLoaded) {
 			if (lep2_d0_branch != 0) {
 				lep2_d0_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_d0_branch does not exist!\n");
 				exit(1);
@@ -4006,6 +4544,8 @@ void LoadAllBranches()
 		if (not lep2_dz_isLoaded) {
 			if (lep2_dz_branch != 0) {
 				lep2_dz_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_dz_branch does not exist!\n");
 				exit(1);
@@ -4019,6 +4559,8 @@ void LoadAllBranches()
 		if (not lep2_mt_isLoaded) {
 			if (lep2_mt_branch != 0) {
 				lep2_mt_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_mt_branch does not exist!\n");
 				exit(1);
@@ -4032,6 +4574,8 @@ void LoadAllBranches()
 		if (not lep2_corpfiso_isLoaded) {
 			if (lep2_corpfiso_branch != 0) {
 				lep2_corpfiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_corpfiso_branch does not exist!\n");
 				exit(1);
@@ -4045,6 +4589,8 @@ void LoadAllBranches()
 		if (not lep2_pfiso_isLoaded) {
 			if (lep2_pfiso_branch != 0) {
 				lep2_pfiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_pfiso_branch does not exist!\n");
 				exit(1);
@@ -4058,6 +4604,8 @@ void LoadAllBranches()
 		if (not lep2_chiso_isLoaded) {
 			if (lep2_chiso_branch != 0) {
 				lep2_chiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_chiso_branch does not exist!\n");
 				exit(1);
@@ -4071,6 +4619,8 @@ void LoadAllBranches()
 		if (not lep2_emiso_isLoaded) {
 			if (lep2_emiso_branch != 0) {
 				lep2_emiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_emiso_branch does not exist!\n");
 				exit(1);
@@ -4084,6 +4634,8 @@ void LoadAllBranches()
 		if (not lep2_nhiso_isLoaded) {
 			if (lep2_nhiso_branch != 0) {
 				lep2_nhiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nhiso_branch does not exist!\n");
 				exit(1);
@@ -4097,6 +4649,8 @@ void LoadAllBranches()
 		if (not lep2_corpfiso04_isLoaded) {
 			if (lep2_corpfiso04_branch != 0) {
 				lep2_corpfiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_corpfiso04_branch does not exist!\n");
 				exit(1);
@@ -4110,6 +4664,8 @@ void LoadAllBranches()
 		if (not lep2_pfiso04_isLoaded) {
 			if (lep2_pfiso04_branch != 0) {
 				lep2_pfiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_pfiso04_branch does not exist!\n");
 				exit(1);
@@ -4123,6 +4679,8 @@ void LoadAllBranches()
 		if (not lep2_chiso04_isLoaded) {
 			if (lep2_chiso04_branch != 0) {
 				lep2_chiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_chiso04_branch does not exist!\n");
 				exit(1);
@@ -4136,6 +4694,8 @@ void LoadAllBranches()
 		if (not lep2_emiso04_isLoaded) {
 			if (lep2_emiso04_branch != 0) {
 				lep2_emiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_emiso04_branch does not exist!\n");
 				exit(1);
@@ -4149,6 +4709,8 @@ void LoadAllBranches()
 		if (not lep2_nhiso04_isLoaded) {
 			if (lep2_nhiso04_branch != 0) {
 				lep2_nhiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nhiso04_branch does not exist!\n");
 				exit(1);
@@ -4162,6 +4724,8 @@ void LoadAllBranches()
 		if (not lep2_cordetiso_isLoaded) {
 			if (lep2_cordetiso_branch != 0) {
 				lep2_cordetiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_cordetiso_branch does not exist!\n");
 				exit(1);
@@ -4175,6 +4739,8 @@ void LoadAllBranches()
 		if (not lep2_detiso_isLoaded) {
 			if (lep2_detiso_branch != 0) {
 				lep2_detiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_detiso_branch does not exist!\n");
 				exit(1);
@@ -4188,6 +4754,8 @@ void LoadAllBranches()
 		if (not lep2_trkiso_isLoaded) {
 			if (lep2_trkiso_branch != 0) {
 				lep2_trkiso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_trkiso_branch does not exist!\n");
 				exit(1);
@@ -4201,6 +4769,8 @@ void LoadAllBranches()
 		if (not lep2_ecaliso_isLoaded) {
 			if (lep2_ecaliso_branch != 0) {
 				lep2_ecaliso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_ecaliso_branch does not exist!\n");
 				exit(1);
@@ -4214,6 +4784,8 @@ void LoadAllBranches()
 		if (not lep2_hcaliso_isLoaded) {
 			if (lep2_hcaliso_branch != 0) {
 				lep2_hcaliso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_hcaliso_branch does not exist!\n");
 				exit(1);
@@ -4227,6 +4799,8 @@ void LoadAllBranches()
 		if (not lep2_cordetiso04_isLoaded) {
 			if (lep2_cordetiso04_branch != 0) {
 				lep2_cordetiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_cordetiso04_branch does not exist!\n");
 				exit(1);
@@ -4240,6 +4814,8 @@ void LoadAllBranches()
 		if (not lep2_detiso04_isLoaded) {
 			if (lep2_detiso04_branch != 0) {
 				lep2_detiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_detiso04_branch does not exist!\n");
 				exit(1);
@@ -4253,6 +4829,8 @@ void LoadAllBranches()
 		if (not lep2_trkiso04_isLoaded) {
 			if (lep2_trkiso04_branch != 0) {
 				lep2_trkiso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_trkiso04_branch does not exist!\n");
 				exit(1);
@@ -4266,6 +4844,8 @@ void LoadAllBranches()
 		if (not lep2_ecaliso04_isLoaded) {
 			if (lep2_ecaliso04_branch != 0) {
 				lep2_ecaliso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_ecaliso04_branch does not exist!\n");
 				exit(1);
@@ -4279,6 +4859,8 @@ void LoadAllBranches()
 		if (not lep2_hcaliso04_isLoaded) {
 			if (lep2_hcaliso04_branch != 0) {
 				lep2_hcaliso04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_hcaliso04_branch does not exist!\n");
 				exit(1);
@@ -4292,6 +4874,8 @@ void LoadAllBranches()
 		if (not lep2_effarea_isLoaded) {
 			if (lep2_effarea_branch != 0) {
 				lep2_effarea_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_effarea_branch does not exist!\n");
 				exit(1);
@@ -4305,6 +4889,8 @@ void LoadAllBranches()
 		if (not lep2_effarea04_isLoaded) {
 			if (lep2_effarea04_branch != 0) {
 				lep2_effarea04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_effarea04_branch does not exist!\n");
 				exit(1);
@@ -4318,6 +4904,8 @@ void LoadAllBranches()
 		if (not lep2_dbeta_isLoaded) {
 			if (lep2_dbeta_branch != 0) {
 				lep2_dbeta_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_dbeta_branch does not exist!\n");
 				exit(1);
@@ -4331,6 +4919,8 @@ void LoadAllBranches()
 		if (not lep2_dbeta04_isLoaded) {
 			if (lep2_dbeta04_branch != 0) {
 				lep2_dbeta04_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_dbeta04_branch does not exist!\n");
 				exit(1);
@@ -4344,6 +4934,8 @@ void LoadAllBranches()
 		if (not lep2_sf_lepeff_isLoaded) {
 			if (lep2_sf_lepeff_branch != 0) {
 				lep2_sf_lepeff_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_sf_lepeff_branch does not exist!\n");
 				exit(1);
@@ -4357,6 +4949,8 @@ void LoadAllBranches()
 		if (not lep2_sf_trig_isLoaded) {
 			if (lep2_sf_trig_branch != 0) {
 				lep2_sf_trig_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_sf_trig_branch does not exist!\n");
 				exit(1);
@@ -4370,6 +4964,14 @@ void LoadAllBranches()
 		if (not lep2_mcp4_isLoaded) {
 			if (lep2_mcp4_branch != 0) {
 				lep2_mcp4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_mcp4_->pt(), &e);
+				if (not isfinite(lep2_mcp4_->pt()) || e > 30) {
+					printf("branch lep2_mcp4_branch contains a bad float: %f\n", lep2_mcp4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_mcp4_branch does not exist!\n");
 				exit(1);
@@ -4383,6 +4985,14 @@ void LoadAllBranches()
 		if (not lep2_mc3p4_isLoaded) {
 			if (lep2_mc3p4_branch != 0) {
 				lep2_mc3p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_mc3p4_->pt(), &e);
+				if (not isfinite(lep2_mc3p4_->pt()) || e > 30) {
+					printf("branch lep2_mc3p4_branch contains a bad float: %f\n", lep2_mc3p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_mc3p4_branch does not exist!\n");
 				exit(1);
@@ -4396,6 +5006,14 @@ void LoadAllBranches()
 		if (not lep2_mc_momp4_isLoaded) {
 			if (lep2_mc_momp4_branch != 0) {
 				lep2_mc_momp4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_mc_momp4_->pt(), &e);
+				if (not isfinite(lep2_mc_momp4_->pt()) || e > 30) {
+					printf("branch lep2_mc_momp4_branch contains a bad float: %f\n", lep2_mc_momp4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_mc_momp4_branch does not exist!\n");
 				exit(1);
@@ -4409,6 +5027,8 @@ void LoadAllBranches()
 		if (not lep2_mcid_isLoaded) {
 			if (lep2_mcid_branch != 0) {
 				lep2_mcid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_mcid_branch does not exist!\n");
 				exit(1);
@@ -4422,6 +5042,8 @@ void LoadAllBranches()
 		if (not lep2_mc3id_isLoaded) {
 			if (lep2_mc3id_branch != 0) {
 				lep2_mc3id_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_mc3id_branch does not exist!\n");
 				exit(1);
@@ -4435,6 +5057,8 @@ void LoadAllBranches()
 		if (not lep2_momid_isLoaded) {
 			if (lep2_momid_branch != 0) {
 				lep2_momid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_momid_branch does not exist!\n");
 				exit(1);
@@ -4448,6 +5072,8 @@ void LoadAllBranches()
 		if (not lep2_mc3_momid_isLoaded) {
 			if (lep2_mc3_momid_branch != 0) {
 				lep2_mc3_momid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_mc3_momid_branch does not exist!\n");
 				exit(1);
@@ -4461,6 +5087,14 @@ void LoadAllBranches()
 		if (not lep2_gsf_p4_isLoaded) {
 			if (lep2_gsf_p4_branch != 0) {
 				lep2_gsf_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_gsf_p4_->pt(), &e);
+				if (not isfinite(lep2_gsf_p4_->pt()) || e > 30) {
+					printf("branch lep2_gsf_p4_branch contains a bad float: %f\n", lep2_gsf_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_gsf_p4_branch does not exist!\n");
 				exit(1);
@@ -4474,6 +5108,14 @@ void LoadAllBranches()
 		if (not lep2_ctf_p4_isLoaded) {
 			if (lep2_ctf_p4_branch != 0) {
 				lep2_ctf_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_ctf_p4_->pt(), &e);
+				if (not isfinite(lep2_ctf_p4_->pt()) || e > 30) {
+					printf("branch lep2_ctf_p4_branch contains a bad float: %f\n", lep2_ctf_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_ctf_p4_branch does not exist!\n");
 				exit(1);
@@ -4487,6 +5129,14 @@ void LoadAllBranches()
 		if (not lep2_sc_p4_isLoaded) {
 			if (lep2_sc_p4_branch != 0) {
 				lep2_sc_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_sc_p4_->pt(), &e);
+				if (not isfinite(lep2_sc_p4_->pt()) || e > 30) {
+					printf("branch lep2_sc_p4_branch contains a bad float: %f\n", lep2_sc_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_sc_p4_branch does not exist!\n");
 				exit(1);
@@ -4500,6 +5150,8 @@ void LoadAllBranches()
 		if (not lep2_q3agree_isLoaded) {
 			if (lep2_q3agree_branch != 0) {
 				lep2_q3agree_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_q3agree_branch does not exist!\n");
 				exit(1);
@@ -4513,6 +5165,8 @@ void LoadAllBranches()
 		if (not lep2_is_conv_isLoaded) {
 			if (lep2_is_conv_branch != 0) {
 				lep2_is_conv_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_conv_branch does not exist!\n");
 				exit(1);
@@ -4526,6 +5180,8 @@ void LoadAllBranches()
 		if (not lep2_qsc_isLoaded) {
 			if (lep2_qsc_branch != 0) {
 				lep2_qsc_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_qsc_branch does not exist!\n");
 				exit(1);
@@ -4539,6 +5195,8 @@ void LoadAllBranches()
 		if (not lep2_qctf_isLoaded) {
 			if (lep2_qctf_branch != 0) {
 				lep2_qctf_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_qctf_branch does not exist!\n");
 				exit(1);
@@ -4552,6 +5210,8 @@ void LoadAllBranches()
 		if (not lep2_qgsf_isLoaded) {
 			if (lep2_qgsf_branch != 0) {
 				lep2_qgsf_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_qgsf_branch does not exist!\n");
 				exit(1);
@@ -4565,6 +5225,8 @@ void LoadAllBranches()
 		if (not lep2_nmhits_isLoaded) {
 			if (lep2_nmhits_branch != 0) {
 				lep2_nmhits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nmhits_branch does not exist!\n");
 				exit(1);
@@ -4578,6 +5240,8 @@ void LoadAllBranches()
 		if (not lep2_eleid_veto_isLoaded) {
 			if (lep2_eleid_veto_branch != 0) {
 				lep2_eleid_veto_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_eleid_veto_branch does not exist!\n");
 				exit(1);
@@ -4591,6 +5255,8 @@ void LoadAllBranches()
 		if (not lep2_eleid_loose_isLoaded) {
 			if (lep2_eleid_loose_branch != 0) {
 				lep2_eleid_loose_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_eleid_loose_branch does not exist!\n");
 				exit(1);
@@ -4604,6 +5270,8 @@ void LoadAllBranches()
 		if (not lep2_eleid_medium_isLoaded) {
 			if (lep2_eleid_medium_branch != 0) {
 				lep2_eleid_medium_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_eleid_medium_branch does not exist!\n");
 				exit(1);
@@ -4617,6 +5285,8 @@ void LoadAllBranches()
 		if (not lep2_eleid_tight_isLoaded) {
 			if (lep2_eleid_tight_branch != 0) {
 				lep2_eleid_tight_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_eleid_tight_branch does not exist!\n");
 				exit(1);
@@ -4630,6 +5300,8 @@ void LoadAllBranches()
 		if (not lep2_dphiin_isLoaded) {
 			if (lep2_dphiin_branch != 0) {
 				lep2_dphiin_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_dphiin_branch does not exist!\n");
 				exit(1);
@@ -4643,6 +5315,8 @@ void LoadAllBranches()
 		if (not lep2_detain_isLoaded) {
 			if (lep2_detain_branch != 0) {
 				lep2_detain_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_detain_branch does not exist!\n");
 				exit(1);
@@ -4656,6 +5330,8 @@ void LoadAllBranches()
 		if (not lep2_sieie_isLoaded) {
 			if (lep2_sieie_branch != 0) {
 				lep2_sieie_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_sieie_branch does not exist!\n");
 				exit(1);
@@ -4669,6 +5345,8 @@ void LoadAllBranches()
 		if (not lep2_hoe_isLoaded) {
 			if (lep2_hoe_branch != 0) {
 				lep2_hoe_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_hoe_branch does not exist!\n");
 				exit(1);
@@ -4682,6 +5360,8 @@ void LoadAllBranches()
 		if (not lep2_ooemoop_isLoaded) {
 			if (lep2_ooemoop_branch != 0) {
 				lep2_ooemoop_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_ooemoop_branch does not exist!\n");
 				exit(1);
@@ -4695,6 +5375,8 @@ void LoadAllBranches()
 		if (not lep2_conv_dist_isLoaded) {
 			if (lep2_conv_dist_branch != 0) {
 				lep2_conv_dist_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_conv_dist_branch does not exist!\n");
 				exit(1);
@@ -4708,6 +5390,8 @@ void LoadAllBranches()
 		if (not lep2_conv_dcot_isLoaded) {
 			if (lep2_conv_dcot_branch != 0) {
 				lep2_conv_dcot_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_conv_dcot_branch does not exist!\n");
 				exit(1);
@@ -4721,6 +5405,14 @@ void LoadAllBranches()
 		if (not lep2_gfit_p4_isLoaded) {
 			if (lep2_gfit_p4_branch != 0) {
 				lep2_gfit_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_gfit_p4_->pt(), &e);
+				if (not isfinite(lep2_gfit_p4_->pt()) || e > 30) {
+					printf("branch lep2_gfit_p4_branch contains a bad float: %f\n", lep2_gfit_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_gfit_p4_branch does not exist!\n");
 				exit(1);
@@ -4734,6 +5426,8 @@ void LoadAllBranches()
 		if (not lep2_is_global_isLoaded) {
 			if (lep2_is_global_branch != 0) {
 				lep2_is_global_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_global_branch does not exist!\n");
 				exit(1);
@@ -4747,6 +5441,8 @@ void LoadAllBranches()
 		if (not lep2_is_tracker_isLoaded) {
 			if (lep2_is_tracker_branch != 0) {
 				lep2_is_tracker_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_tracker_branch does not exist!\n");
 				exit(1);
@@ -4760,6 +5456,8 @@ void LoadAllBranches()
 		if (not lep2_is_stamu_isLoaded) {
 			if (lep2_is_stamu_branch != 0) {
 				lep2_is_stamu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_stamu_branch does not exist!\n");
 				exit(1);
@@ -4773,6 +5471,8 @@ void LoadAllBranches()
 		if (not lep2_is_pfmu_isLoaded) {
 			if (lep2_is_pfmu_branch != 0) {
 				lep2_is_pfmu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_pfmu_branch does not exist!\n");
 				exit(1);
@@ -4786,6 +5486,8 @@ void LoadAllBranches()
 		if (not lep2_is_loosemu_isLoaded) {
 			if (lep2_is_loosemu_branch != 0) {
 				lep2_is_loosemu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_loosemu_branch does not exist!\n");
 				exit(1);
@@ -4799,6 +5501,8 @@ void LoadAllBranches()
 		if (not lep2_is_tightmu_isLoaded) {
 			if (lep2_is_tightmu_branch != 0) {
 				lep2_is_tightmu_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_is_tightmu_branch does not exist!\n");
 				exit(1);
@@ -4812,6 +5516,8 @@ void LoadAllBranches()
 		if (not lep2_npixelhits_isLoaded) {
 			if (lep2_npixelhits_branch != 0) {
 				lep2_npixelhits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_npixelhits_branch does not exist!\n");
 				exit(1);
@@ -4825,6 +5531,8 @@ void LoadAllBranches()
 		if (not lep2_nsihits_isLoaded) {
 			if (lep2_nsihits_branch != 0) {
 				lep2_nsihits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nsihits_branch does not exist!\n");
 				exit(1);
@@ -4838,6 +5546,8 @@ void LoadAllBranches()
 		if (not lep2_nsilayers_isLoaded) {
 			if (lep2_nsilayers_branch != 0) {
 				lep2_nsilayers_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nsilayers_branch does not exist!\n");
 				exit(1);
@@ -4851,6 +5561,8 @@ void LoadAllBranches()
 		if (not lep2_nstahits_isLoaded) {
 			if (lep2_nstahits_branch != 0) {
 				lep2_nstahits_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nstahits_branch does not exist!\n");
 				exit(1);
@@ -4864,6 +5576,8 @@ void LoadAllBranches()
 		if (not lep2_nstations_isLoaded) {
 			if (lep2_nstations_branch != 0) {
 				lep2_nstations_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nstations_branch does not exist!\n");
 				exit(1);
@@ -4877,6 +5591,8 @@ void LoadAllBranches()
 		if (not lep2_chi2_isLoaded) {
 			if (lep2_chi2_branch != 0) {
 				lep2_chi2_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_chi2_branch does not exist!\n");
 				exit(1);
@@ -4890,6 +5606,8 @@ void LoadAllBranches()
 		if (not lep2_ndof_isLoaded) {
 			if (lep2_ndof_branch != 0) {
 				lep2_ndof_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_ndof_branch does not exist!\n");
 				exit(1);
@@ -4903,6 +5621,8 @@ void LoadAllBranches()
 		if (not lep2_pterr_isLoaded) {
 			if (lep2_pterr_branch != 0) {
 				lep2_pterr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_pterr_branch does not exist!\n");
 				exit(1);
@@ -4916,6 +5636,8 @@ void LoadAllBranches()
 		if (not lep2_ecal_vetodep_isLoaded) {
 			if (lep2_ecal_vetodep_branch != 0) {
 				lep2_ecal_vetodep_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_ecal_vetodep_branch does not exist!\n");
 				exit(1);
@@ -4929,6 +5651,8 @@ void LoadAllBranches()
 		if (not lep2_hcal_vetodep_isLoaded) {
 			if (lep2_hcal_vetodep_branch != 0) {
 				lep2_hcal_vetodep_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_hcal_vetodep_branch does not exist!\n");
 				exit(1);
@@ -4942,6 +5666,14 @@ void LoadAllBranches()
 		if (not dilep_p4_isLoaded) {
 			if (dilep_p4_branch != 0) {
 				dilep_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(dilep_p4_->pt(), &e);
+				if (not isfinite(dilep_p4_->pt()) || e > 30) {
+					printf("branch dilep_p4_branch contains a bad float: %f\n", dilep_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dilep_p4_branch does not exist!\n");
 				exit(1);
@@ -4955,6 +5687,8 @@ void LoadAllBranches()
 		if (not is_os_isLoaded) {
 			if (is_os_branch != 0) {
 				is_os_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_os_branch does not exist!\n");
 				exit(1);
@@ -4968,6 +5702,8 @@ void LoadAllBranches()
 		if (not is_ss_isLoaded) {
 			if (is_ss_branch != 0) {
 				is_ss_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_ss_branch does not exist!\n");
 				exit(1);
@@ -4981,6 +5717,8 @@ void LoadAllBranches()
 		if (not dilep_type_isLoaded) {
 			if (dilep_type_branch != 0) {
 				dilep_type_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dilep_type_branch does not exist!\n");
 				exit(1);
@@ -4994,6 +5732,8 @@ void LoadAllBranches()
 		if (not dilep_gen_type_isLoaded) {
 			if (dilep_gen_type_branch != 0) {
 				dilep_gen_type_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dilep_gen_type_branch does not exist!\n");
 				exit(1);
@@ -5007,6 +5747,8 @@ void LoadAllBranches()
 		if (not dilep_mass_isLoaded) {
 			if (dilep_mass_branch != 0) {
 				dilep_mass_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dilep_mass_branch does not exist!\n");
 				exit(1);
@@ -5020,6 +5762,8 @@ void LoadAllBranches()
 		if (not dilep_dphi_isLoaded) {
 			if (dilep_dphi_branch != 0) {
 				dilep_dphi_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dilep_dphi_branch does not exist!\n");
 				exit(1);
@@ -5033,6 +5777,8 @@ void LoadAllBranches()
 		if (not dilep_deta_isLoaded) {
 			if (dilep_deta_branch != 0) {
 				dilep_deta_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dilep_deta_branch does not exist!\n");
 				exit(1);
@@ -5046,6 +5792,8 @@ void LoadAllBranches()
 		if (not dilep_dr_isLoaded) {
 			if (dilep_dr_branch != 0) {
 				dilep_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dilep_dr_branch does not exist!\n");
 				exit(1);
@@ -5059,6 +5807,8 @@ void LoadAllBranches()
 		if (not fiduciality_isLoaded) {
 			if (fiduciality_branch != 0) {
 				fiduciality_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fiduciality_branch does not exist!\n");
 				exit(1);
@@ -5072,6 +5822,8 @@ void LoadAllBranches()
 		if (not selection_isLoaded) {
 			if (selection_branch != 0) {
 				selection_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch selection_branch does not exist!\n");
 				exit(1);
@@ -5085,6 +5837,8 @@ void LoadAllBranches()
 		if (not is_good_lumi_isLoaded) {
 			if (is_good_lumi_branch != 0) {
 				is_good_lumi_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_good_lumi_branch does not exist!\n");
 				exit(1);
@@ -5098,6 +5852,8 @@ void LoadAllBranches()
 		if (not njets_isLoaded) {
 			if (njets_branch != 0) {
 				njets_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch njets_branch does not exist!\n");
 				exit(1);
@@ -5111,6 +5867,8 @@ void LoadAllBranches()
 		if (not njets20_isLoaded) {
 			if (njets20_branch != 0) {
 				njets20_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch njets20_branch does not exist!\n");
 				exit(1);
@@ -5124,6 +5882,8 @@ void LoadAllBranches()
 		if (not njets30_isLoaded) {
 			if (njets30_branch != 0) {
 				njets30_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch njets30_branch does not exist!\n");
 				exit(1);
@@ -5137,6 +5897,8 @@ void LoadAllBranches()
 		if (not nbtags_isLoaded) {
 			if (nbtags_branch != 0) {
 				nbtags_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nbtags_branch does not exist!\n");
 				exit(1);
@@ -5150,6 +5912,8 @@ void LoadAllBranches()
 		if (not nbtags20_isLoaded) {
 			if (nbtags20_branch != 0) {
 				nbtags20_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nbtags20_branch does not exist!\n");
 				exit(1);
@@ -5163,6 +5927,8 @@ void LoadAllBranches()
 		if (not nbtags30_isLoaded) {
 			if (nbtags30_branch != 0) {
 				nbtags30_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nbtags30_branch does not exist!\n");
 				exit(1);
@@ -5176,6 +5942,8 @@ void LoadAllBranches()
 		if (not vtxw_isLoaded) {
 			if (vtxw_branch != 0) {
 				vtxw_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vtxw_branch does not exist!\n");
 				exit(1);
@@ -5184,11 +5952,28 @@ void LoadAllBranches()
 		}
 		return vtxw_;
 	}
+	float &mt()
+	{
+		if (not mt_isLoaded) {
+			if (mt_branch != 0) {
+				mt_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch mt_branch does not exist!\n");
+				exit(1);
+			}
+			mt_isLoaded = true;
+		}
+		return mt_;
+	}
 	float &ht()
 	{
 		if (not ht_isLoaded) {
 			if (ht_branch != 0) {
 				ht_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ht_branch does not exist!\n");
 				exit(1);
@@ -5202,6 +5987,8 @@ void LoadAllBranches()
 		if (not ht20_isLoaded) {
 			if (ht20_branch != 0) {
 				ht20_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ht20_branch does not exist!\n");
 				exit(1);
@@ -5215,6 +6002,8 @@ void LoadAllBranches()
 		if (not ht30_isLoaded) {
 			if (ht30_branch != 0) {
 				ht30_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ht30_branch does not exist!\n");
 				exit(1);
@@ -5228,6 +6017,8 @@ void LoadAllBranches()
 		if (not rho_isLoaded) {
 			if (rho_branch != 0) {
 				rho_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch rho_branch does not exist!\n");
 				exit(1);
@@ -5241,6 +6032,8 @@ void LoadAllBranches()
 		if (not rho_iso_isLoaded) {
 			if (rho_iso_branch != 0) {
 				rho_iso_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch rho_iso_branch does not exist!\n");
 				exit(1);
@@ -5254,6 +6047,8 @@ void LoadAllBranches()
 		if (not trig_mm_isLoaded) {
 			if (trig_mm_branch != 0) {
 				trig_mm_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch trig_mm_branch does not exist!\n");
 				exit(1);
@@ -5267,6 +6062,8 @@ void LoadAllBranches()
 		if (not trig_em_isLoaded) {
 			if (trig_em_branch != 0) {
 				trig_em_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch trig_em_branch does not exist!\n");
 				exit(1);
@@ -5280,6 +6077,8 @@ void LoadAllBranches()
 		if (not trig_ee_isLoaded) {
 			if (trig_ee_branch != 0) {
 				trig_ee_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch trig_ee_branch does not exist!\n");
 				exit(1);
@@ -5288,24 +6087,28 @@ void LoadAllBranches()
 		}
 		return trig_ee_;
 	}
-	int &njets_dwn()
+	int &njets_dn()
 	{
-		if (not njets_dwn_isLoaded) {
-			if (njets_dwn_branch != 0) {
-				njets_dwn_branch->GetEntry(index);
+		if (not njets_dn_isLoaded) {
+			if (njets_dn_branch != 0) {
+				njets_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
-				printf("branch njets_dwn_branch does not exist!\n");
+				printf("branch njets_dn_branch does not exist!\n");
 				exit(1);
 			}
-			njets_dwn_isLoaded = true;
+			njets_dn_isLoaded = true;
 		}
-		return njets_dwn_;
+		return njets_dn_;
 	}
 	int &njets_up()
 	{
 		if (not njets_up_isLoaded) {
 			if (njets_up_branch != 0) {
 				njets_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch njets_up_branch does not exist!\n");
 				exit(1);
@@ -5314,24 +6117,28 @@ void LoadAllBranches()
 		}
 		return njets_up_;
 	}
-	int &nbtags_dwn()
+	int &nbtags_dn()
 	{
-		if (not nbtags_dwn_isLoaded) {
-			if (nbtags_dwn_branch != 0) {
-				nbtags_dwn_branch->GetEntry(index);
+		if (not nbtags_dn_isLoaded) {
+			if (nbtags_dn_branch != 0) {
+				nbtags_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
-				printf("branch nbtags_dwn_branch does not exist!\n");
+				printf("branch nbtags_dn_branch does not exist!\n");
 				exit(1);
 			}
-			nbtags_dwn_isLoaded = true;
+			nbtags_dn_isLoaded = true;
 		}
-		return nbtags_dwn_;
+		return nbtags_dn_;
 	}
 	int &nbtags_up()
 	{
 		if (not nbtags_up_isLoaded) {
 			if (nbtags_up_branch != 0) {
 				nbtags_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nbtags_up_branch does not exist!\n");
 				exit(1);
@@ -5340,24 +6147,28 @@ void LoadAllBranches()
 		}
 		return nbtags_up_;
 	}
-	float &ht_dwn()
+	float &ht_dn()
 	{
-		if (not ht_dwn_isLoaded) {
-			if (ht_dwn_branch != 0) {
-				ht_dwn_branch->GetEntry(index);
+		if (not ht_dn_isLoaded) {
+			if (ht_dn_branch != 0) {
+				ht_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
-				printf("branch ht_dwn_branch does not exist!\n");
+				printf("branch ht_dn_branch does not exist!\n");
 				exit(1);
 			}
-			ht_dwn_isLoaded = true;
+			ht_dn_isLoaded = true;
 		}
-		return ht_dwn_;
+		return ht_dn_;
 	}
 	float &ht_up()
 	{
 		if (not ht_up_isLoaded) {
 			if (ht_up_branch != 0) {
 				ht_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ht_up_branch does not exist!\n");
 				exit(1);
@@ -5366,24 +6177,208 @@ void LoadAllBranches()
 		}
 		return ht_up_;
 	}
-	float &pfmet_dwn()
+	int &njets20_dn()
 	{
-		if (not pfmet_dwn_isLoaded) {
-			if (pfmet_dwn_branch != 0) {
-				pfmet_dwn_branch->GetEntry(index);
+		if (not njets20_dn_isLoaded) {
+			if (njets20_dn_branch != 0) {
+				njets20_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
-				printf("branch pfmet_dwn_branch does not exist!\n");
+				printf("branch njets20_dn_branch does not exist!\n");
 				exit(1);
 			}
-			pfmet_dwn_isLoaded = true;
+			njets20_dn_isLoaded = true;
 		}
-		return pfmet_dwn_;
+		return njets20_dn_;
+	}
+	int &njets20_up()
+	{
+		if (not njets20_up_isLoaded) {
+			if (njets20_up_branch != 0) {
+				njets20_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch njets20_up_branch does not exist!\n");
+				exit(1);
+			}
+			njets20_up_isLoaded = true;
+		}
+		return njets20_up_;
+	}
+	int &nbtags20_dn()
+	{
+		if (not nbtags20_dn_isLoaded) {
+			if (nbtags20_dn_branch != 0) {
+				nbtags20_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch nbtags20_dn_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags20_dn_isLoaded = true;
+		}
+		return nbtags20_dn_;
+	}
+	int &nbtags20_up()
+	{
+		if (not nbtags20_up_isLoaded) {
+			if (nbtags20_up_branch != 0) {
+				nbtags20_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch nbtags20_up_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags20_up_isLoaded = true;
+		}
+		return nbtags20_up_;
+	}
+	float &ht20_dn()
+	{
+		if (not ht20_dn_isLoaded) {
+			if (ht20_dn_branch != 0) {
+				ht20_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch ht20_dn_branch does not exist!\n");
+				exit(1);
+			}
+			ht20_dn_isLoaded = true;
+		}
+		return ht20_dn_;
+	}
+	float &ht20_up()
+	{
+		if (not ht20_up_isLoaded) {
+			if (ht20_up_branch != 0) {
+				ht20_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch ht20_up_branch does not exist!\n");
+				exit(1);
+			}
+			ht20_up_isLoaded = true;
+		}
+		return ht20_up_;
+	}
+	int &njets30_dn()
+	{
+		if (not njets30_dn_isLoaded) {
+			if (njets30_dn_branch != 0) {
+				njets30_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch njets30_dn_branch does not exist!\n");
+				exit(1);
+			}
+			njets30_dn_isLoaded = true;
+		}
+		return njets30_dn_;
+	}
+	int &njets30_up()
+	{
+		if (not njets30_up_isLoaded) {
+			if (njets30_up_branch != 0) {
+				njets30_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch njets30_up_branch does not exist!\n");
+				exit(1);
+			}
+			njets30_up_isLoaded = true;
+		}
+		return njets30_up_;
+	}
+	int &nbtags30_dn()
+	{
+		if (not nbtags30_dn_isLoaded) {
+			if (nbtags30_dn_branch != 0) {
+				nbtags30_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch nbtags30_dn_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags30_dn_isLoaded = true;
+		}
+		return nbtags30_dn_;
+	}
+	int &nbtags30_up()
+	{
+		if (not nbtags30_up_isLoaded) {
+			if (nbtags30_up_branch != 0) {
+				nbtags30_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch nbtags30_up_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags30_up_isLoaded = true;
+		}
+		return nbtags30_up_;
+	}
+	float &ht30_dn()
+	{
+		if (not ht30_dn_isLoaded) {
+			if (ht30_dn_branch != 0) {
+				ht30_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch ht30_dn_branch does not exist!\n");
+				exit(1);
+			}
+			ht30_dn_isLoaded = true;
+		}
+		return ht30_dn_;
+	}
+	float &ht30_up()
+	{
+		if (not ht30_up_isLoaded) {
+			if (ht30_up_branch != 0) {
+				ht30_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch ht30_up_branch does not exist!\n");
+				exit(1);
+			}
+			ht30_up_isLoaded = true;
+		}
+		return ht30_up_;
+	}
+	float &pfmet_dn()
+	{
+		if (not pfmet_dn_isLoaded) {
+			if (pfmet_dn_branch != 0) {
+				pfmet_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch pfmet_dn_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_dn_isLoaded = true;
+		}
+		return pfmet_dn_;
 	}
 	float &pfmet_up()
 	{
 		if (not pfmet_up_isLoaded) {
 			if (pfmet_up_branch != 0) {
 				pfmet_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfmet_up_branch does not exist!\n");
 				exit(1);
@@ -5392,11 +6387,43 @@ void LoadAllBranches()
 		}
 		return pfmet_up_;
 	}
+	float &pfmet_phi_dn()
+	{
+		if (not pfmet_phi_dn_isLoaded) {
+			if (pfmet_phi_dn_branch != 0) {
+				pfmet_phi_dn_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch pfmet_phi_dn_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_phi_dn_isLoaded = true;
+		}
+		return pfmet_phi_dn_;
+	}
+	float &pfmet_phi_up()
+	{
+		if (not pfmet_phi_up_isLoaded) {
+			if (pfmet_phi_up_branch != 0) {
+				pfmet_phi_up_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch pfmet_phi_up_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_phi_up_isLoaded = true;
+		}
+		return pfmet_phi_up_;
+	}
 	float &sf_dileptrig()
 	{
 		if (not sf_dileptrig_isLoaded) {
 			if (sf_dileptrig_branch != 0) {
 				sf_dileptrig_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sf_dileptrig_branch does not exist!\n");
 				exit(1);
@@ -5410,6 +6437,8 @@ void LoadAllBranches()
 		if (not sf_lepeff_isLoaded) {
 			if (sf_lepeff_branch != 0) {
 				sf_lepeff_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sf_lepeff_branch does not exist!\n");
 				exit(1);
@@ -5423,6 +6452,8 @@ void LoadAllBranches()
 		if (not sparm0_isLoaded) {
 			if (sparm0_branch != 0) {
 				sparm0_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sparm0_branch does not exist!\n");
 				exit(1);
@@ -5436,6 +6467,8 @@ void LoadAllBranches()
 		if (not sparm1_isLoaded) {
 			if (sparm1_branch != 0) {
 				sparm1_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sparm1_branch does not exist!\n");
 				exit(1);
@@ -5449,6 +6482,8 @@ void LoadAllBranches()
 		if (not sparm2_isLoaded) {
 			if (sparm2_branch != 0) {
 				sparm2_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sparm2_branch does not exist!\n");
 				exit(1);
@@ -5462,6 +6497,8 @@ void LoadAllBranches()
 		if (not sparm3_isLoaded) {
 			if (sparm3_branch != 0) {
 				sparm3_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sparm3_branch does not exist!\n");
 				exit(1);
@@ -5475,6 +6512,8 @@ void LoadAllBranches()
 		if (not is_pp_isLoaded) {
 			if (is_pp_branch != 0) {
 				is_pp_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_pp_branch does not exist!\n");
 				exit(1);
@@ -5488,6 +6527,8 @@ void LoadAllBranches()
 		if (not is_mm_isLoaded) {
 			if (is_mm_branch != 0) {
 				is_mm_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_mm_branch does not exist!\n");
 				exit(1);
@@ -5501,6 +6542,8 @@ void LoadAllBranches()
 		if (not is_sf_isLoaded) {
 			if (is_sf_branch != 0) {
 				is_sf_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_sf_branch does not exist!\n");
 				exit(1);
@@ -5514,6 +6557,8 @@ void LoadAllBranches()
 		if (not is_df_isLoaded) {
 			if (is_df_branch != 0) {
 				is_df_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_df_branch does not exist!\n");
 				exit(1);
@@ -5527,6 +6572,8 @@ void LoadAllBranches()
 		if (not no_extraz_isLoaded) {
 			if (no_extraz_branch != 0) {
 				no_extraz_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch no_extraz_branch does not exist!\n");
 				exit(1);
@@ -5540,6 +6587,8 @@ void LoadAllBranches()
 		if (not is_gen_pp_isLoaded) {
 			if (is_gen_pp_branch != 0) {
 				is_gen_pp_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_gen_pp_branch does not exist!\n");
 				exit(1);
@@ -5553,6 +6602,8 @@ void LoadAllBranches()
 		if (not is_gen_mm_isLoaded) {
 			if (is_gen_mm_branch != 0) {
 				is_gen_mm_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch is_gen_mm_branch does not exist!\n");
 				exit(1);
@@ -5566,6 +6617,8 @@ void LoadAllBranches()
 		if (not gen_nbtags_isLoaded) {
 			if (gen_nbtags_branch != 0) {
 				gen_nbtags_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch gen_nbtags_branch does not exist!\n");
 				exit(1);
@@ -5579,6 +6632,8 @@ void LoadAllBranches()
 		if (not gen_njets_isLoaded) {
 			if (gen_njets_branch != 0) {
 				gen_njets_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch gen_njets_branch does not exist!\n");
 				exit(1);
@@ -5592,6 +6647,8 @@ void LoadAllBranches()
 		if (not gen_ht_isLoaded) {
 			if (gen_ht_branch != 0) {
 				gen_ht_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch gen_ht_branch does not exist!\n");
 				exit(1);
@@ -5605,6 +6662,14 @@ void LoadAllBranches()
 		if (not lep1_nearbjet_p4_isLoaded) {
 			if (lep1_nearbjet_p4_branch != 0) {
 				lep1_nearbjet_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_nearbjet_p4_->pt(), &e);
+				if (not isfinite(lep1_nearbjet_p4_->pt()) || e > 30) {
+					printf("branch lep1_nearbjet_p4_branch contains a bad float: %f\n", lep1_nearbjet_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nearbjet_p4_branch does not exist!\n");
 				exit(1);
@@ -5618,6 +6683,14 @@ void LoadAllBranches()
 		if (not lep1_nearjet_p4_isLoaded) {
 			if (lep1_nearjet_p4_branch != 0) {
 				lep1_nearjet_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_nearjet_p4_->pt(), &e);
+				if (not isfinite(lep1_nearjet_p4_->pt()) || e > 30) {
+					printf("branch lep1_nearjet_p4_branch contains a bad float: %f\n", lep1_nearjet_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nearjet_p4_branch does not exist!\n");
 				exit(1);
@@ -5631,6 +6704,14 @@ void LoadAllBranches()
 		if (not lep1_nearlep_p4_isLoaded) {
 			if (lep1_nearlep_p4_branch != 0) {
 				lep1_nearlep_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep1_nearlep_p4_->pt(), &e);
+				if (not isfinite(lep1_nearlep_p4_->pt()) || e > 30) {
+					printf("branch lep1_nearlep_p4_branch contains a bad float: %f\n", lep1_nearlep_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nearlep_p4_branch does not exist!\n");
 				exit(1);
@@ -5644,6 +6725,8 @@ void LoadAllBranches()
 		if (not lep1_wfr_isLoaded) {
 			if (lep1_wfr_branch != 0) {
 				lep1_wfr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_wfr_branch does not exist!\n");
 				exit(1);
@@ -5657,6 +6740,8 @@ void LoadAllBranches()
 		if (not lep1_wflip_isLoaded) {
 			if (lep1_wflip_branch != 0) {
 				lep1_wflip_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_wflip_branch does not exist!\n");
 				exit(1);
@@ -5670,6 +6755,8 @@ void LoadAllBranches()
 		if (not lep1_nearbjet_dr_isLoaded) {
 			if (lep1_nearbjet_dr_branch != 0) {
 				lep1_nearbjet_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nearbjet_dr_branch does not exist!\n");
 				exit(1);
@@ -5683,6 +6770,8 @@ void LoadAllBranches()
 		if (not lep1_nearjet_dr_isLoaded) {
 			if (lep1_nearjet_dr_branch != 0) {
 				lep1_nearjet_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nearjet_dr_branch does not exist!\n");
 				exit(1);
@@ -5696,6 +6785,8 @@ void LoadAllBranches()
 		if (not lep1_nearlep_dr_isLoaded) {
 			if (lep1_nearlep_dr_branch != 0) {
 				lep1_nearlep_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep1_nearlep_dr_branch does not exist!\n");
 				exit(1);
@@ -5704,11 +6795,34 @@ void LoadAllBranches()
 		}
 		return lep1_nearlep_dr_;
 	}
+	int &lep1_nearlep_id()
+	{
+		if (not lep1_nearlep_id_isLoaded) {
+			if (lep1_nearlep_id_branch != 0) {
+				lep1_nearlep_id_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch lep1_nearlep_id_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_nearlep_id_isLoaded = true;
+		}
+		return lep1_nearlep_id_;
+	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4()
 	{
 		if (not lep2_nearbjet_p4_isLoaded) {
 			if (lep2_nearbjet_p4_branch != 0) {
 				lep2_nearbjet_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_nearbjet_p4_->pt(), &e);
+				if (not isfinite(lep2_nearbjet_p4_->pt()) || e > 30) {
+					printf("branch lep2_nearbjet_p4_branch contains a bad float: %f\n", lep2_nearbjet_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nearbjet_p4_branch does not exist!\n");
 				exit(1);
@@ -5722,6 +6836,14 @@ void LoadAllBranches()
 		if (not lep2_nearjet_p4_isLoaded) {
 			if (lep2_nearjet_p4_branch != 0) {
 				lep2_nearjet_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_nearjet_p4_->pt(), &e);
+				if (not isfinite(lep2_nearjet_p4_->pt()) || e > 30) {
+					printf("branch lep2_nearjet_p4_branch contains a bad float: %f\n", lep2_nearjet_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nearjet_p4_branch does not exist!\n");
 				exit(1);
@@ -5735,6 +6857,14 @@ void LoadAllBranches()
 		if (not lep2_nearlep_p4_isLoaded) {
 			if (lep2_nearlep_p4_branch != 0) {
 				lep2_nearlep_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(lep2_nearlep_p4_->pt(), &e);
+				if (not isfinite(lep2_nearlep_p4_->pt()) || e > 30) {
+					printf("branch lep2_nearlep_p4_branch contains a bad float: %f\n", lep2_nearlep_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nearlep_p4_branch does not exist!\n");
 				exit(1);
@@ -5743,24 +6873,13 @@ void LoadAllBranches()
 		}
 		return *lep2_nearlep_p4_;
 	}
-	float &lep2_nearlep_dr()
-	{
-		if (not lep2_nearlep_dr_isLoaded) {
-			if (lep2_nearlep_dr_branch != 0) {
-				lep2_nearlep_dr_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_nearlep_dr_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_nearlep_dr_isLoaded = true;
-		}
-		return lep2_nearlep_dr_;
-	}
 	float &lep2_wfr()
 	{
 		if (not lep2_wfr_isLoaded) {
 			if (lep2_wfr_branch != 0) {
 				lep2_wfr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_wfr_branch does not exist!\n");
 				exit(1);
@@ -5774,6 +6893,8 @@ void LoadAllBranches()
 		if (not lep2_wflip_isLoaded) {
 			if (lep2_wflip_branch != 0) {
 				lep2_wflip_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_wflip_branch does not exist!\n");
 				exit(1);
@@ -5787,6 +6908,8 @@ void LoadAllBranches()
 		if (not lep2_nearbjet_dr_isLoaded) {
 			if (lep2_nearbjet_dr_branch != 0) {
 				lep2_nearbjet_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nearbjet_dr_branch does not exist!\n");
 				exit(1);
@@ -5800,6 +6923,8 @@ void LoadAllBranches()
 		if (not lep2_nearjet_dr_isLoaded) {
 			if (lep2_nearjet_dr_branch != 0) {
 				lep2_nearjet_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch lep2_nearjet_dr_branch does not exist!\n");
 				exit(1);
@@ -5808,11 +6933,43 @@ void LoadAllBranches()
 		}
 		return lep2_nearjet_dr_;
 	}
+	float &lep2_nearlep_dr()
+	{
+		if (not lep2_nearlep_dr_isLoaded) {
+			if (lep2_nearlep_dr_branch != 0) {
+				lep2_nearlep_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch lep2_nearlep_dr_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_nearlep_dr_isLoaded = true;
+		}
+		return lep2_nearlep_dr_;
+	}
+	int &lep2_nearlep_id()
+	{
+		if (not lep2_nearlep_id_isLoaded) {
+			if (lep2_nearlep_id_branch != 0) {
+				lep2_nearlep_id_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch lep2_nearlep_id_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_nearlep_id_isLoaded = true;
+		}
+		return lep2_nearlep_id_;
+	}
 	float &sf_nbtag()
 	{
 		if (not sf_nbtag_isLoaded) {
 			if (sf_nbtag_branch != 0) {
 				sf_nbtag_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sf_nbtag_branch does not exist!\n");
 				exit(1);
@@ -5826,6 +6983,8 @@ void LoadAllBranches()
 		if (not sf_nbtag3_isLoaded) {
 			if (sf_nbtag3_branch != 0) {
 				sf_nbtag3_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sf_nbtag3_branch does not exist!\n");
 				exit(1);
@@ -5839,6 +6998,8 @@ void LoadAllBranches()
 		if (not sf_unc_nbtag_isLoaded) {
 			if (sf_unc_nbtag_branch != 0) {
 				sf_unc_nbtag_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sf_unc_nbtag_branch does not exist!\n");
 				exit(1);
@@ -5852,6 +7013,8 @@ void LoadAllBranches()
 		if (not sf_unc_nbtag3_isLoaded) {
 			if (sf_unc_nbtag3_branch != 0) {
 				sf_unc_nbtag3_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sf_unc_nbtag3_branch does not exist!\n");
 				exit(1);
@@ -5865,6 +7028,8 @@ void LoadAllBranches()
 		if (not jets_dr12_isLoaded) {
 			if (jets_dr12_branch != 0) {
 				jets_dr12_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch jets_dr12_branch does not exist!\n");
 				exit(1);
@@ -5878,6 +7043,8 @@ void LoadAllBranches()
 		if (not bjets_dr12_isLoaded) {
 			if (bjets_dr12_branch != 0) {
 				bjets_dr12_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch bjets_dr12_branch does not exist!\n");
 				exit(1);
@@ -5891,6 +7058,16 @@ void LoadAllBranches()
 		if (not vgenb_p4_isLoaded) {
 			if (vgenb_p4_branch != 0) {
 				vgenb_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				for (vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >::const_iterator i = vgenb_p4_->begin(); i != vgenb_p4_->end(); ++i) {
+					int e;
+					frexp(i->pt(), &e);
+					if (not isfinite(i->pt()) || e > 30) {
+						printf("branch vgenb_p4_branch contains a bad float: %f\n", i->pt());
+						exit(1);
+					}
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vgenb_p4_branch does not exist!\n");
 				exit(1);
@@ -5904,6 +7081,16 @@ void LoadAllBranches()
 		if (not vjets_p4_isLoaded) {
 			if (vjets_p4_branch != 0) {
 				vjets_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				for (vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >::const_iterator i = vjets_p4_->begin(); i != vjets_p4_->end(); ++i) {
+					int e;
+					frexp(i->pt(), &e);
+					if (not isfinite(i->pt()) || e > 30) {
+						printf("branch vjets_p4_branch contains a bad float: %f\n", i->pt());
+						exit(1);
+					}
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vjets_p4_branch does not exist!\n");
 				exit(1);
@@ -5917,6 +7104,16 @@ void LoadAllBranches()
 		if (not vgenjets_p4_isLoaded) {
 			if (vgenjets_p4_branch != 0) {
 				vgenjets_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				for (vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >::const_iterator i = vgenjets_p4_->begin(); i != vgenjets_p4_->end(); ++i) {
+					int e;
+					frexp(i->pt(), &e);
+					if (not isfinite(i->pt()) || e > 30) {
+						printf("branch vgenjets_p4_branch contains a bad float: %f\n", i->pt());
+						exit(1);
+					}
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vgenjets_p4_branch does not exist!\n");
 				exit(1);
@@ -5930,6 +7127,16 @@ void LoadAllBranches()
 		if (not vjets_nearjet_p4_isLoaded) {
 			if (vjets_nearjet_p4_branch != 0) {
 				vjets_nearjet_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				for (vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >::const_iterator i = vjets_nearjet_p4_->begin(); i != vjets_nearjet_p4_->end(); ++i) {
+					int e;
+					frexp(i->pt(), &e);
+					if (not isfinite(i->pt()) || e > 30) {
+						printf("branch vjets_nearjet_p4_branch contains a bad float: %f\n", i->pt());
+						exit(1);
+					}
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vjets_nearjet_p4_branch does not exist!\n");
 				exit(1);
@@ -5943,6 +7150,16 @@ void LoadAllBranches()
 		if (not vbjets_p4_isLoaded) {
 			if (vbjets_p4_branch != 0) {
 				vbjets_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				for (vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >::const_iterator i = vbjets_p4_->begin(); i != vbjets_p4_->end(); ++i) {
+					int e;
+					frexp(i->pt(), &e);
+					if (not isfinite(i->pt()) || e > 30) {
+						printf("branch vbjets_p4_branch contains a bad float: %f\n", i->pt());
+						exit(1);
+					}
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vbjets_p4_branch does not exist!\n");
 				exit(1);
@@ -5956,6 +7173,16 @@ void LoadAllBranches()
 		if (not vbjets_nearjet_p4_isLoaded) {
 			if (vbjets_nearjet_p4_branch != 0) {
 				vbjets_nearjet_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				for (vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >::const_iterator i = vbjets_nearjet_p4_->begin(); i != vbjets_nearjet_p4_->end(); ++i) {
+					int e;
+					frexp(i->pt(), &e);
+					if (not isfinite(i->pt()) || e > 30) {
+						printf("branch vbjets_nearjet_p4_branch contains a bad float: %f\n", i->pt());
+						exit(1);
+					}
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vbjets_nearjet_p4_branch does not exist!\n");
 				exit(1);
@@ -5969,6 +7196,8 @@ void LoadAllBranches()
 		if (not vbtags_isLoaded) {
 			if (vbtags_branch != 0) {
 				vbtags_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vbtags_branch does not exist!\n");
 				exit(1);
@@ -5982,6 +7211,14 @@ void LoadAllBranches()
 		if (not vbjets_nearjet_dr_isLoaded) {
 			if (vbjets_nearjet_dr_branch != 0) {
 				vbjets_nearjet_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				for (vector<float>::const_iterator i = vbjets_nearjet_dr_->begin(); i != vbjets_nearjet_dr_->end(); ++i) {
+					if (not isfinite(*i)) {
+						printf("branch vbjets_nearjet_dr_branch contains a bad float: %f\n", *i);
+						exit(1);
+					}
+				}
+				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch vbjets_nearjet_dr_branch does not exist!\n");
 				exit(1);
@@ -5989,6 +7226,174 @@ void LoadAllBranches()
 			vbjets_nearjet_dr_isLoaded = true;
 		}
 		return *vbjets_nearjet_dr_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4()
+	{
+		if (not gen_lep1_p4_isLoaded) {
+			if (gen_lep1_p4_branch != 0) {
+				gen_lep1_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(gen_lep1_p4_->pt(), &e);
+				if (not isfinite(gen_lep1_p4_->pt()) || e > 30) {
+					printf("branch gen_lep1_p4_branch contains a bad float: %f\n", gen_lep1_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_lep1_p4_branch does not exist!\n");
+				exit(1);
+			}
+			gen_lep1_p4_isLoaded = true;
+		}
+		return *gen_lep1_p4_;
+	}
+	int &gen_lep1_pdgid()
+	{
+		if (not gen_lep1_pdgid_isLoaded) {
+			if (gen_lep1_pdgid_branch != 0) {
+				gen_lep1_pdgid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_lep1_pdgid_branch does not exist!\n");
+				exit(1);
+			}
+			gen_lep1_pdgid_isLoaded = true;
+		}
+		return gen_lep1_pdgid_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep2_p4()
+	{
+		if (not gen_lep2_p4_isLoaded) {
+			if (gen_lep2_p4_branch != 0) {
+				gen_lep2_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(gen_lep2_p4_->pt(), &e);
+				if (not isfinite(gen_lep2_p4_->pt()) || e > 30) {
+					printf("branch gen_lep2_p4_branch contains a bad float: %f\n", gen_lep2_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_lep2_p4_branch does not exist!\n");
+				exit(1);
+			}
+			gen_lep2_p4_isLoaded = true;
+		}
+		return *gen_lep2_p4_;
+	}
+	int &gen_lep2_pdgid()
+	{
+		if (not gen_lep2_pdgid_isLoaded) {
+			if (gen_lep2_pdgid_branch != 0) {
+				gen_lep2_pdgid_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_lep2_pdgid_branch does not exist!\n");
+				exit(1);
+			}
+			gen_lep2_pdgid_isLoaded = true;
+		}
+		return gen_lep2_pdgid_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_dilep_p4()
+	{
+		if (not gen_dilep_p4_isLoaded) {
+			if (gen_dilep_p4_branch != 0) {
+				gen_dilep_p4_branch->GetEntry(index);
+				#ifdef PARANOIA
+				int e;
+				frexp(gen_dilep_p4_->pt(), &e);
+				if (not isfinite(gen_dilep_p4_->pt()) || e > 30) {
+					printf("branch gen_dilep_p4_branch contains a bad float: %f\n", gen_dilep_p4_->pt());
+					exit(1);
+				}
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_dilep_p4_branch does not exist!\n");
+				exit(1);
+			}
+			gen_dilep_p4_isLoaded = true;
+		}
+		return *gen_dilep_p4_;
+	}
+	int &gen_dilep_type()
+	{
+		if (not gen_dilep_type_isLoaded) {
+			if (gen_dilep_type_branch != 0) {
+				gen_dilep_type_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_dilep_type_branch does not exist!\n");
+				exit(1);
+			}
+			gen_dilep_type_isLoaded = true;
+		}
+		return gen_dilep_type_;
+	}
+	float &gen_dilep_mass()
+	{
+		if (not gen_dilep_mass_isLoaded) {
+			if (gen_dilep_mass_branch != 0) {
+				gen_dilep_mass_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_dilep_mass_branch does not exist!\n");
+				exit(1);
+			}
+			gen_dilep_mass_isLoaded = true;
+		}
+		return gen_dilep_mass_;
+	}
+	float &gen_dilep_dphi()
+	{
+		if (not gen_dilep_dphi_isLoaded) {
+			if (gen_dilep_dphi_branch != 0) {
+				gen_dilep_dphi_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_dilep_dphi_branch does not exist!\n");
+				exit(1);
+			}
+			gen_dilep_dphi_isLoaded = true;
+		}
+		return gen_dilep_dphi_;
+	}
+	float &gen_dilep_deta()
+	{
+		if (not gen_dilep_deta_isLoaded) {
+			if (gen_dilep_deta_branch != 0) {
+				gen_dilep_deta_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_dilep_deta_branch does not exist!\n");
+				exit(1);
+			}
+			gen_dilep_deta_isLoaded = true;
+		}
+		return gen_dilep_deta_;
+	}
+	float &gen_dilep_dr()
+	{
+		if (not gen_dilep_dr_isLoaded) {
+			if (gen_dilep_dr_branch != 0) {
+				gen_dilep_dr_branch->GetEntry(index);
+				#ifdef PARANOIA
+				#endif // #ifdef PARANOIA
+			} else { 
+				printf("branch gen_dilep_dr_branch does not exist!\n");
+				exit(1);
+			}
+			gen_dilep_dr_isLoaded = true;
+		}
+		return gen_dilep_dr_;
 	}
 
   static void progress( int nEventsTotal, int nEventsChain ){
@@ -6014,7 +7419,7 @@ void LoadAllBranches()
 };
 
 #ifndef __CINT__
-extern SSB samesignbtag;
+extern SSB2012 samesignbtag;
 #endif
 
 namespace ssb {
@@ -6027,14 +7432,13 @@ namespace ssb {
 	int &vtx_idx();
 	float &pfmet();
 	float &pfmet_phi();
-	float &corpfmet();
-	float &corpfmet_phi();
+	float &uncorpfmet();
+	float &uncorpfmet_phi();
 	float &scale1fb();
 	float &xsec();
 	float &kfactor();
 	float &gen_met();
 	float &gen_met_phi();
-;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
 	bool &lep1_passes_id();
 	bool &lep1_passes_iso();
@@ -6216,6 +7620,7 @@ namespace ssb {
 	int &nbtags20();
 	int &nbtags30();
 	float &vtxw();
+	float &mt();
 	float &ht();
 	float &ht20();
 	float &ht30();
@@ -6224,14 +7629,28 @@ namespace ssb {
 	bool &trig_mm();
 	bool &trig_em();
 	bool &trig_ee();
-	int &njets_dwn();
+	int &njets_dn();
 	int &njets_up();
-	int &nbtags_dwn();
+	int &nbtags_dn();
 	int &nbtags_up();
-	float &ht_dwn();
+	float &ht_dn();
 	float &ht_up();
-	float &pfmet_dwn();
+	int &njets20_dn();
+	int &njets20_up();
+	int &nbtags20_dn();
+	int &nbtags20_up();
+	float &ht20_dn();
+	float &ht20_up();
+	int &njets30_dn();
+	int &njets30_up();
+	int &nbtags30_dn();
+	int &nbtags30_up();
+	float &ht30_dn();
+	float &ht30_up();
+	float &pfmet_dn();
 	float &pfmet_up();
+	float &pfmet_phi_dn();
+	float &pfmet_phi_up();
 	float &sf_dileptrig();
 	float &sf_lepeff();
 	float &sparm0();
@@ -6256,14 +7675,16 @@ namespace ssb {
 	float &lep1_nearbjet_dr();
 	float &lep1_nearjet_dr();
 	float &lep1_nearlep_dr();
+	int &lep1_nearlep_id();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearjet_p4();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4();
-	float &lep2_nearlep_dr();
 	float &lep2_wfr();
 	float &lep2_wflip();
 	float &lep2_nearbjet_dr();
 	float &lep2_nearjet_dr();
+	float &lep2_nearlep_dr();
+	int &lep2_nearlep_id();
 	float &sf_nbtag();
 	float &sf_nbtag3();
 	float &sf_unc_nbtag();
@@ -6278,5 +7699,15 @@ namespace ssb {
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4();
 	vector<bool> &vbtags();
 	vector<float> &vbjets_nearjet_dr();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4();
+	int &gen_lep1_pdgid();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep2_p4();
+	int &gen_lep2_pdgid();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_dilep_p4();
+	int &gen_dilep_type();
+	float &gen_dilep_mass();
+	float &gen_dilep_dphi();
+	float &gen_dilep_deta();
+	float &gen_dilep_dr();
 }
 #endif

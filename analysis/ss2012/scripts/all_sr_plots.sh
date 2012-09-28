@@ -10,3 +10,10 @@ echo "" > tables/yields_${out_path}.txt
 for i in {0..8}; do 
     ./scripts/plot_all.sh $i $lumi $out_path; 
 done
+
+# summary table
+root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", 0)"
+root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", 0)" > tables/yields_summary_${out_path}.txt
+root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", 1)" > temp/temp.tex 
+tail -n +3 temp/temp.tex > tables/yields_summary_${out_path}.tex
+rm temp/temp.tex

@@ -431,15 +431,47 @@ namespace at
             // name
             "sbottomtop", 
             // title
-            "SbottomTop", 
+            "#tilde{b}t", 
             // latex 
-            "SbottomTop", 
+            "$\\tilde{b}t$", 
             // ntuple_path
             "SbottomTopv6_macneill_8TeV",
             // SampleType 
             SampleType::susy,
             // Sample
             Sample::sbottomtop,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "glusbottom", 
+            // title
+            "#tilde{g}#tilde{b}", 
+            // latex 
+            "$t\\tidle{g}\\tilde{b}$", 
+            // ntuple_path
+            "GluinoSbottom_cgeorge_8Tev",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::glusbottom,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "glustop", 
+            // title
+            "#tilde{g}#tilde{t}", 
+            // latex 
+            "$t\\tidle{g}\\tilde{t}$", 
+            // ntuple_path
+            "GluinoStop_cgeorge_8Tev",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::glustop,
             // color
             kBlue
         },
@@ -481,7 +513,7 @@ namespace at
             // title
             "W#gamma^{*} #rightarrow l#nu#tau#tau", 
             // latex 
-            "$W\\gamma^{*} \\rightarrow \ell \\nu \\tau \\tau$", 
+            "$W\\gamma^{*} \\rightarrow \\ell \\nu \\tau\\tau$",
             // ntuple_path
             "WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -623,29 +655,21 @@ namespace at
         SampleType::value_type sample_type = GetSampleInfo(sample).type;
         std::string prefix = GetNtuplePath(ntuple, sample_type);
 
-		if (sample == Sample::data && ntuple == NtupleType::cms2)
-		{
-			path = rt::string_replace_all(path, ",", "/merged,");	
-            path.append("/merged");
-		}
-        if (sample != Sample::data && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-13,");
-            path.append("/V05-03-13");
-        }
         // special case since T1tttt/SbottomTop are still 52X 
 		if 
         (
-            (sample == Sample::t1tttt) ||
-            (sample == Sample::t1tttt_fastsim) ||
-            (sample == Sample::sbottomtop)
+            (sample == Sample::t1tttt)         || 
+            (sample == Sample::t1tttt_fastsim) || 
+            (sample == Sample::sbottomtop)     || 
+            (sample == Sample::glusbottom)     || 
+            (sample == Sample::glustop)
         )
         {
             if (ntuple == NtupleType::cms2)
             {
                 prefix = "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
-                path = rt::string_replace_all(path, ",", "/merged,");	
-                path.append("/merged");
+                path = rt::string_replace_all(path, ",", "/V05-02-28,");	
+                path.append("/V05-02-28");
             }
             else if (ntuple == NtupleType::ss_skim)
             {
@@ -653,6 +677,16 @@ namespace at
                 path = rt::string_replace_all(path, ",", "/V05-02-28,");
                 path.append("/V05-02-28");
             }
+        }
+		else if (sample == Sample::data && ntuple == NtupleType::cms2)
+		{
+			path = rt::string_replace_all(path, ",", "/merged,");	
+            path.append("/merged");
+		}
+        else if (sample != Sample::data && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-13,");
+            path.append("/V05-03-13");
         }
         // append *.root at the end
 

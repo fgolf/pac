@@ -30,7 +30,8 @@ template <typename T> T* get(const boost::shared_ptr<T> &p) {return p.get();}
 
 using namespace std;
 
-typedef const boost::shared_ptr<TH1> TH1Ptr;
+//typedef const boost::shared_ptr<TH1> TH1Ptr;
+typedef const TH1* TH1Ptr;
 
 namespace rt
 {

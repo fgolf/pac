@@ -42,6 +42,8 @@ namespace rt
         const std::string& output_folder,
         const std::string& tree1_label,
         const std::string& tree2_label,
+        const std::string& selection, 
+        const std::string& option, 
         long num_entries,
         const std::string& suffix
     )
@@ -167,7 +169,7 @@ namespace rt
             {
                 h1_draw = Form("%s.mass()>>h1_%s", branch.name.c_str(), branch.name.c_str());
             }
-            tree1->Draw(h1_draw.c_str(), "", "goff", num_entries);
+            tree1->Draw(h1_draw.c_str(), selection.c_str(), "goff", num_entries);
             TH1F* h1 = dynamic_cast<TH1F*>(gDirectory->Get(h1_name.c_str()));
 
             // fill hist 2
@@ -176,11 +178,11 @@ namespace rt
             {
                 h2_draw = Form("%s.mass()>>h2_%s", branch.name.c_str(), branch.name.c_str());
             }
-            tree2->Draw(h2_draw.c_str(), "", "goff", num_entries);
+            tree2->Draw(h2_draw.c_str(), selection.c_str(), "goff", num_entries);
             TH1F* h2 = dynamic_cast<TH1F*>(gDirectory->Get(h2_name.c_str()));
 
             string overlay_name = string("p_" ) + branch.name;
-            p_intersection[overlay_name] = TH1Overlay();
+            p_intersection[overlay_name] = TH1Overlay("", option.c_str());
             p_intersection[overlay_name].Add(h1, tree1_label, kBlue, 2);
             p_intersection[overlay_name].Add(h2, tree2_label, kRed , 2);
 
@@ -203,11 +205,11 @@ namespace rt
             {
                 h1_draw = Form("%s.mass()>>h1_%s", branch.name.c_str(), branch.name.c_str());
             }
-            tree1->Draw(h1_draw.c_str(), "", "goff", num_entries);
+            tree1->Draw(h1_draw.c_str(), selection.c_str(), "goff", num_entries);
             TH1F* h1 = dynamic_cast<TH1F*>(gDirectory->Get(h1_name.c_str()));
 
             string overlay_name = string("p_" ) + branch.name;
-            p_tree1[overlay_name] = TH1Overlay();
+            p_tree1[overlay_name] = TH1Overlay("", option.c_str());
             p_tree1[overlay_name].Add(h1, tree1_label, kBlue, 2);
 
             delete h1;
@@ -228,11 +230,11 @@ namespace rt
             {
                 h2_draw = Form("%s.mass()>>h2_%s", branch.name.c_str(), branch.name.c_str());
             }
-            tree1->Draw(h2_draw.c_str(), "", "goff", num_entries);
+            tree1->Draw(h2_draw.c_str(), selection.c_str(), "goff", num_entries);
             TH1F* h2 = dynamic_cast<TH1F*>(gDirectory->Get(h2_name.c_str()));
 
             string overlay_name = string("p_" ) + branch.name;
-            p_tree2[overlay_name] = TH1Overlay();
+            p_tree2[overlay_name] = TH1Overlay("", option.c_str());
             p_tree2[overlay_name].Add(h2, tree2_label, kRed, 2);
 
             delete h2;

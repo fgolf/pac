@@ -37,6 +37,8 @@ namespace at
             t1tttt,
             t1tttt_fastsim,
             sbottomtop,
+            glusbottom,
+            glustop,
             wgstar2e,
             wgstar2m,
             wgstar2t,

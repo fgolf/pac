@@ -41,8 +41,11 @@ namespace ss
     SignalRegionInfo GetSignalRegionInfo(unsigned int signal_region_number);
 
     // passes signal rgion
-    bool PassesSignalRegion(const SignalRegion::value_type& signal_region);
-    bool PassesSignalRegion(unsigned int signal_region_number);
+    bool PassesSignalRegion(const SignalRegion::value_type& signal_region, int num_btags = 0);
+    bool PassesSignalRegion(unsigned int signal_region_number, int num_btags = 0);
+
+    //bool PassesSignalRegionExclusive(const SignalRegion::value_type& signal_region, int num_btags = 0);
+    //bool PassesSignalRegionExclusive(unsigned int signal_region_number, int num_btags = 0);
 
 	// set aliases for TTree
     void SetSignalRegionAliases(TTree& tree);

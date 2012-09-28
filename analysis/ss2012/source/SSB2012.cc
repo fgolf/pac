@@ -1,5 +1,5 @@
 #include "SSB2012.h"
-SSB samesignbtag;
+SSB2012 samesignbtag;
 namespace ssb {
 	unsigned int &run() { return samesignbtag.run(); }
 	unsigned int &ls() { return samesignbtag.ls(); }
@@ -10,8 +10,8 @@ namespace ssb {
 	int &vtx_idx() { return samesignbtag.vtx_idx(); }
 	float &pfmet() { return samesignbtag.pfmet(); }
 	float &pfmet_phi() { return samesignbtag.pfmet_phi(); }
-	float &corpfmet() { return samesignbtag.corpfmet(); }
-	float &corpfmet_phi() { return samesignbtag.corpfmet_phi(); }
+	float &uncorpfmet() { return samesignbtag.uncorpfmet(); }
+	float &uncorpfmet_phi() { return samesignbtag.uncorpfmet_phi(); }
 	float &scale1fb() { return samesignbtag.scale1fb(); }
 	float &xsec() { return samesignbtag.xsec(); }
 	float &kfactor() { return samesignbtag.kfactor(); }
@@ -198,6 +198,7 @@ namespace ssb {
 	int &nbtags20() { return samesignbtag.nbtags20(); }
 	int &nbtags30() { return samesignbtag.nbtags30(); }
 	float &vtxw() { return samesignbtag.vtxw(); }
+	float &mt() { return samesignbtag.mt(); }
 	float &ht() { return samesignbtag.ht(); }
 	float &ht20() { return samesignbtag.ht20(); }
 	float &ht30() { return samesignbtag.ht30(); }
@@ -206,14 +207,28 @@ namespace ssb {
 	bool &trig_mm() { return samesignbtag.trig_mm(); }
 	bool &trig_em() { return samesignbtag.trig_em(); }
 	bool &trig_ee() { return samesignbtag.trig_ee(); }
-	int &njets_dwn() { return samesignbtag.njets_dwn(); }
+	int &njets_dn() { return samesignbtag.njets_dn(); }
 	int &njets_up() { return samesignbtag.njets_up(); }
-	int &nbtags_dwn() { return samesignbtag.nbtags_dwn(); }
+	int &nbtags_dn() { return samesignbtag.nbtags_dn(); }
 	int &nbtags_up() { return samesignbtag.nbtags_up(); }
-	float &ht_dwn() { return samesignbtag.ht_dwn(); }
+	float &ht_dn() { return samesignbtag.ht_dn(); }
 	float &ht_up() { return samesignbtag.ht_up(); }
-	float &pfmet_dwn() { return samesignbtag.pfmet_dwn(); }
+	int &njets20_dn() { return samesignbtag.njets20_dn(); }
+	int &njets20_up() { return samesignbtag.njets20_up(); }
+	int &nbtags20_dn() { return samesignbtag.nbtags20_dn(); }
+	int &nbtags20_up() { return samesignbtag.nbtags20_up(); }
+	float &ht20_dn() { return samesignbtag.ht20_dn(); }
+	float &ht20_up() { return samesignbtag.ht20_up(); }
+	int &njets30_dn() { return samesignbtag.njets30_dn(); }
+	int &njets30_up() { return samesignbtag.njets30_up(); }
+	int &nbtags30_dn() { return samesignbtag.nbtags30_dn(); }
+	int &nbtags30_up() { return samesignbtag.nbtags30_up(); }
+	float &ht30_dn() { return samesignbtag.ht30_dn(); }
+	float &ht30_up() { return samesignbtag.ht30_up(); }
+	float &pfmet_dn() { return samesignbtag.pfmet_dn(); }
 	float &pfmet_up() { return samesignbtag.pfmet_up(); }
+	float &pfmet_phi_dn() { return samesignbtag.pfmet_phi_dn(); }
+	float &pfmet_phi_up() { return samesignbtag.pfmet_phi_up(); }
 	float &sf_dileptrig() { return samesignbtag.sf_dileptrig(); }
 	float &sf_lepeff() { return samesignbtag.sf_lepeff(); }
 	float &sparm0() { return samesignbtag.sparm0(); }
@@ -238,14 +253,16 @@ namespace ssb {
 	float &lep1_nearbjet_dr() { return samesignbtag.lep1_nearbjet_dr(); }
 	float &lep1_nearjet_dr() { return samesignbtag.lep1_nearjet_dr(); }
 	float &lep1_nearlep_dr() { return samesignbtag.lep1_nearlep_dr(); }
+	int &lep1_nearlep_id() { return samesignbtag.lep1_nearlep_id(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4() { return samesignbtag.lep2_nearbjet_p4(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearjet_p4() { return samesignbtag.lep2_nearjet_p4(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4() { return samesignbtag.lep2_nearlep_p4(); }
-	float &lep2_nearlep_dr() { return samesignbtag.lep2_nearlep_dr(); }
 	float &lep2_wfr() { return samesignbtag.lep2_wfr(); }
 	float &lep2_wflip() { return samesignbtag.lep2_wflip(); }
 	float &lep2_nearbjet_dr() { return samesignbtag.lep2_nearbjet_dr(); }
 	float &lep2_nearjet_dr() { return samesignbtag.lep2_nearjet_dr(); }
+	float &lep2_nearlep_dr() { return samesignbtag.lep2_nearlep_dr(); }
+	int &lep2_nearlep_id() { return samesignbtag.lep2_nearlep_id(); }
 	float &sf_nbtag() { return samesignbtag.sf_nbtag(); }
 	float &sf_nbtag3() { return samesignbtag.sf_nbtag3(); }
 	float &sf_unc_nbtag() { return samesignbtag.sf_unc_nbtag(); }
@@ -260,4 +277,14 @@ namespace ssb {
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4() { return samesignbtag.vbjets_nearjet_p4(); }
 	vector<bool> &vbtags() { return samesignbtag.vbtags(); }
 	vector<float> &vbjets_nearjet_dr() { return samesignbtag.vbjets_nearjet_dr(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4() { return samesignbtag.gen_lep1_p4(); }
+	int &gen_lep1_pdgid() { return samesignbtag.gen_lep1_pdgid(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep2_p4() { return samesignbtag.gen_lep2_p4(); }
+	int &gen_lep2_pdgid() { return samesignbtag.gen_lep2_pdgid(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_dilep_p4() { return samesignbtag.gen_dilep_p4(); }
+	int &gen_dilep_type() { return samesignbtag.gen_dilep_type(); }
+	float &gen_dilep_mass() { return samesignbtag.gen_dilep_mass(); }
+	float &gen_dilep_dphi() { return samesignbtag.gen_dilep_dphi(); }
+	float &gen_dilep_deta() { return samesignbtag.gen_dilep_deta(); }
+	float &gen_dilep_dr() { return samesignbtag.gen_dilep_dr(); }
 }

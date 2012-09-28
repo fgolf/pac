@@ -4,7 +4,7 @@ mkdir -p $PAC/analysis/ss2012/logs
 nev=${1:--1}
 ntuple_type=ss_skim
 verbose=0
-njets=0
+njets=2
 
 # do the merging
 function run
@@ -19,27 +19,33 @@ function run
 }
 
 # samples 
-output=babies_jets2
+output=babies_njets2_v2
 #output=babies
-run data     $output json/preapproval_cms2.txt
-run zz       $output 
-run wz       $output 
-run ww       $output 
-run ttjets   $output 
-run ttg      $output 
-run ttw      $output 
-run ttww     $output 
-run ttz      $output 
-run wwg      $output 
-run www      $output 
-run wwz      $output 
-run wzz      $output 
-run zzz      $output 
-run wgstar2e $output 
-run wgstar2m $output 
-run wgstar2t $output 
-run wmwmqq   $output 
-run wpwpqq   $output 
-run ww_ds    $output 
-run lm6      $output 
-run lm9      $output 
+#run data     $output json/preapproval_cms2.txt
+#run zz       $output 
+#run wz       $output 
+#run ww       $output 
+#run ttjets   $output 
+#run ttg      $output 
+#run ttw      $output 
+#run ttww     $output 
+#run ttz      $output 
+#run wwg      $output 
+#run www      $output 
+#run wwz      $output 
+#run wzz      $output 
+#run zzz      $output 
+#run wgstar2e $output 
+#run wgstar2m $output 
+#run wgstar2t $output 
+#run wmwmqq   $output 
+#run wpwpqq   $output 
+#run ww_ds    $output 
+#run lm6      $output 
+#run lm9      $output 
+
+ntuple_type=cms2
+run t1tttt_fastsim $output
+run sbottomtop     $output
+run glusbottom     $output
+run glustop        $output

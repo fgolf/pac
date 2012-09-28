@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "TCut.h"
 #include "TCanvas.h"
 #include "TLegend.h"
@@ -14,7 +15,7 @@ void CreateHtVsMetPlot(bool btag2 = true, const std::string& suffix = "png")
     // set TDR style
     rt::SetTDRStyle();
 
-    float lumi = 10.88; // fb^-1
+    float lumi = 10.45; // fb^-1
 
     TChain e1("tree");
     e1.Add("babies/data.root");
@@ -74,6 +75,13 @@ void CreateHtVsMetPlot(bool btag2 = true, const std::string& suffix = "png")
     g_implied->SetLineWidth(7500);
     g_implied->SetFillStyle(3005);
     g_implied->Draw();
+
+    cout << "ee entried = " << h2_ht_vs_pfmet_baseline_ee->GetEntries() << endl;
+    cout << "em entried = " << h2_ht_vs_pfmet_baseline_em->GetEntries() << endl;
+    cout << "mm entried = " << h2_ht_vs_pfmet_baseline_mm->GetEntries() << endl;
+    cout << "ll entried = " << (h2_ht_vs_pfmet_baseline_ee->GetEntries() + 
+                                h2_ht_vs_pfmet_baseline_em->GetEntries() +
+                                h2_ht_vs_pfmet_baseline_mm->GetEntries()) << endl;
 
     if (!suffix.empty())
     {

@@ -939,8 +939,6 @@ int SSAnalysisLooper::Analyze(long event)
             // scale factor for # btags 
             vector<LorentzVector> bjets = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale);
             std::sort(bjets.begin(), bjets.end(), SortByPt<LorentzVector>());
-            m_evt.sf_nbtag  = 0.0;
-            m_evt.sf_nbtag3 = 0.0;
             if (m_evt.nbtags == 2) 
             {
                 m_evt.sf_nbtag = btagEventWeight(m_evt.nbtags, bjets.at(0).pt(), bjets.at(1).pt(), 0., 0., m_is_fast_sim);

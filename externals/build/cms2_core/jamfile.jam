@@ -31,6 +31,7 @@ lib cms2_core
     /CMS2//cms2_header
     /ROOT
   : # requirements
+		#<define>SS_USE_OLD_ISO
     <include>$(CMS2_CORE)
     <include>$(CMS2_CORE)/CORE
     <include>$(CMS2_CORE)/CORE/jetsmear

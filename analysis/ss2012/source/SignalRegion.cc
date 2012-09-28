@@ -110,28 +110,48 @@ namespace ss
     }
 
     // passes signal region
-    bool PassesSignalRegion(const SignalRegion::value_type& signal_region)
+    bool PassesSignalRegion(const SignalRegion::value_type& signal_region, int num_btags)
     {
         using namespace ssb;
         switch (signal_region)
         {
-            case SignalRegion::sr0  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() >  0.0 );
-            case SignalRegion::sr1  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 );
-            case SignalRegion::sr2  : return (nbtags() >= 2 && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 && is_pp());
-            case SignalRegion::sr3  : return (nbtags() >= 2 && njets() >= 4 && ht() > 200.0 && pfmet() > 120.0);
-            case SignalRegion::sr4  : return (nbtags() >= 2 && njets() >= 4 && ht() > 200.0 && pfmet() > 50.0 );
-            case SignalRegion::sr5  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() > 50.0 );
-            case SignalRegion::sr6  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() > 120.0);
-            case SignalRegion::sr7  : return (nbtags() >= 3 && njets() >= 2 && ht() > 200.0 && pfmet() > 50.0 );
-            case SignalRegion::sr8  : return (nbtags() >= 2 && njets() >= 4 && ht() > 320.0 && pfmet() >  0.0 );
+            case SignalRegion::sr0  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() >  0.0 );
+            case SignalRegion::sr1  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 );
+            case SignalRegion::sr2  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 && is_pp());
+            case SignalRegion::sr3  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 120.0);
+            case SignalRegion::sr4  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 50.0 );
+            case SignalRegion::sr5  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 50.0 );
+            case SignalRegion::sr6  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 120.0);
+            case SignalRegion::sr7  : return (nbtags() >= 3         && njets() >= 2 && ht() > 200.0 && pfmet() > 50.0 );
+            case SignalRegion::sr8  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() >  0.0 );
             default: return false;
         }
         return false;
     }
 
-    bool PassesSignalRegion(unsigned int signal_region_number)
+    // passes signal region
+    //bool PassesSignalRegionExclusive(const SignalRegion::value_type& signal_region, int num_btags)
+    //{
+    //    using namespace ssb;
+    //    switch (signal_region)
+    //    {
+    //        case SignalRegion::sr0  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() >  0.0 );
+    //        case SignalRegion::sr1  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 );
+    //        case SignalRegion::sr2  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 && is_pp());
+    //        case SignalRegion::sr3  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 120.0);
+    //        case SignalRegion::sr4  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 50.0 );
+    //        case SignalRegion::sr5  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 50.0 );
+    //        case SignalRegion::sr6  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 120.0);
+    //        case SignalRegion::sr7  : return (nbtags() >= 3         && njets() >= 2 && ht() > 200.0 && pfmet() > 50.0 );
+    //        case SignalRegion::sr8  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() >  0.0 );
+    //        default: return false;
+    //    }
+    //    return false;
+    //}
+
+    bool PassesSignalRegion(unsigned int signal_region_number, int num_btags)
     {
-        return PassesSignalRegion(static_cast<SignalRegion::value_type>(signal_region_number));
+        return PassesSignalRegion(static_cast<SignalRegion::value_type>(signal_region_number), num_btags);
     }
 
 	// set aliases for TTree
