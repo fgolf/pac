@@ -245,15 +245,9 @@ Yield operator+(const Yield& y1, const Yield& y2)
 
 Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
-    // sample
-    //at::Sample::value_type sample = at::GetSampleFromName(sample_name);
-
-    // signal region
-    //SignalRegion::value_type signal_region = static_cast<SignalRegion::value_type>(signal_region_num); 
-
     // hists  
-
-    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
+	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee"]);
     pair<double, double> mm = rt::IntegralAndError(hc["h_yield_mm"]);
@@ -269,7 +263,8 @@ Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num =
 Yield GetDFYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
+	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_df_pred"]->GetBinContent(1), hc["h_df_pred"]->GetBinError(1));
     pair<double, double> mm(hc["h_df_pred"]->GetBinContent(2), hc["h_df_pred"]->GetBinError(2));
@@ -285,7 +280,8 @@ Yield GetDFYield(const std::string sample_name, unsigned int signal_region_num =
 Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
+	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_sf_pred"]->GetBinContent(1), hc["h_sf_pred"]->GetBinError(1));
     pair<double, double> mm(hc["h_sf_pred"]->GetBinContent(2), hc["h_sf_pred"]->GetBinError(2));
@@ -301,7 +297,8 @@ Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num =
 Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
+	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_fake_pred"]->GetBinContent(1), hc["h_fake_pred"]->GetBinError(1));
     pair<double, double> mm(hc["h_fake_pred"]->GetBinContent(2), hc["h_fake_pred"]->GetBinError(2));
@@ -317,7 +314,8 @@ Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num
 Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-    rt::TH1Container hc(Form("plots/%s/sr%d/%s.root", output_path.c_str(), signal_region_num, sample_name.c_str()));
+	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
     pair<double, double> mm(hc["h_flip_pred"]->GetBinContent(2), hc["h_flip_pred"]->GetBinError(2));

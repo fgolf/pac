@@ -35,6 +35,7 @@ try
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
     unsigned int signal_region_num  = 0;
+    bool exclusive                  = false;
     float lumi                      = 1.0;
     bool verbose                    = false;
 
@@ -59,6 +60,7 @@ try
         ("mlsp"     , po::value<float>(&m_lsp)                    , "LSP mass"                                                                          )
         ("sf_flip"  , po::value<float>(&m_sf_flip)                , "scale factor for flips"                                                            )
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                                        )
+        ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                                                       )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                                         )
         ;
 
@@ -127,7 +129,7 @@ try
     bool is_data   = false;
     bool is_signal = false;
     at::Sample::value_type sample = at::Sample::static_size;
-    string signal_region_name = Form("sr%d", signal_region_num);
+    string signal_region_name = Form(exclusive ? "ex_sr%d" : "sr%d", signal_region_num);
     SignalRegion::value_type signal_region = GetSignalRegionFromName(signal_region_name);
     if (sample_name.empty())  // use input file
     {

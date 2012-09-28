@@ -4,18 +4,22 @@
 signal_region=${1:-0}
 lumi=${2:-1.0}
 out_path=${3:-}
+exclusive=${4:-0}
 
 nbtags=0
 njets=2
-#options=" --nbtags $nbtags --gr 1 --sr $signal_region --lumi $lumi --fr data/fake_rates/ssFR_data_standard_23Sep2012.root"
-options=" --nbtags $nbtags --sr $signal_region --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root"
+options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root"
 mkdir -p logs
 
 function make_hists
 {
     local sample=$1
     local args=$2
-    cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+	if [ $exclusive -eq 1 ]; then
+    	local cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/ex_sr$signal_region/$sample.root > logs/${sample}_hists.log"
+	else
+    	local cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+	fi
     echo $cmd
     eval $cmd
 }
@@ -46,18 +50,30 @@ make_hists ttjets   "$options"
 make_hists t_schan  "$options"
 make_hists tw       "$options"
 
+# if exclusive SR, add 10 so $signal_region
+if [ $exclusive -eq 1 ]; then
+	sr_num=$((10+signal_region))
+	echo $sr_num
+else
+   	sr_num=$signal_region
+fi
+
 # overlay the hists
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"png\")"
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"eps\")"
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $signal_region, \"$out_path\", \"pdf\")"
+root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"png\")"
+root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"eps\")"
+root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"pdf\")"
 
 # print txt 
 mkdir -p tables
-root -b -q -l "macros/PrintYields.C+ ($signal_region, \"$out_path\")"    >> tables/yields_${out_path}.txt
+root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\")"    >> tables/yields_${out_path}.txt
 
 # print tex
 mkdir -p tables/${out_path}
-root -b -q -l "macros/PrintYields.C+ ($signal_region, \"$out_path\", 1)" > temp/temp.tex
-tail -n +3 temp/temp.tex > tables/${out_path}/sr${signal_region}_nbtags${nbtags}_inclusive.tex
-rm temp/temp.tex
+root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\")" > temp/temp.tex
 
+if [ $exclusive -eq 1 ]; then
+	tail -n +3 temp/temp.tex > tables/${out_path}/sr${signal_region}_nbtags${nbtags}_exclusive.tex
+else
+	tail -n +3 temp/temp.tex > tables/${out_path}/sr${signal_region}_nbtags${nbtags}_inclusive.tex
+fi
+rm temp/temp.tex

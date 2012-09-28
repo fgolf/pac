@@ -6,9 +6,14 @@ out_path=${2:-}
 # clear the old yield file
 echo "" > tables/yields_${out_path}.txt
 
-# do for all signal regions
+# do for all signal regions inclusive
 for i in {0..8}; do 
     ./scripts/plot_all.sh $i $lumi $out_path; 
+done
+
+# do for all signal regions exclusive
+for i in {1..4}; do 
+    ./scripts/plot_all.sh $i $lumi $out_path 1; 
 done
 
 # summary table

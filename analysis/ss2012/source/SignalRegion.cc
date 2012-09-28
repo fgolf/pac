@@ -4,9 +4,12 @@
 
 ss::SignalRegionInfo s_SignalRegionInfos[] = 
 {
+    // inclusive
     {
         // name
         "sr0", 
+        // ROOT title
+        "baseline",
         // ROOT title
         "baseline"
     },
@@ -14,49 +17,116 @@ ss::SignalRegionInfo s_SignalRegionInfos[] =
         // name
         "sr1", 
         // ROOT title
-        "# btags #geq 2, # jets #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV"
+        "# jets #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        // Latex
+        "$\\# jets \\geq 2,\\ H_T > 80\\ \\text{GeV},\\ E_T^{miss} > 30\\ \\text{GeV}$"
     },
     {
         // name
         "sr2", 
         // ROOT title
-        "# btags #geq 2, # jets #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++"
+        "# jets #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++",
+        // Latex
+        "$\\# jets \\geq 2,\\ H_T > 80\\ \\text{GeV},\\ E_T^{miss} > 30\\ \\text{GeV},\\ ++$"
     },
     {
         // name
         "sr3", 
         // ROOT title
-        "# btags #geq 2, # jets #geq 4, H_{T} > 200 GeV, E_{T}^{miss} > 120 GeV"
+        "# jets #geq 4, H_{T} > 200 GeV, E_{T}^{miss} > 120 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ H_T > 200\\ \\text{GeV},\\ E_T^{miss} > 120\\ \\text{GeV}$"
     },
     {
         // name
         "sr4", 
         // ROOT title
-        "# btags #geq 2, # jets #geq 4, H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV"
+        "# jets #geq 4, H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ H_T > 200\\ \\text{GeV},\\ E_T^{miss} > 50\\ \\text{GeV}$"
     },
     {
         // name
         "sr5", 
         // ROOT title
-        "# btags #geq 2, # jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 50 GeV"
+        "# jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 50 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ H_T > 320\\ \\text{GeV},\\ E_T^{miss} > 50\\ \\text{GeV}$"
     },
     {
         // name
         "sr6", 
         // ROOT title
-        "# btags #geq 2, # jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV"
+        "# jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ H_T > 320\\ \\text{GeV},\\ E_T^{miss} > 120\\ \\text{GeV}$"
     },
     {
         // name
         "sr7", 
         // ROOT title
-        "# btags #geq 3, # jets #geq 2, H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV"
+        "# btags #geq 3, # jets #geq 2, H_{T} > 200 GeV, E_{T}^{miss} > 50 GeV",
+        // Latex
+        "$\\# btags \\geq 3,\\ \\# jets \\geq 4,\\ H_T > 200\\ \\text{GeV},\\ E_T^{miss} > 50\\ \\text{GeV}$"
     },
     {
         // name
         "sr8", 
         // ROOT title
-        "# btags #geq 2, # jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 0 GeV"
+        "# jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 0 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ H_T > 320\\ \\text{GeV},\\ E_T^{miss} > 0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr9", 
+        // ROOT title
+        "not used",
+        // Latex
+        "not used"
+    },
+    {
+        // name
+        "sr9", 
+        // ROOT title
+        "not used",
+        // Latex
+        "not used"
+    },
+
+
+    // exclusive
+    {
+        // name
+        "ex_sr1", 
+        // ROOT title
+        "# jets #geq 4, 200 < H_{T} < 320 GeV, 50 < E_{T}^{miss} < 120 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ 200 < H_T < 320\\ \\text{GeV},\\ 50 < E_T^{miss} < 120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "ex_sr2", 
+        // ROOT title
+        "# jets #geq 4, 200 < H_{T} < 320 GeV, E_{T}^{miss} > 120 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ 200 < H_T < 320\\ \\text{GeV},\\ E_T^{miss} > 120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "ex_sr3", 
+        // ROOT title
+        "# jets #geq 4, H_{T} > 320 GeV, 50 < E_{T}^{miss} < 120 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ H_T > 320\\ \\text{GeV},\\ 50 < E_T^{miss} < 120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "ex_sr4", 
+        // ROOT title
+        "# jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV",
+        // Latex
+        "$\\# jets \\geq 4,\\ H_T > 320\\ \\text{GeV},\\ E_T^{miss} > 120\\ \\text{GeV}$"
     }
 };
 
@@ -115,39 +185,35 @@ namespace ss
         using namespace ssb;
         switch (signal_region)
         {
-            case SignalRegion::sr0  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() >  0.0 );
-            case SignalRegion::sr1  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 );
-            case SignalRegion::sr2  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 && is_pp());
-            case SignalRegion::sr3  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 120.0);
-            case SignalRegion::sr4  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 50.0 );
-            case SignalRegion::sr5  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 50.0 );
-            case SignalRegion::sr6  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 120.0);
-            case SignalRegion::sr7  : return (nbtags() >= 3         && njets() >= 2 && ht() > 200.0 && pfmet() > 50.0 );
-            case SignalRegion::sr8  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() >  0.0 );
+            // inclusive
+            case SignalRegion::sr0  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80  && pfmet() > 0  );
+            case SignalRegion::sr1  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80  && pfmet() > 30 );
+            case SignalRegion::sr2  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80  && pfmet() > 30 && is_pp());
+            case SignalRegion::sr3  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200 && pfmet() > 120);
+            case SignalRegion::sr4  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200 && pfmet() > 50 );
+            case SignalRegion::sr5  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320 && pfmet() > 50 );
+            case SignalRegion::sr6  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320 && pfmet() > 120);
+            case SignalRegion::sr7  : return (nbtags() >= 3         && njets() >= 2 && ht() > 200 && pfmet() > 50 );
+            case SignalRegion::sr8  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320 && pfmet() > 0  );
+            case SignalRegion::sr9  : return false; 
+            case SignalRegion::sr10 : return false; 
+
+            // exclusive
+            case SignalRegion::ex_sr1 : return (nbtags() >= num_btags && njets() >= 4 && (200 < ht() && ht() < 320) && (50 < pfmet() && pfmet() < 120));
+            case SignalRegion::ex_sr2 : return (nbtags() >= num_btags && njets() >= 4 && (200 < ht() && ht() < 320) && (pfmet() > 120                ));
+            case SignalRegion::ex_sr3 : return (nbtags() >= num_btags && njets() >= 4 && (ht() > 320              ) && (50 < pfmet() && pfmet() < 120));
+            case SignalRegion::ex_sr4 : return (nbtags() >= num_btags && njets() >= 4 && (ht() > 320              ) && (pfmet() > 120                ));
+            //case SignalRegion::ex_sr1 : return (nbtags() >= num_btags && njets() >= 4 && (((80  < ht() && ht() < 200) && (0  < pfmet() && pfmet() < 50 )) ||
+            //                                                                              ((200 < ht() && ht() < 320) && (0  < pfmet() && pfmet() < 50 )) ||
+            //                                                                              ((80  < ht() && ht() < 200) && (50 < pfmet() && pfmet() < 120)));
+            //case SignalRegion::ex_sr1 : return (nbtags() >= num_btags && njets() >= 4 && (((80  < ht() && ht() < 200) && (0  < pfmet() && pfmet() < 50 )) ||
+            //                                                                              ((200 < ht() && ht() < 320) && (0  < pfmet() && pfmet() < 50 )) ||
+            //                                                                              ((80  < ht() && ht() < 200) && (50 < pfmet() && pfmet() < 120)));
+
             default: return false;
         }
         return false;
     }
-
-    // passes signal region
-    //bool PassesSignalRegionExclusive(const SignalRegion::value_type& signal_region, int num_btags)
-    //{
-    //    using namespace ssb;
-    //    switch (signal_region)
-    //    {
-    //        case SignalRegion::sr0  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() >  0.0 );
-    //        case SignalRegion::sr1  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 );
-    //        case SignalRegion::sr2  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80.0  && pfmet() > 30.0 && is_pp());
-    //        case SignalRegion::sr3  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 120.0);
-    //        case SignalRegion::sr4  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 200.0 && pfmet() > 50.0 );
-    //        case SignalRegion::sr5  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 50.0 );
-    //        case SignalRegion::sr6  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() > 120.0);
-    //        case SignalRegion::sr7  : return (nbtags() >= 3         && njets() >= 2 && ht() > 200.0 && pfmet() > 50.0 );
-    //        case SignalRegion::sr8  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320.0 && pfmet() >  0.0 );
-    //        default: return false;
-    //    }
-    //    return false;
-    //}
 
     bool PassesSignalRegion(unsigned int signal_region_number, int num_btags)
     {
@@ -157,15 +223,22 @@ namespace ss
 	// set aliases for TTree
     void SetSignalRegionAliases(TTree& tree)
     {
-        tree.SetAlias("sr0", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet >  0.0"         ); 
-        tree.SetAlias("sr1", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0"         ); 
-        tree.SetAlias("sr2", "nbtags>=2 && njets>=2 && ht > 80.0   && pfmet > 30.0 && is_pp"); 
-        tree.SetAlias("sr3", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 120.0"        ); 
-        tree.SetAlias("sr4", "nbtags>=2 && njets>=4 && ht > 200.0  && pfmet > 50.0"         ); 
-        tree.SetAlias("sr5", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 50.0"         ); 
-        tree.SetAlias("sr6", "nbtags>=2 && njets>=4 && ht > 320.0  && pfmet > 120.0"        ); 
-        tree.SetAlias("sr7", "nbtags>=2 && njets>=2 && ht > 200.0  && pfmet > 50.0"         ); 
-        tree.SetAlias("sr8", "nbtags>=2 && njets>=4 && ht > 320.0"                          ); 
+        // inclusive
+        tree.SetAlias("sr0", "nbtags>=2 && njets>=2 && ht > 80   && pfmet > 0"          ); 
+        tree.SetAlias("sr1", "nbtags>=2 && njets>=2 && ht > 80   && pfmet > 30"         ); 
+        tree.SetAlias("sr2", "nbtags>=2 && njets>=2 && ht > 80   && pfmet > 30 && is_pp"); 
+        tree.SetAlias("sr3", "nbtags>=2 && njets>=4 && ht > 200  && pfmet > 120"        ); 
+        tree.SetAlias("sr4", "nbtags>=2 && njets>=4 && ht > 200  && pfmet > 50"         ); 
+        tree.SetAlias("sr5", "nbtags>=2 && njets>=4 && ht > 320  && pfmet > 50"         ); 
+        tree.SetAlias("sr6", "nbtags>=2 && njets>=4 && ht > 320  && pfmet > 120"        ); 
+        tree.SetAlias("sr7", "nbtags>=2 && njets>=2 && ht > 200  && pfmet > 50"         ); 
+        tree.SetAlias("sr8", "nbtags>=2 && njets>=4 && ht > 320"                        ); 
+
+        // exclusive
+        tree.SetAlias("ex_sr1", "nbtags>=2 && njets>=4 && (200 < ht && ht < 320) && (50 < pfmet && pfmet < 120)"); 
+        tree.SetAlias("ex_sr2", "nbtags>=2 && njets>=4 && (200 < ht && ht < 320) && (pfmet > 120)"              ); 
+        tree.SetAlias("ex_sr3", "nbtags>=2 && njets>=4 && (ht > 320) && (50 < pfmet && pfmet < 120)"            ); 
+        tree.SetAlias("ex_sr4", "nbtags>=2 && njets>=4 && (ht > 320) && (pfmet > 120)"                          ); 
     }
 
     void SetSignalRegionAliases(TTree* tree)
