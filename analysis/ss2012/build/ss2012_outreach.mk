@@ -11,7 +11,8 @@ include ${PAC}/tools/Makefile.common
 programs        := ss2012_outreach.exe
 program_dir_rel := analysis/ss2012
 sources         := ss2012_outreach.cc \
-    			    OutreachLooper.cc 
+    			OutreachLooper.cc \
+			ScaleFactors.cc
 include_dir     := include
 defines         := __NON_ROOT_BUILD__
 
