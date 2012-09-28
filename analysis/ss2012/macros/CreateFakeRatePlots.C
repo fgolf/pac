@@ -327,7 +327,7 @@ void printFRtable(TH2F* hist)
             float fr    = hist->GetBinContent(nbin);
             float frerr = hist->GetBinError(nbin);
 
-            printf("%s%.4f%s%.4f", colsep.c_str(), fr, pmSign.c_str(), frerr);
+            printf("%s%.3f%s%.3f", colsep.c_str(), fr, pmSign.c_str(), frerr);
         }
 
         std::cout << endL << std::endl;
