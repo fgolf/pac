@@ -161,9 +161,9 @@ void TH1Container::Add(TH1* hist_ptr, bool overwrite)
     }
 
 //#ifndef __RTINT__  
-    // non interactive, I want to be in charge of deleting
 //#endif
-    hist_ptr->SetDirectory(0);
+    // I want to be in charge of deleting
+    //hist_ptr->SetDirectory(0);
     m_pimpl->hist_map.insert(pair<string, TH1Ptr>(name, TH1Ptr(hist_ptr)));
     return;
 }

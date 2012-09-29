@@ -539,7 +539,7 @@ int FakeRateStudy::operator()(long event, const std::string& current_file_name)
         if (m_lepton == "mu")
         {
 			//if (mc3_matched && nt_iso()<0.4) 
-			if (mc3_matched) 
+			if (num_lep_sel && mc3_matched) 
 			{
 				rt::Fill(hc["h_mc3_id"], abs(mc3id()), evt_weight); 
 				rt::Fill(hc["h_mc3_pt"], mc3pt()     , evt_weight); 

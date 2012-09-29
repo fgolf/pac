@@ -10,8 +10,8 @@ void CreateFROverlays(const std::string& suffix = "png")
 
 	//rt::TH1Container hc_qcd  ("plots/qcd/qcd_test.root");
 	//rt::TH1Container hc_ttbar("plots/ttbar/ttbar_test.root");
-	rt::TH1Container hc_qcd  ("plots/qcd/qcd_mc3pt150_v2.root");
-	rt::TH1Container hc_ttbar("plots/ttbar/ttbar_mc3pt150_v2.root");
+	rt::TH1Container hc_qcd  ("plots/qcd/qcd_orig.root");
+	rt::TH1Container hc_ttbar("plots/ttbar/ttbar_orig.root");
 
 	// overlays
 	std::map<std::string, rt::TH1Overlay> p;

@@ -350,7 +350,7 @@ HistAttributes::HistAttributes(TH1* h, bool d, Color_t c, Width_t w, Style_t s, 
     , color(c != -1 ? c : h->GetLineColor())
     , width(w != -1 ? w : h->GetLineWidth())
     , style(s != -1 ? s : h->GetLineStyle())
-    , fill (s != -1 ? s : h->GetFillStyle())
+    , fill (s != -1 ? f : h->GetFillStyle())
     , nostack(d)
 {
 }
@@ -362,7 +362,7 @@ HistAttributes::HistAttributes(TH1* h, bool d, const string& l, Color_t c, Width
     , color(c != -1 ? c : h->GetLineColor()) 
     , width(w != -1 ? w : h->GetLineWidth())
     , style(s != -1 ? s : h->GetLineStyle())
-    , fill (s != -1 ? s : h->GetFillStyle())
+    , fill (s != -1 ? f : h->GetFillStyle())
     , nostack(d)
 {
 }
@@ -1020,7 +1020,10 @@ void TH1Overlay::BuildLegend()
         const HistAttributes& hist_att = *iter;
         if (m_pimpl->DrawType==DrawType::stack && hist_att.nostack)
         {
-            m_pimpl->legend->AddEntry(hist_att.hist.get(), hist_att.legend_value.c_str(), "lep"); 
+            if (hist_att.fill<3000)  // hack for the pred fill 
+            {
+                m_pimpl->legend->AddEntry(hist_att.hist.get(), hist_att.legend_value.c_str(), "lep"); 
+            }
         }
         else if (m_pimpl->DrawType==DrawType::stack && !hist_att.nostack)
         {
@@ -1136,15 +1139,15 @@ void TH1Overlay::DrawNonStackedHists(const string& option)
     }
     for (size_t i = 0; i != hists_to_draw.size(); ++i)
     {
-        //if (hists_to_draw[i]->GetFillStyle()!=0)
-        //{
-        //    hists_to_draw[i]->SetFillColor(kBlack);
-        //    hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same E2").c_str());  
-        //}
-        //else
-        //{
-            hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same").c_str());  
-        //}
+        if (hists_to_draw[i]->GetFillStyle()>3000) // hack for the pred fill overlay
+        {
+            hists_to_draw[i]->SetFillColor(kBlack);
+            hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same E2").c_str());  
+        }
+        else
+        {
+          hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same").c_str());  
+        }
     }
 }
 
@@ -1260,7 +1263,6 @@ void TH1Overlay::DrawRegular(const std::string& option)
     BuildLegend();
     BuildStack(/*is_stack = */false, /*is_norm = */false);
     m_pimpl->hist_stack->Draw(("nostack"+option).c_str());
-    //m_pimpl->hist_stack->Draw("nostack");
     SetLog();
     DrawLegend();
     DrawStatBoxes();
@@ -1285,7 +1287,6 @@ void TH1Overlay::DrawNormalized(const std::string& option)
     BuildLegend();
     BuildStack(/*is_stack = */false, /*is_norm = */true);
     m_pimpl->hist_stack->Draw(("nostack"+option).c_str());
-    //m_pimpl->hist_stack->Draw("nostack");
     SetLog();
     DrawLegend();
     DrawStatBoxes();
