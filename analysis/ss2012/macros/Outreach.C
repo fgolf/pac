@@ -59,6 +59,7 @@ void CreateOutreachHists(const std::string& sample_name)
     hc.Add(new TH1F(Form("h_%s_el_pt_num", sample_name.c_str()), Form("h_%s_el_pt_den;p^{gen}_{T} (GeV)", sample_name.c_str()), n_pt_bins, pt_bins));
     hc.Add(new TH1F(Form("h_%s_mu_pt_den", sample_name.c_str()), Form("h_%s_mu_pt_den;p^{gen}_{T} (GeV)", sample_name.c_str()), n_pt_bins, pt_bins));
     hc.Add(new TH1F(Form("h_%s_mu_pt_num", sample_name.c_str()), Form("h_%s_mu_pt_den;p^{gen}_{T} (GeV)", sample_name.c_str()), n_pt_bins, pt_bins));
+    hc.SetDirectory(gDirectory);
     hc.Sumw2();
 
     // fill hists
@@ -133,7 +134,7 @@ void CreateOutreachHists(const std::string& sample_name)
 
     // write the output
     // ------------------------------------------------------------------------------------------ //
-
+    hc.SetDirectory(NULL);
     hc.Write(Form("plots/outreach/%s_or.root", sample_name.c_str()));
 }
 
