@@ -55,7 +55,7 @@ namespace rt
         // tdrStyle->SetHistFillColor(1);
         // tdrStyle->SetHistFillStyle(0);
         tdrStyle->SetHistLineColor(1);
-        tdrStyle->SetHistLineStyle(0);
+        //tdrStyle->SetHistLineStyle(0);
         tdrStyle->SetHistLineWidth(1);
         // tdrStyle->SetLegoInnerR(Float_t rad = 0.5);
         // tdrStyle->SetNumberContours(Int_t number = 20);
@@ -63,7 +63,7 @@ namespace rt
         tdrStyle->SetEndErrorSize(2);
         // remarked out DLE
         //tdrStyle->SetErrorMarker(20);
-        tdrStyle->SetErrorX(0.);
+        //tdrStyle->SetErrorX(0.);
 
 
         tdrStyle->SetMarkerStyle(20);

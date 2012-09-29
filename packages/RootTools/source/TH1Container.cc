@@ -30,8 +30,8 @@ template <typename T> T* get(const boost::shared_ptr<T> &p) {return p.get();}
 
 using namespace std;
 
-//typedef const boost::shared_ptr<TH1> TH1Ptr;
-typedef const TH1* TH1Ptr;
+typedef const boost::shared_ptr<TH1> TH1Ptr;
+//typedef const TH1* TH1Ptr;
 
 namespace rt
 {
@@ -160,9 +160,9 @@ void TH1Container::Add(TH1* hist_ptr, bool overwrite)
         cout << "TH1Container::add(): Adding " << name << endl;
     }
 
-#ifndef __RTINT__  
-// non interactive, I want to be in charge of deleting
-#endif
+//#ifndef __RTINT__  
+    // non interactive, I want to be in charge of deleting
+//#endif
     hist_ptr->SetDirectory(0);
     m_pimpl->hist_map.insert(pair<string, TH1Ptr>(name, TH1Ptr(hist_ptr)));
     return;

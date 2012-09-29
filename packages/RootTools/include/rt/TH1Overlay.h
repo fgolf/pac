@@ -106,12 +106,12 @@ namespace rt
             void Swap(TH1Overlay& other);
     
             // add histograms to the overlay (creates a clone and owns the clone)
-            void Add(TH1* h, bool d, Color_t c = -1, Width_t w = -1, Style_t s = -1);
-            void Add(TH1* h, bool d, const std::string& legend, Color_t c = -1, Width_t w = -1, Style_t = -1);
-            void Add(TH1* h, bool d, const char* legend, Color_t c = -1, Width_t w = -1, Style_t = -1);
-            void Add(TH1* h, Color_t c = -1, Width_t w = -1, Style_t s = -1);
-            void Add(TH1* h, const std::string& legend, Color_t c = -1, Width_t w = -1, Style_t = -1);
-            void Add(TH1* h, const char* legend, Color_t c = -1, Width_t w = -1, Style_t = -1);
+            void Add(TH1* h, bool d, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
+            void Add(TH1* h, bool d, const std::string& legend, Color_t c = -1, Width_t w = -1, Style_t = -1, Style_t f = -1);
+            void Add(TH1* h, bool d, const char* legend, Color_t c = -1, Width_t w = -1, Style_t = -1, Style_t f = -1);
+            void Add(TH1* h, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
+            void Add(TH1* h, const std::string& legend, Color_t c = -1, Width_t w = -1, Style_t = -1, Style_t f = -1);
+            void Add(TH1* h, const char* legend, Color_t c = -1, Width_t w = -1, Style_t = -1, Style_t f = -1);
 
 			// add text
 			void AddText(const TLatex* text);

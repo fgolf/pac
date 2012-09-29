@@ -283,10 +283,10 @@ struct HistAttributes
 {
     HistAttributes();
     ~HistAttributes();
-    HistAttributes(TH1* h, Color_t c = -1, Width_t w = -1, Style_t s = -1);
-    HistAttributes(TH1* h, const std::string& l, Color_t c = -1, Width_t w = -1, Style_t s = -1);
-    HistAttributes(TH1* h, bool d, Color_t c = -1, Width_t w = -1, Style_t s = -1);
-    HistAttributes(TH1* h, bool d, const std::string& l, Color_t c = -1, Width_t w = -1, Style_t s = -1);
+    HistAttributes(TH1* h, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
+    HistAttributes(TH1* h, const std::string& l, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
+    HistAttributes(TH1* h, bool d, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
+    HistAttributes(TH1* h, bool d, const std::string& l, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
     
     // member funtions
     void SetAttributes(float min = 1, float max = -1, bool is_stack = false, bool is_norm = false);
@@ -298,6 +298,7 @@ struct HistAttributes
     Color_t         color;
     Width_t         width;
     Style_t         style;
+    Style_t         fill;
     bool            nostack;
 };
 
@@ -308,6 +309,7 @@ HistAttributes::HistAttributes()
     , color(gStyle->GetHistLineColor())
     , width(gStyle->GetHistLineWidth())
     , style(gStyle->GetHistLineStyle())
+    , fill (gStyle->GetHistFillStyle())
     , nostack(false)
 {
 }
@@ -318,45 +320,49 @@ HistAttributes::~HistAttributes()
 }
 
 
-HistAttributes::HistAttributes(TH1* h, Color_t c , Width_t w , Style_t s)
+HistAttributes::HistAttributes(TH1* h, Color_t c, Width_t w, Style_t s, Style_t f)
     : hist(h)
     , legend_value("")
     , color(c != -1 ? c : h->GetLineColor())
     , width(w != -1 ? w : h->GetLineWidth())
     , style(s != -1 ? s : h->GetLineStyle())
+    , fill (f != -1 ? f : h->GetFillStyle())
     , nostack(false)
 {
 }
 
 
-HistAttributes::HistAttributes(TH1* h, const string& l, Color_t c, Width_t w, Style_t s)
+HistAttributes::HistAttributes(TH1* h, const string& l, Color_t c, Width_t w, Style_t s, Style_t f)
     : hist(h)
     , legend_value(l)
     , color(c != -1 ? c : h->GetLineColor()) 
     , width(w != -1 ? w : h->GetLineWidth())
     , style(s != -1 ? s : h->GetLineStyle())
+    , fill (f != -1 ? f : h->GetFillStyle())
     , nostack(false)
 {
 }
 
 
-HistAttributes::HistAttributes(TH1* h, bool d, Color_t c , Width_t w , Style_t s)
+HistAttributes::HistAttributes(TH1* h, bool d, Color_t c, Width_t w, Style_t s, Style_t f)
     : hist(h)
     , legend_value("")
     , color(c != -1 ? c : h->GetLineColor())
     , width(w != -1 ? w : h->GetLineWidth())
     , style(s != -1 ? s : h->GetLineStyle())
+    , fill (s != -1 ? s : h->GetFillStyle())
     , nostack(d)
 {
 }
 
 
-HistAttributes::HistAttributes(TH1* h, bool d, const string& l, Color_t c, Width_t w, Style_t s)
+HistAttributes::HistAttributes(TH1* h, bool d, const string& l, Color_t c, Width_t w, Style_t s, Style_t f)
     : hist(h)
     , legend_value(l)
     , color(c != -1 ? c : h->GetLineColor()) 
     , width(w != -1 ? w : h->GetLineWidth())
     , style(s != -1 ? s : h->GetLineStyle())
+    , fill (s != -1 ? s : h->GetFillStyle())
     , nostack(d)
 {
 }
@@ -376,7 +382,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetMarkerColor(color);
         hist->SetMarkerSize(0.9);
         hist->SetLineWidth(1);
-        hist->SetLineStyle(1);
+        hist->SetFillStyle(fill);
     }
     else
     {
@@ -384,6 +390,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetLineColor(color);
         hist->SetMarkerColor(color);
         hist->SetLineWidth(width);
+        hist->SetFillStyle(fill);
         hist->SetMarkerStyle(style);
         hist->SetMarkerSize(0.9);
     }
@@ -657,7 +664,7 @@ TH1Overlay::TH1Overlay(const TH1Overlay& rhs)
     )
     {
         const HistAttributes& ha = *iter;
-        Add(ha.hist.get(), ha.nostack, ha.legend_value, ha.color, ha.width, ha.style);
+        Add(ha.hist.get(), ha.nostack, ha.legend_value, ha.color, ha.width, ha.style, ha.fill);
     }
     return;
 }
@@ -698,7 +705,7 @@ TH1Overlay::TH1Overlay(const string& title, const string& option)
 // members 
 // ---------------------------------------------------------------------------------------- //
 
-void TH1Overlay::Add(TH1* h, bool no_stack, const string& legend_value, Color_t c , Width_t w , Style_t s)
+void TH1Overlay::Add(TH1* h, bool no_stack, const string& legend_value, Color_t c, Width_t w, Style_t s, Style_t f)
 {
     if (h)
     {
@@ -706,7 +713,7 @@ void TH1Overlay::Add(TH1* h, bool no_stack, const string& legend_value, Color_t 
         temp_hist->SetDirectory(0);
         
         Color_t color = c != -1 ? c : m_pimpl->unique_hist_color(h->GetLineColor());
-        m_pimpl->hist_vec.push_back(HistAttributes(temp_hist, no_stack, legend_value, color, w, s));
+        m_pimpl->hist_vec.push_back(HistAttributes(temp_hist, no_stack, legend_value, color, w, s, f));
     }
     else
     {
@@ -715,33 +722,33 @@ void TH1Overlay::Add(TH1* h, bool no_stack, const string& legend_value, Color_t 
 }
 
 
-void TH1Overlay::Add(TH1* h, bool no_stack, const char* legend_value, Color_t c , Width_t w , Style_t s)
+void TH1Overlay::Add(TH1* h, bool no_stack, const char* legend_value, Color_t c, Width_t w, Style_t s, Style_t f)
 {
-    Add(h, no_stack, std::string(legend_value), c, w, s);
+    Add(h, no_stack, std::string(legend_value), c, w, s, f);
 }
 
 
-void TH1Overlay::Add(TH1* h, bool no_stack, Color_t c, Width_t w, Style_t s)
+void TH1Overlay::Add(TH1* h, bool no_stack, Color_t c, Width_t w, Style_t s, Style_t f)
 {
-    Add(h, no_stack, h->GetTitle(), c, w, s);
+    Add(h, no_stack, h->GetTitle(), c, w, s, f);
 }
 
 
-void TH1Overlay::Add(TH1* h, const string& legend_value, Color_t c, Width_t w, Style_t s)
+void TH1Overlay::Add(TH1* h, const string& legend_value, Color_t c, Width_t w, Style_t s, Style_t f)
 {
-    Add(h, false, legend_value, c, w, s);
+    Add(h, false, legend_value, c, w, s, f);
 }
 
 
-void TH1Overlay::Add(TH1* h, const char* legend_value, Color_t c, Width_t w, Style_t s)
+void TH1Overlay::Add(TH1* h, const char* legend_value, Color_t c, Width_t w, Style_t s, Style_t f)
 {
-    Add(h, false, std::string(legend_value), c, w, s);
+    Add(h, false, std::string(legend_value), c, w, s, f);
 }
 
 
-void TH1Overlay::Add(TH1* h, Color_t c, Width_t w, Style_t s)
+void TH1Overlay::Add(TH1* h, Color_t c, Width_t w, Style_t s, Style_t f)
 {
-    Add(h, false, h->GetTitle(), c, w, s );
+    Add(h, false, h->GetTitle(), c, w, s, f);
 }
 
 void TH1Overlay::AddText(const TLatex& text)
@@ -1129,7 +1136,15 @@ void TH1Overlay::DrawNonStackedHists(const string& option)
     }
     for (size_t i = 0; i != hists_to_draw.size(); ++i)
     {
-        hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same").c_str());  
+        //if (hists_to_draw[i]->GetFillStyle()!=0)
+        //{
+        //    hists_to_draw[i]->SetFillColor(kBlack);
+        //    hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same E2").c_str());  
+        //}
+        //else
+        //{
+            hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same").c_str());  
+        //}
     }
 }
 
