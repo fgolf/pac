@@ -82,6 +82,13 @@ define include_fg_tools
 	LDFLAGS       += -lFGTools
 endef
 
+# include FakeRateBaby Tools
+define include_fg_tools
+	CPPFLAGS      += $(addprefix -I,$(project_dir)/packages/FakeRateBabyTools/include)
+	LDFLAGS       += -L$(project_lib)
+	LDFLAGS       += -lFakeRateBabyTools
+endef
+
 # include MiniFWLite
 define include_mini_fwlite
 	LDFLAGS       += -L$(project_lib)

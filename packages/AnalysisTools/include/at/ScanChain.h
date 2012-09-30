@@ -13,11 +13,12 @@ namespace at
     int ScanChainTestAnalysis(long event);
 
     // Peform an analysis on a chain.
-    template <typename Function>
-    int ScanChainCMS2
+    template <typename NtupleClass, typename Function>
+    int ScanChain
     (
         TChain* chain, 
         Function analyze, 
+        NtupleClass& ntuple_class,
         long num_events = -1, 
         const std::string& goodrun_file_name = "",
         bool fast = true,

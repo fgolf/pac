@@ -1,5 +1,6 @@
 # ----------------------------------------------------------------------- #
-# Makefile for ss2012_create_fakerate.exe 
+# Makefile for AnalysisTools
+# creates an shared lib
 # ----------------------------------------------------------------------- #
 
 include ${PAC}/tools/Makefile.common
@@ -8,58 +9,42 @@ include ${PAC}/tools/Makefile.common
 # ----------------------------------------------------------------------- #
 
 # source files
-programs        := ss2012_create_fakerate.exe
-program_dir_rel := analysis/ss2012
-sources         := ss2012_create_fakerate.cc \
-    			    FakeRateBabyLooper.cc 
-include_dir     := include source
-defines         := __NON_ROOT_BUILD__
+libraries       := libFakeRateBabyTools.so
+package_dir_rel := packages/FakeRateBabyTools
+sources         := FakeRateBaby.cc         \
+				   FakeRateBabyWrapper.cc  
+include_dir     := include source 
 
 # additional libraries
 # ----------------------------------------------------------------------- #
 
-# BOOST c++ libraries 
+# BOOST libraries
 $(eval $(include_boost_libs))
 
-# RootTools 
+# RootTools
 $(eval $(include_root_tools))
 
-# AnalysisTools
-$(eval $(include_analysis_tools))
-
-# MiniFWLite 
-$(eval $(include_mini_fwlite))
-
-# SimpleTable 
-$(eval $(include_simple_table))
-
-# Frank's tools
-$(eval $(include_fg_tools))
-
-# FakeRateBaby tools
-$(eval $(include_frb_tools))
-
-# CMS2 
+# CMS2
 $(eval $(include_cms2_header))
 $(eval $(include_cms2_core))
 
-# program setup
+# package setup
 # ----------------------------------------------------------------------- #
 
-program_dir := $(project_dir)/$(program_dir_rel)
+package_dir := $(project_dir)/$(package_dir_rel)
 
-include_dir := $(addprefix $(strip $(program_dir))/,$(include_dir))
+include_dir := $(addprefix $(strip $(package_dir))/,$(include_dir))
 
-source_dir  := $(program_dir)/source
-sources     := $(call add-path,$(source_dir),$(sources))
+sources     := $(call add-path,$(package_dir)/source,$(sources))
+source_dir  := $(sort $(dir $(sources)))
 
-object_dir  := $(call add-path,$(project_obj),$(program_dir_rel))
+object_dir  := $(call add-path,$(project_obj),$(package_dir_rel))
 objects     := $(call source-to-object,$(sources),$(object_dir))  
 
-dep_dir     := $(call add-path,$(project_obj),$(program_dir_rel))
+dep_dir     := $(call add-path,$(project_obj),$(package_dir_rel))
 deps        := $(call source-to-dep,$(sources),$(dep_dir))  
 
-programs    := $(call add-path,$(project_bin),$(programs))
+libraries   := $(call add-path,$(project_lib),$(libraries))
 
 vpath %.h  $(include_dir)
 vpath %.cc $(source_dir)
@@ -76,38 +61,30 @@ all:
 # for troubleshooting
 .PHONY: test
 test: 
-	@echo program_dir = $(program_dir)
-	@echo program_dir_rel = $(program_dir_rel)
+	@echo package_dir = $(package_dir)
+	@echo package_dir_rel = $(package_dir_rel)
 	@echo sources = $(sources)
 	@echo source_dir = $(source_dir)
+	@echo includes = $(includes)
 	@echo include_dir = $(include_dir)
 	@echo objects = $(objects)
 	@echo object_dir = $(object_dir)
 	@echo deps = $(deps)
 	@echo dep_dir = $(dep_dir)
-	@echo programs = $(programs)
-	@echo add-path test = $(call add-path,$(object_dir),%.o)
-	@echo bin = $(call add-path,$(project_bin),%.so) 
-	@echo objs = $(call add-path,$(object_dir),%.o) 
-	@echo src = $(call add-path,$(source_dir),%.cc)
-	@echo dep = $(call add-path,$(dep_dir),%.d)
+	@echo libraries = $(libraries)
 
 .PHONY: deps 
-deps: $(deps)
+deps: $(dep)
 
-.PHONY: programs
-programs: $(programs)
+.PHONY: libraries
+libraries: $(libraries)
 
 .PHONY: all
-all: $(deps) $(programs)
-
-# specific rule
-$(programs) : $(objects)
-	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
+all: $(deps) $(libraries)
 
 .PHONY: clean
 clean:
-	$(RM) $(objects) $(programs) $(deps) $(extra_clean) 
+	$(RM) $(objects) $(libraries) $(deps) $(extra_clean) 
 	$(RMDIR) $(dep_dir) $(object_dir)
 
 # system rules
@@ -121,6 +98,11 @@ $(call add-path,$(object_dir),%.o): $(call add-path,$(source_dir),%.cc)
 	@mkdir -p $(object_dir)
 	$(COMPILE.cc) $(addprefix -D,$(defines)) $(OUTPUT_OPTION) $<
 
+# link all the objects 
+$(call add-path,$(project_lib),%.so): $(objects)
+	@mkdir -p $(project_lib)
+	$(SHAREDLIB.cc) $@ $^
+
 # autmatically resolve dependencies
 # ----------------------------------------------------------------------- #
 
@@ -130,6 +112,6 @@ endif
 
 $(call add-path,$(dep_dir),%.d): $(call add-path,$(source_dir),%.cc)
 	@mkdir -p $(dep_dir)
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -M $< | \
+	@$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) $(addprefix -D,$(defines)) -M $< | \
 	$(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@.tmp 
 	@$(MV) $@.tmp $@

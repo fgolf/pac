@@ -13,10 +13,10 @@
 #include "at/ScanChain.h"
 #include "at/Sample.h"
 #include "AnalysisLooper.h"
+#include "CMS2Wrapper.h"
 
 // BOOST
 #include <boost/program_options.hpp>
-
 #include "Math/LorentzVector.h"
 
 // typdefs
@@ -214,7 +214,8 @@ try
     if (verbose) {rt::PrintFilesFromTChain(chain);}
 
     // scan the chain
-    at::ScanChainCMS2
+    //at::ScanChainCMS2
+    at::ScanChain<CMS2>
     (
         chain, 
         SSAnalysisLooper 
@@ -234,6 +235,7 @@ try
             sync_print,
             verbose
         ),
+        cms2,
         number_of_events,
         /*good run list=*/"",  // doing the good run list at analysis level in order to set a flag
         /*fast=*/true,

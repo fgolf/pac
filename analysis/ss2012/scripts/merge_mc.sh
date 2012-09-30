@@ -12,7 +12,7 @@ function merge
     mkdir -p $output_path
     local name=$1
     local path=$2
-    cmd="ss2012_merge_babies --verbose $verbose --input \"${input_path}/${path}/*.root\"  --output \"${output_path}/${name}.root\" --njets $njets"
+    cmd="ss2012_merge_babies --verbose $verbose --input \"${input_path}/${path}/*.root\"  --output \"${output_path}/${name}.root\" --njets $njets --duplicates false"
     echo $cmd > logs/${name}_baby_merge.log 2>&1 &
     eval $cmd >> logs/${name}_baby_merge.log 2>&1 &
 }
@@ -22,7 +22,7 @@ function merge2
     mkdir -p $output_path
     local name=$1
     local input=$2
-    cmd="ss2012_merge_babies --verbose $verbose --input \"$input\" --output \"${output_path}/${name}.root\" --njets $njets"
+    cmd="ss2012_merge_babies --verbose $verbose --input \"$input\" --output \"${output_path}/${name}.root\" --njets $njets --duplicates false"
     echo $cmd
     echo $cmd > logs/${name}_baby_merge.log 2>&1 &
     eval $cmd >> logs/${name}_baby_merge.log 2>&1 &

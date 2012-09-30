@@ -18,11 +18,12 @@
 namespace at
 {
     // Peform an analysis on a chain.
-    template <typename Function>
-    int ScanChainCMS2
+    template <typename NtupleClass, typename Function>
+    int ScanChain
     (
         TChain* chain, 
         Function analyze, 
+        NtupleClass& ntuple_class,
         long num_events,
         const std::string& goodrun_file_name,
         bool fast,
@@ -71,6 +72,7 @@ namespace at
         unsigned long duplicates = 0;
         unsigned long bad_events = 0;
 
+        // loop over files in the chain
         while ((current_file = (TFile*)file_iter.Next()))
         {
             TFile *file = TFile::Open(current_file->GetTitle());
@@ -80,6 +82,7 @@ namespace at
                 continue;
             }
 
+            // get the trees in each file
             TTree *tree = dynamic_cast<TTree*>(file->Get(tree_name.c_str()));
             if (!tree || tree->IsZombie())
             {
@@ -92,7 +95,7 @@ namespace at
                 TTreeCache::SetLearnEntries(10);
                 tree->SetCacheSize(128*1024*1024);
             }
-            cms2.Init(tree);
+            Init(ntuple_class, tree);
 
             // Loop over Events in current file
             if (num_events_total >= num_events_chain) continue;
@@ -106,7 +109,7 @@ namespace at
 
                 // load the entry
                 if (fast) tree->LoadTree(event);
-                cms2.GetEntry(event);
+                GetEntry(ntuple_class, event);
                 ++num_events_total;
 
                 // pogress
@@ -124,17 +127,21 @@ namespace at
         		//    continue;
         		//}
 
+                unsigned int run = Run(ntuple_class);
+                unsigned int ls  = LumiBlock(ntuple_class);
+                unsigned int evt = Event(ntuple_class);
+
                 // filter out events
-                if (tas::evt_isRealData())
+                if (IsRealData(ntuple_class))
 				{
 					//if (verbose) {cout << "good run file = " << goodrun_file_name << endl;}
 					if (!goodrun_file_name.empty())
 					{
 						// check for good run and events
-						if(!goodrun(tas::evt_run(), tas::evt_lumiBlock())) 
+						if(!goodrun(run, ls)) 
 							//if(!goodrun_json(tas::evt_run(), tas::evt_lumiBlock())) 
 						{
-							if (verbose) {cout << "Bad run and lumi:\t" << tas::evt_run() << ", " << tas::evt_lumiBlock() << endl;}
+							if (verbose) {cout << "Bad run and lumi:\t" << run << ", " << ls << endl;}
 							bad_events++;
 							continue;
 						}
@@ -145,7 +152,7 @@ namespace at
 					}
 
 					// check for dupiclate run and events
-					DorkyEventIdentifier id = {tas::evt_run(), tas::evt_event(), tas::evt_lumiBlock()};
+					DorkyEventIdentifier id = {run, evt, ls};
 					if (is_duplicate(id))
 					{
 						if (verbose) {cout << "Duplicate event:\t" << id.run << ", " << id.event << ", " << id.lumi << endl;}
@@ -157,7 +164,7 @@ namespace at
 				// print run/ls/event
         		if (verbose)
         		{
-        		    cout << Form("run %d, ls %d, evt %d", tas::evt_run(), tas::evt_lumiBlock(), tas::evt_event()) << endl;
+        		    cout << Form("run %d, ls %d, evt %d", run, ls, evt) << endl;
         		}
 
                 // analysis
@@ -196,6 +203,5 @@ namespace at
         // done
         return 0;
     }
-    
 } // namespace at
 

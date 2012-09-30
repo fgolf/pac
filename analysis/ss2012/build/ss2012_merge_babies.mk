@@ -10,9 +10,7 @@ include ${PAC}/tools/Makefile.common
 # source files
 programs        := ss2012_merge_babies.exe
 program_dir_rel := analysis/ss2012
-sources         := ss2012_merge_babies.cc \
-				   SSB2012.cc      	\
-				   SkimChainSSB.cc	
+sources         := ss2012_merge_babies.cc
 include_dir     := include source
 defines         := 
 
@@ -40,6 +38,9 @@ $(eval $(include_fg_tools))
 # CMS2 
 $(eval $(include_cms2_header))
 $(eval $(include_cms2_core))
+
+# ss2012 tools 
+$(eval $(include_ss2012_tools))
 
 # program setup
 # ----------------------------------------------------------------------- #

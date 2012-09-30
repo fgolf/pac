@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include "TChain.h"
-#include "ScanChainFRB.h"
+#include "at/ScanChain.h"
+#include "FakeRateBabyWrapper.h"
 #include "FakeRateBabyLooper.h"
 #include <boost/program_options.hpp>
 #include <boost/shared_ptr.hpp>
@@ -236,8 +237,16 @@ try
     boost::shared_ptr<TChain> chain = TChainFactory(dataset, channel);
 
     // scan the chain
-    ScanChainFRB(/*input chain ptr =*/chain.get(), FakeRateBabyLooper(full_output_path, dataset, channel, lumi, charge, false, !suffix.empty(), suffix), number_of_events); 
-    //ScanChainFRB(/*input chain ptr =*/chain.get(), ScanChainFRBTestAnalysis, number_of_events);
+    at::ScanChain
+    (
+        /*input chain ptr =*/chain.get(), 
+        FakeRateBabyLooper(full_output_path, dataset, channel, lumi, charge, false, !suffix.empty(), suffix), 
+        fake_rate_baby,
+        number_of_events,
+        /*good_run_list=*/"",
+        /*fast=*/true,
+        /*verbose=*/false
+    ); 
     
     // done 
     return 0;

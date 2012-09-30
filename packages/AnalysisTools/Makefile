@@ -22,6 +22,7 @@ sources         := AnalysisBase.cc         \
 				   GoodRun.cc              \
 				   Sample.cc               \
 				   LorentzVectorObject.cc  \
+				   CMS2Wrapper.cc 		   \
 				   ScanChain.cc 		   \
 				   SkimChain.cc 		   \
 				   EventInfoTree.cc        \

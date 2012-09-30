@@ -6,7 +6,7 @@
 #include "at/ScanChain.h"
 #include "at/AnalysisWithHist.h"
 #include <stdexcept>
-//#include "CMS2.h"
+#include "CMS2Wrapper.h"
 #include "ssSelections.h"
 #include "electronSelections.h"
 
@@ -121,6 +121,6 @@ int main()
 	rt::PrintFilesFromTChain(chain);
 
 	//ScanChainCMS2(&chain, ScanChainTestAnalysis, 100);
-	ScanChainCMS2(&chain, QuickAnalysis("plots/quick_analysis/iso_plots_v2.root"), 100000);
+	ScanChain(&chain, QuickAnalysis("plots/quick_analysis/iso_plots_v2.root"), cms2, 100000, "", true, false);
 	return 0;
 }

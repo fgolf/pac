@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
 #include "TChain.h"
-#include "ScanChainSSB.h"
 #include "PlotLooper.h"
+#include "SSB2012Wrapper.h"
+#include "at/ScanChain.h"
 #include "rt/RootTools.h"
 #include "SignalRegion.h"
 #include <boost/program_options.hpp>
@@ -182,7 +183,7 @@ try
 	}
 
     // scan the chain
-    ScanChainSSB
+    ScanChain
     (
         chain,
         PlotLooper
@@ -205,7 +206,9 @@ try
             !suffix.empty(),  
             suffix
         ),
+        samesignbtag,
         number_of_events,
+        /*good_run_file=*/"",
         is_data,
         verbose
     );

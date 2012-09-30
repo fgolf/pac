@@ -4,6 +4,7 @@
 lib ssb2012
   : # sources
     ./source/SSB2012.cc
+    ./source/SSB2012Wrapper.cc
     /ROOT
   : # requirements
     <include>./include
@@ -86,26 +87,6 @@ exe ss2012_outreach
   : # usage-requirements
   ;
 
-#exe ss2012_sync
-#  : # sources
-#    ./source/ss2012_sync.cc
-#    ./source/SyncLooper.cc
-#    # dependent packages
-#    ss2012_tools/<link>static
-#    /ROOT
-#    /MiniFWLite//libMiniFWLite/<link>shared
-#    /AnalysisTools//AnalysisTools/<link>static
-#    /RootTools//RootTools/<link>static
-#    /boost//program_options/<link>static
-#    /SimpleTable//SimpleTable/<link>static
-#  : # requirements
-#		<define>__NON_ROOT_BUILD__
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#  ;
-
 exe ss2012_plots
   : # sources
     ./source/ss2012_plots.cc
@@ -159,22 +140,22 @@ exe ss2012_merge_babies
   : # usage-requirements
   ;
 
-lib fake_rate_baby
-  : # sources
-    ./source/ScanChainFRB.cc
-    ./source/FakeRateBaby.cc
-    # dependent packages
-    /ROOT
-    /RootTools//RootTools
-    /AnalysisTools//AnalysisTools
-  : # requirements
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-    <include>./include
-    <include>./source
-  ;
+#lib fake_rate_baby
+#  : # sources
+#    ./source/FakeRateBaby.cc
+#    ./source/FakeRateBabyWrapper.cc
+#    # dependent packages
+#    /ROOT
+#    /RootTools//RootTools
+#    /AnalysisTools//AnalysisTools
+#  : # requirements
+#    <include>./include
+#    <include>./source
+#  : # default-build
+#  : # usage-requirements
+#    <include>./include
+#    <include>./source
+#  ;
 
 exe ss2012_create_fakerate
   : # sources
@@ -182,7 +163,7 @@ exe ss2012_create_fakerate
     ./source/FakeRateBabyLooper.cc
     # dependent packages
     /ROOT
-    fake_rate_baby/<link>static
+    /FakeRateBabyTools//FakeRateBabyTools/<link>static
     /MiniFWLite//libMiniFWLite/<link>shared
     /RootTools//RootTools/<link>static
     /AnalysisTools//AnalysisTools/<link>static
@@ -279,7 +260,6 @@ default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
 default-install ss2012_skim ;
 default-install ss2012_plots ;
-#default-install ss2012_sync ;
 default-install ss2012_outreach ;
 default-install ss2012_tools ;
 default-install ss2012_quick_check ;

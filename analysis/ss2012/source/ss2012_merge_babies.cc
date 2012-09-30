@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include "TChain.h"
-#include "SkimChainSSB.h"
+#include "SSB2012Wrapper.h"
+#include "at/SkimChain.h"
 #include "rt/RootTools.h"
 #include <boost/program_options.hpp>
 
@@ -27,21 +28,23 @@ try
     // inputs
     // -------------------------------------------------------------------------------------------------//
 
-    std::string input_file  = "";
-    std::string output_file = "merged.root";
-    std::string run_list    = "";
-    bool verbose            = false;
-	unsigned int njets      = 0;
+    std::string input_file    = "";
+    std::string output_file   = "merged.root";
+    std::string run_list      = "";
+    bool verbose              = false;
+    bool do_duplicate_removal = true;
+	unsigned int njets        = 0;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"     , "print this menu")
-        ("output"   , po::value<std::string>(&output_file) , "name of output root file (default is merged.root)"    )
-        ("input"    , po::value<std::string>(&input_file)  , "name of input root(s) file (can be cvs)"              )
-        ("run_list" , po::value<std::string>(&run_list)    , "good run list (default is empty)"                     )
-        ("njets"    , po::value<unsigned int>(&njets)      , "number of jets to cun on while merging (default is 0)")
-        ("verbose"  , po::value<bool>(&verbose)            , "verbosity"                                            )
+        ("output"   , po::value<std::string>(&output_file)  , "name of output root file (default is merged.root)"    )
+        ("input"    , po::value<std::string>(&input_file)   , "name of input root(s) file (can be cvs)"              )
+        ("run_list" , po::value<std::string>(&run_list)     , "good run list (default is empty)"                     )
+        ("njets"    , po::value<unsigned int>(&njets)       , "number of jets to cun on while merging (default is 0)")
+        ("duplicate", po::value<bool>(&do_duplicate_removal), "remove duplicate events"                              )
+        ("verbose"  , po::value<bool>(&verbose)             , "verbosity"                                            )
         ;
 
     po::variables_map vm;
@@ -109,15 +112,15 @@ try
     rt::mkdir(rt::dirname(output_file), /*force=*/true);
     int number_of_events = -1;
     
-    SkimChainSSB
+    at::SkimChain
     (
         chain,
         output_file,
-        run_list,
         simple_selection(njets),
-		//keep_all_events,
+        samesignbtag,
         number_of_events,
-        /*do_duplicate_removal=*/true,
+        run_list,
+        do_duplicate_removal,
         verbose
     );
 

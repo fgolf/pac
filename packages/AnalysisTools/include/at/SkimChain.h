@@ -13,14 +13,15 @@ namespace at
     int SkimChainTestSelection(long event);
 
     // Peform an analysis on a chain.
-    template <typename Function>
-    int SkimChainCMS2
+    template <typename NtupleClass, typename Function>
+    int SkimChain
     (
         TChain* chain, 
 	    const std::string& output_file_name,
-	    const std::string& goodrun_file_name = "",
-        Function selected = SkimChainTestSelection, 
+        Function selected,
+        NtupleClass& ntuple_class,
         long num_events = -1, 
+	    const std::string& goodrun_file_name = "",
         bool do_duplicate_removal = true,
         bool verbose = false
     );

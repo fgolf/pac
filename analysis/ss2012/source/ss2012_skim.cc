@@ -8,6 +8,7 @@
 #include "trackSelections.h"
 #include "eventSelections.h"
 #include "jetcorr/FactorizedJetCorrector.h"
+#include "CMS2Wrapper.h"
 #include "at/DileptonHypType.h"
 #include "at/SkimChain.h"
 #include "rt/RootTools.h"
@@ -106,21 +107,23 @@ try
     // inputs
     // -------------------------------------------------------------------------------------------------//
 
-    std::string input_file  = "";
-    std::string output_file = "ntuple_skim.root";
-    std::string run_list    = "";
-    long number_of_events   = -1;
-    bool verbose            = false;
+    std::string input_file    = "";
+    std::string output_file   = "ntuple_skim.root";
+    std::string run_list      = "";
+    long number_of_events     = -1;
+    bool do_duplicate_removal = false;
+    bool verbose              = false;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"     , "print this menu")
-        ("nev"      , po::value<long>(&number_of_events)   , "number of events to run on (-1 == all)"           )
-        ("output"   , po::value<std::string>(&output_file) , "name of output root file (default is merged.root)")
-        ("input"    , po::value<std::string>(&input_file)  , "name of input root(s) file (can be cvs)"          )
-        ("run_list" , po::value<std::string>(&run_list)    , "good run list (default is empty)"                 )
-        ("verbose"  , po::value<bool>(&verbose)            , "verbosity"                                        )
+        ("nev"      , po::value<long>(&number_of_events)    , "number of events to run on (-1 == all)"           )
+        ("output"   , po::value<std::string>(&output_file)  , "name of output root file (default is merged.root)")
+        ("input"    , po::value<std::string>(&input_file)   , "name of input root(s) file (can be cvs)"          )
+        ("run_list" , po::value<std::string>(&run_list)     , "good run list (default is empty)"                 )
+        ("duplicate", po::value<bool>(&do_duplicate_removal), "remove duplicate events (default is false)"       )
+        ("verbose"  , po::value<bool>(&verbose)             , "verbosity"                                        )
         ;
 
     po::variables_map vm;
@@ -192,14 +195,15 @@ try
     //// run the skim and do not cut events except for duplicates and bad runs
     rt::mkdir(rt::dirname(output_file), /*force=*/true);
     
-    SkimChainCMS2
+    at::SkimChain
     (
         chain,
         output_file,
-        run_list,
         SelectSameSign,
+        cms2,
         number_of_events,
-        /*do_duplicate_removal=*/true,
+        run_list,
+        do_duplicate_removal,
         verbose
     );
 

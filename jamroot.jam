@@ -76,6 +76,9 @@ use-project /FGTools  : ./packages/FGTools ;
 # Analysis tools
 use-project /AnalysisTools : ./packages/AnalysisTools ;
 
+# FakeRate Baby tools
+use-project /FakeRateBabyTools : ./packages/FakeRateBabyTools ;
+
 # CMS2
 local cms2_header_tag = 05.03.09 ;
 path-constant CMS2 : ./packages/cms2/$(cms2_header_tag) ;

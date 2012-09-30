@@ -11,11 +11,11 @@ include ${PAC}/tools/Makefile.common
 # source files
 libraries       := libss2012_tools.so
 package_dir_rel := analysis/ss2012
-sources         := SSB2012.cc      	\
-				   ScaleFactors.cc 	\
-				   SameSignTree.cc 	\
-				   SkimChainSSB.cc	\
-				   PredSummary.cc   \
+sources         := SSB2012.cc      		 \
+				   SSB2012Wrapper.cc	 \
+				   ScaleFactors.cc 		 \
+				   SameSignTree.cc 		 \
+				   PredSummary.cc   	 \
 				   FakeRatePrediction.cc \
 				   FlipRatePrediction.cc \
 				   SignalRegion.cc 
