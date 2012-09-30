@@ -163,7 +163,7 @@ void TH1Container::Add(TH1* hist_ptr, bool overwrite)
 //#ifndef __RTINT__  
 //#endif
     // I want to be in charge of deleting
-    //hist_ptr->SetDirectory(0);
+    hist_ptr->SetDirectory(0);
     m_pimpl->hist_map.insert(pair<string, TH1Ptr>(name, TH1Ptr(hist_ptr)));
     return;
 }

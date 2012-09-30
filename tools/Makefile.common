@@ -83,7 +83,7 @@ define include_fg_tools
 endef
 
 # include FakeRateBaby Tools
-define include_fg_tools
+define include_frb_tools
 	CPPFLAGS      += $(addprefix -I,$(project_dir)/packages/FakeRateBabyTools/include)
 	LDFLAGS       += -L$(project_lib)
 	LDFLAGS       += -lFakeRateBabyTools
