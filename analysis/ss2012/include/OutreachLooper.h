@@ -37,36 +37,41 @@ public:
 
     // event level info
     EventInfoTree event_info;
+    int nvtxs;
+    float vtxw;
 
-    // event level
-    float ht;
-    float met;
-    int nbtags;
-    int njets;
-    int nbjets_num;
-    int njets_num;
+    // gen event level
+    at::DileptonHypType::value_type gen_dilep_type; 
     float gen_ht;
-    unsigned int dilep_type;
-    std::vector<LorentzVector> vbjets_p4;
-    std::vector<bool> vbjets_num;
-    std::vector<LorentzVector> vjets_p4;
-    std::vector<bool> vjets_num;
+    //float gen_met; // filled in event_info
+    int gen_nbtags;
+    int gen_njets;
+    bool gen_is_ss;
+    bool gen_is_os;
+
+    // reco event level
+    at::DileptonHypType::value_type dilep_type; 
+    float reco_ht;
+    float reco_met;
+    int reco_nbtags;
+    int reco_njets;
+    bool reco_is_ss;
+    bool reco_is_os;
+
+    // scale facors
     float sf_dileptrig;
     float sf_lepeff;
     float sf_nbtag;
     float sf_nbtag3;
-    int nvtxs;
-    float vtxw;
-    bool clean;
 
+    // sparms
     float sparm0;
     float sparm1;
     float sparm2;
     float sparm3;
 
     // lepton level
-    LorentzVector lep1_p4;
-    LorentzVector lep1_gen_p4;
+    int lep1_gen_pdgid;
     int lep1_pdgid;
     bool lep1_matched;
     bool lep1_from_tau;
@@ -75,15 +80,27 @@ public:
     float lep1_iso;
     bool lep1_num;
 
-    LorentzVector lep2_p4;
-    LorentzVector lep2_gen_p4;
-    bool lep2_matched;
     int lep2_pdgid;
+    int lep2_gen_pdgid;
+    bool lep2_matched;
     bool lep2_from_tau;
     bool lep2_passes_id;
     bool lep2_passes_iso;
     float lep2_iso;
     bool lep2_num;
+
+    // lorentz vectors
+    std::vector<LorentzVector> gen_vbjets_p4;
+    std::vector<bool> gen_vbjets_matched;
+    std::vector<LorentzVector> gen_vjets_p4;
+    std::vector<bool> gen_vjets_matched;
+    std::vector<LorentzVector> reco_vbjets_p4;
+    std::vector<LorentzVector> reco_vjets_p4;
+    LorentzVector lep1_p4;
+    LorentzVector lep1_gen_p4;
+    LorentzVector lep2_p4;
+    LorentzVector lep2_gen_p4;
+
 };
 
 class OutreachLooper : public at::AnalysisWithTree

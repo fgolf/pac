@@ -82,7 +82,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t.root" , path.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ww_ds.root"    , path.c_str() , sr.name.c_str()));
     
-	// set style (FIXIT)
+	// set style
 	rt::SetTDRStyle();
     gStyle->SetHatchesSpacing(0.65);
 

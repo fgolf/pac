@@ -29,6 +29,14 @@ namespace ss
             ex_sr3 = 13, // #btags >= 2, #jets >= 4, HT > 320, 50 < MET < 120
             ex_sr4 = 14, // #btags >= 2, #jets >= 4, HT > 320, MET > 120
 
+            sr15 = 15,
+            sr16 = 16,
+            sr17 = 17,
+            sr18 = 18,
+            sr19 = 19,
+            sr20 = 20,
+            sr21 = 21,
+
             static_size
         };
     };

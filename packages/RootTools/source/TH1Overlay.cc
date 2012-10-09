@@ -380,7 +380,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetFillColor(color);
         hist->SetLineColor(color);
         hist->SetMarkerColor(color);
-        hist->SetMarkerSize(0.9);
+        hist->SetMarkerSize(1.8);
         hist->SetLineWidth(1);
         hist->SetFillStyle(fill);
     }
@@ -392,7 +392,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetLineWidth(width);
         hist->SetFillStyle(fill);
         hist->SetMarkerStyle(style);
-        hist->SetMarkerSize(0.9);
+        hist->SetMarkerSize(1.8);
     }
     if (is_norm)
     {
@@ -893,7 +893,7 @@ void TH1Overlay::BuildStack(bool is_stack, bool is_norm)
         }
         else
         {
-          m_pimpl->hist_stack->Add(iter->hist.get(), m_pimpl->option.c_str());
+            m_pimpl->hist_stack->Add(iter->hist.get(), m_pimpl->option.c_str());
         }
         hist_index++;
     }

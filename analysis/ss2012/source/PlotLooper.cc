@@ -131,7 +131,7 @@ void PlotLooper::EndJob()
     yield_ss[3] = static_cast<int>(rt::Integral(hc["h_yield_ll"]));
 
     // set the error to the lumi*scale1fb if the yield < weight*0.5 
-    float weight = m_lumi * m_scale1fb;
+    float weight = (m_lumi * m_scale1fb);
     if (rt::Integral(hc["h_yield_ee"]) < (weight * 0.5)) {hc["h_yield_ee"]->SetBinError(2, weight);}
     if (rt::Integral(hc["h_yield_mm"]) < (weight * 0.5)) {hc["h_yield_mm"]->SetBinError(2, weight);}
     if (rt::Integral(hc["h_yield_em"]) < (weight * 0.5)) {hc["h_yield_em"]->SetBinError(2, weight);}
@@ -407,7 +407,8 @@ int PlotLooper::operator()(long event)
         // convenience alias
         rt::TH1Container& hc = m_hist_container;
 
-        // which dataset
+        // scale 1b (set before cuts) 
+        m_scale1fb = scale1fb();
 
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
@@ -508,7 +509,6 @@ int PlotLooper::operator()(long event)
         m_lumi = is_real_data() ? 1.0 : m_lumi;
         //float evt_weight = m_lumi * scale1fb() * vtxw;
         float evt_weight = m_lumi * vtxw;
-        m_scale1fb = scale1fb();
 
 		// T1tttt is not scaled properly (need make this automatic) 
         if (m_sample == at::Sample::t1tttt || m_sample == at::Sample::t1tttt_fastsim)

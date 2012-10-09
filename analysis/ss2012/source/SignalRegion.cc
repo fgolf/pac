@@ -127,6 +127,41 @@ ss::SignalRegionInfo s_SignalRegionInfos[] =
         "# jets #geq 4, H_{T} > 320 GeV, E_{T}^{miss} > 120 GeV",
         // Latex
         "$\\# jets \\geq 4,\\ H_T > 320\\ \\text{GeV},\\ E_T^{miss} > 120\\ \\text{GeV}$"
+    },
+    {
+        "sr15", 
+        "met1",
+        "met1"
+    },
+    {
+        "sr16", 
+        "met2",
+        "met2"
+    },
+    {
+        "sr17", 
+        "met3",
+        "met3"
+    },
+    {
+        "sr18", 
+        "met4",
+        "met4"
+    },
+    {
+        "sr19", 
+        "ht1",
+        "ht1"
+    },
+    {
+        "sr20", 
+        "ht2",
+        "ht2"
+    },
+    {
+        "sr21", 
+        "ht3",
+        "ht3"
     }
 };
 
@@ -195,7 +230,8 @@ namespace ss
             case SignalRegion::sr6  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320 && pfmet() > 120);
             case SignalRegion::sr7  : return (nbtags() >= 3         && njets() >= 2 && ht() > 200 && pfmet() > 50 );
             case SignalRegion::sr8  : return (nbtags() >= num_btags && njets() >= 4 && ht() > 320 && pfmet() > 0  );
-            case SignalRegion::sr9  : return false; 
+            case SignalRegion::sr9  : return (nbtags() >= num_btags && njets() >= 2 && ht() > 200 && pfmet() > 120);  // test for sync with lana
+            //case SignalRegion::sr9  : return false; 
             case SignalRegion::sr10 : return false; 
 
             // exclusive
@@ -209,6 +245,14 @@ namespace ss
             //case SignalRegion::ex_sr1 : return (nbtags() >= num_btags && njets() >= 4 && (((80  < ht() && ht() < 200) && (0  < pfmet() && pfmet() < 50 )) ||
             //                                                                              ((200 < ht() && ht() < 320) && (0  < pfmet() && pfmet() < 50 )) ||
             //                                                                              ((80  < ht() && ht() < 200) && (50 < pfmet() && pfmet() < 120)));
+
+            case SignalRegion::sr15 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && 0   < pfmet() && pfmet() < 30.00);
+            case SignalRegion::sr16 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && 30  < pfmet() && pfmet() < 50.00);
+            case SignalRegion::sr17 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && 50  < pfmet() && pfmet() < 120.0);
+            case SignalRegion::sr18 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && 120 < pfmet() && pfmet() < 200.0);
+            case SignalRegion::sr19 : return (nbtags() >= num_btags && njets() >= 2 && 80  < ht() && ht() < 200);
+            case SignalRegion::sr20 : return (nbtags() >= num_btags && njets() >= 2 && 200 < ht() && ht() < 320);
+            case SignalRegion::sr21 : return (nbtags() >= num_btags && njets() >= 2 && 320 < ht() && ht() < 800);
 
             default: return false;
         }
@@ -228,7 +272,7 @@ namespace ss
         tree.SetAlias("sr1", "nbtags>=2 && njets>=2 && ht > 80   && pfmet > 30"         ); 
         tree.SetAlias("sr2", "nbtags>=2 && njets>=2 && ht > 80   && pfmet > 30 && is_pp"); 
         tree.SetAlias("sr3", "nbtags>=2 && njets>=4 && ht > 200  && pfmet > 120"        ); 
-        tree.SetAlias("sr4", "nbtags>=2 && njets>=4 && ht > 200  && pfmet > 50"         ); 
+        tree.SetAlias("sr4", "nbtags>=0 && njets>=4 && ht > 200  && pfmet > 50"         ); 
         tree.SetAlias("sr5", "nbtags>=2 && njets>=4 && ht > 320  && pfmet > 50"         ); 
         tree.SetAlias("sr6", "nbtags>=2 && njets>=4 && ht > 320  && pfmet > 120"        ); 
         tree.SetAlias("sr7", "nbtags>=2 && njets>=2 && ht > 200  && pfmet > 50"         ); 

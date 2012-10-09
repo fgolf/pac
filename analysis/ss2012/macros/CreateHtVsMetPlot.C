@@ -15,7 +15,7 @@ void CreateHtVsMetPlot(bool btag2 = true, const std::string& suffix = "png")
     // set TDR style
     rt::SetTDRStyle();
 
-    float lumi = 10.5; // fb^-1
+    float lumi = 12.3; // fb^-1
 
     TChain e1("tree");
     e1.Add("babies/data.root");

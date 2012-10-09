@@ -6,7 +6,7 @@ lumi=${2:-1.0}
 out_path=${3:-}
 exclusive=${4:-0}
 
-nbtags=0
+nbtags=2
 njets=2
 options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root"
 mkdir -p logs
@@ -59,6 +59,7 @@ else
 fi
 
 # overlay the hists
+mkdir -p plots/${out_path}
 root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"png\")"
 root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"eps\")"
 root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"pdf\")"

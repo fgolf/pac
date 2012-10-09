@@ -679,3 +679,166 @@ void PrintSummaryYields(const std::string output_path = "", bool print_latex = f
         t_yields.print();
     }
 }
+
+// print the summary table 
+void CreateProjPlots(const std::string output_path = "", const std::string& suffix = "png")
+{
+    string title = "CMS Preliminary, #sqrt{s}=8 TeV, L_{int} = 10.5 fb^{-1}";
+
+    const int n_met_bins = 4; const float met_bins[] = {0, 30, 50, 120, 200};
+    const int n_ht_bins = 3;  const float ht_bins [] = {80, 200, 320, 800};
+
+    // table for output
+    TH1F* h_data_met = new TH1F("h_data_met", Form("%s;E^{miss}_{T} (GeV);Events/10 GeV", title.c_str()), n_met_bins, met_bins);
+    TH1F* h_fake_met = new TH1F("h_fake_met", Form("%s;E^{miss}_{T} (GeV);Events/10 GeV", title.c_str()), n_met_bins, met_bins);
+    TH1F* h_flip_met = new TH1F("h_flip_met", Form("%s;E^{miss}_{T} (GeV);Events/10 GeV", title.c_str()), n_met_bins, met_bins);
+    TH1F* h_pred_met = new TH1F("h_pred_met", Form("%s;E^{miss}_{T} (GeV);Events/10 GeV", title.c_str()), n_met_bins, met_bins);
+    TH1F* h_mc_met   = new TH1F("h_mc_met"  , Form("%s;E^{miss}_{T} (GeV);Events/10 GeV", title.c_str()), n_met_bins, met_bins);
+
+    TH1F* h_data_ht = new TH1F("h_data_ht", Form("%s;H_{T} (GeV);Events/10 GeV", title.c_str()), n_ht_bins, ht_bins);
+    TH1F* h_fake_ht = new TH1F("h_fake_ht", Form("%s;H_{T} (GeV);Events/10 GeV", title.c_str()), n_ht_bins, ht_bins);
+    TH1F* h_flip_ht = new TH1F("h_flip_ht", Form("%s;H_{T} (GeV);Events/10 GeV", title.c_str()), n_ht_bins, ht_bins);
+    TH1F* h_pred_ht = new TH1F("h_pred_ht", Form("%s;H_{T} (GeV);Events/10 GeV", title.c_str()), n_ht_bins, ht_bins);
+    TH1F* h_mc_ht   = new TH1F("h_mc_ht"  , Form("%s;H_{T} (GeV);Events/10 GeV", title.c_str()), n_ht_bins, ht_bins);
+
+    // fill the columns
+    int bin = 1;
+    for (unsigned int signal_region_num = 15; signal_region_num != 22; signal_region_num++)
+    {
+        Yield yield_data(GetSSYield  ("data", signal_region_num, output_path));
+        Yield yield_sf  (GetSFYield  ("data", signal_region_num, output_path));
+        Yield yield_df  (GetDFYield  ("data", signal_region_num, output_path));
+        Yield yield_fake(GetFakeYield("data", signal_region_num, output_path));
+        Yield yield_flip(GetFlipYield("data", signal_region_num, output_path));
+        if (signal_region_num == 2)
+        {
+            yield_flip = 0.5*GetFlipYield("data", 1, output_path);
+            yield_flip.title = "Flips";
+        }
+
+        Yield yield_mc("total MC");
+        vector<Yield> yields_bkgd;
+        yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wzz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("zzz"     , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wgstar2e", signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wgstar2m", signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wgstar2t", signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wmwmqq"  , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("wpwpqq"  , signal_region_num, output_path));
+        yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_num, output_path));
+
+        // add the backtrounds to get the totol MC and total prediction
+        for (size_t i = 0; i != yields_bkgd.size(); i++)
+        {
+            yield_mc += yields_bkgd[i];
+        }
+        Yield yield_mc_pred = yield_mc;
+        yield_mc_pred.title = "MC Pred";
+
+        // set systematic uncertainties
+        SetSysUncertainties(yield_fake, 0.5);
+        SetSysUncertainties(yield_flip, 0.2);
+        SetSysUncertainties(yield_mc  , 0.5);
+
+        // total predition
+        Yield yield_pred    = yield_mc_pred;
+        yield_pred.title    = "pred";
+        yield_pred += yield_fake;
+        yield_pred += yield_flip;
+
+        // collect all the yields
+        vector<Yield> yields;
+        yields.push_back(yield_mc);
+        yields.push_back(yield_fake);
+        yields.push_back(yield_flip);
+        yields.push_back(yield_pred);
+        yields.push_back(yield_data);
+
+        // fill hists
+        if (bin < 5)
+        {
+            float scale = h_data_ht->GetBinWidth(bin)/10.0;
+            h_data_met->SetBinContent(bin, yield_data.ll/scale);
+            h_fake_met->SetBinContent(bin, yield_fake.ll/scale);
+            h_flip_met->SetBinContent(bin, yield_flip.ll/scale);
+            h_pred_met->SetBinContent(bin, yield_pred.ll/scale);
+            h_mc_met->SetBinContent  (bin, yield_mc.ll/scale);
+
+            h_data_met->SetBinError(bin, yield_data.dll/scale);
+            h_fake_met->SetBinError(bin, yield_fake.sll/scale);
+            h_flip_met->SetBinError(bin, yield_flip.sll/scale);
+            h_pred_met->SetBinError(bin, yield_pred.sll/scale);
+            h_mc_met->SetBinError  (bin, yield_mc.sll/scale);
+        }
+        else
+        {
+            float scale = h_data_ht->GetBinWidth(bin-4)/10.0;
+            h_data_ht->SetBinContent(bin-4, yield_data.ll/scale);
+            h_fake_ht->SetBinContent(bin-4, yield_fake.ll/scale);
+            h_flip_ht->SetBinContent(bin-4, yield_flip.ll/scale);
+            h_pred_ht->SetBinContent(bin-4, yield_pred.ll/scale);
+            h_mc_ht->SetBinContent  (bin-4, yield_mc.ll/scale);
+
+            h_data_ht->SetBinError(bin-4, yield_data.dll/scale);
+            h_fake_ht->SetBinError(bin-4, yield_fake.sll/scale);
+            h_flip_ht->SetBinError(bin-4, yield_flip.sll/scale);
+            h_pred_ht->SetBinError(bin-4, yield_pred.sll/scale);
+            h_mc_ht->SetBinError  (bin-4, yield_mc.sll/scale);
+        }
+
+        bin++;
+    } // loop over SRs
+
+	// set style
+	rt::SetTDRStyle();
+    gStyle->SetHatchesSpacing(0.65);
+
+	// colors
+    static Color_t data_color = kBlack;
+    static Color_t mc_color   = kCyan-5;
+    static Color_t fake_color = kRed-6;
+    static Color_t flip_color = kBlue-8;
+
+    // make marker larger
+    h_data_ht->SetMarkerSize(2.0);
+    h_data_met->SetMarkerSize(2.0);
+
+    TCanvas* c1 = new TCanvas("c1", "c1");
+    TLatex t1(0.81, 0.84, "E^{miss}_{T} > 0 GeV"); t1.SetTextSize(0.03);
+    rt::TH1Overlay* p_ht = new rt::TH1Overlay("", "sb::off lg::top_right dt::stack");
+    p_ht->Add(h_data_ht, /*no_stack=*/true, "data", data_color, 2, 23); 
+    p_ht->Add(h_pred_ht, /*no_stack=*/true, "pred", 1, 2, 1, 3335); 
+    p_ht->Add(h_flip_ht, "flip", flip_color); 
+    p_ht->Add(h_fake_ht, "fake", fake_color); 
+    p_ht->Add(h_mc_ht  , "mc"  , mc_color  ); 
+    p_ht->AddText(t1);
+    p_ht->Draw();
+
+    TCanvas* c2 = new TCanvas("c2", "c2");
+    TLatex t2(0.82, 0.84, "H_{T} > 80 GeV"); t2.SetTextSize(0.03);
+    rt::TH1Overlay* p_met = new rt::TH1Overlay("", "sb::off lg::top_right dt::stack");
+    p_met->Add(h_data_met, /*no_stack=*/true, "data", data_color, 2, 23); 
+    p_met->Add(h_pred_met, /*no_stack=*/true, "pred", 1, 2, 1, 3335); 
+    p_met->Add(h_flip_met, "flip", flip_color); 
+    p_met->Add(h_fake_met, "fake", fake_color); 
+    p_met->Add(h_mc_met  , "mc"  , mc_color  ); 
+    p_met->AddText(t2);
+    p_met->Draw();
+
+    c1->Print("plots/note/p_proj_ht.pdf");
+    c2->Print("plots/note/p_proj_met.pdf");
+    //h_data_ht->Draw();
+    //h_pred_ht->SetLineColor(kRed);
+    //h_pred_ht->SetFillStyle(3335);
+    //h_pred_ht->SetFillColor(kBlack);
+    //h_pred_ht->Draw("same E2");
+}
