@@ -131,6 +131,10 @@ public:
     bool is_sf;
     bool is_df;
     bool no_extraz;
+    bool no_extrag;
+    bool clean;
+    bool hyp_good_vtx;
+    bool presel;
 
     //
     // gen level info

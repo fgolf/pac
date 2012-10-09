@@ -22,6 +22,7 @@ namespace ssb {
 	bool &lep1_passes_iso() { return samesignbtag.lep1_passes_iso(); }
 	bool &lep1_is_num() { return samesignbtag.lep1_is_num(); }
 	bool &lep1_is_fo() { return samesignbtag.lep1_is_fo(); }
+	bool &lep1_is_fromw() { return samesignbtag.lep1_is_fromw(); }
 	int &lep1_charge() { return samesignbtag.lep1_charge(); }
 	int &lep1_pdgid() { return samesignbtag.lep1_pdgid(); }
 	int &lep1_type() { return samesignbtag.lep1_type(); }
@@ -103,6 +104,7 @@ namespace ssb {
 	bool &lep2_passes_iso() { return samesignbtag.lep2_passes_iso(); }
 	bool &lep2_is_num() { return samesignbtag.lep2_is_num(); }
 	bool &lep2_is_fo() { return samesignbtag.lep2_is_fo(); }
+	bool &lep2_is_fromw() { return samesignbtag.lep2_is_fromw(); }
 	int &lep2_charge() { return samesignbtag.lep2_charge(); }
 	int &lep2_pdgid() { return samesignbtag.lep2_pdgid(); }
 	int &lep2_type() { return samesignbtag.lep2_type(); }
@@ -240,6 +242,10 @@ namespace ssb {
 	bool &is_sf() { return samesignbtag.is_sf(); }
 	bool &is_df() { return samesignbtag.is_df(); }
 	bool &no_extraz() { return samesignbtag.no_extraz(); }
+	bool &no_extrag() { return samesignbtag.no_extrag(); }
+	bool &clean() { return samesignbtag.clean(); }
+	bool &presel() { return samesignbtag.presel(); }
+	bool &hyp_good_vtx() { return samesignbtag.hyp_good_vtx(); }
 	bool &is_gen_pp() { return samesignbtag.is_gen_pp(); }
 	bool &is_gen_mm() { return samesignbtag.is_gen_mm(); }
 	int &gen_nbtags() { return samesignbtag.gen_nbtags(); }

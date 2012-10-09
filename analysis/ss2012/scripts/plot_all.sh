@@ -5,10 +5,9 @@ signal_region=${1:-0}
 lumi=${2:-1.0}
 out_path=${3:-}
 exclusive=${4:-0}
-
 nbtags=2
-njets=2
 options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root"
+
 mkdir -p logs
 
 function make_hists
@@ -66,7 +65,7 @@ root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"pdf\")
 
 # print txt 
 mkdir -p tables
-root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\")"    >> tables/yields_${out_path}.txt
+root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\")" >> tables/yields_${out_path}.txt
 
 # print tex
 mkdir -p tables/${out_path}

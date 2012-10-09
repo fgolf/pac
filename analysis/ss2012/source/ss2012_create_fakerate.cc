@@ -63,11 +63,12 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
     boost::shared_ptr<TChain> chain(new TChain("tree"));
 
      
-    // full 11.38 /fb of 2012AB reprocessed and 2012C
+    // full 12.26 /fb of 2012AB reprocessed and 2012C
     if (dataset == "data")
     {
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";     // 920 /pb
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_11p38fb/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_11p38fb/";     // 920 /pb
+        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_11p38fb/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_11p38fb/";     // 10.45 /fb
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_12p26fb/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_12p26fb/";     // 12.26 /fb
         if (channel=="mu")
         {
             // don't have all of these yet
@@ -77,9 +78,9 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
 			chain->Add(Form("%s/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			//chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"         , ntuple_path.c_str()));
 			chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
-			//chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root"         , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
         }
         else if (channel=="el")
@@ -87,7 +88,7 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
             chain->Add(Form("%s/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
-            //chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v1_AOD/*.root"       , ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root"       , ntuple_path.c_str())); 
 			
         }
@@ -166,6 +167,7 @@ try
     std::string root_file_name     = "test.root";
     std::string channel            = "mu";
     std::string suffix             = "";
+    std::string good_run_list      = "";
 	float lumi					   = 1.0;
     int charge                     = 0;
 
@@ -173,13 +175,14 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"          , "print this menu")
-        ("nev"           , po::value<long>(&number_of_events)         , "number of events to run on (-1 == all)"           )
-        ("lumi"          , po::value<float>(&lumi)                    , "luminosity (default is 1.0 fb)"                   )
-        ("dataset"       , po::value<std::string>(&dataset)           , "name of dataset"                                  )
-        ("channel"       , po::value<std::string>(&channel)           , "name of channel (valid options: \"mu\", \"el\")"  )
-        ("root_file_name", po::value<std::string>(&root_file_name)    , "name of output root file"                         )
-        ("suffix"        , po::value<std::string>(&suffix)            , "suffix to pring (png, eps, pdf).  empty for nonf" )
-        ("charge"        , po::value<int>(&charge)                    , "-1: +ve, -1: -ve, 0: both"                        )
+        ("nev"           , po::value<long>(&number_of_events)      , "number of events to run on (-1 == all)"           )
+        ("lumi"          , po::value<float>(&lumi)                 , "luminosity (default is 1.0 fb)"                   )
+        ("dataset"       , po::value<std::string>(&dataset)        , "name of dataset"                                  )
+        ("channel"       , po::value<std::string>(&channel)        , "name of channel (valid options: \"mu\", \"el\")"  )
+        ("root_file_name", po::value<std::string>(&root_file_name) , "name of output root file"                         )
+        ("run_list"      , po::value<std::string>(&good_run_list)  , "good run list"                                    )
+        ("suffix"        , po::value<std::string>(&suffix)         , "suffix to pring (png, eps, pdf).  empty for nonf" )
+        ("charge"        , po::value<int>(&charge)                 , "-1: +ve, -1: -ve, 0: both"                        )
         ;
 
     po::variables_map vm;
@@ -243,7 +246,7 @@ try
         FakeRateBabyLooper(full_output_path, dataset, channel, lumi, charge, false, !suffix.empty(), suffix), 
         fake_rate_baby,
         number_of_events,
-        /*good_run_list=*/"",
+        good_run_list,
         /*fast=*/true,
         /*verbose=*/false
     ); 

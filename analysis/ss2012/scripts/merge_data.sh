@@ -49,8 +49,8 @@ function merge
 
 # 2012A/B reprocessed (no 2012C v1)
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/26Sep
-output_path=babies_njets${njets}_v2
-run_list=json/preapproval_v2_cms2.txt # 10.45 
+output_path=babies
+run_list=json/preapproval_v3_cms2.txt # 10.45 
 input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"
@@ -60,7 +60,10 @@ input_files="${input_files},${input_path}/MuEG_Run2012B-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuEG_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+input_files="${input_files},${input_path}/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"
+input_files="${input_files},${input_path}/MuEG_Run2012C-24Aug2012-v1_AOD/*.root"
+input_files="${input_files},${input_path}/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root"
-merge data_2012ABC_preapproval_10p45 $input_files
+merge data_2012ABC_preapproval_12p26 $input_files

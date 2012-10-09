@@ -39,23 +39,23 @@ function merge
 #merge "\"$input_path/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root\"" $output_path/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/merged_frbaby.root > logs/merge_fr_del4.txt 2>&1 & 
 #merge "\"$input_path/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root\""         $output_path/DoubleElectron_Run2012B-13Jul2012-v1_AOD/merged_frbaby.root         > logs/merge_fr_del5.txt 2>&1 & 
 
-tag=FakeRate20May2012_11p38fb
+tag=FakeRate20May2012_12p26fb
 input_path=/hadoop/cms/store/user/rwkelley/babies/fr/$tag
 output_path=/nfs-7/userdata/rwkelley/babies/fr/${tag}
 
-merge "\"$input_path/DoubleMu_Run2012C-PromptReco-v1_AOD/*.root\""              $output_path/DoubleMu_Run2012C-PromptReco-v1_AOD/merged_frbaby.root              > logs/merge_fr_dml1.txt 2>&1 & 
+merge "\"$input_path/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root\""               $output_path/DoubleMu_Run2012C-24Aug2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_dml1.txt 2>&1 & 
 merge "\"$input_path/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root\""              $output_path/DoubleMu_Run2012C-PromptReco-v2_AOD/merged_frbaby.root              > logs/merge_fr_dml1.txt 2>&1 & 
 merge "\"$input_path/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root\""       $output_path/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/merged_frbaby.root       > logs/merge_fr_dml4.txt 2>&1 & 
 merge "\"$input_path/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root\""               $output_path/DoubleMu_Run2012A-13Jul2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_dml2.txt 2>&1 & 
 merge "\"$input_path/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root\""               $output_path/DoubleMu_Run2012B-13Jul2012-v4_AOD/merged_frbaby.root               > logs/merge_fr_dml5.txt 2>&1 & 
 
-merge "\"$input_path/SingleMu_Run2012C-PromptReco-v1_AOD/*.root\""              $output_path/SingleMu_Run2012C-PromptReco-v1_AOD/merged_frbaby.root              > logs/merge_fr_sml1.txt 2>&1 & 
+merge "\"$input_path/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root\""               $output_path/SingleMu_Run2012C-24Aug2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_sml1.txt 2>&1 & 
 merge "\"$input_path/SingleMu_Run2012C-PromptReco-v2_AOD/*.root\""              $output_path/SingleMu_Run2012C-PromptReco-v2_AOD/merged_frbaby.root              > logs/merge_fr_sml1.txt 2>&1 & 
 merge "\"$input_path/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root\""       $output_path/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/merged_frbaby.root       > logs/merge_fr_sml4.txt 2>&1 & 
 merge "\"$input_path/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root\""               $output_path/SingleMu_Run2012A-13Jul2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_sml2.txt 2>&1 & 
 merge "\"$input_path/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root\""               $output_path/SingleMu_Run2012B-13Jul2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_sml5.txt 2>&1 & 
 
-merge "\"$input_path/DoubleElectron_Run2012C-PromptReco-v1_AOD/*.root\""        $output_path/DoubleElectron_Run2012C-PromptReco-v1_AOD/merged_frbaby.root        > logs/merge_fr_sml1.txt 2>&1 & 
+merge "\"$input_path/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root\""         $output_path/DoubleElectron_Run2012C-24Aug2012-v1_AOD/merged_frbaby.root         > logs/merge_fr_sml1.txt 2>&1 & 
 merge "\"$input_path/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root\""        $output_path/DoubleElectron_Run2012C-PromptReco-v2_AOD/merged_frbaby.root        > logs/merge_fr_sml1.txt 2>&1 & 
 merge "\"$input_path/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root\"" $output_path/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/merged_frbaby.root > logs/merge_fr_sml4.txt 2>&1 & 
 merge "\"$input_path/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root\""         $output_path/DoubleElectron_Run2012A-13Jul2012-v1_AOD/merged_frbaby.root         > logs/merge_fr_sml2.txt 2>&1 & 

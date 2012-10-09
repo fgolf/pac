@@ -43,20 +43,7 @@ using namespace tas;
 using namespace std;
 using namespace at;
 
-// event type names
-struct EventType
-{
-    enum value_type
-    {
-        SS,
-        SF,
-        DF,
-        OS,
-        static_size
-    };
-};
-
-
+// get the best hyp
 void CompareHyps(std::pair<size_t, DileptonChargeType::value_type>& best_hyp, size_t hyp_idx, const DileptonChargeType::value_type& new_type)
 {
     short current_type = best_hyp.second;
@@ -434,7 +421,7 @@ void SSAnalysisLooper::EndJob()
     CTable yield_table;
     yield_table.setTitle("yields for SS Analysis 2012 (# btags >= 2)");
     yield_table.useTitle();
-    yield_table.setTable() (                      "mm",         "em",          "ee",          "all")
+    yield_table.setTable() (   "mm",         "em",          "ee",          "all")
         ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
         ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
         ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
@@ -444,7 +431,7 @@ void SSAnalysisLooper::EndJob()
     CTable yield_table2;
     yield_table2.setTitle("yields for SS Analysis 2012 (no btags req)");
     yield_table2.useTitle();
-    yield_table2.setTable() (                             "mm",                "em",                 "ee",                "all")
+    yield_table2.setTable() (          "mm",                "em",                 "ee",                "all")
         ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
         ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
         ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
@@ -513,7 +500,70 @@ int SSAnalysisLooper::Analyze(long event)
             }
         }
 
+        // gen level  
+        // --------------------------------------------------------------------------------------------------------- //
 
+        // gen jet info
+        if (!evt_isRealData())
+        {
+            // lepton variables
+            std::pair<GenParticleStruct, GenParticleStruct> best_gen_hyp = efftools::getGenHyp(20.0, 20.0, DileptonChargeType::static_size);
+            if (best_gen_hyp.first.id_ == 0 || best_gen_hyp.second.id_ == 0)
+            {
+                if (m_verbose) {cout << "AnalysisLooper: does not have a good gen hyp" << endl;} 
+                //return 0;
+                m_evt.gen_dilep_type = at::DileptonHypType::static_size; 
+            }
+            else
+            {
+                int   id1  = abs(best_gen_hyp.first.id_ ) == 15 ? best_gen_hyp.first.did_   : best_gen_hyp.first.id_;
+                int   idx1 = abs(best_gen_hyp.first.id_ ) == 15 ? best_gen_hyp.first.didx_  : best_gen_hyp.first.idx_;
+                int   id2  = abs(best_gen_hyp.second.id_) == 15 ? best_gen_hyp.second.did_  : best_gen_hyp.second.id_;
+                int   idx2 = abs(best_gen_hyp.second.id_) == 15 ? best_gen_hyp.second.didx_ : best_gen_hyp.second.idx_;
+
+                // get LorenzVectors
+                LorentzVector p41;
+                if (abs(best_gen_hyp.first.id_) == 15)
+                {
+                    p41 = genps_lepdaughter_p4().at(best_gen_hyp.first.idx_).at(idx1);
+                }
+                else
+                {
+                    p41 = genps_p4().at(idx1);
+                }
+
+                LorentzVector p42;
+                if (abs(best_gen_hyp.second.id_) == 15)
+                {
+                    p42 = genps_lepdaughter_p4().at(best_gen_hyp.second.idx_).at(idx2);
+                }
+                else
+                {
+                    p42 = genps_p4().at(idx2);
+                }
+
+                m_evt.is_gen_pp      = id1<0 && id2<0;  // -11 is a positron, 11 is an electron
+                m_evt.is_gen_mm      = id1>0 && id2>0;  // -11 is a positron, 11 is an electron
+                m_evt.gen_lep1_p4    = p41.pt() > p42.pt() ? p41 : p42;
+                m_evt.gen_lep1_pdgid = p41.pt() > p42.pt() ? id1 : id1;
+                m_evt.gen_lep2_p4    = p41.pt() > p42.pt() ? p42 : p41;
+                m_evt.gen_lep2_pdgid = p41.pt() > p42.pt() ? id2 : id1;
+                m_evt.gen_dilep_p4   = (p41 + p42);
+                m_evt.gen_dilep_type = efftools::getHypType(id1, id2);
+                m_evt.gen_dilep_mass = m_evt.gen_dilep_p4.mass();
+                m_evt.gen_dilep_dphi = rt::DeltaPhi(p41, p42); 
+                m_evt.gen_dilep_deta = rt::DeltaEta(p41, p42); 
+                m_evt.gen_dilep_dr   = rt::DeltaR(p41, p42); 
+            }
+
+            // gen jets
+            m_evt.vgenb_p4       = efftools::getGenBjets(40.0, 2.4);
+            m_evt.vgenjets_p4    = efftools::getGenJets(40.0, 2.4);
+            m_evt.gen_nbtags     = m_evt.vgenb_p4.size();
+            m_evt.gen_njets      = m_evt.vgenjets_p4.size();
+            m_evt.gen_ht         = efftools::getGenHT(40.0, 2.4);
+        }
+        
 
         // Event Cleaning
         // --------------------------------------------------------------------------------------------------------- //
@@ -529,18 +579,18 @@ int SSAnalysisLooper::Analyze(long event)
         if (!cleaning_standardNovember2011()) 
         {
             if (m_verbose) {std::cout << "fails November2011 cleaning requirement" << std::endl;}
-            return 0;
+            //return 0;
         }
 
         // Analysis Selections
         // --------------------------------------------------------------------------------------------------------- //
 
         // needs to be at least one good hypthesis
-        if (hyp_type().empty())
-        {
-            if (m_verbose) {std::cout << "no good hypothesises" << std::endl;}
-            return 0; 
-        }
+        //if (hyp_type().empty())
+        //{
+        //    if (m_verbose) {std::cout << "no good hypothesises" << std::endl;}
+        //    return 0; 
+        //}
 
         // jet type
         JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
@@ -670,12 +720,17 @@ int SSAnalysisLooper::Analyze(long event)
         DileptonChargeType::value_type event_type = best_hyp.second;
 
         // all: 0, mm: 1, em: 2, ee: 3
-        DileptonHypType::value_type dilepton_type = hyp_typeToHypType(hyp_type().at(hyp_idx));
+        DileptonHypType::value_type dilepton_type = hyp_p4().empty() ? DileptonHypType::static_size : hyp_typeToHypType(hyp_type().at(hyp_idx));
 
         // don't write events to the tree that don't pass hypothesis
         if (event_type == DileptonChargeType::static_size)
         {
             if (m_verbose) {std::cout << "fails good event type requirement" << std::endl;}
+
+            // fill the tree with what we have
+            m_tree->Fill();
+
+            // go to the next event
             return 0;
         }
         else
@@ -736,6 +791,10 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
         m_evt.mt           = rt::Mt(m_evt.lep1.p4, met, met_phi);  // calculated against the higher pT lepton
         m_evt.no_extraz    = (not samesign::makesExtraZ(hyp_idx));
+        m_evt.no_extrag    = (not samesign::makesExtraGammaStar(hyp_idx));
+        m_evt.hyp_good_vtx = hypsFromFirstGoodVertex(hyp_idx);
+        m_evt.clean        = cleaning_standardNovember2011(); 
+        m_evt.presel       = (m_evt.no_extraz && m_evt.no_extrag && m_evt.clean && m_evt.hyp_good_vtx);
 
         // set lepton info (lep1 is higher pT lepton, lep2 is lower pT lepton)
         float lt_pt = hyp_lt_p4().at(hyp_idx).pt();
@@ -864,6 +923,26 @@ int SSAnalysisLooper::Analyze(long event)
             //m_evt.pfmet_phidn = cmet_dn.phi();
         }
 
+        // only keep m_njets events
+        //if (evt_isRealData())
+        //{
+        //    if (m_evt.njets < m_njets)
+        //    {
+        //        if (m_verbose) {std::cout << "fails # jets >= 2 cut" << std::endl;}
+        //        return 0;
+        //    }
+        //}
+        //else
+        //{
+        //    bool pass_njets_cut = (m_evt.njets_up >= m_njets || m_evt.njets_dn >= m_njets || m_evt.njets >= m_njets);
+        //    if (not pass_njets_cut)
+        //    {
+        //        if (m_verbose) {std::cout << "fails # jets >= 2 cut" << std::endl;}
+        //        return 0;
+        //    }
+        //}
+
+
         // Gen level info
         // NOTE: we fill the gen block if and only if BOTH leptons are matched 
         if (!evt_isRealData())
@@ -988,12 +1067,6 @@ int SSAnalysisLooper::Analyze(long event)
                 m_evt.sf_unc_nbtag3 = btagEventUncertainty3(4, gen_bjets.at(0).pt(), gen_bjets.at(0).eta(), gen_bjets.at(1).pt(), gen_bjets.at(1).eta(),
                                                             gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), gen_bjets.at(3).pt(), gen_bjets.at(3).eta(), m_is_fast_sim);
             }
-        }
-
-        // only keep m_njets events
-        if (m_evt.njets < m_njets)
-        {
-            return 0;
         }
 
         // jet/bjet info 

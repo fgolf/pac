@@ -67,6 +67,10 @@ void SameSignTree::Reset()
     is_gen_pp        = false;
     is_gen_mm        = false;
     no_extraz        = false;
+    no_extrag        = false;
+    clean            = false;
+    hyp_good_vtx     = false;
+    presel           = false;
     gen_nbtags       = -999999;
     gen_njets        = -999999;
     gen_ht           = -999999.0;
@@ -170,6 +174,10 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("is_sf"             , &is_sf              , "is_sf/O"            );
     tree.Branch("is_df"             , &is_df              , "is_df/O"            );
     tree.Branch("no_extraz"         , &no_extraz          , "no_extraz/O"        );
+    tree.Branch("no_extrag"         , &no_extrag          , "no_extrag/O"        );
+    tree.Branch("clean"             , &clean              , "clean/O"            );
+    tree.Branch("presel"            , &presel             , "presel/O"           );
+    tree.Branch("hyp_good_vtx"      , &hyp_good_vtx       , "hyp_good_vtx/O"     );
     tree.Branch("is_gen_pp"         , &is_gen_pp          , "is_gen_pp/O"        );
     tree.Branch("is_gen_mm"         , &is_gen_mm          , "is_gen_mm/O"        );
     tree.Branch("gen_nbtags"        , &gen_nbtags         , "gen_nbtags/I"       );

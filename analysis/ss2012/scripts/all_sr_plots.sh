@@ -12,9 +12,9 @@ for i in {0..8}; do
 done
 
 # do for all signal regions exclusive
-for i in {1..4}; do 
-    ./scripts/plot_all.sh $i $lumi $out_path 1; 
-done
+#for i in {1..4}; do 
+#    ./scripts/plot_all.sh $i $lumi $out_path 1; 
+#done
 
 # summary table
 root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", 0)"

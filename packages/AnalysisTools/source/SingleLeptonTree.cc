@@ -3,6 +3,7 @@
 #include "CORE/eventSelections.h"
 #include "CORE/electronSelections.h"
 #include "CORE/muonSelections.h"
+#include "CORE/mcSelections.h"
 #include "CORE/eventSelections.h"
 #include "CORE/trackSelections.h"
 #include <algorithm>
@@ -43,6 +44,7 @@ void SingleLeptonTree::FillCommon (int id, int idx)
     if (idx < 0) return;
 
     int vtxidx = firstGoodVertex();
+	is_fromw = not cms2.evt_isRealData() ? leptonIsFromW(idx, id, true) : -999999;
 
     if (abs(id) == 11)
     {
@@ -132,6 +134,7 @@ void SingleLeptonTree::FillCommon (int id, int idx)
         charge = cms2.mus_charge().at(idx);
         pdgid = charge * -13;
         type = cms2.mus_type().at(idx);
+
         
         int trkidx = cms2.mus_trkidx().at(idx);
         if (trkidx >= 0 && vtxidx >= 0) {
@@ -208,6 +211,7 @@ void SingleLeptonTree::Reset()
     passes_iso   = false;
     is_num       = false;
     is_fo        = false;
+    is_fromw     = -999999;
     charge       = -999999;
     pdgid        = -999999;
     type         = -999999;
@@ -293,6 +297,7 @@ void SingleLeptonTree::SetBranches(TTree &tree)
     tree.Branch(Form("%spasses_iso"   , prefix_.c_str()) , &passes_iso     , "passes_iso/O"   );
     tree.Branch(Form("%sis_num"       , prefix_.c_str()) , &is_num         , "is_num/O"       );
     tree.Branch(Form("%sis_fo"        , prefix_.c_str()) , &is_fo          , "is_fo/O"        );
+    tree.Branch(Form("%sis_fromw"     , prefix_.c_str()) , &is_fromw       , "is_fromw/I"     );
     tree.Branch(Form("%scharge"       , prefix_.c_str()) , &charge         , "charge/I"       );
     tree.Branch(Form("%spdgid"        , prefix_.c_str()) , &pdgid          , "pdgid/I"        );
     tree.Branch(Form("%stype"         , prefix_.c_str()) , &type           , "type/I"         );

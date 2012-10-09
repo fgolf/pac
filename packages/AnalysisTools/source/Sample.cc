@@ -736,7 +736,7 @@ namespace at
             switch (ntuple) 
             {
                 case NtupleType::cms2:    return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_3_2_patch4_V05-03-13/";
-                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v2/";
+                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
                 default: {/*do nothing*/}
             };
         }
@@ -745,7 +745,7 @@ namespace at
             switch (ntuple) 
             {
                 case NtupleType::cms2:      return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
-                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v2/";
+                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
                 default: {/*do nothing*/}
             };
         }

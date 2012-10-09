@@ -109,6 +109,11 @@ struct Yield
     Yield& operator+=(const Yield& y);
     Yield& operator-=(const Yield& y);
 
+    float tee() const {return (sqrt(see*see + dee*dee));}
+    float tmm() const {return (sqrt(smm*smm + dmm*dmm));}
+    float tem() const {return (sqrt(sem*sem + dem*dem));}
+    float tll() const {return (sqrt(sll*sll + dll*dll));}
+
     std::string GetLatex(const std::string& latex = "", bool print_sys_err = false) const;
     void Print(bool print_sys_err = false) const;
 
@@ -167,7 +172,7 @@ std::string Yield::GetLatex(const std::string& latex, bool print_sys_err) const
         else
         {
             const char* format = "%35s & %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f";
-            result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, dee, mm, dmm, em, dem, ll, dll);
+            result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, tee(), mm, tmm(), em, tem(), ll, tll());
         }
     }
     return result;
@@ -436,10 +441,10 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
                 latex_name = at::GetSampleInfo(y.title).latex;
             }
 
-            if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            else if (y.title == "Flips"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            else if (y.title == "MC Pred" ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            else if (y.title == "pred"    ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
+            else if (y.title == "Flips"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
+            else if (y.title == "MC Pred" ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
+            else if (y.title == "pred"    ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
             else                            {latex.append(y.GetLatex(latex_name));}
             //latex.append(y.GetLatex(latex_name));
             latex.append(" \\\\\n");
