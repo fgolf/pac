@@ -38,6 +38,7 @@ try
     std::string ntuple_type_name    = "cms2";
     std::string sample_name         = "data";
     std::string vtxreweight_file    = "";
+    std::string fit_file_name       = "";
     bool sparms                     = false;
     bool is_fastsim                 = false;
     //int num_jets                    = 0;
@@ -54,6 +55,7 @@ try
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
         ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                              )
+        ("fit_file"      , po::value<std::string>(&fit_file_name)       , "file for outreach fitted eff histograms ROOT file"                                 )
         ("is_fastsim"    , po::value<bool>(&is_fastsim)                 , "use FastSim btag scale factors"                                                    )
         ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
         //("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
@@ -89,6 +91,7 @@ try
 		cout << "vtxreweight_file   :\t" << vtxreweight_file    << endl;
 		cout << "is_fastsim         :\t" << is_fastsim          << endl;
 		cout << "sparms             :\t" << sparms              << endl;
+		cout << "fit_file           :\t" << fit_file_name       << endl;
 		//cout << "num_jets           :\t" << num_jets            << endl;
 	}
 
@@ -127,6 +130,7 @@ try
             output_file,
             sample,
             luminosity,
+            fit_file_name,
 			vtxreweight_file,
             is_fastsim,
             sparms,
