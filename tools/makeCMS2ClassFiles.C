@@ -193,12 +193,15 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
            !branchclass.Contains("uint") &&  
            !branchclass.Contains("bool") &&  
            !branchclass.Contains("float") && 
-           !branchclass.Contains("double"))
+           !branchclass.Contains("double") &&
+           !branchclass.Contains("TString"))
             continue;
 
-//        if (branchclass.Contains("LorentzVector"))
-        // std::cout << "Adding branch " << branchtitle.Data() << " to list." << std::endl;
-        // std::cout.flush();
+        // if (branchclass.Contains("TString"))
+        // {
+        //     std::cout << "Adding branch " << branchtitle.Data() << " to list." << std::endl;
+        //     std::cout.flush();
+        // }
 
         aliasarray->Add(fullarray->At(i));
     }
