@@ -224,7 +224,11 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
                 classname = classname(0,classname.Length()-2);
                 classname.ReplaceAll("edm::Wrapper<","");
                 headerf << "\t" << classname << " " << aliasname << "_;" << endl;
-            } else {
+            } 
+            else if (classname.Contains("TString")) {
+                headerf << "\t" << classname << " " << aliasname << "_;" << endl;
+            } 
+            else {
                 headerf << "\t" << classname << " *" << aliasname << "_;" << endl;
             }
         } else {
@@ -234,7 +238,11 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
                     classname = classname(0,classname.Length()-1);
                     classname.ReplaceAll("edm::Wrapper<","");
                     headerf << "\t" << classname << " " << aliasname << "_;" << endl;
-                } else {
+                }
+                else if (classname.Contains("TString")) {
+                    headerf << "\t" << classname << " " << aliasname << "_;" << endl;
+                } 
+                else {
                     headerf << "\t" << classname << " *" << aliasname << "_;" << endl;
                 }
             } else {
