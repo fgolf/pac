@@ -732,9 +732,33 @@ void CreateProjPlots(const std::string output_path = "", const std::string& suff
     TH1F* h_pred_ht = new TH1F("h_pred_ht", Form("%s;H_{T} (GeV);Events/10 GeV", title.c_str()), n_ht_bins, ht_bins);
     TH1F* h_mc_ht   = new TH1F("h_mc_ht"  , Form("%s;H_{T} (GeV);Events/10 GeV", title.c_str()), n_ht_bins, ht_bins);
 
+    TH1F* h_data_njets = new TH1F("h_data_njets", Form("%s;# jets;Events", title.c_str()), 8, 1.5, 9.5);
+    TH1F* h_fake_njets = new TH1F("h_fake_njets", Form("%s;# jets;Events", title.c_str()), 8, 1.5, 9.5);
+    TH1F* h_flip_njets = new TH1F("h_flip_njets", Form("%s;# jets;Events", title.c_str()), 8, 1.5, 9.5);
+    TH1F* h_pred_njets = new TH1F("h_pred_njets", Form("%s;# jets;Events", title.c_str()), 8, 1.5, 9.5);
+    TH1F* h_mc_njets   = new TH1F("h_mc_njets"  , Form("%s;# jets;Events", title.c_str()), 8, 1.5, 9.5);
+
+    TH1F* h_data_nbtags = new TH1F("h_data_nbtags", Form("%s;# btags;Events", title.c_str()), 5, 1.5, 6.5);
+    TH1F* h_fake_nbtags = new TH1F("h_fake_nbtags", Form("%s;# btags;Events", title.c_str()), 5, 1.5, 6.5);
+    TH1F* h_flip_nbtags = new TH1F("h_flip_nbtags", Form("%s;# btags;Events", title.c_str()), 5, 1.5, 6.5);
+    TH1F* h_pred_nbtags = new TH1F("h_pred_nbtags", Form("%s;# btags;Events", title.c_str()), 5, 1.5, 6.5);
+    TH1F* h_mc_nbtags   = new TH1F("h_mc_nbtags"  , Form("%s;# btags;Events", title.c_str()), 5, 1.5, 6.5);
+
+    TH1F* h_data_pt1 = new TH1F("h_data_pt1", Form("%s;p^{lep1}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_fake_pt1 = new TH1F("h_fake_pt1", Form("%s;p^{lep1}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_flip_pt1 = new TH1F("h_flip_pt1", Form("%s;p^{lep1}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_pred_pt1 = new TH1F("h_pred_pt1", Form("%s;p^{lep1}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_mc_pt1   = new TH1F("h_mc_pt1"  , Form("%s;p^{lep1}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+
+    TH1F* h_data_pt2 = new TH1F("h_data_pt2", Form("%s;p^{lep2}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_fake_pt2 = new TH1F("h_fake_pt2", Form("%s;p^{lep2}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_flip_pt2 = new TH1F("h_flip_pt2", Form("%s;p^{lep2}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_pred_pt2 = new TH1F("h_pred_pt2", Form("%s;p^{lep2}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+    TH1F* h_mc_pt2   = new TH1F("h_mc_pt2"  , Form("%s;p^{lep2}_{T} GeV;Events", title.c_str()), 10, 0.0, 200.0);
+
     // fill the columns
     int bin = 1;
-    for (unsigned int signal_region_num = 15; signal_region_num != 22; signal_region_num++)
+    for (unsigned int signal_region_num = 15; signal_region_num != 55; signal_region_num++)
     {
         Yield yield_data(GetSSYield  ("data", signal_region_num, output_path));
         Yield yield_sf  (GetSFYield  ("data", signal_region_num, output_path));
@@ -795,35 +819,96 @@ void CreateProjPlots(const std::string output_path = "", const std::string& suff
         yields.push_back(yield_data);
 
         // fill hists
-        if (bin < 5)
+        if (bin <= 4)  // bin 1 - 4
         {
             float scale = h_data_ht->GetBinWidth(bin)/10.0;
-            h_data_met->SetBinContent(bin, yield_data.ll/scale);
-            h_fake_met->SetBinContent(bin, yield_fake.ll/scale);
-            h_flip_met->SetBinContent(bin, yield_flip.ll/scale);
-            h_pred_met->SetBinContent(bin, yield_pred.ll/scale);
-            h_mc_met->SetBinContent  (bin, yield_mc.ll/scale);
-
-            h_data_met->SetBinError(bin, yield_data.dll/scale);
-            h_fake_met->SetBinError(bin, yield_fake.sll/scale);
-            h_flip_met->SetBinError(bin, yield_flip.sll/scale);
-            h_pred_met->SetBinError(bin, yield_pred.sll/scale);
-            h_mc_met->SetBinError  (bin, yield_mc.sll/scale);
+            if(yield_data.ll > 0) h_data_met->SetBinContent(bin, yield_data.ll/scale);
+            if(yield_fake.ll > 0) h_fake_met->SetBinContent(bin, yield_fake.ll/scale);
+            if(yield_flip.ll > 0) h_flip_met->SetBinContent(bin, yield_flip.ll/scale);
+            if(yield_pred.ll > 0) h_pred_met->SetBinContent(bin, yield_pred.ll/scale);
+            if(yield_mc.ll   > 0) h_mc_met->SetBinContent  (bin, yield_mc.ll  /scale);
+                                  
+            if(yield_data.ll > 0) h_data_met->SetBinError(bin, yield_data.dll/scale);
+            if(yield_fake.ll > 0) h_fake_met->SetBinError(bin, yield_fake.tll()/scale);
+            if(yield_flip.ll > 0) h_flip_met->SetBinError(bin, yield_flip.tll()/scale);
+            if(yield_pred.ll > 0) h_pred_met->SetBinError(bin, yield_pred.tll()/scale);
+            if(yield_mc.ll   > 0) h_mc_met->SetBinError  (bin, yield_mc.tll()  /scale);
         }
-        else
+        else if (bin >= 5 && bin <= 7)  // bin 5 - tll()
         {
-            float scale = h_data_ht->GetBinWidth(bin-4)/10.0;
-            h_data_ht->SetBinContent(bin-4, yield_data.ll/scale);
-            h_fake_ht->SetBinContent(bin-4, yield_fake.ll/scale);
-            h_flip_ht->SetBinContent(bin-4, yield_flip.ll/scale);
-            h_pred_ht->SetBinContent(bin-4, yield_pred.ll/scale);
-            h_mc_ht->SetBinContent  (bin-4, yield_mc.ll/scale);
+            int ht_bin = bin-4;
+            float scale = h_data_ht->GetBinWidth(ht_bin)/10.0;
+            if(yield_data.ll > 0) h_data_ht->SetBinContent(ht_bin, yield_data.ll/scale);
+            if(yield_fake.ll > 0) h_fake_ht->SetBinContent(ht_bin, yield_fake.ll/scale);
+            if(yield_flip.ll > 0) h_flip_ht->SetBinContent(ht_bin, yield_flip.ll/scale);
+            if(yield_pred.ll > 0) h_pred_ht->SetBinContent(ht_bin, yield_pred.ll/scale);
+            if(yield_mc.ll   > 0) h_mc_ht->SetBinContent  (ht_bin, yield_mc.ll  /scale);
 
-            h_data_ht->SetBinError(bin-4, yield_data.dll/scale);
-            h_fake_ht->SetBinError(bin-4, yield_fake.sll/scale);
-            h_flip_ht->SetBinError(bin-4, yield_flip.sll/scale);
-            h_pred_ht->SetBinError(bin-4, yield_pred.sll/scale);
-            h_mc_ht->SetBinError  (bin-4, yield_mc.sll/scale);
+            if(yield_data.ll > 0) h_data_ht->SetBinError(ht_bin, yield_data.dll  /scale);
+            if(yield_fake.ll > 0) h_fake_ht->SetBinError(ht_bin, yield_fake.tll()/scale);
+            if(yield_flip.ll > 0) h_flip_ht->SetBinError(ht_bin, yield_flip.tll()/scale);
+            if(yield_pred.ll > 0) h_pred_ht->SetBinError(ht_bin, yield_pred.tll()/scale);
+            if(yield_mc.ll   > 0) h_mc_ht->SetBinError  (ht_bin, yield_mc.tll()    /scale);
+        }
+        else if (bin >= 8 && bin <= 15)  // bin 8 - 15 
+        {
+            int njet_bin = bin-7;
+            if(yield_data.ll > 0) h_data_njets->SetBinContent(njet_bin, yield_data.ll);
+            if(yield_fake.ll > 0) h_fake_njets->SetBinContent(njet_bin, yield_fake.ll);
+            if(yield_flip.ll > 0) h_flip_njets->SetBinContent(njet_bin, yield_flip.ll);
+            if(yield_pred.ll > 0) h_pred_njets->SetBinContent(njet_bin, yield_pred.ll);
+            if(yield_mc.ll   > 0) h_mc_njets->SetBinContent  (njet_bin, yield_mc.ll  );
+
+            if(yield_data.ll > 0) h_data_njets->SetBinError(njet_bin, yield_data.dll  );
+            if(yield_fake.ll > 0) h_fake_njets->SetBinError(njet_bin, yield_fake.tll());
+            if(yield_flip.ll > 0) h_flip_njets->SetBinError(njet_bin, yield_flip.tll());
+            if(yield_pred.ll > 0) h_pred_njets->SetBinError(njet_bin, yield_pred.tll());
+            if(yield_mc.ll   > 0) h_mc_njets->SetBinError  (njet_bin, yield_mc.tll()  );
+        }
+        else if (bin >= 16 && bin <= 22)  // bin 16 - 22 
+        {
+            int njet_bin = bin-15;
+            if(yield_data.ll > 0) h_data_nbtags->SetBinContent(njet_bin, yield_data.ll);
+            if(yield_fake.ll > 0) h_fake_nbtags->SetBinContent(njet_bin, yield_fake.ll);
+            if(yield_flip.ll > 0) h_flip_nbtags->SetBinContent(njet_bin, yield_flip.ll);
+            if(yield_pred.ll > 0) h_pred_nbtags->SetBinContent(njet_bin, yield_pred.ll);
+            if(yield_mc.ll   > 0) h_mc_nbtags->SetBinContent  (njet_bin, yield_mc.ll  );
+
+            if(yield_data.ll > 0) h_data_nbtags->SetBinError(njet_bin, yield_data.dll  );
+            if(yield_fake.ll > 0) h_fake_nbtags->SetBinError(njet_bin, yield_fake.tll());
+            if(yield_flip.ll > 0) h_flip_nbtags->SetBinError(njet_bin, yield_flip.tll());
+            if(yield_pred.ll > 0) h_pred_nbtags->SetBinError(njet_bin, yield_pred.tll());
+            if(yield_mc.ll   > 0) h_mc_nbtags->SetBinError  (njet_bin, yield_mc.tll()  );
+        }
+        else if (bin >= 23 && bin <= 32)  // bin 32 - 41 
+        {
+            int pt1_bin = bin-22;
+            if(yield_data.ll > 0) h_data_pt1->SetBinContent(pt1_bin, yield_data.ll);
+            if(yield_fake.ll > 0) h_fake_pt1->SetBinContent(pt1_bin, yield_fake.ll);
+            if(yield_flip.ll > 0) h_flip_pt1->SetBinContent(pt1_bin, yield_flip.ll);
+            if(yield_pred.ll > 0) h_pred_pt1->SetBinContent(pt1_bin, yield_pred.ll);
+            if(yield_mc.ll   > 0) h_mc_pt1->SetBinContent  (pt1_bin, yield_mc.ll  );
+
+            if(yield_data.ll > 0) h_data_pt1->SetBinError(pt1_bin, yield_data.dll  );
+            if(yield_fake.ll > 0) h_fake_pt1->SetBinError(pt1_bin, yield_fake.tll());
+            if(yield_flip.ll > 0) h_flip_pt1->SetBinError(pt1_bin, yield_flip.tll());
+            if(yield_pred.ll > 0) h_pred_pt1->SetBinError(pt1_bin, yield_pred.tll());
+            if(yield_mc.ll   > 0) h_mc_pt1->SetBinError  (pt1_bin, yield_mc.tll()  );
+        }
+        else if (bin >= 33 && bin <= 42)  // bin 32 - 41 
+        {
+            int pt2_bin = bin-31;
+            if(yield_data.ll > 0) h_data_pt2->SetBinContent(pt2_bin, yield_data.ll);
+            if(yield_fake.ll > 0) h_fake_pt2->SetBinContent(pt2_bin, yield_fake.ll);
+            if(yield_flip.ll > 0) h_flip_pt2->SetBinContent(pt2_bin, yield_flip.ll);
+            if(yield_pred.ll > 0) h_pred_pt2->SetBinContent(pt2_bin, yield_pred.ll);
+            if(yield_mc.ll   > 0) h_mc_pt2->SetBinContent  (pt2_bin, yield_mc.ll  );
+
+            if(yield_data.ll > 0) h_data_pt2->SetBinError(pt2_bin, yield_data.dll  );
+            if(yield_fake.ll > 0) h_fake_pt2->SetBinError(pt2_bin, yield_fake.tll());
+            if(yield_flip.ll > 0) h_flip_pt2->SetBinError(pt2_bin, yield_flip.tll());
+            if(yield_pred.ll > 0) h_pred_pt2->SetBinError(pt2_bin, yield_pred.tll());
+            if(yield_mc.ll   > 0) h_mc_pt2->SetBinError  (pt2_bin, yield_mc.tll()  );
         }
 
         bin++;
@@ -865,11 +950,57 @@ void CreateProjPlots(const std::string output_path = "", const std::string& suff
     p_met->AddText(t2);
     p_met->Draw();
 
-    c1->Print("plots/note/p_proj_ht.pdf");
-    c2->Print("plots/note/p_proj_met.pdf");
-    //h_data_ht->Draw();
-    //h_pred_ht->SetLineColor(kRed);
-    //h_pred_ht->SetFillStyle(3335);
-    //h_pred_ht->SetFillColor(kBlack);
-    //h_pred_ht->Draw("same E2");
+    TCanvas* c3 = new TCanvas("c3", "c3");
+    TLatex t3(0.82, 0.84, "H_{T} > 80 GeV"); t3.SetTextSize(0.03);
+    TLatex t4(0.82, 0.79, "E^{miss}_{T} > 0 GeV"); t4.SetTextSize(0.03);
+    rt::TH1Overlay* p_njets = new rt::TH1Overlay("", "sb::off lg::top_right dt::stack");
+    p_njets->Add(h_data_njets, /*no_stack=*/true, "data", data_color, 2, 23); 
+    p_njets->Add(h_pred_njets, /*no_stack=*/true, "pred", 1, 2, 1, 3335); 
+    p_njets->Add(h_flip_njets, "flip", flip_color); 
+    p_njets->Add(h_fake_njets, "fake", fake_color); 
+    p_njets->Add(h_mc_njets  , "mc"  , mc_color  ); 
+    p_njets->AddText(t3);
+    p_njets->AddText(t4);
+    p_njets->Draw();
+
+    TCanvas* c4 = new TCanvas("c4", "c4");
+    rt::TH1Overlay* p_nbtags = new rt::TH1Overlay("", "sb::off lg::top_right dt::stack");
+    p_nbtags->Add(h_data_nbtags, /*no_stack=*/true, "data", data_color, 2, 23); 
+    p_nbtags->Add(h_pred_nbtags, /*no_stack=*/true, "pred", 1, 2, 1, 3335); 
+    p_nbtags->Add(h_flip_nbtags, "flip", flip_color); 
+    p_nbtags->Add(h_fake_nbtags, "fake", fake_color); 
+    p_nbtags->Add(h_mc_nbtags  , "mc"  , mc_color  ); 
+    p_nbtags->AddText(t3);
+    p_nbtags->AddText(t4);
+    p_nbtags->Draw();
+
+    TCanvas* c5 = new TCanvas("c5", "c5");
+    rt::TH1Overlay* p_pt1 = new rt::TH1Overlay("", "sb::off lg::top_right dt::stack");
+    p_pt1->Add(h_data_pt1, /*no_stack=*/true, "data", data_color, 2, 23); 
+    p_pt1->Add(h_pred_pt1, /*no_stack=*/true, "pred", 1, 2, 1, 3335); 
+    p_pt1->Add(h_flip_pt1, "flip", flip_color); 
+    p_pt1->Add(h_fake_pt1, "fake", fake_color); 
+    p_pt1->Add(h_mc_pt1  , "mc"  , mc_color  ); 
+    p_pt1->AddText(t3);
+    p_pt1->AddText(t4);
+    p_pt1->Draw();
+
+    TCanvas* c6 = new TCanvas("c6", "c6");
+    rt::TH1Overlay* p_pt2 = new rt::TH1Overlay("", "sb::off lg::top_right dt::stack");
+    p_pt2->Add(h_data_pt2, /*no_stack=*/true, "data", data_color, 2, 23); 
+    p_pt2->Add(h_pred_pt2, /*no_stack=*/true, "pred", 1, 2, 1, 3335); 
+    p_pt2->Add(h_flip_pt2, "flip", flip_color); 
+    p_pt2->Add(h_fake_pt2, "fake", fake_color); 
+    p_pt2->Add(h_mc_pt2  , "mc"  , mc_color  ); 
+    p_pt2->AddText(t3);
+    p_pt2->AddText(t4);
+    p_pt2->Draw();
+
+    // print
+    c1->cd(); c1->Print(Form("plots/note/p_proj_ht.%s"    , suffix.c_str()));
+    c1->cd(); c2->Print(Form("plots/note/p_proj_met.%s"   , suffix.c_str()));
+    c3->cd(); c3->Print(Form("plots/note/p_proj_njets.%s" , suffix.c_str()));
+    c4->cd(); c4->Print(Form("plots/note/p_proj_nbtags.%s", suffix.c_str()));
+    c5->cd(); c5->Print(Form("plots/note/p_proj_pt1.%s"   , suffix.c_str()));
+    c6->cd(); c6->Print(Form("plots/note/p_proj_pt2.%s"   , suffix.c_str()));
 }

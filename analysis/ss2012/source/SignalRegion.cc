@@ -162,7 +162,41 @@ ss::SignalRegionInfo s_SignalRegionInfos[] =
         "sr21", 
         "ht3",
         "ht3"
-    }
+    },
+    {"sr22", "", ""},
+    {"sr23", "", ""},
+    {"sr24", "", ""},
+    {"sr25", "", ""},
+    {"sr26", "", ""},
+    {"sr27", "", ""},
+    {"sr28", "", ""},
+    {"sr29", "", ""},
+    {"sr30", "", ""},
+    {"sr31", "", ""},
+    {"sr32", "", ""},
+    {"sr33", "", ""},
+    {"sr34", "", ""},
+    {"sr35", "", ""},
+    {"sr36", "", ""},
+    {"sr37", "", ""},
+    {"sr38", "", ""},
+    {"sr39", "", ""},
+    {"sr40", "", ""},
+    {"sr41", "", ""},
+    {"sr42", "", ""},
+    {"sr43", "", ""},
+    {"sr44", "", ""},
+    {"sr45", "", ""},
+    {"sr46", "", ""},
+    {"sr47", "", ""},
+    {"sr48", "", ""},
+    {"sr49", "", ""},
+    {"sr50", "", ""},
+    {"sr51", "", ""},
+    {"sr52", "", ""},
+    {"sr53", "", ""},
+    {"sr54", "", ""},
+    {"sr55", "", ""}
 };
 
 // check that the SignalRegionInfoArray is the same size as the enum
@@ -218,6 +252,8 @@ namespace ss
     bool PassesSignalRegion(const SignalRegion::value_type& signal_region, int num_btags)
     {
         using namespace ssb;
+        float pt1 = lep1_p4().pt();
+        float pt2 = lep2_p4().pt();
         switch (signal_region)
         {
             // inclusive
@@ -250,9 +286,48 @@ namespace ss
             case SignalRegion::sr16 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && 30  < pfmet() && pfmet() < 50.00);
             case SignalRegion::sr17 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && 50  < pfmet() && pfmet() < 120.0);
             case SignalRegion::sr18 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && 120 < pfmet() && pfmet() < 200.0);
+
             case SignalRegion::sr19 : return (nbtags() >= num_btags && njets() >= 2 && 80  < ht() && ht() < 200);
             case SignalRegion::sr20 : return (nbtags() >= num_btags && njets() >= 2 && 200 < ht() && ht() < 320);
             case SignalRegion::sr21 : return (nbtags() >= num_btags && njets() >= 2 && 320 < ht() && ht() < 800);
+
+            case SignalRegion::sr22 : return (nbtags() >= num_btags && njets() == 2 && ht() > 80);
+            case SignalRegion::sr23 : return (nbtags() >= num_btags && njets() == 3 && ht() > 80);
+            case SignalRegion::sr24 : return (nbtags() >= num_btags && njets() == 4 && ht() > 80);
+            case SignalRegion::sr25 : return (nbtags() >= num_btags && njets() == 5 && ht() > 80);
+            case SignalRegion::sr26 : return (nbtags() >= num_btags && njets() == 6 && ht() > 80);
+            case SignalRegion::sr27 : return (nbtags() >= num_btags && njets() == 7 && ht() > 80);
+            case SignalRegion::sr28 : return (nbtags() >= num_btags && njets() == 8 && ht() > 80);
+            case SignalRegion::sr29 : return (nbtags() >= num_btags && njets() >= 9 && ht() > 80);
+
+            case SignalRegion::sr30 : return (nbtags() == 2 && njets() >= 2 && ht() > 80);
+            case SignalRegion::sr31 : return (nbtags() == 3 && njets() >= 2 && ht() > 80);
+            case SignalRegion::sr32 : return (nbtags() == 4 && njets() >= 2 && ht() > 80);
+            case SignalRegion::sr33 : return (nbtags() == 5 && njets() >= 2 && ht() > 80);
+            case SignalRegion::sr34 : return (nbtags() == 6 && njets() >= 2 && ht() > 80);
+            case SignalRegion::sr35 : return (nbtags() == 7 && njets() >= 2 && ht() > 80);
+
+            case SignalRegion::sr36 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (  0 < pt1 && pt1 <  20));
+            case SignalRegion::sr37 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 20 < pt1 && pt1 <  40));
+            case SignalRegion::sr38 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 40 < pt1 && pt1 <  60));
+            case SignalRegion::sr39 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 60 < pt1 && pt1 <  80));
+            case SignalRegion::sr40 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 80 < pt1 && pt1 < 100));
+            case SignalRegion::sr41 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (100 < pt1 && pt1 < 120));
+            case SignalRegion::sr42 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (120 < pt1 && pt1 < 140));
+            case SignalRegion::sr43 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (140 < pt1 && pt1 < 160));
+            case SignalRegion::sr44 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (160 < pt1 && pt1 < 180));
+            case SignalRegion::sr45 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (180 < pt1             ));
+
+            case SignalRegion::sr46 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (  0 < pt2 && pt2 <  20));
+            case SignalRegion::sr47 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 20 < pt2 && pt2 <  40));
+            case SignalRegion::sr48 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 40 < pt2 && pt2 <  60));
+            case SignalRegion::sr49 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 60 < pt2 && pt2 <  80));
+            case SignalRegion::sr50 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && ( 80 < pt2 && pt2 < 100));
+            case SignalRegion::sr51 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (100 < pt2 && pt2 < 120));
+            case SignalRegion::sr52 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (120 < pt2 && pt2 < 140));
+            case SignalRegion::sr53 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (140 < pt2 && pt2 < 160));
+            case SignalRegion::sr54 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (160 < pt2 && pt2 < 180));
+            case SignalRegion::sr55 : return (nbtags() >= num_btags && njets() >= 2 && ht() > 80 && (180 < pt2             ));
 
             default: return false;
         }

@@ -29,13 +29,47 @@ namespace ss
             ex_sr3 = 13, // #btags >= 2, #jets >= 4, HT > 320, 50 < MET < 120
             ex_sr4 = 14, // #btags >= 2, #jets >= 4, HT > 320, MET > 120
 
-            sr15 = 15,
-            sr16 = 16,
-            sr17 = 17,
-            sr18 = 18,
-            sr19 = 19,
-            sr20 = 20,
-            sr21 = 21,
+            sr15 = 15,  // met1
+            sr16 = 16,  // met2
+            sr17 = 17,  // met3
+            sr18 = 18,  // met3
+            sr19 = 19,  // ht1
+            sr20 = 20,  // ht2
+            sr21 = 21,  // ht3
+            sr22 = 22,  // njets1
+            sr23 = 23,  // njets2
+            sr24 = 24,  // njets3
+            sr25 = 25,  // njets4
+            sr26 = 26,  // njets5
+            sr27 = 27,  // njets6
+            sr28 = 28,  // njets7
+            sr29 = 29,  // njets8
+            sr30 = 30,  // nbtags1
+            sr31 = 31,  // nbtags2
+            sr32 = 32,  // nbtags3
+            sr33 = 33,  // nbtags4
+            sr34 = 34,  // nbtags5
+            sr35 = 35,  // nbtags6
+            sr36 = 36,  // l1_pt1
+            sr37 = 37,  // l1_pt2
+            sr38 = 38,  // l1_pt3
+            sr39 = 39,  // l1_pt4
+            sr40 = 40,  // l1_pt5
+            sr41 = 41,  // l1_pt6
+            sr42 = 42,  // l1_pt7
+            sr43 = 43,  // l1_pt9
+            sr44 = 44,  // l1_pt9
+            sr45 = 45,  // l1_pt10
+            sr46 = 46,  // l2_pt1
+            sr47 = 47,  // l2_pt2
+            sr48 = 48,  // l2_pt3
+            sr49 = 49,  // l2_pt4
+            sr50 = 50,  // l2_pt5
+            sr51 = 51,  // l2_pt6
+            sr52 = 52,  // l2_pt7
+            sr53 = 53,  // l2_pt9
+            sr54 = 54,  // l2_pt9
+            sr55 = 55,  // l2_pt10
 
             static_size
         };
