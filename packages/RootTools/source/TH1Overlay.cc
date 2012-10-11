@@ -382,7 +382,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetMarkerColor(color);
         hist->SetMarkerSize(1.8);
         hist->SetLineWidth(1);
-        hist->SetFillStyle(fill);
+        hist->SetFillStyle(1001);  // hard coded until i determine how to do this better
     }
     else
     {

@@ -145,6 +145,6 @@ endif
 
 $(call add-path,$(dep_dir),%.d): $(call add-path,$(source_dir),%.cc)
 	@mkdir -p $(dep_dir)
-	@$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -M $< | \
+	@$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) $(addprefix -D,$(defines)) -M $< | \
 	$(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@.tmp 
 	@$(MV) $@.tmp $@

@@ -359,8 +359,8 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, output_path));
@@ -373,6 +373,30 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     yields_bkgd.push_back(GetSSYield("wmwmqq"  , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wpwpqq"  , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_num, output_path));
+
+    //Yield yield_wgstar("wgstar");
+    //yield_wgstar += GetSSYield("wgstar2e", signal_region_num, output_path);
+    //yield_wgstar += GetSSYield("wgstar2m", signal_region_num, output_path);
+    //yield_wgstar += GetSSYield("wgstar2t", signal_region_num, output_path);
+
+    //Yield yield_wwqq("wwqq");
+    //yield_wwqq += GetSSYield("wmwmqq"  , signal_region_num, output_path);
+    //yield_wwqq += GetSSYield("wpwpqq"  , signal_region_num, output_path);
+
+    //yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("wzz"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("zzz"     , signal_region_num, output_path));
+    //yields_bkgd.push_back(yield_wgstar);
+    //yields_bkgd.push_back(yield_wwqq);
+    //yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_num, output_path));
 
     // add the backtrounds to get the totol MC and total prediction
     for (size_t i = 0; i != yields_bkgd.size(); i++)
@@ -429,16 +453,18 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
 
             // handle title explicitly 
             string latex_name = y.title;
-            if      (y.title == "SF"      ) {latex_name = "SF";          }
-            else if (y.title == "DF"      ) {latex_name = "DF";          }
-            else if (y.title == "Fakes"   ) {latex_name = "SF + DF";     }
-            else if (y.title == "Flips"   ) {latex_name = "Charge Flips";}
-            else if (y.title == "Total MC") {latex_name = "Total MC";    }
-            else if (y.title == "MC Pred" ) {latex_name = "MC Pred";     }
-            else if (y.title == "pred"    ) {latex_name = "Total Pred";  }
+            if      (y.title == "SF"      ) {latex_name = "SF";             }
+            else if (y.title == "DF"      ) {latex_name = "DF";             }
+            else if (y.title == "Fakes"   ) {latex_name = "SF + DF";        }
+            else if (y.title == "Flips"   ) {latex_name = "Charge Flips";   }
+            else if (y.title == "Total MC") {latex_name = "Total MC";       }
+            else if (y.title == "MC Pred" ) {latex_name = "MC Pred";        }
+            else if (y.title == "pred"    ) {latex_name = "Total Pred";     }
+            //else if (y.title == "wgstar"  ) {latex_name = "$W\\gamma^{*}$";   }
+            //else if (y.title == "wwqq"    ) {latex_name = "$W^{\\pm}^{\\pm}$";}
             else
             {
-                latex_name = at::GetSampleInfo(y.title).latex;
+                latex_name = at::IsSample(y.title) ? at::GetSampleInfo(y.title).latex : y.title;
             }
 
             if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 

@@ -17,8 +17,6 @@
 
 // typdefs
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
-//typedef std::vector<LorentzVector> vecLorentzVector;
-//typedef std::vector<float> vecd;
 
 // forward declaration
 class TTree;
@@ -89,17 +87,6 @@ public:
     float lep2_iso;
     bool lep2_num;
 
-    // weights
-    float metw30;
-    float metw50;
-    float metw120;
-    float btagw;
-    float pt1w;
-    float pt2w;
-    float htw;
-    float htw200;
-    float htw320;
-
     // lorentz vectors
     std::vector<LorentzVector> gen_vbjets_p4;
     std::vector<bool> gen_vbjets_matched;
@@ -123,7 +110,6 @@ class OutreachLooper : public at::AnalysisWithTree
             const std::string& root_file_name,
             const at::Sample::value_type& sample,
             double luminosity = 1.0,
-            const std::string& fit_eff_file = "",
             const std::string& vtxreweight_file_name = "",
             bool is_fast_sim = false,
             bool sparms = false,
@@ -149,17 +135,6 @@ class OutreachLooper : public at::AnalysisWithTree
         bool m_verbose;
         bool m_is_fastsim;
         bool m_sparms;
-
-        std::tr1::shared_ptr<TH1F> h_btagpt;
-        std::tr1::shared_ptr<TH1F> h_el_pt;
-        std::tr1::shared_ptr<TH1F> h_mu_pt;
-        std::tr1::shared_ptr<TH1F> h_genmet30;
-        std::tr1::shared_ptr<TH1F> h_genmet50;
-        std::tr1::shared_ptr<TH1F> h_genmet120;
-        std::tr1::shared_ptr<TH1F> h_ht200;
-        std::tr1::shared_ptr<TH1F> h_ht320;
-
-        rt::TH1Container m_hist_container;
 
         // struct to hold tree values
         OutreachTree m_evt;

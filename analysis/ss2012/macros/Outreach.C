@@ -1,5 +1,4 @@
 #include "rt/RootTools.h"
-#include "CTable.h"
 #include "TSystem.h"
 #include "TChain.h"
 #include "TEventList.h"
@@ -75,23 +74,23 @@ void CreateOutreachHists(const std::string& sample_name)
     chain.Add(Form("babies_outreach/%s.root", sample_name.c_str()));
 
     // ht efficieny selection
-    TCut ht_eff    = "gen_met > 50.0 && njets >=2";
-    TCut ht200_eff = ht_eff && TCut("ht>200.0");
-    TCut ht320_eff = ht_eff && TCut("ht>320.0");
+    TCut ht_eff    = "gen_met > 50.0 && gen_njets >=2";
+    TCut ht200_eff = ht_eff && TCut("reco_ht>200.0");
+    TCut ht320_eff = ht_eff && TCut("reco_ht>320.0");
 
     // met selection
-    TCut met_eff    = "gen_ht > 200.0 && njets >=2";
-    TCut met30_eff  = met_eff && TCut("pfmet>30.0" );
-    TCut met50_eff  = met_eff && TCut("pfmet>50.0" );
-    TCut met120_eff = met_eff && TCut("pfmet>120.0");
+    TCut met_eff    = "gen_ht > 200.0 && gen_njets >=2";
+    TCut met30_eff  = met_eff && TCut("reco_met>30.0" );
+    TCut met50_eff  = met_eff && TCut("reco_met>50.0" );
+    TCut met120_eff = met_eff && TCut("reco_met>120.0");
 
     // b-tagging selection
-    TCut btag_eff   = "gen_ht > 200.0 && gen_met > 50.0 && njets >=2";
-    TCut btag40_eff = btag_eff && TCut("vbjets_num");
+    TCut btag_eff   = "gen_ht > 200.0 && gen_met > 50.0 && gen_njets >=2";
+    TCut btag40_eff = btag_eff && TCut("gen_vbjets_matched");
 
     // lepton selection
-    TCut el1_den = "gen_ht > 200.0 && gen_met > 50.0 && njets >=2 && abs(lep1_pdgid==11)";
-    TCut el2_den = "gen_ht > 200.0 && gen_met > 50.0 && njets >=2 && abs(lep2_pdgid==11)";
+    TCut el1_den = "gen_ht > 200.0 && gen_met > 50.0 && gen_njets >=2 && abs(lep1_gen_pdgid)==11";
+    TCut el2_den = "gen_ht > 200.0 && gen_met > 50.0 && gen_njets >=2 && abs(lep2_gen_pdgid)==11";
     TCut el1_num = el1_den && TCut("lep1_num");
     TCut el2_num = el2_den && TCut("lep2_num");
     TCut el1_id  = el1_den && TCut("lep1_passes_id");
@@ -99,8 +98,8 @@ void CreateOutreachHists(const std::string& sample_name)
     TCut el1_iso = el1_den && TCut("lep1_passes_iso");
     TCut el2_iso = el2_den && TCut("lep2_passes_iso");
 
-    TCut mu1_den = "gen_ht > 200.0 && gen_met > 50.0 && njets >=2 && abs(lep1_pdgid==13)";
-    TCut mu2_den = "gen_ht > 200.0 && gen_met > 50.0 && njets >=2 && abs(lep2_pdgid==13)";
+    TCut mu1_den = "gen_ht > 200.0 && gen_met > 50.0 && gen_njets >=2 && abs(lep1_gen_pdgid)==13";
+    TCut mu2_den = "gen_ht > 200.0 && gen_met > 50.0 && gen_njets >=2 && abs(lep2_gen_pdgid)==13";
     TCut mu1_num = mu1_den && TCut("lep1_num");
     TCut mu2_num = mu2_den && TCut("lep2_num");
     TCut mu1_id  = mu1_den && TCut("lep1_passes_id");
@@ -118,28 +117,28 @@ void CreateOutreachHists(const std::string& sample_name)
     chain.Draw(Form("gen_met>>h_%s_genmet50" , sample_name.c_str()), met50_eff , "goff");
     chain.Draw(Form("gen_met>>h_%s_genmet120", sample_name.c_str()), met120_eff, "goff");
 
-    chain.Draw(Form("vbjets_p4.pt()>>h_%s_btagpt"  , sample_name.c_str()), btag_eff  , "goff");
-    chain.Draw(Form("vbjets_p4.pt()>>h_%s_btagpt40", sample_name.c_str()), btag40_eff, "goff");
+    chain.Draw(Form("gen_vbjets_p4.pt()>>h_%s_btagpt"  , sample_name.c_str()), btag_eff  , "goff");
+    chain.Draw(Form("gen_vbjets_p4.pt()>>h_%s_btagpt40", sample_name.c_str()), btag40_eff, "goff");
 
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_el_pt_den" , sample_name.c_str()), el1_den, "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_el_pt_den", sample_name.c_str()), el2_den, "goff");
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_el_pt_num" , sample_name.c_str()), el1_num, "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_el_pt_num", sample_name.c_str()), el2_num, "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_el_pt_den" , sample_name.c_str()), el1_den, "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_el_pt_den", sample_name.c_str()), el2_den, "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_el_pt_num" , sample_name.c_str()), el1_num, "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_el_pt_num", sample_name.c_str()), el2_num, "goff");
 
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_el_pt_id"  , sample_name.c_str()), el1_id , "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_el_pt_id" , sample_name.c_str()), el2_id , "goff");
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_el_pt_iso" , sample_name.c_str()), el1_iso, "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_el_pt_iso", sample_name.c_str()), el2_iso, "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_el_pt_id"  , sample_name.c_str()), el1_id , "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_el_pt_id" , sample_name.c_str()), el2_id , "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_el_pt_iso" , sample_name.c_str()), el1_iso, "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_el_pt_iso", sample_name.c_str()), el2_iso, "goff");
 
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_mu_pt_den" , sample_name.c_str()), mu1_den, "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_mu_pt_den", sample_name.c_str()), mu2_den, "goff");
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_mu_pt_num" , sample_name.c_str()), mu1_num, "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_mu_pt_num", sample_name.c_str()), mu2_num, "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_mu_pt_den" , sample_name.c_str()), mu1_den, "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_mu_pt_den", sample_name.c_str()), mu2_den, "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_mu_pt_num" , sample_name.c_str()), mu1_num, "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_mu_pt_num", sample_name.c_str()), mu2_num, "goff");
 
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_mu_pt_id"  , sample_name.c_str()), mu1_id , "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_mu_pt_id" , sample_name.c_str()), mu2_id , "goff");
-    chain.Draw(Form("lep1_p4.pt()>>h_%s_mu_pt_iso" , sample_name.c_str()), mu1_iso, "goff");
-    chain.Draw(Form("lep2_p4.pt()>>+h_%s_mu_pt_iso", sample_name.c_str()), mu2_iso, "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_mu_pt_id"  , sample_name.c_str()), mu1_id , "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_mu_pt_id" , sample_name.c_str()), mu2_id , "goff");
+    chain.Draw(Form("lep1_gen_p4.pt()>>h_%s_mu_pt_iso" , sample_name.c_str()), mu1_iso, "goff");
+    chain.Draw(Form("lep2_gen_p4.pt()>>+h_%s_mu_pt_iso", sample_name.c_str()), mu2_iso, "goff");
 
     // create efficiencies
     hc.Add(MakeEfficiencyPlot(hc[Form("h_%s_ht200", sample_name.c_str())], hc[Form("h_%s_ht", sample_name.c_str())], Form("h_eff_%s_ht200", sample_name.c_str()), "CMS Simulation, #sqrt{s} = 8 TeV;H^{gen}_{T} (GeV);Efficiency"));
@@ -157,6 +156,7 @@ void CreateOutreachHists(const std::string& sample_name)
     hc.Add(MakeEfficiencyPlot(hc[Form("h_%s_mu_pt_id"  , sample_name.c_str())], hc[Form("h_%s_mu_pt_den" , sample_name.c_str())],Form("h_eff_%s_mu_id_pt" ,sample_name.c_str()),"CMS Simulation, #sqrt{s} = 8 TeV;p^{gen}_{T} (GeV);Efficiency"));
     hc.Add(MakeEfficiencyPlot(hc[Form("h_%s_el_pt_iso" , sample_name.c_str())], hc[Form("h_%s_el_pt_den" , sample_name.c_str())],Form("h_eff_%s_el_iso_pt",sample_name.c_str()),"CMS Simulation, #sqrt{s} = 8 TeV;p^{gen}_{T} (GeV);Efficiency"));
     hc.Add(MakeEfficiencyPlot(hc[Form("h_%s_mu_pt_iso" , sample_name.c_str())], hc[Form("h_%s_mu_pt_den" , sample_name.c_str())],Form("h_eff_%s_mu_iso_pt",sample_name.c_str()),"CMS Simulation, #sqrt{s} = 8 TeV;p^{gen}_{T} (GeV);Efficiency"));
+    hc.SetDirectory(gDirectory);
 
 
     // write the output
@@ -270,7 +270,7 @@ void FitHtTurnOnCurve(const std::string& sample_name)
 
     c1->Draw();
     c1->Print(Form("plots/outreach/HtTurnOnCurve_%s.pdf" , sample_name.c_str()));
-    c1->Print(Form("plots/outreach/HtTurnOnCurve_%s.root", sample_name.c_str()));
+    //c1->Print(Form("plots/outreach/HtTurnOnCurve_%s.root", sample_name.c_str()));
 
     CTable t1;
     double* params1 = func1->GetParameters(); 
@@ -280,13 +280,14 @@ void FitHtTurnOnCurve(const std::string& sample_name)
     t1.useTitle();
     t1.setTitle("HT fit");
     t1.setTable() (                                         "HT > 200",                            "HT > 320")
-                  ("eps_infty" , rt::pm(params1[0], errors1[0], "1.3"), rt::pm(params2[0], errors2[0], "1.3"))
-                  ("x_1/2 GeV" , rt::pm(params1[1], errors1[1], "1.3"), rt::pm(params2[1], errors2[1], "1.3"))
-                  ("sigma, GeV", rt::pm(params1[2], errors1[2], "1.3"), rt::pm(params2[2], errors2[2], "1.3"));
+                  ("$\\epsilon_{\\infty}$", rt::pm(params1[0], errors1[0], "1.3"), rt::pm(params2[0], errors2[0], "1.3"))
+                  ("$x_{1/2}$ GeV"        , rt::pm(params1[1], errors1[1], "1.3"), rt::pm(params2[1], errors2[1], "1.3"))
+                  ("$]sigma$, GeV"        , rt::pm(params1[2], errors1[2], "1.3"), rt::pm(params2[2], errors2[2], "1.3"));
     t1.print();
+    t1.saveTex(Form("plots/outreach/HtTurnOnCurve_%s.tex" , sample_name.c_str()));
 
 	// save fits back to file
-	file->Write();
+	file->Write("", TObject::kOverwrite);
 	file->Close();
 	delete file;
 
@@ -399,7 +400,7 @@ void FitMetTurnOnCurve(const std::string& sample_name)
     std::cout << "prob: " << func3->GetProb() << std::endl;
     std::cout << std::endl;
 
-    TLegend* legend = new TLegend(0.6, 0.5, 0.9, 0.7);
+    TLegend* legend = new TLegend(0.65, 0.4, 0.95, 0.6);
     legend->AddEntry(h1,"#slash{E}_{T} > 30 GeV" , "p");
     legend->AddEntry(h2,"#slash{E}_{T} > 50 GeV" , "p");
     legend->AddEntry(h3,"#slash{E}_{T} > 120 GeV", "p");
@@ -420,13 +421,14 @@ void FitMetTurnOnCurve(const std::string& sample_name)
                   ("x_1/2 GeV" , rt::pm(params1[1], errors1[1], "1.3"), rt::pm(params2[1], errors2[1], "1.3"), rt::pm(params3[1], errors3[1], "1.3"))
                   ("sigma, GeV", rt::pm(params1[2], errors1[2], "1.3"), rt::pm(params2[2], errors2[2], "1.3"), rt::pm(params3[2], errors3[2], "1.3"));
     t1.print();
+    t1.saveTex(Form("plots/outreach/MetTurnOnCurve_%s.tex" , sample_name.c_str()));
 
     c1->Draw();
     c1->Print(Form("plots/outreach/MetTurnOnCurve_%s.pdf" , sample_name.c_str()));
-    c1->Print(Form("plots/outreach/MetTurnOnCurve_%s.root", sample_name.c_str()));
+    //c1->Print(Form("plots/outreach/MetTurnOnCurve_%s.root", sample_name.c_str()));
 
 	// save fits back to file
-	file->Write();
+	file->Write("", TObject::kOverwrite);
 	file->Close();
 	delete file;
 
@@ -507,6 +509,10 @@ void FitBtagEfficiencyCurve(const std::string& sample_name)
     std::cout << "prob: " << bfunc->GetProb() << std::endl;
     std::cout << std::endl;
 
+    c1->Draw();
+    c1->Print(Form("plots/outreach/btagEfficiency_%s.pdf" , sample_name.c_str()));
+    //c1->Print(Form("plots/outreach/btagEfficiency_%s.root", sample_name.c_str()));
+
     CTable t1;
     double* params1 = bfunc->GetParameters(); 
     double* errors1 = bfunc->GetParErrors(); 
@@ -517,14 +523,12 @@ void FitBtagEfficiencyCurve(const std::string& sample_name)
                   ("p1", rt::pm(params1[1], errors1[1], "1.4"))
                   ("p2", rt::pm(params1[2], errors1[2], "1.4"));
     t1.print();
-
-    c1->Draw();
-    c1->Print(Form("plots/outreach/btagEfficiency_%s.pdf" , sample_name.c_str()));
-    c1->Print(Form("plots/outreach/btagEfficiency_%s.root", sample_name.c_str()));
+    t1.saveTex(Form("plots/outreach/btagEfficiency_%s.tex", sample_name.c_str()));
 
 	// save fits back to file
-	file->Write();
+	file->Write("", TObject::kOverwrite);
 	file->Close();
+    delete file;
 
     return;
 }
@@ -566,7 +570,7 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
         cout << "FitHtTurnOnCurve: file not found!" << endl;
         return;
     }
-    file->ls();
+    //file->ls();
 
     TCanvas* c1 = new TCanvas("c1", "c1"); 
     c1->cd();
@@ -606,7 +610,7 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
     std::cout << "fitting second histo...\n";
 
     TF1* efunc = new TF1("efitf", efitf, 20, 200, 3);
-    efunc->SetParameters(0.7, 0.5, 10);
+    efunc->SetParameters(0.7, 0.25, 20);
     efunc->SetLineColor(kBlack);
     efunc->SetLineWidth(2);
     efunc->SetParNames("offset", "normalization", "constant");
@@ -619,9 +623,9 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
 
     std::cout << "saving histo...\n";
 
-    TLegend* legend = new TLegend(0.6, 0.3, 0.9, 0.5);
-    legend->AddEntry(h1, "Muons"    , "p");
-    legend->AddEntry(h2, "Electrons", "p");
+    TLegend* legend = new TLegend(0.6, 0.35, 0.9, 0.18);
+    legend->AddEntry(h1, "muons"    , "p");
+    legend->AddEntry(h2, "electrons", "p");
     legend->SetFillColor(0);
     legend->Draw("sames");
 
@@ -637,200 +641,18 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
                   ("eps_C"     , rt::pm(params1[1], errors1[1], "1.3"), rt::pm(params2[1], errors2[1], "1.3"))
                   ("sigma, GeV", rt::pm(params1[2], errors1[2], "1.3"), rt::pm(params2[2], errors2[2], "1.3"));
     t1.print();
+    t1.saveTex(Form("plots/outreach/lepEfficiency_%s.tex", sample_name.c_str()));
 
     c1->Draw();
     c1->Print(Form("plots/outreach/lepEfficiency_%s.pdf" , sample_name.c_str()));
-    c1->Print(Form("plots/outreach/lepEfficiency_%s.root", sample_name.c_str()));
+    //c1->Print(Form("plots/outreach/lepEfficiency_%s.root", sample_name.c_str()));
 
 	// save fits back to file
-	file->Write();
+	file->Write("", TObject::kOverwrite);
 	file->Close();
+    delete file;
 }
 
-// lep eff ID fit
-void FitLepIdEfficiencyCurve(const std::string& sample_name) 
-{
-    gStyle->SetOptStat("");
-    rt::SetTDRStyle();
-
-    TFile* file = TFile::Open(Form("plots/outreach/%s_or.root", sample_name.c_str()), "UPDATE");
-    if (!file || file->IsZombie())
-    {
-        cout << "FitHtTurnOnCurve: file not found!" << endl;
-        return;
-    }
-    file->ls();
-
-    TCanvas* c1 = new TCanvas("c1", "c1"); 
-    c1->cd();
-
-    TH1* h1 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_mu_id_pt", sample_name.c_str()))); 
-    h1->SetLineWidth(2);
-    h1->SetMarkerStyle(20);
-    h1->SetMarkerSize(1.2);
-    h1->SetLineColor(kRed);
-    h1->SetMarkerColor(h1->GetLineColor());
-    h1->GetYaxis()->SetRangeUser(-0.05, 1.1);
-    TH1* h2 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_el_id_pt", sample_name.c_str()))); 
-    h2->SetLineWidth(2);
-    h2->SetMarkerStyle(22);
-    h2->SetMarkerSize(1.2);
-    h2->SetLineColor(kBlue);
-    h2->SetMarkerColor(h2->GetLineColor());
-    h2->GetYaxis()->SetRangeUser(-0.05, 1.1);
-
-    h1->Draw();
-    h2->Draw("sames");
-
-    std::cout << "fitting first histo...\n";
-
-    TF1* mfunc = new TF1("mfitf", mfitf, 20, 200, 3);
-    mfunc->SetParameters(0.5, 0.5, 20);
-    mfunc->SetLineColor(kBlack);
-    mfunc->SetLineWidth(2);
-    mfunc->SetParNames("offset", "normalization", "constant");
-    h1->Fit(mfunc, "r", "same");
-
-    std::cout << std::endl;
-    std::cout << "chi2/ndof: " << mfunc->GetChisquare() << "/" << mfunc->GetNDF() << std::endl;
-    std::cout << "prob: " << mfunc->GetProb() << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "fitting second histo...\n";
-
-    TF1* efunc = new TF1("efitf", efitf, 20, 200, 3);
-    efunc->SetParameters(0.7, 0.25, 10);
-    efunc->SetLineColor(kBlack);
-    efunc->SetLineWidth(2);
-    efunc->SetParNames("offset", "normalization", "constant");
-    h2->Fit(efunc, "r", "same");
-
-    std::cout << std::endl;
-    std::cout << "chi2/ndof: " << efunc->GetChisquare() << "/" << efunc->GetNDF() << std::endl;
-    std::cout << "prob: " << efunc->GetProb() << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "saving histo...\n";
-
-    TLegend* legend = new TLegend(0.6, 0.3, 0.9, 0.5);
-    legend->AddEntry(h1, "muons"    , "p");
-    legend->AddEntry(h2, "electrons", "p");
-    legend->SetFillColor(0);
-    legend->Draw("sames");
-
-    CTable t1;
-    double* params1 = efunc->GetParameters(); 
-    double* errors1 = efunc->GetParErrors(); 
-    double* params2 = mfunc->GetParameters(); 
-    double* errors2 = mfunc->GetParErrors(); 
-    t1.useTitle();
-    t1.setTitle("lepton ID eff fit");
-    t1.setTable() (                                        "Electrons",                               "Muons")
-                  ("eps_infty" , rt::pm(params1[0], errors1[0], "1.3"), rt::pm(params2[0], errors2[0], "1.3"))
-                  ("eps_C"     , rt::pm(params1[1], errors1[1], "1.3"), rt::pm(params2[1], errors2[1], "1.3"))
-                  ("sigma, GeV", rt::pm(params1[2], errors1[2], "1.3"), rt::pm(params2[2], errors2[2], "1.3"));
-    t1.print();
-
-    c1->Draw();
-    c1->Print(Form("plots/outreach/lepIdEfficiency_%s.pdf" , sample_name.c_str()));
-    c1->Print(Form("plots/outreach/lepIdEfficiency_%s.root", sample_name.c_str()));
-
-	// save fits back to file
-	file->Write();
-	file->Close();
-}
-
-void FitLepIsoEfficiencyCurve(const std::string& sample_name) 
-{
-    gStyle->SetOptStat("");
-    rt::SetTDRStyle();
-
-    TFile* file = TFile::Open(Form("plots/outreach/%s_or.root", sample_name.c_str()), "UPDATE");
-    if (!file || file->IsZombie())
-    {
-        cout << "FitHtTurnOnCurve: file not found!" << endl;
-        return;
-    }
-    file->ls();
-
-    TCanvas* c1 = new TCanvas("c1", "c1"); 
-    c1->cd();
-
-    TH1* h1 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_mu_iso_pt", sample_name.c_str()))); 
-    h1->SetLineWidth(2);
-    h1->SetMarkerStyle(20);
-    h1->SetMarkerSize(1.2);
-    h1->SetLineColor(kRed);
-    h1->SetMarkerColor(h1->GetLineColor());
-    h1->GetYaxis()->SetRangeUser(-0.05, 1.1);
-    TH1* h2 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_el_iso_pt", sample_name.c_str()))); 
-    h2->SetLineWidth(2);
-    h2->SetMarkerStyle(22);
-    h2->SetMarkerSize(1.2);
-    h2->SetLineColor(kBlue);
-    h2->SetMarkerColor(h2->GetLineColor());
-    h2->GetYaxis()->SetRangeUser(-0.05, 1.1);
-
-    h1->Draw();
-    h2->Draw("sames");
-
-    std::cout << "fitting first histo...\n";
-
-    TF1* mfunc = new TF1("mfitf", mfitf, 20, 200, 3);
-    mfunc->SetParameters(0.5, 0.5, 20);
-    mfunc->SetLineColor(kBlack);
-    mfunc->SetLineWidth(2);
-    mfunc->SetParNames("offset", "normalization", "constant");
-    h1->Fit(mfunc, "r", "same");
-
-    std::cout << std::endl;
-    std::cout << "chi2/ndof: " << mfunc->GetChisquare() << "/" << mfunc->GetNDF() << std::endl;
-    std::cout << "prob: " << mfunc->GetProb() << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "fitting second histo...\n";
-
-    TF1* efunc = new TF1("efitf", efitf, 20, 200, 3);
-    efunc->SetParameters(0.7, 0.25, 10);
-    efunc->SetLineColor(kBlack);
-    efunc->SetLineWidth(2);
-    efunc->SetParNames("offset", "normalization", "constant");
-    h2->Fit(efunc, "r", "same");
-
-    std::cout << std::endl;
-    std::cout << "chi2/ndof: " << efunc->GetChisquare() << "/" << efunc->GetNDF() << std::endl;
-    std::cout << "prob: " << efunc->GetProb() << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "saving histo...\n";
-
-    TLegend* legend = new TLegend(0.6, 0.3, 0.9, 0.5);
-    legend->AddEntry(h1, "muons"    , "p");
-    legend->AddEntry(h2, "electrons", "p");
-    legend->SetFillColor(0);
-    legend->Draw("sames");
-
-    CTable t1;
-    double* params1 = efunc->GetParameters(); 
-    double* errors1 = efunc->GetParErrors(); 
-    double* params2 = mfunc->GetParameters(); 
-    double* errors2 = mfunc->GetParErrors(); 
-    t1.useTitle();
-    t1.setTitle("lepton Iso eff fit");
-    t1.setTable() (                                        "Electrons",                               "Muons")
-                  ("eps_infty" , rt::pm(params1[0], errors1[0], "1.3"), rt::pm(params2[0], errors2[0], "1.3"))
-                  ("eps_C"     , rt::pm(params1[1], errors1[1], "1.3"), rt::pm(params2[1], errors2[1], "1.3"))
-                  ("sigma, GeV", rt::pm(params1[2], errors1[2], "1.3"), rt::pm(params2[2], errors2[2], "1.3"));
-    t1.print();
-
-    c1->Draw();
-    c1->Print(Form("plots/outreach/lepIsoEfficiency_%s.pdf" , sample_name.c_str()));
-    c1->Print(Form("plots/outreach/lepIsoEfficiency_%s.root", sample_name.c_str()));
-
-	// save fits back to file
-	file->Write();
-	file->Close();
-}
 
 
 void CreateOutreachPlots(const std::string& sample_name)
@@ -840,6 +662,4 @@ void CreateOutreachPlots(const std::string& sample_name)
     FitMetTurnOnCurve(sample_name);
     FitBtagEfficiencyCurve(sample_name);
     FitLepEfficiencyCurve(sample_name);
-    FitLepIdEfficiencyCurve(sample_name);
-    FitLepIsoEfficiencyCurve(sample_name);
 }

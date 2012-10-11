@@ -258,24 +258,30 @@ std::vector<std::pair<GenParticleStruct, GenParticleStruct> > efftools::makeGenH
     //            
     std::vector<GenParticleStruct> gleps;
     for (unsigned int gidx = 0; gidx < cms2.genps_p4().size(); gidx++) {
-                
+
         if (cms2.genps_status().at(gidx) != 3)
+        {
             continue;
+        }
 
         int id    = cms2.genps_id().at(gidx);
         float pt  = cms2.genps_p4().at(gidx).pt();
         float eta = cms2.genps_p4().at(gidx).eta();
 
         if (fabs(eta) > eta_cut)
+        {
             continue;
+        }
 
         if (abs(id) == 11 || abs(id) == 13) {
             if (removeLeptonsOverlappingWithPartons && leptonOverlapsWithParton(cms2.genps_p4().at(gidx)))
+            {
                 continue;
+            }
 
             gleps.push_back(GenParticleStruct(id, gidx, pt, eta, -999, 999, -999., -999.));   
         }
-                
+
         //
         // need to add protection here to not get more than one lepton from the same tau
         //
@@ -284,25 +290,35 @@ std::vector<std::pair<GenParticleStruct, GenParticleStruct> > efftools::makeGenH
 
             GenParticleStruct tmp_gp = GenParticleStruct(0, 0, 0, 0, 0, 0, 0, 0);                    
             for (unsigned int didx = 0; didx < cms2.genps_lepdaughter_id().at(gidx).size(); didx++) {
-                        
+
                 int did = cms2.genps_lepdaughter_id().at(gidx).at(didx);
                 if (abs(did) != 11 && abs(did) != 13)
+                {
                     continue;
+                }
 
                 if (fabs(cms2.genps_lepdaughter_p4().at(gidx).at(didx).eta()) > eta_cut)
+                {
                     continue;
+                }
 
                 if (removeLeptonsOverlappingWithPartons && leptonOverlapsWithParton(cms2.genps_lepdaughter_p4().at(gidx).at(didx)))
+                {
                     continue;            
+                }
 
                 float dpt  = cms2.genps_lepdaughter_p4().at(gidx).at(didx).pt();
                 float deta = cms2.genps_lepdaughter_p4().at(gidx).at(didx).eta();
                 if (dpt > tmp_gp.dpt_)
+                {
                     tmp_gp = GenParticleStruct(id, gidx, pt, eta, did, didx, dpt, deta); 
+                }
             }
 
             if (tmp_gp.dpt_ > 0.1)
+            {
                 gleps.push_back(tmp_gp);
+            }
 
         } // end tau block
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 verbose=0
-njets=2
+njets=0
 
 # make the output dirs
 
@@ -50,7 +50,7 @@ function merge
 # 2012A/B reprocessed (no 2012C v1)
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/26Sep
 output_path=babies
-run_list=json/preapproval_v3_cms2.txt # 10.45 
+run_list=json/preapproval_v3_cms2.txt # 12.26 
 input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"

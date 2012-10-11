@@ -30,6 +30,9 @@ namespace at
 
     // convert the int to a DileptonHypType
     DileptonHypType::value_type hyp_typeToHypType(int hyp_type);
+
+    // convert the two pdgid's into hype type a DileptonHypType
+    DileptonHypType::value_type PdgidToHypType(int id1, int id2);
 };
 
 #endif // DILEPTONHYPTYPE_H

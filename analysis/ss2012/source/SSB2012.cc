@@ -17,12 +17,13 @@ namespace ssb {
 	float &kfactor() { return samesignbtag.kfactor(); }
 	float &gen_met() { return samesignbtag.gen_met(); }
 	float &gen_met_phi() { return samesignbtag.gen_met_phi(); }
+	TString &dataset() { return samesignbtag.dataset(); }
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4() { return samesignbtag.lep1_p4(); }
 	bool &lep1_passes_id() { return samesignbtag.lep1_passes_id(); }
 	bool &lep1_passes_iso() { return samesignbtag.lep1_passes_iso(); }
 	bool &lep1_is_num() { return samesignbtag.lep1_is_num(); }
 	bool &lep1_is_fo() { return samesignbtag.lep1_is_fo(); }
-	bool &lep1_is_fromw() { return samesignbtag.lep1_is_fromw(); }
+	int &lep1_is_fromw() { return samesignbtag.lep1_is_fromw(); }
 	int &lep1_charge() { return samesignbtag.lep1_charge(); }
 	int &lep1_pdgid() { return samesignbtag.lep1_pdgid(); }
 	int &lep1_type() { return samesignbtag.lep1_type(); }
@@ -104,7 +105,7 @@ namespace ssb {
 	bool &lep2_passes_iso() { return samesignbtag.lep2_passes_iso(); }
 	bool &lep2_is_num() { return samesignbtag.lep2_is_num(); }
 	bool &lep2_is_fo() { return samesignbtag.lep2_is_fo(); }
-	bool &lep2_is_fromw() { return samesignbtag.lep2_is_fromw(); }
+	int &lep2_is_fromw() { return samesignbtag.lep2_is_fromw(); }
 	int &lep2_charge() { return samesignbtag.lep2_charge(); }
 	int &lep2_pdgid() { return samesignbtag.lep2_pdgid(); }
 	int &lep2_type() { return samesignbtag.lep2_type(); }

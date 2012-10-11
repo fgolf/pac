@@ -25,17 +25,17 @@ namespace at
             "DoubleMu_Run2012B-13Jul2012-v4_AOD,"
             "DoubleMu_Run2012A-13Jul2012-v1_AOD,"
             "DoubleMu_Run2012A-recover-06Aug2012-v1_AOD,"
-            //"DoubleMu_Run2012C-PromptReco-v1_AOD,"
+            "DoubleMu_Run2012C-24Aug2012-v1_AOD,"
             "DoubleMu_Run2012C-PromptReco-v2_AOD,"
             "DoubleElectron_Run2012B-13Jul2012-v1_AOD,"
             "DoubleElectron_Run2012A-13Jul2012-v1_AOD,"
             "DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD,"
-            //"DoubleElectron_Run2012C-PromptReco-v1_AOD,"
+            "DoubleElectron_Run2012C-24Aug2012-v1_AOD,"
             "DoubleElectron_Run2012C-PromptReco-v2_AOD,"
             "MuEG_Run2012B-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
-            //"MuEG_Run2012C-PromptReco-v1_AOD,"
+            "MuEG_Run2012C-24Aug2012-v1_AOD,"
             "MuEG_Run2012C-PromptReco-v2_AOD",
             // SampleType 
             SampleType::data,
@@ -55,7 +55,7 @@ namespace at
             "DoubleElectron_Run2012B-13Jul2012-v1_AOD,"
             "DoubleElectron_Run2012A-13Jul2012-v1_AOD,"
             "DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD,"
-            //"DoubleElectron_Run2012C-PromptReco-v1_AOD,"
+            "DoubleElectron_Run2012C-24Aug2012-v1_AOD,"
             "DoubleElectron_Run2012C-PromptReco-v2_AOD",
             // SampleType 
             SampleType::data,
@@ -75,7 +75,7 @@ namespace at
             "DoubleMu_Run2012B-13Jul2012-v4_AOD,"
             "DoubleMu_Run2012A-13Jul2012-v1_AOD,"
             "DoubleMu_Run2012A-recover-06Aug2012-v1_AOD,"
-            //"DoubleMu_Run2012C-PromptReco-v1_AOD,"
+            "DoubleMu_Run2012C-24Aug2012-v1_AOD,"
             "DoubleMu_Run2012C-PromptReco-v2_AOD",
             // SampleType 
             SampleType::data,
@@ -95,7 +95,7 @@ namespace at
             "MuEG_Run2012B-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-13Jul2012-v1_AOD,"
             "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
-            //"MuEG_Run2012C-PromptReco-v1_AOD,"
+            "MuEG_Run2012C-24Aug2012-v1_AOD,"
             "MuEG_Run2012C-PromptReco-v2_AOD",
             // SampleType 
             SampleType::data,
@@ -138,7 +138,7 @@ namespace at
         },
         {
             // name
-            "tw", 
+            "t_tw", 
             // title,
             "tW", 
             // latex
@@ -559,9 +559,9 @@ namespace at
             // name
             "ww_ds", 
             // title
-            "WW DS", 
+            "WW(DPS)", 
             // latex
-            "WW DS", 
+            "WW(DPS)", 
             // ntuple_path
             "WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -632,6 +632,19 @@ namespace at
         }
 
         return sample; 
+    }
+
+    // test if a string is a sample name 
+    bool IsSample(const std::string& sample_name)
+    {
+        for (size_t i = 0; i != Sample::static_size; i++)
+        {
+            if (std::string(s_SampleInfos[i].name) == sample_name)
+            {
+                return true; 
+            }
+        }
+        return false;
     }
 
     // wrapper function to get the SampleInfo

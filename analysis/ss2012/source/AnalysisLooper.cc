@@ -812,6 +812,15 @@ int SSAnalysisLooper::Analyze(long event)
         {
             if (m_verbose) {std::cout << "fails good event type requirement" << std::endl;}
 
+            // fill event level info 
+            m_evt.event_info.FillCommon(m_sample);
+
+            // fill the dilepton analysis independent variables 
+            if (not hyp_p4().empty())
+            {
+                m_evt.FillCommon(hyp_idx);
+            }
+
             // fill the tree with what we have
             m_tree->Fill();
 

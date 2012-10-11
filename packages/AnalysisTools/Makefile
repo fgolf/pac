@@ -31,6 +31,13 @@ sources         := AnalysisBase.cc         \
 				   DileptonTree.cc	
 include_dir     := include source 
 
+# for ROOT interactive use (rootcint)
+headers         := at/Sample.h              \
+                   at/Sample.h              \
+                   at/DileptonHypType.h     \
+                   at/DileptonChargeType.h
+link_def	    := LinkDef.h
+
 # additional libraries
 # ----------------------------------------------------------------------- #
 
@@ -61,6 +68,8 @@ dep_dir     := $(call add-path,$(project_obj),$(package_dir_rel))
 deps        := $(call source-to-dep,$(sources),$(dep_dir))  
 
 libraries   := $(call add-path,$(project_lib),$(libraries))
+rootdict    := $(call lib-to-rootdict,$(libraries),$(object_dir)) 
+sources     += $(rootdict)
 
 vpath %.h  $(include_dir)
 vpath %.cc $(source_dir)
@@ -109,13 +118,21 @@ clean:
 # keep object files
 .PRECIOUS: $(call add-path,$(object_dir),%.o)
 
+# create the dict.cc
+$(rootdict): $(headers)
+	$(call root-cint,$(rootdict),$(headers),$(include_dir),$(link_def),$(defines))
+
+# create dict.o
+$(subst .cc,.o,$(rootdict)): $(rootdict)
+	$(COMPILE.cc) $(addprefix -D,$(defines)) $(OUTPUT_OPTION) $<
+
 # compile all the objects
 $(call add-path,$(object_dir),%.o): $(call add-path,$(source_dir),%.cc)
 	@mkdir -p $(object_dir)
 	$(COMPILE.cc) $(addprefix -D,$(defines)) $(OUTPUT_OPTION) $<
 
 # link all the objects 
-$(call add-path,$(project_lib),%.so): $(objects)
+$(call add-path,$(project_lib),%.so): $(objects) $(subst .cc,.o,$(rootdict))
 	@mkdir -p $(project_lib)
 	$(SHAREDLIB.cc) $@ $^
 

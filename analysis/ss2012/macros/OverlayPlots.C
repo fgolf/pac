@@ -80,14 +80,21 @@ void OverlayPlots(bool sbottom = false, float scale = 1.0, int signal_region = 0
         }
 
         // pt1
-        p["p_pt1_"   +postfix].Add(hc["h_pt1_ss"   ], signal, title, color, 2, marker);
-        p["p_pt2_"   +postfix].Add(hc["h_pt2_ss"   ], signal, title, color, 2, marker);
-        p["p_mt_"    +postfix].Add(hc["h_mt_ss"    ], signal, title, color, 2, marker);
-        p["p_ht_"    +postfix].Add(hc["h_ht_ss"    ], signal, title, color, 2, marker);
-        p["p_met_"   +postfix].Add(hc["h_met_ss"   ], signal, title, color, 2, marker);
-        p["p_njets_" +postfix].Add(hc["h_njets_ss" ], signal, title, color, 2, marker);
-        p["p_nbtags_"+postfix].Add(hc["h_nbtags_ss"], signal, title, color, 2, marker);
+        p["p_pt1_"   +postfix].Add(hc["h_pt1_ss"   ], signal, title, color, 2, marker, 1001);
+        p["p_pt2_"   +postfix].Add(hc["h_pt2_ss"   ], signal, title, color, 2, marker, 1001);
+        p["p_mt_"    +postfix].Add(hc["h_mt_ss"    ], signal, title, color, 2, marker, 1001);
+        p["p_ht_"    +postfix].Add(hc["h_ht_ss"    ], signal, title, color, 2, marker, 1001);
+        p["p_met_"   +postfix].Add(hc["h_met_ss"   ], signal, title, color, 2, marker, 1001);
+        p["p_njets_" +postfix].Add(hc["h_njets_ss" ], signal, title, color, 2, marker, 1001);
+        p["p_nbtags_"+postfix].Add(hc["h_nbtags_ss"], signal, title, color, 2, marker, 1001);
     }
+    p["p_pt1_"   +postfix].SetLegendTextSize(0.02);
+    p["p_pt2_"   +postfix].SetLegendTextSize(0.02);
+    p["p_mt_"    +postfix].SetLegendTextSize(0.02);
+    p["p_ht_"    +postfix].SetLegendTextSize(0.02);
+    p["p_met_"   +postfix].SetLegendTextSize(0.02);
+    p["p_njets_" +postfix].SetLegendTextSize(0.02);
+    p["p_nbtags_"+postfix].SetLegendTextSize(0.02);
 
     // simple figure of merit
     float fom1 = samples[0].yield / (bkgd_yield); 

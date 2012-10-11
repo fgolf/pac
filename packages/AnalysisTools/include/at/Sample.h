@@ -90,6 +90,9 @@ namespace at
     // Get the Sample from a string
     Sample::value_type GetSampleFromName(const std::string& sample_name);
 
+    // test if a string is on of the samples
+    bool IsSample(const std::string& sample_name);
+
     // wrapper function to get the SampleInfo
     SampleInfo GetSampleInfo(const Sample::value_type& sample);
     SampleInfo GetSampleInfo(const std::string& sample_name);

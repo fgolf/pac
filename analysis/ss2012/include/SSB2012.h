@@ -65,6 +65,9 @@ protected:
 	float	gen_met_phi_;
 	TBranch *gen_met_phi_branch;
 	bool gen_met_phi_isLoaded;
+	TString dataset_;
+	TBranch *dataset_branch;
+	bool dataset_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_p4_;
 	TBranch *lep1_p4_branch;
 	bool lep1_p4_isLoaded;
@@ -80,7 +83,7 @@ protected:
 	bool	lep1_is_fo_;
 	TBranch *lep1_is_fo_branch;
 	bool lep1_is_fo_isLoaded;
-	bool	lep1_is_fromw_;
+	int	lep1_is_fromw_;
 	TBranch *lep1_is_fromw_branch;
 	bool lep1_is_fromw_isLoaded;
 	int	lep1_charge_;
@@ -326,7 +329,7 @@ protected:
 	bool	lep2_is_fo_;
 	TBranch *lep2_is_fo_branch;
 	bool lep2_is_fo_isLoaded;
-	bool	lep2_is_fromw_;
+	int	lep2_is_fromw_;
 	TBranch *lep2_is_fromw_branch;
 	bool lep2_is_fromw_isLoaded;
 	int	lep2_charge_;
@@ -1135,6 +1138,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("gen_met_phi") != 0) {
 		gen_met_phi_branch = tree->GetBranch("gen_met_phi");
 		gen_met_phi_branch->SetAddress(&gen_met_phi_);
+	}
+	dataset_branch = 0;
+	if (tree->GetBranch("dataset") != 0) {
+		dataset_branch = tree->GetBranch("dataset");
+		dataset_branch->SetAddress(&dataset_);
 	}
 	lep1_passes_id_branch = 0;
 	if (tree->GetBranch("lep1_passes_id") != 0) {
@@ -2378,6 +2386,7 @@ void GetEntry(unsigned int idx)
 		kfactor_isLoaded = false;
 		gen_met_isLoaded = false;
 		gen_met_phi_isLoaded = false;
+		dataset_isLoaded = false;
 		lep1_p4_isLoaded = false;
 		lep1_passes_id_isLoaded = false;
 		lep1_passes_iso_isLoaded = false;
@@ -2675,6 +2684,7 @@ void LoadAllBranches()
 	if (kfactor_branch != 0) kfactor();
 	if (gen_met_branch != 0) gen_met();
 	if (gen_met_phi_branch != 0) gen_met_phi();
+	if (dataset_branch != 0) dataset();
 	if (lep1_p4_branch != 0) lep1_p4();
 	if (lep1_passes_id_branch != 0) lep1_passes_id();
 	if (lep1_passes_iso_branch != 0) lep1_passes_iso();
@@ -3161,6 +3171,19 @@ void LoadAllBranches()
 		}
 		return gen_met_phi_;
 	}
+	TString &dataset()
+	{
+		if (not dataset_isLoaded) {
+			if (dataset_branch != 0) {
+				dataset_branch->GetEntry(index);
+			} else { 
+				printf("branch dataset_branch does not exist!\n");
+				exit(1);
+			}
+			dataset_isLoaded = true;
+		}
+		return dataset_;
+	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4()
 	{
 		if (not lep1_p4_isLoaded) {
@@ -3226,7 +3249,7 @@ void LoadAllBranches()
 		}
 		return lep1_is_fo_;
 	}
-	bool &	lep1_is_fromw()
+	int &lep1_is_fromw()
 	{
 		if (not lep1_is_fromw_isLoaded) {
 			if (lep1_is_fromw_branch != 0) {
@@ -4292,7 +4315,7 @@ void LoadAllBranches()
 		}
 		return lep2_is_fo_;
 	}
-	bool &	lep2_is_fromw()
+	int &lep2_is_fromw()
 	{
 		if (not lep2_is_fromw_isLoaded) {
 			if (lep2_is_fromw_branch != 0) {
@@ -6793,12 +6816,13 @@ namespace ssb {
 	float &kfactor();
 	float &gen_met();
 	float &gen_met_phi();
+	TString &dataset();
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
 	bool &lep1_passes_id();
 	bool &lep1_passes_iso();
 	bool &lep1_is_num();
 	bool &lep1_is_fo();
-	bool &lep1_is_fromw();
+	int &lep1_is_fromw();
 	int &lep1_charge();
 	int &lep1_pdgid();
 	int &lep1_type();
@@ -6880,7 +6904,7 @@ namespace ssb {
 	bool &lep2_passes_iso();
 	bool &lep2_is_num();
 	bool &lep2_is_fo();
-	bool &lep2_is_fromw();
+	int &lep2_is_fromw();
 	int &lep2_charge();
 	int &lep2_pdgid();
 	int &lep2_type();

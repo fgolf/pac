@@ -19,6 +19,19 @@ namespace at
         return DileptonHypType::ALL;
     }
 
+    DileptonHypType::value_type PdgidToHypType (int id1, int id2)
+    {
+        id1 = abs(id1);
+        id2 = abs(id2);
+
+        if      (id1 == 13 && id2 == 13) {return DileptonHypType::MUMU;}
+        else if (id1 == 13 && id2 == 11) {return DileptonHypType::EMU; }
+        else if (id1 == 11 && id2 == 13) {return DileptonHypType::EMU; }
+        else if (id1 == 11 && id2 == 11) {return DileptonHypType::EE;  }
+        else                             {return DileptonHypType::ALL; }
+    }
+
+
     std::string GetDileptonHypTypeName(const DileptonHypType::value_type& hyp_type)
     {
         switch (hyp_type) 

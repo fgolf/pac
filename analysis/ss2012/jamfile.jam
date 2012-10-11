@@ -87,27 +87,6 @@ exe ss2012_outreach
   : # usage-requirements
   ;
 
-#exe ss2012_gen
-#  : # sources
-#    ./source/ss2012_gen.cc
-#    ./source/GenLooper.cc
-#    # dependent packages
-#    /ROOT
-#    ss2012_tools/<link>static
-#    /MiniFWLite//libMiniFWLite/<link>shared
-#    /AnalysisTools//AnalysisTools/<link>static
-#    /RootTools//RootTools/<link>static
-#    /FGTools//FGTools/<link>static
-#    /boost//program_options/<link>static
-#    /SimpleTable//SimpleTable/<link>static
-#  : # requirements
-#    <define>__NON_ROOT_BUILD__
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#  ;
-
 exe ss2012_plots
   : # sources
     ./source/ss2012_plots.cc
@@ -115,6 +94,27 @@ exe ss2012_plots
     # dependent packages
     /ROOT
     ss2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+		<define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_outreach_closure
+  : # sources
+    ./source/ss2012_outreach_closure.cc
+    ./source/OutreachClosure.cc
+    ./source/OutreachBaby.cc
+    ./source/OutreachBabyWrapper.cc
+    # dependent packages
+    /ROOT
     /MiniFWLite//libMiniFWLite/<link>shared
     /AnalysisTools//AnalysisTools/<link>static
     /RootTools//RootTools/<link>static
@@ -161,23 +161,6 @@ exe ss2012_merge_babies
   : # usage-requirements
   ;
 
-#lib fake_rate_baby
-#  : # sources
-#    ./source/FakeRateBaby.cc
-#    ./source/FakeRateBabyWrapper.cc
-#    # dependent packages
-#    /ROOT
-#    /RootTools//RootTools
-#    /AnalysisTools//AnalysisTools
-#  : # requirements
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#    <include>./include
-#    <include>./source
-#  ;
-
 exe ss2012_create_fakerate
   : # sources
     ./source/ss2012_create_fakerate.cc
@@ -216,75 +199,13 @@ exe ss2012_quick_check
   : # usage-requirements
   ;
 
-## FG's background tools
-#lib ss2012_bkgd_tools
-#  : # sources
-#		./FGBkgd/doAllBkgdPlots.cc
-#		./FGBkgd/makeBkgdEstimatePlots.cc
-#		./FGBkgd/printYieldsTable.cc
-#		./FGBkgd/printEventList.cc
-#		./FGBkgd/FakeRatePrediction.cc
-#		./FGBkgd/ChargeFlipPrediction.cc
-#		./FGBkgd/getTotalBackgroundPrediction.cc
-#		./FGBkgd/makeBkgdEstimatePlots.cc
-#		./FGBkgd/doAllBkgdPlots.cc
-#		./FGBkgd/printFRtable.cc
-#    ssb2012
-#	 	[ rootcint Dict
-#	 	  : # requirements
-#	 	    <include>./FGBkgd
-#	 	    <include>$(PAC)/packages/cms2/05.03.09/header
-#	 	    <include>$(PAC)/packages/AnalysisTools/include
-#				#<header>SignalRegion.h
-#				<header>printYieldsTable.h
-#				<header>printEventList.h
-#				<header>FakeRatePrediction.h
-#			  <header>ChargeFlipPrediction.h
-#				<header>EventType.h
-#				<header>Samples.h
-#	 	    #<header>DileptonHypType.h
-#				<header>doAllBkgdPlots.h
-#		    <header>printFRtable.h
-#				<header>makeBkgdEstimatePlots.h
-#				<header>getTotalBackgroundPrediction.h
-#	 	    <linkdef>libs/LinkDef.h
-#	 	]
-#    # dependent packages
-#    /ROOT
-#    /MiniFWLite//libMiniFWLite
-#		/FGTools//FGTools
-#    /AnalysisTools//AnalysisTools
-#    /RootTools//RootTools
-#    /boost//filesystem
-#  : # requirements
-#    <include>./FGBkgd
-#  : # default-build
-#  : # usage-requirements
-#  ;
-#
-#exe test_bkgd
-#  : # sources
-#    ./FGBkgd/test_bkgd.cc
-#    # dependent packages
-#    ss2012_bkgd_tools/<link>static
-#    /MiniFWLite//libMiniFWLite/<link>shared
-#    /ROOT
-#  : # requirements
-#    <include>./FGBkgd
-#  : # default-build
-#  : # usage-requirements
-#  ;
-
-
 # install libs/exes
 default-install ss2012_merge_babies ;
 default-install ss2012_analysis ;
 default-install ss2012_skim ;
 default-install ss2012_plots ;
 default-install ss2012_outreach ;
-#default-install ss2012_gen ;
+default-install ss2012_outreach_closure ;
 default-install ss2012_tools/<link>shared ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
-#default-install ss2012_bkgd_tools ;
-#default-install test_bkgd ;

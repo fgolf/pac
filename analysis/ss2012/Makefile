@@ -12,6 +12,7 @@ all:
 	$(MAKE) -f build/ss2012_plots.mk
 	$(MAKE) -f build/ss2012_quick_check.mk
 	$(MAKE) -f build/ss2012_outreach.mk
+	$(MAKE) -f build/ss2012_outreach_closure.mk
 
 clean:
 	$(MAKE) -f build/ss2012_tools.mk clean
@@ -22,5 +23,6 @@ clean:
 	$(MAKE) -f build/ss2012_merge_babies.mk clean
 	$(MAKE) -f build/ss2012_quick_check.mk clean
 	$(MAKE) -f build/ss2012_outreach.mk clean
+	$(MAKE) -f build/ss2012_outreach_closure.mk clean
 
 .PHONY: all clean
