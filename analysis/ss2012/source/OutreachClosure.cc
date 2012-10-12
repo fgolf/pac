@@ -257,19 +257,28 @@ void OutreachClosure::EndJob()
     float nbtags_pred  = rt::Integral(hc["h_nbtags_pred" ]);
     float nbtags_ratio = nbtags_obs/nbtags_pred;
 
-    //float pt1_obs   = rt::Integral(hc["h_pt1_obs"  ]);
-    //float pt1_pred  = rt::Integral(hc["h_pt1_pred" ]);
-    //float pt1_ratio = pt1_obs/pt1_pred;
-    //float pt2_obs   = rt::Integral(hc["h_pt2_obs"  ]);
-    //float pt2_pred  = rt::Integral(hc["h_pt2_pred" ]);
-    //float pt2_ratio = pt2_obs/pt2_pred;
+    float pt1_obs   = rt::Integral(hc["h_pt1_obs"  ]);
+    float pt1_pred  = rt::Integral(hc["h_pt1_pred" ]);
+    float pt1_ratio = pt1_obs/pt1_pred;
+    float pt2_obs   = rt::Integral(hc["h_pt2_obs"  ]);
+    float pt2_pred  = rt::Integral(hc["h_pt2_pred" ]);
+    float pt2_ratio = pt2_obs/pt2_pred;
     float pt_obs   = rt::Integral(hc["h_pt_obs"  ]);
     float pt_pred  = rt::Integral(hc["h_pt_pred" ]);
     float pt_ratio = pt_obs/pt_pred;
+    //float pt_obs   = pt1_obs + pt2_obs; 
+    //float pt_pred  = pt1_pred + pt2_pred; 
+    //float pt_ratio = pt_obs/pt_pred;
 
     float total_obs   = rt::Integral(hc["h_total_obs" ]);
     float total_pred  = rt::Integral(hc["h_total_pred"]);
     float total_ratio = total_obs/total_pred;
+
+    float total_obs2   = rt::Integral(hc["h_total_obs2" ]);
+    float total_pred2  = rt::Integral(hc["h_total_pred2"]);
+    float total_ratio2 = total_obs2/total_pred2;
+
+    float product = met50_ratio * ht200_ratio * nbtags_ratio * pt_ratio;
 
     // print the output
     CTable t_closure;
@@ -282,8 +291,12 @@ void OutreachClosure::EndJob()
                          ("met50"  , met50_obs , met50_pred ,  met50_ratio)
                          ("met120" , met120_obs, met120_pred, met120_ratio)
                          ("nbtags" , nbtags_obs, nbtags_pred, nbtags_ratio)
+                         ("l1"     , pt1_obs    , pt1_pred    , pt1_ratio    )
+                         ("l2"     , pt2_obs    , pt2_pred    , pt2_ratio    )
                          ("leptons", pt_obs    , pt_pred    , pt_ratio    )
-                         ("total"  , total_obs , total_pred , total_ratio );
+                         ("total"  , total_obs , total_pred , total_ratio )
+                         ("product", "NA"      , "NA"       , product     )
+                         ("total"  , total_obs2 , total_pred2 , total_ratio2);
     t_closure.print();
     cout << endl;
     t_closure.printTex();
@@ -348,6 +361,9 @@ void OutreachClosure::BookHists()
         hc.Add(new TH1F("h_total_obs" , "h_total_obs" , 3, -0.5, 2.5));
         hc.Add(new TH1F("h_total_pred", "h_total_pred", 3, -0.5, 2.5));
 
+        hc.Add(new TH1F("h_total_obs2" , "h_total_obs2" , 3, -0.5, 2.5));
+        hc.Add(new TH1F("h_total_pred2", "h_total_pred2", 3, -0.5, 2.5));
+
         // sbottomtop (m_chi vs m_sb)
         hc.Add(new TH2F("h_sparm_obs_v1" , "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{b}_{1}) GeV;m(#tilde{#chi}^{#pm}_{1}) GeV", 26, 245, 505, 12, 130, 370));
         hc.Add(new TH2F("h_sparm_pred_v1", "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{b}_{1}) GeV;m(#tilde{#chi}^{#pm}_{1}) GeV", 26, 245, 505, 12, 130, 370));
@@ -391,12 +407,27 @@ int OutreachClosure::operator()(long event)
             return 0;
         }
 
+        // weights
+        int   l1_id = lep1_gen_pdgid();
+        int   l2_id = lep1_gen_pdgid();
+        float l1_pt = lep1_gen_p4().pt();
+        float l2_pt = lep2_gen_p4().pt();
+        
+        float ht200_weight  = GetHTEfficiencyWeight(gen_ht(), h_ht200.get()); 
+        float ht320_weight  = GetHTEfficiencyWeight(gen_ht(), h_ht320.get()); 
+        float met30_weight  = GetMETEfficiencyWeight(gen_met(), h_genmet30.get()); 
+        float met50_weight  = GetMETEfficiencyWeight(gen_met(), h_genmet50.get()); 
+        float met120_weight = GetMETEfficiencyWeight(gen_met(), h_genmet120.get()); 
+        float btag_weight   = GetBtagEfficiencyWeight(gen_vbjets_p4(), h_btagpt.get()); 
+        float l1_pt_weight  = abs(l1_id)==11 ? GetPtEfficiencyWeight(l1_pt, h_el_pt.get()) : GetPtEfficiencyWeight(l1_pt, h_mu_pt.get()); 
+        float l2_pt_weight  = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_pt.get()) : GetPtEfficiencyWeight(l2_pt, h_mu_pt.get()); 
+        float weight        = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
+        float weight1       = btag_weight * ht200_weight * met50_weight * l1_pt_weight;
+        float weight2       = btag_weight * ht200_weight * met50_weight * l2_pt_weight;
+
         // ht test
         if (gen_njets()>1 && gen_met()>50.0)
         {
-            float ht200_weight = GetHTEfficiencyWeight(gen_ht(), h_ht200.get()); 
-            float ht320_weight = GetHTEfficiencyWeight(gen_ht(), h_ht320.get()); 
-
             if (reco_ht() > 200) {rt::Fill(hc["h_ht200_obs"], gen_ht(), 1.0);}
             if (reco_ht() > 320) {rt::Fill(hc["h_ht320_obs"], gen_ht(), 1.0);}
             rt::Fill(hc["h_ht200_pred"], gen_ht(), ht200_weight);
@@ -406,10 +437,6 @@ int OutreachClosure::operator()(long event)
         // met test
         if (gen_njets()>1 && gen_ht()>200.0)
         {
-            float met30_weight  = GetMETEfficiencyWeight(gen_met(), h_genmet30.get()); 
-            float met50_weight  = GetMETEfficiencyWeight(gen_met(), h_genmet50.get()); 
-            float met120_weight = GetMETEfficiencyWeight(gen_met(), h_genmet120.get()); 
-
             if (reco_met() > 30 ) {rt::Fill(hc["h_met30_obs" ], gen_met(), 1.0);}
             if (reco_met() > 50 ) {rt::Fill(hc["h_met50_obs" ], gen_met(), 1.0);}
             if (reco_met() > 120) {rt::Fill(hc["h_met120_obs"], gen_met(), 1.0);}
@@ -419,43 +446,49 @@ int OutreachClosure::operator()(long event)
         }
 
         // btag eff test
-        if (gen_njets()>1 && gen_ht()>200.0 && gen_met()>50.0 && gen_nbtags()>=2)
+        //if (gen_njets()>1 && gen_ht()>200.0 && gen_met()>50.0 && gen_nbtags()>=2)
+        //bool passes_reco_nbtags = false;
+        //switch (gen_nbtags())
+        //{
+        //    case 2: 
+        //        passes_reco_nbtags = reco_nbtags()==2 && gen_vbjets_matched().at(0) && gen_vbjets_matched().at(1); 
+        //        break;
+        //    case 3: 
+        //        passes_reco_nbtags = reco_nbtags()==3 && gen_vbjets_matched().at(0) && gen_vbjets_matched().at(1) && gen_vbjets_matched().at(2); 
+        //        break;
+        //    case 4: 
+        //        passes_reco_nbtags = reco_nbtags()==4 && gen_vbjets_matched().at(0) && gen_vbjets_matched().at(1) && gen_vbjets_matched().at(2) && gen_vbjets_matched().at(3); 
+        //        break;
+        //    default: 
+        //        passes_reco_nbtags = false; 
+        //        break;
+        //}
+        if (gen_njets()>=2 && gen_ht()>200.0 && gen_met()>50.0)
         {
-            float btag_weight  = GetBtagEfficiencyWeight(gen_vbjets_p4(), h_btagpt.get()); 
-
-            if (reco_nbtags() >=2 ) 
+            if (reco_nbtags()>=2) 
             {
                 rt::Fill(hc["h_nbtags_obs"], gen_nbtags(), 1.0);
             }
-            rt::Fill(hc["h_nbtags_pred"], gen_nbtags(), btag_weight);
+            if (gen_nbtags() >=2 ) 
+            {
+                rt::Fill(hc["h_nbtags_pred"], gen_nbtags(), btag_weight);
+            }
         }
 
         // lepton eff test
-        if (gen_njets()>1 && gen_ht()>200.0 && gen_met()>50.0)
+        if (gen_njets()>=2 && gen_ht()>200.0 && gen_met()>50.0)
         {
-            float l1_pt = lep1_gen_p4().pt();
-            float l2_pt = lep2_gen_p4().pt();
-
-            float l1_pt_weight = abs(lep1_gen_pdgid())==11 ? GetPtEfficiencyWeight(l1_pt, h_el_pt.get())
-                                                           : GetPtEfficiencyWeight(l1_pt, h_mu_pt.get()); 
-            float l2_pt_weight = abs(lep2_gen_pdgid())==11 ? GetPtEfficiencyWeight(l2_pt, h_el_pt.get())
-                                                           : GetPtEfficiencyWeight(l2_pt, h_mu_pt.get()); 
-
             if (lep1_num()) 
             {
-                rt::Fill(hc["h_pt1_obs"], lep1_gen_p4().pt(), 1.0);
-            //    rt::Fill(hc["h_pt_obs" ], lep1_gen_p4().pt(), 1.0);
+                rt::Fill(hc["h_pt1_obs"], l1_pt, 1.0);
             }
-            rt::Fill(hc["h_pt1_pred"], lep1_gen_p4().pt(), l1_pt_weight);
-            //rt::Fill(hc["h_pt_pred" ], lep1_gen_p4().pt(), l2_pt_weight);
+            rt::Fill(hc["h_pt1_pred"], l1_pt, l1_pt_weight);
 
             if (lep2_num()) 
             {
-                rt::Fill(hc["h_pt2_obs"], lep2_gen_p4().pt(), 1.0);
-            //    rt::Fill(hc["h_pt_obs" ], lep2_gen_p4().pt(), 1.0);
+                rt::Fill(hc["h_pt2_obs"], l2_pt, 1.0);
             }
-            rt::Fill(hc["h_pt2_pred"], lep2_gen_p4().pt(), l2_pt_weight);
-            //rt::Fill(hc["h_pt_pred" ], lep2_gen_p4().pt(), l2_pt_weight);
+            rt::Fill(hc["h_pt2_pred"], l2_pt, l2_pt_weight);
 
             if (lep1_num() && lep2_num()) 
             {
@@ -465,24 +498,37 @@ int OutreachClosure::operator()(long event)
         }
 
         // total
-        if (reco_nbtags()>1 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num() && lep2_num())
+        if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num() && lep2_num())
+        //if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0)
+        //if (reco_ht()>200.0 && reco_met()>50.0 && gen_nbtags()>=2)
+        //if (reco_ht()>200.0 && reco_met()>50.0 && gen_nbtags()>=2 && lep1_num() && lep2_num())
+        //if (reco_ht()>200.0 && reco_met()>50.0 && gen_nbtags()>=2 && lep1_num() && lep2_num())
         {
             rt::Fill(hc["h_total_obs"], 1.0, 1.0);
         }
+        //if (gen_nbtags()>=2)
         {
-            float l1_pt = lep1_gen_p4().pt();
-            float l2_pt = lep2_gen_p4().pt();
-
-            float met50_weight = GetMETEfficiencyWeight(gen_met(), h_genmet50.get()); 
-            float ht200_weight = GetHTEfficiencyWeight(gen_ht(), h_ht200.get()); 
-            float l1_pt_weight = abs(lep1_gen_pdgid())==11 ? GetPtEfficiencyWeight(l1_pt, h_el_pt.get())
-                                                           : GetPtEfficiencyWeight(l1_pt, h_mu_pt.get()); 
-            float l2_pt_weight = abs(lep2_gen_pdgid())==11 ? GetPtEfficiencyWeight(l2_pt, h_el_pt.get())
-                                                           : GetPtEfficiencyWeight(l2_pt, h_mu_pt.get()); 
-            float btag_weight  = GetBtagEfficiencyWeight(gen_vbjets_p4(), h_btagpt.get()); 
-            float weight       = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
-
+            //cout << Form("btag_weight %f, htw %f, metw %f, l1w %f, l2w %f", btag_weight, ht200_weight, met50_weight, l1_pt_weight, l2_pt_weight) << endl;
             rt::Fill(hc["h_total_pred"], 1.0, weight);
+            //rt::Fill(hc["h_total_pred"], 1.0, btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight);
+            //rt::Fill(hc["h_total_pred"], 1.0, btag_weight * ht200_weight * met50_weight);
+            //rt::Fill(hc["h_total_pred"], 1.0, ht200_weight * met50_weight);
+            //rt::Fill(hc["h_total_pred"], 1.0, ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight);
+        }
+
+        // total v2
+        if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num())
+        {
+            rt::Fill(hc["h_total_obs2"], 1.0, 1.0);
+        }
+        if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0 && lep2_num())
+        {
+            rt::Fill(hc["h_total_obs2"], 1.0, 1.0);
+        }
+        if (gen_nbtags()>=2)
+        {
+            rt::Fill(hc["h_total_pred2"], l1_pt, weight1);
+            rt::Fill(hc["h_total_pred2"], l2_pt, weight2);
         }
 
         // sparms projection 
@@ -502,7 +548,7 @@ int OutreachClosure::operator()(long event)
         }
         else if (m_sample == at::Sample::glusbottom)  // m_chi = 150, m_lsp = 50
         {
-            if (not rt::is_equal(sparm2(), 150.0f) && rt::is_equal(sparm3(), 50.0f))
+            if (not (rt::is_equal(sparm2(), 150.0f) && rt::is_equal(sparm3(), 50.0f)))
             {
                 return 0;
             }
@@ -515,18 +561,6 @@ int OutreachClosure::operator()(long event)
             rt::Fill2D(hc["h_sparm_obs_v3"], sparm0(), sparm1(), 1.0);
         }
         {
-            float l1_pt = lep1_gen_p4().pt();
-            float l2_pt = lep2_gen_p4().pt();
-
-            float met50_weight = GetMETEfficiencyWeight(gen_met(), h_genmet50.get()); 
-            float ht200_weight = GetHTEfficiencyWeight(gen_ht(), h_ht200.get()); 
-            float l1_pt_weight = abs(lep1_gen_pdgid())==11 ? GetPtEfficiencyWeight(l1_pt, h_el_pt.get())
-                                                           : GetPtEfficiencyWeight(l1_pt, h_mu_pt.get()); 
-            float l2_pt_weight = abs(lep2_gen_pdgid())==11 ? GetPtEfficiencyWeight(l2_pt, h_el_pt.get())
-                                                           : GetPtEfficiencyWeight(l2_pt, h_mu_pt.get()); 
-            float btag_weight  = GetBtagEfficiencyWeight(gen_vbjets_p4(), h_btagpt.get()); 
-            float weight       = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
-
             rt::Fill2D(hc["h_sparm_pred_v1"], sparm0(), sparm1(), weight);
             rt::Fill2D(hc["h_sparm_pred_v2"], sparm0(), sparm1(), weight);
             rt::Fill2D(hc["h_sparm_pred_v3"], sparm0(), sparm1(), weight);
