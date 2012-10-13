@@ -107,8 +107,9 @@ try
 
     // merge the tree
     TChain* chain = rt::CreateTChainFromCommaSeperatedList(input_file, "tree");
+    //chain->SetDirectory(0);
 
-    //// run the skim and do not cut events except for duplicates and bad runs
+    // run the skim and do not cut events except for duplicates and bad runs
     rt::mkdir(rt::dirname(output_file), /*force=*/true);
     int number_of_events = -1;
     
@@ -125,7 +126,7 @@ try
     );
 
     // cleanup
-    delete chain;
+    //delete chain;
     
     // done 
     return 0;

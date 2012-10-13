@@ -109,7 +109,6 @@ define include_ss2012_tools
 	LDFLAGS       += -lss2012_tools
 endef
 
-
 ## include FakeRateTools
 #define include_fake_rate_tools
 #	CPPFLAGS      += $(addprefix -I,$(project_dir)/programs/analysis/FakeRateStudy/include)

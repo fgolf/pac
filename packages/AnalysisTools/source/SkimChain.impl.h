@@ -75,7 +75,7 @@ namespace at
 
         while ((current_file = (TFile*)file_iter.Next()))
         {
-            TFile *file = new TFile(current_file->GetTitle());
+            TFile* file = TFile::Open(current_file->GetTitle());
             TTree *tree = dynamic_cast<TTree*>(file->Get(tree_name.c_str()));
             if (not tree)
             {
@@ -84,6 +84,7 @@ namespace at
             TTreeCache::SetLearnEntries(10);
             tree->SetCacheSize(128*1024*1024);
             tree->SetDirectory(file);
+
 
             // init
             Init(ntuple_class, new_tree);
@@ -103,7 +104,6 @@ namespace at
                 tree->LoadTree(event);
                 GetEntry(ntuple_class, event);
                 ++num_events_total;
-
 
                 unsigned int run = Run(ntuple_class);
                 unsigned int ls  = LumiBlock(ntuple_class);
@@ -155,7 +155,7 @@ namespace at
                 }
 
                 // fill the new tree
-                file->cd();
+                //file->cd();
                 LoadAllBranches(ntuple_class);
                 output_root_file->cd();
                 new_tree->Fill();
@@ -164,15 +164,15 @@ namespace at
 
             // Clean Up
             //delete tree;
-            file->Close();
-            delete file;
+            //file->Close();
+            //delete file;
         }
 
         // wrap up
         output_root_file->cd();
         new_tree->Write();
-        output_root_file->Close();
-        delete output_root_file;
+        //output_root_file->Close();
+        //delete output_root_file;
 
         // print warning if the totals don't line up
         if (num_events_chain != num_events_total) 
