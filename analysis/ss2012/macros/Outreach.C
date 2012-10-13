@@ -291,6 +291,9 @@ void FitHtTurnOnCurve(const std::string& sample_name)
 	file->Close();
 	delete file;
 
+    delete legend;
+    delete c1;
+
     return;
 }
 
@@ -431,6 +434,7 @@ void FitMetTurnOnCurve(const std::string& sample_name)
 	file->Write("", TObject::kOverwrite);
 	file->Close();
 	delete file;
+    delete c1;
 
     return;
 }
@@ -529,6 +533,7 @@ void FitBtagEfficiencyCurve(const std::string& sample_name)
 	file->Write("", TObject::kOverwrite);
 	file->Close();
     delete file;
+    delete c1;
 
     return;
 }
@@ -651,6 +656,8 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
 	file->Write("", TObject::kOverwrite);
 	file->Close();
     delete file;
+    delete legend;
+    delete c1;
 }
 
 

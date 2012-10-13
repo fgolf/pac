@@ -413,6 +413,12 @@ int PlotLooper::operator()(long event)
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
+        // ichep uppper run
+        //if (run() > 195947)
+        //{
+        //    return 0;
+        //}
+
         // only keep good lumi (data only) -- is_good_lumi branch not set
         if (m_check_good_lumi && is_real_data() && not is_good_lumi())
         {

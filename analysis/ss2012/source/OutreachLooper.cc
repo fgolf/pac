@@ -139,9 +139,6 @@ int OutreachLooper::Analyze(long event)
         // basic selection
         // --------------------------------------------------------------------------------------------------------- //
 
-        // fill common
-        m_evt.event_info.FillCommon(m_sample);
-
         // vertex re-weighting
         m_evt.nvtxs = numberOfGoodVertices(); 
         m_evt.vtxw  = 1.0; 
@@ -156,15 +153,6 @@ int OutreachLooper::Analyze(long event)
         int  idx2 = from_tau2 ? best_gen_hyp.second.didx_ : best_gen_hyp.second.idx_;
         GenParticleStruct gen1 = best_gen_hyp.first;
         GenParticleStruct gen2 = best_gen_hyp.second;
-
-        // put in the order of increasing pT
-        if (genps_p4().at(idx1).pt() < genps_p4().at(idx2).pt())
-        {
-            std::swap(id1 ,  id2);
-            std::swap(idx1, idx2);
-            std::swap(from_tau1, from_tau2);
-            std::swap(gen1, gen2);
-        }
 
         // get gen LorenzVectors
         LorentzVector p41;
@@ -187,6 +175,15 @@ int OutreachLooper::Analyze(long event)
             p42 = genps_p4().at(idx2);
         }
 
+        //// put in the order of increasing pT
+        //if (genps_p4().at(idx1).pt() < genps_p4().at(idx2).pt())
+        //{
+        //    std::swap(id1 ,  id2);
+        //    std::swap(idx1, idx2);
+        //    std::swap(from_tau1, from_tau2);
+        //    std::swap(gen1, gen2);
+        //}
+
         // gen lep type
         m_evt.gen_dilep_type = getHypType(id1, id2);
 
@@ -196,14 +193,6 @@ int OutreachLooper::Analyze(long event)
 
         // HT
         m_evt.gen_ht = getGenHT(40, 2.4);
-
-        // Now take care of gen b-jets 
-        m_evt.gen_vbjets_p4 = getGenBjets(40.0, 2.4);
-        m_evt.gen_nbtags    = m_evt.gen_vbjets_p4.size();
-
-        // Now take care of gen jets
-        m_evt.gen_vjets_p4 = getGenJets(40.0, 2.4);
-        m_evt.gen_njets    = m_evt.gen_vbjets_p4.size(); 
 
         // leptons
         // --------------------------------------------------------------------------------------------------------- //
@@ -225,7 +214,9 @@ int OutreachLooper::Analyze(long event)
         std::vector<unsigned int> indexJets = getRecoJets(gen1, gen2);
         m_evt.reco_ht = getHT(indexJets);
 
-        // Now take care of b-tagging
+        // Now take care of b-jets 
+        m_evt.gen_vbjets_p4 = getGenBjets(40.0, 2.4);
+        m_evt.gen_nbtags    = m_evt.gen_vbjets_p4.size();
         for (size_t bidx = 0; bidx < m_evt.gen_vbjets_p4.size(); bidx++) 
         {
             int index = getRecoJet(m_evt.gen_vbjets_p4.at(bidx));
@@ -248,6 +239,9 @@ int OutreachLooper::Analyze(long event)
         m_evt.reco_nbtags = m_evt.reco_vbjets_p4.size();
 
         // Now take care of jets
+        m_evt.gen_vjets_p4 = getGenJets(40.0, 2.4);
+        m_evt.gen_njets    = m_evt.gen_vbjets_p4.size(); 
+
         for (size_t jidx = 0; jidx < m_evt.gen_vjets_p4.size(); jidx++) 
         {
             int index = getRecoJet(m_evt.gen_vjets_p4.at(jidx));

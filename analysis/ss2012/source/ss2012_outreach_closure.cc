@@ -42,12 +42,12 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"          , "print this menu")
-        ("nev"           , po::value<long>(&number_of_events)           , "number of events to run on (-1 == all)"                                            )
-        ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                                                 )
-        ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                           )
-        ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
-        ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
-        ("fit_file"      , po::value<std::string>(&fit_file_name)       , "file for outreach fitted eff histograms ROOT file"                                 )
+        ("nev"           , po::value<long>(&number_of_events)           , "number of events to run on (-1 == all)"              )
+        ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                   )
+        ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"             )
+        ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)" )
+        ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in Samples.cc)" )
+        ("fit_file"      , po::value<std::string>(&fit_file_name)       , "file for outreach fitted eff histograms ROOT file"   )
         ;
 
     po::variables_map vm;
@@ -78,6 +78,12 @@ try
 		cout << "fit_file           :\t" << fit_file_name       << endl;
 	}
 
+    if (fit_file_name.empty())
+    {
+        cout << "[ss2012_outreach_closure] file " << fit_file_name << "is not valid.  Please supply a valid fit file" << endl;
+        return 1;
+    }
+
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
 
@@ -87,6 +93,7 @@ try
    
 	if (input_file.empty())
 	{
+        cout << "using input file:" <<  Form("babies_outreach/%s.root", sample_name.c_str()) << endl;
         chain.Add(Form("babies_outreach/%s.root", sample_name.c_str()));
 	}
 	else

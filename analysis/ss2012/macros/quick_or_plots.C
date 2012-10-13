@@ -11,8 +11,8 @@
     rt::TH1Container hc2("plots/outreach/closure/glustop.root");
     hc2["h_sparm_ratio_v2"]->SetStats(false);
     hc2["h_sparm_ratio_v2"]->Draw("colz");
-    hc2["h_sparm_ratio_v2"]->SetMinimum(0.8);
-    hc2["h_sparm_ratio_v2"]->SetMaximum(1.2);
+    //hc2["h_sparm_ratio_v2"]->SetMinimum(0.8);
+    //hc2["h_sparm_ratio_v2"]->SetMaximum(1.2);
     rt::mkdir("plots/outreach/preapproval/");
     c1->Print("plots/outreach/preapproval/h_outreach_ratio_glustop.pdf");
     c1->Print("plots/outreach/preapproval/h_outreach_ratio_glustop.png");

@@ -352,7 +352,7 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     vector<Yield> yields_bkgd;
     yields_bkgd.push_back(GetSSYield("ttjets"  , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("t_schan" , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("tw"      , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("t_tw"    , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("dy"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wjets"   , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ww"      , signal_region_num, output_path));
@@ -477,7 +477,7 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
 
             // add the line between sections
             if (y.title == "ttjets"  ) {latex.append("\\hline\n"        );} 
-            if (y.title == "tw"      ) {latex.append("\\hline\n"        );} 
+            if (y.title == "t_tw"    ) {latex.append("\\hline\n"        );} 
             if (y.title == "ww"      ) {latex.append("\\hline\n"        );} 
             if (y.title == "zz"      ) {latex.append("\\hline\n"        );} 
             if (y.title == "zzz"     ) {latex.append("\\hline\n"        );} 
@@ -865,7 +865,7 @@ void CreateProjPlots(const std::string output_path = "", const std::string& suff
             if(yield_pred.ll > 0) h_pred_njets->SetBinError(njet_bin, yield_pred.tll());
             if(yield_mc.ll   > 0) h_mc_njets->SetBinError  (njet_bin, yield_mc.tll()  );
         }
-        else if (bin >= 16 && bin <= 22)  // bin 16 - 22 
+        else if (bin >= 16 && bin <= 21)  // bin 16 - 22 
         {
             int njet_bin = bin-15;
             if(yield_data.ll > 0) h_data_nbtags->SetBinContent(njet_bin, yield_data.ll);
@@ -880,9 +880,9 @@ void CreateProjPlots(const std::string output_path = "", const std::string& suff
             if(yield_pred.ll > 0) h_pred_nbtags->SetBinError(njet_bin, yield_pred.tll());
             if(yield_mc.ll   > 0) h_mc_nbtags->SetBinError  (njet_bin, yield_mc.tll()  );
         }
-        else if (bin >= 23 && bin <= 32)  // bin 32 - 41 
+        else if (bin >= 22 && bin <= 31)  // bin 32 - 41 
         {
-            int pt1_bin = bin-22;
+            int pt1_bin = bin-21;
             if(yield_data.ll > 0) h_data_pt1->SetBinContent(pt1_bin, yield_data.ll);
             if(yield_fake.ll > 0) h_fake_pt1->SetBinContent(pt1_bin, yield_fake.ll);
             if(yield_flip.ll > 0) h_flip_pt1->SetBinContent(pt1_bin, yield_flip.ll);
@@ -895,7 +895,7 @@ void CreateProjPlots(const std::string output_path = "", const std::string& suff
             if(yield_pred.ll > 0) h_pred_pt1->SetBinError(pt1_bin, yield_pred.tll());
             if(yield_mc.ll   > 0) h_mc_pt1->SetBinError  (pt1_bin, yield_mc.tll()  );
         }
-        else if (bin >= 33 && bin <= 42)  // bin 32 - 41 
+        else if (bin >= 32 && bin <= 41)  // bin 32 - 41 
         {
             int pt2_bin = bin-31;
             if(yield_data.ll > 0) h_data_pt2->SetBinContent(pt2_bin, yield_data.ll);

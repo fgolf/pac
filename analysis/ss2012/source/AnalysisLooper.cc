@@ -342,18 +342,18 @@ SSAnalysisLooper::SSAnalysisLooper
     bool sync_print,
     bool verbose,
     const std::string apply_jec_otf
-    )
+)
     : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
-                , m_lumi(luminosity)
-                , m_njets(njets)
-                , m_jetMetScale(jetMetScale)
-                , m_is_fast_sim(is_fast_sim)
-                , m_sparms(sparms)
-                , m_sync_print(sync_print)
-                , m_verbose(verbose)
-                , jet_corrector(NULL)
-                , met_corrector(NULL)
+    , m_lumi(luminosity)
+    , m_njets(njets)
+    , m_jetMetScale(jetMetScale)
+    , m_is_fast_sim(is_fast_sim)
+    , m_sparms(sparms)
+    , m_sync_print(sync_print)
+    , m_verbose(verbose)
+    , jet_corrector(NULL)
+    , met_corrector(NULL)
 {
     // set vertex weight file
     if (!vtxreweight_file_name.empty())
@@ -386,7 +386,9 @@ SSAnalysisLooper::SSAnalysisLooper
             m_list_of_jec_filenames.push_back(Form("%s/%s_L2Relative_AK5PF.txt", path.c_str(), temp_jec_string.c_str()));
             m_list_of_jec_filenames.push_back(Form("%s/%s_L3Absolute_AK5PF.txt", path.c_str(), temp_jec_string.c_str()));
             if (m_sample <= at::Sample::datame)
+            {
                 m_list_of_jec_filenames.push_back(Form("%s/%s_L2L3Residual_AK5PF.txt", path.c_str(), temp_jec_string.c_str()));
+            }
         }
         else
         {
@@ -395,16 +397,22 @@ SSAnalysisLooper::SSAnalysisLooper
             m_list_of_jec_filenames.push_back(Form("%s/%s_L2Relative_AK5PF.txt", path.c_str(), temp_jec_string.c_str()));
             m_list_of_jec_filenames.push_back(Form("%s/%s_L3Absolute_AK5PF.txt", path.c_str(), temp_jec_string.c_str()));
             if (m_sample <= at::Sample::datame)
+            {
                 m_list_of_jec_filenames.push_back(Form("%s/%s_L2L3Residual_AK5PF.txt", path.c_str(), temp_jec_string.c_str()));
+            }
         }
 
         printf("[SSAnalysisLooper] making jet and MET correctors with: \n");
         for (unsigned int idx = 0; idx < m_list_of_jec_filenames.size(); idx++)
         {
             if (rt::exists(m_list_of_jec_filenames.at(idx)))
+            {
                 printf("\t%s\n", m_list_of_jec_filenames.at(idx).c_str());
+            }
             else
+            {
                 printf("\tFILE %s doesn't exist.\n", m_list_of_jec_filenames.at(idx).c_str());
+            }
         }
         
         jet_corrector = makeJetCorrector(m_list_of_jec_filenames);
@@ -837,7 +845,7 @@ int SSAnalysisLooper::Analyze(long event)
         // trigger info
         m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
         m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-            passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                        passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
         m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
 
         // event wieghts 

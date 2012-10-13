@@ -47,7 +47,7 @@ make_hists dy       "$options"
 make_hists wjets    "$options"
 make_hists ttjets   "$options"
 make_hists t_schan  "$options"
-make_hists tw       "$options"
+make_hists t_tw     "$options"
 
 # if exclusive SR, add 10 so $signal_region
 if [ $exclusive -eq 1 ]; then

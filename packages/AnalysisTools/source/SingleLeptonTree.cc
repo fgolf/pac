@@ -114,7 +114,7 @@ void SingleLeptonTree::FillCommon (int id, int idx)
         trkiso04  = cms2.els_tkIso04().at(idx);
         ecaliso04 = cms2.els_ecalIso04().at(idx);
         hcaliso04 = cms2.els_hcalIso04().at(idx);
-        detiso04  = trkiso04 + hcaliso04;
+        detiso04  = trkiso04 + hcaliso04 + ecaliso04;
         if (fabs(sc_p4.eta()) >= 1.479) detiso += cms2.els_ecalIso04().at(idx);
         else detiso += std::max(cms2.els_ecalIso04().at(idx) - 1., 0.0);
         detiso /= p4.pt();
