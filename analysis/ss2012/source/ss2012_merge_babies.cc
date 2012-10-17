@@ -31,6 +31,7 @@ try
     std::string input_file    = "";
     std::string output_file   = "merged.root";
     std::string run_list      = "";
+    int number_of_events      = -1;
     bool verbose              = false;
     bool do_duplicate_removal = true;
 	unsigned int njets        = 0;
@@ -42,6 +43,7 @@ try
         ("output"   , po::value<std::string>(&output_file)  , "name of output root file (default is merged.root)"    )
         ("input"    , po::value<std::string>(&input_file)   , "name of input root(s) file (can be cvs)"              )
         ("run_list" , po::value<std::string>(&run_list)     , "good run list (default is empty)"                     )
+        ("nev"      , po::value<int>(&number_of_events)     , "number of events"                                     )
         ("njets"    , po::value<unsigned int>(&njets)       , "number of jets to cun on while merging (default is 0)")
         ("duplicate", po::value<bool>(&do_duplicate_removal), "remove duplicate events"                              )
         ("verbose"  , po::value<bool>(&verbose)             , "verbosity"                                            )
@@ -111,9 +113,8 @@ try
 
     // run the skim and do not cut events except for duplicates and bad runs
     rt::mkdir(rt::dirname(output_file), /*force=*/true);
-    int number_of_events = -1;
     
-    at::SkimChain
+    at::SkimChain<SSB2012>
     (
         chain,
         output_file,
