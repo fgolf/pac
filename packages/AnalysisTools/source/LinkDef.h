@@ -16,6 +16,7 @@
 
 // typedefs
 #pragma link C++ enum at::Sample::value_type;
+#pragma link C++ enum at::SampleType::value_type;
 #pragma link C++ enum at::NtupleType::value_type;
 #pragma link C++ enum at::DileptonHypType::value_type;
 #pragma link C++ enum at::DileptonChargeType::value_type;
@@ -25,6 +26,7 @@
 // classes or structs
 #pragma link C++ struct at::Sample;
 #pragma link C++ struct at::SampleInfo;
+#pragma link C++ struct at::SampleType;
 #pragma link C++ struct at::DileptonHypType;
 #pragma link C++ struct at::DileptonChargeType;
 

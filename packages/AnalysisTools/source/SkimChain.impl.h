@@ -155,7 +155,7 @@ namespace at
                 }
 
                 // fill the new tree
-                //file->cd();
+                file->cd();
                 LoadAllBranches(ntuple_class);
                 output_root_file->cd();
                 new_tree->Fill();
@@ -163,16 +163,15 @@ namespace at
             } // end event loop
 
             // Clean Up
-            //delete tree;
-            //file->Close();
-            //delete file;
+            file->Close();
+            delete file;
         }
 
         // wrap up
         output_root_file->cd();
         new_tree->Write();
-        //output_root_file->Close();
-        //delete output_root_file;
+        output_root_file->Close();
+        delete output_root_file;
 
         // print warning if the totals don't line up
         if (num_events_chain != num_events_total) 
