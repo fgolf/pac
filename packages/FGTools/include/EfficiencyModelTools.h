@@ -36,6 +36,12 @@ namespace efftools {
     // calculate gen ht
     float getGenHT(float pt_cut, float eta_cut);
 
+    // calculate gen isolation (colored particles only) 
+    float getGenIsolation(const LorentzVector& p4, float parton_pt = 1.0, float dr = 0.4);
+
+	// find the dr of the closest parton (colored particles only);
+	float getClosestParton(const LorentzVector& p4, float parton_pt = 1.0);
+
     // get gen jets
     std::vector<LorentzVector> getGenJets (float pt_cut, float eta_cut);
 

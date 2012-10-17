@@ -75,6 +75,8 @@ public:
     bool lep1_from_tau;
     bool lep1_passes_id;
     bool lep1_passes_iso;
+	float lep1_gen_nearjet_dr;
+	float lep1_gen_iso;
     float lep1_iso;
     bool lep1_num;
 
@@ -84,6 +86,8 @@ public:
     bool lep2_from_tau;
     bool lep2_passes_id;
     bool lep2_passes_iso;
+	float lep2_gen_nearjet_dr;
+	float lep2_gen_iso;
     float lep2_iso;
     bool lep2_num;
 

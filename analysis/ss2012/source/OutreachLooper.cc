@@ -198,14 +198,43 @@ int OutreachLooper::Analyze(long event)
         // --------------------------------------------------------------------------------------------------------- //
 
         // lep1
-        m_evt.lep1_gen_p4    = p41;
-        m_evt.lep1_gen_pdgid = id1;
-        m_evt.lep1_from_tau  = from_tau1;
+        m_evt.lep1_gen_p4         = p41;
+        m_evt.lep1_gen_pdgid      = id1;
+        m_evt.lep1_from_tau       = from_tau1;
+		m_evt.lep1_gen_iso        = getGenIsolation(p41);
+		m_evt.lep1_gen_nearjet_dr = getClosestParton(p41);
 
         // lep2
-        m_evt.lep2_gen_p4    = p42;
-        m_evt.lep2_gen_pdgid = id2;
-        m_evt.lep2_from_tau  = from_tau2;
+        m_evt.lep2_gen_p4     	  = p42;
+        m_evt.lep2_gen_pdgid  	  = id2;
+        m_evt.lep2_from_tau   	  = from_tau2;
+		m_evt.lep2_gen_iso        = getGenIsolation(p42);
+		m_evt.lep2_gen_nearjet_dr = getClosestParton(p42);
+
+        // determine if matched to gen
+        std::pair<LorentzVector, int> reco_lep1 = getRecoLepton(gen1);
+        if (reco_lep1.second > -1 && reco_lep1.first.pt() > 20.0 && abs(reco_lep1.first.eta())<2.4) 
+        {
+            m_evt.lep1_matched    = true; 
+            m_evt.lep1_p4         = reco_lep1.first;
+            m_evt.lep1_num        = samesign::isNumeratorLepton(id1, reco_lep1.second);
+            m_evt.lep1_passes_id  = samesign::isGoodLepton(id1, reco_lep1.second);
+            m_evt.lep1_passes_iso = samesign::isIsolatedLepton(id1, reco_lep1.second);
+            m_evt.lep1_iso        = (abs(id1)==11) ? samesign::electronIsolationPF2012(reco_lep1.second) 
+                                                   : muonIsoValuePF2012_deltaBeta(reco_lep1.second);
+        }
+
+        std::pair<LorentzVector, int> reco_lep2 = getRecoLepton(gen2);
+        if (reco_lep2.second > -1 && reco_lep2.first.pt() > 20.0 && abs(reco_lep2.first.eta())<2.4) 
+        {
+            m_evt.lep2_matched    = true; 
+            m_evt.lep2_p4         = reco_lep2.first;
+            m_evt.lep2_num        = samesign::isNumeratorLepton(id2, reco_lep2.second);
+            m_evt.lep2_passes_id  = samesign::isGoodLepton(id2, reco_lep2.second);
+            m_evt.lep2_passes_iso = samesign::isIsolatedLepton(id2, reco_lep2.second);
+            m_evt.lep2_iso        = (abs(id2)==11) ? samesign::electronIsolationPF2012(reco_lep2.second)
+                                                   : muonIsoValuePF2012_deltaBeta(reco_lep2.second);
+        }
 
         // reco quantities 
         // --------------------------------------------------------------------------------------------------------- //
@@ -226,7 +255,8 @@ int OutreachLooper::Analyze(long event)
                 continue;
             }
 
-            if (cms2.pfjets_combinedSecondaryVertexBJetTag().at(index) > 0.679)
+            if (pfjets_p4().at(index).pt() > 40.0 && fabs(pfjets_p4().at(index).eta()) < 2.4 && 
+				cms2.pfjets_combinedSecondaryVertexBJetTag().at(index) > 0.679)
             {
                 m_evt.reco_vbjets_p4.push_back(pfjets_p4().at(bidx));
                 m_evt.gen_vbjets_matched.push_back(true);
@@ -262,31 +292,6 @@ int OutreachLooper::Analyze(long event)
             }
         }
         m_evt.reco_njets = m_evt.reco_vjets_p4.size();
-
-        // determine if matched to gen
-        std::pair<LorentzVector, int> reco_lep1 = getRecoLepton(gen1);
-        if (reco_lep1.second > -1) 
-        {
-            m_evt.lep1_matched    = true; 
-            m_evt.lep1_p4         = reco_lep1.first;
-            m_evt.lep1_num        = samesign::isNumeratorLepton(id1, reco_lep1.second);
-            m_evt.lep1_passes_id  = samesign::isGoodLepton(id1, reco_lep1.second);
-            m_evt.lep1_passes_iso = samesign::isIsolatedLepton(id1, reco_lep1.second);
-            m_evt.lep1_iso        = (abs(id1)==11) ? samesign::electronIsolationPF2012(reco_lep1.second) 
-                                                   : muonIsoValuePF2012_deltaBeta(reco_lep1.second);
-        }
-
-        std::pair<LorentzVector, int> reco_lep2 = getRecoLepton(gen2);
-        if (reco_lep2.second > -1) 
-        {
-            m_evt.lep2_matched    = true; 
-            m_evt.lep2_p4         = reco_lep2.first;
-            m_evt.lep2_num        = samesign::isNumeratorLepton(id2, reco_lep2.second);
-            m_evt.lep2_passes_id  = samesign::isGoodLepton(id2, reco_lep2.second);
-            m_evt.lep2_passes_iso = samesign::isIsolatedLepton(id2, reco_lep2.second);
-            m_evt.lep2_iso        = (abs(id2)==11) ? samesign::electronIsolationPF2012(reco_lep2.second)
-                                                   : muonIsoValuePF2012_deltaBeta(reco_lep2.second);
-        }
 
         // by constuction
         m_evt.dilep_type = m_evt.gen_dilep_type; 
@@ -352,43 +357,47 @@ void OutreachTree::Reset()
 {
     event_info.Reset();
 
-    gen_dilep_type  = at::DileptonHypType::static_size;
-    gen_ht          = -99999.0;
-    gen_nbtags      = -999999;
-    gen_njets       = -999999;
-    gen_is_ss       = false;
-    gen_is_os       = false;
-    dilep_type      = at::DileptonHypType::static_size;
-    reco_ht         = -999999.0;
-    reco_met        = -999999.0;
-    reco_nbtags     = -999999;
-    reco_njets      = -999999;
-    reco_is_ss      = false;
-    reco_is_os      = false;
-    sf_dileptrig    = 1.0;
-    sf_lepeff       = 1.0;
-    sf_nbtag        = 1.0;
-    sf_nbtag3       = 1.0;
-    sparm0          = -999999.0;
-    sparm1          = -999999.0;
-    sparm2          = -999999.0;
-    sparm3          = -999999.0;
-    lep1_gen_pdgid  = -999999;
-    lep1_pdgid      = -999999;
-    lep1_matched    = false;
-    lep1_from_tau   = false;
-    lep1_passes_id  = false;
-    lep1_passes_iso = - false;
-    lep1_num        = false;
-    lep1_iso        = -999999.0;
-    lep2_pdgid      = -999999;
-    lep2_gen_pdgid  = -999999;
-    lep2_matched    = false;
-    lep2_from_tau   = false;
-    lep2_passes_id  = false;
-    lep2_passes_iso = false;
-    lep2_num        = false;
-    lep2_iso        = -999999.0;
+    gen_dilep_type      = at::DileptonHypType::static_size;
+    gen_ht              = -99999.0;
+    gen_nbtags          = -999999;
+    gen_njets           = -999999;
+    gen_is_ss           = false;
+    gen_is_os           = false;
+    dilep_type          = at::DileptonHypType::static_size;
+    reco_ht             = -999999.0;
+    reco_met            = -999999.0;
+    reco_nbtags         = -999999;
+    reco_njets          = -999999;
+    reco_is_ss          = false;
+    reco_is_os          = false;
+    sf_dileptrig        = 1.0;
+    sf_lepeff           = 1.0;
+    sf_nbtag            = 1.0;
+    sf_nbtag3           = 1.0;
+    sparm0              = -999999.0;
+    sparm1              = -999999.0;
+    sparm2              = -999999.0;
+    sparm3              = -999999.0;
+    lep1_gen_pdgid      = -999999;
+    lep1_pdgid          = -999999;
+    lep1_matched        = false;
+    lep1_from_tau       = false;
+    lep1_passes_id      = false;
+    lep1_passes_iso     = - false;
+    lep1_num            = false;
+    lep1_gen_nearjet_dr = -999999;
+    lep1_gen_iso        = -999999;
+    lep1_iso            = -999999.0;
+    lep2_pdgid          = -999999;
+    lep2_gen_pdgid      = -999999;
+    lep2_matched        = false;
+    lep2_from_tau       = false;
+    lep2_passes_id      = false;
+    lep2_passes_iso     = false;
+    lep2_num            = false;
+    lep2_gen_nearjet_dr = -999999;
+    lep2_gen_iso        = -999999;
+    lep2_iso            = -999999.0;
 
     // lorentz vectors
     gen_vbjets_p4.clear();
@@ -408,43 +417,47 @@ void OutreachTree::SetBranches(TTree &tree)
     event_info.SetBranches(tree);
 
     // reco event level
-    tree.Branch("gen_dilep_type"  , &gen_dilep_type    , "gen_dilep_type/I"  ); 
-    tree.Branch("gen_ht"          , &gen_ht            , "gen_ht/F"          ); 
-    tree.Branch("gen_nbtags"      , &gen_nbtags        , "gen_nbtags/I"      ); 
-    tree.Branch("gen_njets"       , &gen_njets         , "gen_njets/I"       ); 
-    tree.Branch("gen_is_ss"       , &gen_is_ss         , "gen_is_ss/O"       ); 
-    tree.Branch("gen_is_os"       , &gen_is_os         , "gen_is_os/O"       ); 
-    tree.Branch("dilep_type"      , &dilep_type        , "dilep_type/I"      ); 
-    tree.Branch("reco_ht"         , &reco_ht           , "reco_ht/F"         ); 
-    tree.Branch("reco_met"        , &reco_met          , "reco_met/F"        ); 
-    tree.Branch("reco_nbtags"     , &reco_nbtags       , "reco_nbtags/I"     ); 
-    tree.Branch("reco_njets"      , &reco_njets        , "reco_njets/I"      ); 
-    tree.Branch("reco_is_ss"      , &reco_is_ss        , "reco_is_ss/F"      ); 
-    tree.Branch("reco_is_os"      , &reco_is_os        , "reco_is_os/F"      ); 
-    tree.Branch("sf_dileptrig"    , &sf_dileptrig      , "sf_dileptrig/F"    ); 
-    tree.Branch("sf_lepeff"       , &sf_lepeff         , "sf_lepeff/F"       ); 
-    tree.Branch("sf_nbtag"        , &sf_nbtag          , "sf_nbtag/F"        ); 
-    tree.Branch("sf_nbtag3"       , &sf_nbtag3         , "sf_nbtag3/F"       ); 
-    tree.Branch("sparm0"          , &sparm0            , "sparm0/F"          ); 
-    tree.Branch("sparm1"          , &sparm1            , "sparm1/F"          ); 
-    tree.Branch("sparm2"          , &sparm2            , "sparm2/F"          ); 
-    tree.Branch("sparm3"          , &sparm3            , "sparm3/F"          ); 
-    tree.Branch("lep1_gen_pdgid"  , &lep1_gen_pdgid    , "lep1_gen_pdgid/I"  ); 
-    tree.Branch("lep1_pdgid"      , &lep1_pdgid        , "lep1_pdgid/I"      ); 
-    tree.Branch("lep1_matched"    , &lep1_matched      , "lep1_matched/O"    ); 
-    tree.Branch("lep1_from_tau"   , &lep1_from_tau     , "lep1_from_tau/O"   ); 
-    tree.Branch("lep1_passes_id"  , &lep1_passes_id    , "lep1_passes_id/O"  ); 
-    tree.Branch("lep1_passes_iso" , &lep1_passes_iso   , "lep1_passes_iso/O" ); 
-    tree.Branch("lep1_num"        , &lep1_num          , "lep1_num/O"        ); 
-    tree.Branch("lep1_iso"        , &lep1_iso          , "lep1_iso/F"        ); 
-    tree.Branch("lep2_pdgid"      , &lep2_pdgid        , "lep2_pdgid/I"      ); 
-    tree.Branch("lep2_gen_pdgid"  , &lep2_gen_pdgid    , "lep2_gen_pdgid/I"  ); 
-    tree.Branch("lep2_matched"    , &lep2_matched      , "lep2_matched/O"    ); 
-    tree.Branch("lep2_from_tau"   , &lep2_from_tau     , "lep2_from_tau/O"   ); 
-    tree.Branch("lep2_passes_id"  , &lep2_passes_id    , "lep2_passes_id/O"  ); 
-    tree.Branch("lep2_passes_iso" , &lep2_passes_iso   , "lep2_passes_iso/O" ); 
-    tree.Branch("lep2_num"        , &lep2_num          , "lep2_num/O"        ); 
-    tree.Branch("lep2_iso"        , &lep2_iso          , "lep2_iso/F"        ); 
+    tree.Branch("gen_dilep_type"      , &gen_dilep_type      , "gen_dilep_type/I"      ); 
+    tree.Branch("gen_ht"              , &gen_ht              , "gen_ht/F"              ); 
+    tree.Branch("gen_nbtags"          , &gen_nbtags          , "gen_nbtags/I"          ); 
+    tree.Branch("gen_njets"           , &gen_njets           , "gen_njets/I"           ); 
+    tree.Branch("gen_is_ss"           , &gen_is_ss           , "gen_is_ss/O"           ); 
+    tree.Branch("gen_is_os"           , &gen_is_os           , "gen_is_os/O"           ); 
+    tree.Branch("dilep_type"          , &dilep_type          , "dilep_type/I"          ); 
+    tree.Branch("reco_ht"             , &reco_ht             , "reco_ht/F"             ); 
+    tree.Branch("reco_met"            , &reco_met            , "reco_met/F"            ); 
+    tree.Branch("reco_nbtags"         , &reco_nbtags         , "reco_nbtags/I"         ); 
+    tree.Branch("reco_njets"          , &reco_njets          , "reco_njets/I"          ); 
+    tree.Branch("reco_is_ss"          , &reco_is_ss          , "reco_is_ss/F"          ); 
+    tree.Branch("reco_is_os"          , &reco_is_os          , "reco_is_os/F"          ); 
+    tree.Branch("sf_dileptrig"        , &sf_dileptrig        , "sf_dileptrig/F"        ); 
+    tree.Branch("sf_lepeff"           , &sf_lepeff           , "sf_lepeff/F"           ); 
+    tree.Branch("sf_nbtag"            , &sf_nbtag            , "sf_nbtag/F"            ); 
+    tree.Branch("sf_nbtag3"           , &sf_nbtag3           , "sf_nbtag3/F"           ); 
+    tree.Branch("sparm0"              , &sparm0              , "sparm0/F"              ); 
+    tree.Branch("sparm1"              , &sparm1              , "sparm1/F"              ); 
+    tree.Branch("sparm2"              , &sparm2              , "sparm2/F"              ); 
+    tree.Branch("sparm3"              , &sparm3              , "sparm3/F"              ); 
+    tree.Branch("lep1_gen_pdgid"      , &lep1_gen_pdgid      , "lep1_gen_pdgid/I"      ); 
+    tree.Branch("lep1_pdgid"          , &lep1_pdgid          , "lep1_pdgid/I"          ); 
+    tree.Branch("lep1_matched"        , &lep1_matched        , "lep1_matched/O"        ); 
+    tree.Branch("lep1_from_tau"       , &lep1_from_tau       , "lep1_from_tau/O"       ); 
+    tree.Branch("lep1_passes_id"      , &lep1_passes_id      , "lep1_passes_id/O"      ); 
+    tree.Branch("lep1_passes_iso"     , &lep1_passes_iso     , "lep1_passes_iso/O"     ); 
+    tree.Branch("lep1_num"            , &lep1_num            , "lep1_num/O"            ); 
+    tree.Branch("lep1_gen_nearjet_dr" , &lep1_gen_nearjet_dr , "lep1_gen_nearjet_dr/F" ); 
+    tree.Branch("lep1_gen_iso"        , &lep1_gen_iso        , "lep1_gen_iso/F"        ); 
+    tree.Branch("lep1_iso"            , &lep1_iso            , "lep1_iso/F"            ); 
+    tree.Branch("lep2_pdgid"          , &lep2_pdgid          , "lep2_pdgid/I"          ); 
+    tree.Branch("lep2_gen_pdgid"      , &lep2_gen_pdgid      , "lep2_gen_pdgid/I"      ); 
+    tree.Branch("lep2_matched"        , &lep2_matched        , "lep2_matched/O"        ); 
+    tree.Branch("lep2_from_tau"       , &lep2_from_tau       , "lep2_from_tau/O"       ); 
+    tree.Branch("lep2_passes_id"      , &lep2_passes_id      , "lep2_passes_id/O"      ); 
+    tree.Branch("lep2_passes_iso"     , &lep2_passes_iso     , "lep2_passes_iso/O"     ); 
+    tree.Branch("lep2_num"            , &lep2_num            , "lep2_num/O"            ); 
+    tree.Branch("lep2_gen_nearjet_dr" , &lep2_gen_nearjet_dr , "lep2_gen_nearjet_dr/F" ); 
+    tree.Branch("lep2_gen_iso"        , &lep2_gen_iso        , "lep2_gen_iso/F"        ); 
+    tree.Branch("lep2_iso"            , &lep2_iso            , "lep2_iso/F"            ); 
 
     tree.Branch("lep1_gen_p4"         , "LorentzVector"     , &lep1_gen_p4       ); 
     tree.Branch("lep1_p4"             , "LorentzVector"     , &lep1_p4           ); 

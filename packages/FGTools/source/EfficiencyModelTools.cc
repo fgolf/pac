@@ -212,6 +212,43 @@ float efftools::getHT (std::vector<unsigned int>& jets) {
     return ht_;
 }
 
+float efftools::getGenIsolation(const LorentzVector& p4, float parton_pt, float dr)
+{
+	float iso = 0.0;
+    for (unsigned int idx = 0; idx < cms2.genps_p4().size(); idx++) 
+	{
+        if (cms2.genps_status().at(idx) != 3)
+            {continue;}
+        if ((abs(cms2.genps_id().at(idx)) < 1 || abs(cms2.genps_id().at(idx)) > 5) && abs(cms2.genps_id().at(idx)) != 21) // require a quark or gluon
+            {continue;}
+        if (cms2.genps_p4().at(idx).pt() < parton_pt)
+            {continue;}
+        if (ROOT::Math::VectorUtil::DeltaR(cms2.genps_p4().at(idx), p4) < dr)
+            {iso += cms2.genps_p4().at(idx).pt();}
+	}
+	return iso;
+}
+
+float efftools::getClosestParton(const LorentzVector& p4, float parton_pt)
+{
+	float prev_dr = 999999.0;
+    for (unsigned int idx = 0; idx < cms2.genps_p4().size(); idx++) 
+	{
+        if (cms2.genps_status().at(idx) != 3)
+            {continue;}
+        if ((abs(cms2.genps_id().at(idx)) < 1 || abs(cms2.genps_id().at(idx)) > 5) && abs(cms2.genps_id().at(idx)) != 21) // require a quark or gluon
+            {continue;}
+        if (cms2.genps_p4().at(idx).pt() < parton_pt)
+            {continue;}
+		float current_dr = ROOT::Math::VectorUtil::DeltaR(cms2.genps_p4().at(idx), p4);
+		if (current_dr < prev_dr)
+		{
+			prev_dr   = current_dr;
+		}
+	}
+	return prev_dr;
+}
+
 std::pair<LorentzVector, int> efftools::getRecoLepton (struct GenParticleStruct& struct1) {
 
     const float mupt = 20.;
