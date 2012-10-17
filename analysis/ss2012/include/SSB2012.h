@@ -66,6 +66,7 @@ protected:
 	TBranch *gen_met_phi_branch;
 	bool gen_met_phi_isLoaded;
 	TString dataset_;
+	TString* dataset_ptr_;
 	TBranch *dataset_branch;
 	bool dataset_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_p4_;
@@ -1142,7 +1143,8 @@ void Init(TTree *tree) {
 	dataset_branch = 0;
 	if (tree->GetBranch("dataset") != 0) {
 		dataset_branch = tree->GetBranch("dataset");
-		dataset_branch->SetAddress(&dataset_);
+        dataset_ptr_ = &dataset_;
+		dataset_branch->SetAddress(&dataset_ptr_);
 	}
 	lep1_passes_id_branch = 0;
 	if (tree->GetBranch("lep1_passes_id") != 0) {
