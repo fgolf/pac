@@ -18,6 +18,7 @@ sources         := SSB2012.cc      		 \
 				   PredSummary.cc   	 \
 				   FakeRatePrediction.cc \
 				   FlipRatePrediction.cc \
+				   TTbarBreakDown.cc     \
 				   SignalRegion.cc 
 include_dir     := include source 
 defines         := 

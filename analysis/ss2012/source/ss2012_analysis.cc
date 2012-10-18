@@ -40,7 +40,7 @@ try
     std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_24Sep2012.root";
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string fake_rate_hist_name = "h_mufr40c";
-    std::string sample_name         = "data";
+    std::string sample_name         = "";
     std::string vtxreweight_file    = "";
     std::string good_run_list       = "";
     bool sync_print                 = false;
@@ -192,10 +192,17 @@ try
     // input
     TChain* chain  = NULL;
     at::Sample::value_type sample = at::Sample::static_size; 
-    if (input_file.empty())
-    {
+	if (not sample_name.empty())
+	{
         cout << "processing "  << sample_name << endl;
         sample = at::GetSampleFromName(sample_name);
+	}
+	else
+	{
+        cout << "no sample name given." << endl;
+	}
+    if (input_file.empty())
+    {
         chain = at::GetSampleTChain(sample, at::GetNtupleTypeFromName(ntuple_type_name));
         if (output_file.empty())
         {

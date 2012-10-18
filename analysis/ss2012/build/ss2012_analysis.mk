@@ -38,6 +38,9 @@ $(eval $(include_simple_table))
 # Frank's tools
 $(eval $(include_fg_tools))
 
+# ss2012 tools 
+$(eval $(include_ss2012_tools))
+
 # CMS2 
 $(eval $(include_cms2_header))
 $(eval $(include_cms2_core))

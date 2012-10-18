@@ -827,12 +827,12 @@ int SSAnalysisLooper::Analyze(long event)
 
             // fill the dilepton analysis independent variables 
             if (not hyp_p4().empty())
-            {
-                m_evt.FillCommon(hyp_idx);
-            
-                // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
-                m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
-            }
+			{
+				m_evt.FillCommon(hyp_idx);
+
+				// ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
+				m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
+			}
 
             // fill the tree with what we have
             m_tree->Fill();
@@ -846,9 +846,6 @@ int SSAnalysisLooper::Analyze(long event)
             if (m_verbose) {std::cout << "passes good charege type requirement:  " << at::GetDileptonChargeTypeName(event_type) << std::endl;}
             if (m_verbose) {std::cout << "good hyp index is : " << hyp_idx << std::endl;}
         }
-
-        // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
-        m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
 
         // trigger info
         m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
@@ -867,6 +864,9 @@ int SSAnalysisLooper::Analyze(long event)
 
         // fill the dilepton analysis independent variables 
         m_evt.FillCommon(hyp_idx);
+
+        // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
+        m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
 
         // fill analysis specific branches 
         m_evt.vtxw = vtxw;
