@@ -32,6 +32,7 @@
 #include "GenParticleStruct.h"
 #include "EfficiencyModelTools.h"
 #include "ScaleFactors.h"
+#include "TTbarBreakDown.h"
 
 // ROOT
 #include "Math/LorentzVector.h"
@@ -655,6 +656,7 @@ int SSAnalysisLooper::Analyze(long event)
             m_evt.gen_nbtags     = m_evt.vgenb_p4.size();
             m_evt.gen_njets      = m_evt.vgenjets_p4.size();
             m_evt.gen_ht         = efftools::getGenHT(40.0, 2.4);
+
         }
         
 
@@ -827,6 +829,9 @@ int SSAnalysisLooper::Analyze(long event)
             if (not hyp_p4().empty())
             {
                 m_evt.FillCommon(hyp_idx);
+            
+                // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
+                m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
             }
 
             // fill the tree with what we have
@@ -841,6 +846,9 @@ int SSAnalysisLooper::Analyze(long event)
             if (m_verbose) {std::cout << "passes good charege type requirement:  " << at::GetDileptonChargeTypeName(event_type) << std::endl;}
             if (m_verbose) {std::cout << "good hyp index is : " << hyp_idx << std::endl;}
         }
+
+        // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
+        m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
 
         // trigger info
         m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
@@ -997,6 +1005,7 @@ int SSAnalysisLooper::Analyze(long event)
         m_evt.lep2.passes_iso  = samesign::isIsolatedLepton(lep2_id, lep2_idx);
         m_evt.lep2_wfr         = GetFakeRateValue(lep2_id, lep2_idx);
         m_evt.lep2_wflip       = GetFlipRateValue(lep2_id, lep2_idx);
+
 
         // njets, nbtags, HT and MET for JES systematics
         if (!evt_isRealData()) 

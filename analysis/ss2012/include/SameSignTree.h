@@ -76,6 +76,7 @@ public:
     int nbtags;
     int nbtags20;
     int nbtags30;
+    int ttbar_bkdn;
     float vtxw;
     float mt;
     float ht;

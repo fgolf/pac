@@ -22,6 +22,7 @@ void SameSignTree::Reset()
     nbtags           = -999999;
     nbtags20         = -999999;
     nbtags30         = -999999;
+    ttbar_bkdn       = -999999;
     vtxw             = -999999.0;
     mt               = -999999.0;
     ht               = -999999.0;
@@ -131,6 +132,7 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("nbtags"            , &nbtags             , "nbtags/I"           );
     tree.Branch("nbtags20"          , &nbtags20           , "nbtags20/I"         );
     tree.Branch("nbtags30"          , &nbtags30           , "nbtags30/I"         );
+    tree.Branch("ttbar_bkdn"        , &ttbar_bkdn         , "ttbar_bkdn/I"       );
     tree.Branch("vtxw"              , &vtxw               , "vtxw/F"             );
     tree.Branch("mt"                , &mt                 , "mt/F"               );
     tree.Branch("ht"                , &ht                 , "ht/F"               );

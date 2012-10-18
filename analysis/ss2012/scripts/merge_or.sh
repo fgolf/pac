@@ -18,11 +18,11 @@ function merge
 
 
 input_path=/hadoop/cms/store/user/rwkelley/babies/outreach/52X/v1
-output_path=babies_outreach
+output_path=babies_outreach2
 merge glusbottom glusbottom
 merge glustop    glustop
-#merge sbottomtop sbottomtop
-#merge t1tttt     t1tttt
+merge sbottomtop sbottomtop
+merge t1tttt     t1tttt
 
 #input_path=/hadoop/cms/store/user/rwkelley/babies/outreach/53X/v1
 #output_path=babies_outreach

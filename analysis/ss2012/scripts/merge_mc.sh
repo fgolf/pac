@@ -30,10 +30,10 @@ function merge2
     #eval $cmd
 }
 
-input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/52X/v5
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/52X/v5
 #output_path=/nfs-7/userdata/rwkelley/babies/ss2012/53X/v3
 #output_path=babies/52X
-output_path=babies_njets2_v4
+#output_path=babies_njets2_v4
 #merge wwg_fast    8TeV_WWGJets_FastSim_525_Summer12-v3_StoreResults-InTimePU_START52_V9-v3
 #merge www_fast    8TeV_WWWJets_FastSim_525_Summer12-v3_StoreResults-InTimePU_START52_V9-v3
 #merge wwz_fast    8TeV_WWZNoGstarJets_FastSim_525_Summer12-v3_StoreResults-InTimePU_START52_V9-v3
@@ -56,30 +56,29 @@ output_path=babies_njets2_v4
 #merge zz          ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v3
 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/53X/v5
-#output_path=/nfs-7/userdata/rwkelley/babies/ss2012/53X/v3
-output_path=babies_test_v2
-#merge dy       DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wjets    WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wz       WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge zz       ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ww       WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttg      TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+output_path=babies_njets0
+merge dy       DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wjets    WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wz       WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge zz       ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ww       WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttg      TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ttjets   TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttw      TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttww     TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ttz      TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wwg      WWGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge www      WWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wwz      WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wzz      WZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge zzz      ZZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge lm6      SUSY_LM6_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge lm9      SUSY_LM9_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wmwmqq   WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wpwpqq   WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge ww_ds    WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wgstar2e WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wgstar2m WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge wgstar2t WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge2 t_schan  "${input_path}/Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/T_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
-#merge2 tw       "${input_path}/Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
+merge ttw      TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttww     TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ttz      TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wwg      WWGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge www      WWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wwz      WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wzz      WZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge zzz      ZZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge lm6      SUSY_LM6_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge lm9      SUSY_LM9_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wmwmqq   WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wpwpqq   WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ww_ds    WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wgstar2e WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wgstar2m WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge wgstar2t WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge2 t_schan  "${input_path}/Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/T_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
+merge2 tw       "${input_path}/Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"

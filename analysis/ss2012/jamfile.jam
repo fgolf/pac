@@ -23,6 +23,7 @@ lib ss2012_tools
     ./source/PredSummary.cc
     ./source/FakeRatePrediction.cc
     ./source/FlipRatePrediction.cc
+    ./source/TTbarBreakDown.cc
     [ rootcint Dict
      : 
        <include>./include
