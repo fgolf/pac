@@ -65,8 +65,7 @@ protected:
 	float	gen_met_phi_;
 	TBranch *gen_met_phi_branch;
 	bool gen_met_phi_isLoaded;
-	TString dataset_;
-	TString* dataset_ptr_;
+	TString *dataset_;
 	TBranch *dataset_branch;
 	bool dataset_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_p4_;
@@ -615,6 +614,9 @@ protected:
 	int	nbtags30_;
 	TBranch *nbtags30_branch;
 	bool nbtags30_isLoaded;
+	int	ttbar_bkdn_;
+	TBranch *ttbar_bkdn_branch;
+	bool ttbar_bkdn_isLoaded;
 	float	vtxw_;
 	TBranch *vtxw_branch;
 	bool vtxw_isLoaded;
@@ -1143,8 +1145,7 @@ void Init(TTree *tree) {
 	dataset_branch = 0;
 	if (tree->GetBranch("dataset") != 0) {
 		dataset_branch = tree->GetBranch("dataset");
-        dataset_ptr_ = &dataset_;
-		dataset_branch->SetAddress(&dataset_ptr_);
+		dataset_branch->SetAddress(&dataset_);
 	}
 	lep1_passes_id_branch = 0;
 	if (tree->GetBranch("lep1_passes_id") != 0) {
@@ -1971,6 +1972,11 @@ void Init(TTree *tree) {
 		nbtags30_branch = tree->GetBranch("nbtags30");
 		nbtags30_branch->SetAddress(&nbtags30_);
 	}
+	ttbar_bkdn_branch = 0;
+	if (tree->GetBranch("ttbar_bkdn") != 0) {
+		ttbar_bkdn_branch = tree->GetBranch("ttbar_bkdn");
+		ttbar_bkdn_branch->SetAddress(&ttbar_bkdn_);
+	}
 	vtxw_branch = 0;
 	if (tree->GetBranch("vtxw") != 0) {
 		vtxw_branch = tree->GetBranch("vtxw");
@@ -2571,6 +2577,7 @@ void GetEntry(unsigned int idx)
 		nbtags_isLoaded = false;
 		nbtags20_isLoaded = false;
 		nbtags30_isLoaded = false;
+		ttbar_bkdn_isLoaded = false;
 		vtxw_isLoaded = false;
 		mt_isLoaded = false;
 		ht_isLoaded = false;
@@ -2869,6 +2876,7 @@ void LoadAllBranches()
 	if (nbtags_branch != 0) nbtags();
 	if (nbtags20_branch != 0) nbtags20();
 	if (nbtags30_branch != 0) nbtags30();
+	if (ttbar_bkdn_branch != 0) ttbar_bkdn();
 	if (vtxw_branch != 0) vtxw();
 	if (mt_branch != 0) mt();
 	if (ht_branch != 0) ht();
@@ -3184,7 +3192,7 @@ void LoadAllBranches()
 			}
 			dataset_isLoaded = true;
 		}
-		return dataset_;
+		return *dataset_;
 	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4()
 	{
@@ -5552,6 +5560,19 @@ void LoadAllBranches()
 		}
 		return nbtags30_;
 	}
+	int &ttbar_bkdn()
+	{
+		if (not ttbar_bkdn_isLoaded) {
+			if (ttbar_bkdn_branch != 0) {
+				ttbar_bkdn_branch->GetEntry(index);
+			} else { 
+				printf("branch ttbar_bkdn_branch does not exist!\n");
+				exit(1);
+			}
+			ttbar_bkdn_isLoaded = true;
+		}
+		return ttbar_bkdn_;
+	}
 	float &vtxw()
 	{
 		if (not vtxw_isLoaded) {
@@ -7001,6 +7022,7 @@ namespace ssb {
 	int &nbtags();
 	int &nbtags20();
 	int &nbtags30();
+	int &ttbar_bkdn();
 	float &vtxw();
 	float &mt();
 	float &ht();

@@ -200,6 +200,7 @@ namespace ssb {
 	int &nbtags() { return samesignbtag.nbtags(); }
 	int &nbtags20() { return samesignbtag.nbtags20(); }
 	int &nbtags30() { return samesignbtag.nbtags30(); }
+	int &ttbar_bkdn() { return samesignbtag.ttbar_bkdn(); }
 	float &vtxw() { return samesignbtag.vtxw(); }
 	float &mt() { return samesignbtag.mt(); }
 	float &ht() { return samesignbtag.ht(); }
