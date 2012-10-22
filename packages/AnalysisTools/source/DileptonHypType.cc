@@ -1,5 +1,6 @@
 #include "at/DileptonHypType.h"
 #include <stdexcept> 
+#include <cmath> 
 
 namespace at 
 {

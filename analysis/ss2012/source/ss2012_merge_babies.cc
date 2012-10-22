@@ -16,7 +16,10 @@ bool keep_all_events(long)
 struct simple_selection
 {
 	simple_selection(unsigned int njets = 0) : m_njets(njets) {}
-	bool operator() (long) const {return static_cast<unsigned int>(ssb::njets()) >= m_njets;}
+	bool operator() (long) const 
+    {
+        return (ssb::dilep_type() < 4 && static_cast<unsigned int>(ssb::njets()) >= m_njets);
+    }
 	unsigned int m_njets;
 };
 

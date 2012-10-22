@@ -170,7 +170,7 @@ namespace at
         // wrap up
         output_root_file->cd();
         new_tree->Write();
-        output_root_file->Close();
+        //output_root_file->Close();
         delete output_root_file;
 
         // print warning if the totals don't line up

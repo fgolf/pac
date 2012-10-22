@@ -225,9 +225,9 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
                 classname.ReplaceAll("edm::Wrapper<","");
                 headerf << "\t" << classname << " " << aliasname << "_;" << endl;
             } 
-            else if (classname.Contains("TString")) {
-                headerf << "\t" << classname << " " << aliasname << "_;" << endl;
-            } 
+            //else if (classname.Contains("TString")) {
+            //    headerf << "\t" << classname << " " << aliasname << "_;" << endl;
+            //} 
             else {
                 headerf << "\t" << classname << " *" << aliasname << "_;" << endl;
             }
@@ -239,9 +239,9 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
                     classname.ReplaceAll("edm::Wrapper<","");
                     headerf << "\t" << classname << " " << aliasname << "_;" << endl;
                 }
-                else if (classname.Contains("TString")) {
-                    headerf << "\t" << classname << " " << aliasname << "_;" << endl;
-                } 
+                //else if (classname.Contains("TString")) {
+                //    headerf << "\t" << classname << " " << aliasname << "_;" << endl;
+                //} 
                 else {
                     headerf << "\t" << classname << " *" << aliasname << "_;" << endl;
                 }
@@ -489,6 +489,9 @@ void makeHeaderFile(TFile *f, std::string treeName, bool paranoid, string Classn
         headerf << "\t\t\t" << Form("%s_isLoaded",aliasname.Data()) << " = true;" << endl;
         headerf << "\t\t" << "}" << endl;
         if(isSkimmedNtuple) {
+            headerf << "\t\t" << "return *" << aliasname << "_;" << endl << "\t}" << endl;
+        }
+        else if(classname == "TString") {
             headerf << "\t\t" << "return *" << aliasname << "_;" << endl << "\t}" << endl;
         }
         else {

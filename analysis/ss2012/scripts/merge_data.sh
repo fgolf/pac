@@ -1,7 +1,7 @@
 #!/bin/bash
 
 verbose=0
-njets=0
+njets=2
 
 # make the output dirs
 
