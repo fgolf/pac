@@ -30,6 +30,10 @@ vector<float> GetFitParameters(TH1* hist)
 	if      (rt::string_contains(hist->GetName(), "btagpt"   )) {func_name = "fitf_btag";}
 	else if (rt::string_contains(hist->GetName(), "el_pt"    )) {func_name = "efitf";}
 	else if (rt::string_contains(hist->GetName(), "mu_pt"    )) {func_name = "mfitf";}
+	else if (rt::string_contains(hist->GetName(), "el_id"    )) {func_name = "efitf";}
+	else if (rt::string_contains(hist->GetName(), "mu_id"    )) {func_name = "mfitf";}
+	else if (rt::string_contains(hist->GetName(), "el_iso"   )) {func_name = "efitf";}
+	else if (rt::string_contains(hist->GetName(), "mu_iso"   )) {func_name = "mfitf";}
 	else if (rt::string_contains(hist->GetName(), "genmet30" )) {func_name = "fitf1";}
 	else if (rt::string_contains(hist->GetName(), "genmet50" )) {func_name = "fitf2";}
 	else if (rt::string_contains(hist->GetName(), "genmet120")) {func_name = "fitf3";}
@@ -37,8 +41,7 @@ vector<float> GetFitParameters(TH1* hist)
 	else if (rt::string_contains(hist->GetName(), "ht320"    )) {func_name = "fitf2";}
 	else
 	{
-		cout << "invalid hist (" << hist->GetName() << "). exiting" << endl;
-		return params;
+	    throw std::runtime_error(std::string("invalid hist (") + hist->GetName() + "). exiting");
 	}
 
 	// get parameters
@@ -191,8 +194,12 @@ OutreachClosure::OutreachClosure
     h_btagpt.reset(dynamic_cast<TH1F*>(hc_temp[Form("h_eff_%s_btagpt", m_fit_sample_name.c_str())]->Clone())); 
 
     // lepton
-    h_el_pt.reset(dynamic_cast<TH1F*>(hc_temp[Form("h_eff_%s_el_pt", m_fit_sample_name.c_str())]->Clone())); 
-    h_mu_pt.reset(dynamic_cast<TH1F*>(hc_temp[Form("h_eff_%s_mu_pt", m_fit_sample_name.c_str())]->Clone())); 
+    h_el_pt.reset(dynamic_cast<TH1F*>( hc_temp[Form("h_eff_%s_el_pt"    , m_fit_sample_name.c_str())]->Clone())); 
+    h_mu_pt.reset(dynamic_cast<TH1F*>( hc_temp[Form("h_eff_%s_mu_pt"    , m_fit_sample_name.c_str())]->Clone())); 
+    h_el_id.reset(dynamic_cast<TH1F*>( hc_temp[Form("h_eff_%s_el_id_pt" , m_fit_sample_name.c_str())]->Clone())); 
+    h_mu_id.reset(dynamic_cast<TH1F*>( hc_temp[Form("h_eff_%s_mu_id_pt" , m_fit_sample_name.c_str())]->Clone())); 
+    h_el_iso.reset(dynamic_cast<TH1F*>(hc_temp[Form("h_eff_%s_el_iso_pt", m_fit_sample_name.c_str())]->Clone())); 
+    h_mu_iso.reset(dynamic_cast<TH1F*>(hc_temp[Form("h_eff_%s_mu_iso_pt", m_fit_sample_name.c_str())]->Clone())); 
 
     // met
     h_genmet30.reset( dynamic_cast<TH1F*>(hc_temp[Form("h_eff_%s_genmet30" , m_fit_sample_name.c_str())]->Clone())); 
@@ -266,9 +273,12 @@ void OutreachClosure::EndJob()
     float pt_obs   = rt::Integral(hc["h_pt_obs"  ]);
     float pt_pred  = rt::Integral(hc["h_pt_pred" ]);
     float pt_ratio = pt_obs/pt_pred;
-    //float pt_obs   = pt1_obs + pt2_obs; 
-    //float pt_pred  = pt1_pred + pt2_pred; 
-    //float pt_ratio = pt_obs/pt_pred;
+    float id_obs   = rt::Integral(hc["h_pt_id_obs"  ]);
+    float id_pred  = rt::Integral(hc["h_pt_id_pred" ]);
+    float id_ratio = id_obs/id_pred;
+    float iso_obs   = rt::Integral(hc["h_pt_iso_obs"  ]);
+    float iso_pred  = rt::Integral(hc["h_pt_iso_pred" ]);
+    float iso_ratio = iso_obs/iso_pred;
 
     float total_obs   = rt::Integral(hc["h_total_obs" ]);
     float total_pred  = rt::Integral(hc["h_total_pred"]);
@@ -284,27 +294,38 @@ void OutreachClosure::EndJob()
     CTable t_closure;
     t_closure.useTitle();
     t_closure.setTitle("outreach obs/pred table");
-    t_closure.setTable() (              "obs",        "pred",      "ratio")
-                         ("ht200"  , ht200_obs , ht200_pred ,  ht200_ratio)
-                         ("ht320"  , ht320_obs , ht320_pred ,  ht320_ratio)
-                         ("met30"  , met30_obs , met30_pred ,  met30_ratio)
-                         ("met50"  , met50_obs , met50_pred ,  met50_ratio)
-                         ("met120" , met120_obs, met120_pred, met120_ratio)
-                         ("nbtags" , nbtags_obs, nbtags_pred, nbtags_ratio)
-                         ("l1"     , pt1_obs    , pt1_pred    , pt1_ratio    )
-                         ("l2"     , pt2_obs    , pt2_pred    , pt2_ratio    )
-                         ("leptons", pt_obs    , pt_pred    , pt_ratio    )
-                         ("total"  , total_obs , total_pred , total_ratio )
-                         ("product", "NA"      , "NA"       , product     )
-                         ("total"  , total_obs2 , total_pred2 , total_ratio2);
+    t_closure.setTable() 
+        (                "obs",        "pred",      "ratio")
+        ("ht200"    , ht200_obs , ht200_pred ,  ht200_ratio)
+        ("ht320"    , ht320_obs , ht320_pred ,  ht320_ratio)
+        ("met30"    , met30_obs , met30_pred ,  met30_ratio)
+        ("met50"    , met50_obs , met50_pred ,  met50_ratio)
+        ("met120"   , met120_obs, met120_pred, met120_ratio)
+        ("nbtags"   , nbtags_obs, nbtags_pred, nbtags_ratio)
+        ("l1"       , pt1_obs   , pt1_pred   , pt1_ratio   )
+        ("l2"       , pt2_obs   , pt2_pred   , pt2_ratio   )
+        ("id"       , id_obs    , id_pred    , id_ratio    )
+        ("iso"      , iso_obs   , iso_pred   , iso_ratio   )
+        ("leptons"  , pt_obs    , pt_pred    , pt_ratio    )
+        ("total"    , total_obs , total_pred , total_ratio )
+        ("product"  , "NA"      , "NA"       , product     )
+        ("total sr6", total_obs2 , total_pred2 , total_ratio2);
     t_closure.print();
-    cout << endl;
-    t_closure.printTex();
+    //cout << endl;
+    //t_closure.printTex();
 
     // ratio plots
-    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_v1"], hc["h_sparm_pred_v1"], "h_sparm_ratio_v1", "direct sbottom obs/pred"));
-    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_v2"], hc["h_sparm_pred_v2"], "h_sparm_ratio_v2", "glustop obs/pred"       ));
-    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_v3"], hc["h_sparm_pred_v3"], "h_sparm_ratio_v3", "glusbottom obs/pred"    ));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs"     ], hc["h_sparm_pred"     ], "h_sparm_ratio"     , Form("%s obs/pred", at::GetSampleInfo(m_sample).title.c_str())));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_btag"], hc["h_sparm_pred_btag"], "h_sparm_ratio_btag", Form("%s obs/pred", at::GetSampleInfo(m_sample).title.c_str())));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_met" ], hc["h_sparm_pred_met" ], "h_sparm_ratio_met" , Form("%s obs/pred", at::GetSampleInfo(m_sample).title.c_str())));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_ht"  ], hc["h_sparm_pred_ht"  ], "h_sparm_ratio_ht"  , Form("%s obs/pred", at::GetSampleInfo(m_sample).title.c_str())));
+    for (size_t i = 0; i != DileptonHypType::static_size; i++)
+    {
+        string ch = GetDileptonHypTypeName(i);
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_lep_"+ch], hc["h_sparm_pred_lep_"+ch], "h_sparm_ratio_lep_"+ch, Form("%s obs/pred", at::GetSampleInfo(m_sample).title.c_str())));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_id_" +ch], hc["h_sparm_pred_id_" +ch], "h_sparm_ratio_id_" +ch, Form("%s obs/pred", at::GetSampleInfo(m_sample).title.c_str())));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_sparm_obs_iso_"+ch], hc["h_sparm_pred_iso_"+ch], "h_sparm_ratio_iso_"+ch, Form("%s obs/pred", at::GetSampleInfo(m_sample).title.c_str())));
+    }
 }
 
 struct bins_t
@@ -330,10 +351,6 @@ void OutreachClosure::BookHists()
         const unsigned int n_bpt_bins = 11;
         bins_t met_bins  = {25, 0.0, 500.0};
         bins_t ht_bins   = {32, 0.0, 800.0};
-        //bins_t mglu_bins = {40, 320, 1120};
-        //bins_t mst_bins  = {40, 200, 1000};
-        //bins_t msb_bins  = {25, 360, 1110};
-        //bins_t mchi_bins = {12, 130, 370};
 
         // book
         hc.Add(new TH1F("h_ht200_obs" , "h_ht200_obs;H^{gen}_{T} (GeV)" , ht_bins.num, ht_bins.min, ht_bins.max));
@@ -358,23 +375,87 @@ void OutreachClosure::BookHists()
         hc.Add(new TH1F("h_pt2_pred", "h_pt2_pred;p^{gen}_{T} (GeV)", n_pt_bins, pt_bins));
         hc.Add(new TH1F("h_pt_pred" , "h_pt_pred;p^{gen}_{T} (GeV)" , n_pt_bins, pt_bins));
 
+        hc.Add(new TH1F("h_pt_iso_obs" , "h_pt_iso_obs;p^{gen}_{T} (GeV)" , n_pt_bins, pt_bins));
+        hc.Add(new TH1F("h_pt_iso_pred", "h_pt_iso_pred;p^{gen}_{T} (GeV)", n_pt_bins, pt_bins));
+        hc.Add(new TH1F("h_pt_id_obs"  , "h_pt_id_obs;p^{gen}_{T} (GeV)"  , n_pt_bins, pt_bins));
+        hc.Add(new TH1F("h_pt_id_pred" , "h_pt_id_pred;p^{gen}_{T} (GeV)" , n_pt_bins, pt_bins));
+
         hc.Add(new TH1F("h_total_obs" , "h_total_obs" , 3, -0.5, 2.5));
         hc.Add(new TH1F("h_total_pred", "h_total_pred", 3, -0.5, 2.5));
 
         hc.Add(new TH1F("h_total_obs2" , "h_total_obs2" , 3, -0.5, 2.5));
         hc.Add(new TH1F("h_total_pred2", "h_total_pred2", 3, -0.5, 2.5));
 
-        // sbottomtop (m_chi vs m_sb)
-        hc.Add(new TH2F("h_sparm_obs_v1" , "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{b}_{1}) GeV;m(#tilde{#chi}^{#pm}_{1}) GeV", 26, 245, 505, 12, 130, 370));
-        hc.Add(new TH2F("h_sparm_pred_v1", "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{b}_{1}) GeV;m(#tilde{#chi}^{#pm}_{1}) GeV", 26, 245, 505, 12, 130, 370));
-
-        // glustop (m_g vs m_stop)
-        hc.Add(new TH2F("h_sparm_obs_v2" , "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV; m(#tilde{t}_{1}) GeV", 7, 675, 1125, 16, 225, 1025));
-        hc.Add(new TH2F("h_sparm_pred_v2", "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV; m(#tilde{t}_{1}) GeV", 7, 675, 1125, 16, 225, 1025));
-
         // glusbottom (m_g vs m_sb)
         hc.Add(new TH2F("h_sparm_obs_v3" , "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV; m(#tilde{b}_{1}) GeV", 16, 325, 1125, 22, 325, 1425));
         hc.Add(new TH2F("h_sparm_pred_v3", "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV; m(#tilde{b}_{1}) GeV", 16, 325, 1125, 22, 325, 1425));
+
+        // sparms projection 
+        bins_t s0_bins;
+        bins_t s1_bins;
+        string title = "";
+        if (m_sample == at::Sample::sbottomtop) 
+		{
+            s0_bins.num = 26;
+            s0_bins.min = 245;
+            s0_bins.max = 505;
+            s1_bins.num = 12;
+            s1_bins.min = 130;
+            s1_bins.max = 370;
+            title = "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{b}_{1}) GeV;m(#tilde{#chi}^{#pm}_{1}) GeV";
+		}
+        else if (m_sample == at::Sample::glustop) 
+        {
+            s0_bins.num = 7;
+            s0_bins.min = 675;
+            s0_bins.max = 1125;
+            s1_bins.num = 16;
+            s1_bins.min = 225;
+            s1_bins.max = 1025;
+            title = "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV;m(#tilde{t}_{1}) GeV";
+        }
+        else if (m_sample == at::Sample::glusbottom) 
+        {
+            s0_bins.num = 16;
+            s0_bins.min = 325;
+            s0_bins.max = 1125;
+            s1_bins.num = 22;
+            s1_bins.min = 325;
+            s1_bins.max = 1425;
+            title = "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV;m(#tilde{b}_{1}) GeV";
+        }
+        else if (m_sample == at::Sample::t1tttt) 
+        {
+            s0_bins.num = 16;
+            s0_bins.min = 425;
+            s0_bins.max = 1225;
+            s1_bins.num = 19;
+            s1_bins.min = -25;
+            s1_bins.max = 925;
+            title = "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV;m(#tilde{#chi}^{0}_{1}) GeV";
+        }
+
+		hc.Add(new TH2F("h_sparm_obs"      , title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		hc.Add(new TH2F("h_sparm_obs_btag" , title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		hc.Add(new TH2F("h_sparm_obs_met"  , title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		hc.Add(new TH2F("h_sparm_obs_ht"   , title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+                                                                                                                        
+		hc.Add(new TH2F("h_sparm_pred"     , title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		hc.Add(new TH2F("h_sparm_pred_btag", title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		hc.Add(new TH2F("h_sparm_pred_met" , title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		hc.Add(new TH2F("h_sparm_pred_ht"  , title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+
+        for (size_t i = 0; i != DileptonHypType::static_size; i++)
+        {
+            string ch = GetDileptonHypTypeName(i);
+		    hc.Add(new TH2F(Form("h_sparm_obs_lep_%s" ,ch.c_str()), title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		    hc.Add(new TH2F(Form("h_sparm_obs_id_%s"  ,ch.c_str()), title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		    hc.Add(new TH2F(Form("h_sparm_obs_iso_%s" ,ch.c_str()), title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+
+		    hc.Add(new TH2F(Form("h_sparm_pred_lep_%s",ch.c_str()), title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		    hc.Add(new TH2F(Form("h_sparm_pred_id_%s" ,ch.c_str()), title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+		    hc.Add(new TH2F(Form("h_sparm_pred_iso_%s",ch.c_str()), title.c_str(), s0_bins.num, s0_bins.min, s0_bins.max, s1_bins.num, s1_bins.min, s1_bins.max));
+        }
 
         return;
     }
@@ -390,6 +471,7 @@ int OutreachClosure::operator()(long event)
 {
     using namespace std;
     using namespace orb;
+    using namespace rt;
 
     try
     {
@@ -419,59 +501,68 @@ int OutreachClosure::operator()(long event)
         float met50_weight  = GetMETEfficiencyWeight(gen_met(), h_genmet50.get()); 
         float met120_weight = GetMETEfficiencyWeight(gen_met(), h_genmet120.get()); 
         float btag_weight   = GetBtagEfficiencyWeight(gen_vbjets_p4(), h_btagpt.get()); 
-        float l1_pt_weight  = abs(l1_id)==11 ? GetPtEfficiencyWeight(l1_pt, h_el_pt.get()) : GetPtEfficiencyWeight(l1_pt, h_mu_pt.get()); 
-        float l2_pt_weight  = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_pt.get()) : GetPtEfficiencyWeight(l2_pt, h_mu_pt.get()); 
+        float l1_pt_weight  = abs(l1_id)==11 ? GetPtEfficiencyWeight(l1_pt, h_el_pt.get())  : GetPtEfficiencyWeight(l1_pt, h_mu_pt.get()); 
+        float l2_pt_weight  = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_pt.get())  : GetPtEfficiencyWeight(l2_pt, h_mu_pt.get()); 
+        float l1_id_weight  = abs(l1_id)==11 ? GetPtEfficiencyWeight(l1_pt, h_el_id.get())  : GetPtEfficiencyWeight(l1_pt, h_mu_id.get()); 
+        float l2_id_weight  = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_id.get())  : GetPtEfficiencyWeight(l2_pt, h_mu_id.get()); 
+        float l1_iso_weight = abs(l1_id)==11 ? GetPtEfficiencyWeight(l1_pt, h_el_iso.get()) : GetPtEfficiencyWeight(l1_pt, h_mu_iso.get()); 
+        float l2_iso_weight = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_iso.get()) : GetPtEfficiencyWeight(l2_pt, h_mu_iso.get()); 
         float weight        = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
         float weight1       = btag_weight * ht200_weight * met50_weight * l1_pt_weight;
         float weight2       = btag_weight * ht200_weight * met50_weight * l2_pt_weight;
+        float weight_sr6    = btag_weight * ht320_weight * met120_weight * l1_pt_weight * l2_pt_weight;
 
         // ht test
         if (gen_njets()>1 && gen_met()>50.0)
         {
-            if (reco_ht() > 200) {rt::Fill(hc["h_ht200_obs"], gen_ht(), 1.0);}
-            if (reco_ht() > 320) {rt::Fill(hc["h_ht320_obs"], gen_ht(), 1.0);}
+            if (reco_ht() > 200) 
+			{
+				rt::Fill(hc["h_ht200_obs"], gen_ht(), 1.0);
+            	rt::Fill2D(hc["h_sparm_obs_ht"], sparm0(), sparm1(), 1.0);
+			}
+            if (reco_ht() > 320) 
+			{
+				rt::Fill(hc["h_ht320_obs"], gen_ht(), 1.0);
+			}
             rt::Fill(hc["h_ht200_pred"], gen_ht(), ht200_weight);
             rt::Fill(hc["h_ht320_pred"], gen_ht(), ht320_weight);
+            rt::Fill2D(hc["h_sparm_pred_ht"], sparm0(), sparm1(), ht200_weight);
         }
 
         // met test
         if (gen_njets()>1 && gen_ht()>200.0)
         {
-            if (reco_met() > 30 ) {rt::Fill(hc["h_met30_obs" ], gen_met(), 1.0);}
-            if (reco_met() > 50 ) {rt::Fill(hc["h_met50_obs" ], gen_met(), 1.0);}
-            if (reco_met() > 120) {rt::Fill(hc["h_met120_obs"], gen_met(), 1.0);}
+            if (reco_met() > 30 ) 
+			{
+				rt::Fill(hc["h_met30_obs" ], gen_met(), 1.0);
+			}
+            if (reco_met() > 50 ) 
+			{
+				rt::Fill(hc["h_met50_obs" ], gen_met(), 1.0);
+            	rt::Fill2D(hc["h_sparm_obs_met"], sparm0(), sparm1(), 1.0);
+			}
+            if (reco_met() > 120) 
+			{
+				rt::Fill(hc["h_met120_obs"], gen_met(), 1.0);
+			}
             rt::Fill(hc["h_met30_pred" ], gen_met(), met30_weight);
             rt::Fill(hc["h_met50_pred" ], gen_met(), met50_weight);
             rt::Fill(hc["h_met120_pred"], gen_met(), met120_weight);
+           	rt::Fill2D(hc["h_sparm_pred_met"], sparm0(), sparm1(), met50_weight);
         }
 
         // btag eff test
-        //if (gen_njets()>1 && gen_ht()>200.0 && gen_met()>50.0 && gen_nbtags()>=2)
-        //bool passes_reco_nbtags = false;
-        //switch (gen_nbtags())
-        //{
-        //    case 2: 
-        //        passes_reco_nbtags = reco_nbtags()==2 && gen_vbjets_matched().at(0) && gen_vbjets_matched().at(1); 
-        //        break;
-        //    case 3: 
-        //        passes_reco_nbtags = reco_nbtags()==3 && gen_vbjets_matched().at(0) && gen_vbjets_matched().at(1) && gen_vbjets_matched().at(2); 
-        //        break;
-        //    case 4: 
-        //        passes_reco_nbtags = reco_nbtags()==4 && gen_vbjets_matched().at(0) && gen_vbjets_matched().at(1) && gen_vbjets_matched().at(2) && gen_vbjets_matched().at(3); 
-        //        break;
-        //    default: 
-        //        passes_reco_nbtags = false; 
-        //        break;
-        //}
         if (gen_njets()>=2 && gen_ht()>200.0 && gen_met()>50.0)
         {
             if (reco_nbtags()>=2) 
             {
                 rt::Fill(hc["h_nbtags_obs"], gen_nbtags(), 1.0);
+           		rt::Fill2D(hc["h_sparm_obs_btag"], sparm0(), sparm1(), 1.0);
             }
             if (gen_nbtags() >=2 ) 
             {
                 rt::Fill(hc["h_nbtags_pred"], gen_nbtags(), btag_weight);
+           		rt::Fill2D(hc["h_sparm_pred_btag"], sparm0(), sparm1(), btag_weight);
             }
         }
 
@@ -493,78 +584,124 @@ int OutreachClosure::operator()(long event)
             if (lep1_num() && lep2_num()) 
             {
                 rt::Fill(hc["h_pt_obs"], 1.0, 1.0);
+           		if (dilep_type()==DileptonHypType::MUMU) {rt::Fill2D(hc["h_sparm_obs_lep_mm"], sparm0(), sparm1(), 1.0);}
+           		if (dilep_type()==DileptonHypType::EMU)  {rt::Fill2D(hc["h_sparm_obs_lep_em"], sparm0(), sparm1(), 1.0);}
+           		if (dilep_type()==DileptonHypType::EE)   {rt::Fill2D(hc["h_sparm_obs_lep_ee"], sparm0(), sparm1(), 1.0);}
+           		rt::Fill2D(hc["h_sparm_obs_lep_ll"], sparm0(), sparm1(), 1.0);
             }
             rt::Fill(hc["h_pt_pred"], 1.0, l1_pt_weight * l2_pt_weight);
+           	if (dilep_type()==DileptonHypType::MUMU) {rt::Fill2D(hc["h_sparm_pred_lep_mm"], sparm0(), sparm1(), l1_pt_weight * l2_pt_weight);}
+           	if (dilep_type()==DileptonHypType::EMU)  {rt::Fill2D(hc["h_sparm_pred_lep_em"], sparm0(), sparm1(), l1_pt_weight * l2_pt_weight);}
+           	if (dilep_type()==DileptonHypType::EE)   {rt::Fill2D(hc["h_sparm_pred_lep_ee"], sparm0(), sparm1(), l1_pt_weight * l2_pt_weight);}
+           	rt::Fill2D(hc["h_sparm_pred_lep_ll"], sparm0(), sparm1(), l1_pt_weight * l2_pt_weight);
         }
 
-        // total
-        if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num() && lep2_num())
-        //if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0)
-        //if (reco_ht()>200.0 && reco_met()>50.0 && gen_nbtags()>=2)
-        //if (reco_ht()>200.0 && reco_met()>50.0 && gen_nbtags()>=2 && lep1_num() && lep2_num())
-        //if (reco_ht()>200.0 && reco_met()>50.0 && gen_nbtags()>=2 && lep1_num() && lep2_num())
+        // lepton ID eff test
+        if (gen_njets()>=2 && gen_ht()>200.0 && gen_met()>50.0)
         {
-            rt::Fill(hc["h_total_obs"], 1.0, 1.0);
-        }
-        //if (gen_nbtags()>=2)
-        {
-            //cout << Form("btag_weight %f, htw %f, metw %f, l1w %f, l2w %f", btag_weight, ht200_weight, met50_weight, l1_pt_weight, l2_pt_weight) << endl;
-            rt::Fill(hc["h_total_pred"], 1.0, weight);
-            //rt::Fill(hc["h_total_pred"], 1.0, btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight);
-            //rt::Fill(hc["h_total_pred"], 1.0, btag_weight * ht200_weight * met50_weight);
-            //rt::Fill(hc["h_total_pred"], 1.0, ht200_weight * met50_weight);
-            //rt::Fill(hc["h_total_pred"], 1.0, ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight);
+            if (lep1_passes_id() && lep2_passes_id()) 
+            {
+                rt::Fill(hc["h_pt_id_obs"], 1.0, 1.0);
+           		if (dilep_type()==DileptonHypType::MUMU) {rt::Fill2D(hc["h_sparm_obs_id_mm"], sparm0(), sparm1(), 1.0);}
+           		if (dilep_type()==DileptonHypType::EMU)  {rt::Fill2D(hc["h_sparm_obs_id_em"], sparm0(), sparm1(), 1.0);}
+           		if (dilep_type()==DileptonHypType::EE)   {rt::Fill2D(hc["h_sparm_obs_id_ee"], sparm0(), sparm1(), 1.0);}
+           		rt::Fill2D(hc["h_sparm_obs_id_ll"], sparm0(), sparm1(), 1.0);
+            }
+            rt::Fill(hc["h_pt_id_pred"], 1.0, l1_id_weight * l2_id_weight);
+           	if (dilep_type()==DileptonHypType::MUMU) {rt::Fill2D(hc["h_sparm_pred_id_mm"], sparm0(), sparm1(), l1_id_weight * l2_id_weight);}
+           	if (dilep_type()==DileptonHypType::EMU)  {rt::Fill2D(hc["h_sparm_pred_id_em"], sparm0(), sparm1(), l1_id_weight * l2_id_weight);}
+           	if (dilep_type()==DileptonHypType::EE)   {rt::Fill2D(hc["h_sparm_pred_id_ee"], sparm0(), sparm1(), l1_id_weight * l2_id_weight);}
+           	rt::Fill2D(hc["h_sparm_pred_id_ll"], sparm0(), sparm1(), l1_id_weight * l2_id_weight);
         }
 
-        // total v2
-        if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num())
+        // lepton Iso eff test
+        if (gen_njets()>=2 && gen_ht()>200.0 && gen_met()>50.0)
+        {
+            if (lep1_passes_iso() && lep2_passes_iso()) 
+            {
+                rt::Fill(hc["h_pt_iso_obs"], 1.0, 1.0);
+           		if (dilep_type()==DileptonHypType::MUMU) {rt::Fill2D(hc["h_sparm_obs_iso_mm"], sparm0(), sparm1(), 1.0);}
+           		if (dilep_type()==DileptonHypType::EMU)  {rt::Fill2D(hc["h_sparm_obs_iso_em"], sparm0(), sparm1(), 1.0);}
+           		if (dilep_type()==DileptonHypType::EE)   {rt::Fill2D(hc["h_sparm_obs_iso_ee"], sparm0(), sparm1(), 1.0);}
+           		rt::Fill2D(hc["h_sparm_obs_iso_ll"], sparm0(), sparm1(), 1.0);
+            }
+            rt::Fill(hc["h_pt_iso_pred"], 1.0, l1_iso_weight * l2_iso_weight);
+           	if (dilep_type()==DileptonHypType::MUMU) {rt::Fill2D(hc["h_sparm_pred_iso_mm"], sparm0(), sparm1(), l1_iso_weight * l2_iso_weight);}
+           	if (dilep_type()==DileptonHypType::EMU)  {rt::Fill2D(hc["h_sparm_pred_iso_em"], sparm0(), sparm1(), l1_iso_weight * l2_iso_weight);}
+           	if (dilep_type()==DileptonHypType::EE)   {rt::Fill2D(hc["h_sparm_pred_iso_ee"], sparm0(), sparm1(), l1_iso_weight * l2_iso_weight);}
+           	rt::Fill2D(hc["h_sparm_pred_iso_ll"], sparm0(), sparm1(), l1_iso_weight * l2_iso_weight);
+        }
+
+
+        //// total
+        //if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num() && lep2_num())
+        //{
+        //    rt::Fill(hc["h_total_obs"], 1.0, 1.0);
+        //}
+        //{
+        //    rt::Fill(hc["h_total_pred"], 1.0, weight);
+        //}
+        // mass points
+        if (m_sample == at::Sample::glustop)  // m_g=750, m_stop = 380, m_lsp == 50.0
+        {
+            if (not (is_equal(sparm2(), 250.0f)))
+            {
+                return 0;
+            }
+        }
+        //if (m_sample == at::Sample::t1tttt)  // m_g=750, m_lsp == 50.0
+        //{
+        //    if (not (is_equal(sparm0(), 750.0f) && is_equal(sparm1(), 50.0f)))
+        //    {
+        //        return 0;
+        //    }
+        //}
+        //if (m_sample == at::Sample::sbottomtop)  // m_b=350, m_chi+ == 130.0, m_lsp = 50
+        //{
+        //    if (not (is_equal(sparm0(), 350.0f) && is_equal(sparm1(), 140.0f) && is_equal(sparm2(), 50.0f)))
+        //    {
+        //        return 0;
+        //    }
+        //}
+
+		// total
+        if (reco_nbtags()>1 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num() && lep2_num())
+        {
+            rt::Fill2D(hc["h_sparm_obs"], sparm0(), sparm1(), 1.0);
+        }
+        //if (gen_is_ss() && gen_nbtags()>=2 && gen_vjets_p4().size()>=4 && gen_ht()>200.0 && gen_met()>50)
+        if (gen_is_ss() && gen_nbtags()>=2 && gen_vjets_p4().size()>=4 && gen_ht()>320.0 && gen_met()>120)
+        {
+            rt::Fill2D(hc["h_sparm_pred"], sparm0(), sparm1(), weight_sr6);
+        }
+
+
+        // total sr6
+        if (reco_nbtags()>=2 && reco_njets()>=4 && reco_ht()>320.0 && reco_met()>120.0 && lep1_num() && lep2_num())
         {
             rt::Fill(hc["h_total_obs2"], 1.0, 1.0);
         }
-        if (reco_nbtags()>=2 && reco_ht()>200.0 && reco_met()>50.0 && lep2_num())
+        if (gen_nbtags()>=2 && gen_njets()>=4 && gen_ht()>320.0 && gen_met()>120)
+        //if (gen_njets()>=4)
         {
-            rt::Fill(hc["h_total_obs2"], 1.0, 1.0);
-        }
-        if (gen_nbtags()>=2)
-        {
-            rt::Fill(hc["h_total_pred2"], l1_pt, weight1);
-            rt::Fill(hc["h_total_pred2"], l2_pt, weight2);
+            rt::Fill(hc["h_total_pred2"], 1.0, weight_sr6);
         }
 
         // sparms projection 
-        if (m_sample == at::Sample::sbottomtop) // lsp == 50.0
-        {
-            if (not rt::is_equal(sparm2(), 50.0f))
-            {
-                return 0;
-            }
-        }
-        else if (m_sample == at::Sample::glustop)  // lsp == 50.0
-        {
-            if (not rt::is_equal(sparm2(), 50.0f))
-            {
-                return 0;
-            }
-        }
-        else if (m_sample == at::Sample::glusbottom)  // m_chi = 150, m_lsp = 50
-        {
-            if (not (rt::is_equal(sparm2(), 150.0f) && rt::is_equal(sparm3(), 50.0f)))
-            {
-                return 0;
-            }
-        }
-
-        if (reco_nbtags()>1 && reco_ht()>200.0 && reco_met()>50.0 && lep1_num() && lep2_num())
-        {
-            rt::Fill2D(hc["h_sparm_obs_v1"], sparm0(), sparm1(), 1.0);
-            rt::Fill2D(hc["h_sparm_obs_v2"], sparm0(), sparm1(), 1.0);
-            rt::Fill2D(hc["h_sparm_obs_v3"], sparm0(), sparm1(), 1.0);
-        }
-        {
-            rt::Fill2D(hc["h_sparm_pred_v1"], sparm0(), sparm1(), weight);
-            rt::Fill2D(hc["h_sparm_pred_v2"], sparm0(), sparm1(), weight);
-            rt::Fill2D(hc["h_sparm_pred_v3"], sparm0(), sparm1(), weight);
-        }
+        //if (m_sample == at::Sample::sbottomtop) // lsp == 50.0
+        //{
+        //    if (not rt::is_equal(sparm2(), 50.0f))
+        //    {
+        //        return 0;
+        //    }
+        //}
+        //else if (m_sample == at::Sample::glusbottom)  // m_chi = 150, m_lsp = 50
+        //{
+        //    if (not (rt::is_equal(sparm2(), 150.0f) && rt::is_equal(sparm3(), 50.0f)))
+        //    {
+        //        return 0;
+        //    }
+        //}
 
     }
     catch (std::exception& e)

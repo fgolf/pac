@@ -5,7 +5,7 @@ signal_region=${1:-0}
 lumi=${2:-1.0}
 out_path=${3:-}
 exclusive=${4:-0}
-nbtags=2
+nbtags=${5:-2}
 options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root"
 
 mkdir -p logs
@@ -46,7 +46,12 @@ make_hists ww_ds    "$options"
 make_hists dy       "$options"
 make_hists wjets    "$options"
 make_hists ttjets   "$options"
+make_hists ttdil    "$options"
+make_hists ttotr    "$options"
+make_hists ttslb    "$options"
+make_hists ttslo    "$options"
 make_hists t_schan  "$options"
+make_hists t_tchan  "$options"
 make_hists t_tw     "$options"
 
 # if exclusive SR, add 10 so $signal_region

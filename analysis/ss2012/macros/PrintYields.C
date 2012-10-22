@@ -166,12 +166,12 @@ std::string Yield::GetLatex(const std::string& latex, bool print_sys_err) const
     {
         if (print_sys_err)
         {
-            const char* format = "%35s & %5.3f $\\pm$ %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f $\\pm$ %5.3f";
+            const char* format = "%35s & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f";
             result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, dee, see, mm, dmm, smm, em, dem, sem, ll, dll, sll);
         }
         else
         {
-            const char* format = "%35s & %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f & %5.3f $\\pm$ %5.3f";
+            const char* format = "%35s & %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f";
             result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, tee(), mm, tmm(), em, tem(), ll, tll());
         }
     }
@@ -189,12 +189,12 @@ void Yield::Print(bool print_sys_err) const
     {
         if (print_sys_err)
         {
-            const char* format = "%15s ee: %2.3f +/- %2.3f +/- %2.3f mm: %2.3f +/- %2.3f +/- %2.3f em: %2.3f +/- %2.3f +/- %2.3f ll: %2.3f +/- %2.3f +/- %2.3f";
+            const char* format = "%15s ee: %2.2f +/- %2.2f +/- %2.2f mm: %2.2f +/- %2.2f +/- %2.2f em: %2.2f +/- %2.2f +/- %2.2f ll: %2.2f +/- %2.2f +/- %2.2f";
             cout << Form(format, title.c_str(), ee, dee, see, mm, dmm, smm, em, dem, sem, ll, dll, sll) << endl;
         }
         else
         {
-            const char* format = "%15s ee: %2.3f +/- %2.3f mm: %2.3f +/- %2.3f em: %2.3f +/- %2.3f ll: %2.3f +/- %2.3f";
+            const char* format = "%15s ee: %2.2f +/- %2.2f mm: %2.2f +/- %2.2f em: %2.2f +/- %2.2f ll: %2.2f +/- %2.2f";
             cout << Form(format, title.c_str(), ee, dee, mm, dmm, em, dem, ll, dll) << endl;
         }
     }
@@ -223,35 +223,53 @@ Yield operator*(float scale, const Yield& y)
                           scale * y.mm, scale * y.dmm, 
                           scale * y.em, scale * y.dem, 
                           scale * y.ll, scale * y.dll);
-   return result; 
+    return result; 
+}
+
+float DetermineError(float v1, float v2, float e1, float e2)
+{
+    // test for zero yield condition
+    if (rt::is_zero(v1) && rt::is_zero(v2))
+    {
+        return std::max(e1, e2);    
+    }
+    else if (rt::is_zero(v1) && not rt::is_zero(v2))
+    {
+        return e2;
+    }
+    else if (not rt::is_zero(v1) && rt::is_zero(v2))
+    {
+        return e1;
+    }
+    else
+    {
+        return sqrt(e1*e1 + e2*e2);
+    }
 }
 
 Yield operator-(const Yield& y1, const Yield& y2)
 {
-    Yield result("total", y1.ee - y2.ee, sqrt(y1.dee*y1.dee + y2.dee*y2.dee), 
-                          y1.mm - y2.mm, sqrt(y1.dmm*y1.dmm + y2.dmm*y2.dmm), 
-                          y1.em - y2.em, sqrt(y1.dem*y1.dem + y2.dem*y2.dem), 
-                          y1.ll - y2.ll, sqrt(y1.dll*y1.dll + y2.dll*y2.dll));
-   return result; 
+    Yield result("total", y1.ee - y2.ee, DetermineError(y1.ee, y2.ee, y1.dee, y2.dee), 
+                          y1.mm - y2.mm, DetermineError(y1.mm, y2.mm, y1.dmm, y2.dmm), 
+                          y1.em - y2.em, DetermineError(y1.em, y2.em, y1.dem, y2.dem), 
+                          y1.ll - y2.ll, DetermineError(y1.ll, y2.ll, y1.dll, y2.dll));
+    return result; 
 }
 
 Yield operator+(const Yield& y1, const Yield& y2)
 {
-    Yield result("total", y1.ee + y2.ee, sqrt(y1.dee*y1.dee + y2.dee*y2.dee), 
-                          y1.mm + y2.mm, sqrt(y1.dmm*y1.dmm + y2.dmm*y2.dmm), 
-                          y1.em + y2.em, sqrt(y1.dem*y1.dem + y2.dem*y2.dem), 
-                          y1.ll + y2.ll, sqrt(y1.dll*y1.dll + y2.dll*y2.dll));
-   return result; 
+    Yield result("total", y1.ee + y2.ee, DetermineError(y1.ee, y2.ee, y1.dee, y2.dee), 
+                          y1.mm + y2.mm, DetermineError(y1.mm, y2.mm, y1.dmm, y2.dmm), 
+                          y1.em + y2.em, DetermineError(y1.em, y2.em, y1.dem, y2.dem), 
+                          y1.ll + y2.ll, DetermineError(y1.ll, y2.ll, y1.dll, y2.dll));
+    return result; 
 }
 
-
-
 // get the yields per sample
-
 Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
     rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee"]);
@@ -268,7 +286,7 @@ Yield GetSSYield(const std::string sample_name, unsigned int signal_region_num =
 Yield GetDFYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
     rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_df_pred"]->GetBinContent(1), hc["h_df_pred"]->GetBinError(1));
@@ -285,7 +303,7 @@ Yield GetDFYield(const std::string sample_name, unsigned int signal_region_num =
 Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
     rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_sf_pred"]->GetBinContent(1), hc["h_sf_pred"]->GetBinError(1));
@@ -302,7 +320,7 @@ Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num =
 Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
     rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_fake_pred"]->GetBinContent(1), hc["h_fake_pred"]->GetBinError(1));
@@ -319,7 +337,7 @@ Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num
 Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num = 0, const std::string output_path = "")
 {
     // hists  
-	std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
+    std::string sr = ss::GetSignalRegionInfo(signal_region_num).name;
     rt::TH1Container hc(Form("plots/%s/%s/%s.root", output_path.c_str(), sr.c_str(), sample_name.c_str()));
 
     pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
@@ -349,39 +367,51 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
 
     // The order matters for the formated tex table.
     Yield yield_mc("Total MC");
+
+    // for display only
     vector<Yield> yields_bkgd;
-    yields_bkgd.push_back(GetSSYield("ttjets"  , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttdil"   , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttslb"   , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttslo"   , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttotr"   , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("ttjets"  , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("t_schan" , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("t_tchan" , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("t_tw"    , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("dy"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wjets"   , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ww"      , signal_region_num, output_path));
+    size_t display_index = yields_bkgd.size();
+
+    // to include in prediction
+    Yield yield_wgstar("wgstar");
+    yield_wgstar += GetSSYield("wgstar2e", signal_region_num, output_path);
+    yield_wgstar += GetSSYield("wgstar2m", signal_region_num, output_path);
+    yield_wgstar += GetSSYield("wgstar2t", signal_region_num, output_path);
+
+    Yield yield_wwqq("wwqq");
+    yield_wwqq += GetSSYield("wmwmqq"  , signal_region_num, output_path);
+    yield_wwqq += GetSSYield("wpwpqq"  , signal_region_num, output_path);
+
+    //yields_bkgd.push_back(GetSSYield("wgstar2e", signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("wgstar2m", signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("wgstar2t", signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("wmwmqq"  , signal_region_num, output_path));
+    //yields_bkgd.push_back(GetSSYield("wpwpqq"  , signal_region_num, output_path));
+    yields_bkgd.push_back(yield_wgstar);
     yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, output_path));
+    yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("wzz"     , signal_region_num, output_path));
     yields_bkgd.push_back(GetSSYield("zzz"     , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wgstar2e", signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wgstar2m", signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wgstar2t", signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wmwmqq"  , signal_region_num, output_path));
-    yields_bkgd.push_back(GetSSYield("wpwpqq"  , signal_region_num, output_path));
+    yields_bkgd.push_back(yield_wwqq);
     yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_num, output_path));
-
-    //Yield yield_wgstar("wgstar");
-    //yield_wgstar += GetSSYield("wgstar2e", signal_region_num, output_path);
-    //yield_wgstar += GetSSYield("wgstar2m", signal_region_num, output_path);
-    //yield_wgstar += GetSSYield("wgstar2t", signal_region_num, output_path);
-
-    //Yield yield_wwqq("wwqq");
-    //yield_wwqq += GetSSYield("wmwmqq"  , signal_region_num, output_path);
-    //yield_wwqq += GetSSYield("wpwpqq"  , signal_region_num, output_path);
 
     //yields_bkgd.push_back(GetSSYield("wz"      , signal_region_num, output_path));
     //yields_bkgd.push_back(GetSSYield("zz"      , signal_region_num, output_path));
@@ -394,8 +424,6 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     //yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, output_path));
     //yields_bkgd.push_back(GetSSYield("wzz"     , signal_region_num, output_path));
     //yields_bkgd.push_back(GetSSYield("zzz"     , signal_region_num, output_path));
-    //yields_bkgd.push_back(yield_wgstar);
-    //yields_bkgd.push_back(yield_wwqq);
     //yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_num, output_path));
 
     // add the backtrounds to get the totol MC and total prediction
@@ -404,7 +432,7 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
         yield_mc += yields_bkgd[i];
     }
     Yield yield_mc_pred("MC Pred");
-    for (size_t i = 6; i != yields_bkgd.size(); i++)
+    for (size_t i = display_index; i != yields_bkgd.size(); i++)
     {
         yield_mc_pred += yields_bkgd[i];
     }
@@ -453,34 +481,34 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
 
             // handle title explicitly 
             string latex_name = y.title;
-            if      (y.title == "SF"      ) {latex_name = "SF";             }
-            else if (y.title == "DF"      ) {latex_name = "DF";             }
-            else if (y.title == "Fakes"   ) {latex_name = "SF + DF";        }
-            else if (y.title == "Flips"   ) {latex_name = "Charge Flips";   }
-            else if (y.title == "Total MC") {latex_name = "Total MC";       }
-            else if (y.title == "MC Pred" ) {latex_name = "MC Pred";        }
-            else if (y.title == "pred"    ) {latex_name = "Total Pred";     }
-            //else if (y.title == "wgstar"  ) {latex_name = "$W\\gamma^{*}$";   }
-            //else if (y.title == "wwqq"    ) {latex_name = "$W^{\\pm}^{\\pm}$";}
+            if      (y.title == "SF"      ) {latex_name = "SF";                  }
+            else if (y.title == "DF"      ) {latex_name = "DF";                  }
+            else if (y.title == "Fakes"   ) {latex_name = "SF + DF";             }
+            else if (y.title == "Flips"   ) {latex_name = "Charge Flips";        }
+            else if (y.title == "Total MC") {latex_name = "Total MC";            }
+            else if (y.title == "MC Pred" ) {latex_name = "MC Pred";             }
+            else if (y.title == "pred"    ) {latex_name = "Total Pred";          }
+            else if (y.title == "wgstar"  ) {latex_name = "$W\\gamma^{*}$";      }
+            else if (y.title == "wwqq"    ) {latex_name = "$qqW^{\\pm}W^{\\pm}$";}
             else
             {
                 latex_name = at::IsSample(y.title) ? at::GetSampleInfo(y.title).latex : y.title;
             }
 
-            if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
-            else if (y.title == "Flips"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
-            else if (y.title == "MC Pred" ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
-            else if (y.title == "pred"    ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/false));} 
+            if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            else if (y.title == "Flips"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            else if (y.title == "MC Pred" ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
+            else if (y.title == "pred"    ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
             else                            {latex.append(y.GetLatex(latex_name));}
             //latex.append(y.GetLatex(latex_name));
             latex.append(" \\\\\n");
 
             // add the line between sections
-            if (y.title == "ttjets"  ) {latex.append("\\hline\n"        );} 
+            if (y.title == "ttotr"   ) {latex.append("\\hline\n"        );} 
             if (y.title == "t_tw"    ) {latex.append("\\hline\n"        );} 
             if (y.title == "ww"      ) {latex.append("\\hline\n"        );} 
             if (y.title == "zz"      ) {latex.append("\\hline\n"        );} 
-            if (y.title == "zzz"     ) {latex.append("\\hline\n"        );} 
+            //if (y.title == "zzz"     ) {latex.append("\\hline\n"        );} 
             if (y.title == "ww_ds"   ) {latex.append("\\hline\n"        );} 
             if (y.title == "Total MC") {latex.append("\\hline\\hline\n" );} 
             if (y.title == "DF"      ) {latex.append("\\hline\n"        );} 
@@ -914,11 +942,11 @@ void CreateProjPlots(const std::string output_path = "", const std::string& suff
         bin++;
     } // loop over SRs
 
-	// set style
-	rt::SetTDRStyle();
+    // set style
+    rt::SetTDRStyle();
     gStyle->SetHatchesSpacing(0.65);
 
-	// colors
+    // colors
     static Color_t data_color = kBlack;
     static Color_t mc_color   = kCyan-5;
     static Color_t fake_color = kRed-6;

@@ -42,6 +42,10 @@ class OutreachClosure : public at::AnalysisWithHist
         std::tr1::shared_ptr<TH1F> h_btagpt;
         std::tr1::shared_ptr<TH1F> h_el_pt;
         std::tr1::shared_ptr<TH1F> h_mu_pt;
+        std::tr1::shared_ptr<TH1F> h_el_id;
+        std::tr1::shared_ptr<TH1F> h_mu_id;
+        std::tr1::shared_ptr<TH1F> h_el_iso;
+        std::tr1::shared_ptr<TH1F> h_mu_iso;
         std::tr1::shared_ptr<TH1F> h_genmet30;
         std::tr1::shared_ptr<TH1F> h_genmet50;
         std::tr1::shared_ptr<TH1F> h_genmet120;

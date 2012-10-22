@@ -12,6 +12,7 @@
 #include "at/DileptonHypType.h"
 #include "at/DileptonChargeType.h"
 #include "SignalRegion.h"
+#include "TTbarBreakDown.h"
 #include "ScaleFactors.h"
 #include "PredSummary.h"
 #include "FakeRatePrediction.h"
@@ -124,11 +125,11 @@ void PlotLooper::EndJob()
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll
-    std::tr1::array<int, 4> yield_ss;
-    yield_ss[0] = static_cast<int>(rt::Integral(hc["h_yield_ee"]));
-    yield_ss[1] = static_cast<int>(rt::Integral(hc["h_yield_mm"]));
-    yield_ss[2] = static_cast<int>(rt::Integral(hc["h_yield_em"]));
-    yield_ss[3] = static_cast<int>(rt::Integral(hc["h_yield_ll"]));
+    std::tr1::array<float, 4> yield_ss;
+    yield_ss[0] = rt::Integral(hc["h_yield_ee"]);
+    yield_ss[1] = rt::Integral(hc["h_yield_mm"]);
+    yield_ss[2] = rt::Integral(hc["h_yield_em"]);
+    yield_ss[3] = rt::Integral(hc["h_yield_ll"]);
 
     // set the error to the lumi*scale1fb if the yield < weight*0.5 
     float weight = (m_lumi * m_scale1fb);
@@ -438,10 +439,10 @@ int PlotLooper::operator()(long event)
 
         // dilepton hyp type: 1 mm, 2 em, 3ee
         DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
-        //if (hyp_type != DileptonHypType::EMU)
-        //{
-        //    return 0;
-        //}
+        if (hyp_type == DileptonHypType::static_size)
+        {
+            return 0;
+        }
 
         // check that it passes the trigger requirement
         //bool passes_trigger = false;
@@ -501,6 +502,16 @@ int PlotLooper::operator()(long event)
             }
             //cout << Form("sparm0 %f m_glu %f", sparm0(), m_mass_glu) << endl;;
             //cout << Form("sparm1 %f m_lsp %f", sparm1(), m_mass_lsp) << endl;;
+        }
+
+        // ttbar breakdown 
+        switch (m_sample)
+        {
+            case at::Sample::ttdil: if (ttbar_bkdn() != TTbarBreakDown::TTDIL) return 0; break; 
+            case at::Sample::ttotr: if (ttbar_bkdn() != TTbarBreakDown::TTOTR) return 0; break;
+            case at::Sample::ttslb: if (ttbar_bkdn() != TTbarBreakDown::TTSLB) return 0; break;
+            case at::Sample::ttslo: if (ttbar_bkdn() != TTbarBreakDown::TTSLO) return 0; break;
+            default: {/*do nothing*/}
         }
 
         // Weight Factors

@@ -270,7 +270,7 @@ int OutreachLooper::Analyze(long event)
 
         // Now take care of jets
         m_evt.gen_vjets_p4 = getGenJets(40.0, 2.4);
-        m_evt.gen_njets    = m_evt.gen_vbjets_p4.size(); 
+        m_evt.gen_njets    = m_evt.gen_vjets_p4.size(); 
 
         for (size_t jidx = 0; jidx < m_evt.gen_vjets_p4.size(); jidx++) 
         {
@@ -316,8 +316,8 @@ int OutreachLooper::Analyze(long event)
         }
         else if (bjets.size() == 3) 
         {
-            m_evt.sf_nbtag  = btagEventWeight (3, bjets.at(0).pt(), bjets.at(1).pt(), bjets.at(2).pt(), 0., m_is_fastsim);
-            m_evt.sf_nbtag3 = btagEventWeight3(3, bjets.at(0).pt(), bjets.at(1).pt(), bjets.at(2).pt(), 0., m_is_fastsim);
+            m_evt.sf_nbtag  = btagEventWeight (3, bjets.at(0).pt(), bjets.at(1).pt(), bjets.at(2).pt(), 0.0, m_is_fastsim);
+            m_evt.sf_nbtag3 = btagEventWeight3(3, bjets.at(0).pt(), bjets.at(1).pt(), bjets.at(2).pt(), 0.0, m_is_fastsim);
         }
         else if (bjets.size() > 3) 
         {

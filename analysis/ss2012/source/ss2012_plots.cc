@@ -159,18 +159,16 @@ try
         if (input_file.empty())
         {
             input_file = Form("babies/%s.root", sample_name.c_str());
-	    /*
-            if (is_data)
+            // special case for ttbar breakdown
+            switch (sample)
             {
-                //input_file = "babies/52X/data.root";
-                input_file = "babies/53X/data.root";
+                case at::Sample::ttdil: input_file = "babies/ttjets.root"; break; 
+                case at::Sample::ttotr: input_file = "babies/ttjets.root"; break;
+                case at::Sample::ttslb: input_file = "babies/ttjets.root"; break;
+                case at::Sample::ttslo: input_file = "babies/ttjets.root"; break;
+                default: {/*do nothing*/}
             }
-            else
-            {
-                input_file = Form("babies/52X/%s.root", sample_name.c_str());
-                //input_file = Form("babies/53X/%s.root", sample_name.c_str());
-            }
-	    */
+
         }
         if (output_file.empty())
         {

@@ -269,6 +269,70 @@ namespace at
         },
         {
             // name
+            "ttdil", 
+            // title
+            "t#bar{t} #rightarrow llX", 
+            // latex
+            "$t\\overline{t} \\rightarrow \\ell \\ell X$", 
+            // ntuple_path
+            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::ttdil,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "ttotr", 
+            // title
+            "t#bar{t} other", 
+            // latex
+            "$t\\overline{t}\\ \\rm{other}$", 
+            // ntuple_path
+            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::ttotr,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "ttslb", 
+            // title
+            "t#bar{t} #rightarrow l(b #rightarrow l)X", 
+            // latex
+            "$t\\overline{t} \\rightarrow \\ell (b \\rightarrow \\ell) X$", 
+            // ntuple_path
+            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::ttslb,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "ttslo", 
+            // title
+            "t#bar{t} #rightarrow l(#slash{b} #rightarrow l)X", 
+            // latex
+            "$t\\overline{t} \\rightarrow \\ell (\\slashed b \\rightarrow \\ell) X$", 
+            // ntuple_path
+            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::ttslo,
+            // color
+            kBlue
+        },
+        {
+            // name
             "zz", 
             // title
             "ZZ", 

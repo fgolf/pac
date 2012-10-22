@@ -114,7 +114,7 @@ namespace rt
         // tdrStyle->SetTitleH(0); // Set the height of the title box
         // tdrStyle->SetTitleW(0); // Set the width of the title box
         tdrStyle->SetTitleX(0.5); // Set the position of the title box
-        // tdrStyle->SetTitleY(0.985); // Set the position of the title box
+        tdrStyle->SetTitleY(0.975); // Set the position of the title box
         tdrStyle->SetTitleAlign(23);
         tdrStyle->SetTitleStyle(0);
         tdrStyle->SetTitleBorderSize(0);
@@ -124,11 +124,11 @@ namespace rt
 
         tdrStyle->SetTitleColor(1, "XYZ");
         tdrStyle->SetTitleFont(42, "XYZ");
-        tdrStyle->SetTitleSize(0.06, "XYZ");
+        tdrStyle->SetTitleSize(0.05, "XYZ");
         // tdrStyle->SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
         // tdrStyle->SetTitleYSize(Float_t size = 0.02);
-        tdrStyle->SetTitleXOffset(1.0);
-        tdrStyle->SetTitleOffset(1.2, "Y"); // Another way to set the Offset
+        //tdrStyle->SetTitleOffset(1.20, "X");
+        //tdrStyle->SetTitleOffset(1.05, "Y"); 
 
         // For the axis labels:
 

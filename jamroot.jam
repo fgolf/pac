@@ -42,8 +42,9 @@ use-project /boost : $(boost_current) ;
 
 # ROOT
 local rootsys = [ os.environ ROOTSYS ] ;
-path-constant ROOT_PATH : $(rootsys) ;
-use-project /ROOT       : ./externals/build/root ;
+path-constant ROOT_PATH       : $(rootsys) ;
+#path-constant ROOT_PATH_DEBUG : $(rootsys)_debug ;
+use-project /ROOT             : ./externals/build/root ;
 
 # MiniFWLite
 path-constant MINIFWLITE_PATH : ./externals/source/MiniFWLite ;
