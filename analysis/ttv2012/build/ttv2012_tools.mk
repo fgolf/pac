@@ -11,7 +11,9 @@ include ${PAC}/tools/Makefile.common
 # source files
 libraries       := libttv2012_tools.so
 package_dir_rel := analysis/ttv2012
-sources         := TrileptonZTree.cc 	\
+sources         := TRILEPZ2012.cc \
+			TRILEPZ2012Wrapper.cc \
+			TrileptonZTree.cc \
 			SameSignTree.cc
 include_dir     := include source 
 defines         := 
