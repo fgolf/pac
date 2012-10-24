@@ -36,6 +36,7 @@ public:
         int jetMetScale = 0,
         bool sync_print = false,
         bool verbose = false,
+        bool gen_only = false,
         const std::string apply_jec_otf = "",
         const std::string ele_mva_path = "/home/users/pac/analysis/ttv2012/data/electron_mva/"
         );
@@ -64,6 +65,7 @@ private:
     bool m_filter_bad_runs;
     bool m_sync_print;
     bool m_verbose;
+    bool m_gen_only;
 
     // 0 eee, 1 eem, 2 mme, 3 mmm, 4 eme, 5 emm
     std::tr1::array<float, 7> m_count;

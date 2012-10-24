@@ -211,6 +211,7 @@ try
             jetMetScale,
             sync_print,
             verbose,
+            gen_only,
             apply_jec_otf,
             ele_mva_path
         ),

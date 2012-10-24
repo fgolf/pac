@@ -67,10 +67,23 @@ float EffectiveArea03(int id, int idx)
     return AEff;
 }
 
-// place holder until I figure out the right thing
-float EffectiveArea04(int, int)
+float EffectiveArea04(int id, int idx)
 {
-    return -99999.0;
+    if (abs(id)!=11)
+        return -999990.0;
+
+    float etaAbs = fabs(els_etaSC()[idx]);
+
+    // get effective area
+    float AEff = 0.;
+    if (etaAbs <= 1.0) AEff = 0.19;
+    else if (etaAbs > 1.0 && etaAbs <= 1.479) AEff = 0.25;
+    else if (etaAbs > 1.479 && etaAbs <= 2.0) AEff = 0.12;
+    else if (etaAbs > 2.0 && etaAbs <= 2.2) AEff = 0.21;
+    else if (etaAbs > 2.2 && etaAbs <= 2.3) AEff = 0.27;
+    else if (etaAbs > 2.3 && etaAbs <= 2.4) AEff = 0.44;
+    else if (etaAbs > 2.4) AEff = 0.52;
+    return AEff;
 }
 
 // use delta R to match
@@ -114,6 +127,7 @@ TrileptonZAnalysisLooper::TrileptonZAnalysisLooper
     int  jetMetScale,
     bool sync_print,
     bool verbose,
+    bool gen_only,
     const std::string apply_jec_otf,
     const std::string ele_mva_path
     )
@@ -125,6 +139,7 @@ TrileptonZAnalysisLooper::TrileptonZAnalysisLooper
     , m_jetMetScale(jetMetScale)
     , m_sync_print(sync_print)
     , m_verbose(verbose)
+    , m_gen_only(gen_only)
     , jet_corrector(NULL)
     , met_corrector(NULL)
     , trigEleMVA(NULL)
@@ -421,7 +436,18 @@ int TrileptonZAnalysisLooper::Analyze(long event)
             m_evt.gen_ht         = efftools::getGenHT(15.0, 2.4);
             m_evt.vgenjets_p4    = efftools::getGenJets(15.0, 2.4);
         }
-       
+
+        if (m_gen_only)
+        {
+            // fill event level info 
+            m_evt.event_info.FillCommon(m_sample);
+
+            // fill the tree
+            m_tree->Fill();
+
+            // continue to next event
+            return 0;
+        }
 
         // Event Cleaning
         // --------------------------------------------------------------------------------------------------------- //
@@ -725,8 +751,8 @@ int TrileptonZAnalysisLooper::Analyze(long event)
         m_evt.dilep.lep1.cordetiso04 = m_evt.dilep.lep1.detiso04 - (log(m_evt.dilep.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.dilep.lep1.p4.pt()); // check that I have the correct formula 
         m_evt.dilep.lep1.corpfiso    = (abs(best_trilep_hyp.z.lep1.id)==11) ? samesign::electronIsolationPF2012(best_trilep_hyp.z.lep1.idx) : muonIsoValuePF2012_deltaBeta(best_trilep_hyp.z.lep1.idx);
         m_evt.dilep.lep1.corpfiso04  = -999999.0;   // this is not implemented yet 
-        m_evt.dilep.lep1.effarea     = EffectiveArea03(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx);  // is there a diffenece for different cone sizes? 
-        m_evt.dilep.lep1.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
+        m_evt.dilep.lep1.effarea     = EffectiveArea03(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx);
+        m_evt.dilep.lep1.effarea04   = EffectiveArea04(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx);
         m_evt.dilep.lep1.dbeta       = (abs(best_trilep_hyp.z.lep1.id)==13) ? mus_isoR03_pf_PUPt().at(best_trilep_hyp.z.lep1.idx) : -99999.0;
         m_evt.dilep.lep1.dbeta04     = (abs(best_trilep_hyp.z.lep1.id)==13) ? mus_isoR04_pf_PUPt().at(best_trilep_hyp.z.lep1.idx) : -99999.0;
         m_evt.dilep.lep1.is_conv     = (abs(best_trilep_hyp.z.lep1.id)==11) ? isFromConversionMIT(best_trilep_hyp.z.lep1.idx) : false;
@@ -738,8 +764,8 @@ int TrileptonZAnalysisLooper::Analyze(long event)
         m_evt.dilep.lep2.cordetiso04 = m_evt.dilep.lep2.detiso04 - (log(m_evt.dilep.lep2.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.dilep.lep2.p4.pt()); // check that I have the correct formula 
         m_evt.dilep.lep2.corpfiso    = (abs(best_trilep_hyp.z.lep2.id)==11) ? samesign::electronIsolationPF2012(best_trilep_hyp.z.lep2.idx) : muonIsoValuePF2012_deltaBeta(best_trilep_hyp.z.lep2.idx);
         m_evt.dilep.lep2.corpfiso04  = -999999.0;   // this is not implemented yet 
-        m_evt.dilep.lep2.effarea     = EffectiveArea03(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx);  // is there a diffenece for different cone sizes? 
-        m_evt.dilep.lep2.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
+        m_evt.dilep.lep2.effarea     = EffectiveArea03(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx);
+        m_evt.dilep.lep2.effarea04   = EffectiveArea04(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx);
         m_evt.dilep.lep2.dbeta       = (abs(best_trilep_hyp.z.lep2.id)==13) ? mus_isoR03_pf_PUPt().at(best_trilep_hyp.z.lep2.idx) : -99999.0;
         m_evt.dilep.lep2.dbeta04     = (abs(best_trilep_hyp.z.lep2.id)==13) ? mus_isoR04_pf_PUPt().at(best_trilep_hyp.z.lep2.idx) : -99999.0;
         m_evt.dilep.lep2.is_conv     = (abs(best_trilep_hyp.z.lep2.id)==11) ? isFromConversionMIT(best_trilep_hyp.z.lep2.idx) : false;
@@ -751,8 +777,8 @@ int TrileptonZAnalysisLooper::Analyze(long event)
         m_evt.lep3.cordetiso04       = m_evt.lep3.detiso04 - (log(m_evt.lep3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep3.p4.pt()); // check that I have the correct formula 
         m_evt.lep3.corpfiso          = (abs(best_trilep_hyp.w.id)==11) ? samesign::electronIsolationPF2012(best_trilep_hyp.w.idx) : muonIsoValuePF2012_deltaBeta(best_trilep_hyp.w.idx);
         m_evt.lep3.corpfiso04        = -999999.0;   // this is not implemented yet 
-        m_evt.lep3.effarea           = EffectiveArea03(best_trilep_hyp.w.id, best_trilep_hyp.w.idx);  // is there a diffenece for different cone sizes? 
-        m_evt.lep3.effarea04         = -999999.0;   // is there a diffenece for different cone sizes?
+        m_evt.lep3.effarea           = EffectiveArea03(best_trilep_hyp.w.id, best_trilep_hyp.w.idx);
+        m_evt.lep3.effarea04         = EffectiveArea04(best_trilep_hyp.w.id, best_trilep_hyp.w.idx);
         m_evt.lep3.dbeta             = (abs(best_trilep_hyp.w.id)==13) ? mus_isoR03_pf_PUPt().at(best_trilep_hyp.w.idx) : -99999.0;
         m_evt.lep3.dbeta04           = (abs(best_trilep_hyp.w.id)==13) ? mus_isoR04_pf_PUPt().at(best_trilep_hyp.w.idx) : -99999.0;
         m_evt.lep3.is_conv           = (abs(best_trilep_hyp.w.id)==11) ? isFromConversionMIT(best_trilep_hyp.w.idx) : false;
@@ -888,17 +914,16 @@ int TrileptonZAnalysisLooper::Analyze(long event)
         // jet/bjet info 
         if (not jet_corrector)
         {
-            m_evt.vbjets_p4 = ttv::getBtaggedJets(good_leps, jet_type, JETS_BTAG_CSVL,     /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale); 
-            m_evt.vjets_p4  = ttv::getJets(good_leps, jet_type,                            /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale); 
-            // m_evt.vbtags    = ttv::getBtaggedJetFlags(good_leps, jet_type, JETS_BTAG_CSVM, /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale);
+            m_evt.vjets_p4  = ttv::getJets(good_leps, jet_type,                            /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale);
+            m_evt.vbjets_p4 = ttv::getBtaggedJets(good_leps, jet_type, JETS_BTAG_CSVL,     /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale);
         }
         else
         {
-            m_evt.vbjets_p4 = ttv::getBtaggedJets(good_leps, jet_corrector, jet_type, JETS_BTAG_CSVL,     /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale); 
-            m_evt.vjets_p4  = ttv::getJets(good_leps, jet_corrector, jet_type,                            /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale); 
-            // m_evt.vbtags    = ttv::getBtaggedJetFlags(good_leps, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale);
+            m_evt.vjets_p4  = ttv::getJets(good_leps, jet_corrector, jet_type,                            /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale);
+            m_evt.vbjets_p4 = ttv::getBtaggedJets(good_leps, jet_corrector, jet_type, JETS_BTAG_CSVL,     /*dR=*/0.5, /*jet_pt>*/15.0, /*|eta|<*/2.4, /*rescale=*/1.0, /*systFlag=*/m_jetMetScale);
         }
 
+        SetBtagDiscriminator(m_evt.vjets_p4, m_evt.vbjets_disc, JETS_BTAG_CSVL);
         m_evt.bjets_dr12 = (m_evt.nbtags_loose>=2) ? rt::DeltaR(m_evt.vbjets_p4.at(0), m_evt.vbjets_p4.at(1)) : -999999.0;
 
         vector<LorentzVector> temp_bjets_p4 = m_evt.vbjets_p4;
