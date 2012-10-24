@@ -74,6 +74,7 @@ root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\")" >> tables/yields_
 
 # print tex
 mkdir -p tables/${out_path}
+mkdir -p temp
 root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\", 1)" > temp/temp.tex
 if [ $exclusive -eq 1 ]; then
 	tail -n +3 temp/temp.tex > tables/${out_path}/sr${signal_region}_nbtags${nbtags}_exclusive.tex
