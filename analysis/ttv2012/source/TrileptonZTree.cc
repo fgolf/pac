@@ -125,7 +125,7 @@ void TrileptonZTree::SetBranches(TTree &tree)
     tree.Branch(Form("%snjets15"                , prefix_.c_str()), &njets15                , "njets15/I"                );
     tree.Branch(Form("%snjets30"                , prefix_.c_str()), &njets30                , "njets30/I"                );
     tree.Branch(Form("%snbtags_loose"           , prefix_.c_str()), &nbtags_loose           , "nbtags_loose/I"           );
-    tree.Branch(Form("%snbtags_loose"           , prefix_.c_str()), &nbtags_loose           , "nbtags_loose/I"           );
+    tree.Branch(Form("%snbtags_tight"           , prefix_.c_str()), &nbtags_tight           , "nbtags_tight/I"           );
     tree.Branch(Form("%svtxw"                   , prefix_.c_str()), &vtxw                   , "vtxw/F"                   );
     tree.Branch(Form("%sht"                     , prefix_.c_str()), &ht                     , "ht/F"                     );
     tree.Branch(Form("%srho"                    , prefix_.c_str()), &rho                    , "rho/F"                    );
