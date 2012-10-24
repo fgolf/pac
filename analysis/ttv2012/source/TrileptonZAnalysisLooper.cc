@@ -1248,7 +1248,7 @@ int TrileptonZAnalysisLooper::GetGenTrilepHyp(float zwin)
             for (unsigned int widx = idx+1; widx < vgenps.size(); widx++)
             {
                 if (widx == (unsigned int)zcands.at(zidx)) continue;
-                std::pair<int, int> tmp_pair = std::make_pair(idx, zcands.at(idx));
+                std::pair<int, int> tmp_pair = std::make_pair(idx, zcands.at(zidx));
                 trilep_cands.push_back(std::make_pair(tmp_pair, widx));
             }
         }
