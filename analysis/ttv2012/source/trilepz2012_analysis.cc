@@ -48,6 +48,7 @@ try
     int num_btags                   = 0;
     int jetMetScale                 = 0;
     std::string apply_jec_otf       = "";
+    std::string ele_mva_path        = "/home/users/fgolf/pac/analysis/ttv2012/data/electron_mva/";
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -71,6 +72,7 @@ try
         ("nbtags"        , po::value<int>(&num_btags)                    , "minimum # of btags to select"                                                      )
         ("jetMetScale"   , po::value<int>(&jetMetScale)                  , "+1 to scale jets up, -1 to scale jets down"                                        )
         ("apply_jec_otf" , po::value<std::string>(&apply_jec_otf)        , "apply JEC on-the-fly using the specified global tag"                               )
+        ("ele_mva_path"  , po::value<std::string>(&ele_mva_path)         , "use electron MVA for ID"                                                           )
         ;
 
     po::variables_map vm;
@@ -105,6 +107,7 @@ try
         cout << "fake_rate_file_name:\t" << fake_rate_file_name << endl;
         cout << "jetMetScale        :\t" << jetMetScale         << endl;
         cout << "apply_jec_otf      :\t" << apply_jec_otf       << endl;
+        cout << "ele_mva_path       :\t" << ele_mva_path        << endl;
     }
 
     // test inputs boundary conditions
@@ -208,7 +211,8 @@ try
             jetMetScale,
             sync_print,
             verbose,
-            apply_jec_otf
+            apply_jec_otf,
+            ele_mva_path
         ),
         cms2,
         number_of_events,
