@@ -135,7 +135,7 @@ SHAREDLIB.cpp = $(CXX) $(ROOTLIBS) $(CPPFLAGS) $(LDFLAGS) $(SOFLAGS) $(TARGET_AR
 SHAREDLIB.cc  = $(SHAREDLIB.cpp) 
 
 # ROOT is missing the GenVector in its default setup 
-LDFLAGS += -lGenVector -lEG
+LDFLAGS += -lGenVector -lEG -lTMVA -lMinuit -lMLP -lXMLIO -lTreePlayer
 
 # load debug symbols
 ifeq ($(DEBUG),1)
