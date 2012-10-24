@@ -36,7 +36,8 @@ public:
         int jetMetScale = 0,
         bool sync_print = false,
         bool verbose = false,
-        const std::string apply_jec_otf = ""
+        const std::string apply_jec_otf = "",
+        const std::string ele_mva_path = "/home/users/pac/analysis/ttv2012/data/electron_mva/"
         );
 
     // destroy:
@@ -66,6 +67,14 @@ private:
 
     // 0 eee, 1 eem, 2 mme, 3 mmm, 4 eme, 5 emm
     std::tr1::array<float, 7> m_count;
+    std::tr1::array<float, 7> m_count_sf;
+    std::tr1::array<float, 7> m_count_df;
+    std::tr1::array<float, 7> m_count_tf;
+
+    std::tr1::array<float, 7> m_count_nobtag;
+    std::tr1::array<float, 7> m_count_nobtag_sf;
+    std::tr1::array<float, 7> m_count_nobtag_df;
+    std::tr1::array<float, 7> m_count_nobtag_tf;
 
     // fake rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;

@@ -33,6 +33,7 @@ void TrileptonZTree::Reset()
     trig_mm                = false;
     trig_em                = false;
     trig_ee                = false;
+    event_type             = ttv2012::EventType::static_size;
     njets30_dn             = -999999;
     njets30_up             = -999999;
     njets15_dn             = -999999;
@@ -134,6 +135,7 @@ void TrileptonZTree::SetBranches(TTree &tree)
     tree.Branch(Form("%strig_mm"                , prefix_.c_str()), &trig_mm                , "trig_mm/O"                );
     tree.Branch(Form("%strig_em"                , prefix_.c_str()), &trig_em                , "trig_em/O"                );
     tree.Branch(Form("%strig_ee"                , prefix_.c_str()), &trig_ee                , "trig_ee/O"                );
+    tree.Branch(Form("%sevent_type"             , prefix_.c_str()), &event_type             , "event_type/I"             );
     tree.Branch(Form("%snjets30_dn"             , prefix_.c_str()), &njets30_dn             , "njets30_dn/I"             );
     tree.Branch(Form("%snjets30_up"             , prefix_.c_str()), &njets30_up             , "njets30_up/I"             );
     tree.Branch(Form("%snjets15_dn"             , prefix_.c_str()), &njets15_dn             , "njets15_dn/I"             );

@@ -114,7 +114,8 @@ TrileptonZAnalysisLooper::TrileptonZAnalysisLooper
     int  jetMetScale,
     bool sync_print,
     bool verbose,
-    const std::string apply_jec_otf
+    const std::string apply_jec_otf,
+    const std::string ele_mva_path
     )
     : AnalysisWithTree(root_file_name, "tree", "baby tree for TTZ2012 analysis")
     , m_sample(sample)
@@ -196,8 +197,37 @@ TrileptonZAnalysisLooper::TrileptonZAnalysisLooper
         }
     }
 
+    // setup MVAs for electron ID
+    std::vector<std::string> trigEleWeights;
+    trigEleWeights.push_back(Form("%s/Electrons_BDTG_TrigV0_Cat1.weights.xml", ele_mva_path.c_str()));
+    trigEleWeights.push_back(Form("%s/Electrons_BDTG_TrigV0_Cat2.weights.xml", ele_mva_path.c_str())); 
+    trigEleWeights.push_back(Form("%s/Electrons_BDTG_TrigV0_Cat3.weights.xml", ele_mva_path.c_str())); 
+    trigEleWeights.push_back(Form("%s/Electrons_BDTG_TrigV0_Cat4.weights.xml", ele_mva_path.c_str())); 
+    trigEleWeights.push_back(Form("%s/Electrons_BDTG_TrigV0_Cat5.weights.xml", ele_mva_path.c_str())); 
+    trigEleWeights.push_back(Form("%s/Electrons_BDTG_TrigV0_Cat6.weights.xml", ele_mva_path.c_str())); 
+    trigEleMVA = new EGammaMvaEleEstimator();
+    trigEleMVA->initialize("BDT", EGammaMvaEleEstimator::kTrig, true, trigEleWeights);
+
+    std::vector<std::string> nontrigEleWeights;
+    nontrigEleWeights.push_back(Form("%s/Electrons_BDTG_NonTrigV0_Cat1.weights.xml", ele_mva_path.c_str()));
+    nontrigEleWeights.push_back(Form("%s/Electrons_BDTG_NonTrigV0_Cat2.weights.xml", ele_mva_path.c_str())); 
+    nontrigEleWeights.push_back(Form("%s/Electrons_BDTG_NonTrigV0_Cat3.weights.xml", ele_mva_path.c_str())); 
+    nontrigEleWeights.push_back(Form("%s/Electrons_BDTG_NonTrigV0_Cat4.weights.xml", ele_mva_path.c_str())); 
+    nontrigEleWeights.push_back(Form("%s/Electrons_BDTG_NonTrigV0_Cat5.weights.xml", ele_mva_path.c_str())); 
+    nontrigEleWeights.push_back(Form("%s/Electrons_BDTG_NonTrigV0_Cat6.weights.xml", ele_mva_path.c_str()));    
+    nontrigEleMVA = new EGammaMvaEleEstimator();
+    nontrigEleMVA->initialize("BDT", EGammaMvaEleEstimator::kNonTrig, true, nontrigEleWeights);
+
     // initialize counters
     for (size_t i = 0; i != m_count.size(); i++) {m_count.at(i)=0.0;}
+    for (size_t i = 0; i != m_count.size(); i++) {m_count_sf.at(i)=0.0;}
+    for (size_t i = 0; i != m_count.size(); i++) {m_count_df.at(i)=0.0;}
+    for (size_t i = 0; i != m_count.size(); i++) {m_count_tf.at(i)=0.0;}
+
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag.at(i)=0.0;}
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_sf.at(i)=0.0;}
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_df.at(i)=0.0;}
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_tf.at(i)=0.0;}
 
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
@@ -667,19 +697,29 @@ int TrileptonZAnalysisLooper::Analyze(long event)
         m_evt.dilep.lep1.passes_id  = ttv::isGoodLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep1.passes_iso = ttv::isIsolatedLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep1.is_num     = ttv::isNumeratorLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE);
-        m_evt.dilep.lep1.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE);
+        m_evt.dilep.lep1.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE) && !m_evt.dilep.lep1.is_num;
 
         // for lepton 2
         m_evt.dilep.lep2.passes_id  = ttv::isGoodLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep2.passes_iso = ttv::isIsolatedLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep2.is_num     = ttv::isNumeratorLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE);
-        m_evt.dilep.lep2.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE);
+        m_evt.dilep.lep2.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE) && !m_evt.dilep.lep2.is_num;
 
         // and finally for lepton 3
         m_evt.lep3.passes_id  = ttv::isGoodLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE);
         m_evt.lep3.passes_iso = ttv::isIsolatedLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE);
         m_evt.lep3.is_num     = ttv::isNumeratorLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE);
-        m_evt.lep3.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE);
+        m_evt.lep3.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE) && !m_evt.lep3.is_num;
+
+        if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_num & m_evt.lep3.is_num) m_evt.event_type = ttv2012::EventType::TRILEPTONZ;
+        else if (m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_fo) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_TF;
+        else if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_num & m_evt.lep3.is_fo ||
+                 m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_num ||
+                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_num & m_evt.lep3.is_num) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_SF;
+        else if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_fo ||
+                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_num ||
+                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_num & m_evt.lep3.is_fo) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_DF;
+        
 
         m_evt.dilep.lep1.cordetiso   = m_evt.dilep.lep1.detiso   - (log(m_evt.dilep.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.dilep.lep1.p4.pt()); // check that I have the correct formula 
         m_evt.dilep.lep1.cordetiso04 = m_evt.dilep.lep1.detiso04 - (log(m_evt.dilep.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.dilep.lep1.p4.pt()); // check that I have the correct formula 
@@ -1087,59 +1127,11 @@ int TrileptonZAnalysisLooper::Analyze(long event)
 
         // Fill the tree
         m_tree->Fill();
-/*
+
         // printout
         if (m_evt.is_good_lumi)
         {
-            if (dilepton_type==DileptonHypType::MUMU)
-            {
-                if(m_verbose) {cout << "type == mm" << endl;}
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[0] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[0] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[0] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[0] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[0] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[0] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[0] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[0] += scale;
-            }
-            if (dilepton_type==DileptonHypType::EMU)
-            {
-                if(m_verbose) {cout << "type == em" << endl;}
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[1] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[1] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[1] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[1] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[1] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[1] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[1] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[1] += scale;
-            }
-            if (dilepton_type==DileptonHypType::EE)
-            {
-                if(m_verbose) {cout << "type == ee" << endl;}
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[2] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[2] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[2] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[2] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[2] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[2] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[2] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[2] += scale;
-            }
-            // count all 
-            {
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[3] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[3] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[3] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[3] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[3] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[3] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[3] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[3] += scale;
-            }
         }
-*/
     }
     catch (std::exception& e)
     {

@@ -8,6 +8,7 @@
 #include "DileptonTree.h"
 #include "EventInfoTree.h"
 #include "LooperTypes.h"
+#include "EventTypes.h"
 
 // forward declaration
 class TTree;
@@ -89,6 +90,7 @@ public:
     bool trig_mm;
     bool trig_em;
     bool trig_ee;
+    ttv2012::EventType::value_type event_type;
 
     //
     // for JES sysetmatics
