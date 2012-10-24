@@ -199,8 +199,6 @@ public:
     // bjet info
     //
     vecLorentzVector vbjets_p4;
-    std::vector<bool> vbtags_loose;
-    std::vector<bool> vbtags_tight;
     float bjets_dr12;
 
     //

@@ -109,8 +109,6 @@ void TrileptonZTree::Reset()
     vgenjets_p4.clear();
     vbjets_disc.clear();
     vbjets_p4.clear();
-    vbtags_loose.clear();
-    vbtags_tight.clear();
 }
 
 void TrileptonZTree::SetBranches(TTree &tree)
@@ -190,8 +188,6 @@ void TrileptonZTree::SetBranches(TTree &tree)
     tree.Branch(Form("%svjets_p4"               , prefix_.c_str()), "vecLorentzVector"      , &vjets_p4                  );
     tree.Branch(Form("%svgenjets_p4"            , prefix_.c_str()), "vecLorentzVector"      , &vgenjets_p4               );
     tree.Branch(Form("%svbjets_p4"              , prefix_.c_str()), "vecLorentzVector"      , &vbjets_p4                 );
-    tree.Branch(Form("%svbtags_loose"           , prefix_.c_str()), "std::vector<bool>"     , &vbtags_loose              );
-    tree.Branch(Form("%svbtags_tight"           , prefix_.c_str()), "std::vector<bool>"     , &vbtags_tight              );
     tree.Branch(Form("%svbjets_disc"            , prefix_.c_str()), "vecd"                  , &vbjets_disc               );
     tree.Branch(Form("%sgen_lep1_p4"            , prefix_.c_str()), "LorentzVector"         , &gen_lep1_p4               );
     tree.Branch(Form("%sgen_lep1_pdgid"         , prefix_.c_str()), &gen_lep1_pdgid         , "gen_lep1_pdgid/I"         );
