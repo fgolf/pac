@@ -77,7 +77,10 @@ void DileptonTree::FillCommon (int idx)
     if (abs(lep1.mc3id) == 11 && abs(lep2.mc3id) == 13) {dilep_gen_type = at::DileptonHypType::EMU; }
     if (abs(lep1.mc3id) == 13 && abs(lep2.mc3id) == 11) {dilep_gen_type = at::DileptonHypType::EMU; }
 
-    fiduciality = GetFiduciality(lep1.p4, lep2.p4);
+    LorentzVector v1 = (abs(lep1_id) == 11) ? lep1.sc_p4 : lep1.p4;
+    LorentzVector v2 = (abs(lep2_id) == 11) ? lep2.sc_p4 : lep2.p4;
+
+    fiduciality = GetFiduciality(v1, v2);
 }
 
 void DileptonTree::Reset()
