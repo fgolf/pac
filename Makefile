@@ -13,6 +13,7 @@ all:
 	$(MAKE) -C packages/FGTools
 	$(MAKE) -C packages/FakeRateBabyTools
 	$(MAKE) -C analysis/ss2012 
+	$(MAKE) -C analysis/ttv2012
 
 clean:
 	$(MAKE) -C externals/build/MiniFWLite clean
@@ -24,6 +25,7 @@ clean:
 	$(MAKE) -C packages/FGTools clean
 	$(MAKE) -C packages/FakeRateBabyTools clean
 	$(MAKE) -C analysis/ss2012 clean
+	$(MAKE) -C analysis/ttv2012 clean
 
 .PHONY: all clean
 
