@@ -28,7 +28,8 @@ sources         := BabyDorkIdentifier.cc \
 					tdrStyle.cc \
 					tools.cc \
 					histio.cc \
-					vtxreweight.cc
+					vtxreweight.cc \
+					EGammaMvaEleEstimator.cc \\
 					#DileptonHypType.cc \
 					#ScaleFactors.cc # temporarilty removed until i found the right place for this 
 include_dir      := include
