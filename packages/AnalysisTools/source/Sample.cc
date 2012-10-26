@@ -666,6 +666,103 @@ namespace at
             Sample::lm9,
             // color
             kBlue
+        },
+        {
+            // name
+            "dy4jets", 
+            // title,
+            "DY #rightarrow ll + 4j", 
+            // latex
+            "$DY \\rightarrow \\ell \\ell$ + 4j", 
+            // ntuple_path
+            "DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::dy4jets,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "w3jets", 
+            // title,
+            "W #rightarrow l#nu + 3j", 
+            // latex
+            "$W \\rightarrow \\ell \\ny$ + 3j", 
+            // ntuple_path
+            "W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::w3jets,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "w4jets", 
+            // title,
+            "W #rightarrow l#nu + 4j", 
+            // latex
+            "$W \\rightarrow \\ell \\ny$ + 4j", 
+            // ntuple_path
+            "W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::w4jets,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wz2l", 
+            // title,
+            "WZ #rightarrow 2l", 
+            // latex
+            "$WZ \\rightarrow 2\\ell", 
+            // ntuple_path
+            "WZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::wz2l,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "zz2l", 
+            // title,
+            "ZZ #rightarrow 2l", 
+            // latex
+            "$ZZ \\rightarrow 2\\ell", 
+            // ntuple_path
+            "ZZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::zz2l,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "ttpowheg", 
+            // title
+            "t#bar{t}+jets", 
+            // latex
+            "$t\\overline{t}+jets$", 
+            // ntuple_path
+            "TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v2",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::ttpowheg,
+            // color
+            kBlue
         }
     };
 
@@ -733,14 +830,12 @@ namespace at
         std::string prefix = GetNtuplePath(ntuple, sample_type);
 
         // special case since T1tttt/SbottomTop are still 52X 
-		if 
-        (
-            (sample == Sample::t1tttt)         || 
-            (sample == Sample::t1tttt_fastsim) || 
-            (sample == Sample::sbottomtop)     || 
-            (sample == Sample::glusbottom)     || 
-            (sample == Sample::glustop)
-        )
+        if ( (sample == Sample::t1tttt)         || 
+             (sample == Sample::t1tttt_fastsim) || 
+             (sample == Sample::sbottomtop)     || 
+             (sample == Sample::glusbottom)     || 
+             (sample == Sample::glustop)
+            )
         {
             if (ntuple == NtupleType::cms2)
             {
@@ -755,18 +850,18 @@ namespace at
                 path.append("/V05-02-28");
             }
         }
-		else if (sample == Sample::data && ntuple == NtupleType::cms2)
-		{
-			path = rt::string_replace_all(path, ",", "/merged,");	
+        else if (sample == Sample::data && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/merged,");	
             path.append("/merged");
-		}
+        }
         else if (sample != Sample::data && ntuple == NtupleType::cms2)
         {
             path = rt::string_replace_all(path, ",", "/V05-03-13,");
             path.append("/V05-03-13");
         }
-        // append *.root at the end
 
+        // append *.root at the end
         path = rt::string_replace_all(path, ",", "/*.root,");
         path.append("/*.root");
 
@@ -778,8 +873,8 @@ namespace at
     {
         switch (sample) 
         {
-			case Sample::data:
-				return true;
+        case Sample::data:
+            return true;
             //case dyee: 
             //    return isDYee();
             //case dymm:
@@ -792,18 +887,18 @@ namespace at
             //    return isWm();
             //case wt:
             //    return isWt();
-            default:
-                return true;
+        default:
+            return true;
         };
 
         return true;
     }
 
-	// check if the sampe is real data
-	bool SampleIsData(const Sample::value_type& sample)
-	{
-		return (GetSampleInfo(sample).type == SampleType::data);
-	}
+    // check if the sampe is real data
+    bool SampleIsData(const Sample::value_type& sample)
+    {
+        return (GetSampleInfo(sample).type == SampleType::data);
+    }
 
     // get path to ntuple
     std::string GetNtuplePath(const NtupleType::value_type& ntuple, const SampleType::value_type sample_type)
@@ -812,49 +907,52 @@ namespace at
         {
             switch (ntuple) 
             {
-                case NtupleType::cms2:    return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_3_2_patch4_V05-03-13/";
-                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
-                default: {/*do nothing*/}
+            case NtupleType::cms2:         return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_3_2_patch4_V05-03-13/";
+            case NtupleType::ss_skim:      return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
+            case NtupleType::trilepz_skim: return "/hadoop/cms/store/user/imacneill/TTZ_8TeV_LooseTrilepSkim/gsfglobaliso/";
+            default: {/*do nothing*/}
             };
         }
         else
         {
             switch (ntuple) 
             {
-                case NtupleType::cms2:      return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
-                case NtupleType::ss_skim:   return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
-                default: {/*do nothing*/}
+            case NtupleType::cms2:         return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
+            case NtupleType::ss_skim:      return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
+            case NtupleType::trilepz_skim: return "/hadoop/cms/store/user/imacneill/TTZ_8TeV_LooseTrilepSkim/gsfglobaliso/";
+            default: {/*do nothing*/}
             };
         }
         
         return "";
     }
 
-	SampleType::value_type GetSampleTypeFromName(const std::string& sample_type_name)
-	{
-		if (sample_type_name == "data") return SampleType::data;
-		if (sample_type_name == "susy") return SampleType::susy;
-		if (sample_type_name == "rare") return SampleType::rare;
-		if (sample_type_name == "bkgd") return SampleType::bkgd;
+    SampleType::value_type GetSampleTypeFromName(const std::string& sample_type_name)
+    {
+        if (sample_type_name == "data") return SampleType::data;
+        if (sample_type_name == "susy") return SampleType::susy;
+        if (sample_type_name == "rare") return SampleType::rare;
+        if (sample_type_name == "bkgd") return SampleType::bkgd;
 
         // throw string is not valid 
         throw std::domain_error("ERROR: at::GetSampleTypeFromName(std::string): ntuple type name not found!");
-	}
+    }
 
 
-	NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name)
-	{
-		if (ntuple_type_name == "cms2"   ) return NtupleType::cms2;
-		if (ntuple_type_name == "ss_skim") return NtupleType::ss_skim;
+    NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name)
+    {
+        if (ntuple_type_name == "cms2"   )      return NtupleType::cms2;
+        if (ntuple_type_name == "ss_skim")      return NtupleType::ss_skim;
+        if (ntuple_type_name == "trilepz_skim") return NtupleType::trilepz_skim;
 
         // throw string is not valid 
         throw std::domain_error("ERROR: at::GetNtupleTypeFromName(std::string): ntuple type name not found!");
-	}
+    }
 
-	std::string GetNtuplePath(const std::string& ntuple_type_name, const std::string& sample_type_name)
-	{
-		return GetNtuplePath(GetNtupleTypeFromName(ntuple_type_name), GetSampleTypeFromName(sample_type_name));
-	}
+    std::string GetNtuplePath(const std::string& ntuple_type_name, const std::string& sample_type_name)
+    {
+        return GetNtuplePath(GetNtupleTypeFromName(ntuple_type_name), GetSampleTypeFromName(sample_type_name));
+    }
 
 
 } // namespace at
