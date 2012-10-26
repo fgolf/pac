@@ -40,7 +40,24 @@ struct TrileptonZTree
             TwoTightBtags        = 1UL<<12, 	// at least 2 btags passing tight selections
             OneLooseOneTightBtag = 1UL<<12, 	// at least 1 btag passing loose selections and 1 passing tight selections
             Trigger              = 1UL<<14, 	// passes trigger (always true for MC)
-            SR0                  = 1UL<<15, 	// passes signal selection
+            SYNC                 = 1UL<<15, 	// sync selection
+            PRESEL               = 1UL<<16,     // pre-selection
+            SR0                  = 1UL<<17,     // signal selection
+            static_size
+        };
+    };
+
+    struct LeptonType
+    {
+        enum value_type
+        {
+            TRIGGER,
+            LOOSE_DENOM,
+            TIGHT_DENOM,
+            LOOSE_NUM,
+            TIGHT_NUM,
+            LOOSE_MVA_NUM,
+            TIGHT_MVA_NUM,
             static_size
         };
     };
@@ -134,7 +151,7 @@ public:
     float lep1_ele_mva_trig;
     float lep1_ele_mva_nontrig;
     int lep1_nearlep_id;
-    int lep1_passes_id_bitmask;
+    int lep1_id_bitmask;
 
     //
     // reco lepton 2 info
@@ -149,7 +166,7 @@ public:
     float lep2_ele_mva_trig;
     float lep2_ele_mva_nontrig;
     int lep2_nearlep_id;
-    int lep2_passes_id_bitmask;
+    int lep2_id_bitmask;
 
     //
     // 3rd lepton candidate
@@ -169,7 +186,7 @@ public:
     float lep3_ele_mva_trig;
     float lep3_ele_mva_nontrig;
     int lep3_nearlep_id;
-    int lep3_passes_id_bitmask;
+    int lep3_id_bitmask;
 
     //
     // gen level info

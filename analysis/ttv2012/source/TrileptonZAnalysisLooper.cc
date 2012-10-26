@@ -119,8 +119,8 @@ TrileptonZAnalysisLooper::TrileptonZAnalysisLooper
     const std::string& fake_rate_file_name,
     const std::string& mfake_rate_hist_name,
     const std::string& efake_rate_hist_name,
-    const std::string& goodrun_file_name,
     const std::string& vtxreweight_file_name,
+    const std::string& goodrun_file_name,
     double luminosity,
     int njets,
     int nbtags,
@@ -724,18 +724,36 @@ int TrileptonZAnalysisLooper::Analyze(long event)
         m_evt.dilep.lep1.passes_iso = ttv::isIsolatedLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep1.is_num     = ttv::isNumeratorLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep1.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE) && !m_evt.dilep.lep1.is_num;
+        int lep1_id_bitmask_tmp = 0;
+        if (ttv::isDenominatorLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE)) lep1_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::LOOSE_DENOM);
+        if (ttv::isDenominatorLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::TIGHT)) lep1_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::TIGHT_DENOM);
+        if (ttv::isGoodLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::LOOSE)) lep1_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::LOOSE_NUM);
+        if (ttv::isGoodLepton(best_trilep_hyp.z.lep1.id, best_trilep_hyp.z.lep1.idx, ttv::LeptonType::TIGHT)) lep1_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::TIGHT_NUM);
+        m_evt.lep1_id_bitmask = lep1_id_bitmask_tmp;
 
         // for lepton 2
         m_evt.dilep.lep2.passes_id  = ttv::isGoodLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep2.passes_iso = ttv::isIsolatedLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep2.is_num     = ttv::isNumeratorLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE);
         m_evt.dilep.lep2.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE) && !m_evt.dilep.lep2.is_num;
+        int lep2_id_bitmask_tmp = 0;
+        if (ttv::isDenominatorLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE)) lep2_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::LOOSE_DENOM);
+        if (ttv::isDenominatorLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::TIGHT)) lep2_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::TIGHT_DENOM);
+        if (ttv::isGoodLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::LOOSE)) lep2_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::LOOSE_NUM);
+        if (ttv::isGoodLepton(best_trilep_hyp.z.lep2.id, best_trilep_hyp.z.lep2.idx, ttv::LeptonType::TIGHT)) lep2_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::TIGHT_NUM);
+        m_evt.lep2_id_bitmask = lep2_id_bitmask_tmp;
 
         // and finally for lepton 3
         m_evt.lep3.passes_id  = ttv::isGoodLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE);
         m_evt.lep3.passes_iso = ttv::isIsolatedLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE);
         m_evt.lep3.is_num     = ttv::isNumeratorLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE);
         m_evt.lep3.is_fo      = ttv::isDenominatorLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE) && !m_evt.lep3.is_num;
+        int lep3_id_bitmask_tmp = 0;
+        if (ttv::isDenominatorLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE)) lep3_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::LOOSE_DENOM);
+        if (ttv::isDenominatorLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::TIGHT)) lep3_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::TIGHT_DENOM);
+        if (ttv::isGoodLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::LOOSE)) lep3_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::LOOSE_NUM);
+        if (ttv::isGoodLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::TIGHT)) lep3_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::TIGHT_NUM);
+        m_evt.lep3_id_bitmask = lep3_id_bitmask_tmp;
 
         if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_num & m_evt.lep3.is_num) m_evt.event_type = ttv2012::EventType::TRILEPTONZ;
         else if (m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_fo) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_TF;
