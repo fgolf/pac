@@ -25,7 +25,8 @@ sources         := MITConversionUtilities.cc \
 					susySelections.cc \
 					trackSelections.cc \
 					triggerUtils.cc \
-					utilities.cc
+					utilities.cc \
+					ttvSelections.cc
 #sources         = $(wildcard $(package_dir)/*.cc) $(wildcard $(package_dir)/jetsmear/*.cc) $(wildcard $(package_dir)/MT2/*.cc) 
 include_dir     := .
 
