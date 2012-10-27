@@ -51,6 +51,12 @@ namespace at
             ww_ds,
             lm6,
             lm9,
+            dy4jets,
+            w3jets,
+            w4jets,
+            wz2l,
+            zz2l,
+            ttpowheg,
             static_size
         };
     };
@@ -87,6 +93,7 @@ namespace at
         {
             cms2,
             ss_skim,
+            trilepz_skim,
             static_size
         };
     };
