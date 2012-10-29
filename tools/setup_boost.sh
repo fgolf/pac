@@ -18,7 +18,6 @@ else
     fi
     #svn co $boost_source $boost_dest 
     pushd $boost_dest
-    ls
     ./bootstrap.sh
     ./b2 -j 10
     popd
