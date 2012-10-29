@@ -16,7 +16,7 @@ else
         echo creating ${install_path}/boost
         mkdir -p ${install_path}/boost
     fi
-    #svn co $boost_source $boost_dest 
+    svn co $boost_source $boost_dest 
     pushd $boost_dest
     ./bootstrap.sh
     ./b2 -j 10
