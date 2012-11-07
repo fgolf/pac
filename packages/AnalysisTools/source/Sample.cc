@@ -769,8 +769,8 @@ namespace at
     // check that the SampleInfoArray is the same size as the enum
     // fails at compile time if it does
 #define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
-#define STATIC_ASSERT(expr) typedef char static_assert[(expr) ? 1 : -1]
-    STATIC_ASSERT(ARRAY_SIZE(s_SampleInfos) == Sample::static_size);
+#define STATIC_ASSERT(expr) typedef char my_static_assert[(expr) ? 1 : -1]
+    STATIC_ASSERT(ARRAY_SIZE(s_SampleInfos) == at::Sample::static_size);
 
     // wrapper function to get the SampleInfo
     Sample::value_type GetSampleFromName(const std::string& sample_name)

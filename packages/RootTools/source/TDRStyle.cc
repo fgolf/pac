@@ -63,7 +63,7 @@ namespace rt
         tdrStyle->SetEndErrorSize(2);
         // remarked out DLE
         //tdrStyle->SetErrorMarker(20);
-        //tdrStyle->SetErrorX(0.);
+        //tdrStyle->SetErrorX(0.0);
 
 
         tdrStyle->SetMarkerStyle(20);
@@ -114,7 +114,7 @@ namespace rt
         // tdrStyle->SetTitleH(0); // Set the height of the title box
         // tdrStyle->SetTitleW(0); // Set the width of the title box
         tdrStyle->SetTitleX(0.5); // Set the position of the title box
-        tdrStyle->SetTitleY(0.975); // Set the position of the title box
+        tdrStyle->SetTitleY(0.985); // Set the position of the title box
         tdrStyle->SetTitleAlign(23);
         tdrStyle->SetTitleStyle(0);
         tdrStyle->SetTitleBorderSize(0);
@@ -127,15 +127,15 @@ namespace rt
         tdrStyle->SetTitleSize(0.05, "XYZ");
         // tdrStyle->SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
         // tdrStyle->SetTitleYSize(Float_t size = 0.02);
-        //tdrStyle->SetTitleOffset(1.20, "X");
-        //tdrStyle->SetTitleOffset(1.05, "Y"); 
+        tdrStyle->SetTitleOffset(1.20, "X");
+        tdrStyle->SetTitleOffset(1.10, "Y"); 
 
         // For the axis labels:
 
         tdrStyle->SetLabelColor(1, "XYZ");
         tdrStyle->SetLabelFont(42, "XYZ");
         tdrStyle->SetLabelOffset(0.007, "XYZ");
-        tdrStyle->SetLabelSize(0.05, "XYZ");
+        tdrStyle->SetLabelSize(0.04, "XYZ");
 
         // For the axis:
 

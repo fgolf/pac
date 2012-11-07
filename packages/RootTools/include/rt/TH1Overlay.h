@@ -10,6 +10,7 @@
 // ROOT includes
 #include "TH1.h"
 #include "TLatex.h"
+#include "TLine.h"
 
 // ---------------------------------------------------------------------------------------- //
 // TODO
@@ -116,8 +117,13 @@ namespace rt
 			// add text
 			void AddText(const TLatex* text);
 			void AddText(const TLatex& text);
-			void AddText(const std::string& text, float x, float y);
+			void AddText(const std::string& text, float x, float y, float text_size = 0.035);
     
+            // add line
+			void AddLine(const TLine* line);
+			void AddLine(const TLine& line);
+			void AddLine(float x1, float y1, float x2, float y2, Color_t c = kBlack);
+
             // remove histogram 
             void Remove(const std::string& hist_name);
             void Remove(const char* hist_name);
@@ -219,6 +225,7 @@ namespace rt
             void DrawLegend() const;
             void DrawStatBoxes();
             void DrawText();
+            void DrawLines();
             void SetLog();
             std::string ProcessOptionString(const std::string& option);
     

@@ -20,9 +20,6 @@ lib ss2012_tools
     ./source/SameSignTree.cc
     ./source/SkimChainSSB.cc
     ./source/SignalRegion.cc
-    ./source/PredSummary.cc
-    ./source/FakeRatePrediction.cc
-    ./source/FlipRatePrediction.cc
     ./source/TTbarBreakDown.cc
     [ rootcint Dict
      : 
@@ -92,6 +89,26 @@ exe ss2012_plots
   : # sources
     ./source/ss2012_plots.cc
     ./source/PlotLooper.cc
+    # dependent packages
+    /ROOT
+    ss2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+		<define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_closure_test
+  : # sources
+    ./source/ss2012_closure_test.cc
+    ./source/FRClosureLooper.cc
     # dependent packages
     /ROOT
     ss2012_tools/<link>static
@@ -210,3 +227,4 @@ default-install ss2012_outreach_closure ;
 default-install ss2012_tools/<link>shared ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
+default-install ss2012_closure_test ;

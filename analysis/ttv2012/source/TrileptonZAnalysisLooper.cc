@@ -234,15 +234,15 @@ TrileptonZAnalysisLooper::TrileptonZAnalysisLooper
     nontrigEleMVA->initialize("BDT", EGammaMvaEleEstimator::kNonTrig, true, nontrigEleWeights);
 
     // initialize counters
-    for (size_t i = 0; i != m_count.size(); i++) {m_count.at(i)=0.0;}
-    for (size_t i = 0; i != m_count.size(); i++) {m_count_sf.at(i)=0.0;}
-    for (size_t i = 0; i != m_count.size(); i++) {m_count_df.at(i)=0.0;}
-    for (size_t i = 0; i != m_count.size(); i++) {m_count_tf.at(i)=0.0;}
+    for (size_t i = 0; i != m_count.size(); i++) {m_count[i]   =0.0;}
+    for (size_t i = 0; i != m_count.size(); i++) {m_count_sf[i]=0.0;}
+    for (size_t i = 0; i != m_count.size(); i++) {m_count_df[i]=0.0;}
+    for (size_t i = 0; i != m_count.size(); i++) {m_count_tf[i]=0.0;}
 
-    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_sf.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_df.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_tf.at(i)=0.0;}
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag[i]   =0.0;}
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_sf[i]=0.0;}
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_df[i]=0.0;}
+    for (size_t i = 0; i != m_count_nobtag.size(); i++) {m_count_nobtag_tf[i]=0.0;}
 
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));

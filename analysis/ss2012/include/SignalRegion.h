@@ -20,7 +20,7 @@ namespace ss
             sr6  = 6,  // #btags >= 2, #jets >= 4, HT > 320, MET > 120
             sr7  = 7,  // #btags >= 2, #jets >= 2, HT > 200, MET > 50
             sr8  = 8,  // #btags >= 2, #jets >= 4, HT > 320, no MET cut
-            sr9  = 9,  // not used
+            sr9  = 9,  // #btags >= 2, #jets >= 2, HT > 80, MET > 30, --
             sr10 = 10, // not used
 
             // exclusive
@@ -30,47 +30,47 @@ namespace ss
             ex_sr4 = 14, // #btags >= 2, #jets >= 4, HT > 320, MET > 120
             ex_sr5 = 15, // #btags >= 2, #jets >= 4, HT > 320, MET < 50
 
-            sr15 = 16,  // met1
-            sr16 = 17,  // met2
-            sr17 = 18,  // met3
-            sr18 = 19,  // met3
-            sr19 = 20,  // ht1
-            sr20 = 21,  // ht2
-            sr21 = 22,  // ht3
-            sr22 = 23,  // njets1
-            sr23 = 24,  // njets2
-            sr24 = 25,  // njets3
-            sr25 = 26,  // njets4
-            sr26 = 27,  // njets5
-            sr27 = 28,  // njets6
-            sr28 = 29,  // njets7
-            sr29 = 30,  // njets8
-            sr30 = 31,  // nbtags1
-            sr31 = 32,  // nbtags2
-            sr32 = 33,  // nbtags3
-            sr33 = 34,  // nbtags4
-            sr34 = 35,  // nbtags5
-            sr35 = 36,  // nbtags6
-            sr36 = 37,  // l1_pt1
-            sr37 = 38,  // l1_pt2
-            sr38 = 39,  // l1_pt3
-            sr39 = 40,  // l1_pt4
-            sr40 = 41,  // l1_pt5
-            sr41 = 42,  // l1_pt6
-            sr42 = 43,  // l1_pt7
-            sr43 = 44,  // l1_pt9
-            sr44 = 45,  // l1_pt9
-            sr45 = 46,  // l1_pt10
-            sr46 = 47,  // l2_pt1
-            sr47 = 48,  // l2_pt2
-            sr48 = 49,  // l2_pt3
-            sr49 = 50,  // l2_pt4
-            sr50 = 51,  // l2_pt5
-            sr51 = 52,  // l2_pt6
-            sr52 = 53,  // l2_pt7
-            sr53 = 54,  // l2_pt9
-            sr54 = 55,  // l2_pt9
-            sr55 = 56,  // l2_pt10
+            sr16 = 16,  // met1
+            sr17 = 17,  // met2
+            sr18 = 18,  // met3
+            sr19 = 19,  // met3
+            sr20 = 20,  // ht1
+            sr21 = 21,  // ht2
+            sr22 = 22,  // ht3
+            sr23 = 23,  // njets1
+            sr24 = 24,  // njets2
+            sr25 = 25,  // njets3
+            sr26 = 26,  // njets4
+            sr27 = 27,  // njets5
+            sr28 = 28,  // njets6
+            sr29 = 29,  // njets7
+            sr30 = 30,  // njets8
+            sr31 = 31,  // nbtags1
+            sr32 = 32,  // nbtags2
+            sr33 = 33,  // nbtags3
+            sr34 = 34,  // nbtags4
+            sr35 = 35,  // nbtags5
+            sr36 = 36,  // nbtags6
+            sr37 = 37,  // l1_pt1
+            sr38 = 38,  // l1_pt2
+            sr39 = 39,  // l1_pt3
+            sr40 = 40,  // l1_pt4
+            sr41 = 41,  // l1_pt5
+            sr42 = 42,  // l1_pt6
+            sr43 = 43,  // l1_pt7
+            sr44 = 44,  // l1_pt9
+            sr45 = 45,  // l1_pt9
+            sr46 = 46,  // l1_pt10
+            sr47 = 47,  // l2_pt1
+            sr48 = 48,  // l2_pt2
+            sr49 = 49,  // l2_pt3
+            sr50 = 50,  // l2_pt4
+            sr51 = 51,  // l2_pt5
+            sr52 = 52,  // l2_pt6
+            sr53 = 53,  // l2_pt7
+            sr54 = 54,  // l2_pt9
+            sr55 = 55,  // l2_pt9
+            sr56 = 56,  // l2_pt10
 
             static_size
         };

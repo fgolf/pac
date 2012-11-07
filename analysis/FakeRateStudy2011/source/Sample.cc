@@ -19,7 +19,9 @@ namespace fr
             "~/Data/babies/fr/FakeRate20May2012_5p098ifb/DoubleMu_Run2012A-PromptReco-v1_AOD/*.root," 
             "~/Data/babies/fr/FakeRate20May2012_5p098ifb/DoubleMu_Run2012B-PromptReco-v1_AOD/*.root," 
             "~/Data/babies/fr/FakeRate20May2012_5p098ifb/SingleMu_Run2012A-PromptReco-v1_AOD/*.root," 
-            "~/Data/babies/fr/FakeRate20May2012_5p098ifb/SingleMu_Run2012B-PromptReco-v1_AOD/*.root", 
+            "~/Data/babies/fr/FakeRate20May2012_5p098ifb/SingleMu_Run2012B-PromptReco-v1_AOD/*.root," 
+            "~/Data/babies/fr/FakeRate20May2012_5p098ifb/DoubleElectron_Run2012A-PromptReco-v1_AOD/*.root," 
+            "~/Data/babies/fr/FakeRate20May2012_5p098ifb/DoubleElectron_Run2012B-PromptReco-v1_AOD/*.root", 
             // output file 
             "plots/data/data.root",
             // SampleType
@@ -61,14 +63,13 @@ namespace fr
             // title,
             "QCD", 
             // baby_path
-            //"~/Data/fr2/QCD_Pt-15to20_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
-            //"~/Data/fr2/QCD_Pt-20_MuEnrichedPt-10_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
+            "~/Data/fr2/QCD_Pt-15to20_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
+            "~/Data/fr2/QCD_Pt-20_MuEnrichedPt-10_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
             "~/Data/fr2/QCD_Pt-20_MuEnrichedPt-15_TuneZ2_7TeV-pythia6_Summer11-PU_S4_START42_V11-v1_frbaby/merged_output_files/*.root,"
-            //"~/Data/fr2/QCD_Pt-20to30_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
-            //"~/Data/fr2/QCD_Pt-30to50_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
-            //"~/Data/fr2/QCD_Pt-50to80_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S4_START42_V11-v1_frbaby/merged_output_files/*.root,"
-            //"~/Data/fr2/QCD_Pt-80to120_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S4_START42_V11-v1_frbaby/merged_output_files/*.root",
-			,
+            "~/Data/fr2/QCD_Pt-20to30_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
+            "~/Data/fr2/QCD_Pt-30to50_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S3_START42_V11-v2_frbaby/merged_output_files/*.root,"
+            "~/Data/fr2/QCD_Pt-50to80_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S4_START42_V11-v1_frbaby/merged_output_files/*.root,"
+            "~/Data/fr2/QCD_Pt-80to120_MuPt5Enriched_TuneZ2_7TeV-pythia6_Summer11-PU_S4_START42_V11-v1_frbaby/merged_output_files/*.root",
             // output file
             "plots/qcd11/qcd11.root",
             // SampleType

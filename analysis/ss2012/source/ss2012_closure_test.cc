@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "TChain.h"
-#include "PlotLooper.h"
+#include "FRClosureLooper.h"
 #include "SSB2012Wrapper.h"
 #include "at/ScanChain.h"
 #include "rt/RootTools.h"
@@ -24,22 +24,15 @@ try
     std::string input_file          = "";
     std::string output_file         = "";
     std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_23May2012.root";
-    std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
-    std::string suffix              = "";
+    std::string mufr_hist_name      = "h_mufr40c";
+    std::string elfr_hist_name      = "h_elfr40c";
     std::string vtxreweight_file    = "";
     std::string sample_name         = "";
     bool do_scale_factors           = true;
-    bool check_good_lumi            = false;
-    float sparm0                    = -999;
-    float sparm1                    = -999;
-    float sparm2                    = -999;
-    float sparm3                    = -999;
-    float sf_flip                   = 0.8;
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
     int charge_option               = 0;
     unsigned int signal_region_num  = 0;
-    bool exclusive                  = false;
     float lumi                      = 1.0;
     bool verbose                    = false;
 
@@ -47,28 +40,21 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"     , "print this menu")
-        ("nev"      , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                    )
-        ("output"   , po::value<std::string>(&output_file)        , "name of output root file"                                  )
-        ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                                   )
-        ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                   )
-        ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                       )
-        ("fl_file"  , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                       )
-        ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"      )
-        ("suffix"   , po::value<std::string>(&suffix)             , "suffix to pring (png, eps, pdf).  empty for none"          )
-        ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                                 )
-        ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                  )
-        ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                      )
-        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
-        ("gr"       , po::value<bool>(&check_good_lumi)           , "for data, check the is_good_lumi() method"                 )
-        ("sparm1"   , po::value<float>(&sparm0)                   , "sparm0"                                                    )
-        ("sparm2"   , po::value<float>(&sparm1)                   , "sparm1"                                                    )
-        ("sparm3"   , po::value<float>(&sparm2)                   , "sparm2"                                                    )
-        ("sparm4"   , po::value<float>(&sparm3)                   , "sparm3"                                                    )
-        ("sf_flip"  , po::value<float>(&sf_flip)                  , "scale factor for flips"                                    )
-        ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                )
-        ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
-        ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
-        ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
+        ("nev"      , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                                            )
+        ("output"   , po::value<std::string>(&output_file)        , "name of output root file"                                                          )
+        ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                                                           )
+        ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                                           )
+        ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                                               )
+        ("mufr"     , po::value<std::string>(&mufr_hist_name)     , "muon fake rate hist name"                                                          )
+        ("elfr"     , po::value<std::string>(&elfr_hist_name)     , "electron fake rate hist name"                                                      )
+        ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"                              )
+        ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                                                         )
+        ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                                          )
+        ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                                              )
+        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                                           )
+        ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                                        )
+        ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)"                        )
+        ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                                         )
         ;
 
     po::variables_map vm;
@@ -136,8 +122,7 @@ try
     bool is_data   = false;
     bool is_signal = false;
     at::Sample::value_type sample = at::Sample::static_size;
-    string signal_region_name = Form(exclusive ? "ex_sr%d" : "sr%d", signal_region_num);
-    SignalRegion::value_type signal_region = GetSignalRegionFromName(signal_region_name);
+    SignalRegion::value_type signal_region = GetSignalRegionFromName(Form("sr%d", signal_region_num));
     if (sample_name.empty())  // use input file
     {
 	    if (input_file.empty())
@@ -190,28 +175,21 @@ try
     ScanChain
     (
         chain,
-        PlotLooper
+        FRClosureLooper
         (
             output_file,       
             sample,
             signal_region,
             vtxreweight_file,
             fake_rate_file_name,
-            flip_rate_file_name,
+            mufr_hist_name,
+            elfr_hist_name,
+            do_scale_factors,
             num_btags,
             num_jets,
             charge_option,
-            do_scale_factors,
-            check_good_lumi, 
-            sparm0,
-            sparm1,
-            sparm2,
-            sparm3,
-            sf_flip,
             lumi,
-            verbose,
-            !suffix.empty(),  
-            suffix
+            verbose
         ),
         samesignbtag,
         number_of_events,

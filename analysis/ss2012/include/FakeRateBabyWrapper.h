@@ -3,7 +3,7 @@
 
 // simple wrapper to fake_rate_baby to use with at::ScanChain()
 
-#include "FakeRateBaby.h"
+class FakeRateBaby;
 
 void Init(FakeRateBaby& fake_rate_baby, TTree* tree);
 void GetEntry(FakeRateBaby& fake_rate_baby, long event);

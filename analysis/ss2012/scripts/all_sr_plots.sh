@@ -3,23 +3,33 @@
 lumi=${1:-1.0}
 out_path=${2:-}
 nbtags=${3:-2}
+charge_option=${4:-0}
 
 # clear the old yield file
 echo "" > tables/yields_${out_path}.txt
 
 # do for all signal regions inclusive
 for i in {0..8}; do 
-    ./scripts/plot_all.sh $i $lumi $out_path 0 $nbtags; 
+    ./scripts/plot_all.sh $i $lumi $out_path 0 $nbtags $charge_option; 
 done
 
 # do for all signal regions exclusive
-for i in {1..5}; do 
-    ./scripts/plot_all.sh $i $lumi $out_path 1 $nbtags; 
-done
+if [ $nbtags -eq 2 ]; then
+    for i in {1..5}; do 
+        ./scripts/plot_all.sh $i $lumi $out_path 1 $nbtags $charge_option; 
+    done
+fi
 
 # summary table
-root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", 0)"
-root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", 0)" > tables/yields_summary_${out_path}.txt
-root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", 1)" > temp/temp.tex 
-tail -n +3 temp/temp.tex > tables/yields_summary_${out_path}.tex
+charge_stem=
+if [ $charge_option -eq 1 ]; then
+    charge_stem="_pp"
+elif [ $charge_option -eq -1 ]; then
+    charge_stem="_mm"
+fi
+
+root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", $charge_option, 0)"
+root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", $charge_option, 0)" > tables/yields_summary_${out_path}${charge_stem}.txt
+root -b -q -l "macros/PrintSummaryYieldsWrapper.C (\"$out_path\", $charge_option, 1)" > temp/temp.tex 
+tail -n +3 temp/temp.tex > tables/yields_summary_${out_path}${charge_stem}.tex
 rm temp/temp.tex

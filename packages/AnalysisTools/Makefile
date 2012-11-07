@@ -28,6 +28,9 @@ sources         := AnalysisBase.cc         \
 				   EventInfoTree.cc        \
 				   SingleLeptonTree.cc     \
 				   PrintIdIsoInfo.cc       \
+				   PredSummary.cc          \
+				   FakeRatePrediction.cc   \
+				   FlipRatePrediction.cc   \
 				   DileptonTree.cc	
 				   
 include_dir     := include source 

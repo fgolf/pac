@@ -37,6 +37,7 @@ class FakeRateBabyLooper : public at::AnalysisWithHist
         std::string m_lepton;
 		float m_lumi;
         int m_charge;
+        bool m_verbose;
 };
 
 #endif // SS_FAKERATEBABYLOOPER_HPP

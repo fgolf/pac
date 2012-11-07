@@ -60,7 +60,7 @@ try
         ("help"          , "print this menu")
         ("nev"           , po::value<long>(&number_of_events)        , "number of events to run on (-1 == all)"              )
         ("lumi"          , po::value<float>(&lumi)                   , "luminosity (default is 1.0 fb)"                      )
-        ("sample"        , po::value<std::string>(&sample_name)      , "name of dataset (valid options: \"data\", \"qcd\")"  )
+        ("sample"        , po::value<std::string>(&sample_name)      , "name of sample"                                      )
         ("channel"       , po::value<std::string>(&channel)          , "name of channel (valid options: \"mu\", \"el\")"     )
         //("jet_cut"       , po::value<float>(&away_jet_cut)           , "away jet cut (default 40 GeV)"                       )
         ("charge"        , po::value<short>(&charge)                 , "-1: +ve, -1: -ve, 0: both"                           )
@@ -119,7 +119,6 @@ try
     
     // sample info
     fr::Sample::value_type sample = fr::GetSampleFromName(sample_name);
-    bool is_data = false; //(fr::GetSampleInfo(sample).type == fr::SampleType::data);
 
     // directories
     //std::string analysis_path = rt::getenv("PWD");

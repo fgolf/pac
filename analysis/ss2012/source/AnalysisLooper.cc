@@ -429,15 +429,15 @@ SSAnalysisLooper::SSAnalysisLooper
     }
 
     // initialize counters
-    for (size_t i = 0; i != m_count_ss.size(); i++) {m_count_ss.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_sf.size(); i++) {m_count_sf.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_df.size(); i++) {m_count_df.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_os.size(); i++) {m_count_os.at(i)=0.0;}
+    for (size_t i = 0; i != m_count_ss.size(); i++) {m_count_ss[i]=0.0;}
+    for (size_t i = 0; i != m_count_sf.size(); i++) {m_count_sf[i]=0.0;}
+    for (size_t i = 0; i != m_count_df.size(); i++) {m_count_df[i]=0.0;}
+    for (size_t i = 0; i != m_count_os.size(); i++) {m_count_os[i]=0.0;}
 
-    for (size_t i = 0; i != m_count_nobtag_ss.size(); i++) {m_count_nobtag_ss.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_nobtag_sf.size(); i++) {m_count_nobtag_sf.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_nobtag_df.size(); i++) {m_count_nobtag_df.at(i)=0.0;}
-    for (size_t i = 0; i != m_count_nobtag_os.size(); i++) {m_count_nobtag_os.at(i)=0.0;}
+    for (size_t i = 0; i != m_count_nobtag_ss.size(); i++) {m_count_nobtag_ss[i]=0.0;}
+    for (size_t i = 0; i != m_count_nobtag_sf.size(); i++) {m_count_nobtag_sf[i]=0.0;}
+    for (size_t i = 0; i != m_count_nobtag_df.size(); i++) {m_count_nobtag_df[i]=0.0;}
+    for (size_t i = 0; i != m_count_nobtag_os.size(); i++) {m_count_nobtag_os[i]=0.0;}
 
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));

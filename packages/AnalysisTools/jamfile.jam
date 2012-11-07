@@ -20,6 +20,9 @@ lib AnalysisTools
     ./source/SingleLeptonTree.cc
     ./source/EventInfoTree.cc
     ./source/CMS2Wrapper.cc
+    ./source/FakeRatePrediction.cc
+    ./source/FlipRatePrediction.cc
+    ./source/PredSummary.cc
     [ rootcint Dict
         : # requirements
           #<define>__RTINT__

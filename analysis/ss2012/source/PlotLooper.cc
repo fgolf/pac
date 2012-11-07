@@ -14,9 +14,9 @@
 #include "SignalRegion.h"
 #include "TTbarBreakDown.h"
 #include "ScaleFactors.h"
-#include "PredSummary.h"
-#include "FakeRatePrediction.h"
-#include "FlipRatePrediction.h"
+#include "at/PredSummary.h"
+#include "at/FakeRatePrediction.h"
+#include "at/FlipRatePrediction.h"
 #include "SSB2012.h"
 #include "CTable.h"
 
@@ -37,10 +37,13 @@ PlotLooper::PlotLooper
     const std::string& flip_rate_file_name,
     unsigned int num_btags,
     unsigned int num_jets,
+    int charge_option,
     bool do_scale_factors,
     bool check_good_lumi,
-    float mass_glu,
-    float mass_lsp,
+    float sparm0,
+    float sparm1,
+    float sparm2,
+    float sparm3,
     float sf_flip,
     float lumi,
     bool verbose,
@@ -56,8 +59,11 @@ PlotLooper::PlotLooper
     , m_check_good_lumi(check_good_lumi)
     , m_nbtags(num_btags)
     , m_njets(num_jets)
-    , m_mass_glu(mass_glu)
-    , m_mass_lsp(mass_lsp)
+    , m_charge_option(charge_option)
+    , m_sparm0(sparm0)
+    , m_sparm1(sparm1)
+    , m_sparm2(sparm2)
+    , m_sparm3(sparm3)
     , m_sf_flip(sf_flip)
     , m_sample(sample)
     , m_signal_region(signal_region)
@@ -68,8 +74,6 @@ PlotLooper::PlotLooper
         cout << "using vertex reweight file : " << vtxreweight_file_name << endl;
         set_vtxreweight_rootfile(vtxreweight_file_name.c_str(), m_verbose);
     }
-    count_ee = 0;
-    count_em = 0;
 
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
@@ -140,7 +144,7 @@ void PlotLooper::EndJob()
 
     // Fake predictions
     // -----------------------------------------------------------------------------//
-    FakeRatePrediction frp(h_mufr.get(), h_elfr.get(), m_lumi);
+    at::FakeRatePrediction frp(h_mufr.get(), h_elfr.get());
     frp.ComputeAllFakePredictions
     (
         static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
@@ -444,6 +448,14 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
+        // charge option (1 == ++, -1 == --)
+        switch (m_charge_option)
+        {
+            case  1: if (not is_pp()) return 0; break;
+            case -1: if (not is_mm()) return 0; break;
+            default: {/*do nothing*/}
+        }
+
         // check that it passes the trigger requirement
         //bool passes_trigger = false;
         //switch (hyp_type)
@@ -479,10 +491,6 @@ int PlotLooper::operator()(long event)
 
         // apply gamma*/upsilon veto
         bool has_gamma_cand = false;
-        if (hyp_type == DileptonHypType::EE || hyp_type == DileptonHypType::MUMU) 
-        {
-            
-        }
         if (has_gamma_cand)
         {
             return 0;
@@ -496,12 +504,10 @@ int PlotLooper::operator()(long event)
 		    m_sample == at::Sample::sbottomtop
 		)
         {
-            if (!rt::is_equal(m_mass_glu, sparm0()) || !rt::is_equal(m_mass_lsp, sparm1()))
+            if (!rt::is_equal(m_sparm0, sparm0()) || !rt::is_equal(m_sparm1, sparm1()))
             {
                 return 0;
             }
-            //cout << Form("sparm0 %f m_glu %f", sparm0(), m_mass_glu) << endl;;
-            //cout << Form("sparm1 %f m_lsp %f", sparm1(), m_mass_lsp) << endl;;
         }
 
         // ttbar breakdown 
@@ -550,7 +556,7 @@ int PlotLooper::operator()(long event)
         {
             evt_weight *= sf_lepeff();
             // evt_weight *= sf_dileptrig();  // applying trigger cut now on MC
-            evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger cut now on MC
+            evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger with scale factor 
             if (m_nbtags>=2)
             {
                 if (m_signal_region == SignalRegion::sr7)
@@ -595,8 +601,8 @@ int PlotLooper::operator()(long event)
             int l1_id                  = lep1_pdgid();
             int l2_id                  = lep2_pdgid();
 
-            FillDoubleFakeHist(dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
-            FillDoubleFakeHist(dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
+            at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
+            at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
         }
 
         // OS
@@ -611,12 +617,10 @@ int PlotLooper::operator()(long event)
             float weight = (m_signal_region != SignalRegion::sr2) ? evt_weight : 0.5*evt_weight;
             if (hyp_type == DileptonHypType::EE) 
             {
-                FillDoubleFlipHist(dynamic_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]), l1_p4.pt(), l1_p4.eta(), l2_p4.pt(), l2_p4.eta(), weight);
-                count_ee++;
+                at::FillDoubleFlipHist(*dynamic_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]), *h_flip, l1_p4.pt(), l1_p4.eta(), l2_p4.pt(), l2_p4.eta(), weight);
             }
             else if (hyp_type == DileptonHypType::EMU) 
             {
-                count_em++;
                 if      (abs(l1_id) == 11) {rt::Fill2D(hc["h_os_fo_pt_vs_eta_em"], fabs(l1_p4.eta()), l1_p4.pt(), weight);}
                 else if (abs(l2_id) == 11) {rt::Fill2D(hc["h_os_fo_pt_vs_eta_em"], fabs(l2_p4.eta()), l2_p4.pt(), weight);}
             }
@@ -834,106 +838,4 @@ float PlotLooper::GetFlipRateError(int lep_id, float pt, float eta) const
     int pt_bin   = h_flip->GetYaxis()->FindBin(min(pt, max_pt));
     int eta_bin  = h_flip->GetXaxis()->FindBin(fabs(eta));
     return h_flip->GetBinError(eta_bin, pt_bin);
-}
-
-int DoubleFakeBinLookup(int id, float pt, float eta)
-{
-    id  = abs(id);
-    eta = fabs(eta);
-
-    float max_pt  = (id == 11 ? el_pt_bins.back()   : mu_pt_bins.back() );
-    float min_pt  = (id == 11 ? el_pt_bins.front()  : mu_pt_bins.front());
-    float max_eta = (id == 11 ? el_eta_bins.back()  : mu_eta_bins.back());
-    float min_eta = (id == 11 ? el_eta_bins.front() : mu_eta_bins.front());
-
-    eta = eta >= max_eta ? max_eta-0.001 : eta;
-    pt  = pt  >= max_pt  ? max_pt-0.001  : pt;
-    if (pt < min_pt || eta > max_eta || eta < min_eta+0.001)
-    {
-        return -1;
-    }
-   
-    static TH2F h_mu_bins("h_mu_bins", "h_mu_bins", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data());
-    static TH2F h_el_bins("h_el_bins", "h_el_bins", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data());
-    TH2F& h_l_bins = id==11 ? h_el_bins : h_mu_bins;
-
-    int etabin = h_l_bins.GetXaxis()->FindBin(eta);
-    int ptbin  = h_l_bins.GetYaxis()->FindBin(pt);
-
-    if(ptbin <= 0)  {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: ptbin <= 0" );}
-    if(etabin <= 0) {throw std::domain_error("ERROR: PlotLooper::DoubleFakeBinLookup: etabin <= 0");}
-
-    int bin = (ptbin-1) * h_l_bins.GetNbinsX() + etabin;
-    //cout << Form("id %u pt %f eta %f pt_bin %u eta_bin %u", id, pt, eta, ptbin, etabin) << endl;
-    return bin;
-}
-
-void PlotLooper::FillDoubleFakeHist
-(
-    TH2F* hist, 
-    const at::DileptonHypType::value_type& hyp, 
-    int id1, 
-    float pt1, 
-    float eta1, 
-    int id2, 
-    float pt2, 
-    float eta2, 
-    float weight
-    )
-{
-    std::pair<int, int> bins(DoubleFakeBinLookup(id1, pt1, eta1), DoubleFakeBinLookup(id2, pt2, eta2));
-    if (hyp == at::DileptonHypType::EMU && abs(id1) == 13)
-    {
-        bins = std::make_pair(DoubleFakeBinLookup(id2, pt2, eta2), DoubleFakeBinLookup(id1, pt1, eta1));
-    }
-    float value = hist->GetBinContent(bins.first, bins.second);
-
-    value += weight;
-    hist->SetBinContent(bins.first, bins.second, value);
-    hist->SetBinError(bins.first, bins.second, weight * sqrt(value/weight));
-    //cout << GetDileptonHypTypeName(hyp) << "\t" << bins.first << "\t" << bins.second << "\t" << value << "\t" << weight * sqrt(value/weight) << endl;
-}
-
-int DoubleFlipBinLookup(float pt, float eta)
-{
-    float max_pt  = el_flip_pt_bins.back();
-    float min_pt  = el_flip_pt_bins.front();
-    float max_eta = el_flip_eta_bins.back();
-    float min_eta = el_flip_eta_bins.front();
-    
-    eta = fabs(eta);
-    eta = eta >= max_eta ? max_eta-0.001 : eta;
-    pt  = pt  >= max_pt  ? max_pt-0.001  : pt;
-    if (pt < min_pt || eta > max_eta || eta < min_eta+0.001)
-    {
-        return -1;
-    }
-   
-    static TH2F h_bins("h_bins", "h_bins", el_flip_eta_bins.size()-1, el_flip_eta_bins.data(), el_flip_pt_bins.size()-1, el_flip_pt_bins.data());
-    int etabin = h_bins.GetXaxis()->FindBin(eta);
-    int ptbin  = h_bins.GetYaxis()->FindBin(pt);
-
-    if(ptbin <= 0)  {throw std::domain_error("ERROR: PlotLooper::DoubleFlipBinLookup: ptbin <= 0" );}
-    if(etabin <= 0) {throw std::domain_error("ERROR: PlotLooper::DoubleFlipBinLookup: etabin <= 0");}
-
-    int bin = (ptbin-1) * h_bins.GetNbinsX() + etabin;
-    return bin;
-}
-
-void PlotLooper::FillDoubleFlipHist
-(
-    TH2F* hist, 
-    float pt1, 
-    float eta1, 
-    float pt2, 
-    float eta2, 
-    float weight
-    )
-{
-    std::pair<int, int> bins(DoubleFlipBinLookup(pt1, eta1), DoubleFlipBinLookup(pt2, eta2));
-    //cout << Form("b1 %d b2 %d", bins.first, bins.second) << endl;
-    float value = hist->GetBinContent(bins.first, bins.second);
-    value += weight;
-    hist->SetBinContent(bins.first, bins.second, value);
-    hist->SetBinError(bins.first, bins.second, weight * sqrt(value/weight));
 }

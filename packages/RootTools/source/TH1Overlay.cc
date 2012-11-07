@@ -48,18 +48,18 @@ std::string UniqueHistName()
 // simple Rectangle 
 struct Rectangle
 {
-    float x1;
-    float y1;
-    float x2;
-    float y2;
+    double x1;
+    double y1;
+    double x2;
+    double y2;
 };
 
 
 // simple 2D Point 
 struct Point
 {
-    float x;
-    float y;
+    double x;
+    double y;
 };
 
 
@@ -378,7 +378,8 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
     if (is_stack && !nostack)
     {
         hist->SetFillColor(color);
-        hist->SetLineColor(color);
+        //hist->SetLineColor(color);
+        hist->SetLineColor(kBlack);
         hist->SetMarkerColor(color);
         hist->SetMarkerSize(1.8);
         hist->SetLineWidth(1);
@@ -458,6 +459,7 @@ struct TH1Overlay::impl
     vector<HistAttributes> hist_vec;
     shared_ptr<TLegend> legend;
 	vector<shared_ptr<TLatex> > text_vector;
+	vector<shared_ptr<TLine> > line_vector;
     
     // handle the colors
     Color_t unique_hist_color(Color_t color);
@@ -521,6 +523,7 @@ TH1Overlay::impl::impl
     , legend(new TLegend) 
 {
 }
+
 
 TH1Overlay::impl::impl(const string& title, const string& option)
     : title(title)
@@ -608,10 +611,10 @@ bool TH1Overlay::impl::is_hist_color_used(Color_t color)
 // ---------------------------------------------------------------------------------------- //
 
 float       TH1Overlay::legend_width_default            = 0.295;
-float       TH1Overlay::legend_height_per_entry_default = 0.045;
-float       TH1Overlay::legend_offset_default           = 0.015;
+float       TH1Overlay::legend_height_per_entry_default = 0.065;
+float       TH1Overlay::legend_offset_default           = 0.020;
 float       TH1Overlay::legend_text_size_default        = 0.030;
-const char* TH1Overlay::legend_option_default           = "L";
+const char* TH1Overlay::legend_option_default           = "LEP";
 Color_t     TH1Overlay::statbox_fill_color_default      = gStyle->GetFrameFillColor();
 float       TH1Overlay::profile_marker_size_default     = 0.8;
 Style_t     TH1Overlay::profile_marker_style_default    = 20;
@@ -652,6 +655,7 @@ TH1Overlay::TH1Overlay(const TH1Overlay& rhs)
     SetLegendTextSize(rhs.GetLegendTextSize());
     SetLegendOption(rhs.GetLegendOption());
     SetStatBoxFillColor(rhs.GetStatBoxFillColor());
+    SetYAxisRange(rhs.GetYAxisMin(), rhs.GetYAxisMax());
     //Setprofile_marker_size(rhs.Getprofile_marker());
     //Setprofile_marker_style(rhs.Getprofile_marker_style());
 
@@ -666,6 +670,19 @@ TH1Overlay::TH1Overlay(const TH1Overlay& rhs)
         const HistAttributes& ha = *iter;
         Add(ha.hist.get(), ha.nostack, ha.legend_value, ha.color, ha.width, ha.style, ha.fill);
     }
+
+    // copy the text
+    for (size_t i = 0; i != rhs.m_pimpl->text_vector.size(); i++)
+    {
+        AddText(rhs.m_pimpl->text_vector.at(i).get());
+    }
+
+    // copy the lines
+    for (size_t i = 0; i != rhs.m_pimpl->line_vector.size(); i++)
+    {
+        AddLine(rhs.m_pimpl->line_vector.at(i).get());
+    }
+
     return;
 }
 
@@ -763,10 +780,27 @@ void TH1Overlay::AddText(const TLatex* text)
 	m_pimpl->text_vector.back()->SetNDC(); 
 }
 
-void TH1Overlay::AddText(const std::string& text, float x, float y)
+void TH1Overlay::AddText(const std::string& text, float x, float y, float text_size)
 {
 	m_pimpl->text_vector.push_back(boost::shared_ptr<TLatex>(new TLatex(x, y, text.c_str())));
 	m_pimpl->text_vector.back()->SetNDC(); 
+	m_pimpl->text_vector.back()->SetTextSize(text_size); 
+}
+
+void TH1Overlay::AddLine(const TLine& line)
+{
+	m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(dynamic_cast<TLine*>(line.Clone())));
+}
+
+void TH1Overlay::AddLine(const TLine* line)
+{
+	m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(dynamic_cast<TLine*>(line->Clone())));
+}
+
+void TH1Overlay::AddLine(float x1, float y1, float x2, float y2, Color_t c)
+{
+	m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(new TLine(x1, y1, x2, y2)));
+    m_pimpl->line_vector.back()->SetLineColor(c);
 }
 
 struct CompareHistAttributesByName 
@@ -863,6 +897,8 @@ void TH1Overlay::BuildStack(bool is_stack, bool is_norm)
     }
     
     // Fill the THSsack
+    double max_height = 0.0;
+    double min_height = 0.0;
     size_t hist_index = 0;
     for 
     (
@@ -882,6 +918,10 @@ void TH1Overlay::BuildStack(bool is_stack, bool is_norm)
 
         // special treament for profile hists
         iter->SetProfileAttributes(m_pimpl->profile_marker_style, m_pimpl->profile_marker_size);
+
+        // get the maximum value
+        max_height = std::max(max_height, GetHistMaximumValue(iter->hist.get(), /*include_error=*/true));
+        min_height = std::min(min_height, GetHistMinimumValue(iter->hist.get(), /*include_error=*/true));
 
         // Fill the stack 
         if (is_stack)
@@ -911,10 +951,15 @@ void TH1Overlay::BuildStack(bool is_stack, bool is_norm)
     if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
     {
         m_pimpl->hist_stack->GetHists()->SetOwner(false);
-        if (m_pimpl->yaxis_min < m_pimpl->yaxis_max)
+        if (m_pimpl->yaxis_min <= m_pimpl->yaxis_max)
         {
             m_pimpl->hist_stack->SetMinimum(m_pimpl->yaxis_min);
             m_pimpl->hist_stack->SetMaximum(m_pimpl->yaxis_max);
+        }
+        else
+        {
+            m_pimpl->hist_stack->SetMinimum(min_height);
+            m_pimpl->hist_stack->SetMaximum(max_height*1.1);
         }
     }
     // this is a kludge to get the annoying THStack's blank histogram from showing up
@@ -1020,7 +1065,11 @@ void TH1Overlay::BuildLegend()
         const HistAttributes& hist_att = *iter;
         if (m_pimpl->DrawType==DrawType::stack && hist_att.nostack)
         {
-            if (hist_att.fill<3000)  // hack for the pred fill 
+            if (hist_att.fill>3000)  // hack for the pred fill 
+            {
+                m_pimpl->legend->AddEntry(hist_att.hist.get(), hist_att.legend_value.c_str(), "f"); 
+            }
+            else 
             {
                 m_pimpl->legend->AddEntry(hist_att.hist.get(), hist_att.legend_value.c_str(), "lep"); 
             }
@@ -1042,6 +1091,16 @@ void TH1Overlay::DrawText()
 	for (size_t i = 0; i != m_pimpl->text_vector.size(); i++)
 	{
 		m_pimpl->text_vector.at(i)->Draw();
+	}
+}
+
+
+// draw the lines
+void TH1Overlay::DrawLines()
+{
+	for (size_t i = 0; i != m_pimpl->line_vector.size(); i++)
+	{
+		m_pimpl->line_vector.at(i)->Draw();
 	}
 }
 
@@ -1135,18 +1194,19 @@ void TH1Overlay::DrawNonStackedHists(const string& option)
     if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
     {
         m_pimpl->hist_stack->SetMinimum(min_height);
-        m_pimpl->hist_stack->SetMaximum(max_height);
+        m_pimpl->hist_stack->SetMaximum(max_height*1.1);
     }
     for (size_t i = 0; i != hists_to_draw.size(); ++i)
     {
         if (hists_to_draw[i]->GetFillStyle()>3000) // hack for the pred fill overlay
         {
             hists_to_draw[i]->SetFillColor(kBlack);
+            hists_to_draw[i]->SetLineWidth(1);
             hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same E2").c_str());  
         }
         else
         {
-          hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same").c_str());  
+            hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same").c_str());  
         }
     }
 }
@@ -1267,6 +1327,7 @@ void TH1Overlay::DrawRegular(const std::string& option)
     DrawLegend();
     DrawStatBoxes();
 	DrawText();
+	DrawLines();
 }
 
 
@@ -1279,6 +1340,7 @@ void TH1Overlay::DrawStacked(const std::string& option)
     DrawLegend();
     DrawStatBoxes();
 	DrawText();
+	DrawLines();
 }
 
 
@@ -1291,6 +1353,7 @@ void TH1Overlay::DrawNormalized(const std::string& option)
     DrawLegend();
     DrawStatBoxes();
 	DrawText();
+	DrawLines();
 }
 
 
@@ -1328,13 +1391,13 @@ void TH1Overlay::SetYAxisRange(double min, double max)
 
 double TH1Overlay::GetYAxisMax() const
 {
-    return m_pimpl->yaxis_min;
+    return m_pimpl->yaxis_max;
 }
 
 
 double TH1Overlay::GetYAxisMin() const
 {
-    return m_pimpl->yaxis_max;
+    return m_pimpl->yaxis_min;
 }
 
 

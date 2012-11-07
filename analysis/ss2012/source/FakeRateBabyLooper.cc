@@ -26,6 +26,7 @@ FakeRateBabyLooper::FakeRateBabyLooper
     , m_lepton(lepton)
     , m_lumi(lumi)
     , m_charge(charge)
+    , m_verbose(verbose)
 {
     // begin job
     BeginJob();
@@ -224,7 +225,8 @@ int FakeRateBabyLooper::operator()(long event)
         // ----------------------------------------------------------------------------------------------------------------------------//
         //
         // which dataset
-        bool is_data = rt::string_contains(m_dataset, "data");
+        bool is_data  = rt::string_contains(m_dataset, "data");
+        bool is_ttbar = rt::string_contains(m_dataset, "ttbar");
         bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
         bool is_el = (m_lepton=="el") ? abs(id())==11 : false;
 
@@ -239,51 +241,52 @@ int FakeRateBabyLooper::operator()(long event)
         {
             case  1: if (id()>0) {return 0;} break; // 11/13   --> e-/mu- (reject)
             case -1: if (id()<0) {return 0;} break; // -11/-13 --> e+/mu+ (reject)
-            case  0: /* do nothing*/ break;
+            case  0: /*do nothing*/ break;
             default: /*do nothing*/ break;
         };
-
 
         // pT cut
         if (is_mu && (pt()<5 || pt()>35))
 		{
+            if (m_verbose) {cout << "fails pt cut" << endl;}
             return 0;
 		}
 		if (is_el && (pt()<10 || pt()>55))
 		{
+            if (m_verbose) {cout << "fails pt cut" << endl;}
             return 0;
         }
 
         // eta cut
         if (fabs(eta()) > 2.4)
         {
+            if (m_verbose) {cout << "fails eta cut" << endl;}
             return 0;
         }
 
         // no W (MET and m_T cuts)
         if (pfmet()>20 || pfmt()>25)
         {
+            if (m_verbose) {cout << "fails no W cut" << endl;}
             return 0;
         }
 
         // no resonance's (Z or upsilon)
         if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()>12)))
         {
+            if (m_verbose) {cout << "fails no Z cut" << endl;}
             return 0;
         }
         else if (is_el && (76<mz_fo_gsf() && mz_fo_gsf()<106))
         {
+            if (m_verbose) {cout << "fails no Z cut" << endl;}
             return 0;
         }
 
         // trigger cuts
-        bool trig_cut = false;
+        bool trig_cut = is_data ? false : true;
         if (is_data && is_mu)
         {
-            //trig_cut = ((pt() > 30 && (mu15_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1 || mu30_eta2p1_vstar() > 1)) || 
-            //            (pt() > 24 && (mu15_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1)) || 
-            //            (pt() > 15 && mu15_eta2p1_vstar() > 1) ||
-            //            (pt() > 8  && mu8_vstar() > 1));
             trig_cut = ((pt() > 30 && (mu30_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
             			(pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
             			(pt() > 17 && (mu17_vstar()>1 || mu8_vstar()>1)) || 
@@ -291,9 +294,6 @@ int FakeRateBabyLooper::operator()(long event)
         }
         else if(is_data && is_el)
         {
-			//trig_cut = ((pt() > 17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1   || 
-                                        //ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1 ||  ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1)) ||
-                        //(pt() > 8  && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1  || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1)));
             trig_cut =  (pt() > 17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar() > 1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar() > 1 ||
                                        ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
             trig_cut |= (pt() > 8  && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
@@ -314,6 +314,12 @@ int FakeRateBabyLooper::operator()(long event)
         bool jet20c_cut = (ptpfcL1Fj1res() > 20);
         bool jet40c_cut = (ptpfcL1Fj1res() > 40);
         bool jet60c_cut = (ptpfcL1Fj1res() > 60);
+        if (is_ttbar)
+        {
+            jet20c_cut = true;
+            jet40c_cut = true;
+            jet60c_cut = true;
+        }
 
         // numerator cut
         bool num_lep_cut = false;
@@ -346,6 +352,7 @@ int FakeRateBabyLooper::operator()(long event)
 		// skip if not FO
         if (!fo_lep_sel)
         {
+            if (m_verbose) {cout << "fails FO ID cut" << endl;}
             return 0;
         }
 
@@ -361,7 +368,6 @@ int FakeRateBabyLooper::operator()(long event)
             // numerator
             if (num_lep_sel)
             {
-
                 if (cpfiso03_db()<0.1)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -374,6 +380,7 @@ int FakeRateBabyLooper::operator()(long event)
                 }
             }
 
+            // denominator
             if (fo_lep_sel)
             {
                 if (cpfiso03_db()<0.4)
@@ -382,6 +389,7 @@ int FakeRateBabyLooper::operator()(long event)
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
+                    if (m_verbose) {cout << "passing lepton" << endl;}
                     if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 

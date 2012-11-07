@@ -6,7 +6,15 @@ lumi=${2:-1.0}
 out_path=${3:-}
 exclusive=${4:-0}
 nbtags=${5:-2}
-options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root"
+charge_option=${6:-0}  # -1 means --, 1 means ++, anything else means both
+options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root --charge $charge_option"
+
+charge_stem=
+if [ $charge_option -eq 1 ]; then
+    charge_stem="_pp"
+elif [ $charge_option -eq -1 ]; then
+    charge_stem="_mm"
+fi
 
 mkdir -p logs
 
@@ -15,9 +23,9 @@ function make_hists
     local sample=$1
     local args=$2
 	if [ $exclusive -eq 1 ]; then
-    	local cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/ex_sr$signal_region/$sample.root > logs/${sample}_hists.log"
+    	local cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/ex_sr$signal_region/${sample}${charge_stem}.root > logs/${sample}${charge_stem}_hists.log"
 	else
-    	local cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/$sample.root > logs/${sample}_hists.log"
+    	local cmd="ss2012_plots.exe --sample $sample $args --output plots/$out_path/sr$signal_region/${sample}${charge_stem}.root > logs/${sample}${charge_stem}_hists.log"
 	fi
     echo $cmd
     eval $cmd
@@ -57,25 +65,25 @@ make_hists t_tw     "$options"
 # if exclusive SR, add 10 so $signal_region
 if [ $exclusive -eq 1 ]; then
 	sr_num=$((10+signal_region))
-	echo $sr_num
 else
    	sr_num=$signal_region
 fi
 
 # overlay the hists
-mkdir -p plots/${out_path}
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"png\")"
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"eps\")"
-root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"pdf\")"
+if [[ $charge_option -eq 1 || $charge_option -eq 1 ]]; then
+    mkdir -p plots/${out_path}
+    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"png\")"
+    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"eps\")"
+    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$out_path\", \"pdf\")"
+fi
 
 # print txt 
 mkdir -p tables
-root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\")" >> tables/yields_${out_path}.txt
+root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\", $charge_option, 0)" >> tables/yields_${out_path}.txt
 
 # print tex
 mkdir -p tables/${out_path}
-mkdir -p temp
-root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\", 1)" > temp/temp.tex
+root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$out_path\", $charge_option, 1)" > temp/temp.tex
 if [ $exclusive -eq 1 ]; then
 	tail -n +3 temp/temp.tex > tables/${out_path}/sr${signal_region}_nbtags${nbtags}_exclusive.tex
 else

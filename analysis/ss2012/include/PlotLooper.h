@@ -1,5 +1,5 @@
-#ifndef SS_FAKEPREDLOOPER_HPP
-#define SS_FAKEPREDLOOPER_HPP
+#ifndef PLOTLOOPER_H
+#define PLOTLOOPER_H
 
 #include "at/AnalysisWithHist.h"
 #include "at/Sample.h"
@@ -25,10 +25,13 @@ class PlotLooper : public at::AnalysisWithHist
              const std::string& flip_rate_file_name = "",
              unsigned int num_btags = 0,
              unsigned int num_jets = 0,
+             int charge_option = 0,
              bool do_scale_factors = true,
              bool bheck_good_lumi = false,
-             float mass_glu = 1000,
-             float mass_lsp = 100,
+             float sparm0 = -999,
+             float sparm1 = -999,
+             float sparm2 = -999,
+             float sparm3 = -999,
              float sf_flip = 1.0,
              float lumi = 1.0,
              bool verbose = false,
@@ -57,8 +60,11 @@ class PlotLooper : public at::AnalysisWithHist
         bool m_check_good_lumi;
         unsigned int m_nbtags;
         unsigned int m_njets;
-        float m_mass_glu;
-        float m_mass_lsp;
+        int m_charge_option;
+        float m_sparm0;
+        float m_sparm1;
+        float m_sparm2;
+        float m_sparm3;
         float m_scale1fb;
         float m_sf_flip;
         at::Sample::value_type m_sample;
@@ -69,9 +75,6 @@ class PlotLooper : public at::AnalysisWithHist
         std::tr1::shared_ptr<TH2F> h_elfr;
         std::tr1::shared_ptr<TH2F> h_flip;
 
-        int count_ee;
-        int count_em;
-
         // methods
         float GetFakeRateValue(int lep_id, float pt, float eta) const;
         float GetFakeRateError(int lep_id, float pt, float eta) const;
@@ -79,28 +82,28 @@ class PlotLooper : public at::AnalysisWithHist
         float GetFlipRateValue(int lep_id, float pt, float eta) const; 
         float GetFlipRateError(int lep_id, float pt, float eta) const; 
 
-        void FillDoubleFakeHist
-        (
-             TH2F* hist, 
-             const at::DileptonHypType::value_type& hyp, 
-             int id1, 
-             float pt1, 
-             float eta1, 
-             int id2, 
-             float pt2, 
-             float eta2, 
-             float weight
-         );
+        //void FillDoubleFakeHist
+        //(
+        //     TH2F* hist, 
+        //     const at::DileptonHypType::value_type& hyp, 
+        //     int id1, 
+        //     float pt1, 
+        //     float eta1, 
+        //     int id2, 
+        //     float pt2, 
+        //     float eta2, 
+        //     float weight
+        // );
 
-        void FillDoubleFlipHist
-        (
-            TH2F* hist, 
-            float pt1, 
-            float eta1, 
-            float pt2, 
-            float eta2, 
-            float weight
-        );
+        //void FillDoubleFlipHist
+        //(
+        //    TH2F* hist, 
+        //    float pt1, 
+        //    float eta1, 
+        //    float pt2, 
+        //    float eta2, 
+        //    float weight
+        //);
 };
 
-#endif // SS_FAKEPREDLOOPER_HPP
+#endif // PLOTLOOPER_HPP

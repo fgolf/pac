@@ -49,7 +49,7 @@ endif
 
 ROOTCFLAGS   := $(shell $(RC) --cflags)
 ROOTLDFLAGS  := $(shell $(RC) --ldflags)
-ROOTLIBS     := $(subst -pthread,,$(shell $(RC) --libs))
+ROOTLIBS     := $(shell $(RC) --libs)
 ROOTGLIBS    := $(shell $(RC) --glibs)
 HASTHREAD    := $(shell $(RC) --has-thread)
 ROOTDICTTYPE := $(shell $(RC) --dicttype)
@@ -100,18 +100,8 @@ LDFLAGS       = $(OPT2)
 SOFLAGS       = -shared
 endif
 
-ifeq ($(ARCH),aix)
-# IBM AIX xlC 4.x
-CXX           = xlC
-CXXFLAGS      = $(OPT)
-LD            = xlC
-LDFLAGS       = $(OPT)
-SOFLAGS       =
-DllSuf        = a
-endif
-
 ifeq ($(ARCH),aix5)
-# IBM AIX xlC 5.x
+# IBM AIX >5.x xlC
 CXX           = xlC
 CXXFLAGS      = $(OPT)
 LD            = xlC
@@ -121,7 +111,7 @@ DllSuf        = a
 endif
 
 ifeq ($(ARCH),aixgcc)
-# IBM AIX with GCC
+# IBM AIX >5.x with GCC
 CXX           = g++
 CXXFLAGS      = $(OPT)
 LD            = g++
@@ -381,7 +371,7 @@ endif
 ifneq ($(subst $(MACOSX_MINOR),,12),12)
 LD            = g++
 endif
-SOFLAGS       = -dynamiclib -single_module
+SOFLAGS       = -dynamiclib -single_module -install_name $(CURDIR)/
 endif
 
 ifeq ($(ARCH),macosxicc)
@@ -401,7 +391,7 @@ DllSuf        = so
 else
 DllSuf        = dylib
 endif
-SOFLAGS       = -dynamiclib -single_module
+SOFLAGS       = -dynamiclib -single_module -install_name $(CURDIR)/
 endif
 
 ifeq ($(ARCH),macosx64)
@@ -419,7 +409,7 @@ DllSuf        = so
 else
 DllSuf        = dylib
 endif
-SOFLAGS       = -dynamiclib -single_module
+SOFLAGS       = -dynamiclib -single_module -install_name $(CURDIR)/
 endif
 
 ifeq ($(ARCH),win32)

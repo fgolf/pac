@@ -18,6 +18,8 @@ bool ValidDatasetName(const std::string& dataset)
         return true;
     if (dataset == "data2012ABv1")
         return true;
+    if (dataset == "ttbar12")
+        return true;
     return false;
 }
 
@@ -96,9 +98,9 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
     // 2012 AB prompt v1
     if (dataset == "data2012ABv1")
     {
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";             // 920 /pb from AN
+        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";             // 920 /pb from AN
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_3p95fb/"  : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_3p95fb/";  // 3.95 /fb 
-        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_5p098ifb/": "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_5p098ifb/";  // 5.1 /fb (full 2012AB)
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_5p098ifb/": "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_5p098ifb/";  // 5.1 /fb (full 2012AB)
         if (channel=="mu")
         {
             chain->Add(Form("%s/SingleMu_Run2012A-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
@@ -147,6 +149,11 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
             chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
         }
     }    
+    else if (dataset == "ttbar12")
+    {
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_mc/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_mc";
+        chain->Add(Form("%s/TTJets_TuneZ2star_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v1/*.root", ntuple_path.c_str())); 
+    }    
 
     return chain;
 }
@@ -168,6 +175,7 @@ try
     std::string channel            = "mu";
     std::string suffix             = "";
     std::string good_run_list      = "";
+    bool verbose                   = false;
 	float lumi					   = 1.0;
     int charge                     = 0;
 
@@ -183,6 +191,7 @@ try
         ("run_list"      , po::value<std::string>(&good_run_list)  , "good run list"                                    )
         ("suffix"        , po::value<std::string>(&suffix)         , "suffix to pring (png, eps, pdf).  empty for nonf" )
         ("charge"        , po::value<int>(&charge)                 , "-1: +ve, -1: -ve, 0: both"                        )
+        ("verbose"       , po::value<bool>(&verbose)               , "verbosity"                                        )
         ;
 
     po::variables_map vm;
@@ -240,15 +249,15 @@ try
     boost::shared_ptr<TChain> chain = TChainFactory(dataset, channel);
 
     // scan the chain
-    at::ScanChain
+    at::ScanChain<FakeRateBaby>
     (
         /*input chain ptr =*/chain.get(), 
-        FakeRateBabyLooper(full_output_path, dataset, channel, lumi, charge, false, !suffix.empty(), suffix), 
+        FakeRateBabyLooper(full_output_path, dataset, channel, lumi, charge, verbose, !suffix.empty(), suffix), 
         fake_rate_baby,
         number_of_events,
         good_run_list,
         /*fast=*/true,
-        /*verbose=*/false
+        verbose
     ); 
     
     // done 

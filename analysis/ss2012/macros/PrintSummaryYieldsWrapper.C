@@ -1,4 +1,4 @@
-void PrintSummaryYieldsWrapper(const std::string& out_path, bool latex = false)
+void PrintSummaryYieldsWrapper(const std::string& out_path, int charge_option = 0, bool latex = false)
 {
     if (out_path.empty())
     {
@@ -6,5 +6,5 @@ void PrintSummaryYieldsWrapper(const std::string& out_path, bool latex = false)
     }
 
     gROOT->ProcessLine(".L macros/PrintYields.C+");
-    PrintSummaryYields(out_path, latex);
+    PrintSummaryYields(out_path, charge_option, latex);
 }

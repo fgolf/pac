@@ -8,7 +8,6 @@
 #include "rt/is_equal.h"
 #include "at/Predicates.h"
 #include "ScaleFactors.h"
-#include "PredSummary.h"
 #include "CTable.h"
 #include "TF1.h"
 

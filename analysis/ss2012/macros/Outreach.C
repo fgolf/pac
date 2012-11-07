@@ -207,10 +207,13 @@ void FitHtTurnOnCurve(const std::string& sample_name)
         return;
     }
 
+    string title = "CMS Simulation, #sqrt{s} = 8 TeV;H_{T} (GeV);Efficiency";
+
     TCanvas* c1 = new TCanvas("c1", "c1"); 
     c1->cd();
 
     TH1* h1 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_ht200", sample_name.c_str()))); 
+    h1->SetTitle(title.c_str());
     h1->SetLineWidth(2);
     h1->SetMarkerStyle(20);
     h1->SetMarkerSize(1.2);
@@ -219,7 +222,10 @@ void FitHtTurnOnCurve(const std::string& sample_name)
     h1->GetYaxis()->SetRangeUser(-0.05, 1.1);
     h1->GetYaxis()->SetTitleOffset(1.05);
     h1->GetXaxis()->SetTitleOffset(1.20);
+    h1->GetYaxis()->SetTitleSize(0.05);
+    h1->GetXaxis()->SetTitleSize(0.05);
     TH1* h2 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_ht320", sample_name.c_str()))); 
+    h2->SetTitle(title.c_str());
     h2->SetLineWidth(2);
     h2->SetMarkerStyle(22);
     h2->SetMarkerSize(1.2);
@@ -228,6 +234,8 @@ void FitHtTurnOnCurve(const std::string& sample_name)
     h2->GetYaxis()->SetTitleOffset(1.05);
     h2->GetXaxis()->SetTitleOffset(1.20);
     h2->SetMarkerColor(h2->GetLineColor());
+    h2->GetYaxis()->SetTitleSize(0.05);
+    h2->GetXaxis()->SetTitleSize(0.05);
 
     h1->Draw();
     h2->Draw("sames");
@@ -273,7 +281,8 @@ void FitHtTurnOnCurve(const std::string& sample_name)
     legend->Draw("sames");
 
     c1->Draw();
-    c1->Print(Form("plots/outreach/HtTurnOnCurve_%s.pdf" , sample_name.c_str()));
+    c1->Print(Form("plots/outreach/HtTurnOnCurve_%s.pdf", sample_name.c_str()));
+    c1->Print(Form("plots/outreach/HtTurnOnCurve_%s.C"  , sample_name.c_str()));
     //c1->Print(Form("plots/outreach/HtTurnOnCurve_%s.root", sample_name.c_str()));
 
     CTable t1;
@@ -329,8 +338,11 @@ void FitMetTurnOnCurve(const std::string& sample_name)
 
     TCanvas* c1 = new TCanvas("c1", "c1"); 
     c1->cd();
+    
+    string title = "CMS Simulation, #sqrt{s} = 8 TeV;E_{T}^{miss} (GeV);Efficiency";
 
     TH1* h1 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_genmet30", sample_name.c_str()))); 
+    h1->SetTitle(title.c_str());
     h1->SetLineWidth(2);
     h1->SetMarkerStyle(20);
     h1->SetMarkerSize(1.2);
@@ -339,7 +351,10 @@ void FitMetTurnOnCurve(const std::string& sample_name)
     h1->GetYaxis()->SetRangeUser(-0.05, 1.1);
     h1->GetYaxis()->SetTitleOffset(1.05);
     h1->GetXaxis()->SetTitleOffset(1.20);
+    h1->GetYaxis()->SetTitleSize(0.05);
+    h1->GetXaxis()->SetTitleSize(0.05);
     TH1* h2 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_genmet50", sample_name.c_str()))); 
+    h2->SetTitle(title.c_str());
     h2->SetLineWidth(2);
     h2->SetMarkerStyle(22);
     h2->SetMarkerSize(1.2);
@@ -348,7 +363,10 @@ void FitMetTurnOnCurve(const std::string& sample_name)
     h2->GetYaxis()->SetRangeUser(-0.05, 1.1);
     h2->GetYaxis()->SetTitleOffset(1.05);
     h2->GetXaxis()->SetTitleOffset(1.20);
+    h2->GetYaxis()->SetTitleSize(0.05);
+    h2->GetXaxis()->SetTitleSize(0.05);
     TH1* h3 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_genmet120", sample_name.c_str()))); 
+    h3->SetTitle(title.c_str());
     h3->SetLineWidth(2);
     h3->SetMarkerStyle(24);
     h3->SetMarkerSize(1.2);
@@ -357,6 +375,8 @@ void FitMetTurnOnCurve(const std::string& sample_name)
     h3->GetYaxis()->SetRangeUser(-0.05, 1.1);
     h3->GetYaxis()->SetTitleOffset(1.05);
     h3->GetXaxis()->SetTitleOffset(1.20);
+    h3->GetYaxis()->SetTitleSize(0.05);
+    h3->GetXaxis()->SetTitleSize(0.05);
 
     h1->Draw();
     h2->Draw("sames");
@@ -414,9 +434,9 @@ void FitMetTurnOnCurve(const std::string& sample_name)
     std::cout << std::endl;
 
     TLegend* legend = new TLegend(0.50, 0.4, 0.80, 0.7);
-    legend->AddEntry(h1,"#slash{E}_{T} > 30 GeV" , "p");
-    legend->AddEntry(h2,"#slash{E}_{T} > 50 GeV" , "p");
-    legend->AddEntry(h3,"#slash{E}_{T} > 120 GeV", "p");
+    legend->AddEntry(h1,"E_{T}^{miss} > 30 GeV" , "p");
+    legend->AddEntry(h2,"E_{T}^{miss} > 50 GeV" , "p");
+    legend->AddEntry(h3,"E_{T}^{miss} > 120 GeV", "p");
     legend->SetFillColor(0);
     legend->Draw("sames");
 
@@ -437,7 +457,8 @@ void FitMetTurnOnCurve(const std::string& sample_name)
     t1.saveTex(Form("plots/outreach/MetTurnOnCurve_%s.tex" , sample_name.c_str()));
 
     c1->Draw();
-    c1->Print(Form("plots/outreach/MetTurnOnCurve_%s.pdf" , sample_name.c_str()));
+    c1->Print(Form("plots/outreach/MetTurnOnCurve_%s.pdf", sample_name.c_str()));
+    c1->Print(Form("plots/outreach/MetTurnOnCurve_%s.C"  , sample_name.c_str()));
     //c1->Print(Form("plots/outreach/MetTurnOnCurve_%s.root", sample_name.c_str()));
 
 	// save fits back to file
@@ -494,6 +515,7 @@ void FitBtagEfficiencyCurve(const std::string& sample_name)
     //gStyle->SetTitleYOffset(1.05); 
 
     TFile* file = TFile::Open(Form("plots/outreach/%s_or.root", sample_name.c_str()), "UPDATE");
+
     if (!file || file->IsZombie())
     {
         cout << "FitHtTurnOnCurve: file not found!" << endl;
@@ -503,8 +525,10 @@ void FitBtagEfficiencyCurve(const std::string& sample_name)
 
     TCanvas* c1 = new TCanvas("c1", "c1"); 
     c1->cd();
+    string title = "CMS Simulation, #sqrt{s} = 8 TeV;p_{T} (GeV);Efficiency";
 
     TH1* h1 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_btagpt", sample_name.c_str()))); 
+    h1->SetTitle(title.c_str());
     h1->SetLineWidth(2);
     h1->SetMarkerStyle(22);
     h1->SetMarkerSize(1.2);
@@ -513,6 +537,8 @@ void FitBtagEfficiencyCurve(const std::string& sample_name)
     h1->GetYaxis()->SetRangeUser(-0.05, 1.1);
     h1->GetYaxis()->SetTitleOffset(1.05);
     h1->GetXaxis()->SetTitleOffset(1.20);
+    h1->GetYaxis()->SetTitleSize(0.05);
+    h1->GetXaxis()->SetTitleSize(0.05);
     h1->Draw();
 
     TF1* bfunc = new TF1("fitf_btag", fitf_btag, 40, 400, 3);
@@ -529,7 +555,8 @@ void FitBtagEfficiencyCurve(const std::string& sample_name)
 
 
     c1->Draw();
-    c1->Print(Form("plots/outreach/btagEfficiency_%s.pdf" , sample_name.c_str()));
+    c1->Print(Form("plots/outreach/btagEfficiency_%s.pdf", sample_name.c_str()));
+    c1->Print(Form("plots/outreach/btagEfficiency_%s.C"  , sample_name.c_str()));
     //c1->Print(Form("plots/outreach/btagEfficiency_%s.root", sample_name.c_str()));
 
     CTable t1;
@@ -595,7 +622,10 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
     TCanvas* c1 = new TCanvas("c1", "c1"); 
     c1->cd();
 
+    string title = "CMS Simulation, #sqrt{s} = 8 TeV;p_{T} (GeV);Efficiency";
+
     TH1* h1 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_mu_pt", sample_name.c_str()))); 
+    h1->SetTitle(title.c_str());
     h1->SetLineWidth(2);
     h1->SetMarkerStyle(20);
     h1->SetMarkerSize(1.2);
@@ -603,8 +633,11 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
     h1->SetMarkerColor(h1->GetLineColor());
     h1->GetYaxis()->SetRangeUser(-0.05, 1.1);
     h1->GetYaxis()->SetTitleOffset(1.05);
+    h1->GetYaxis()->SetTitleSize(0.05);
     h1->GetXaxis()->SetTitleOffset(1.20);
+    h1->GetXaxis()->SetTitleSize(0.05);
     TH1* h2 = dynamic_cast<TH1*>(file->Get(Form("h_eff_%s_el_pt", sample_name.c_str()))); 
+    h2->SetTitle(title.c_str());
     h2->SetLineWidth(2);
     h2->SetMarkerStyle(22);
     h2->SetMarkerSize(1.2);
@@ -612,7 +645,9 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
     h2->SetMarkerColor(h2->GetLineColor());
     h2->GetYaxis()->SetRangeUser(-0.05, 1.1);
     h2->GetYaxis()->SetTitleOffset(1.05);
+    h2->GetYaxis()->SetTitleSize(0.05);
     h2->GetXaxis()->SetTitleOffset(1.20);
+    h2->GetXaxis()->SetTitleSize(0.05);
 
     h1->Draw();
     h2->Draw("sames");
@@ -668,7 +703,8 @@ void FitLepEfficiencyCurve(const std::string& sample_name)
     t1.saveTex(Form("plots/outreach/lepEfficiency_%s.tex", sample_name.c_str()));
 
     c1->Draw();
-    c1->Print(Form("plots/outreach/lepEfficiency_%s.pdf" , sample_name.c_str()));
+    c1->Print(Form("plots/outreach/lepEfficiency_%s.pdf", sample_name.c_str()));
+    c1->Print(Form("plots/outreach/lepEfficiency_%s.C"  , sample_name.c_str()));
     //c1->Print(Form("plots/outreach/lepEfficiency_%s.root", sample_name.c_str()));
 
 	// save fits back to file
@@ -770,7 +806,8 @@ void FitIdEfficiencyCurve(const std::string& sample_name)
     t1.saveTex(Form("plots/outreach/lepIdEfficiency_%s.tex", sample_name.c_str()));
 
     c1->Draw();
-    c1->Print(Form("plots/outreach/lepIdEfficiency_%s.pdf" , sample_name.c_str()));
+    c1->Print(Form("plots/outreach/lepIdEfficiency_%s.pdf", sample_name.c_str()));
+    c1->Print(Form("plots/outreach/lepIdEfficiency_%s.C"  , sample_name.c_str()));
     //c1->Print(Form("plots/outreach/lepIdEfficiency_%s.root", sample_name.c_str()));
 
 	// save fits back to file
@@ -872,6 +909,7 @@ void FitIsoEfficiencyCurve(const std::string& sample_name)
 
     c1->Draw();
     c1->Print(Form("plots/outreach/lepIsoEfficiency_%s.pdf" , sample_name.c_str()));
+    c1->Print(Form("plots/outreach/lepIsoEfficiency_%s.C" , sample_name.c_str()));
     //c1->Print(Form("plots/outreach/lepIsoEfficiency_%s.root", sample_name.c_str()));
 
 	// save fits back to file
@@ -892,6 +930,6 @@ void CreateOutreachPlots(const std::string& sample_name)
     FitMetTurnOnCurve(sample_name);
     FitBtagEfficiencyCurve(sample_name);
     FitLepEfficiencyCurve(sample_name);
-    FitIdEfficiencyCurve(sample_name);
-    FitIsoEfficiencyCurve(sample_name);
+    //FitIdEfficiencyCurve(sample_name);
+    //FitIsoEfficiencyCurve(sample_name);
 }

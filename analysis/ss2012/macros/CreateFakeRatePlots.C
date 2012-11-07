@@ -99,9 +99,9 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
     //std::string path = "plots/fake_rates/muons_8p8fb";
 	//float lumi = 8.8;
 
-	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_08Oct2012.root");
-    std::string path = "plots/fake_rates/muons_12p26fb";
-	float lumi = 12.3;
+	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_24Sep2012.root");
+    std::string path = "plots/fake_rates/muons_10p45fb";
+	float lumi = 10.5;
 
     //std::string path = "plots/fake_rates/data/23May";
 	//rt::TH1Container hc("plots/mu_plus/data/mu_plus.root");
@@ -131,34 +131,34 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
     Style_t s60 = 24;
 
     // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
-    p["p_mufr_vs_nvtxs"] = rt::TH1Overlay(Form("%s;# vtxs;TL ratio", title.c_str()), "sb::off lg::top_left");
+    p["p_mufr_vs_nvtxs"] = rt::TH1Overlay(Form("%s;number of vertices;TL ratio", title.c_str()), "sb::off lg::top");
     p["p_mufr_vs_nvtxs"].Add(hc["h_mufr20c_vs_nvtxs"], "away jet p_{T} > 20 GeV", c20, 2, s20);
     p["p_mufr_vs_nvtxs"].Add(hc["h_mufr40c_vs_nvtxs"], "away jet p_{T} > 40 GeV", c40, 2, s40);
     p["p_mufr_vs_nvtxs"].Add(hc["h_mufr60c_vs_nvtxs"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_mufr_vs_nvtxs"].SetYAxisRange(0, max);
     p["p_mufr_vs_nvtxs"].SetLegendOption("p");
     p["p_mufr_vs_nvtxs"].SetLegendTextSize(0.042);
-    p["p_mufr_vs_nvtxs"].AddText("Muons"               , 0.75, 0.835);
-    p["p_mufr_vs_nvtxs"].AddText("p^{#mu}_{T} > 20 GeV", 0.75, 0.775);
+    p["p_mufr_vs_nvtxs"].AddText("Muons"               , 0.25, 0.835);
+    p["p_mufr_vs_nvtxs"].AddText("p^{#mu}_{T} > 20 GeV", 0.25, 0.775);
 
-    p["p_mufr_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top_left");
+    p["p_mufr_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
     p["p_mufr_vs_pt"].Add(hc["h_mufr20c_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
     p["p_mufr_vs_pt"].Add(hc["h_mufr40c_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
     p["p_mufr_vs_pt"].Add(hc["h_mufr60c_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_mufr_vs_pt"].SetYAxisRange(0, max);
     p["p_mufr_vs_pt"].SetLegendOption("p");
     p["p_mufr_vs_pt"].SetLegendTextSize(0.042);
-    p["p_mufr_vs_pt"].AddText("Muons", 0.75, 0.835);
+    p["p_mufr_vs_pt"].AddText("Muons", 0.25, 0.835);
 
-    p["p_mufr_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top_left");
+    p["p_mufr_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
     p["p_mufr_vs_eta"].Add(hc["h_mufr20c_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
     p["p_mufr_vs_eta"].Add(hc["h_mufr40c_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
     p["p_mufr_vs_eta"].Add(hc["h_mufr60c_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_mufr_vs_eta"].SetYAxisRange(0, max);
     p["p_mufr_vs_eta"].SetLegendOption("p");
     p["p_mufr_vs_eta"].SetLegendTextSize(0.042);
-    p["p_mufr_vs_eta"].AddText("Muons"               , 0.75, 0.835);
-    p["p_mufr_vs_eta"].AddText("p^{#mu}_{T} > 20 GeV", 0.75, 0.775);
+    p["p_mufr_vs_eta"].AddText("Muons"               , 0.25, 0.835);
+    p["p_mufr_vs_eta"].AddText("p^{#mu}_{T} > 20 GeV", 0.25, 0.775);
 
     cout << endl;
     CountMuonNumDen(hc["h_mu_num20c"], hc["h_mu_fo20c"], "#mu count (num, den), away jet p_{T} > 20");
@@ -210,9 +210,9 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     //std::string path = "plots/fake_rates/electrons_8p8fb";
 	//float lumi = 8.8;
 
-	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_08Oct2012.root");
-    std::string path = "plots/fake_rates/electrons_12p26fb";
-	float lumi = 12.3;
+	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_24Sep2012.root");
+    std::string path = "plots/fake_rates/electrons_10p45fb";
+	float lumi = 10.5;
 
 	// set style
 	rt::SetTDRStyle();
@@ -234,34 +234,34 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 
     // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
 	std::map<std::string, rt::TH1Overlay> p;
-    p["p_elfr_vs_nvtxs"] = rt::TH1Overlay(Form("%s;# vtxs;TL ratio", title.c_str()), "sb::off lg::top_left");
+    p["p_elfr_vs_nvtxs"] = rt::TH1Overlay(Form("%s;number of vertices;TL ratio", title.c_str()), "sb::off lg::top");
     p["p_elfr_vs_nvtxs"].Add(hc["h_elfr20c_vs_nvtxs"], "away jet p_{T} > 20 GeV", c20, 2, s20);
     p["p_elfr_vs_nvtxs"].Add(hc["h_elfr40c_vs_nvtxs"], "away jet p_{T} > 40 GeV", c40, 2, s40);
     p["p_elfr_vs_nvtxs"].Add(hc["h_elfr60c_vs_nvtxs"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_elfr_vs_nvtxs"].SetYAxisRange(0, max);
     p["p_elfr_vs_nvtxs"].SetLegendOption("p");
     p["p_elfr_vs_nvtxs"].SetLegendTextSize(0.042);
-    p["p_elfr_vs_nvtxs"].AddText("Electrons"         , 0.75, 0.835);
-    p["p_elfr_vs_nvtxs"].AddText("p^{e}_{T} > 20 GeV", 0.75, 0.775);
+    p["p_elfr_vs_nvtxs"].AddText("Electrons"         , 0.25, 0.835);
+    p["p_elfr_vs_nvtxs"].AddText("p^{e}_{T} > 20 GeV", 0.25, 0.775);
 
-    p["p_elfr_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top_left");
+    p["p_elfr_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
     p["p_elfr_vs_pt"].Add(hc["h_elfr20c_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
     p["p_elfr_vs_pt"].Add(hc["h_elfr40c_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
     p["p_elfr_vs_pt"].Add(hc["h_elfr60c_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_elfr_vs_pt"].SetYAxisRange(0, max);
     p["p_elfr_vs_pt"].SetLegendOption("p");
     p["p_elfr_vs_pt"].SetLegendTextSize(0.042);
-    p["p_elfr_vs_pt"].AddText("Electrons", 0.75, 0.835);
+    p["p_elfr_vs_pt"].AddText("Electrons", 0.25, 0.835);
 
-    p["p_elfr_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top_left");
+    p["p_elfr_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
     p["p_elfr_vs_eta"].Add(hc["h_elfr20c_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
     p["p_elfr_vs_eta"].Add(hc["h_elfr40c_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
     p["p_elfr_vs_eta"].Add(hc["h_elfr60c_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_elfr_vs_eta"].SetYAxisRange(0, max);
     p["p_elfr_vs_eta"].SetLegendOption("p");
     p["p_elfr_vs_eta"].SetLegendTextSize(0.042);
-    p["p_elfr_vs_eta"].AddText("Electrons"         , 0.75, 0.835);
-    p["p_elfr_vs_eta"].AddText("p^{e}_{T} > 20 GeV", 0.75, 0.775);
+    p["p_elfr_vs_eta"].AddText("Electrons"         , 0.25, 0.835);
+    p["p_elfr_vs_eta"].AddText("p^{e}_{T} > 20 GeV", 0.25, 0.775);
 
     CountElectronNumDen(hc["h_el_num20c"], hc["h_el_fo20c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 20");
     CountElectronNumDen(hc["h_el_num40c"], hc["h_el_fo40c"], "electron count (num, den), radial iso (E_T > 0.5), away jet p_{T} > 40");
