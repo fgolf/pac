@@ -435,7 +435,7 @@ std::pair<GenParticleStruct, GenParticleStruct> efftools::getGenHyp (float pt1_c
     return good_gen_hyp;
 }
 
-int efftools::getRecoJet (LorentzVector p4) {
+int efftools::getRecoJet (const LorentzVector& p4) {
 
     float tmp_dr = 99.;
     int b_index = -1;
@@ -511,7 +511,7 @@ float efftools::getGenHT(float pt_cut, float eta_cut) {
     return tmp_ht;
 }
 
-bool efftools::leptonOverlapsWithParton(LorentzVector p4, float parton_pt, float dr) {
+bool efftools::leptonOverlapsWithParton(const LorentzVector& p4, float parton_pt, float dr) {
     
     for (unsigned int idx = 0; idx < cms2.genps_p4().size(); idx++) {
         
@@ -544,20 +544,22 @@ DileptonHypType::value_type efftools::getHypType (int id1, int id2) {
 }
 
 
-int efftools::getGenParton (LorentzVector p4) {
+int efftools::getGenParton (const LorentzVector& p4, bool use_status3_only) {
 
     float tmp_dr = 99.;
-    int index = -1;
-    for (unsigned int jidx = 0; jidx < cms2.genps_p4().size(); jidx++) {
+    int index = -999999;
+    for (unsigned int idx = 0; idx < cms2.genps_p4().size(); idx++) {
 
-        if (fabs(cms2.genps_p4().at(jidx).eta()) > 2.4)
+        if (use_status3_only && cms2.genps_status().at(idx) != 3)
             continue;
-        if (cms2.genps_p4().at(jidx).pt() < 40.)
+        if (fabs(cms2.genps_p4().at(idx).eta()) > 2.4)
+            continue;
+        if (cms2.genps_p4().at(idx).pt() < 40.)
             continue;
 
-        if (ROOT::Math::VectorUtil::DeltaR(cms2.genps_p4().at(jidx), p4) < tmp_dr) {
-            tmp_dr = ROOT::Math::VectorUtil::DeltaR(cms2.genps_p4().at(jidx), p4);
-            index = jidx;
+        if (ROOT::Math::VectorUtil::DeltaR(cms2.genps_p4().at(idx), p4) < tmp_dr) {
+            tmp_dr = ROOT::Math::VectorUtil::DeltaR(cms2.genps_p4().at(idx), p4);
+            index = idx;
         }                            
     }
 

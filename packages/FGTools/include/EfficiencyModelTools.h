@@ -39,8 +39,8 @@ namespace efftools {
     // calculate gen isolation (colored particles only) 
     float getGenIsolation(const LorentzVector& p4, float parton_pt = 1.0, float dr = 0.4);
 
-	// find the dr of the closest parton (colored particles only);
-	float getClosestParton(const LorentzVector& p4, float parton_pt = 1.0);
+    // find the dr of the closest parton (colored particles only);
+    float getClosestParton(const LorentzVector& p4, float parton_pt = 1.0);
 
     // get gen jets
     std::vector<LorentzVector> getGenJets (float pt_cut, float eta_cut);
@@ -49,13 +49,13 @@ namespace efftools {
     std::vector<LorentzVector> getGenBjets (float pt_cut, float eta_cut);
 
     // get reco jet matched to a given gen jet
-    int getRecoJet (LorentzVector p4);
+    int getRecoJet (const LorentzVector& p4);
 
     // get gen particle matched to a given reco jet
-    int getGenParton (LorentzVector p4);
+    int getGenParton (const LorentzVector& p4, bool use_status3_only = false);
 
     // check if gen lepton overlaps with a status 3 parton (quark or gluon)
-    bool leptonOverlapsWithParton(LorentzVector p4, float parton_pt = 20., float dr = 0.3);
+    bool leptonOverlapsWithParton(const LorentzVector& p4, float parton_pt = 20., float dr = 0.3);
 
     // get gen hyp type (ee, em, mm)
     at::DileptonHypType::value_type getHypType (int id1, int id2);

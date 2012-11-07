@@ -1464,6 +1464,28 @@ int SSAnalysisLooper::Analyze(long event)
             }                
         }
 
+        // match njets/btags to MC truth
+        if (not tas::evt_isRealData())
+        {
+            // jets
+            for (size_t i = 0; i != m_evt.vjets_p4.size(); i++)
+            {
+                const LorentzVector jet_p4 = m_evt.vjets_p4.at(i);
+                int idx = efftools::getGenParton(jet_p4, /*use status3 =*/true);
+                int mc3id = idx>= 0 ? tas::genps_id().at(idx) : -999999;
+                m_evt.vjets_mc3id.push_back(mc3id);
+            }
+
+            // b-tagged jets
+            for (size_t i = 0; i != m_evt.vbjets_p4.size(); i++)
+            {
+                const LorentzVector bjet_p4 = m_evt.vbjets_p4.at(i);
+                int idx = efftools::getGenParton(bjet_p4, /*use status3 =*/true);
+                int mc3id = idx>= 0 ? tas::genps_id().at(idx) : -999999;
+                m_evt.vbjets_mc3id.push_back(mc3id);
+            }
+        }
+
         // Fill the tree
         m_tree->Fill();
 

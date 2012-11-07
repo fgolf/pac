@@ -15,6 +15,7 @@ class TTree;
 // typedefs
 typedef std::vector<LorentzVector> vecLorentzVector;
 typedef std::vector<float> vecd;
+typedef std::vector<int> veci;
 
 struct SameSignTree : public DileptonTree
 {
@@ -191,6 +192,7 @@ public:
     float jets_dr12;
     vecd vjets_nearjet_dr;
     vecd vbjets_disc;
+    veci vjets_mc3id;
 
     //
     // bjet info
@@ -199,6 +201,7 @@ public:
     vecLorentzVector vbjets_nearjet_p4;
     std::vector<bool> vbtags;
     vecd vbjets_nearjet_dr;
+    veci vbjets_mc3id;
     float bjets_dr12;
 
     //

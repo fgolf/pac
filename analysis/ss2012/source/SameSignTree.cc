@@ -113,10 +113,12 @@ void SameSignTree::Reset()
     vjets_p4.clear();
     vgenjets_p4.clear();
     vjets_nearjet_p4.clear();
+    vjets_mc3id.clear();
     vbjets_p4.clear();
     vbjets_nearjet_p4.clear();
     vbtags.clear();
     vbjets_nearjet_dr.clear();
+    vbjets_mc3id.clear();
 }
 
 void SameSignTree::SetBranches(TTree &tree)
@@ -212,11 +214,13 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("vgenb_p4"          , "vecLorentzVector"  , &vgenb_p4            );
     tree.Branch("vjets_p4"          , "vecLorentzVector"  , &vjets_p4            );
     tree.Branch("vgenjets_p4"       , "vecLorentzVector"  , &vgenjets_p4         );
+    tree.Branch("vjets_mc3id"       , "veci"              , &vjets_mc3id         );
     tree.Branch("vjets_nearjet_p4"  , "vecLorentzVector"  , &vjets_nearjet_p4    );
     tree.Branch("vbjets_p4"         , "vecLorentzVector"  , &vbjets_p4           );
     tree.Branch("vbjets_nearjet_p4" , "vecLorentzVector"  , &vbjets_nearjet_p4   );
     tree.Branch("vbtags"            , "std::vector<bool>" , &vbtags              );
     tree.Branch("vbjets_nearjet_dr" , "vecd"              , &vbjets_nearjet_dr   );
+    tree.Branch("vbjets_mc3id"      , "veci"              , &vbjets_mc3id        );
     tree.Branch("gen_lep1_p4"       , "LorentzVector"     , &gen_lep1_p4         );
     tree.Branch("gen_lep1_pdgid"    , &gen_lep1_pdgid     , "gen_lep1_pdgid/I"   );
     tree.Branch("gen_lep2_p4"       , "LorentzVector"     , &gen_lep2_p4         );
