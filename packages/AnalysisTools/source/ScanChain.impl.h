@@ -164,7 +164,7 @@ namespace at
 				// print run/ls/event
         		if (verbose)
         		{
-        		    cout << Form("run %d, ls %d, evt %d", run, ls, evt) << endl;
+        		    //cout << Form("run %d, ls %d, evt %d", run, ls, evt) << endl;
         		}
 
                 // analysis

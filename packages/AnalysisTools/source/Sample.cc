@@ -669,6 +669,22 @@ namespace at
         },
         {
             // name
+            "qcd_mu15", 
+            // title
+            "QCD (#mu15 enriched)", 
+            // latex
+            "QCD (\\mu15 enriched)", 
+            // ntuple_path
+            "QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12-PU_S7_START52_V9-v1",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::lm9,
+            // color
+            kBlue
+        },
+        {
+            // name
             "dy4jets", 
             // title,
             "DY #rightarrow ll + 4j", 
@@ -850,9 +866,18 @@ namespace at
                 path.append("/V05-02-28");
             }
         }
-        else if (sample == Sample::data && ntuple == NtupleType::cms2)
+		else if (sample == Sample::qcd_mu15)
         {
-            path = rt::string_replace_all(path, ",", "/merged,");	
+            if (ntuple == NtupleType::cms2)
+            {
+                prefix = "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
+                path = rt::string_replace_all(path, ",", "/V05-02-27,");	
+                path.append("/V05-02-27");
+            }
+        }
+		else if (sample == Sample::data && ntuple == NtupleType::cms2)
+		{
+			path = rt::string_replace_all(path, ",", "/merged,");	
             path.append("/merged");
         }
         else if (sample != Sample::data && ntuple == NtupleType::cms2)

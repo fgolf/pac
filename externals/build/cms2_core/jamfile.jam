@@ -20,6 +20,7 @@ lib cms2_core
     $(CMS2_CORE)/CORE/photonSelections.cc
     $(CMS2_CORE)/CORE/SimpleFakeRate.cc
     $(CMS2_CORE)/CORE/ssSelections.cc
+    $(CMS2_CORE)/CORE/ttvSelections.cc
     $(CMS2_CORE)/CORE/susySelections.cc
     $(CMS2_CORE)/CORE/trackSelections.cc
     $(CMS2_CORE)/CORE/triggerSuperModel.cc

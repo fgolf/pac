@@ -13,14 +13,22 @@ bool keep_all_events(long)
 }
 
 // simple # jets selection
-struct simple_selection
+struct simple_skim
 {
-	simple_selection(unsigned int njets = 0) : m_njets(njets) {}
+	simple_skim(int njets) : m_njets(njets) {}
 	bool operator() (long) const 
     {
-        return (ssb::dilep_type() < 4 && static_cast<unsigned int>(ssb::njets()) >= m_njets);
+        using namespace ssb;
+        if (is_real_data())
+        {
+            return (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+        }
+        else
+        {
+            return (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+        }
     }
-	unsigned int m_njets;
+	int m_njets;
 };
 
 int main(int argc, char* argv[])
@@ -37,7 +45,7 @@ try
     int number_of_events      = -1;
     bool verbose              = false;
     bool do_duplicate_removal = true;
-	unsigned int njets        = 0;
+	int njets                 = 0;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -47,7 +55,7 @@ try
         ("input"    , po::value<std::string>(&input_file)   , "name of input root(s) file (can be cvs)"              )
         ("run_list" , po::value<std::string>(&run_list)     , "good run list (default is empty)"                     )
         ("nev"      , po::value<int>(&number_of_events)     , "number of events"                                     )
-        ("njets"    , po::value<unsigned int>(&njets)       , "number of jets to cun on while merging (default is 0)")
+        ("njets"    , po::value<int>(&njets)                , "number of jets to cun on while merging (default is 0)")
         ("duplicate", po::value<bool>(&do_duplicate_removal), "remove duplicate events"                              )
         ("verbose"  , po::value<bool>(&verbose)             , "verbosity"                                            )
         ;
@@ -121,7 +129,7 @@ try
     (
         chain,
         output_file,
-        simple_selection(njets),
+        simple_skim(njets),
         samesignbtag,
         number_of_events,
         run_list,

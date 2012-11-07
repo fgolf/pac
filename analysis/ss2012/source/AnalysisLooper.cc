@@ -489,9 +489,9 @@ void SSAnalysisLooper::BeginJob()
     if (m_sync_print)
     {
         cout << "Run | LS | Event | channel | " 
-            "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
-            "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
-            "MET | HT | nJets | nbJets" << endl;
+                "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
+                "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
+                "MET | HT | nJets | nbJets" << endl;
     }
 }
 
@@ -538,31 +538,12 @@ int SSAnalysisLooper::Analyze(long event)
     try
     {
         // select specific events
-        //if (!(evt_run() == 191247 && evt_lumiBlock() == 189 && evt_event() == 281392234))
-        //if (!(evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 91075424))
-        //if (!(evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 90509753))
-        //if (!(evt_run() == 190736 && evt_lumiBlock() == 143 && evt_event() == 147343009))
-        //if (!(evt_run() == 190736 && evt_lumiBlock() == 143 && evt_event() == 147655281))
-        //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93008232))  no good vtx
-        //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 92441355))
-        //if (!(evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
-        //if (!(evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
-        //if (!(evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
-        //if 
-        //(
-        //    not
-        //    (
-        //        evt_event() == 75924510  || // --> ee event, probably 2012B 13Jul2012 
-        //        evt_event() == 58926598  || // --> ee event, probably 2012B 13Jul2012
-        //        evt_event() == 261675757 || // , em event, probably 2012B 13Jul2012
-        //        evt_event() == 341568433 || // , em event, probably 2012B 13Jul2012
-        //        evt_event() == 113167649 || // , em 2021Cv2 
-        //        evt_event() == 27490600  || // , ee 2021Cv2 
-        //        evt_event() == 663249061    // , ee 2021Cv2 
-        //    )
-        //)
+        //if (!(evt_run() == 1  && evt_lumiBlock() == 98280 && evt_event() == 29478058))
         //{
         //    return 0;
+        //}
+        //{
+        //    cout << Form("runnin on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
         //}
 
         // Reset Tree Variables
@@ -605,7 +586,6 @@ int SSAnalysisLooper::Analyze(long event)
             if (best_gen_hyp.first.id_ == 0 || best_gen_hyp.second.id_ == 0)
             {
                 if (m_verbose) {cout << "AnalysisLooper: does not have a good gen hyp" << endl;} 
-                //return 0;
                 m_evt.gen_dilep_type = at::DileptonHypType::static_size; 
             }
             else
@@ -656,7 +636,6 @@ int SSAnalysisLooper::Analyze(long event)
             m_evt.gen_nbtags     = m_evt.vgenb_p4.size();
             m_evt.gen_njets      = m_evt.vgenjets_p4.size();
             m_evt.gen_ht         = efftools::getGenHT(40.0, 2.4);
-
         }
         
 
@@ -679,13 +658,6 @@ int SSAnalysisLooper::Analyze(long event)
 
         // Analysis Selections
         // --------------------------------------------------------------------------------------------------------- //
-
-        // needs to be at least one good hypthesis
-        //if (hyp_type().empty())
-        //{
-        //    if (m_verbose) {std::cout << "no good hypothesises" << std::endl;}
-        //    return 0; 
-        //}
 
         // jet type
         JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
@@ -710,7 +682,7 @@ int SSAnalysisLooper::Analyze(long event)
             }
 
             // check if hyp passes trigger
-            if (!samesign::passesTrigger(hyp_type().at(ihyp)))
+            if (evt_isRealData() && !samesign::passesTrigger(hyp_type().at(ihyp)))
             {
                 if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
                 continue;
@@ -743,11 +715,11 @@ int SSAnalysisLooper::Analyze(long event)
             }
 
             // check extra Gamma* veto
-            if (samesign::makesExtraGammaStar(ihyp))
-            {
-                if (m_verbose) {std::cout << "fails btag extra Gamma* veto requirement" << std::endl;}
-                continue;
-            }
+            //if (samesign::makesExtraGammaStar(ihyp))
+            //{
+            //    if (m_verbose) {std::cout << "fails btag extra Gamma* veto requirement" << std::endl;}
+            //    continue;
+            //}
 
             // check if event passes num_jet cut
             //int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
@@ -824,6 +796,7 @@ int SSAnalysisLooper::Analyze(long event)
 
             // fill event level info 
             m_evt.event_info.FillCommon(m_sample);
+            m_evt.dilep_type = DileptonHypType::static_size;
 
             // fill the dilepton analysis independent variables 
             if (not hyp_p4().empty())
@@ -1117,11 +1090,11 @@ int SSAnalysisLooper::Analyze(long event)
         // only keep m_njets events
         //if (evt_isRealData())
         //{
-        //    if (m_evt.njets < m_njets)
-        //    {
-        //        if (m_verbose) {std::cout << "fails # jets >= 2 cut" << std::endl;}
-        //        return 0;
-        //    }
+        //if (m_evt.njets < m_njets)
+        //{
+        //    if (m_verbose) {std::cout << "fails # jets >= 2 cut" << std::endl;}
+        //    return 0;
+        //}
         //}
         //else
         //{

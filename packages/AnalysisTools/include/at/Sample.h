@@ -51,6 +51,7 @@ namespace at
             ww_ds,
             lm6,
             lm9,
+            qcd_mu15,
             dy4jets,
             w3jets,
             w4jets,
