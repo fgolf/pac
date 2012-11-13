@@ -12,15 +12,15 @@ typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > v
 // construct:
 FakeRateBabyLooper::FakeRateBabyLooper
 (
-     const std::string& root_file_name,
-     const std::string& dataset,
-     const std::string& lepton,
-     float lumi,
-     int charge, 
-     bool verbose,
-     bool print,
-     const std::string& suffix
-)
+    const std::string& root_file_name,
+    const std::string& dataset,
+    const std::string& lepton,
+    float lumi,
+    int charge, 
+    bool verbose,
+    bool print,
+    const std::string& suffix
+    )
     : at::AnalysisWithHist(root_file_name, print, suffix)
     , m_dataset(dataset)
     , m_lepton(lepton)
@@ -140,7 +140,7 @@ std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
 std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
 
 // book hists 
- void FakeRateBabyLooper::BookHists()
+void FakeRateBabyLooper::BookHists()
 {
     // convenience alias
     rt::TH1Container& hc = m_hist_container;
@@ -207,7 +207,7 @@ std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
     return;
 }
 
-    // main analysis function operator 
+// main analysis function operator 
 int FakeRateBabyLooper::operator()(long event)
 {
     using namespace std;
@@ -247,12 +247,12 @@ int FakeRateBabyLooper::operator()(long event)
 
         // pT cut
         if (is_mu && (pt()<5 || pt()>35))
-		{
+        {
             if (m_verbose) {cout << "fails pt cut" << endl;}
             return 0;
-		}
-		if (is_el && (pt()<10 || pt()>55))
-		{
+        }
+        if (is_el && (pt()<10 || pt()>55))
+        {
             if (m_verbose) {cout << "fails pt cut" << endl;}
             return 0;
         }
@@ -288,9 +288,9 @@ int FakeRateBabyLooper::operator()(long event)
         if (is_data && is_mu)
         {
             trig_cut = ((pt() > 30 && (mu30_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
-            			(pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
-            			(pt() > 17 && (mu17_vstar()>1 || mu8_vstar()>1)) || 
-            			(pt() > 8  && (mu8_vstar()>1)));
+                        (pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
+                        (pt() > 17 && (mu17_vstar()>1 || mu8_vstar()>1)) || 
+                        (pt() > 8  && (mu8_vstar()>1)));
         }
         else if(is_data && is_el)
         {
@@ -299,16 +299,16 @@ int FakeRateBabyLooper::operator()(long event)
             trig_cut |= (pt() > 8  && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
         }
 
-		// no additional FO's in event
-		bool nFOcut = false;
-		if (is_mu)
+        // no additional FO's in event
+        bool nFOcut = false;
+        if (is_mu)
         {
-			nFOcut = (nFOmus() == 0);
-		}
+            nFOcut = (nFOmus() == 0);
+        }
         else if(is_el)
         {
-			nFOcut = (nFOels() == 0);
-		}
+            nFOcut = (nFOels() == 0);
+        }
 
         // away jet cut
         bool jet20c_cut = (ptpfcL1Fj1res() > 20);
@@ -349,7 +349,7 @@ int FakeRateBabyLooper::operator()(long event)
         bool num_lep_sel        = (trig_cut && num_lep_sel_notrig);
         bool fo_lep_sel         = (trig_cut && fo_lep_sel_notrig);
 
-		// skip if not FO
+        // skip if not FO
         if (!fo_lep_sel)
         {
             if (m_verbose) {cout << "fails FO ID cut" << endl;}
