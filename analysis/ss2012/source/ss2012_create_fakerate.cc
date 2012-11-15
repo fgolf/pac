@@ -60,7 +60,8 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
     }
 
     // prefix name
-    bool local = rt::string_contains(rt::getenv("HOSTNAME"), "tensor");
+    //bool local = rt::string_contains(rt::getenv("HOSTNAME"), "tensor");
+    bool local = false;
     
     boost::shared_ptr<TChain> chain(new TChain("tree"));
 
