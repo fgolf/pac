@@ -755,14 +755,14 @@ int TrileptonZAnalysisLooper::Analyze(long event)
         if (ttv::isGoodLepton(best_trilep_hyp.w.id, best_trilep_hyp.w.idx, ttv::LeptonType::TIGHT)) lep3_id_bitmask_tmp |= (1<<TrileptonZTree::LeptonType::TIGHT_NUM);
         m_evt.lep3_id_bitmask = lep3_id_bitmask_tmp;
 
-        if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_num & m_evt.lep3.is_num) m_evt.event_type = ttv2012::EventType::TRILEPTONZ;
-        else if (m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_fo) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_TF;
-        else if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_num & m_evt.lep3.is_fo ||
-                 m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_num ||
-                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_num & m_evt.lep3.is_num) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_SF;
-        else if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_fo ||
-                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_fo & m_evt.lep3.is_num ||
-                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_num & m_evt.lep3.is_fo) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_DF;
+        if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_num && m_evt.lep3.is_num) m_evt.event_type = ttv2012::EventType::TRILEPTONZ;
+        else if (m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_fo && m_evt.lep3.is_fo) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_TF;
+        else if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_num && m_evt.lep3.is_fo ||
+                 m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_fo && m_evt.lep3.is_num ||
+                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_num && m_evt.lep3.is_num) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_SF;
+        else if (m_evt.dilep.lep1.is_num && m_evt.dilep.lep1.is_fo && m_evt.lep3.is_fo ||
+                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_fo && m_evt.lep3.is_num ||
+                 m_evt.dilep.lep1.is_fo && m_evt.dilep.lep1.is_num && m_evt.lep3.is_fo) m_evt.event_type = ttv2012::EventType::TRILEPTONZ_DF;
         
 
         m_evt.dilep.lep1.cordetiso   = m_evt.dilep.lep1.detiso   - (log(m_evt.dilep.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.dilep.lep1.p4.pt()); // check that I have the correct formula 
