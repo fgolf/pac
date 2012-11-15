@@ -13,7 +13,7 @@ EventInfoTree::EventInfoTree (const std::string &prefix)
 {
 }
 
-void EventInfoTree::FillCommon (Sample::value_type sample_)
+void EventInfoTree::FillCommon (Sample::value_type sample_, const std::string& root_file_name)
 {
     run            = cms2.evt_run();
     ls             = cms2.evt_lumiBlock();
@@ -27,6 +27,7 @@ void EventInfoTree::FillCommon (Sample::value_type sample_)
     pfmet          = cms2.evt_pfmet_type1cor();
     pfmet_phi      = cms2.evt_pfmetPhi_type1cor();
     dataset        = cms2.evt_dataset().at(0);
+    filename       = root_file_name;
 
     if (!cms2.evt_isRealData()) 
 	{
@@ -57,6 +58,7 @@ void EventInfoTree::Reset()
     gen_met        = -999999.;
     gen_met_phi    = -999999.;
     dataset        = "";
+    filename       = "";
 }
 
 void EventInfoTree::SetBranches(TTree &tree)
@@ -78,5 +80,6 @@ void EventInfoTree::SetBranches(TTree &tree)
     tree.Branch(Form("%sgen_met"        , prefix_.c_str()) , &gen_met        , "gen_met/F"        );
     tree.Branch(Form("%sgen_met_phi"    , prefix_.c_str()) , &gen_met_phi    , "gen_met_phi/F"    );
     tree.Branch(Form("%sdataset"        , prefix_.c_str()) , "TString"       , &dataset           );
+    tree.Branch(Form("%sfilename"       , prefix_.c_str()) , "TString"       , &filename          );
 }
 

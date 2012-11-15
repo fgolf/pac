@@ -222,7 +222,7 @@ try
     if (verbose) {rt::PrintFilesFromTChain(chain);}
 
     // scan the chain
-    at::ScanChain<CMS2>
+    at::ScanChainWithFilename<CMS2>
     (
         chain, 
         SSAnalysisLooper 

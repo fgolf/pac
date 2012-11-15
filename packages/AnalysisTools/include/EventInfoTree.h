@@ -17,7 +17,7 @@ public:
     void Reset ();
     void SetBranches (TTree &tree);
     void SetAliases (TTree &tree) const;
-    void FillCommon (at::Sample::value_type sample_);
+    void FillCommon (at::Sample::value_type sample_, const std::string& root_file_name = "");
 
 private:
 
@@ -33,6 +33,7 @@ public:
     unsigned int evt;
     at::Sample::value_type sample;
     TString dataset;
+    TString filename;
     bool is_real_data;
 
     //

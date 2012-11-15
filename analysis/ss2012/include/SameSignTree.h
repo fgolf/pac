@@ -187,21 +187,25 @@ public:
     // jet info
     //
     vecLorentzVector vjets_p4;
+    vecLorentzVector vjets_mc3p4;
     vecLorentzVector vgenjets_p4;
     vecLorentzVector vjets_nearjet_p4;
     float jets_dr12;
     vecd vjets_nearjet_dr;
     vecd vbjets_disc;
+    veci vjets_momid;
     veci vjets_mc3id;
 
     //
     // bjet info
     //
     vecLorentzVector vbjets_p4;
+    vecLorentzVector vbjets_mc3p4;
     vecLorentzVector vbjets_nearjet_p4;
     std::vector<bool> vbtags;
     vecd vbjets_nearjet_dr;
     veci vbjets_mc3id;
+    veci vbjets_momid;
     float bjets_dr12;
 
     //

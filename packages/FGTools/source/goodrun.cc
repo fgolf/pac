@@ -1,10 +1,9 @@
-// $Id: goodrun.cc,v 1.2 2011/05/26 03:34:52 fgolf Exp $
+// $Id: goodrun.cc,v 1.2 2012/08/24 04:13:58 kelley Exp $
 
 // CINT is allowed to see this, but nothing else:
 #include "goodrun.h"
 
 #ifndef __CINT__
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

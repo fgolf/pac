@@ -473,10 +473,10 @@ SSAnalysisLooper::~SSAnalysisLooper()
 }
 
 // function operator: operate on each event
-int SSAnalysisLooper::operator() (long event)
+int SSAnalysisLooper::operator() (long event, const std::string& filename)
 {
     // call base class operator
-    return Analyze(event);
+    return Analyze(event, filename);
 }
 
 // members:
@@ -533,7 +533,7 @@ int SSAnalysisLooper::SetJetCorrector(std::vector<std::string> &list_of_filename
     return 0;
 }
 
-int SSAnalysisLooper::Analyze(long event)
+int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 {
     try
     {
@@ -795,7 +795,7 @@ int SSAnalysisLooper::Analyze(long event)
             if (m_verbose) {std::cout << "fails good event type requirement" << std::endl;}
 
             // fill event level info 
-            m_evt.event_info.FillCommon(m_sample);
+            m_evt.event_info.FillCommon(m_sample, filename);
             m_evt.dilep_type = DileptonHypType::static_size;
 
             // fill the dilepton analysis independent variables 
@@ -1473,7 +1473,11 @@ int SSAnalysisLooper::Analyze(long event)
                 const LorentzVector jet_p4 = m_evt.vjets_p4.at(i);
                 int idx = efftools::getGenParton(jet_p4, /*use status3 =*/true);
                 int mc3id = idx>= 0 ? tas::genps_id().at(idx) : -999999;
+                int momid = idx>= 0 ? tas::genps_id_mother().at(idx) : -999999;
+                LorentzVector mc3p4 = idx>= 0 ? tas::genps_p4().at(idx) : LorentzVector(0,0,0,0);
                 m_evt.vjets_mc3id.push_back(mc3id);
+                m_evt.vjets_momid.push_back(momid);
+                m_evt.vjets_mc3p4.push_back(mc3p4);
             }
 
             // b-tagged jets
@@ -1482,7 +1486,11 @@ int SSAnalysisLooper::Analyze(long event)
                 const LorentzVector bjet_p4 = m_evt.vbjets_p4.at(i);
                 int idx = efftools::getGenParton(bjet_p4, /*use status3 =*/true);
                 int mc3id = idx>= 0 ? tas::genps_id().at(idx) : -999999;
+                int momid = idx>= 0 ? tas::genps_id_mother().at(idx) : -999999;
+                LorentzVector mc3p4 = idx>= 0 ? tas::genps_p4().at(idx) : LorentzVector(0,0,0,0);
                 m_evt.vbjets_mc3id.push_back(mc3id);
+                m_evt.vbjets_momid.push_back(momid);
+                m_evt.vbjets_mc3p4.push_back(mc3p4);
             }
         }
 

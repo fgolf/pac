@@ -43,12 +43,12 @@ public:
     ~SSAnalysisLooper();
 
     // function operator:
-    int operator() (long event);
+    int operator() (long event, const std::string& filename);
 
     // members:
     virtual void BeginJob();
     virtual void EndJob();
-    int Analyze(long event);
+    int Analyze(long event, const std::string& filename);
     int SetJetCorrector(std::vector<std::string> &list_of_filenames);
 
 private:
