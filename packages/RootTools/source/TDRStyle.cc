@@ -125,8 +125,8 @@ namespace rt
         tdrStyle->SetTitleColor(1, "XYZ");
         tdrStyle->SetTitleFont(42, "XYZ");
         tdrStyle->SetTitleSize(0.05, "XYZ");
-        // tdrStyle->SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
-        // tdrStyle->SetTitleYSize(Float_t size = 0.02);
+        //tdrStyle->SetTitleXSize(Float_t size = 0.04); // Another way to set the size?
+        //tdrStyle->SetTitleYSize(Float_t size = 0.04);
         tdrStyle->SetTitleOffset(1.20, "X");
         tdrStyle->SetTitleOffset(1.10, "Y"); 
 

@@ -112,4 +112,28 @@ namespace at
     {
     }
 
+    PredSummary& PredSummary::operator+=(const PredSummary& rhs)
+    {
+        PredSummary temp(this->ee + rhs.ee, this->mm + rhs.mm, this->em + rhs.em);
+        std::swap(*this, temp);
+        return *this; 
+    }
+
+    PredSummary& PredSummary::operator-=(const PredSummary& rhs)
+    {
+        PredSummary temp(this->ee - rhs.ee, this->mm - rhs.mm, this->em - rhs.em);
+        std::swap(*this, temp);
+        return *this; 
+    }
+
+    PredSummary operator+(const PredSummary& lhs, const PredSummary& rhs)
+    {
+        return PredSummary(lhs) += rhs; 
+    }
+
+    PredSummary operator-(const PredSummary& lhs, const PredSummary& rhs)
+    {
+        return PredSummary(lhs) -= rhs; 
+    }
+
 } // namespace at

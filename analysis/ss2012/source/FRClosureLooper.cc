@@ -186,6 +186,13 @@ void FRClosureLooper::EndJob()
     hc["h_fake_pred"]->SetBinError(3, fake.em.error);
     hc["h_fake_pred"]->SetBinError(4, fake.ll.error);
 
+    // MC pred (hard coded from ICHEP) 
+    PredSummary mc(Pred(00.0, 0.0), Pred(11.3, 0.3), Pred(00.0, 0.0));
+
+    // total prediciton
+    PredSummary pred = fake + mc;
+
+
     // print the output
     CTable t_yields;
     t_yields.useTitle();
@@ -196,6 +203,8 @@ void FRClosureLooper::EndJob()
                         ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
                         ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
                         ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
+                        ("MC"     ,     mc.ee.str(f),     mc.mm.str(f),     mc.em.str(f),     mc.ll.str(f))    
+                        ("Pred"   ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   pred.ll.str(f))    
                         ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
     t_yields.print();
 }

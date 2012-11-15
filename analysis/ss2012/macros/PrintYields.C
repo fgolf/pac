@@ -786,11 +786,11 @@ void CreateProjPlots(const std::string& output_path = "", int charge_option = 0,
     TH1F* h_pred_njets = new TH1F("h_pred_njets", Form("%s;number of jets;Events", title.c_str()), 8, 1.5, 9.5);
     TH1F* h_mc_njets   = new TH1F("h_mc_njets"  , Form("%s;number of jets;Events", title.c_str()), 8, 1.5, 9.5);
 
-    TH1F* h_data_nbtags = new TH1F("h_data_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 5, 1.5, 6.5);
-    TH1F* h_fake_nbtags = new TH1F("h_fake_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 5, 1.5, 6.5);
-    TH1F* h_flip_nbtags = new TH1F("h_flip_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 5, 1.5, 6.5);
-    TH1F* h_pred_nbtags = new TH1F("h_pred_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 5, 1.5, 6.5);
-    TH1F* h_mc_nbtags   = new TH1F("h_mc_nbtags"  , Form("%s;number of b-tagged jets;Events", title.c_str()), 5, 1.5, 6.5);
+    TH1F* h_data_nbtags = new TH1F("h_data_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 7, -0.5, 6.5);
+    TH1F* h_fake_nbtags = new TH1F("h_fake_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 7, -0.5, 6.5);
+    TH1F* h_flip_nbtags = new TH1F("h_flip_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 7, -0.5, 6.5);
+    TH1F* h_pred_nbtags = new TH1F("h_pred_nbtags", Form("%s;number of b-tagged jets;Events", title.c_str()), 7, -0.5, 6.5);
+    TH1F* h_mc_nbtags   = new TH1F("h_mc_nbtags"  , Form("%s;number of b-tagged jets;Events", title.c_str()), 7, -0.5, 6.5);
 
     TH1F* h_data_pt1 = new TH1F("h_data_pt1", Form("%s;p^{lep1}_{T} (GeV);Events", title.c_str()), 10, 0.0, 200.0);
     TH1F* h_fake_pt1 = new TH1F("h_fake_pt1", Form("%s;p^{lep1}_{T} (GeV);Events", title.c_str()), 10, 0.0, 200.0);
@@ -920,7 +920,7 @@ void CreateProjPlots(const std::string& output_path = "", int charge_option = 0,
             if(yield_pred.ll > 0) h_pred_njets->SetBinError(njet_bin, yield_pred.tll());
             if(yield_mc.ll   > 0) h_mc_njets->SetBinError  (njet_bin, yield_mc.tll()  );
         }
-        else if (bin >= 16 && bin <= 21)  // bin 16 - 22 
+        else if (bin >= 16 && bin <= 23)  // bin 16 - 23 
         {
             int njet_bin = bin-15;
             if(yield_data.ll > 0) h_data_nbtags->SetBinContent(njet_bin, yield_data.ll);
@@ -935,9 +935,9 @@ void CreateProjPlots(const std::string& output_path = "", int charge_option = 0,
             if(yield_pred.ll > 0) h_pred_nbtags->SetBinError(njet_bin, yield_pred.tll());
             if(yield_mc.ll   > 0) h_mc_nbtags->SetBinError  (njet_bin, yield_mc.tll()  );
         }
-        else if (bin >= 22 && bin <= 31)  // bin 22 - 31 
+        else if (bin >= 24 && bin <= 33)  // bin 22 - 33 
         {
-            int pt1_bin = bin-21;
+            int pt1_bin = bin-23;
             if(yield_data.ll > 0) h_data_pt1->SetBinContent(pt1_bin, yield_data.ll);
             if(yield_fake.ll > 0) h_fake_pt1->SetBinContent(pt1_bin, yield_fake.ll);
             if(yield_flip.ll > 0) h_flip_pt1->SetBinContent(pt1_bin, yield_flip.ll);
@@ -950,9 +950,9 @@ void CreateProjPlots(const std::string& output_path = "", int charge_option = 0,
             if(yield_pred.ll > 0) h_pred_pt1->SetBinError(pt1_bin, yield_pred.tll());
             if(yield_mc.ll   > 0) h_mc_pt1->SetBinError  (pt1_bin, yield_mc.tll()  );
         }
-        else if (bin >= 32 && bin <= 41)  // bin 32 - 41 
+        else if (bin >= 34 && bin <= 43)  // bin 33 - 43 
         {
-            int pt2_bin = bin-31;
+            int pt2_bin = bin-33;
             if(yield_data.ll > 0) h_data_pt2->SetBinContent(pt2_bin, yield_data.ll);
             if(yield_fake.ll > 0) h_fake_pt2->SetBinContent(pt2_bin, yield_fake.ll);
             if(yield_flip.ll > 0) h_flip_pt2->SetBinContent(pt2_bin, yield_flip.ll);
@@ -1062,11 +1062,13 @@ void CreateProjPlots(const std::string& output_path = "", int charge_option = 0,
     // print
     if (!suffix.empty())
     {
-        c1->cd(); c1->Print(Form("plots/note/p_proj_ht.%s"    , suffix.c_str()));
-        c1->cd(); c2->Print(Form("plots/note/p_proj_met.%s"   , suffix.c_str()));
-        c3->cd(); c3->Print(Form("plots/note/p_proj_njets.%s" , suffix.c_str()));
-        c4->cd(); c4->Print(Form("plots/note/p_proj_nbtags.%s", suffix.c_str()));
-        c5->cd(); c5->Print(Form("plots/note/p_proj_pt1.%s"   , suffix.c_str()));
-        c6->cd(); c6->Print(Form("plots/note/p_proj_pt2.%s"   , suffix.c_str()));
+        rt::mkdir("plots/note/nbtags0", true);
+        rt::CopyIndexPhp("plots/note/nbtags0");
+        c1->cd(); c1->Print(Form("plots/note/nbtags0/p_proj_ht.%s"    , suffix.c_str()));
+        c1->cd(); c2->Print(Form("plots/note/nbtags0/p_proj_met.%s"   , suffix.c_str()));
+        c3->cd(); c3->Print(Form("plots/note/nbtags0/p_proj_njets.%s" , suffix.c_str()));
+        c4->cd(); c4->Print(Form("plots/note/nbtags0/p_proj_nbtags.%s", suffix.c_str()));
+        c5->cd(); c5->Print(Form("plots/note/nbtags0/p_proj_pt1.%s"   , suffix.c_str()));
+        c6->cd(); c6->Print(Form("plots/note/nbtags0/p_proj_pt2.%s"   , suffix.c_str()));
     }
 }

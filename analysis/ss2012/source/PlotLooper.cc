@@ -457,19 +457,19 @@ int PlotLooper::operator()(long event)
         }
 
         // check that it passes the trigger requirement
-        //bool passes_trigger = false;
-        //switch (hyp_type)
-        //{
-        //    case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
-        //    case DileptonHypType::EMU : passes_trigger = trig_em(); break;
-        //    case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
-        //    default: passes_trigger = false; break;
-        //};
-        //if (not passes_trigger)
-        //{
-        //    //cout << "fails trigger" << endl;
-        //    return 0;
-        //}
+        bool passes_trigger = false;
+        switch (hyp_type)
+        {
+            case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
+            case DileptonHypType::EMU : passes_trigger = trig_em(); break;
+            case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
+            default: passes_trigger = false; break;
+        };
+        if (not passes_trigger)
+        {
+            //cout << "fails trigger" << endl;
+            return 0;
+        }
 
         // two jet events
         if (njets() < static_cast<int>(m_njets))

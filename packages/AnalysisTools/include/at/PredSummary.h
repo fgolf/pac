@@ -33,11 +33,18 @@ namespace at
     {
         PredSummary();
         PredSummary(const Pred& ee_, const Pred& mm_, const Pred& em_);
+        PredSummary& operator+=(const PredSummary& rhs);
+        PredSummary& operator-=(const PredSummary& rhs);
+
         Pred ee;
         Pred mm;
         Pred em;
         Pred ll;
     };
+
+    // non member methods
+    PredSummary operator-(const PredSummary& lhs, const PredSummary& rhs);
+    PredSummary operator+(const PredSummary& lhs, const PredSummary& rhs);
 
 } // namepace at
 
