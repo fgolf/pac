@@ -18,11 +18,13 @@ namespace at
 
             // function operator:
             virtual int operator () (long event);
+            virtual int operator () (long event, const std::string& filename);
 
             // methods
             virtual void BeginJob();
             virtual void EndJob();
-            virtual int  Analyze(long event);
+            virtual int Analyze(long event);
+            virtual int Analyze(long event, const std::string& filename);
 
         protected:
             // members:

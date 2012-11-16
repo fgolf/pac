@@ -16,12 +16,13 @@ sources         := SSB2012.cc      		 \
 				   ScaleFactors.cc 		 \
 				   SameSignTree.cc 		 \
 				   TTbarBreakDown.cc     \
-				   SignalRegion.cc 
+				   SignalRegion.cc       \
+				   AnalysisType.cc
 include_dir     := include source 
 defines         := 
 
 # for ROOT interactive use (rootcint)
-headers         := SignalRegion.h 
+headers         := SignalRegion.h AnalysisType.h 
 link_def	    := LinkDef.h
 
 # additional libraries

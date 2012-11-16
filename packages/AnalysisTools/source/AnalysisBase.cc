@@ -26,12 +26,22 @@ namespace at
         return Analyze(event);
     }
 
+    int AnalysisBase::operator () (long event, const std::string& filename)
+    {
+        return Analyze(event, filename);
+    }
+
     // methods
     void AnalysisBase::BeginJob()
     {
     }
 
     int AnalysisBase::Analyze(long event)
+    {
+        return 0;
+    }
+
+    int AnalysisBase::Analyze(long event, const std::string& filename)
     {
         return 0;
     }
