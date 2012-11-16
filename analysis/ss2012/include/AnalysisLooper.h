@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include "SameSignTree.h"
+#include "AnalysisType.h"
 
 class TH2F;
 class FactorizedJetCorrector;
@@ -24,6 +25,7 @@ public:
     (
         const std::string& root_file_name,
         const at::Sample::value_type& sample,
+        const ss::AnalysisType::value_type& analysis_type,
         const std::string& fake_rate_file_name,
         const std::string& flip_rate_file_name,
         const std::string& fake_rate_hist_name = "h_mufr40c",
@@ -54,6 +56,7 @@ public:
 private:
     // members:
     at::Sample::value_type m_sample;
+    ss::AnalysisType::value_type m_analysis_type;
     double m_lumi;
     int  m_njets;
     int  m_jetMetScale;

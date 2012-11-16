@@ -46,6 +46,7 @@ typedef std::vector<LorentzVector> vecLorentzVector;
 using namespace tas;
 using namespace std;
 using namespace at;
+using namespace ss;
 
 // get the best hyp
 void CompareHyps(std::pair<size_t, DileptonChargeType::value_type>& best_hyp, size_t hyp_idx, const DileptonChargeType::value_type& new_type)
@@ -217,7 +218,7 @@ void SetBtagDiscriminator(const vector<LorentzVector>& jets_p4, vector<float>& j
 //    }
 //}
 
-void PrintForSync(int ihyp, enum JetType jet_type, int jet_met_scale, FactorizedJetCorrector *jet_corrector = NULL, MetCorrector *met_corrector = NULL)
+void PrintForSync(int ihyp, float max_pt, float min_pt, enum JetType jet_type, int jet_met_scale, FactorizedJetCorrector *jet_corrector = NULL, MetCorrector *met_corrector = NULL)
 {
     // convenience
     const LorentzVector& lt_p4 = hyp_lt_p4().at(ihyp);
@@ -242,16 +243,16 @@ void PrintForSync(int ihyp, enum JetType jet_type, int jet_met_scale, Factorized
     float met = evt_pfmet_type1cor();
     if (not jet_corrector)
     {
-        num_jets  = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
-        num_btags = samesign::nBtaggedJets(ihyp, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0);
-        ht        = samesign::sumJetPt(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, jet_met_scale);
+        num_jets  = samesign::nJets(ihyp, jet_type                       , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt);
+        num_btags = samesign::nBtaggedJets(ihyp, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt);
+        ht        = samesign::sumJetPt(ihyp, jet_type                    , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, jet_met_scale);
         met       = evt_pfmet_type1cor();
     }
     else
     {
-        num_jets  = samesign::nJets(ihyp, jet_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
-        num_btags = samesign::nBtaggedJets(ihyp, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0);
-        ht        = samesign::sumJetPt(ihyp, jet_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, jet_met_scale);
+        num_jets  = samesign::nJets(ihyp, jet_corrector, jet_type                       , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt);
+        num_btags = samesign::nBtaggedJets(ihyp, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt);
+        ht        = samesign::sumJetPt(ihyp, jet_corrector, jet_type                    , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, jet_met_scale);
         met       = met_corrector->getCorrectedMET().first;
     }
 
@@ -330,6 +331,7 @@ SSAnalysisLooper::SSAnalysisLooper
 (
     const std::string& root_file_name,
     const Sample::value_type& sample,
+    const AnalysisType::value_type& analysis_type,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
     const std::string& fake_rate_hist_name,
@@ -346,6 +348,7 @@ SSAnalysisLooper::SSAnalysisLooper
 )
     : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
+    , m_analysis_type(analysis_type)
     , m_lumi(luminosity)
     , m_njets(njets)
     , m_jetMetScale(jetMetScale)
@@ -502,20 +505,20 @@ void SSAnalysisLooper::EndJob()
     yield_table.setTitle("yields for SS Analysis 2012 (# btags >= 2)");
     yield_table.useTitle();
     yield_table.setTable() (   "mm",         "em",          "ee",          "all")
-        ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
-        ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
-        ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
-        ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
+                           ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
+                           ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
+                           ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
+                           ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
     yield_table.print();
 
     CTable yield_table2;
     yield_table2.setTitle("yields for SS Analysis 2012 (no btags req)");
     yield_table2.useTitle();
     yield_table2.setTable() (          "mm",                "em",                 "ee",                "all")
-        ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
-        ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
-        ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
-        ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
+                            ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
+                            ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
+                            ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
+                            ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
     yield_table2.print();
 }
 
@@ -578,11 +581,15 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // gen level  
         // --------------------------------------------------------------------------------------------------------- //
 
+        // lepton pT cut values
+        float min_pt = m_analysis_type == AnalysisType::high_pt ? 20.0 : 10.0;
+        float max_pt = m_analysis_type == AnalysisType::high_pt ? 20.0 : 20.0;
+
         // gen jet info
         if (!evt_isRealData())
         {
             // lepton variables
-            std::pair<GenParticleStruct, GenParticleStruct> best_gen_hyp = efftools::getGenHyp(20.0, 20.0, DileptonChargeType::static_size);
+            std::pair<GenParticleStruct, GenParticleStruct> best_gen_hyp = efftools::getGenHyp(max_pt, min_pt, DileptonChargeType::static_size);
             if (best_gen_hyp.first.id_ == 0 || best_gen_hyp.second.id_ == 0)
             {
                 if (m_verbose) {cout << "AnalysisLooper: does not have a good gen hyp" << endl;} 
@@ -697,14 +704,16 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             int ll_idx                 = hyp_ll_index().at(ihyp);
 
             // check if hyp passes lepton kinematics
-            if (fabs(lt_p4.Eta())>2.4 || lt_p4.Pt()<20.0) continue;
-            if (fabs(ll_p4.Eta())>2.4 || ll_p4.Pt()<20.0) continue;
+            if (fabs(lt_p4.Eta())>2.4) continue;
+            if (fabs(ll_p4.Eta())>2.4) continue;
+            if (std::min(lt_p4.pt(), ll_p4.pt()) < min_pt) continue;
+            if (std::max(lt_p4.pt(), ll_p4.pt()) < max_pt) continue;
 
             // print for syncing
             if (m_sync_print)
             {
                 cout << "printing for hyp index " << ihyp << endl;
-                PrintForSync(ihyp, jet_type, m_jetMetScale, jet_corrector, met_corrector);
+                PrintForSync(ihyp, max_pt, min_pt, jet_type, m_jetMetScale, jet_corrector, met_corrector);
             }
 
             // check extra Z veto
@@ -715,14 +724,14 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
 
             // check extra Gamma* veto
-            //if (samesign::makesExtraGammaStar(ihyp))
-            //{
-            //    if (m_verbose) {std::cout << "fails btag extra Gamma* veto requirement" << std::endl;}
-            //    continue;
-            //}
+            if (samesign::makesExtraGammaStar(ihyp))
+            {
+                if (m_verbose) {std::cout << "fails btag extra Gamma* veto requirement" << std::endl;}
+                continue;
+            }
 
             // check if event passes num_jet cut
-            //int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
+            //int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt);
             //if (num_jets < 2)
             //{
             //    if (m_verbose) {std::cout << "fails # jets requirement" << std::endl;}
@@ -730,7 +739,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             //}
 
             //// check if events passes num_btags cut
-            //int num_btags = samesign::nBtaggedJets(ihyp, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0);
+            //int num_btags = samesign::nBtaggedJets(ihyp, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*min_pt);
             //if (num_btags < 2)
             //{
             //    if (m_verbose) {std::cout << "fails # btags requirement" << std::endl;}
@@ -877,27 +886,27 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 
         if (not jet_corrector)
         {
-            m_evt.ht           = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.ht20         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.ht30         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.njets        = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, 0);
-            m_evt.njets20      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, 0);
-            m_evt.njets30      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, 0);
-            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
+            m_evt.ht           = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.ht20         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.ht30         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.njets        = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.njets20      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.njets30      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
         }
         else
         {
-            m_evt.ht           = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.ht20         = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.ht30         = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.njets        = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, 0);
-            m_evt.njets20      = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, 0);
-            m_evt.njets30      = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, 0);
-            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
-            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
+            m_evt.ht           = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.ht20         = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.ht30         = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.njets        = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.njets20      = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.njets30      = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
+            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
         }
 
         m_evt.no_extrag    = (not samesign::makesExtraGammaStar(hyp_idx));
@@ -985,25 +994,25 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         {
             if (not jet_corrector || not met_corrector)
             {
-                m_evt.ht_up       = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.njets_up    = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.njets20_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.njets30_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
+                m_evt.ht_up       = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets_up    = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets20_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets30_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
 
-                m_evt.ht_dn       = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.njets_dn    = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.njets20_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.njets30_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
+                m_evt.ht_dn       = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets_dn    = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets20_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets30_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
 
                 // MET
                 ROOT::Math::XYVector cmet_up;
@@ -1013,7 +1022,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 float mety_up = evt_pfmet_type1cor() * sin(evt_pfmetPhi_type1cor());
                 float mety_dn = evt_pfmet_type1cor() * sin(evt_pfmetPhi_type1cor());
                 // get uncorrected jets
-                vector<LorentzVector> ujets = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, 0);
+                vector<LorentzVector> ujets = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, 0);
                 for (size_t u = 0; u != ujets.size(); u++) 
                 {
                     float px   = ujets.at(u).px();
@@ -1036,25 +1045,25 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
             else
             {
-                m_evt.ht_up       = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.njets_up    = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.njets20_up  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.njets30_up  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/1);
+                m_evt.ht_up       = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets_up    = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets20_up  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets30_up  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/1);
 
-                m_evt.ht_dn       = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.njets_dn    = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.njets20_dn  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.njets30_dn  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, /*jetMetScale*/-1);
+                m_evt.ht_dn       = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets_dn    = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets20_dn  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets30_dn  = samesign::nJets(hyp_idx, jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, /*jetMetScale*/-1);
 
                 // MET
                 ROOT::Math::XYVector cmet_up;
@@ -1112,7 +1121,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         if (!evt_isRealData())
         {
             // gen Lep p4
-            std::pair<GenParticleStruct, GenParticleStruct> gen_hyp = efftools::getGenHyp(/*pt1=*/20, /*pt2=*/20, DileptonChargeType::SS);
+            std::pair<GenParticleStruct, GenParticleStruct> gen_hyp = efftools::getGenHyp(/*pt1=*/max_pt, /*pt2=*/min_pt, DileptonChargeType::SS);
             if (gen_hyp.first.idx_!=999999 && gen_hyp.second.idx_!=999999)
             {
                 m_evt.is_gen_mm = gen_hyp.first.id_>0 && gen_hyp.second.id_>0;
@@ -1182,9 +1191,9 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             // scale factor for # btags 
             vector<LorentzVector> bjets;
             if (not jet_corrector)
-                bjets = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale);
+                bjets = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale);
             else
-                bjets = samesign::getBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale);
+                bjets = samesign::getBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale);
 
             std::sort(bjets.begin(), bjets.end(), SortByPt<LorentzVector>());
             if (m_evt.nbtags == 2) 
@@ -1241,15 +1250,15 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // jet/bjet info 
         if (not jet_corrector)
         {
-            m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale); 
-            m_evt.vjets_p4  = samesign::getJets(hyp_idx, jet_type,                            /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, m_jetMetScale); 
-            m_evt.vbtags    = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale);
+            m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale); 
+            m_evt.vjets_p4  = samesign::getJets(hyp_idx, jet_type,                            /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale); 
+            m_evt.vbtags    = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale);
         }
         else
         {
-            m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale); 
-            m_evt.vjets_p4  = samesign::getJets(hyp_idx, jet_corrector, jet_type,                            /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, m_jetMetScale); 
-            m_evt.vbtags    = samesign::getBtaggedJetFlags(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt1>*/20.0, 1.0, m_jetMetScale);
+            m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale); 
+            m_evt.vjets_p4  = samesign::getJets(hyp_idx, jet_corrector, jet_type,                            /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale); 
+            m_evt.vbtags    = samesign::getBtaggedJetFlags(hyp_idx, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale);
         }
 
         //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
@@ -1275,7 +1284,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // get the list of selected jets with lower pT theshold
         //vector<LorentzVector> temp_jets_p4 = tas::pfjets_p4();
         //vector<float>& temp_jets_csv = pfjets_combinedSecondaryVertexBJetTag();
-        //vector<LorentzVector> temp_jets_p4  = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0, 1.0, m_jetMetScale); 
+        //vector<LorentzVector> temp_jets_p4  = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, /*pt1>*/max_pt, /*pt2>*/min_pt, 1.0, m_jetMetScale); 
         //vector<float> temp_jets_csv;
         //SetBtagDiscriminator(temp_jets_p4, temp_jets_csv, JETS_BTAG_CSVM);
         

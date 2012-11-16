@@ -41,6 +41,7 @@ try
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string fake_rate_hist_name = "h_mufr40c";
     std::string sample_name         = "";
+    std::string analysis_type_name  = "high_pt";
     std::string vtxreweight_file    = "";
     std::string good_run_list       = "";
     bool sync_print                 = false;
@@ -60,6 +61,7 @@ try
         ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                                                 )
         ("gen_only"      , po::value<bool>(&gen_only)                   , "only fill gen variables"                                                           )
         ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                           )
+        ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from at/Sample.h)"                                           )
         ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, tensor, ...)"                                     )
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
@@ -101,6 +103,7 @@ try
         cout << "luminosity         :\t" << luminosity          << endl;
         cout << "verbose            :\t" << verbose             << endl;
         cout << "sample_name        :\t" << sample_name         << endl;
+        cout << "analysis_type_name :\t" << analysis_type_name         << endl;
         cout << "ntuple_type_name   :\t" << ntuple_type_name    << endl;
         cout << "output_file        :\t" << output_file         << endl;
         cout << "input_file         :\t" << input_file          << endl;
@@ -192,6 +195,7 @@ try
     // input
     TChain* chain  = NULL;
     at::Sample::value_type sample = at::Sample::static_size; 
+    ss::AnalysisType::value_type analysis_type = ss::GetAnalysisTypeFromName(analysis_type_name); 
 	if (not sample_name.empty())
 	{
         cout << "processing "  << sample_name << endl;
@@ -229,6 +233,7 @@ try
         (
             output_file,
             sample,
+            analysis_type,
             fake_rate_file_name,
             flip_rate_file_name,
             fake_rate_hist_name,
