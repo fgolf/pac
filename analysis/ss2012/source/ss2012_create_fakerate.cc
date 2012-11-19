@@ -240,7 +240,7 @@ try
     // -------------------------------------------------------------------------------------------------//
 
     // directories
-    std::string analysis_path = rt::getenv("SS");
+    std::string analysis_path = rt::getenv("PAC") + "/analysis/ss2012";
     root_file_name = rt::string_contains(root_file_name, ".root") ? rt::string_remove_all(root_file_name, ".root") : root_file_name;
 	std::string root_base_name = rt::basename(root_file_name);
     std::string full_output_path = Form("%s/plots/fake_rates/%s/%s.root", analysis_path.c_str(), root_base_name.c_str(), root_file_name.c_str()); 
