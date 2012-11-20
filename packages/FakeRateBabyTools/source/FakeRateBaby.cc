@@ -5,12 +5,19 @@ namespace frb {
 	int &ls() { return fake_rate_baby.ls(); }
 	unsigned int &evt() { return fake_rate_baby.evt(); }
 	float &weight() { return fake_rate_baby.weight(); }
+	bool &is_real_data() { return fake_rate_baby.is_real_data(); }
+	TString &dataset() { return fake_rate_baby.dataset(); }
+	TString &filename() { return fake_rate_baby.filename(); }
 	int &pu_nPUvertices() { return fake_rate_baby.pu_nPUvertices(); }
 	int &evt_nvtxs() { return fake_rate_baby.evt_nvtxs(); }
 	int &nFOels() { return fake_rate_baby.nFOels(); }
 	int &nFOmus() { return fake_rate_baby.nFOmus(); }
 	int &ngsfs() { return fake_rate_baby.ngsfs(); }
 	int &nmus() { return fake_rate_baby.nmus(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4() { return fake_rate_baby.lp4(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4() { return fake_rate_baby.mc3p4(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4() { return fake_rate_baby.foel_p4(); }
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &fomu_p4() { return fake_rate_baby.fomu_p4(); }
 	int &foel_id() { return fake_rate_baby.foel_id(); }
 	int &fomu_id() { return fake_rate_baby.fomu_id(); }
 	float &foel_mass() { return fake_rate_baby.foel_mass(); }
@@ -72,8 +79,6 @@ namespace frb {
 	int &els_exp_innerlayers() { return fake_rate_baby.els_exp_innerlayers(); }
 	float &d0PV_wwV1() { return fake_rate_baby.d0PV_wwV1(); }
 	float &dzPV_wwV1() { return fake_rate_baby.dzPV_wwV1(); }
-	float &ht_calo() { return fake_rate_baby.ht_calo(); }
-	float &ht_calo_L2L3() { return fake_rate_baby.ht_calo_L2L3(); }
 	float &ht_pf() { return fake_rate_baby.ht_pf(); }
 	float &ht_pf_L2L3() { return fake_rate_baby.ht_pf_L2L3(); }
 	float &ht_pf_L1FastL2L3() { return fake_rate_baby.ht_pf_L1FastL2L3(); }
@@ -84,6 +89,9 @@ namespace frb {
 	float &mc3dr() { return fake_rate_baby.mc3dr(); }
 	int &leptonIsFromW() { return fake_rate_baby.leptonIsFromW(); }
 	bool &mu_isCosmic() { return fake_rate_baby.mu_isCosmic(); }
+	float &mu_ecal_veto_dep() { return fake_rate_baby.mu_ecal_veto_dep(); }
+	float &mu_hcal_veto_dep() { return fake_rate_baby.mu_hcal_veto_dep(); }
+	float &mu_nchi2() { return fake_rate_baby.mu_nchi2(); }
 	float &mz_fo_gsf() { return fake_rate_baby.mz_fo_gsf(); }
 	float &mz_gsf_iso() { return fake_rate_baby.mz_gsf_iso(); }
 	float &mz_fo_ctf() { return fake_rate_baby.mz_fo_ctf(); }
@@ -99,6 +107,30 @@ namespace frb {
 	bool &num_mu_ssV5_noIso() { return fake_rate_baby.num_mu_ssV5_noIso(); }
 	bool &fo_mu_ssV5() { return fake_rate_baby.fo_mu_ssV5(); }
 	bool &fo_mu_ssV5_noIso() { return fake_rate_baby.fo_mu_ssV5_noIso(); }
+	bool &num_el_TTZcuttightv1() { return fake_rate_baby.num_el_TTZcuttightv1(); }
+	bool &num_el_TTZcuttightv1_noIso() { return fake_rate_baby.num_el_TTZcuttightv1_noIso(); }
+	bool &fo_el_TTZcuttightv1() { return fake_rate_baby.fo_el_TTZcuttightv1(); }
+	bool &fo_el_TTZcuttightv1_noIso() { return fake_rate_baby.fo_el_TTZcuttightv1_noIso(); }
+	bool &num_el_TTZcutloosev1() { return fake_rate_baby.num_el_TTZcutloosev1(); }
+	bool &num_el_TTZcutloosev1_noIso() { return fake_rate_baby.num_el_TTZcutloosev1_noIso(); }
+	bool &fo_el_TTZcutloosev1() { return fake_rate_baby.fo_el_TTZcutloosev1(); }
+	bool &fo_el_TTZcutloosev1_noIso() { return fake_rate_baby.fo_el_TTZcutloosev1_noIso(); }
+	bool &num_el_TTZMVAtightv1() { return fake_rate_baby.num_el_TTZMVAtightv1(); }
+	bool &num_el_TTZMVAtightv1_noIso() { return fake_rate_baby.num_el_TTZMVAtightv1_noIso(); }
+	bool &fo_el_TTZMVAtightv1() { return fake_rate_baby.fo_el_TTZMVAtightv1(); }
+	bool &fo_el_TTZMVAtightv1_noIso() { return fake_rate_baby.fo_el_TTZMVAtightv1_noIso(); }
+	bool &num_el_TTZMVAloosev1() { return fake_rate_baby.num_el_TTZMVAloosev1(); }
+	bool &num_el_TTZMVAloosev1_noIso() { return fake_rate_baby.num_el_TTZMVAloosev1_noIso(); }
+	bool &fo_el_TTZMVAloosev1() { return fake_rate_baby.fo_el_TTZMVAloosev1(); }
+	bool &fo_el_TTZMVAloosev1_noIso() { return fake_rate_baby.fo_el_TTZMVAloosev1_noIso(); }
+	bool &num_mu_TTZtightv1() { return fake_rate_baby.num_mu_TTZtightv1(); }
+	bool &num_mu_TTZtightv1_noIso() { return fake_rate_baby.num_mu_TTZtightv1_noIso(); }
+	bool &fo_mu_TTZtightv1() { return fake_rate_baby.fo_mu_TTZtightv1(); }
+	bool &fo_mu_TTZtightv1_noIso() { return fake_rate_baby.fo_mu_TTZtightv1_noIso(); }
+	bool &num_mu_TTZloosev1() { return fake_rate_baby.num_mu_TTZloosev1(); }
+	bool &num_mu_TTZloosev1_noIso() { return fake_rate_baby.num_mu_TTZloosev1_noIso(); }
+	bool &fo_mu_TTZloosev1() { return fake_rate_baby.fo_mu_TTZloosev1(); }
+	bool &fo_mu_TTZloosev1_noIso() { return fake_rate_baby.fo_mu_TTZloosev1_noIso(); }
 	bool &num_el_ssV6() { return fake_rate_baby.num_el_ssV6(); }
 	bool &num_el_ssV6_noIso() { return fake_rate_baby.num_el_ssV6_noIso(); }
 	bool &v1_el_ssV6() { return fake_rate_baby.v1_el_ssV6(); }
@@ -186,16 +218,6 @@ namespace frb {
 	int &hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar() { return fake_rate_baby.hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar(); }
 	int &hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar() { return fake_rate_baby.hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar(); }
 	int &hltps_ele27_WP80_vstar() { return fake_rate_baby.hltps_ele27_WP80_vstar(); }
-	int &l1ps_ele8_CaloIdL_CaloIsoVL_vstar() { return fake_rate_baby.l1ps_ele8_CaloIdL_CaloIsoVL_vstar(); }
-	int &l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar() { return fake_rate_baby.l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar(); }
-	int &l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar() { return fake_rate_baby.l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar(); }
-	int &l1ps_ele8_CaloIdT_TrkIdVL_vstar() { return fake_rate_baby.l1ps_ele8_CaloIdT_TrkIdVL_vstar(); }
-	int &l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar() { return fake_rate_baby.l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar(); }
-	int &l1ps_ele17_CaloIdL_CaloIsoVL_vstar() { return fake_rate_baby.l1ps_ele17_CaloIdL_CaloIsoVL_vstar(); }
-	int &l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar() { return fake_rate_baby.l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar(); }
-	int &l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar() { return fake_rate_baby.l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar(); }
-	int &l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar() { return fake_rate_baby.l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar(); }
-	int &l1ps_ele27_WP80_vstar() { return fake_rate_baby.l1ps_ele27_WP80_vstar(); }
 	int &mu3_vstar() { return fake_rate_baby.mu3_vstar(); }
 	int &mu5_vstar() { return fake_rate_baby.mu5_vstar(); }
 	int &mu8_vstar() { return fake_rate_baby.mu8_vstar(); }
@@ -213,6 +235,7 @@ namespace frb {
 	int &isoMu24_eta2p1_vstar() { return fake_rate_baby.isoMu24_eta2p1_vstar(); }
 	int &isoMu30_eta2p1_vstar() { return fake_rate_baby.isoMu30_eta2p1_vstar(); }
 	int &relIso1p0Mu17_vstar() { return fake_rate_baby.relIso1p0Mu17_vstar(); }
+	int &relIso1p0Mu20_vstar() { return fake_rate_baby.relIso1p0Mu20_vstar(); }
 	int &relIso1p0Mu5_vstar() { return fake_rate_baby.relIso1p0Mu5_vstar(); }
 	int &mu3_version() { return fake_rate_baby.mu3_version(); }
 	int &mu5_version() { return fake_rate_baby.mu5_version(); }
@@ -231,6 +254,7 @@ namespace frb {
 	int &isoMu24_eta2p1_version() { return fake_rate_baby.isoMu24_eta2p1_version(); }
 	int &isoMu30_eta2p1_version() { return fake_rate_baby.isoMu30_eta2p1_version(); }
 	int &relIso1p0Mu17_version() { return fake_rate_baby.relIso1p0Mu17_version(); }
+	int &relIso1p0Mu20_version() { return fake_rate_baby.relIso1p0Mu20_version(); }
 	int &relIso1p0Mu5_version() { return fake_rate_baby.relIso1p0Mu5_version(); }
 	float &dr_mu3_vstar() { return fake_rate_baby.dr_mu3_vstar(); }
 	float &dr_mu5_vstar() { return fake_rate_baby.dr_mu5_vstar(); }
@@ -249,6 +273,7 @@ namespace frb {
 	float &dr_isoMu24_eta2p1_vstar() { return fake_rate_baby.dr_isoMu24_eta2p1_vstar(); }
 	float &dr_isoMu30_eta2p1_vstar() { return fake_rate_baby.dr_isoMu30_eta2p1_vstar(); }
 	float &dr_relIso1p0Mu17_vstar() { return fake_rate_baby.dr_relIso1p0Mu17_vstar(); }
+	float &dr_relIso1p0Mu20_vstar() { return fake_rate_baby.dr_relIso1p0Mu20_vstar(); }
 	float &dr_relIso1p0Mu5_vstar() { return fake_rate_baby.dr_relIso1p0Mu5_vstar(); }
 	int &hltps_mu3_vstar() { return fake_rate_baby.hltps_mu3_vstar(); }
 	int &hltps_mu5_vstar() { return fake_rate_baby.hltps_mu5_vstar(); }
@@ -267,23 +292,8 @@ namespace frb {
 	int &hltps_isoMu24_eta2p1_vstar() { return fake_rate_baby.hltps_isoMu24_eta2p1_vstar(); }
 	int &hltps_isoMu30_eta2p1_vstar() { return fake_rate_baby.hltps_isoMu30_eta2p1_vstar(); }
 	int &hltps_relIso1p0Mu17_vstar() { return fake_rate_baby.hltps_relIso1p0Mu17_vstar(); }
+	int &hltps_relIso1p0Mu20_vstar() { return fake_rate_baby.hltps_relIso1p0Mu20_vstar(); }
 	int &hltps_relIso1p0Mu5_vstar() { return fake_rate_baby.hltps_relIso1p0Mu5_vstar(); }
-	int &l1ps_mu5_vstar() { return fake_rate_baby.l1ps_mu5_vstar(); }
-	int &l1ps_mu8_vstar() { return fake_rate_baby.l1ps_mu8_vstar(); }
-	int &l1ps_mu12_vstar() { return fake_rate_baby.l1ps_mu12_vstar(); }
-	int &l1ps_mu17_vstar() { return fake_rate_baby.l1ps_mu17_vstar(); }
-	int &l1ps_mu15_eta2p1_vstar() { return fake_rate_baby.l1ps_mu15_eta2p1_vstar(); }
-	int &l1ps_mu24_eta2p1_vstar() { return fake_rate_baby.l1ps_mu24_eta2p1_vstar(); }
-	int &l1ps_mu30_eta2p1_vstar() { return fake_rate_baby.l1ps_mu30_eta2p1_vstar(); }
-	int &l1ps_isoMu20_eta2p1_vstar() { return fake_rate_baby.l1ps_isoMu20_eta2p1_vstar(); }
-	int &l1ps_isoMu24_eta2p1_vstar() { return fake_rate_baby.l1ps_isoMu24_eta2p1_vstar(); }
-	int &l1ps_isoMu30_eta2p1_vstar() { return fake_rate_baby.l1ps_isoMu30_eta2p1_vstar(); }
-	int &l1ps_relIso1p0Mu17_vstar() { return fake_rate_baby.l1ps_relIso1p0Mu17_vstar(); }
-	int &l1ps_relIso1p0Mu5_vstar() { return fake_rate_baby.l1ps_relIso1p0Mu5_vstar(); }
-	float &ptj1() { return fake_rate_baby.ptj1(); }
-	int &nj1() { return fake_rate_baby.nj1(); }
-	float &ptj1_b2b() { return fake_rate_baby.ptj1_b2b(); }
-	float &dphij1_b2b() { return fake_rate_baby.dphij1_b2b(); }
 	float &ptpfj1() { return fake_rate_baby.ptpfj1(); }
 	int &npfj1() { return fake_rate_baby.npfj1(); }
 	float &ptpfj1_b2b() { return fake_rate_baby.ptpfj1_b2b(); }
@@ -302,6 +312,7 @@ namespace frb {
 	float &ptpfcL1Fj1_b2b() { return fake_rate_baby.ptpfcL1Fj1_b2b(); }
 	float &dphipfcL1Fj1_b2b() { return fake_rate_baby.dphipfcL1Fj1_b2b(); }
 	bool &btagpfcL1F() { return fake_rate_baby.btagpfcL1F(); }
+	int &npfc50L1Fj1_eth() { return fake_rate_baby.npfc50L1Fj1_eth(); }
 	float &emfpfcL1Fj1res() { return fake_rate_baby.emfpfcL1Fj1res(); }
 	float &ptpfcL1Fj1res() { return fake_rate_baby.ptpfcL1Fj1res(); }
 	float &dphipfcL1Fj1res() { return fake_rate_baby.dphipfcL1Fj1res(); }
@@ -311,13 +322,11 @@ namespace frb {
 	float &ptpfcL1Fj1res_b2b() { return fake_rate_baby.ptpfcL1Fj1res_b2b(); }
 	float &dphipfcL1Fj1res_b2b() { return fake_rate_baby.dphipfcL1Fj1res_b2b(); }
 	bool &btagpfcL1Fres() { return fake_rate_baby.btagpfcL1Fres(); }
+	int &npfc50L1Fj1res_eth() { return fake_rate_baby.npfc50L1Fj1res_eth(); }
 	float &ptbtagpfcL1Fj1() { return fake_rate_baby.ptbtagpfcL1Fj1(); }
 	float &dphibtagpfcL1Fj1() { return fake_rate_baby.dphibtagpfcL1Fj1(); }
 	float &ptbtagpfcL1Fj1res() { return fake_rate_baby.ptbtagpfcL1Fj1res(); }
 	float &dphibtagpfcL1Fj1res() { return fake_rate_baby.dphibtagpfcL1Fj1res(); }
-	int &nbjet() { return fake_rate_baby.nbjet(); }
-	float &dRNear() { return fake_rate_baby.dRNear(); }
-	float &dRFar() { return fake_rate_baby.dRFar(); }
 	int &nbpfcjet() { return fake_rate_baby.nbpfcjet(); }
 	float &dRpfcNear() { return fake_rate_baby.dRpfcNear(); }
 	float &dRpfcFar() { return fake_rate_baby.dRpfcFar(); }

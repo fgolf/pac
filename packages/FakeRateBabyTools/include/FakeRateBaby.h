@@ -12,8 +12,6 @@
 #include <vector> 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 
-#define PARANOIA
-
 using namespace std; 
 class FakeRateBaby {
 private: 
@@ -31,6 +29,15 @@ protected:
 	float	weight_;
 	TBranch *weight_branch;
 	bool weight_isLoaded;
+	bool	is_real_data_;
+	TBranch *is_real_data_branch;
+	bool is_real_data_isLoaded;
+	TString dataset_;
+	TBranch *dataset_branch;
+	bool dataset_isLoaded;
+	TString filename_;
+	TBranch *filename_branch;
+	bool filename_isLoaded;
 	int	pu_nPUvertices_;
 	TBranch *pu_nPUvertices_branch;
 	bool pu_nPUvertices_isLoaded;
@@ -49,6 +56,18 @@ protected:
 	int	nmus_;
 	TBranch *nmus_branch;
 	bool nmus_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lp4_;
+	TBranch *lp4_branch;
+	bool lp4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *mc3p4_;
+	TBranch *mc3p4_branch;
+	bool mc3p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *foel_p4_;
+	TBranch *foel_p4_branch;
+	bool foel_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *fomu_p4_;
+	TBranch *fomu_p4_branch;
+	bool fomu_p4_isLoaded;
 	int	foel_id_;
 	TBranch *foel_id_branch;
 	bool foel_id_isLoaded;
@@ -232,12 +251,6 @@ protected:
 	float	dzPV_wwV1_;
 	TBranch *dzPV_wwV1_branch;
 	bool dzPV_wwV1_isLoaded;
-	float	ht_calo_;
-	TBranch *ht_calo_branch;
-	bool ht_calo_isLoaded;
-	float	ht_calo_L2L3_;
-	TBranch *ht_calo_L2L3_branch;
-	bool ht_calo_L2L3_isLoaded;
 	float	ht_pf_;
 	TBranch *ht_pf_branch;
 	bool ht_pf_isLoaded;
@@ -268,6 +281,15 @@ protected:
 	bool	mu_isCosmic_;
 	TBranch *mu_isCosmic_branch;
 	bool mu_isCosmic_isLoaded;
+	float	mu_ecal_veto_dep_;
+	TBranch *mu_ecal_veto_dep_branch;
+	bool mu_ecal_veto_dep_isLoaded;
+	float	mu_hcal_veto_dep_;
+	TBranch *mu_hcal_veto_dep_branch;
+	bool mu_hcal_veto_dep_isLoaded;
+	float	mu_nchi2_;
+	TBranch *mu_nchi2_branch;
+	bool mu_nchi2_isLoaded;
 	float	mz_fo_gsf_;
 	TBranch *mz_fo_gsf_branch;
 	bool mz_fo_gsf_isLoaded;
@@ -313,6 +335,78 @@ protected:
 	bool	fo_mu_ssV5_noIso_;
 	TBranch *fo_mu_ssV5_noIso_branch;
 	bool fo_mu_ssV5_noIso_isLoaded;
+	bool	num_el_TTZcuttightv1_;
+	TBranch *num_el_TTZcuttightv1_branch;
+	bool num_el_TTZcuttightv1_isLoaded;
+	bool	num_el_TTZcuttightv1_noIso_;
+	TBranch *num_el_TTZcuttightv1_noIso_branch;
+	bool num_el_TTZcuttightv1_noIso_isLoaded;
+	bool	fo_el_TTZcuttightv1_;
+	TBranch *fo_el_TTZcuttightv1_branch;
+	bool fo_el_TTZcuttightv1_isLoaded;
+	bool	fo_el_TTZcuttightv1_noIso_;
+	TBranch *fo_el_TTZcuttightv1_noIso_branch;
+	bool fo_el_TTZcuttightv1_noIso_isLoaded;
+	bool	num_el_TTZcutloosev1_;
+	TBranch *num_el_TTZcutloosev1_branch;
+	bool num_el_TTZcutloosev1_isLoaded;
+	bool	num_el_TTZcutloosev1_noIso_;
+	TBranch *num_el_TTZcutloosev1_noIso_branch;
+	bool num_el_TTZcutloosev1_noIso_isLoaded;
+	bool	fo_el_TTZcutloosev1_;
+	TBranch *fo_el_TTZcutloosev1_branch;
+	bool fo_el_TTZcutloosev1_isLoaded;
+	bool	fo_el_TTZcutloosev1_noIso_;
+	TBranch *fo_el_TTZcutloosev1_noIso_branch;
+	bool fo_el_TTZcutloosev1_noIso_isLoaded;
+	bool	num_el_TTZMVAtightv1_;
+	TBranch *num_el_TTZMVAtightv1_branch;
+	bool num_el_TTZMVAtightv1_isLoaded;
+	bool	num_el_TTZMVAtightv1_noIso_;
+	TBranch *num_el_TTZMVAtightv1_noIso_branch;
+	bool num_el_TTZMVAtightv1_noIso_isLoaded;
+	bool	fo_el_TTZMVAtightv1_;
+	TBranch *fo_el_TTZMVAtightv1_branch;
+	bool fo_el_TTZMVAtightv1_isLoaded;
+	bool	fo_el_TTZMVAtightv1_noIso_;
+	TBranch *fo_el_TTZMVAtightv1_noIso_branch;
+	bool fo_el_TTZMVAtightv1_noIso_isLoaded;
+	bool	num_el_TTZMVAloosev1_;
+	TBranch *num_el_TTZMVAloosev1_branch;
+	bool num_el_TTZMVAloosev1_isLoaded;
+	bool	num_el_TTZMVAloosev1_noIso_;
+	TBranch *num_el_TTZMVAloosev1_noIso_branch;
+	bool num_el_TTZMVAloosev1_noIso_isLoaded;
+	bool	fo_el_TTZMVAloosev1_;
+	TBranch *fo_el_TTZMVAloosev1_branch;
+	bool fo_el_TTZMVAloosev1_isLoaded;
+	bool	fo_el_TTZMVAloosev1_noIso_;
+	TBranch *fo_el_TTZMVAloosev1_noIso_branch;
+	bool fo_el_TTZMVAloosev1_noIso_isLoaded;
+	bool	num_mu_TTZtightv1_;
+	TBranch *num_mu_TTZtightv1_branch;
+	bool num_mu_TTZtightv1_isLoaded;
+	bool	num_mu_TTZtightv1_noIso_;
+	TBranch *num_mu_TTZtightv1_noIso_branch;
+	bool num_mu_TTZtightv1_noIso_isLoaded;
+	bool	fo_mu_TTZtightv1_;
+	TBranch *fo_mu_TTZtightv1_branch;
+	bool fo_mu_TTZtightv1_isLoaded;
+	bool	fo_mu_TTZtightv1_noIso_;
+	TBranch *fo_mu_TTZtightv1_noIso_branch;
+	bool fo_mu_TTZtightv1_noIso_isLoaded;
+	bool	num_mu_TTZloosev1_;
+	TBranch *num_mu_TTZloosev1_branch;
+	bool num_mu_TTZloosev1_isLoaded;
+	bool	num_mu_TTZloosev1_noIso_;
+	TBranch *num_mu_TTZloosev1_noIso_branch;
+	bool num_mu_TTZloosev1_noIso_isLoaded;
+	bool	fo_mu_TTZloosev1_;
+	TBranch *fo_mu_TTZloosev1_branch;
+	bool fo_mu_TTZloosev1_isLoaded;
+	bool	fo_mu_TTZloosev1_noIso_;
+	TBranch *fo_mu_TTZloosev1_noIso_branch;
+	bool fo_mu_TTZloosev1_noIso_isLoaded;
 	bool	num_el_ssV6_;
 	TBranch *num_el_ssV6_branch;
 	bool num_el_ssV6_isLoaded;
@@ -574,36 +668,6 @@ protected:
 	int	hltps_ele27_WP80_vstar_;
 	TBranch *hltps_ele27_WP80_vstar_branch;
 	bool hltps_ele27_WP80_vstar_isLoaded;
-	int	l1ps_ele8_CaloIdL_CaloIsoVL_vstar_;
-	TBranch *l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch;
-	bool l1ps_ele8_CaloIdL_CaloIsoVL_vstar_isLoaded;
-	int	l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_;
-	TBranch *l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch;
-	bool l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded;
-	int	l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_;
-	TBranch *l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch;
-	bool l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded;
-	int	l1ps_ele8_CaloIdT_TrkIdVL_vstar_;
-	TBranch *l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch;
-	bool l1ps_ele8_CaloIdT_TrkIdVL_vstar_isLoaded;
-	int	l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_;
-	TBranch *l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch;
-	bool l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_isLoaded;
-	int	l1ps_ele17_CaloIdL_CaloIsoVL_vstar_;
-	TBranch *l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch;
-	bool l1ps_ele17_CaloIdL_CaloIsoVL_vstar_isLoaded;
-	int	l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_;
-	TBranch *l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch;
-	bool l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded;
-	int	l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_;
-	TBranch *l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch;
-	bool l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded;
-	int	l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_;
-	TBranch *l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch;
-	bool l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded;
-	int	l1ps_ele27_WP80_vstar_;
-	TBranch *l1ps_ele27_WP80_vstar_branch;
-	bool l1ps_ele27_WP80_vstar_isLoaded;
 	int	mu3_vstar_;
 	TBranch *mu3_vstar_branch;
 	bool mu3_vstar_isLoaded;
@@ -655,6 +719,9 @@ protected:
 	int	relIso1p0Mu17_vstar_;
 	TBranch *relIso1p0Mu17_vstar_branch;
 	bool relIso1p0Mu17_vstar_isLoaded;
+	int	relIso1p0Mu20_vstar_;
+	TBranch *relIso1p0Mu20_vstar_branch;
+	bool relIso1p0Mu20_vstar_isLoaded;
 	int	relIso1p0Mu5_vstar_;
 	TBranch *relIso1p0Mu5_vstar_branch;
 	bool relIso1p0Mu5_vstar_isLoaded;
@@ -709,6 +776,9 @@ protected:
 	int	relIso1p0Mu17_version_;
 	TBranch *relIso1p0Mu17_version_branch;
 	bool relIso1p0Mu17_version_isLoaded;
+	int	relIso1p0Mu20_version_;
+	TBranch *relIso1p0Mu20_version_branch;
+	bool relIso1p0Mu20_version_isLoaded;
 	int	relIso1p0Mu5_version_;
 	TBranch *relIso1p0Mu5_version_branch;
 	bool relIso1p0Mu5_version_isLoaded;
@@ -763,6 +833,9 @@ protected:
 	float	dr_relIso1p0Mu17_vstar_;
 	TBranch *dr_relIso1p0Mu17_vstar_branch;
 	bool dr_relIso1p0Mu17_vstar_isLoaded;
+	float	dr_relIso1p0Mu20_vstar_;
+	TBranch *dr_relIso1p0Mu20_vstar_branch;
+	bool dr_relIso1p0Mu20_vstar_isLoaded;
 	float	dr_relIso1p0Mu5_vstar_;
 	TBranch *dr_relIso1p0Mu5_vstar_branch;
 	bool dr_relIso1p0Mu5_vstar_isLoaded;
@@ -817,57 +890,12 @@ protected:
 	int	hltps_relIso1p0Mu17_vstar_;
 	TBranch *hltps_relIso1p0Mu17_vstar_branch;
 	bool hltps_relIso1p0Mu17_vstar_isLoaded;
+	int	hltps_relIso1p0Mu20_vstar_;
+	TBranch *hltps_relIso1p0Mu20_vstar_branch;
+	bool hltps_relIso1p0Mu20_vstar_isLoaded;
 	int	hltps_relIso1p0Mu5_vstar_;
 	TBranch *hltps_relIso1p0Mu5_vstar_branch;
 	bool hltps_relIso1p0Mu5_vstar_isLoaded;
-	int	l1ps_mu5_vstar_;
-	TBranch *l1ps_mu5_vstar_branch;
-	bool l1ps_mu5_vstar_isLoaded;
-	int	l1ps_mu8_vstar_;
-	TBranch *l1ps_mu8_vstar_branch;
-	bool l1ps_mu8_vstar_isLoaded;
-	int	l1ps_mu12_vstar_;
-	TBranch *l1ps_mu12_vstar_branch;
-	bool l1ps_mu12_vstar_isLoaded;
-	int	l1ps_mu17_vstar_;
-	TBranch *l1ps_mu17_vstar_branch;
-	bool l1ps_mu17_vstar_isLoaded;
-	int	l1ps_mu15_eta2p1_vstar_;
-	TBranch *l1ps_mu15_eta2p1_vstar_branch;
-	bool l1ps_mu15_eta2p1_vstar_isLoaded;
-	int	l1ps_mu24_eta2p1_vstar_;
-	TBranch *l1ps_mu24_eta2p1_vstar_branch;
-	bool l1ps_mu24_eta2p1_vstar_isLoaded;
-	int	l1ps_mu30_eta2p1_vstar_;
-	TBranch *l1ps_mu30_eta2p1_vstar_branch;
-	bool l1ps_mu30_eta2p1_vstar_isLoaded;
-	int	l1ps_isoMu20_eta2p1_vstar_;
-	TBranch *l1ps_isoMu20_eta2p1_vstar_branch;
-	bool l1ps_isoMu20_eta2p1_vstar_isLoaded;
-	int	l1ps_isoMu24_eta2p1_vstar_;
-	TBranch *l1ps_isoMu24_eta2p1_vstar_branch;
-	bool l1ps_isoMu24_eta2p1_vstar_isLoaded;
-	int	l1ps_isoMu30_eta2p1_vstar_;
-	TBranch *l1ps_isoMu30_eta2p1_vstar_branch;
-	bool l1ps_isoMu30_eta2p1_vstar_isLoaded;
-	int	l1ps_relIso1p0Mu17_vstar_;
-	TBranch *l1ps_relIso1p0Mu17_vstar_branch;
-	bool l1ps_relIso1p0Mu17_vstar_isLoaded;
-	int	l1ps_relIso1p0Mu5_vstar_;
-	TBranch *l1ps_relIso1p0Mu5_vstar_branch;
-	bool l1ps_relIso1p0Mu5_vstar_isLoaded;
-	float	ptj1_;
-	TBranch *ptj1_branch;
-	bool ptj1_isLoaded;
-	int	nj1_;
-	TBranch *nj1_branch;
-	bool nj1_isLoaded;
-	float	ptj1_b2b_;
-	TBranch *ptj1_b2b_branch;
-	bool ptj1_b2b_isLoaded;
-	float	dphij1_b2b_;
-	TBranch *dphij1_b2b_branch;
-	bool dphij1_b2b_isLoaded;
 	float	ptpfj1_;
 	TBranch *ptpfj1_branch;
 	bool ptpfj1_isLoaded;
@@ -922,6 +950,9 @@ protected:
 	bool	btagpfcL1F_;
 	TBranch *btagpfcL1F_branch;
 	bool btagpfcL1F_isLoaded;
+	int	npfc50L1Fj1_eth_;
+	TBranch *npfc50L1Fj1_eth_branch;
+	bool npfc50L1Fj1_eth_isLoaded;
 	float	emfpfcL1Fj1res_;
 	TBranch *emfpfcL1Fj1res_branch;
 	bool emfpfcL1Fj1res_isLoaded;
@@ -949,6 +980,9 @@ protected:
 	bool	btagpfcL1Fres_;
 	TBranch *btagpfcL1Fres_branch;
 	bool btagpfcL1Fres_isLoaded;
+	int	npfc50L1Fj1res_eth_;
+	TBranch *npfc50L1Fj1res_eth_branch;
+	bool npfc50L1Fj1res_eth_isLoaded;
 	float	ptbtagpfcL1Fj1_;
 	TBranch *ptbtagpfcL1Fj1_branch;
 	bool ptbtagpfcL1Fj1_isLoaded;
@@ -961,15 +995,6 @@ protected:
 	float	dphibtagpfcL1Fj1res_;
 	TBranch *dphibtagpfcL1Fj1res_branch;
 	bool dphibtagpfcL1Fj1res_isLoaded;
-	int	nbjet_;
-	TBranch *nbjet_branch;
-	bool nbjet_isLoaded;
-	float	dRNear_;
-	TBranch *dRNear_branch;
-	bool dRNear_isLoaded;
-	float	dRFar_;
-	TBranch *dRFar_branch;
-	bool dRFar_isLoaded;
 	int	nbpfcjet_;
 	TBranch *nbpfcjet_branch;
 	bool nbpfcjet_isLoaded;
@@ -984,6 +1009,26 @@ protected:
 	bool rho_isLoaded;
 public: 
 void Init(TTree *tree) {
+	lp4_branch = 0;
+	if (tree->GetBranch("lp4") != 0) {
+		lp4_branch = tree->GetBranch("lp4");
+		lp4_branch->SetAddress(&lp4_);
+	}
+	mc3p4_branch = 0;
+	if (tree->GetBranch("mc3p4") != 0) {
+		mc3p4_branch = tree->GetBranch("mc3p4");
+		mc3p4_branch->SetAddress(&mc3p4_);
+	}
+	foel_p4_branch = 0;
+	if (tree->GetBranch("foel_p4") != 0) {
+		foel_p4_branch = tree->GetBranch("foel_p4");
+		foel_p4_branch->SetAddress(&foel_p4_);
+	}
+	fomu_p4_branch = 0;
+	if (tree->GetBranch("fomu_p4") != 0) {
+		fomu_p4_branch = tree->GetBranch("fomu_p4");
+		fomu_p4_branch->SetAddress(&fomu_p4_);
+	}
   tree->SetMakeClass(1);
 	run_branch = 0;
 	if (tree->GetBranch("run") != 0) {
@@ -1004,6 +1049,21 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("weight") != 0) {
 		weight_branch = tree->GetBranch("weight");
 		weight_branch->SetAddress(&weight_);
+	}
+	is_real_data_branch = 0;
+	if (tree->GetBranch("is_real_data") != 0) {
+		is_real_data_branch = tree->GetBranch("is_real_data");
+		is_real_data_branch->SetAddress(&is_real_data_);
+	}
+	dataset_branch = 0;
+	if (tree->GetBranch("dataset") != 0) {
+		dataset_branch = tree->GetBranch("dataset");
+		dataset_branch->SetAddress(&dataset_);
+	}
+	filename_branch = 0;
+	if (tree->GetBranch("filename") != 0) {
+		filename_branch = tree->GetBranch("filename");
+		filename_branch->SetAddress(&filename_);
 	}
 	pu_nPUvertices_branch = 0;
 	if (tree->GetBranch("pu_nPUvertices") != 0) {
@@ -1340,16 +1400,6 @@ void Init(TTree *tree) {
 		dzPV_wwV1_branch = tree->GetBranch("dzPV_wwV1");
 		dzPV_wwV1_branch->SetAddress(&dzPV_wwV1_);
 	}
-	ht_calo_branch = 0;
-	if (tree->GetBranch("ht_calo") != 0) {
-		ht_calo_branch = tree->GetBranch("ht_calo");
-		ht_calo_branch->SetAddress(&ht_calo_);
-	}
-	ht_calo_L2L3_branch = 0;
-	if (tree->GetBranch("ht_calo_L2L3") != 0) {
-		ht_calo_L2L3_branch = tree->GetBranch("ht_calo_L2L3");
-		ht_calo_L2L3_branch->SetAddress(&ht_calo_L2L3_);
-	}
 	ht_pf_branch = 0;
 	if (tree->GetBranch("ht_pf") != 0) {
 		ht_pf_branch = tree->GetBranch("ht_pf");
@@ -1399,6 +1449,21 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("mu_isCosmic") != 0) {
 		mu_isCosmic_branch = tree->GetBranch("mu_isCosmic");
 		mu_isCosmic_branch->SetAddress(&mu_isCosmic_);
+	}
+	mu_ecal_veto_dep_branch = 0;
+	if (tree->GetBranch("mu_ecal_veto_dep") != 0) {
+		mu_ecal_veto_dep_branch = tree->GetBranch("mu_ecal_veto_dep");
+		mu_ecal_veto_dep_branch->SetAddress(&mu_ecal_veto_dep_);
+	}
+	mu_hcal_veto_dep_branch = 0;
+	if (tree->GetBranch("mu_hcal_veto_dep") != 0) {
+		mu_hcal_veto_dep_branch = tree->GetBranch("mu_hcal_veto_dep");
+		mu_hcal_veto_dep_branch->SetAddress(&mu_hcal_veto_dep_);
+	}
+	mu_nchi2_branch = 0;
+	if (tree->GetBranch("mu_nchi2") != 0) {
+		mu_nchi2_branch = tree->GetBranch("mu_nchi2");
+		mu_nchi2_branch->SetAddress(&mu_nchi2_);
 	}
 	mz_fo_gsf_branch = 0;
 	if (tree->GetBranch("mz_fo_gsf") != 0) {
@@ -1474,6 +1539,126 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("fo_mu_ssV5_noIso") != 0) {
 		fo_mu_ssV5_noIso_branch = tree->GetBranch("fo_mu_ssV5_noIso");
 		fo_mu_ssV5_noIso_branch->SetAddress(&fo_mu_ssV5_noIso_);
+	}
+	num_el_TTZcuttightv1_branch = 0;
+	if (tree->GetBranch("num_el_TTZcuttightv1") != 0) {
+		num_el_TTZcuttightv1_branch = tree->GetBranch("num_el_TTZcuttightv1");
+		num_el_TTZcuttightv1_branch->SetAddress(&num_el_TTZcuttightv1_);
+	}
+	num_el_TTZcuttightv1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZcuttightv1_noIso") != 0) {
+		num_el_TTZcuttightv1_noIso_branch = tree->GetBranch("num_el_TTZcuttightv1_noIso");
+		num_el_TTZcuttightv1_noIso_branch->SetAddress(&num_el_TTZcuttightv1_noIso_);
+	}
+	fo_el_TTZcuttightv1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcuttightv1") != 0) {
+		fo_el_TTZcuttightv1_branch = tree->GetBranch("fo_el_TTZcuttightv1");
+		fo_el_TTZcuttightv1_branch->SetAddress(&fo_el_TTZcuttightv1_);
+	}
+	fo_el_TTZcuttightv1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcuttightv1_noIso") != 0) {
+		fo_el_TTZcuttightv1_noIso_branch = tree->GetBranch("fo_el_TTZcuttightv1_noIso");
+		fo_el_TTZcuttightv1_noIso_branch->SetAddress(&fo_el_TTZcuttightv1_noIso_);
+	}
+	num_el_TTZcutloosev1_branch = 0;
+	if (tree->GetBranch("num_el_TTZcutloosev1") != 0) {
+		num_el_TTZcutloosev1_branch = tree->GetBranch("num_el_TTZcutloosev1");
+		num_el_TTZcutloosev1_branch->SetAddress(&num_el_TTZcutloosev1_);
+	}
+	num_el_TTZcutloosev1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZcutloosev1_noIso") != 0) {
+		num_el_TTZcutloosev1_noIso_branch = tree->GetBranch("num_el_TTZcutloosev1_noIso");
+		num_el_TTZcutloosev1_noIso_branch->SetAddress(&num_el_TTZcutloosev1_noIso_);
+	}
+	fo_el_TTZcutloosev1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcutloosev1") != 0) {
+		fo_el_TTZcutloosev1_branch = tree->GetBranch("fo_el_TTZcutloosev1");
+		fo_el_TTZcutloosev1_branch->SetAddress(&fo_el_TTZcutloosev1_);
+	}
+	fo_el_TTZcutloosev1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcutloosev1_noIso") != 0) {
+		fo_el_TTZcutloosev1_noIso_branch = tree->GetBranch("fo_el_TTZcutloosev1_noIso");
+		fo_el_TTZcutloosev1_noIso_branch->SetAddress(&fo_el_TTZcutloosev1_noIso_);
+	}
+	num_el_TTZMVAtightv1_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAtightv1") != 0) {
+		num_el_TTZMVAtightv1_branch = tree->GetBranch("num_el_TTZMVAtightv1");
+		num_el_TTZMVAtightv1_branch->SetAddress(&num_el_TTZMVAtightv1_);
+	}
+	num_el_TTZMVAtightv1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAtightv1_noIso") != 0) {
+		num_el_TTZMVAtightv1_noIso_branch = tree->GetBranch("num_el_TTZMVAtightv1_noIso");
+		num_el_TTZMVAtightv1_noIso_branch->SetAddress(&num_el_TTZMVAtightv1_noIso_);
+	}
+	fo_el_TTZMVAtightv1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAtightv1") != 0) {
+		fo_el_TTZMVAtightv1_branch = tree->GetBranch("fo_el_TTZMVAtightv1");
+		fo_el_TTZMVAtightv1_branch->SetAddress(&fo_el_TTZMVAtightv1_);
+	}
+	fo_el_TTZMVAtightv1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAtightv1_noIso") != 0) {
+		fo_el_TTZMVAtightv1_noIso_branch = tree->GetBranch("fo_el_TTZMVAtightv1_noIso");
+		fo_el_TTZMVAtightv1_noIso_branch->SetAddress(&fo_el_TTZMVAtightv1_noIso_);
+	}
+	num_el_TTZMVAloosev1_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAloosev1") != 0) {
+		num_el_TTZMVAloosev1_branch = tree->GetBranch("num_el_TTZMVAloosev1");
+		num_el_TTZMVAloosev1_branch->SetAddress(&num_el_TTZMVAloosev1_);
+	}
+	num_el_TTZMVAloosev1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAloosev1_noIso") != 0) {
+		num_el_TTZMVAloosev1_noIso_branch = tree->GetBranch("num_el_TTZMVAloosev1_noIso");
+		num_el_TTZMVAloosev1_noIso_branch->SetAddress(&num_el_TTZMVAloosev1_noIso_);
+	}
+	fo_el_TTZMVAloosev1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAloosev1") != 0) {
+		fo_el_TTZMVAloosev1_branch = tree->GetBranch("fo_el_TTZMVAloosev1");
+		fo_el_TTZMVAloosev1_branch->SetAddress(&fo_el_TTZMVAloosev1_);
+	}
+	fo_el_TTZMVAloosev1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAloosev1_noIso") != 0) {
+		fo_el_TTZMVAloosev1_noIso_branch = tree->GetBranch("fo_el_TTZMVAloosev1_noIso");
+		fo_el_TTZMVAloosev1_noIso_branch->SetAddress(&fo_el_TTZMVAloosev1_noIso_);
+	}
+	num_mu_TTZtightv1_branch = 0;
+	if (tree->GetBranch("num_mu_TTZtightv1") != 0) {
+		num_mu_TTZtightv1_branch = tree->GetBranch("num_mu_TTZtightv1");
+		num_mu_TTZtightv1_branch->SetAddress(&num_mu_TTZtightv1_);
+	}
+	num_mu_TTZtightv1_noIso_branch = 0;
+	if (tree->GetBranch("num_mu_TTZtightv1_noIso") != 0) {
+		num_mu_TTZtightv1_noIso_branch = tree->GetBranch("num_mu_TTZtightv1_noIso");
+		num_mu_TTZtightv1_noIso_branch->SetAddress(&num_mu_TTZtightv1_noIso_);
+	}
+	fo_mu_TTZtightv1_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZtightv1") != 0) {
+		fo_mu_TTZtightv1_branch = tree->GetBranch("fo_mu_TTZtightv1");
+		fo_mu_TTZtightv1_branch->SetAddress(&fo_mu_TTZtightv1_);
+	}
+	fo_mu_TTZtightv1_noIso_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZtightv1_noIso") != 0) {
+		fo_mu_TTZtightv1_noIso_branch = tree->GetBranch("fo_mu_TTZtightv1_noIso");
+		fo_mu_TTZtightv1_noIso_branch->SetAddress(&fo_mu_TTZtightv1_noIso_);
+	}
+	num_mu_TTZloosev1_branch = 0;
+	if (tree->GetBranch("num_mu_TTZloosev1") != 0) {
+		num_mu_TTZloosev1_branch = tree->GetBranch("num_mu_TTZloosev1");
+		num_mu_TTZloosev1_branch->SetAddress(&num_mu_TTZloosev1_);
+	}
+	num_mu_TTZloosev1_noIso_branch = 0;
+	if (tree->GetBranch("num_mu_TTZloosev1_noIso") != 0) {
+		num_mu_TTZloosev1_noIso_branch = tree->GetBranch("num_mu_TTZloosev1_noIso");
+		num_mu_TTZloosev1_noIso_branch->SetAddress(&num_mu_TTZloosev1_noIso_);
+	}
+	fo_mu_TTZloosev1_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZloosev1") != 0) {
+		fo_mu_TTZloosev1_branch = tree->GetBranch("fo_mu_TTZloosev1");
+		fo_mu_TTZloosev1_branch->SetAddress(&fo_mu_TTZloosev1_);
+	}
+	fo_mu_TTZloosev1_noIso_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZloosev1_noIso") != 0) {
+		fo_mu_TTZloosev1_noIso_branch = tree->GetBranch("fo_mu_TTZloosev1_noIso");
+		fo_mu_TTZloosev1_noIso_branch->SetAddress(&fo_mu_TTZloosev1_noIso_);
 	}
 	num_el_ssV6_branch = 0;
 	if (tree->GetBranch("num_el_ssV6") != 0) {
@@ -1910,56 +2095,6 @@ void Init(TTree *tree) {
 		hltps_ele27_WP80_vstar_branch = tree->GetBranch("hltps_ele27_WP80_vstar");
 		hltps_ele27_WP80_vstar_branch->SetAddress(&hltps_ele27_WP80_vstar_);
 	}
-	l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele8_CaloIdL_CaloIsoVL_vstar") != 0) {
-		l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("l1ps_ele8_CaloIdL_CaloIsoVL_vstar");
-		l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&l1ps_ele8_CaloIdL_CaloIsoVL_vstar_);
-	}
-	l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
-		l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
-	}
-	l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
-		l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
-	}
-	l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele8_CaloIdT_TrkIdVL_vstar") != 0) {
-		l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch = tree->GetBranch("l1ps_ele8_CaloIdT_TrkIdVL_vstar");
-		l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch->SetAddress(&l1ps_ele8_CaloIdT_TrkIdVL_vstar_);
-	}
-	l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar") != 0) {
-		l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = tree->GetBranch("l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar");
-		l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->SetAddress(&l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_);
-	}
-	l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele17_CaloIdL_CaloIsoVL_vstar") != 0) {
-		l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("l1ps_ele17_CaloIdL_CaloIsoVL_vstar");
-		l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&l1ps_ele17_CaloIdL_CaloIsoVL_vstar_);
-	}
-	l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
-		l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
-	}
-	l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
-		l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
-	}
-	l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar") != 0) {
-		l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = tree->GetBranch("l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar");
-		l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->SetAddress(&l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_);
-	}
-	l1ps_ele27_WP80_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_ele27_WP80_vstar") != 0) {
-		l1ps_ele27_WP80_vstar_branch = tree->GetBranch("l1ps_ele27_WP80_vstar");
-		l1ps_ele27_WP80_vstar_branch->SetAddress(&l1ps_ele27_WP80_vstar_);
-	}
 	mu3_vstar_branch = 0;
 	if (tree->GetBranch("mu3_vstar") != 0) {
 		mu3_vstar_branch = tree->GetBranch("mu3_vstar");
@@ -2044,6 +2179,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("relIso1p0Mu17_vstar") != 0) {
 		relIso1p0Mu17_vstar_branch = tree->GetBranch("relIso1p0Mu17_vstar");
 		relIso1p0Mu17_vstar_branch->SetAddress(&relIso1p0Mu17_vstar_);
+	}
+	relIso1p0Mu20_vstar_branch = 0;
+	if (tree->GetBranch("relIso1p0Mu20_vstar") != 0) {
+		relIso1p0Mu20_vstar_branch = tree->GetBranch("relIso1p0Mu20_vstar");
+		relIso1p0Mu20_vstar_branch->SetAddress(&relIso1p0Mu20_vstar_);
 	}
 	relIso1p0Mu5_vstar_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu5_vstar") != 0) {
@@ -2135,6 +2275,11 @@ void Init(TTree *tree) {
 		relIso1p0Mu17_version_branch = tree->GetBranch("relIso1p0Mu17_version");
 		relIso1p0Mu17_version_branch->SetAddress(&relIso1p0Mu17_version_);
 	}
+	relIso1p0Mu20_version_branch = 0;
+	if (tree->GetBranch("relIso1p0Mu20_version") != 0) {
+		relIso1p0Mu20_version_branch = tree->GetBranch("relIso1p0Mu20_version");
+		relIso1p0Mu20_version_branch->SetAddress(&relIso1p0Mu20_version_);
+	}
 	relIso1p0Mu5_version_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu5_version") != 0) {
 		relIso1p0Mu5_version_branch = tree->GetBranch("relIso1p0Mu5_version");
@@ -2224,6 +2369,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("dr_relIso1p0Mu17_vstar") != 0) {
 		dr_relIso1p0Mu17_vstar_branch = tree->GetBranch("dr_relIso1p0Mu17_vstar");
 		dr_relIso1p0Mu17_vstar_branch->SetAddress(&dr_relIso1p0Mu17_vstar_);
+	}
+	dr_relIso1p0Mu20_vstar_branch = 0;
+	if (tree->GetBranch("dr_relIso1p0Mu20_vstar") != 0) {
+		dr_relIso1p0Mu20_vstar_branch = tree->GetBranch("dr_relIso1p0Mu20_vstar");
+		dr_relIso1p0Mu20_vstar_branch->SetAddress(&dr_relIso1p0Mu20_vstar_);
 	}
 	dr_relIso1p0Mu5_vstar_branch = 0;
 	if (tree->GetBranch("dr_relIso1p0Mu5_vstar") != 0) {
@@ -2315,90 +2465,15 @@ void Init(TTree *tree) {
 		hltps_relIso1p0Mu17_vstar_branch = tree->GetBranch("hltps_relIso1p0Mu17_vstar");
 		hltps_relIso1p0Mu17_vstar_branch->SetAddress(&hltps_relIso1p0Mu17_vstar_);
 	}
+	hltps_relIso1p0Mu20_vstar_branch = 0;
+	if (tree->GetBranch("hltps_relIso1p0Mu20_vstar") != 0) {
+		hltps_relIso1p0Mu20_vstar_branch = tree->GetBranch("hltps_relIso1p0Mu20_vstar");
+		hltps_relIso1p0Mu20_vstar_branch->SetAddress(&hltps_relIso1p0Mu20_vstar_);
+	}
 	hltps_relIso1p0Mu5_vstar_branch = 0;
 	if (tree->GetBranch("hltps_relIso1p0Mu5_vstar") != 0) {
 		hltps_relIso1p0Mu5_vstar_branch = tree->GetBranch("hltps_relIso1p0Mu5_vstar");
 		hltps_relIso1p0Mu5_vstar_branch->SetAddress(&hltps_relIso1p0Mu5_vstar_);
-	}
-	l1ps_mu5_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_mu5_vstar") != 0) {
-		l1ps_mu5_vstar_branch = tree->GetBranch("l1ps_mu5_vstar");
-		l1ps_mu5_vstar_branch->SetAddress(&l1ps_mu5_vstar_);
-	}
-	l1ps_mu8_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_mu8_vstar") != 0) {
-		l1ps_mu8_vstar_branch = tree->GetBranch("l1ps_mu8_vstar");
-		l1ps_mu8_vstar_branch->SetAddress(&l1ps_mu8_vstar_);
-	}
-	l1ps_mu12_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_mu12_vstar") != 0) {
-		l1ps_mu12_vstar_branch = tree->GetBranch("l1ps_mu12_vstar");
-		l1ps_mu12_vstar_branch->SetAddress(&l1ps_mu12_vstar_);
-	}
-	l1ps_mu17_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_mu17_vstar") != 0) {
-		l1ps_mu17_vstar_branch = tree->GetBranch("l1ps_mu17_vstar");
-		l1ps_mu17_vstar_branch->SetAddress(&l1ps_mu17_vstar_);
-	}
-	l1ps_mu15_eta2p1_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_mu15_eta2p1_vstar") != 0) {
-		l1ps_mu15_eta2p1_vstar_branch = tree->GetBranch("l1ps_mu15_eta2p1_vstar");
-		l1ps_mu15_eta2p1_vstar_branch->SetAddress(&l1ps_mu15_eta2p1_vstar_);
-	}
-	l1ps_mu24_eta2p1_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_mu24_eta2p1_vstar") != 0) {
-		l1ps_mu24_eta2p1_vstar_branch = tree->GetBranch("l1ps_mu24_eta2p1_vstar");
-		l1ps_mu24_eta2p1_vstar_branch->SetAddress(&l1ps_mu24_eta2p1_vstar_);
-	}
-	l1ps_mu30_eta2p1_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_mu30_eta2p1_vstar") != 0) {
-		l1ps_mu30_eta2p1_vstar_branch = tree->GetBranch("l1ps_mu30_eta2p1_vstar");
-		l1ps_mu30_eta2p1_vstar_branch->SetAddress(&l1ps_mu30_eta2p1_vstar_);
-	}
-	l1ps_isoMu20_eta2p1_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_isoMu20_eta2p1_vstar") != 0) {
-		l1ps_isoMu20_eta2p1_vstar_branch = tree->GetBranch("l1ps_isoMu20_eta2p1_vstar");
-		l1ps_isoMu20_eta2p1_vstar_branch->SetAddress(&l1ps_isoMu20_eta2p1_vstar_);
-	}
-	l1ps_isoMu24_eta2p1_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_isoMu24_eta2p1_vstar") != 0) {
-		l1ps_isoMu24_eta2p1_vstar_branch = tree->GetBranch("l1ps_isoMu24_eta2p1_vstar");
-		l1ps_isoMu24_eta2p1_vstar_branch->SetAddress(&l1ps_isoMu24_eta2p1_vstar_);
-	}
-	l1ps_isoMu30_eta2p1_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_isoMu30_eta2p1_vstar") != 0) {
-		l1ps_isoMu30_eta2p1_vstar_branch = tree->GetBranch("l1ps_isoMu30_eta2p1_vstar");
-		l1ps_isoMu30_eta2p1_vstar_branch->SetAddress(&l1ps_isoMu30_eta2p1_vstar_);
-	}
-	l1ps_relIso1p0Mu17_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_relIso1p0Mu17_vstar") != 0) {
-		l1ps_relIso1p0Mu17_vstar_branch = tree->GetBranch("l1ps_relIso1p0Mu17_vstar");
-		l1ps_relIso1p0Mu17_vstar_branch->SetAddress(&l1ps_relIso1p0Mu17_vstar_);
-	}
-	l1ps_relIso1p0Mu5_vstar_branch = 0;
-	if (tree->GetBranch("l1ps_relIso1p0Mu5_vstar") != 0) {
-		l1ps_relIso1p0Mu5_vstar_branch = tree->GetBranch("l1ps_relIso1p0Mu5_vstar");
-		l1ps_relIso1p0Mu5_vstar_branch->SetAddress(&l1ps_relIso1p0Mu5_vstar_);
-	}
-	ptj1_branch = 0;
-	if (tree->GetBranch("ptj1") != 0) {
-		ptj1_branch = tree->GetBranch("ptj1");
-		ptj1_branch->SetAddress(&ptj1_);
-	}
-	nj1_branch = 0;
-	if (tree->GetBranch("nj1") != 0) {
-		nj1_branch = tree->GetBranch("nj1");
-		nj1_branch->SetAddress(&nj1_);
-	}
-	ptj1_b2b_branch = 0;
-	if (tree->GetBranch("ptj1_b2b") != 0) {
-		ptj1_b2b_branch = tree->GetBranch("ptj1_b2b");
-		ptj1_b2b_branch->SetAddress(&ptj1_b2b_);
-	}
-	dphij1_b2b_branch = 0;
-	if (tree->GetBranch("dphij1_b2b") != 0) {
-		dphij1_b2b_branch = tree->GetBranch("dphij1_b2b");
-		dphij1_b2b_branch->SetAddress(&dphij1_b2b_);
 	}
 	ptpfj1_branch = 0;
 	if (tree->GetBranch("ptpfj1") != 0) {
@@ -2490,6 +2565,11 @@ void Init(TTree *tree) {
 		btagpfcL1F_branch = tree->GetBranch("btagpfcL1F");
 		btagpfcL1F_branch->SetAddress(&btagpfcL1F_);
 	}
+	npfc50L1Fj1_eth_branch = 0;
+	if (tree->GetBranch("npfc50L1Fj1_eth") != 0) {
+		npfc50L1Fj1_eth_branch = tree->GetBranch("npfc50L1Fj1_eth");
+		npfc50L1Fj1_eth_branch->SetAddress(&npfc50L1Fj1_eth_);
+	}
 	emfpfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("emfpfcL1Fj1res") != 0) {
 		emfpfcL1Fj1res_branch = tree->GetBranch("emfpfcL1Fj1res");
@@ -2535,6 +2615,11 @@ void Init(TTree *tree) {
 		btagpfcL1Fres_branch = tree->GetBranch("btagpfcL1Fres");
 		btagpfcL1Fres_branch->SetAddress(&btagpfcL1Fres_);
 	}
+	npfc50L1Fj1res_eth_branch = 0;
+	if (tree->GetBranch("npfc50L1Fj1res_eth") != 0) {
+		npfc50L1Fj1res_eth_branch = tree->GetBranch("npfc50L1Fj1res_eth");
+		npfc50L1Fj1res_eth_branch->SetAddress(&npfc50L1Fj1res_eth_);
+	}
 	ptbtagpfcL1Fj1_branch = 0;
 	if (tree->GetBranch("ptbtagpfcL1Fj1") != 0) {
 		ptbtagpfcL1Fj1_branch = tree->GetBranch("ptbtagpfcL1Fj1");
@@ -2554,21 +2639,6 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("dphibtagpfcL1Fj1res") != 0) {
 		dphibtagpfcL1Fj1res_branch = tree->GetBranch("dphibtagpfcL1Fj1res");
 		dphibtagpfcL1Fj1res_branch->SetAddress(&dphibtagpfcL1Fj1res_);
-	}
-	nbjet_branch = 0;
-	if (tree->GetBranch("nbjet") != 0) {
-		nbjet_branch = tree->GetBranch("nbjet");
-		nbjet_branch->SetAddress(&nbjet_);
-	}
-	dRNear_branch = 0;
-	if (tree->GetBranch("dRNear") != 0) {
-		dRNear_branch = tree->GetBranch("dRNear");
-		dRNear_branch->SetAddress(&dRNear_);
-	}
-	dRFar_branch = 0;
-	if (tree->GetBranch("dRFar") != 0) {
-		dRFar_branch = tree->GetBranch("dRFar");
-		dRFar_branch->SetAddress(&dRFar_);
 	}
 	nbpfcjet_branch = 0;
 	if (tree->GetBranch("nbpfcjet") != 0) {
@@ -2600,12 +2670,19 @@ void GetEntry(unsigned int idx)
 		ls_isLoaded = false;
 		evt_isLoaded = false;
 		weight_isLoaded = false;
+		is_real_data_isLoaded = false;
+		dataset_isLoaded = false;
+		filename_isLoaded = false;
 		pu_nPUvertices_isLoaded = false;
 		evt_nvtxs_isLoaded = false;
 		nFOels_isLoaded = false;
 		nFOmus_isLoaded = false;
 		ngsfs_isLoaded = false;
 		nmus_isLoaded = false;
+		lp4_isLoaded = false;
+		mc3p4_isLoaded = false;
+		foel_p4_isLoaded = false;
+		fomu_p4_isLoaded = false;
 		foel_id_isLoaded = false;
 		fomu_id_isLoaded = false;
 		foel_mass_isLoaded = false;
@@ -2667,8 +2744,6 @@ void GetEntry(unsigned int idx)
 		els_exp_innerlayers_isLoaded = false;
 		d0PV_wwV1_isLoaded = false;
 		dzPV_wwV1_isLoaded = false;
-		ht_calo_isLoaded = false;
-		ht_calo_L2L3_isLoaded = false;
 		ht_pf_isLoaded = false;
 		ht_pf_L2L3_isLoaded = false;
 		ht_pf_L1FastL2L3_isLoaded = false;
@@ -2679,6 +2754,9 @@ void GetEntry(unsigned int idx)
 		mc3dr_isLoaded = false;
 		leptonIsFromW_isLoaded = false;
 		mu_isCosmic_isLoaded = false;
+		mu_ecal_veto_dep_isLoaded = false;
+		mu_hcal_veto_dep_isLoaded = false;
+		mu_nchi2_isLoaded = false;
 		mz_fo_gsf_isLoaded = false;
 		mz_gsf_iso_isLoaded = false;
 		mz_fo_ctf_isLoaded = false;
@@ -2694,6 +2772,30 @@ void GetEntry(unsigned int idx)
 		num_mu_ssV5_noIso_isLoaded = false;
 		fo_mu_ssV5_isLoaded = false;
 		fo_mu_ssV5_noIso_isLoaded = false;
+		num_el_TTZcuttightv1_isLoaded = false;
+		num_el_TTZcuttightv1_noIso_isLoaded = false;
+		fo_el_TTZcuttightv1_isLoaded = false;
+		fo_el_TTZcuttightv1_noIso_isLoaded = false;
+		num_el_TTZcutloosev1_isLoaded = false;
+		num_el_TTZcutloosev1_noIso_isLoaded = false;
+		fo_el_TTZcutloosev1_isLoaded = false;
+		fo_el_TTZcutloosev1_noIso_isLoaded = false;
+		num_el_TTZMVAtightv1_isLoaded = false;
+		num_el_TTZMVAtightv1_noIso_isLoaded = false;
+		fo_el_TTZMVAtightv1_isLoaded = false;
+		fo_el_TTZMVAtightv1_noIso_isLoaded = false;
+		num_el_TTZMVAloosev1_isLoaded = false;
+		num_el_TTZMVAloosev1_noIso_isLoaded = false;
+		fo_el_TTZMVAloosev1_isLoaded = false;
+		fo_el_TTZMVAloosev1_noIso_isLoaded = false;
+		num_mu_TTZtightv1_isLoaded = false;
+		num_mu_TTZtightv1_noIso_isLoaded = false;
+		fo_mu_TTZtightv1_isLoaded = false;
+		fo_mu_TTZtightv1_noIso_isLoaded = false;
+		num_mu_TTZloosev1_isLoaded = false;
+		num_mu_TTZloosev1_noIso_isLoaded = false;
+		fo_mu_TTZloosev1_isLoaded = false;
+		fo_mu_TTZloosev1_noIso_isLoaded = false;
 		num_el_ssV6_isLoaded = false;
 		num_el_ssV6_noIso_isLoaded = false;
 		v1_el_ssV6_isLoaded = false;
@@ -2781,16 +2883,6 @@ void GetEntry(unsigned int idx)
 		hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_isLoaded = false;
 		hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded = false;
 		hltps_ele27_WP80_vstar_isLoaded = false;
-		l1ps_ele8_CaloIdL_CaloIsoVL_vstar_isLoaded = false;
-		l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded = false;
-		l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded = false;
-		l1ps_ele8_CaloIdT_TrkIdVL_vstar_isLoaded = false;
-		l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_isLoaded = false;
-		l1ps_ele17_CaloIdL_CaloIsoVL_vstar_isLoaded = false;
-		l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded = false;
-		l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded = false;
-		l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded = false;
-		l1ps_ele27_WP80_vstar_isLoaded = false;
 		mu3_vstar_isLoaded = false;
 		mu5_vstar_isLoaded = false;
 		mu8_vstar_isLoaded = false;
@@ -2808,6 +2900,7 @@ void GetEntry(unsigned int idx)
 		isoMu24_eta2p1_vstar_isLoaded = false;
 		isoMu30_eta2p1_vstar_isLoaded = false;
 		relIso1p0Mu17_vstar_isLoaded = false;
+		relIso1p0Mu20_vstar_isLoaded = false;
 		relIso1p0Mu5_vstar_isLoaded = false;
 		mu3_version_isLoaded = false;
 		mu5_version_isLoaded = false;
@@ -2826,6 +2919,7 @@ void GetEntry(unsigned int idx)
 		isoMu24_eta2p1_version_isLoaded = false;
 		isoMu30_eta2p1_version_isLoaded = false;
 		relIso1p0Mu17_version_isLoaded = false;
+		relIso1p0Mu20_version_isLoaded = false;
 		relIso1p0Mu5_version_isLoaded = false;
 		dr_mu3_vstar_isLoaded = false;
 		dr_mu5_vstar_isLoaded = false;
@@ -2844,6 +2938,7 @@ void GetEntry(unsigned int idx)
 		dr_isoMu24_eta2p1_vstar_isLoaded = false;
 		dr_isoMu30_eta2p1_vstar_isLoaded = false;
 		dr_relIso1p0Mu17_vstar_isLoaded = false;
+		dr_relIso1p0Mu20_vstar_isLoaded = false;
 		dr_relIso1p0Mu5_vstar_isLoaded = false;
 		hltps_mu3_vstar_isLoaded = false;
 		hltps_mu5_vstar_isLoaded = false;
@@ -2862,23 +2957,8 @@ void GetEntry(unsigned int idx)
 		hltps_isoMu24_eta2p1_vstar_isLoaded = false;
 		hltps_isoMu30_eta2p1_vstar_isLoaded = false;
 		hltps_relIso1p0Mu17_vstar_isLoaded = false;
+		hltps_relIso1p0Mu20_vstar_isLoaded = false;
 		hltps_relIso1p0Mu5_vstar_isLoaded = false;
-		l1ps_mu5_vstar_isLoaded = false;
-		l1ps_mu8_vstar_isLoaded = false;
-		l1ps_mu12_vstar_isLoaded = false;
-		l1ps_mu17_vstar_isLoaded = false;
-		l1ps_mu15_eta2p1_vstar_isLoaded = false;
-		l1ps_mu24_eta2p1_vstar_isLoaded = false;
-		l1ps_mu30_eta2p1_vstar_isLoaded = false;
-		l1ps_isoMu20_eta2p1_vstar_isLoaded = false;
-		l1ps_isoMu24_eta2p1_vstar_isLoaded = false;
-		l1ps_isoMu30_eta2p1_vstar_isLoaded = false;
-		l1ps_relIso1p0Mu17_vstar_isLoaded = false;
-		l1ps_relIso1p0Mu5_vstar_isLoaded = false;
-		ptj1_isLoaded = false;
-		nj1_isLoaded = false;
-		ptj1_b2b_isLoaded = false;
-		dphij1_b2b_isLoaded = false;
 		ptpfj1_isLoaded = false;
 		npfj1_isLoaded = false;
 		ptpfj1_b2b_isLoaded = false;
@@ -2897,6 +2977,7 @@ void GetEntry(unsigned int idx)
 		ptpfcL1Fj1_b2b_isLoaded = false;
 		dphipfcL1Fj1_b2b_isLoaded = false;
 		btagpfcL1F_isLoaded = false;
+		npfc50L1Fj1_eth_isLoaded = false;
 		emfpfcL1Fj1res_isLoaded = false;
 		ptpfcL1Fj1res_isLoaded = false;
 		dphipfcL1Fj1res_isLoaded = false;
@@ -2906,13 +2987,11 @@ void GetEntry(unsigned int idx)
 		ptpfcL1Fj1res_b2b_isLoaded = false;
 		dphipfcL1Fj1res_b2b_isLoaded = false;
 		btagpfcL1Fres_isLoaded = false;
+		npfc50L1Fj1res_eth_isLoaded = false;
 		ptbtagpfcL1Fj1_isLoaded = false;
 		dphibtagpfcL1Fj1_isLoaded = false;
 		ptbtagpfcL1Fj1res_isLoaded = false;
 		dphibtagpfcL1Fj1res_isLoaded = false;
-		nbjet_isLoaded = false;
-		dRNear_isLoaded = false;
-		dRFar_isLoaded = false;
 		nbpfcjet_isLoaded = false;
 		dRpfcNear_isLoaded = false;
 		dRpfcFar_isLoaded = false;
@@ -2926,12 +3005,19 @@ void LoadAllBranches()
 	if (ls_branch != 0) ls();
 	if (evt_branch != 0) evt();
 	if (weight_branch != 0) weight();
+	if (is_real_data_branch != 0) is_real_data();
+	if (dataset_branch != 0) dataset();
+	if (filename_branch != 0) filename();
 	if (pu_nPUvertices_branch != 0) pu_nPUvertices();
 	if (evt_nvtxs_branch != 0) evt_nvtxs();
 	if (nFOels_branch != 0) nFOels();
 	if (nFOmus_branch != 0) nFOmus();
 	if (ngsfs_branch != 0) ngsfs();
 	if (nmus_branch != 0) nmus();
+	if (lp4_branch != 0) lp4();
+	if (mc3p4_branch != 0) mc3p4();
+	if (foel_p4_branch != 0) foel_p4();
+	if (fomu_p4_branch != 0) fomu_p4();
 	if (foel_id_branch != 0) foel_id();
 	if (fomu_id_branch != 0) fomu_id();
 	if (foel_mass_branch != 0) foel_mass();
@@ -2993,8 +3079,6 @@ void LoadAllBranches()
 	if (els_exp_innerlayers_branch != 0) els_exp_innerlayers();
 	if (d0PV_wwV1_branch != 0) d0PV_wwV1();
 	if (dzPV_wwV1_branch != 0) dzPV_wwV1();
-	if (ht_calo_branch != 0) ht_calo();
-	if (ht_calo_L2L3_branch != 0) ht_calo_L2L3();
 	if (ht_pf_branch != 0) ht_pf();
 	if (ht_pf_L2L3_branch != 0) ht_pf_L2L3();
 	if (ht_pf_L1FastL2L3_branch != 0) ht_pf_L1FastL2L3();
@@ -3005,6 +3089,9 @@ void LoadAllBranches()
 	if (mc3dr_branch != 0) mc3dr();
 	if (leptonIsFromW_branch != 0) leptonIsFromW();
 	if (mu_isCosmic_branch != 0) mu_isCosmic();
+	if (mu_ecal_veto_dep_branch != 0) mu_ecal_veto_dep();
+	if (mu_hcal_veto_dep_branch != 0) mu_hcal_veto_dep();
+	if (mu_nchi2_branch != 0) mu_nchi2();
 	if (mz_fo_gsf_branch != 0) mz_fo_gsf();
 	if (mz_gsf_iso_branch != 0) mz_gsf_iso();
 	if (mz_fo_ctf_branch != 0) mz_fo_ctf();
@@ -3020,6 +3107,30 @@ void LoadAllBranches()
 	if (num_mu_ssV5_noIso_branch != 0) num_mu_ssV5_noIso();
 	if (fo_mu_ssV5_branch != 0) fo_mu_ssV5();
 	if (fo_mu_ssV5_noIso_branch != 0) fo_mu_ssV5_noIso();
+	if (num_el_TTZcuttightv1_branch != 0) num_el_TTZcuttightv1();
+	if (num_el_TTZcuttightv1_noIso_branch != 0) num_el_TTZcuttightv1_noIso();
+	if (fo_el_TTZcuttightv1_branch != 0) fo_el_TTZcuttightv1();
+	if (fo_el_TTZcuttightv1_noIso_branch != 0) fo_el_TTZcuttightv1_noIso();
+	if (num_el_TTZcutloosev1_branch != 0) num_el_TTZcutloosev1();
+	if (num_el_TTZcutloosev1_noIso_branch != 0) num_el_TTZcutloosev1_noIso();
+	if (fo_el_TTZcutloosev1_branch != 0) fo_el_TTZcutloosev1();
+	if (fo_el_TTZcutloosev1_noIso_branch != 0) fo_el_TTZcutloosev1_noIso();
+	if (num_el_TTZMVAtightv1_branch != 0) num_el_TTZMVAtightv1();
+	if (num_el_TTZMVAtightv1_noIso_branch != 0) num_el_TTZMVAtightv1_noIso();
+	if (fo_el_TTZMVAtightv1_branch != 0) fo_el_TTZMVAtightv1();
+	if (fo_el_TTZMVAtightv1_noIso_branch != 0) fo_el_TTZMVAtightv1_noIso();
+	if (num_el_TTZMVAloosev1_branch != 0) num_el_TTZMVAloosev1();
+	if (num_el_TTZMVAloosev1_noIso_branch != 0) num_el_TTZMVAloosev1_noIso();
+	if (fo_el_TTZMVAloosev1_branch != 0) fo_el_TTZMVAloosev1();
+	if (fo_el_TTZMVAloosev1_noIso_branch != 0) fo_el_TTZMVAloosev1_noIso();
+	if (num_mu_TTZtightv1_branch != 0) num_mu_TTZtightv1();
+	if (num_mu_TTZtightv1_noIso_branch != 0) num_mu_TTZtightv1_noIso();
+	if (fo_mu_TTZtightv1_branch != 0) fo_mu_TTZtightv1();
+	if (fo_mu_TTZtightv1_noIso_branch != 0) fo_mu_TTZtightv1_noIso();
+	if (num_mu_TTZloosev1_branch != 0) num_mu_TTZloosev1();
+	if (num_mu_TTZloosev1_noIso_branch != 0) num_mu_TTZloosev1_noIso();
+	if (fo_mu_TTZloosev1_branch != 0) fo_mu_TTZloosev1();
+	if (fo_mu_TTZloosev1_noIso_branch != 0) fo_mu_TTZloosev1_noIso();
 	if (num_el_ssV6_branch != 0) num_el_ssV6();
 	if (num_el_ssV6_noIso_branch != 0) num_el_ssV6_noIso();
 	if (v1_el_ssV6_branch != 0) v1_el_ssV6();
@@ -3107,16 +3218,6 @@ void LoadAllBranches()
 	if (hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar();
 	if (hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch != 0) hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar();
 	if (hltps_ele27_WP80_vstar_branch != 0) hltps_ele27_WP80_vstar();
-	if (l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) l1ps_ele8_CaloIdL_CaloIsoVL_vstar();
-	if (l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar();
-	if (l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar();
-	if (l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch != 0) l1ps_ele8_CaloIdT_TrkIdVL_vstar();
-	if (l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch != 0) l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar();
-	if (l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch != 0) l1ps_ele17_CaloIdL_CaloIsoVL_vstar();
-	if (l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar();
-	if (l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar();
-	if (l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch != 0) l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar();
-	if (l1ps_ele27_WP80_vstar_branch != 0) l1ps_ele27_WP80_vstar();
 	if (mu3_vstar_branch != 0) mu3_vstar();
 	if (mu5_vstar_branch != 0) mu5_vstar();
 	if (mu8_vstar_branch != 0) mu8_vstar();
@@ -3134,6 +3235,7 @@ void LoadAllBranches()
 	if (isoMu24_eta2p1_vstar_branch != 0) isoMu24_eta2p1_vstar();
 	if (isoMu30_eta2p1_vstar_branch != 0) isoMu30_eta2p1_vstar();
 	if (relIso1p0Mu17_vstar_branch != 0) relIso1p0Mu17_vstar();
+	if (relIso1p0Mu20_vstar_branch != 0) relIso1p0Mu20_vstar();
 	if (relIso1p0Mu5_vstar_branch != 0) relIso1p0Mu5_vstar();
 	if (mu3_version_branch != 0) mu3_version();
 	if (mu5_version_branch != 0) mu5_version();
@@ -3152,6 +3254,7 @@ void LoadAllBranches()
 	if (isoMu24_eta2p1_version_branch != 0) isoMu24_eta2p1_version();
 	if (isoMu30_eta2p1_version_branch != 0) isoMu30_eta2p1_version();
 	if (relIso1p0Mu17_version_branch != 0) relIso1p0Mu17_version();
+	if (relIso1p0Mu20_version_branch != 0) relIso1p0Mu20_version();
 	if (relIso1p0Mu5_version_branch != 0) relIso1p0Mu5_version();
 	if (dr_mu3_vstar_branch != 0) dr_mu3_vstar();
 	if (dr_mu5_vstar_branch != 0) dr_mu5_vstar();
@@ -3170,6 +3273,7 @@ void LoadAllBranches()
 	if (dr_isoMu24_eta2p1_vstar_branch != 0) dr_isoMu24_eta2p1_vstar();
 	if (dr_isoMu30_eta2p1_vstar_branch != 0) dr_isoMu30_eta2p1_vstar();
 	if (dr_relIso1p0Mu17_vstar_branch != 0) dr_relIso1p0Mu17_vstar();
+	if (dr_relIso1p0Mu20_vstar_branch != 0) dr_relIso1p0Mu20_vstar();
 	if (dr_relIso1p0Mu5_vstar_branch != 0) dr_relIso1p0Mu5_vstar();
 	if (hltps_mu3_vstar_branch != 0) hltps_mu3_vstar();
 	if (hltps_mu5_vstar_branch != 0) hltps_mu5_vstar();
@@ -3188,23 +3292,8 @@ void LoadAllBranches()
 	if (hltps_isoMu24_eta2p1_vstar_branch != 0) hltps_isoMu24_eta2p1_vstar();
 	if (hltps_isoMu30_eta2p1_vstar_branch != 0) hltps_isoMu30_eta2p1_vstar();
 	if (hltps_relIso1p0Mu17_vstar_branch != 0) hltps_relIso1p0Mu17_vstar();
+	if (hltps_relIso1p0Mu20_vstar_branch != 0) hltps_relIso1p0Mu20_vstar();
 	if (hltps_relIso1p0Mu5_vstar_branch != 0) hltps_relIso1p0Mu5_vstar();
-	if (l1ps_mu5_vstar_branch != 0) l1ps_mu5_vstar();
-	if (l1ps_mu8_vstar_branch != 0) l1ps_mu8_vstar();
-	if (l1ps_mu12_vstar_branch != 0) l1ps_mu12_vstar();
-	if (l1ps_mu17_vstar_branch != 0) l1ps_mu17_vstar();
-	if (l1ps_mu15_eta2p1_vstar_branch != 0) l1ps_mu15_eta2p1_vstar();
-	if (l1ps_mu24_eta2p1_vstar_branch != 0) l1ps_mu24_eta2p1_vstar();
-	if (l1ps_mu30_eta2p1_vstar_branch != 0) l1ps_mu30_eta2p1_vstar();
-	if (l1ps_isoMu20_eta2p1_vstar_branch != 0) l1ps_isoMu20_eta2p1_vstar();
-	if (l1ps_isoMu24_eta2p1_vstar_branch != 0) l1ps_isoMu24_eta2p1_vstar();
-	if (l1ps_isoMu30_eta2p1_vstar_branch != 0) l1ps_isoMu30_eta2p1_vstar();
-	if (l1ps_relIso1p0Mu17_vstar_branch != 0) l1ps_relIso1p0Mu17_vstar();
-	if (l1ps_relIso1p0Mu5_vstar_branch != 0) l1ps_relIso1p0Mu5_vstar();
-	if (ptj1_branch != 0) ptj1();
-	if (nj1_branch != 0) nj1();
-	if (ptj1_b2b_branch != 0) ptj1_b2b();
-	if (dphij1_b2b_branch != 0) dphij1_b2b();
 	if (ptpfj1_branch != 0) ptpfj1();
 	if (npfj1_branch != 0) npfj1();
 	if (ptpfj1_b2b_branch != 0) ptpfj1_b2b();
@@ -3223,6 +3312,7 @@ void LoadAllBranches()
 	if (ptpfcL1Fj1_b2b_branch != 0) ptpfcL1Fj1_b2b();
 	if (dphipfcL1Fj1_b2b_branch != 0) dphipfcL1Fj1_b2b();
 	if (btagpfcL1F_branch != 0) btagpfcL1F();
+	if (npfc50L1Fj1_eth_branch != 0) npfc50L1Fj1_eth();
 	if (emfpfcL1Fj1res_branch != 0) emfpfcL1Fj1res();
 	if (ptpfcL1Fj1res_branch != 0) ptpfcL1Fj1res();
 	if (dphipfcL1Fj1res_branch != 0) dphipfcL1Fj1res();
@@ -3232,13 +3322,11 @@ void LoadAllBranches()
 	if (ptpfcL1Fj1res_b2b_branch != 0) ptpfcL1Fj1res_b2b();
 	if (dphipfcL1Fj1res_b2b_branch != 0) dphipfcL1Fj1res_b2b();
 	if (btagpfcL1Fres_branch != 0) btagpfcL1Fres();
+	if (npfc50L1Fj1res_eth_branch != 0) npfc50L1Fj1res_eth();
 	if (ptbtagpfcL1Fj1_branch != 0) ptbtagpfcL1Fj1();
 	if (dphibtagpfcL1Fj1_branch != 0) dphibtagpfcL1Fj1();
 	if (ptbtagpfcL1Fj1res_branch != 0) ptbtagpfcL1Fj1res();
 	if (dphibtagpfcL1Fj1res_branch != 0) dphibtagpfcL1Fj1res();
-	if (nbjet_branch != 0) nbjet();
-	if (dRNear_branch != 0) dRNear();
-	if (dRFar_branch != 0) dRFar();
 	if (nbpfcjet_branch != 0) nbpfcjet();
 	if (dRpfcNear_branch != 0) dRpfcNear();
 	if (dRpfcFar_branch != 0) dRpfcFar();
@@ -3250,8 +3338,6 @@ void LoadAllBranches()
 		if (not run_isLoaded) {
 			if (run_branch != 0) {
 				run_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch run_branch does not exist!\n");
 				exit(1);
@@ -3265,8 +3351,6 @@ void LoadAllBranches()
 		if (not ls_isLoaded) {
 			if (ls_branch != 0) {
 				ls_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ls_branch does not exist!\n");
 				exit(1);
@@ -3280,8 +3364,6 @@ void LoadAllBranches()
 		if (not evt_isLoaded) {
 			if (evt_branch != 0) {
 				evt_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch evt_branch does not exist!\n");
 				exit(1);
@@ -3295,8 +3377,6 @@ void LoadAllBranches()
 		if (not weight_isLoaded) {
 			if (weight_branch != 0) {
 				weight_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch weight_branch does not exist!\n");
 				exit(1);
@@ -3305,13 +3385,50 @@ void LoadAllBranches()
 		}
 		return weight_;
 	}
+	bool &	is_real_data()
+	{
+		if (not is_real_data_isLoaded) {
+			if (is_real_data_branch != 0) {
+				is_real_data_branch->GetEntry(index);
+			} else { 
+				printf("branch is_real_data_branch does not exist!\n");
+				exit(1);
+			}
+			is_real_data_isLoaded = true;
+		}
+		return is_real_data_;
+	}
+	TString &dataset()
+	{
+		if (not dataset_isLoaded) {
+			if (dataset_branch != 0) {
+				dataset_branch->GetEntry(index);
+			} else { 
+				printf("branch dataset_branch does not exist!\n");
+				exit(1);
+			}
+			dataset_isLoaded = true;
+		}
+		return dataset_;
+	}
+	TString &filename()
+	{
+		if (not filename_isLoaded) {
+			if (filename_branch != 0) {
+				filename_branch->GetEntry(index);
+			} else { 
+				printf("branch filename_branch does not exist!\n");
+				exit(1);
+			}
+			filename_isLoaded = true;
+		}
+		return filename_;
+	}
 	int &pu_nPUvertices()
 	{
 		if (not pu_nPUvertices_isLoaded) {
 			if (pu_nPUvertices_branch != 0) {
 				pu_nPUvertices_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pu_nPUvertices_branch does not exist!\n");
 				exit(1);
@@ -3325,8 +3442,6 @@ void LoadAllBranches()
 		if (not evt_nvtxs_isLoaded) {
 			if (evt_nvtxs_branch != 0) {
 				evt_nvtxs_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch evt_nvtxs_branch does not exist!\n");
 				exit(1);
@@ -3340,8 +3455,6 @@ void LoadAllBranches()
 		if (not nFOels_isLoaded) {
 			if (nFOels_branch != 0) {
 				nFOels_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nFOels_branch does not exist!\n");
 				exit(1);
@@ -3355,8 +3468,6 @@ void LoadAllBranches()
 		if (not nFOmus_isLoaded) {
 			if (nFOmus_branch != 0) {
 				nFOmus_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nFOmus_branch does not exist!\n");
 				exit(1);
@@ -3370,8 +3481,6 @@ void LoadAllBranches()
 		if (not ngsfs_isLoaded) {
 			if (ngsfs_branch != 0) {
 				ngsfs_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ngsfs_branch does not exist!\n");
 				exit(1);
@@ -3385,8 +3494,6 @@ void LoadAllBranches()
 		if (not nmus_isLoaded) {
 			if (nmus_branch != 0) {
 				nmus_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nmus_branch does not exist!\n");
 				exit(1);
@@ -3395,13 +3502,63 @@ void LoadAllBranches()
 		}
 		return nmus_;
 	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4()
+	{
+		if (not lp4_isLoaded) {
+			if (lp4_branch != 0) {
+				lp4_branch->GetEntry(index);
+			} else { 
+				printf("branch lp4_branch does not exist!\n");
+				exit(1);
+			}
+			lp4_isLoaded = true;
+		}
+		return *lp4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4()
+	{
+		if (not mc3p4_isLoaded) {
+			if (mc3p4_branch != 0) {
+				mc3p4_branch->GetEntry(index);
+			} else { 
+				printf("branch mc3p4_branch does not exist!\n");
+				exit(1);
+			}
+			mc3p4_isLoaded = true;
+		}
+		return *mc3p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4()
+	{
+		if (not foel_p4_isLoaded) {
+			if (foel_p4_branch != 0) {
+				foel_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch foel_p4_branch does not exist!\n");
+				exit(1);
+			}
+			foel_p4_isLoaded = true;
+		}
+		return *foel_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &fomu_p4()
+	{
+		if (not fomu_p4_isLoaded) {
+			if (fomu_p4_branch != 0) {
+				fomu_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch fomu_p4_branch does not exist!\n");
+				exit(1);
+			}
+			fomu_p4_isLoaded = true;
+		}
+		return *fomu_p4_;
+	}
 	int &foel_id()
 	{
 		if (not foel_id_isLoaded) {
 			if (foel_id_branch != 0) {
 				foel_id_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch foel_id_branch does not exist!\n");
 				exit(1);
@@ -3415,8 +3572,6 @@ void LoadAllBranches()
 		if (not fomu_id_isLoaded) {
 			if (fomu_id_branch != 0) {
 				fomu_id_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fomu_id_branch does not exist!\n");
 				exit(1);
@@ -3430,8 +3585,6 @@ void LoadAllBranches()
 		if (not foel_mass_isLoaded) {
 			if (foel_mass_branch != 0) {
 				foel_mass_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch foel_mass_branch does not exist!\n");
 				exit(1);
@@ -3445,8 +3598,6 @@ void LoadAllBranches()
 		if (not fomu_mass_isLoaded) {
 			if (fomu_mass_branch != 0) {
 				fomu_mass_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fomu_mass_branch does not exist!\n");
 				exit(1);
@@ -3460,8 +3611,6 @@ void LoadAllBranches()
 		if (not pt_isLoaded) {
 			if (pt_branch != 0) {
 				pt_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pt_branch does not exist!\n");
 				exit(1);
@@ -3475,8 +3624,6 @@ void LoadAllBranches()
 		if (not eta_isLoaded) {
 			if (eta_branch != 0) {
 				eta_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch eta_branch does not exist!\n");
 				exit(1);
@@ -3490,8 +3637,6 @@ void LoadAllBranches()
 		if (not sceta_isLoaded) {
 			if (sceta_branch != 0) {
 				sceta_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch sceta_branch does not exist!\n");
 				exit(1);
@@ -3505,8 +3650,6 @@ void LoadAllBranches()
 		if (not phi_isLoaded) {
 			if (phi_branch != 0) {
 				phi_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch phi_branch does not exist!\n");
 				exit(1);
@@ -3520,8 +3663,6 @@ void LoadAllBranches()
 		if (not scet_isLoaded) {
 			if (scet_branch != 0) {
 				scet_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch scet_branch does not exist!\n");
 				exit(1);
@@ -3535,8 +3676,6 @@ void LoadAllBranches()
 		if (not hoe_isLoaded) {
 			if (hoe_branch != 0) {
 				hoe_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hoe_branch does not exist!\n");
 				exit(1);
@@ -3550,8 +3689,6 @@ void LoadAllBranches()
 		if (not pfmet_isLoaded) {
 			if (pfmet_branch != 0) {
 				pfmet_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfmet_branch does not exist!\n");
 				exit(1);
@@ -3565,8 +3702,6 @@ void LoadAllBranches()
 		if (not pfmetphi_isLoaded) {
 			if (pfmetphi_branch != 0) {
 				pfmetphi_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfmetphi_branch does not exist!\n");
 				exit(1);
@@ -3580,8 +3715,6 @@ void LoadAllBranches()
 		if (not iso_isLoaded) {
 			if (iso_branch != 0) {
 				iso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch iso_branch does not exist!\n");
 				exit(1);
@@ -3595,8 +3728,6 @@ void LoadAllBranches()
 		if (not iso_nps_isLoaded) {
 			if (iso_nps_branch != 0) {
 				iso_nps_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch iso_nps_branch does not exist!\n");
 				exit(1);
@@ -3610,8 +3741,6 @@ void LoadAllBranches()
 		if (not trck_iso_isLoaded) {
 			if (trck_iso_branch != 0) {
 				trck_iso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch trck_iso_branch does not exist!\n");
 				exit(1);
@@ -3625,8 +3754,6 @@ void LoadAllBranches()
 		if (not ecal_iso_isLoaded) {
 			if (ecal_iso_branch != 0) {
 				ecal_iso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ecal_iso_branch does not exist!\n");
 				exit(1);
@@ -3640,8 +3767,6 @@ void LoadAllBranches()
 		if (not ecal_iso_nps_isLoaded) {
 			if (ecal_iso_nps_branch != 0) {
 				ecal_iso_nps_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ecal_iso_nps_branch does not exist!\n");
 				exit(1);
@@ -3655,8 +3780,6 @@ void LoadAllBranches()
 		if (not hcal_iso_isLoaded) {
 			if (hcal_iso_branch != 0) {
 				hcal_iso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hcal_iso_branch does not exist!\n");
 				exit(1);
@@ -3670,8 +3793,6 @@ void LoadAllBranches()
 		if (not pfiso03_isLoaded) {
 			if (pfiso03_branch != 0) {
 				pfiso03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfiso03_branch does not exist!\n");
 				exit(1);
@@ -3685,8 +3806,6 @@ void LoadAllBranches()
 		if (not ch_pfiso03_isLoaded) {
 			if (ch_pfiso03_branch != 0) {
 				ch_pfiso03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ch_pfiso03_branch does not exist!\n");
 				exit(1);
@@ -3700,8 +3819,6 @@ void LoadAllBranches()
 		if (not nh_pfiso03_isLoaded) {
 			if (nh_pfiso03_branch != 0) {
 				nh_pfiso03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nh_pfiso03_branch does not exist!\n");
 				exit(1);
@@ -3715,8 +3832,6 @@ void LoadAllBranches()
 		if (not em_pfiso03_isLoaded) {
 			if (em_pfiso03_branch != 0) {
 				em_pfiso03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch em_pfiso03_branch does not exist!\n");
 				exit(1);
@@ -3730,8 +3845,6 @@ void LoadAllBranches()
 		if (not pfiso04_isLoaded) {
 			if (pfiso04_branch != 0) {
 				pfiso04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfiso04_branch does not exist!\n");
 				exit(1);
@@ -3745,8 +3858,6 @@ void LoadAllBranches()
 		if (not ch_pfiso04_isLoaded) {
 			if (ch_pfiso04_branch != 0) {
 				ch_pfiso04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ch_pfiso04_branch does not exist!\n");
 				exit(1);
@@ -3760,8 +3871,6 @@ void LoadAllBranches()
 		if (not nh_pfiso04_isLoaded) {
 			if (nh_pfiso04_branch != 0) {
 				nh_pfiso04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nh_pfiso04_branch does not exist!\n");
 				exit(1);
@@ -3775,8 +3884,6 @@ void LoadAllBranches()
 		if (not em_pfiso04_isLoaded) {
 			if (em_pfiso04_branch != 0) {
 				em_pfiso04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch em_pfiso04_branch does not exist!\n");
 				exit(1);
@@ -3790,8 +3897,6 @@ void LoadAllBranches()
 		if (not pfpupt03_isLoaded) {
 			if (pfpupt03_branch != 0) {
 				pfpupt03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfpupt03_branch does not exist!\n");
 				exit(1);
@@ -3805,8 +3910,6 @@ void LoadAllBranches()
 		if (not pfpupt04_isLoaded) {
 			if (pfpupt04_branch != 0) {
 				pfpupt04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfpupt04_branch does not exist!\n");
 				exit(1);
@@ -3820,8 +3923,6 @@ void LoadAllBranches()
 		if (not cpfiso03_rho_isLoaded) {
 			if (cpfiso03_rho_branch != 0) {
 				cpfiso03_rho_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch cpfiso03_rho_branch does not exist!\n");
 				exit(1);
@@ -3835,8 +3936,6 @@ void LoadAllBranches()
 		if (not cpfiso03_db_isLoaded) {
 			if (cpfiso03_db_branch != 0) {
 				cpfiso03_db_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch cpfiso03_db_branch does not exist!\n");
 				exit(1);
@@ -3850,8 +3949,6 @@ void LoadAllBranches()
 		if (not id_isLoaded) {
 			if (id_branch != 0) {
 				id_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch id_branch does not exist!\n");
 				exit(1);
@@ -3865,8 +3962,6 @@ void LoadAllBranches()
 		if (not closestMuon_isLoaded) {
 			if (closestMuon_branch != 0) {
 				closestMuon_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch closestMuon_branch does not exist!\n");
 				exit(1);
@@ -3880,8 +3975,6 @@ void LoadAllBranches()
 		if (not el_id_sieie_isLoaded) {
 			if (el_id_sieie_branch != 0) {
 				el_id_sieie_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch el_id_sieie_branch does not exist!\n");
 				exit(1);
@@ -3895,8 +3988,6 @@ void LoadAllBranches()
 		if (not el_id_detain_isLoaded) {
 			if (el_id_detain_branch != 0) {
 				el_id_detain_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch el_id_detain_branch does not exist!\n");
 				exit(1);
@@ -3910,8 +4001,6 @@ void LoadAllBranches()
 		if (not el_id_dphiin_isLoaded) {
 			if (el_id_dphiin_branch != 0) {
 				el_id_dphiin_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch el_id_dphiin_branch does not exist!\n");
 				exit(1);
@@ -3925,8 +4014,6 @@ void LoadAllBranches()
 		if (not el_id_smurfV5_isLoaded) {
 			if (el_id_smurfV5_branch != 0) {
 				el_id_smurfV5_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch el_id_smurfV5_branch does not exist!\n");
 				exit(1);
@@ -3940,8 +4027,6 @@ void LoadAllBranches()
 		if (not el_id_vbtf80_isLoaded) {
 			if (el_id_vbtf80_branch != 0) {
 				el_id_vbtf80_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch el_id_vbtf80_branch does not exist!\n");
 				exit(1);
@@ -3955,8 +4040,6 @@ void LoadAllBranches()
 		if (not el_id_vbtf90_isLoaded) {
 			if (el_id_vbtf90_branch != 0) {
 				el_id_vbtf90_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch el_id_vbtf90_branch does not exist!\n");
 				exit(1);
@@ -3970,8 +4053,6 @@ void LoadAllBranches()
 		if (not el_effarea_isLoaded) {
 			if (el_effarea_branch != 0) {
 				el_effarea_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch el_effarea_branch does not exist!\n");
 				exit(1);
@@ -3985,8 +4066,6 @@ void LoadAllBranches()
 		if (not mu_effarea03_isLoaded) {
 			if (mu_effarea03_branch != 0) {
 				mu_effarea03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_effarea03_branch does not exist!\n");
 				exit(1);
@@ -4000,8 +4079,6 @@ void LoadAllBranches()
 		if (not mu_nh_effarea03_isLoaded) {
 			if (mu_nh_effarea03_branch != 0) {
 				mu_nh_effarea03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_nh_effarea03_branch does not exist!\n");
 				exit(1);
@@ -4015,8 +4092,6 @@ void LoadAllBranches()
 		if (not mu_em_effarea03_isLoaded) {
 			if (mu_em_effarea03_branch != 0) {
 				mu_em_effarea03_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_em_effarea03_branch does not exist!\n");
 				exit(1);
@@ -4030,8 +4105,6 @@ void LoadAllBranches()
 		if (not mu_effarea03_tight_isLoaded) {
 			if (mu_effarea03_tight_branch != 0) {
 				mu_effarea03_tight_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_effarea03_tight_branch does not exist!\n");
 				exit(1);
@@ -4045,8 +4118,6 @@ void LoadAllBranches()
 		if (not mu_nh_effarea03_tight_isLoaded) {
 			if (mu_nh_effarea03_tight_branch != 0) {
 				mu_nh_effarea03_tight_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_nh_effarea03_tight_branch does not exist!\n");
 				exit(1);
@@ -4060,8 +4131,6 @@ void LoadAllBranches()
 		if (not mu_em_effarea03_tight_isLoaded) {
 			if (mu_em_effarea03_tight_branch != 0) {
 				mu_em_effarea03_tight_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_em_effarea03_tight_branch does not exist!\n");
 				exit(1);
@@ -4075,8 +4144,6 @@ void LoadAllBranches()
 		if (not mu_effarea04_isLoaded) {
 			if (mu_effarea04_branch != 0) {
 				mu_effarea04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_effarea04_branch does not exist!\n");
 				exit(1);
@@ -4090,8 +4157,6 @@ void LoadAllBranches()
 		if (not mu_nh_effarea04_isLoaded) {
 			if (mu_nh_effarea04_branch != 0) {
 				mu_nh_effarea04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_nh_effarea04_branch does not exist!\n");
 				exit(1);
@@ -4105,8 +4170,6 @@ void LoadAllBranches()
 		if (not mu_em_effarea04_isLoaded) {
 			if (mu_em_effarea04_branch != 0) {
 				mu_em_effarea04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_em_effarea04_branch does not exist!\n");
 				exit(1);
@@ -4120,8 +4183,6 @@ void LoadAllBranches()
 		if (not mu_effarea04_tight_isLoaded) {
 			if (mu_effarea04_tight_branch != 0) {
 				mu_effarea04_tight_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_effarea04_tight_branch does not exist!\n");
 				exit(1);
@@ -4135,8 +4196,6 @@ void LoadAllBranches()
 		if (not mu_nh_effarea04_tight_isLoaded) {
 			if (mu_nh_effarea04_tight_branch != 0) {
 				mu_nh_effarea04_tight_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_nh_effarea04_tight_branch does not exist!\n");
 				exit(1);
@@ -4150,8 +4209,6 @@ void LoadAllBranches()
 		if (not mu_em_effarea04_tight_isLoaded) {
 			if (mu_em_effarea04_tight_branch != 0) {
 				mu_em_effarea04_tight_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_em_effarea04_tight_branch does not exist!\n");
 				exit(1);
@@ -4165,8 +4222,6 @@ void LoadAllBranches()
 		if (not conv0MissHits_isLoaded) {
 			if (conv0MissHits_branch != 0) {
 				conv0MissHits_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch conv0MissHits_branch does not exist!\n");
 				exit(1);
@@ -4180,8 +4235,6 @@ void LoadAllBranches()
 		if (not convHitPattern_isLoaded) {
 			if (convHitPattern_branch != 0) {
 				convHitPattern_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch convHitPattern_branch does not exist!\n");
 				exit(1);
@@ -4195,8 +4248,6 @@ void LoadAllBranches()
 		if (not convPartnerTrack_isLoaded) {
 			if (convPartnerTrack_branch != 0) {
 				convPartnerTrack_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch convPartnerTrack_branch does not exist!\n");
 				exit(1);
@@ -4210,8 +4261,6 @@ void LoadAllBranches()
 		if (not convMIT_isLoaded) {
 			if (convMIT_branch != 0) {
 				convMIT_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch convMIT_branch does not exist!\n");
 				exit(1);
@@ -4225,8 +4274,6 @@ void LoadAllBranches()
 		if (not mt_isLoaded) {
 			if (mt_branch != 0) {
 				mt_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mt_branch does not exist!\n");
 				exit(1);
@@ -4240,8 +4287,6 @@ void LoadAllBranches()
 		if (not pfmt_isLoaded) {
 			if (pfmt_branch != 0) {
 				pfmt_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch pfmt_branch does not exist!\n");
 				exit(1);
@@ -4255,8 +4300,6 @@ void LoadAllBranches()
 		if (not q3_isLoaded) {
 			if (q3_branch != 0) {
 				q3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch q3_branch does not exist!\n");
 				exit(1);
@@ -4270,8 +4313,6 @@ void LoadAllBranches()
 		if (not els_exp_innerlayers_isLoaded) {
 			if (els_exp_innerlayers_branch != 0) {
 				els_exp_innerlayers_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch els_exp_innerlayers_branch does not exist!\n");
 				exit(1);
@@ -4285,8 +4326,6 @@ void LoadAllBranches()
 		if (not d0PV_wwV1_isLoaded) {
 			if (d0PV_wwV1_branch != 0) {
 				d0PV_wwV1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch d0PV_wwV1_branch does not exist!\n");
 				exit(1);
@@ -4300,8 +4339,6 @@ void LoadAllBranches()
 		if (not dzPV_wwV1_isLoaded) {
 			if (dzPV_wwV1_branch != 0) {
 				dzPV_wwV1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dzPV_wwV1_branch does not exist!\n");
 				exit(1);
@@ -4310,43 +4347,11 @@ void LoadAllBranches()
 		}
 		return dzPV_wwV1_;
 	}
-	float &ht_calo()
-	{
-		if (not ht_calo_isLoaded) {
-			if (ht_calo_branch != 0) {
-				ht_calo_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch ht_calo_branch does not exist!\n");
-				exit(1);
-			}
-			ht_calo_isLoaded = true;
-		}
-		return ht_calo_;
-	}
-	float &ht_calo_L2L3()
-	{
-		if (not ht_calo_L2L3_isLoaded) {
-			if (ht_calo_L2L3_branch != 0) {
-				ht_calo_L2L3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch ht_calo_L2L3_branch does not exist!\n");
-				exit(1);
-			}
-			ht_calo_L2L3_isLoaded = true;
-		}
-		return ht_calo_L2L3_;
-	}
 	float &ht_pf()
 	{
 		if (not ht_pf_isLoaded) {
 			if (ht_pf_branch != 0) {
 				ht_pf_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ht_pf_branch does not exist!\n");
 				exit(1);
@@ -4360,8 +4365,6 @@ void LoadAllBranches()
 		if (not ht_pf_L2L3_isLoaded) {
 			if (ht_pf_L2L3_branch != 0) {
 				ht_pf_L2L3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ht_pf_L2L3_branch does not exist!\n");
 				exit(1);
@@ -4375,8 +4378,6 @@ void LoadAllBranches()
 		if (not ht_pf_L1FastL2L3_isLoaded) {
 			if (ht_pf_L1FastL2L3_branch != 0) {
 				ht_pf_L1FastL2L3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ht_pf_L1FastL2L3_branch does not exist!\n");
 				exit(1);
@@ -4390,8 +4391,6 @@ void LoadAllBranches()
 		if (not mcid_isLoaded) {
 			if (mcid_branch != 0) {
 				mcid_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mcid_branch does not exist!\n");
 				exit(1);
@@ -4405,8 +4404,6 @@ void LoadAllBranches()
 		if (not mcmotherid_isLoaded) {
 			if (mcmotherid_branch != 0) {
 				mcmotherid_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mcmotherid_branch does not exist!\n");
 				exit(1);
@@ -4420,8 +4417,6 @@ void LoadAllBranches()
 		if (not mc3id_isLoaded) {
 			if (mc3id_branch != 0) {
 				mc3id_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mc3id_branch does not exist!\n");
 				exit(1);
@@ -4435,8 +4430,6 @@ void LoadAllBranches()
 		if (not mc3pt_isLoaded) {
 			if (mc3pt_branch != 0) {
 				mc3pt_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mc3pt_branch does not exist!\n");
 				exit(1);
@@ -4450,8 +4443,6 @@ void LoadAllBranches()
 		if (not mc3dr_isLoaded) {
 			if (mc3dr_branch != 0) {
 				mc3dr_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mc3dr_branch does not exist!\n");
 				exit(1);
@@ -4465,8 +4456,6 @@ void LoadAllBranches()
 		if (not leptonIsFromW_isLoaded) {
 			if (leptonIsFromW_branch != 0) {
 				leptonIsFromW_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch leptonIsFromW_branch does not exist!\n");
 				exit(1);
@@ -4480,8 +4469,6 @@ void LoadAllBranches()
 		if (not mu_isCosmic_isLoaded) {
 			if (mu_isCosmic_branch != 0) {
 				mu_isCosmic_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu_isCosmic_branch does not exist!\n");
 				exit(1);
@@ -4490,13 +4477,50 @@ void LoadAllBranches()
 		}
 		return mu_isCosmic_;
 	}
+	float &mu_ecal_veto_dep()
+	{
+		if (not mu_ecal_veto_dep_isLoaded) {
+			if (mu_ecal_veto_dep_branch != 0) {
+				mu_ecal_veto_dep_branch->GetEntry(index);
+			} else { 
+				printf("branch mu_ecal_veto_dep_branch does not exist!\n");
+				exit(1);
+			}
+			mu_ecal_veto_dep_isLoaded = true;
+		}
+		return mu_ecal_veto_dep_;
+	}
+	float &mu_hcal_veto_dep()
+	{
+		if (not mu_hcal_veto_dep_isLoaded) {
+			if (mu_hcal_veto_dep_branch != 0) {
+				mu_hcal_veto_dep_branch->GetEntry(index);
+			} else { 
+				printf("branch mu_hcal_veto_dep_branch does not exist!\n");
+				exit(1);
+			}
+			mu_hcal_veto_dep_isLoaded = true;
+		}
+		return mu_hcal_veto_dep_;
+	}
+	float &mu_nchi2()
+	{
+		if (not mu_nchi2_isLoaded) {
+			if (mu_nchi2_branch != 0) {
+				mu_nchi2_branch->GetEntry(index);
+			} else { 
+				printf("branch mu_nchi2_branch does not exist!\n");
+				exit(1);
+			}
+			mu_nchi2_isLoaded = true;
+		}
+		return mu_nchi2_;
+	}
 	float &mz_fo_gsf()
 	{
 		if (not mz_fo_gsf_isLoaded) {
 			if (mz_fo_gsf_branch != 0) {
 				mz_fo_gsf_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mz_fo_gsf_branch does not exist!\n");
 				exit(1);
@@ -4510,8 +4534,6 @@ void LoadAllBranches()
 		if (not mz_gsf_iso_isLoaded) {
 			if (mz_gsf_iso_branch != 0) {
 				mz_gsf_iso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mz_gsf_iso_branch does not exist!\n");
 				exit(1);
@@ -4525,8 +4547,6 @@ void LoadAllBranches()
 		if (not mz_fo_ctf_isLoaded) {
 			if (mz_fo_ctf_branch != 0) {
 				mz_fo_ctf_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mz_fo_ctf_branch does not exist!\n");
 				exit(1);
@@ -4540,8 +4560,6 @@ void LoadAllBranches()
 		if (not mz_ctf_iso_isLoaded) {
 			if (mz_ctf_iso_branch != 0) {
 				mz_ctf_iso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mz_ctf_iso_branch does not exist!\n");
 				exit(1);
@@ -4555,8 +4573,6 @@ void LoadAllBranches()
 		if (not mupsilon_fo_mu_isLoaded) {
 			if (mupsilon_fo_mu_branch != 0) {
 				mupsilon_fo_mu_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mupsilon_fo_mu_branch does not exist!\n");
 				exit(1);
@@ -4570,8 +4586,6 @@ void LoadAllBranches()
 		if (not mupsilon_mu_iso_isLoaded) {
 			if (mupsilon_mu_iso_branch != 0) {
 				mupsilon_mu_iso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mupsilon_mu_iso_branch does not exist!\n");
 				exit(1);
@@ -4585,8 +4599,6 @@ void LoadAllBranches()
 		if (not num_el_ssV7_isLoaded) {
 			if (num_el_ssV7_branch != 0) {
 				num_el_ssV7_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_ssV7_branch does not exist!\n");
 				exit(1);
@@ -4600,8 +4612,6 @@ void LoadAllBranches()
 		if (not num_el_ssV7_noIso_isLoaded) {
 			if (num_el_ssV7_noIso_branch != 0) {
 				num_el_ssV7_noIso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_ssV7_noIso_branch does not exist!\n");
 				exit(1);
@@ -4615,8 +4625,6 @@ void LoadAllBranches()
 		if (not v1_el_ssV7_isLoaded) {
 			if (v1_el_ssV7_branch != 0) {
 				v1_el_ssV7_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v1_el_ssV7_branch does not exist!\n");
 				exit(1);
@@ -4630,8 +4638,6 @@ void LoadAllBranches()
 		if (not v2_el_ssV7_isLoaded) {
 			if (v2_el_ssV7_branch != 0) {
 				v2_el_ssV7_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v2_el_ssV7_branch does not exist!\n");
 				exit(1);
@@ -4645,8 +4651,6 @@ void LoadAllBranches()
 		if (not v3_el_ssV7_isLoaded) {
 			if (v3_el_ssV7_branch != 0) {
 				v3_el_ssV7_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v3_el_ssV7_branch does not exist!\n");
 				exit(1);
@@ -4660,8 +4664,6 @@ void LoadAllBranches()
 		if (not num_mu_ssV5_isLoaded) {
 			if (num_mu_ssV5_branch != 0) {
 				num_mu_ssV5_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_mu_ssV5_branch does not exist!\n");
 				exit(1);
@@ -4675,8 +4677,6 @@ void LoadAllBranches()
 		if (not num_mu_ssV5_noIso_isLoaded) {
 			if (num_mu_ssV5_noIso_branch != 0) {
 				num_mu_ssV5_noIso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_mu_ssV5_noIso_branch does not exist!\n");
 				exit(1);
@@ -4690,8 +4690,6 @@ void LoadAllBranches()
 		if (not fo_mu_ssV5_isLoaded) {
 			if (fo_mu_ssV5_branch != 0) {
 				fo_mu_ssV5_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mu_ssV5_branch does not exist!\n");
 				exit(1);
@@ -4705,8 +4703,6 @@ void LoadAllBranches()
 		if (not fo_mu_ssV5_noIso_isLoaded) {
 			if (fo_mu_ssV5_noIso_branch != 0) {
 				fo_mu_ssV5_noIso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mu_ssV5_noIso_branch does not exist!\n");
 				exit(1);
@@ -4715,13 +4711,323 @@ void LoadAllBranches()
 		}
 		return fo_mu_ssV5_noIso_;
 	}
+	bool &	num_el_TTZcuttightv1()
+	{
+		if (not num_el_TTZcuttightv1_isLoaded) {
+			if (num_el_TTZcuttightv1_branch != 0) {
+				num_el_TTZcuttightv1_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZcuttightv1_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZcuttightv1_isLoaded = true;
+		}
+		return num_el_TTZcuttightv1_;
+	}
+	bool &	num_el_TTZcuttightv1_noIso()
+	{
+		if (not num_el_TTZcuttightv1_noIso_isLoaded) {
+			if (num_el_TTZcuttightv1_noIso_branch != 0) {
+				num_el_TTZcuttightv1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZcuttightv1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZcuttightv1_noIso_isLoaded = true;
+		}
+		return num_el_TTZcuttightv1_noIso_;
+	}
+	bool &	fo_el_TTZcuttightv1()
+	{
+		if (not fo_el_TTZcuttightv1_isLoaded) {
+			if (fo_el_TTZcuttightv1_branch != 0) {
+				fo_el_TTZcuttightv1_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZcuttightv1_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZcuttightv1_isLoaded = true;
+		}
+		return fo_el_TTZcuttightv1_;
+	}
+	bool &	fo_el_TTZcuttightv1_noIso()
+	{
+		if (not fo_el_TTZcuttightv1_noIso_isLoaded) {
+			if (fo_el_TTZcuttightv1_noIso_branch != 0) {
+				fo_el_TTZcuttightv1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZcuttightv1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZcuttightv1_noIso_isLoaded = true;
+		}
+		return fo_el_TTZcuttightv1_noIso_;
+	}
+	bool &	num_el_TTZcutloosev1()
+	{
+		if (not num_el_TTZcutloosev1_isLoaded) {
+			if (num_el_TTZcutloosev1_branch != 0) {
+				num_el_TTZcutloosev1_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZcutloosev1_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZcutloosev1_isLoaded = true;
+		}
+		return num_el_TTZcutloosev1_;
+	}
+	bool &	num_el_TTZcutloosev1_noIso()
+	{
+		if (not num_el_TTZcutloosev1_noIso_isLoaded) {
+			if (num_el_TTZcutloosev1_noIso_branch != 0) {
+				num_el_TTZcutloosev1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZcutloosev1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZcutloosev1_noIso_isLoaded = true;
+		}
+		return num_el_TTZcutloosev1_noIso_;
+	}
+	bool &	fo_el_TTZcutloosev1()
+	{
+		if (not fo_el_TTZcutloosev1_isLoaded) {
+			if (fo_el_TTZcutloosev1_branch != 0) {
+				fo_el_TTZcutloosev1_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZcutloosev1_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZcutloosev1_isLoaded = true;
+		}
+		return fo_el_TTZcutloosev1_;
+	}
+	bool &	fo_el_TTZcutloosev1_noIso()
+	{
+		if (not fo_el_TTZcutloosev1_noIso_isLoaded) {
+			if (fo_el_TTZcutloosev1_noIso_branch != 0) {
+				fo_el_TTZcutloosev1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZcutloosev1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZcutloosev1_noIso_isLoaded = true;
+		}
+		return fo_el_TTZcutloosev1_noIso_;
+	}
+	bool &	num_el_TTZMVAtightv1()
+	{
+		if (not num_el_TTZMVAtightv1_isLoaded) {
+			if (num_el_TTZMVAtightv1_branch != 0) {
+				num_el_TTZMVAtightv1_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZMVAtightv1_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZMVAtightv1_isLoaded = true;
+		}
+		return num_el_TTZMVAtightv1_;
+	}
+	bool &	num_el_TTZMVAtightv1_noIso()
+	{
+		if (not num_el_TTZMVAtightv1_noIso_isLoaded) {
+			if (num_el_TTZMVAtightv1_noIso_branch != 0) {
+				num_el_TTZMVAtightv1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZMVAtightv1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZMVAtightv1_noIso_isLoaded = true;
+		}
+		return num_el_TTZMVAtightv1_noIso_;
+	}
+	bool &	fo_el_TTZMVAtightv1()
+	{
+		if (not fo_el_TTZMVAtightv1_isLoaded) {
+			if (fo_el_TTZMVAtightv1_branch != 0) {
+				fo_el_TTZMVAtightv1_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZMVAtightv1_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZMVAtightv1_isLoaded = true;
+		}
+		return fo_el_TTZMVAtightv1_;
+	}
+	bool &	fo_el_TTZMVAtightv1_noIso()
+	{
+		if (not fo_el_TTZMVAtightv1_noIso_isLoaded) {
+			if (fo_el_TTZMVAtightv1_noIso_branch != 0) {
+				fo_el_TTZMVAtightv1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZMVAtightv1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZMVAtightv1_noIso_isLoaded = true;
+		}
+		return fo_el_TTZMVAtightv1_noIso_;
+	}
+	bool &	num_el_TTZMVAloosev1()
+	{
+		if (not num_el_TTZMVAloosev1_isLoaded) {
+			if (num_el_TTZMVAloosev1_branch != 0) {
+				num_el_TTZMVAloosev1_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZMVAloosev1_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZMVAloosev1_isLoaded = true;
+		}
+		return num_el_TTZMVAloosev1_;
+	}
+	bool &	num_el_TTZMVAloosev1_noIso()
+	{
+		if (not num_el_TTZMVAloosev1_noIso_isLoaded) {
+			if (num_el_TTZMVAloosev1_noIso_branch != 0) {
+				num_el_TTZMVAloosev1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch num_el_TTZMVAloosev1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			num_el_TTZMVAloosev1_noIso_isLoaded = true;
+		}
+		return num_el_TTZMVAloosev1_noIso_;
+	}
+	bool &	fo_el_TTZMVAloosev1()
+	{
+		if (not fo_el_TTZMVAloosev1_isLoaded) {
+			if (fo_el_TTZMVAloosev1_branch != 0) {
+				fo_el_TTZMVAloosev1_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZMVAloosev1_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZMVAloosev1_isLoaded = true;
+		}
+		return fo_el_TTZMVAloosev1_;
+	}
+	bool &	fo_el_TTZMVAloosev1_noIso()
+	{
+		if (not fo_el_TTZMVAloosev1_noIso_isLoaded) {
+			if (fo_el_TTZMVAloosev1_noIso_branch != 0) {
+				fo_el_TTZMVAloosev1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_el_TTZMVAloosev1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			fo_el_TTZMVAloosev1_noIso_isLoaded = true;
+		}
+		return fo_el_TTZMVAloosev1_noIso_;
+	}
+	bool &	num_mu_TTZtightv1()
+	{
+		if (not num_mu_TTZtightv1_isLoaded) {
+			if (num_mu_TTZtightv1_branch != 0) {
+				num_mu_TTZtightv1_branch->GetEntry(index);
+			} else { 
+				printf("branch num_mu_TTZtightv1_branch does not exist!\n");
+				exit(1);
+			}
+			num_mu_TTZtightv1_isLoaded = true;
+		}
+		return num_mu_TTZtightv1_;
+	}
+	bool &	num_mu_TTZtightv1_noIso()
+	{
+		if (not num_mu_TTZtightv1_noIso_isLoaded) {
+			if (num_mu_TTZtightv1_noIso_branch != 0) {
+				num_mu_TTZtightv1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch num_mu_TTZtightv1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			num_mu_TTZtightv1_noIso_isLoaded = true;
+		}
+		return num_mu_TTZtightv1_noIso_;
+	}
+	bool &	fo_mu_TTZtightv1()
+	{
+		if (not fo_mu_TTZtightv1_isLoaded) {
+			if (fo_mu_TTZtightv1_branch != 0) {
+				fo_mu_TTZtightv1_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_mu_TTZtightv1_branch does not exist!\n");
+				exit(1);
+			}
+			fo_mu_TTZtightv1_isLoaded = true;
+		}
+		return fo_mu_TTZtightv1_;
+	}
+	bool &	fo_mu_TTZtightv1_noIso()
+	{
+		if (not fo_mu_TTZtightv1_noIso_isLoaded) {
+			if (fo_mu_TTZtightv1_noIso_branch != 0) {
+				fo_mu_TTZtightv1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_mu_TTZtightv1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			fo_mu_TTZtightv1_noIso_isLoaded = true;
+		}
+		return fo_mu_TTZtightv1_noIso_;
+	}
+	bool &	num_mu_TTZloosev1()
+	{
+		if (not num_mu_TTZloosev1_isLoaded) {
+			if (num_mu_TTZloosev1_branch != 0) {
+				num_mu_TTZloosev1_branch->GetEntry(index);
+			} else { 
+				printf("branch num_mu_TTZloosev1_branch does not exist!\n");
+				exit(1);
+			}
+			num_mu_TTZloosev1_isLoaded = true;
+		}
+		return num_mu_TTZloosev1_;
+	}
+	bool &	num_mu_TTZloosev1_noIso()
+	{
+		if (not num_mu_TTZloosev1_noIso_isLoaded) {
+			if (num_mu_TTZloosev1_noIso_branch != 0) {
+				num_mu_TTZloosev1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch num_mu_TTZloosev1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			num_mu_TTZloosev1_noIso_isLoaded = true;
+		}
+		return num_mu_TTZloosev1_noIso_;
+	}
+	bool &	fo_mu_TTZloosev1()
+	{
+		if (not fo_mu_TTZloosev1_isLoaded) {
+			if (fo_mu_TTZloosev1_branch != 0) {
+				fo_mu_TTZloosev1_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_mu_TTZloosev1_branch does not exist!\n");
+				exit(1);
+			}
+			fo_mu_TTZloosev1_isLoaded = true;
+		}
+		return fo_mu_TTZloosev1_;
+	}
+	bool &	fo_mu_TTZloosev1_noIso()
+	{
+		if (not fo_mu_TTZloosev1_noIso_isLoaded) {
+			if (fo_mu_TTZloosev1_noIso_branch != 0) {
+				fo_mu_TTZloosev1_noIso_branch->GetEntry(index);
+			} else { 
+				printf("branch fo_mu_TTZloosev1_noIso_branch does not exist!\n");
+				exit(1);
+			}
+			fo_mu_TTZloosev1_noIso_isLoaded = true;
+		}
+		return fo_mu_TTZloosev1_noIso_;
+	}
 	bool &	num_el_ssV6()
 	{
 		if (not num_el_ssV6_isLoaded) {
 			if (num_el_ssV6_branch != 0) {
 				num_el_ssV6_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_ssV6_branch does not exist!\n");
 				exit(1);
@@ -4735,8 +5041,6 @@ void LoadAllBranches()
 		if (not num_el_ssV6_noIso_isLoaded) {
 			if (num_el_ssV6_noIso_branch != 0) {
 				num_el_ssV6_noIso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_ssV6_noIso_branch does not exist!\n");
 				exit(1);
@@ -4750,8 +5054,6 @@ void LoadAllBranches()
 		if (not v1_el_ssV6_isLoaded) {
 			if (v1_el_ssV6_branch != 0) {
 				v1_el_ssV6_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v1_el_ssV6_branch does not exist!\n");
 				exit(1);
@@ -4765,8 +5067,6 @@ void LoadAllBranches()
 		if (not v2_el_ssV6_isLoaded) {
 			if (v2_el_ssV6_branch != 0) {
 				v2_el_ssV6_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v2_el_ssV6_branch does not exist!\n");
 				exit(1);
@@ -4780,8 +5080,6 @@ void LoadAllBranches()
 		if (not v3_el_ssV6_isLoaded) {
 			if (v3_el_ssV6_branch != 0) {
 				v3_el_ssV6_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v3_el_ssV6_branch does not exist!\n");
 				exit(1);
@@ -4795,8 +5093,6 @@ void LoadAllBranches()
 		if (not numNomSSv4_isLoaded) {
 			if (numNomSSv4_branch != 0) {
 				numNomSSv4_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch numNomSSv4_branch does not exist!\n");
 				exit(1);
@@ -4810,8 +5106,6 @@ void LoadAllBranches()
 		if (not numNomSSv4noIso_isLoaded) {
 			if (numNomSSv4noIso_branch != 0) {
 				numNomSSv4noIso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch numNomSSv4noIso_branch does not exist!\n");
 				exit(1);
@@ -4825,8 +5119,6 @@ void LoadAllBranches()
 		if (not fo_mussV4_04_isLoaded) {
 			if (fo_mussV4_04_branch != 0) {
 				fo_mussV4_04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mussV4_04_branch does not exist!\n");
 				exit(1);
@@ -4840,8 +5132,6 @@ void LoadAllBranches()
 		if (not fo_mussV4_noIso_isLoaded) {
 			if (fo_mussV4_noIso_branch != 0) {
 				fo_mussV4_noIso_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mussV4_noIso_branch does not exist!\n");
 				exit(1);
@@ -4855,8 +5145,6 @@ void LoadAllBranches()
 		if (not num_el_smurfV6_isLoaded) {
 			if (num_el_smurfV6_branch != 0) {
 				num_el_smurfV6_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_smurfV6_branch does not exist!\n");
 				exit(1);
@@ -4870,8 +5158,6 @@ void LoadAllBranches()
 		if (not num_el_smurfV6lh_isLoaded) {
 			if (num_el_smurfV6lh_branch != 0) {
 				num_el_smurfV6lh_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_smurfV6lh_branch does not exist!\n");
 				exit(1);
@@ -4885,8 +5171,6 @@ void LoadAllBranches()
 		if (not v1_el_smurfV1_isLoaded) {
 			if (v1_el_smurfV1_branch != 0) {
 				v1_el_smurfV1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v1_el_smurfV1_branch does not exist!\n");
 				exit(1);
@@ -4900,8 +5184,6 @@ void LoadAllBranches()
 		if (not v2_el_smurfV1_isLoaded) {
 			if (v2_el_smurfV1_branch != 0) {
 				v2_el_smurfV1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v2_el_smurfV1_branch does not exist!\n");
 				exit(1);
@@ -4915,8 +5197,6 @@ void LoadAllBranches()
 		if (not v3_el_smurfV1_isLoaded) {
 			if (v3_el_smurfV1_branch != 0) {
 				v3_el_smurfV1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v3_el_smurfV1_branch does not exist!\n");
 				exit(1);
@@ -4930,8 +5210,6 @@ void LoadAllBranches()
 		if (not v4_el_smurfV1_isLoaded) {
 			if (v4_el_smurfV1_branch != 0) {
 				v4_el_smurfV1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch v4_el_smurfV1_branch does not exist!\n");
 				exit(1);
@@ -4945,8 +5223,6 @@ void LoadAllBranches()
 		if (not num_mu_smurfV6_isLoaded) {
 			if (num_mu_smurfV6_branch != 0) {
 				num_mu_smurfV6_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_mu_smurfV6_branch does not exist!\n");
 				exit(1);
@@ -4960,8 +5236,6 @@ void LoadAllBranches()
 		if (not fo_mu_smurf_04_isLoaded) {
 			if (fo_mu_smurf_04_branch != 0) {
 				fo_mu_smurf_04_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mu_smurf_04_branch does not exist!\n");
 				exit(1);
@@ -4975,8 +5249,6 @@ void LoadAllBranches()
 		if (not fo_mu_smurf_10_isLoaded) {
 			if (fo_mu_smurf_10_branch != 0) {
 				fo_mu_smurf_10_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mu_smurf_10_branch does not exist!\n");
 				exit(1);
@@ -4990,8 +5262,6 @@ void LoadAllBranches()
 		if (not num_el_OSV2_isLoaded) {
 			if (num_el_OSV2_branch != 0) {
 				num_el_OSV2_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_OSV2_branch does not exist!\n");
 				exit(1);
@@ -5005,8 +5275,6 @@ void LoadAllBranches()
 		if (not num_mu_OSGV2_isLoaded) {
 			if (num_mu_OSGV2_branch != 0) {
 				num_mu_OSGV2_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_mu_OSGV2_branch does not exist!\n");
 				exit(1);
@@ -5020,8 +5288,6 @@ void LoadAllBranches()
 		if (not num_mu_OSZV2_isLoaded) {
 			if (num_mu_OSZV2_branch != 0) {
 				num_mu_OSZV2_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_mu_OSZV2_branch does not exist!\n");
 				exit(1);
@@ -5035,8 +5301,6 @@ void LoadAllBranches()
 		if (not fo_el_OSV2_isLoaded) {
 			if (fo_el_OSV2_branch != 0) {
 				fo_el_OSV2_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_el_OSV2_branch does not exist!\n");
 				exit(1);
@@ -5050,8 +5314,6 @@ void LoadAllBranches()
 		if (not fo_mu_OSGV2_isLoaded) {
 			if (fo_mu_OSGV2_branch != 0) {
 				fo_mu_OSGV2_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mu_OSGV2_branch does not exist!\n");
 				exit(1);
@@ -5065,8 +5327,6 @@ void LoadAllBranches()
 		if (not num_el_OSV3_isLoaded) {
 			if (num_el_OSV3_branch != 0) {
 				num_el_OSV3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_el_OSV3_branch does not exist!\n");
 				exit(1);
@@ -5080,8 +5340,6 @@ void LoadAllBranches()
 		if (not num_mu_OSGV3_isLoaded) {
 			if (num_mu_OSGV3_branch != 0) {
 				num_mu_OSGV3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch num_mu_OSGV3_branch does not exist!\n");
 				exit(1);
@@ -5095,8 +5353,6 @@ void LoadAllBranches()
 		if (not fo_el_OSV3_isLoaded) {
 			if (fo_el_OSV3_branch != 0) {
 				fo_el_OSV3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_el_OSV3_branch does not exist!\n");
 				exit(1);
@@ -5110,8 +5366,6 @@ void LoadAllBranches()
 		if (not fo_mu_OSGV3_isLoaded) {
 			if (fo_mu_OSGV3_branch != 0) {
 				fo_mu_OSGV3_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch fo_mu_OSGV3_branch does not exist!\n");
 				exit(1);
@@ -5125,8 +5379,6 @@ void LoadAllBranches()
 		if (not ele8_vstar_isLoaded) {
 			if (ele8_vstar_branch != 0) {
 				ele8_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_vstar_branch does not exist!\n");
 				exit(1);
@@ -5140,8 +5392,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdL_TrkIdVL_vstar_isLoaded) {
 			if (ele8_CaloIdL_TrkIdVL_vstar_branch != 0) {
 				ele8_CaloIdL_TrkIdVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdL_TrkIdVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5155,8 +5405,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdL_CaloIsoVL_Jet40_vstar_isLoaded) {
 			if (ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch != 0) {
 				ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch does not exist!\n");
 				exit(1);
@@ -5170,8 +5418,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				ele8_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5185,8 +5431,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_isLoaded) {
 			if (ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch != 0) {
 				ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5200,8 +5444,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
 			if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
 				ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5215,8 +5457,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
 			if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
 				ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5230,8 +5470,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_TrkIdVL_vstar_isLoaded) {
 			if (ele8_CaloIdT_TrkIdVL_vstar_branch != 0) {
 				ele8_CaloIdT_TrkIdVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_TrkIdVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5245,8 +5483,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_TrkIdVL_Jet30_vstar_isLoaded) {
 			if (ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch != 0) {
 				ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5260,8 +5496,6 @@ void LoadAllBranches()
 		if (not ele17_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (ele17_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				ele17_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele17_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5275,8 +5509,6 @@ void LoadAllBranches()
 		if (not ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
 			if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
 				ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5290,8 +5522,6 @@ void LoadAllBranches()
 		if (not ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
 			if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
 				ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5305,8 +5535,6 @@ void LoadAllBranches()
 		if (not photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5320,8 +5548,6 @@ void LoadAllBranches()
 		if (not ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded) {
 			if (ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch != 0) {
 				ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5335,8 +5561,6 @@ void LoadAllBranches()
 		if (not ele27_WP80_vstar_isLoaded) {
 			if (ele27_WP80_vstar_branch != 0) {
 				ele27_WP80_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele27_WP80_vstar_branch does not exist!\n");
 				exit(1);
@@ -5350,8 +5574,6 @@ void LoadAllBranches()
 		if (not ele8_version_isLoaded) {
 			if (ele8_version_branch != 0) {
 				ele8_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_version_branch does not exist!\n");
 				exit(1);
@@ -5365,8 +5587,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdL_TrkIdVL_version_isLoaded) {
 			if (ele8_CaloIdL_TrkIdVL_version_branch != 0) {
 				ele8_CaloIdL_TrkIdVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdL_TrkIdVL_version_branch does not exist!\n");
 				exit(1);
@@ -5380,8 +5600,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdL_CaloIsoVL_Jet40_version_isLoaded) {
 			if (ele8_CaloIdL_CaloIsoVL_Jet40_version_branch != 0) {
 				ele8_CaloIdL_CaloIsoVL_Jet40_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdL_CaloIsoVL_Jet40_version_branch does not exist!\n");
 				exit(1);
@@ -5395,8 +5613,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdL_CaloIsoVL_version_isLoaded) {
 			if (ele8_CaloIdL_CaloIsoVL_version_branch != 0) {
 				ele8_CaloIdL_CaloIsoVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdL_CaloIsoVL_version_branch does not exist!\n");
 				exit(1);
@@ -5410,8 +5626,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_isLoaded) {
 			if (ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch != 0) {
 				ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch does not exist!\n");
 				exit(1);
@@ -5425,8 +5639,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_isLoaded) {
 			if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch != 0) {
 				ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch does not exist!\n");
 				exit(1);
@@ -5440,8 +5652,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_isLoaded) {
 			if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch != 0) {
 				ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch does not exist!\n");
 				exit(1);
@@ -5455,8 +5665,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_TrkIdVL_version_isLoaded) {
 			if (ele8_CaloIdT_TrkIdVL_version_branch != 0) {
 				ele8_CaloIdT_TrkIdVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_TrkIdVL_version_branch does not exist!\n");
 				exit(1);
@@ -5470,8 +5678,6 @@ void LoadAllBranches()
 		if (not ele8_CaloIdT_TrkIdVL_Jet30_version_isLoaded) {
 			if (ele8_CaloIdT_TrkIdVL_Jet30_version_branch != 0) {
 				ele8_CaloIdT_TrkIdVL_Jet30_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele8_CaloIdT_TrkIdVL_Jet30_version_branch does not exist!\n");
 				exit(1);
@@ -5485,8 +5691,6 @@ void LoadAllBranches()
 		if (not ele17_CaloIdL_CaloIsoVL_version_isLoaded) {
 			if (ele17_CaloIdL_CaloIsoVL_version_branch != 0) {
 				ele17_CaloIdL_CaloIsoVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele17_CaloIdL_CaloIsoVL_version_branch does not exist!\n");
 				exit(1);
@@ -5500,8 +5704,6 @@ void LoadAllBranches()
 		if (not ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_isLoaded) {
 			if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch != 0) {
 				ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch does not exist!\n");
 				exit(1);
@@ -5515,8 +5717,6 @@ void LoadAllBranches()
 		if (not ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_isLoaded) {
 			if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch != 0) {
 				ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch does not exist!\n");
 				exit(1);
@@ -5530,8 +5730,6 @@ void LoadAllBranches()
 		if (not photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_isLoaded) {
 			if (photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch != 0) {
 				photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch does not exist!\n");
 				exit(1);
@@ -5545,8 +5743,6 @@ void LoadAllBranches()
 		if (not ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_isLoaded) {
 			if (ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch != 0) {
 				ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch does not exist!\n");
 				exit(1);
@@ -5560,8 +5756,6 @@ void LoadAllBranches()
 		if (not ele27_WP80_version_isLoaded) {
 			if (ele27_WP80_version_branch != 0) {
 				ele27_WP80_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ele27_WP80_version_branch does not exist!\n");
 				exit(1);
@@ -5575,8 +5769,6 @@ void LoadAllBranches()
 		if (not dr_ele8_vstar_isLoaded) {
 			if (dr_ele8_vstar_branch != 0) {
 				dr_ele8_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_vstar_branch does not exist!\n");
 				exit(1);
@@ -5590,8 +5782,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdL_TrkIdVL_vstar_isLoaded) {
 			if (dr_ele8_CaloIdL_TrkIdVL_vstar_branch != 0) {
 				dr_ele8_CaloIdL_TrkIdVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdL_TrkIdVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5605,8 +5795,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_isLoaded) {
 			if (dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch != 0) {
 				dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch does not exist!\n");
 				exit(1);
@@ -5620,8 +5808,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (dr_ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				dr_ele8_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5635,8 +5821,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_isLoaded) {
 			if (dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch != 0) {
 				dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5650,8 +5834,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
 			if (dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
 				dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5665,8 +5847,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
 			if (dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
 				dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5680,8 +5860,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdT_TrkIdVL_vstar_isLoaded) {
 			if (dr_ele8_CaloIdT_TrkIdVL_vstar_branch != 0) {
 				dr_ele8_CaloIdT_TrkIdVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdT_TrkIdVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5695,8 +5873,6 @@ void LoadAllBranches()
 		if (not dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_isLoaded) {
 			if (dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch != 0) {
 				dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5710,8 +5886,6 @@ void LoadAllBranches()
 		if (not dr_ele17_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (dr_ele17_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				dr_ele17_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele17_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5725,8 +5899,6 @@ void LoadAllBranches()
 		if (not dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
 			if (dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
 				dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5740,8 +5912,6 @@ void LoadAllBranches()
 		if (not dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
 			if (dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
 				dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5755,8 +5925,6 @@ void LoadAllBranches()
 		if (not dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5770,8 +5938,6 @@ void LoadAllBranches()
 		if (not dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded) {
 			if (dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch != 0) {
 				dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5785,8 +5951,6 @@ void LoadAllBranches()
 		if (not dr_ele27_WP80_vstar_isLoaded) {
 			if (dr_ele27_WP80_vstar_branch != 0) {
 				dr_ele27_WP80_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_ele27_WP80_vstar_branch does not exist!\n");
 				exit(1);
@@ -5800,8 +5964,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_vstar_isLoaded) {
 			if (hltps_ele8_vstar_branch != 0) {
 				hltps_ele8_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_vstar_branch does not exist!\n");
 				exit(1);
@@ -5815,8 +5977,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdL_TrkIdVL_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdL_TrkIdVL_vstar_branch != 0) {
 				hltps_ele8_CaloIdL_TrkIdVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdL_TrkIdVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5830,8 +5990,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch != 0) {
 				hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch does not exist!\n");
 				exit(1);
@@ -5845,8 +6003,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5860,8 +6016,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch != 0) {
 				hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5875,8 +6029,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
 				hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5890,8 +6042,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
 				hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5905,8 +6055,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdT_TrkIdVL_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdT_TrkIdVL_vstar_branch != 0) {
 				hltps_ele8_CaloIdT_TrkIdVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdT_TrkIdVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5920,8 +6068,6 @@ void LoadAllBranches()
 		if (not hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_isLoaded) {
 			if (hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch != 0) {
 				hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5935,8 +6081,6 @@ void LoadAllBranches()
 		if (not hltps_ele17_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5950,8 +6094,6 @@ void LoadAllBranches()
 		if (not hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
 			if (hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
 				hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5965,8 +6107,6 @@ void LoadAllBranches()
 		if (not hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
 			if (hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
 				hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -5980,8 +6120,6 @@ void LoadAllBranches()
 		if (not hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_isLoaded) {
 			if (hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) {
 				hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
 				exit(1);
@@ -5995,8 +6133,6 @@ void LoadAllBranches()
 		if (not hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded) {
 			if (hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch != 0) {
 				hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch does not exist!\n");
 				exit(1);
@@ -6010,8 +6146,6 @@ void LoadAllBranches()
 		if (not hltps_ele27_WP80_vstar_isLoaded) {
 			if (hltps_ele27_WP80_vstar_branch != 0) {
 				hltps_ele27_WP80_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_ele27_WP80_vstar_branch does not exist!\n");
 				exit(1);
@@ -6020,163 +6154,11 @@ void LoadAllBranches()
 		}
 		return hltps_ele27_WP80_vstar_;
 	}
-	int &l1ps_ele8_CaloIdL_CaloIsoVL_vstar()
-	{
-		if (not l1ps_ele8_CaloIdL_CaloIsoVL_vstar_isLoaded) {
-			if (l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch != 0) {
-				l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele8_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele8_CaloIdL_CaloIsoVL_vstar_isLoaded = true;
-		}
-		return l1ps_ele8_CaloIdL_CaloIsoVL_vstar_;
-	}
-	int &l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()
-	{
-		if (not l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
-			if (l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
-				l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded = true;
-		}
-		return l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_;
-	}
-	int &l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()
-	{
-		if (not l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
-			if (l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
-				l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded = true;
-		}
-		return l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_;
-	}
-	int &l1ps_ele8_CaloIdT_TrkIdVL_vstar()
-	{
-		if (not l1ps_ele8_CaloIdT_TrkIdVL_vstar_isLoaded) {
-			if (l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch != 0) {
-				l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele8_CaloIdT_TrkIdVL_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele8_CaloIdT_TrkIdVL_vstar_isLoaded = true;
-		}
-		return l1ps_ele8_CaloIdT_TrkIdVL_vstar_;
-	}
-	int &l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar()
-	{
-		if (not l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_isLoaded) {
-			if (l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch != 0) {
-				l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_isLoaded = true;
-		}
-		return l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_;
-	}
-	int &l1ps_ele17_CaloIdL_CaloIsoVL_vstar()
-	{
-		if (not l1ps_ele17_CaloIdL_CaloIsoVL_vstar_isLoaded) {
-			if (l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch != 0) {
-				l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele17_CaloIdL_CaloIsoVL_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele17_CaloIdL_CaloIsoVL_vstar_isLoaded = true;
-		}
-		return l1ps_ele17_CaloIdL_CaloIsoVL_vstar_;
-	}
-	int &l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()
-	{
-		if (not l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded) {
-			if (l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch != 0) {
-				l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_isLoaded = true;
-		}
-		return l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_;
-	}
-	int &l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()
-	{
-		if (not l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded) {
-			if (l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch != 0) {
-				l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_isLoaded = true;
-		}
-		return l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_;
-	}
-	int &l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar()
-	{
-		if (not l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded) {
-			if (l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch != 0) {
-				l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_isLoaded = true;
-		}
-		return l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_;
-	}
-	int &l1ps_ele27_WP80_vstar()
-	{
-		if (not l1ps_ele27_WP80_vstar_isLoaded) {
-			if (l1ps_ele27_WP80_vstar_branch != 0) {
-				l1ps_ele27_WP80_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_ele27_WP80_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_ele27_WP80_vstar_isLoaded = true;
-		}
-		return l1ps_ele27_WP80_vstar_;
-	}
 	int &mu3_vstar()
 	{
 		if (not mu3_vstar_isLoaded) {
 			if (mu3_vstar_branch != 0) {
 				mu3_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu3_vstar_branch does not exist!\n");
 				exit(1);
@@ -6190,8 +6172,6 @@ void LoadAllBranches()
 		if (not mu5_vstar_isLoaded) {
 			if (mu5_vstar_branch != 0) {
 				mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu5_vstar_branch does not exist!\n");
 				exit(1);
@@ -6205,8 +6185,6 @@ void LoadAllBranches()
 		if (not mu8_vstar_isLoaded) {
 			if (mu8_vstar_branch != 0) {
 				mu8_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu8_vstar_branch does not exist!\n");
 				exit(1);
@@ -6220,8 +6198,6 @@ void LoadAllBranches()
 		if (not mu12_vstar_isLoaded) {
 			if (mu12_vstar_branch != 0) {
 				mu12_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu12_vstar_branch does not exist!\n");
 				exit(1);
@@ -6235,8 +6211,6 @@ void LoadAllBranches()
 		if (not mu15_vstar_isLoaded) {
 			if (mu15_vstar_branch != 0) {
 				mu15_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu15_vstar_branch does not exist!\n");
 				exit(1);
@@ -6250,8 +6224,6 @@ void LoadAllBranches()
 		if (not mu17_vstar_isLoaded) {
 			if (mu17_vstar_branch != 0) {
 				mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu17_vstar_branch does not exist!\n");
 				exit(1);
@@ -6265,8 +6237,6 @@ void LoadAllBranches()
 		if (not mu20_vstar_isLoaded) {
 			if (mu20_vstar_branch != 0) {
 				mu20_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu20_vstar_branch does not exist!\n");
 				exit(1);
@@ -6280,8 +6250,6 @@ void LoadAllBranches()
 		if (not mu24_vstar_isLoaded) {
 			if (mu24_vstar_branch != 0) {
 				mu24_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu24_vstar_branch does not exist!\n");
 				exit(1);
@@ -6295,8 +6263,6 @@ void LoadAllBranches()
 		if (not mu30_vstar_isLoaded) {
 			if (mu30_vstar_branch != 0) {
 				mu30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu30_vstar_branch does not exist!\n");
 				exit(1);
@@ -6310,8 +6276,6 @@ void LoadAllBranches()
 		if (not mu15_eta2p1_vstar_isLoaded) {
 			if (mu15_eta2p1_vstar_branch != 0) {
 				mu15_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu15_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6325,8 +6289,6 @@ void LoadAllBranches()
 		if (not mu24_eta2p1_vstar_isLoaded) {
 			if (mu24_eta2p1_vstar_branch != 0) {
 				mu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu24_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6340,8 +6302,6 @@ void LoadAllBranches()
 		if (not mu30_eta2p1_vstar_isLoaded) {
 			if (mu30_eta2p1_vstar_branch != 0) {
 				mu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu30_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6355,8 +6315,6 @@ void LoadAllBranches()
 		if (not mu8_Jet40_vstar_isLoaded) {
 			if (mu8_Jet40_vstar_branch != 0) {
 				mu8_Jet40_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu8_Jet40_vstar_branch does not exist!\n");
 				exit(1);
@@ -6370,8 +6328,6 @@ void LoadAllBranches()
 		if (not isoMu20_eta2p1_vstar_isLoaded) {
 			if (isoMu20_eta2p1_vstar_branch != 0) {
 				isoMu20_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch isoMu20_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6385,8 +6341,6 @@ void LoadAllBranches()
 		if (not isoMu24_eta2p1_vstar_isLoaded) {
 			if (isoMu24_eta2p1_vstar_branch != 0) {
 				isoMu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch isoMu24_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6400,8 +6354,6 @@ void LoadAllBranches()
 		if (not isoMu30_eta2p1_vstar_isLoaded) {
 			if (isoMu30_eta2p1_vstar_branch != 0) {
 				isoMu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch isoMu30_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6415,8 +6367,6 @@ void LoadAllBranches()
 		if (not relIso1p0Mu17_vstar_isLoaded) {
 			if (relIso1p0Mu17_vstar_branch != 0) {
 				relIso1p0Mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch relIso1p0Mu17_vstar_branch does not exist!\n");
 				exit(1);
@@ -6425,13 +6375,24 @@ void LoadAllBranches()
 		}
 		return relIso1p0Mu17_vstar_;
 	}
+	int &relIso1p0Mu20_vstar()
+	{
+		if (not relIso1p0Mu20_vstar_isLoaded) {
+			if (relIso1p0Mu20_vstar_branch != 0) {
+				relIso1p0Mu20_vstar_branch->GetEntry(index);
+			} else { 
+				printf("branch relIso1p0Mu20_vstar_branch does not exist!\n");
+				exit(1);
+			}
+			relIso1p0Mu20_vstar_isLoaded = true;
+		}
+		return relIso1p0Mu20_vstar_;
+	}
 	int &relIso1p0Mu5_vstar()
 	{
 		if (not relIso1p0Mu5_vstar_isLoaded) {
 			if (relIso1p0Mu5_vstar_branch != 0) {
 				relIso1p0Mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch relIso1p0Mu5_vstar_branch does not exist!\n");
 				exit(1);
@@ -6445,8 +6406,6 @@ void LoadAllBranches()
 		if (not mu3_version_isLoaded) {
 			if (mu3_version_branch != 0) {
 				mu3_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu3_version_branch does not exist!\n");
 				exit(1);
@@ -6460,8 +6419,6 @@ void LoadAllBranches()
 		if (not mu5_version_isLoaded) {
 			if (mu5_version_branch != 0) {
 				mu5_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu5_version_branch does not exist!\n");
 				exit(1);
@@ -6475,8 +6432,6 @@ void LoadAllBranches()
 		if (not mu8_version_isLoaded) {
 			if (mu8_version_branch != 0) {
 				mu8_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu8_version_branch does not exist!\n");
 				exit(1);
@@ -6490,8 +6445,6 @@ void LoadAllBranches()
 		if (not mu12_version_isLoaded) {
 			if (mu12_version_branch != 0) {
 				mu12_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu12_version_branch does not exist!\n");
 				exit(1);
@@ -6505,8 +6458,6 @@ void LoadAllBranches()
 		if (not mu15_version_isLoaded) {
 			if (mu15_version_branch != 0) {
 				mu15_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu15_version_branch does not exist!\n");
 				exit(1);
@@ -6520,8 +6471,6 @@ void LoadAllBranches()
 		if (not mu17_version_isLoaded) {
 			if (mu17_version_branch != 0) {
 				mu17_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu17_version_branch does not exist!\n");
 				exit(1);
@@ -6535,8 +6484,6 @@ void LoadAllBranches()
 		if (not mu20_version_isLoaded) {
 			if (mu20_version_branch != 0) {
 				mu20_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu20_version_branch does not exist!\n");
 				exit(1);
@@ -6550,8 +6497,6 @@ void LoadAllBranches()
 		if (not mu24_version_isLoaded) {
 			if (mu24_version_branch != 0) {
 				mu24_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu24_version_branch does not exist!\n");
 				exit(1);
@@ -6565,8 +6510,6 @@ void LoadAllBranches()
 		if (not mu30_version_isLoaded) {
 			if (mu30_version_branch != 0) {
 				mu30_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu30_version_branch does not exist!\n");
 				exit(1);
@@ -6580,8 +6523,6 @@ void LoadAllBranches()
 		if (not mu15_eta2p1_version_isLoaded) {
 			if (mu15_eta2p1_version_branch != 0) {
 				mu15_eta2p1_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu15_eta2p1_version_branch does not exist!\n");
 				exit(1);
@@ -6595,8 +6536,6 @@ void LoadAllBranches()
 		if (not mu24_eta2p1_version_isLoaded) {
 			if (mu24_eta2p1_version_branch != 0) {
 				mu24_eta2p1_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu24_eta2p1_version_branch does not exist!\n");
 				exit(1);
@@ -6610,8 +6549,6 @@ void LoadAllBranches()
 		if (not mu30_eta2p1_version_isLoaded) {
 			if (mu30_eta2p1_version_branch != 0) {
 				mu30_eta2p1_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu30_eta2p1_version_branch does not exist!\n");
 				exit(1);
@@ -6625,8 +6562,6 @@ void LoadAllBranches()
 		if (not mu8_Jet40_version_isLoaded) {
 			if (mu8_Jet40_version_branch != 0) {
 				mu8_Jet40_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch mu8_Jet40_version_branch does not exist!\n");
 				exit(1);
@@ -6640,8 +6575,6 @@ void LoadAllBranches()
 		if (not isoMu20_eta2p1_version_isLoaded) {
 			if (isoMu20_eta2p1_version_branch != 0) {
 				isoMu20_eta2p1_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch isoMu20_eta2p1_version_branch does not exist!\n");
 				exit(1);
@@ -6655,8 +6588,6 @@ void LoadAllBranches()
 		if (not isoMu24_eta2p1_version_isLoaded) {
 			if (isoMu24_eta2p1_version_branch != 0) {
 				isoMu24_eta2p1_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch isoMu24_eta2p1_version_branch does not exist!\n");
 				exit(1);
@@ -6670,8 +6601,6 @@ void LoadAllBranches()
 		if (not isoMu30_eta2p1_version_isLoaded) {
 			if (isoMu30_eta2p1_version_branch != 0) {
 				isoMu30_eta2p1_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch isoMu30_eta2p1_version_branch does not exist!\n");
 				exit(1);
@@ -6685,8 +6614,6 @@ void LoadAllBranches()
 		if (not relIso1p0Mu17_version_isLoaded) {
 			if (relIso1p0Mu17_version_branch != 0) {
 				relIso1p0Mu17_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch relIso1p0Mu17_version_branch does not exist!\n");
 				exit(1);
@@ -6695,13 +6622,24 @@ void LoadAllBranches()
 		}
 		return relIso1p0Mu17_version_;
 	}
+	int &relIso1p0Mu20_version()
+	{
+		if (not relIso1p0Mu20_version_isLoaded) {
+			if (relIso1p0Mu20_version_branch != 0) {
+				relIso1p0Mu20_version_branch->GetEntry(index);
+			} else { 
+				printf("branch relIso1p0Mu20_version_branch does not exist!\n");
+				exit(1);
+			}
+			relIso1p0Mu20_version_isLoaded = true;
+		}
+		return relIso1p0Mu20_version_;
+	}
 	int &relIso1p0Mu5_version()
 	{
 		if (not relIso1p0Mu5_version_isLoaded) {
 			if (relIso1p0Mu5_version_branch != 0) {
 				relIso1p0Mu5_version_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch relIso1p0Mu5_version_branch does not exist!\n");
 				exit(1);
@@ -6715,8 +6653,6 @@ void LoadAllBranches()
 		if (not dr_mu3_vstar_isLoaded) {
 			if (dr_mu3_vstar_branch != 0) {
 				dr_mu3_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu3_vstar_branch does not exist!\n");
 				exit(1);
@@ -6730,8 +6666,6 @@ void LoadAllBranches()
 		if (not dr_mu5_vstar_isLoaded) {
 			if (dr_mu5_vstar_branch != 0) {
 				dr_mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu5_vstar_branch does not exist!\n");
 				exit(1);
@@ -6745,8 +6679,6 @@ void LoadAllBranches()
 		if (not dr_mu8_vstar_isLoaded) {
 			if (dr_mu8_vstar_branch != 0) {
 				dr_mu8_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu8_vstar_branch does not exist!\n");
 				exit(1);
@@ -6760,8 +6692,6 @@ void LoadAllBranches()
 		if (not dr_mu12_vstar_isLoaded) {
 			if (dr_mu12_vstar_branch != 0) {
 				dr_mu12_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu12_vstar_branch does not exist!\n");
 				exit(1);
@@ -6775,8 +6705,6 @@ void LoadAllBranches()
 		if (not dr_mu15_vstar_isLoaded) {
 			if (dr_mu15_vstar_branch != 0) {
 				dr_mu15_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu15_vstar_branch does not exist!\n");
 				exit(1);
@@ -6790,8 +6718,6 @@ void LoadAllBranches()
 		if (not dr_mu17_vstar_isLoaded) {
 			if (dr_mu17_vstar_branch != 0) {
 				dr_mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu17_vstar_branch does not exist!\n");
 				exit(1);
@@ -6805,8 +6731,6 @@ void LoadAllBranches()
 		if (not dr_mu20_vstar_isLoaded) {
 			if (dr_mu20_vstar_branch != 0) {
 				dr_mu20_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu20_vstar_branch does not exist!\n");
 				exit(1);
@@ -6820,8 +6744,6 @@ void LoadAllBranches()
 		if (not dr_mu24_vstar_isLoaded) {
 			if (dr_mu24_vstar_branch != 0) {
 				dr_mu24_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu24_vstar_branch does not exist!\n");
 				exit(1);
@@ -6835,8 +6757,6 @@ void LoadAllBranches()
 		if (not dr_mu30_vstar_isLoaded) {
 			if (dr_mu30_vstar_branch != 0) {
 				dr_mu30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu30_vstar_branch does not exist!\n");
 				exit(1);
@@ -6850,8 +6770,6 @@ void LoadAllBranches()
 		if (not dr_mu15_eta2p1_vstar_isLoaded) {
 			if (dr_mu15_eta2p1_vstar_branch != 0) {
 				dr_mu15_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu15_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6865,8 +6783,6 @@ void LoadAllBranches()
 		if (not dr_mu24_eta2p1_vstar_isLoaded) {
 			if (dr_mu24_eta2p1_vstar_branch != 0) {
 				dr_mu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu24_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6880,8 +6796,6 @@ void LoadAllBranches()
 		if (not dr_mu30_eta2p1_vstar_isLoaded) {
 			if (dr_mu30_eta2p1_vstar_branch != 0) {
 				dr_mu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu30_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6895,8 +6809,6 @@ void LoadAllBranches()
 		if (not dr_mu8_Jet40_vstar_isLoaded) {
 			if (dr_mu8_Jet40_vstar_branch != 0) {
 				dr_mu8_Jet40_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_mu8_Jet40_vstar_branch does not exist!\n");
 				exit(1);
@@ -6910,8 +6822,6 @@ void LoadAllBranches()
 		if (not dr_isoMu20_eta2p1_vstar_isLoaded) {
 			if (dr_isoMu20_eta2p1_vstar_branch != 0) {
 				dr_isoMu20_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_isoMu20_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6925,8 +6835,6 @@ void LoadAllBranches()
 		if (not dr_isoMu24_eta2p1_vstar_isLoaded) {
 			if (dr_isoMu24_eta2p1_vstar_branch != 0) {
 				dr_isoMu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_isoMu24_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6940,8 +6848,6 @@ void LoadAllBranches()
 		if (not dr_isoMu30_eta2p1_vstar_isLoaded) {
 			if (dr_isoMu30_eta2p1_vstar_branch != 0) {
 				dr_isoMu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_isoMu30_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -6955,8 +6861,6 @@ void LoadAllBranches()
 		if (not dr_relIso1p0Mu17_vstar_isLoaded) {
 			if (dr_relIso1p0Mu17_vstar_branch != 0) {
 				dr_relIso1p0Mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_relIso1p0Mu17_vstar_branch does not exist!\n");
 				exit(1);
@@ -6965,13 +6869,24 @@ void LoadAllBranches()
 		}
 		return dr_relIso1p0Mu17_vstar_;
 	}
+	float &dr_relIso1p0Mu20_vstar()
+	{
+		if (not dr_relIso1p0Mu20_vstar_isLoaded) {
+			if (dr_relIso1p0Mu20_vstar_branch != 0) {
+				dr_relIso1p0Mu20_vstar_branch->GetEntry(index);
+			} else { 
+				printf("branch dr_relIso1p0Mu20_vstar_branch does not exist!\n");
+				exit(1);
+			}
+			dr_relIso1p0Mu20_vstar_isLoaded = true;
+		}
+		return dr_relIso1p0Mu20_vstar_;
+	}
 	float &dr_relIso1p0Mu5_vstar()
 	{
 		if (not dr_relIso1p0Mu5_vstar_isLoaded) {
 			if (dr_relIso1p0Mu5_vstar_branch != 0) {
 				dr_relIso1p0Mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dr_relIso1p0Mu5_vstar_branch does not exist!\n");
 				exit(1);
@@ -6985,8 +6900,6 @@ void LoadAllBranches()
 		if (not hltps_mu3_vstar_isLoaded) {
 			if (hltps_mu3_vstar_branch != 0) {
 				hltps_mu3_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu3_vstar_branch does not exist!\n");
 				exit(1);
@@ -7000,8 +6913,6 @@ void LoadAllBranches()
 		if (not hltps_mu5_vstar_isLoaded) {
 			if (hltps_mu5_vstar_branch != 0) {
 				hltps_mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu5_vstar_branch does not exist!\n");
 				exit(1);
@@ -7015,8 +6926,6 @@ void LoadAllBranches()
 		if (not hltps_mu8_vstar_isLoaded) {
 			if (hltps_mu8_vstar_branch != 0) {
 				hltps_mu8_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu8_vstar_branch does not exist!\n");
 				exit(1);
@@ -7030,8 +6939,6 @@ void LoadAllBranches()
 		if (not hltps_mu12_vstar_isLoaded) {
 			if (hltps_mu12_vstar_branch != 0) {
 				hltps_mu12_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu12_vstar_branch does not exist!\n");
 				exit(1);
@@ -7045,8 +6952,6 @@ void LoadAllBranches()
 		if (not hltps_mu15_vstar_isLoaded) {
 			if (hltps_mu15_vstar_branch != 0) {
 				hltps_mu15_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu15_vstar_branch does not exist!\n");
 				exit(1);
@@ -7060,8 +6965,6 @@ void LoadAllBranches()
 		if (not hltps_mu17_vstar_isLoaded) {
 			if (hltps_mu17_vstar_branch != 0) {
 				hltps_mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu17_vstar_branch does not exist!\n");
 				exit(1);
@@ -7075,8 +6978,6 @@ void LoadAllBranches()
 		if (not hltps_mu20_vstar_isLoaded) {
 			if (hltps_mu20_vstar_branch != 0) {
 				hltps_mu20_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu20_vstar_branch does not exist!\n");
 				exit(1);
@@ -7090,8 +6991,6 @@ void LoadAllBranches()
 		if (not hltps_mu24_vstar_isLoaded) {
 			if (hltps_mu24_vstar_branch != 0) {
 				hltps_mu24_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu24_vstar_branch does not exist!\n");
 				exit(1);
@@ -7105,8 +7004,6 @@ void LoadAllBranches()
 		if (not hltps_mu30_vstar_isLoaded) {
 			if (hltps_mu30_vstar_branch != 0) {
 				hltps_mu30_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu30_vstar_branch does not exist!\n");
 				exit(1);
@@ -7120,8 +7017,6 @@ void LoadAllBranches()
 		if (not hltps_mu15_eta2p1_vstar_isLoaded) {
 			if (hltps_mu15_eta2p1_vstar_branch != 0) {
 				hltps_mu15_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu15_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -7135,8 +7030,6 @@ void LoadAllBranches()
 		if (not hltps_mu24_eta2p1_vstar_isLoaded) {
 			if (hltps_mu24_eta2p1_vstar_branch != 0) {
 				hltps_mu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu24_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -7150,8 +7043,6 @@ void LoadAllBranches()
 		if (not hltps_mu30_eta2p1_vstar_isLoaded) {
 			if (hltps_mu30_eta2p1_vstar_branch != 0) {
 				hltps_mu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu30_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -7165,8 +7056,6 @@ void LoadAllBranches()
 		if (not hltps_mu8_Jet40_vstar_isLoaded) {
 			if (hltps_mu8_Jet40_vstar_branch != 0) {
 				hltps_mu8_Jet40_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_mu8_Jet40_vstar_branch does not exist!\n");
 				exit(1);
@@ -7180,8 +7069,6 @@ void LoadAllBranches()
 		if (not hltps_isoMu20_eta2p1_vstar_isLoaded) {
 			if (hltps_isoMu20_eta2p1_vstar_branch != 0) {
 				hltps_isoMu20_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_isoMu20_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -7195,8 +7082,6 @@ void LoadAllBranches()
 		if (not hltps_isoMu24_eta2p1_vstar_isLoaded) {
 			if (hltps_isoMu24_eta2p1_vstar_branch != 0) {
 				hltps_isoMu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_isoMu24_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -7210,8 +7095,6 @@ void LoadAllBranches()
 		if (not hltps_isoMu30_eta2p1_vstar_isLoaded) {
 			if (hltps_isoMu30_eta2p1_vstar_branch != 0) {
 				hltps_isoMu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_isoMu30_eta2p1_vstar_branch does not exist!\n");
 				exit(1);
@@ -7225,8 +7108,6 @@ void LoadAllBranches()
 		if (not hltps_relIso1p0Mu17_vstar_isLoaded) {
 			if (hltps_relIso1p0Mu17_vstar_branch != 0) {
 				hltps_relIso1p0Mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_relIso1p0Mu17_vstar_branch does not exist!\n");
 				exit(1);
@@ -7235,13 +7116,24 @@ void LoadAllBranches()
 		}
 		return hltps_relIso1p0Mu17_vstar_;
 	}
+	int &hltps_relIso1p0Mu20_vstar()
+	{
+		if (not hltps_relIso1p0Mu20_vstar_isLoaded) {
+			if (hltps_relIso1p0Mu20_vstar_branch != 0) {
+				hltps_relIso1p0Mu20_vstar_branch->GetEntry(index);
+			} else { 
+				printf("branch hltps_relIso1p0Mu20_vstar_branch does not exist!\n");
+				exit(1);
+			}
+			hltps_relIso1p0Mu20_vstar_isLoaded = true;
+		}
+		return hltps_relIso1p0Mu20_vstar_;
+	}
 	int &hltps_relIso1p0Mu5_vstar()
 	{
 		if (not hltps_relIso1p0Mu5_vstar_isLoaded) {
 			if (hltps_relIso1p0Mu5_vstar_branch != 0) {
 				hltps_relIso1p0Mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch hltps_relIso1p0Mu5_vstar_branch does not exist!\n");
 				exit(1);
@@ -7250,253 +7142,11 @@ void LoadAllBranches()
 		}
 		return hltps_relIso1p0Mu5_vstar_;
 	}
-	int &l1ps_mu5_vstar()
-	{
-		if (not l1ps_mu5_vstar_isLoaded) {
-			if (l1ps_mu5_vstar_branch != 0) {
-				l1ps_mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_mu5_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_mu5_vstar_isLoaded = true;
-		}
-		return l1ps_mu5_vstar_;
-	}
-	int &l1ps_mu8_vstar()
-	{
-		if (not l1ps_mu8_vstar_isLoaded) {
-			if (l1ps_mu8_vstar_branch != 0) {
-				l1ps_mu8_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_mu8_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_mu8_vstar_isLoaded = true;
-		}
-		return l1ps_mu8_vstar_;
-	}
-	int &l1ps_mu12_vstar()
-	{
-		if (not l1ps_mu12_vstar_isLoaded) {
-			if (l1ps_mu12_vstar_branch != 0) {
-				l1ps_mu12_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_mu12_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_mu12_vstar_isLoaded = true;
-		}
-		return l1ps_mu12_vstar_;
-	}
-	int &l1ps_mu17_vstar()
-	{
-		if (not l1ps_mu17_vstar_isLoaded) {
-			if (l1ps_mu17_vstar_branch != 0) {
-				l1ps_mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_mu17_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_mu17_vstar_isLoaded = true;
-		}
-		return l1ps_mu17_vstar_;
-	}
-	int &l1ps_mu15_eta2p1_vstar()
-	{
-		if (not l1ps_mu15_eta2p1_vstar_isLoaded) {
-			if (l1ps_mu15_eta2p1_vstar_branch != 0) {
-				l1ps_mu15_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_mu15_eta2p1_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_mu15_eta2p1_vstar_isLoaded = true;
-		}
-		return l1ps_mu15_eta2p1_vstar_;
-	}
-	int &l1ps_mu24_eta2p1_vstar()
-	{
-		if (not l1ps_mu24_eta2p1_vstar_isLoaded) {
-			if (l1ps_mu24_eta2p1_vstar_branch != 0) {
-				l1ps_mu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_mu24_eta2p1_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_mu24_eta2p1_vstar_isLoaded = true;
-		}
-		return l1ps_mu24_eta2p1_vstar_;
-	}
-	int &l1ps_mu30_eta2p1_vstar()
-	{
-		if (not l1ps_mu30_eta2p1_vstar_isLoaded) {
-			if (l1ps_mu30_eta2p1_vstar_branch != 0) {
-				l1ps_mu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_mu30_eta2p1_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_mu30_eta2p1_vstar_isLoaded = true;
-		}
-		return l1ps_mu30_eta2p1_vstar_;
-	}
-	int &l1ps_isoMu20_eta2p1_vstar()
-	{
-		if (not l1ps_isoMu20_eta2p1_vstar_isLoaded) {
-			if (l1ps_isoMu20_eta2p1_vstar_branch != 0) {
-				l1ps_isoMu20_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_isoMu20_eta2p1_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_isoMu20_eta2p1_vstar_isLoaded = true;
-		}
-		return l1ps_isoMu20_eta2p1_vstar_;
-	}
-	int &l1ps_isoMu24_eta2p1_vstar()
-	{
-		if (not l1ps_isoMu24_eta2p1_vstar_isLoaded) {
-			if (l1ps_isoMu24_eta2p1_vstar_branch != 0) {
-				l1ps_isoMu24_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_isoMu24_eta2p1_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_isoMu24_eta2p1_vstar_isLoaded = true;
-		}
-		return l1ps_isoMu24_eta2p1_vstar_;
-	}
-	int &l1ps_isoMu30_eta2p1_vstar()
-	{
-		if (not l1ps_isoMu30_eta2p1_vstar_isLoaded) {
-			if (l1ps_isoMu30_eta2p1_vstar_branch != 0) {
-				l1ps_isoMu30_eta2p1_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_isoMu30_eta2p1_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_isoMu30_eta2p1_vstar_isLoaded = true;
-		}
-		return l1ps_isoMu30_eta2p1_vstar_;
-	}
-	int &l1ps_relIso1p0Mu17_vstar()
-	{
-		if (not l1ps_relIso1p0Mu17_vstar_isLoaded) {
-			if (l1ps_relIso1p0Mu17_vstar_branch != 0) {
-				l1ps_relIso1p0Mu17_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_relIso1p0Mu17_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_relIso1p0Mu17_vstar_isLoaded = true;
-		}
-		return l1ps_relIso1p0Mu17_vstar_;
-	}
-	int &l1ps_relIso1p0Mu5_vstar()
-	{
-		if (not l1ps_relIso1p0Mu5_vstar_isLoaded) {
-			if (l1ps_relIso1p0Mu5_vstar_branch != 0) {
-				l1ps_relIso1p0Mu5_vstar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch l1ps_relIso1p0Mu5_vstar_branch does not exist!\n");
-				exit(1);
-			}
-			l1ps_relIso1p0Mu5_vstar_isLoaded = true;
-		}
-		return l1ps_relIso1p0Mu5_vstar_;
-	}
-	float &ptj1()
-	{
-		if (not ptj1_isLoaded) {
-			if (ptj1_branch != 0) {
-				ptj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch ptj1_branch does not exist!\n");
-				exit(1);
-			}
-			ptj1_isLoaded = true;
-		}
-		return ptj1_;
-	}
-	int &nj1()
-	{
-		if (not nj1_isLoaded) {
-			if (nj1_branch != 0) {
-				nj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch nj1_branch does not exist!\n");
-				exit(1);
-			}
-			nj1_isLoaded = true;
-		}
-		return nj1_;
-	}
-	float &ptj1_b2b()
-	{
-		if (not ptj1_b2b_isLoaded) {
-			if (ptj1_b2b_branch != 0) {
-				ptj1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch ptj1_b2b_branch does not exist!\n");
-				exit(1);
-			}
-			ptj1_b2b_isLoaded = true;
-		}
-		return ptj1_b2b_;
-	}
-	float &dphij1_b2b()
-	{
-		if (not dphij1_b2b_isLoaded) {
-			if (dphij1_b2b_branch != 0) {
-				dphij1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch dphij1_b2b_branch does not exist!\n");
-				exit(1);
-			}
-			dphij1_b2b_isLoaded = true;
-		}
-		return dphij1_b2b_;
-	}
 	float &ptpfj1()
 	{
 		if (not ptpfj1_isLoaded) {
 			if (ptpfj1_branch != 0) {
 				ptpfj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfj1_branch does not exist!\n");
 				exit(1);
@@ -7510,8 +7160,6 @@ void LoadAllBranches()
 		if (not npfj1_isLoaded) {
 			if (npfj1_branch != 0) {
 				npfj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfj1_branch does not exist!\n");
 				exit(1);
@@ -7525,8 +7173,6 @@ void LoadAllBranches()
 		if (not ptpfj1_b2b_isLoaded) {
 			if (ptpfj1_b2b_branch != 0) {
 				ptpfj1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfj1_b2b_branch does not exist!\n");
 				exit(1);
@@ -7540,8 +7186,6 @@ void LoadAllBranches()
 		if (not dphipfj1_b2b_isLoaded) {
 			if (dphipfj1_b2b_branch != 0) {
 				dphipfj1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphipfj1_b2b_branch does not exist!\n");
 				exit(1);
@@ -7555,8 +7199,6 @@ void LoadAllBranches()
 		if (not ptpfcj1_isLoaded) {
 			if (ptpfcj1_branch != 0) {
 				ptpfcj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfcj1_branch does not exist!\n");
 				exit(1);
@@ -7570,8 +7212,6 @@ void LoadAllBranches()
 		if (not npfcj1_isLoaded) {
 			if (npfcj1_branch != 0) {
 				npfcj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfcj1_branch does not exist!\n");
 				exit(1);
@@ -7585,8 +7225,6 @@ void LoadAllBranches()
 		if (not ptpfcj1_b2b_isLoaded) {
 			if (ptpfcj1_b2b_branch != 0) {
 				ptpfcj1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfcj1_b2b_branch does not exist!\n");
 				exit(1);
@@ -7600,8 +7238,6 @@ void LoadAllBranches()
 		if (not dphipfcj1_b2b_isLoaded) {
 			if (dphipfcj1_b2b_branch != 0) {
 				dphipfcj1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphipfcj1_b2b_branch does not exist!\n");
 				exit(1);
@@ -7615,8 +7251,6 @@ void LoadAllBranches()
 		if (not btagpfc_isLoaded) {
 			if (btagpfc_branch != 0) {
 				btagpfc_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch btagpfc_branch does not exist!\n");
 				exit(1);
@@ -7630,8 +7264,6 @@ void LoadAllBranches()
 		if (not emfpfcL1Fj1_isLoaded) {
 			if (emfpfcL1Fj1_branch != 0) {
 				emfpfcL1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch emfpfcL1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7645,8 +7277,6 @@ void LoadAllBranches()
 		if (not ptpfcL1Fj1_isLoaded) {
 			if (ptpfcL1Fj1_branch != 0) {
 				ptpfcL1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfcL1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7660,8 +7290,6 @@ void LoadAllBranches()
 		if (not dphipfcL1Fj1_isLoaded) {
 			if (dphipfcL1Fj1_branch != 0) {
 				dphipfcL1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphipfcL1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7675,8 +7303,6 @@ void LoadAllBranches()
 		if (not npfcL1Fj1_isLoaded) {
 			if (npfcL1Fj1_branch != 0) {
 				npfcL1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfcL1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7690,8 +7316,6 @@ void LoadAllBranches()
 		if (not npfc30L1Fj1_isLoaded) {
 			if (npfc30L1Fj1_branch != 0) {
 				npfc30L1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfc30L1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7705,8 +7329,6 @@ void LoadAllBranches()
 		if (not npfc40L1Fj1_isLoaded) {
 			if (npfc40L1Fj1_branch != 0) {
 				npfc40L1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfc40L1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7720,8 +7342,6 @@ void LoadAllBranches()
 		if (not ptpfcL1Fj1_b2b_isLoaded) {
 			if (ptpfcL1Fj1_b2b_branch != 0) {
 				ptpfcL1Fj1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfcL1Fj1_b2b_branch does not exist!\n");
 				exit(1);
@@ -7735,8 +7355,6 @@ void LoadAllBranches()
 		if (not dphipfcL1Fj1_b2b_isLoaded) {
 			if (dphipfcL1Fj1_b2b_branch != 0) {
 				dphipfcL1Fj1_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphipfcL1Fj1_b2b_branch does not exist!\n");
 				exit(1);
@@ -7750,8 +7368,6 @@ void LoadAllBranches()
 		if (not btagpfcL1F_isLoaded) {
 			if (btagpfcL1F_branch != 0) {
 				btagpfcL1F_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch btagpfcL1F_branch does not exist!\n");
 				exit(1);
@@ -7760,13 +7376,24 @@ void LoadAllBranches()
 		}
 		return btagpfcL1F_;
 	}
+	int &npfc50L1Fj1_eth()
+	{
+		if (not npfc50L1Fj1_eth_isLoaded) {
+			if (npfc50L1Fj1_eth_branch != 0) {
+				npfc50L1Fj1_eth_branch->GetEntry(index);
+			} else { 
+				printf("branch npfc50L1Fj1_eth_branch does not exist!\n");
+				exit(1);
+			}
+			npfc50L1Fj1_eth_isLoaded = true;
+		}
+		return npfc50L1Fj1_eth_;
+	}
 	float &emfpfcL1Fj1res()
 	{
 		if (not emfpfcL1Fj1res_isLoaded) {
 			if (emfpfcL1Fj1res_branch != 0) {
 				emfpfcL1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch emfpfcL1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7780,8 +7407,6 @@ void LoadAllBranches()
 		if (not ptpfcL1Fj1res_isLoaded) {
 			if (ptpfcL1Fj1res_branch != 0) {
 				ptpfcL1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfcL1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7795,8 +7420,6 @@ void LoadAllBranches()
 		if (not dphipfcL1Fj1res_isLoaded) {
 			if (dphipfcL1Fj1res_branch != 0) {
 				dphipfcL1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphipfcL1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7810,8 +7433,6 @@ void LoadAllBranches()
 		if (not npfcL1Fj1res_isLoaded) {
 			if (npfcL1Fj1res_branch != 0) {
 				npfcL1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfcL1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7825,8 +7446,6 @@ void LoadAllBranches()
 		if (not npfc30L1Fj1res_isLoaded) {
 			if (npfc30L1Fj1res_branch != 0) {
 				npfc30L1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfc30L1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7840,8 +7459,6 @@ void LoadAllBranches()
 		if (not npfc40L1Fj1res_isLoaded) {
 			if (npfc40L1Fj1res_branch != 0) {
 				npfc40L1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch npfc40L1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7855,8 +7472,6 @@ void LoadAllBranches()
 		if (not ptpfcL1Fj1res_b2b_isLoaded) {
 			if (ptpfcL1Fj1res_b2b_branch != 0) {
 				ptpfcL1Fj1res_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptpfcL1Fj1res_b2b_branch does not exist!\n");
 				exit(1);
@@ -7870,8 +7485,6 @@ void LoadAllBranches()
 		if (not dphipfcL1Fj1res_b2b_isLoaded) {
 			if (dphipfcL1Fj1res_b2b_branch != 0) {
 				dphipfcL1Fj1res_b2b_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphipfcL1Fj1res_b2b_branch does not exist!\n");
 				exit(1);
@@ -7885,8 +7498,6 @@ void LoadAllBranches()
 		if (not btagpfcL1Fres_isLoaded) {
 			if (btagpfcL1Fres_branch != 0) {
 				btagpfcL1Fres_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch btagpfcL1Fres_branch does not exist!\n");
 				exit(1);
@@ -7895,13 +7506,24 @@ void LoadAllBranches()
 		}
 		return btagpfcL1Fres_;
 	}
+	int &npfc50L1Fj1res_eth()
+	{
+		if (not npfc50L1Fj1res_eth_isLoaded) {
+			if (npfc50L1Fj1res_eth_branch != 0) {
+				npfc50L1Fj1res_eth_branch->GetEntry(index);
+			} else { 
+				printf("branch npfc50L1Fj1res_eth_branch does not exist!\n");
+				exit(1);
+			}
+			npfc50L1Fj1res_eth_isLoaded = true;
+		}
+		return npfc50L1Fj1res_eth_;
+	}
 	float &ptbtagpfcL1Fj1()
 	{
 		if (not ptbtagpfcL1Fj1_isLoaded) {
 			if (ptbtagpfcL1Fj1_branch != 0) {
 				ptbtagpfcL1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptbtagpfcL1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7915,8 +7537,6 @@ void LoadAllBranches()
 		if (not dphibtagpfcL1Fj1_isLoaded) {
 			if (dphibtagpfcL1Fj1_branch != 0) {
 				dphibtagpfcL1Fj1_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphibtagpfcL1Fj1_branch does not exist!\n");
 				exit(1);
@@ -7930,8 +7550,6 @@ void LoadAllBranches()
 		if (not ptbtagpfcL1Fj1res_isLoaded) {
 			if (ptbtagpfcL1Fj1res_branch != 0) {
 				ptbtagpfcL1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch ptbtagpfcL1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7945,8 +7563,6 @@ void LoadAllBranches()
 		if (not dphibtagpfcL1Fj1res_isLoaded) {
 			if (dphibtagpfcL1Fj1res_branch != 0) {
 				dphibtagpfcL1Fj1res_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dphibtagpfcL1Fj1res_branch does not exist!\n");
 				exit(1);
@@ -7955,58 +7571,11 @@ void LoadAllBranches()
 		}
 		return dphibtagpfcL1Fj1res_;
 	}
-	int &nbjet()
-	{
-		if (not nbjet_isLoaded) {
-			if (nbjet_branch != 0) {
-				nbjet_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch nbjet_branch does not exist!\n");
-				exit(1);
-			}
-			nbjet_isLoaded = true;
-		}
-		return nbjet_;
-	}
-	float &dRNear()
-	{
-		if (not dRNear_isLoaded) {
-			if (dRNear_branch != 0) {
-				dRNear_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch dRNear_branch does not exist!\n");
-				exit(1);
-			}
-			dRNear_isLoaded = true;
-		}
-		return dRNear_;
-	}
-	float &dRFar()
-	{
-		if (not dRFar_isLoaded) {
-			if (dRFar_branch != 0) {
-				dRFar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
-			} else { 
-				printf("branch dRFar_branch does not exist!\n");
-				exit(1);
-			}
-			dRFar_isLoaded = true;
-		}
-		return dRFar_;
-	}
 	int &nbpfcjet()
 	{
 		if (not nbpfcjet_isLoaded) {
 			if (nbpfcjet_branch != 0) {
 				nbpfcjet_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch nbpfcjet_branch does not exist!\n");
 				exit(1);
@@ -8020,8 +7589,6 @@ void LoadAllBranches()
 		if (not dRpfcNear_isLoaded) {
 			if (dRpfcNear_branch != 0) {
 				dRpfcNear_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dRpfcNear_branch does not exist!\n");
 				exit(1);
@@ -8035,8 +7602,6 @@ void LoadAllBranches()
 		if (not dRpfcFar_isLoaded) {
 			if (dRpfcFar_branch != 0) {
 				dRpfcFar_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch dRpfcFar_branch does not exist!\n");
 				exit(1);
@@ -8050,8 +7615,6 @@ void LoadAllBranches()
 		if (not rho_isLoaded) {
 			if (rho_branch != 0) {
 				rho_branch->GetEntry(index);
-				#ifdef PARANOIA
-				#endif // #ifdef PARANOIA
 			} else { 
 				printf("branch rho_branch does not exist!\n");
 				exit(1);
@@ -8092,12 +7655,19 @@ namespace frb {
 	int &ls();
 	unsigned int &evt();
 	float &weight();
+	bool &is_real_data();
+	TString &dataset();
+	TString &filename();
 	int &pu_nPUvertices();
 	int &evt_nvtxs();
 	int &nFOels();
 	int &nFOmus();
 	int &ngsfs();
 	int &nmus();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4();
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &fomu_p4();
 	int &foel_id();
 	int &fomu_id();
 	float &foel_mass();
@@ -8159,8 +7729,6 @@ namespace frb {
 	int &els_exp_innerlayers();
 	float &d0PV_wwV1();
 	float &dzPV_wwV1();
-	float &ht_calo();
-	float &ht_calo_L2L3();
 	float &ht_pf();
 	float &ht_pf_L2L3();
 	float &ht_pf_L1FastL2L3();
@@ -8171,6 +7739,9 @@ namespace frb {
 	float &mc3dr();
 	int &leptonIsFromW();
 	bool &mu_isCosmic();
+	float &mu_ecal_veto_dep();
+	float &mu_hcal_veto_dep();
+	float &mu_nchi2();
 	float &mz_fo_gsf();
 	float &mz_gsf_iso();
 	float &mz_fo_ctf();
@@ -8186,6 +7757,30 @@ namespace frb {
 	bool &num_mu_ssV5_noIso();
 	bool &fo_mu_ssV5();
 	bool &fo_mu_ssV5_noIso();
+	bool &num_el_TTZcuttightv1();
+	bool &num_el_TTZcuttightv1_noIso();
+	bool &fo_el_TTZcuttightv1();
+	bool &fo_el_TTZcuttightv1_noIso();
+	bool &num_el_TTZcutloosev1();
+	bool &num_el_TTZcutloosev1_noIso();
+	bool &fo_el_TTZcutloosev1();
+	bool &fo_el_TTZcutloosev1_noIso();
+	bool &num_el_TTZMVAtightv1();
+	bool &num_el_TTZMVAtightv1_noIso();
+	bool &fo_el_TTZMVAtightv1();
+	bool &fo_el_TTZMVAtightv1_noIso();
+	bool &num_el_TTZMVAloosev1();
+	bool &num_el_TTZMVAloosev1_noIso();
+	bool &fo_el_TTZMVAloosev1();
+	bool &fo_el_TTZMVAloosev1_noIso();
+	bool &num_mu_TTZtightv1();
+	bool &num_mu_TTZtightv1_noIso();
+	bool &fo_mu_TTZtightv1();
+	bool &fo_mu_TTZtightv1_noIso();
+	bool &num_mu_TTZloosev1();
+	bool &num_mu_TTZloosev1_noIso();
+	bool &fo_mu_TTZloosev1();
+	bool &fo_mu_TTZloosev1_noIso();
 	bool &num_el_ssV6();
 	bool &num_el_ssV6_noIso();
 	bool &v1_el_ssV6();
@@ -8273,16 +7868,6 @@ namespace frb {
 	int &hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar();
 	int &hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar();
 	int &hltps_ele27_WP80_vstar();
-	int &l1ps_ele8_CaloIdL_CaloIsoVL_vstar();
-	int &l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar();
-	int &l1ps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar();
-	int &l1ps_ele8_CaloIdT_TrkIdVL_vstar();
-	int &l1ps_ele8_CaloIdT_TrkIdVL_Jet30_vstar();
-	int &l1ps_ele17_CaloIdL_CaloIsoVL_vstar();
-	int &l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar();
-	int &l1ps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar();
-	int &l1ps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar();
-	int &l1ps_ele27_WP80_vstar();
 	int &mu3_vstar();
 	int &mu5_vstar();
 	int &mu8_vstar();
@@ -8300,6 +7885,7 @@ namespace frb {
 	int &isoMu24_eta2p1_vstar();
 	int &isoMu30_eta2p1_vstar();
 	int &relIso1p0Mu17_vstar();
+	int &relIso1p0Mu20_vstar();
 	int &relIso1p0Mu5_vstar();
 	int &mu3_version();
 	int &mu5_version();
@@ -8318,6 +7904,7 @@ namespace frb {
 	int &isoMu24_eta2p1_version();
 	int &isoMu30_eta2p1_version();
 	int &relIso1p0Mu17_version();
+	int &relIso1p0Mu20_version();
 	int &relIso1p0Mu5_version();
 	float &dr_mu3_vstar();
 	float &dr_mu5_vstar();
@@ -8336,6 +7923,7 @@ namespace frb {
 	float &dr_isoMu24_eta2p1_vstar();
 	float &dr_isoMu30_eta2p1_vstar();
 	float &dr_relIso1p0Mu17_vstar();
+	float &dr_relIso1p0Mu20_vstar();
 	float &dr_relIso1p0Mu5_vstar();
 	int &hltps_mu3_vstar();
 	int &hltps_mu5_vstar();
@@ -8354,23 +7942,8 @@ namespace frb {
 	int &hltps_isoMu24_eta2p1_vstar();
 	int &hltps_isoMu30_eta2p1_vstar();
 	int &hltps_relIso1p0Mu17_vstar();
+	int &hltps_relIso1p0Mu20_vstar();
 	int &hltps_relIso1p0Mu5_vstar();
-	int &l1ps_mu5_vstar();
-	int &l1ps_mu8_vstar();
-	int &l1ps_mu12_vstar();
-	int &l1ps_mu17_vstar();
-	int &l1ps_mu15_eta2p1_vstar();
-	int &l1ps_mu24_eta2p1_vstar();
-	int &l1ps_mu30_eta2p1_vstar();
-	int &l1ps_isoMu20_eta2p1_vstar();
-	int &l1ps_isoMu24_eta2p1_vstar();
-	int &l1ps_isoMu30_eta2p1_vstar();
-	int &l1ps_relIso1p0Mu17_vstar();
-	int &l1ps_relIso1p0Mu5_vstar();
-	float &ptj1();
-	int &nj1();
-	float &ptj1_b2b();
-	float &dphij1_b2b();
 	float &ptpfj1();
 	int &npfj1();
 	float &ptpfj1_b2b();
@@ -8389,6 +7962,7 @@ namespace frb {
 	float &ptpfcL1Fj1_b2b();
 	float &dphipfcL1Fj1_b2b();
 	bool &btagpfcL1F();
+	int &npfc50L1Fj1_eth();
 	float &emfpfcL1Fj1res();
 	float &ptpfcL1Fj1res();
 	float &dphipfcL1Fj1res();
@@ -8398,13 +7972,11 @@ namespace frb {
 	float &ptpfcL1Fj1res_b2b();
 	float &dphipfcL1Fj1res_b2b();
 	bool &btagpfcL1Fres();
+	int &npfc50L1Fj1res_eth();
 	float &ptbtagpfcL1Fj1();
 	float &dphibtagpfcL1Fj1();
 	float &ptbtagpfcL1Fj1res();
 	float &dphibtagpfcL1Fj1res();
-	int &nbjet();
-	float &dRNear();
-	float &dRFar();
 	int &nbpfcjet();
 	float &dRpfcNear();
 	float &dRpfcFar();
