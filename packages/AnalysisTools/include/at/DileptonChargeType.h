@@ -10,10 +10,10 @@ namespace at
 	{
 		enum value_type
 		{
-			SS,  // opposite sign
+			SS,  // same sign
 			SF,  // single fake
 			DF,  // double fake
-			OS,  // same sign
+			OS,  // opposite sign
 			static_size
 		};
 	};

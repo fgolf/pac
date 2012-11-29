@@ -34,10 +34,10 @@ libraries   := $(call add-path,$(project_lib),$(libraries))
 rootdict    := $(call lib-to-rootdict,$(libraries),$(object_dir)) 
 sources     += $(rootdict)
 
-vpath %.h $(include_dir)
+vpath %.h  $(include_dir)
 vpath %.cc $(source_dir)
-vpath %.o   $(object_dir)
-vpath %.d   $(dep_dir)
+vpath %.o  $(object_dir)
+vpath %.d  $(dep_dir)
 
 CPPFLAGS    += $(addprefix -I,$(sort $(include_dir)))
 

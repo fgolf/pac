@@ -1012,43 +1012,58 @@ void Init(TTree *tree) {
 	lp4_branch = 0;
 	if (tree->GetBranch("lp4") != 0) {
 		lp4_branch = tree->GetBranch("lp4");
-		lp4_branch->SetAddress(&lp4_);
+		if (lp4_branch) {lp4_branch->SetAddress(&lp4_);}
 	}
 	mc3p4_branch = 0;
 	if (tree->GetBranch("mc3p4") != 0) {
 		mc3p4_branch = tree->GetBranch("mc3p4");
-		mc3p4_branch->SetAddress(&mc3p4_);
+		if (mc3p4_branch) {mc3p4_branch->SetAddress(&mc3p4_);}
 	}
 	foel_p4_branch = 0;
 	if (tree->GetBranch("foel_p4") != 0) {
 		foel_p4_branch = tree->GetBranch("foel_p4");
-		foel_p4_branch->SetAddress(&foel_p4_);
+		if (foel_p4_branch) {foel_p4_branch->SetAddress(&foel_p4_);}
 	}
 	fomu_p4_branch = 0;
 	if (tree->GetBranch("fomu_p4") != 0) {
 		fomu_p4_branch = tree->GetBranch("fomu_p4");
-		fomu_p4_branch->SetAddress(&fomu_p4_);
+		if (fomu_p4_branch) {fomu_p4_branch->SetAddress(&fomu_p4_);}
 	}
   tree->SetMakeClass(1);
 	run_branch = 0;
 	if (tree->GetBranch("run") != 0) {
 		run_branch = tree->GetBranch("run");
-		run_branch->SetAddress(&run_);
+		if (run_branch) {run_branch->SetAddress(&run_);}
 	}
 	ls_branch = 0;
 	if (tree->GetBranch("ls") != 0) {
 		ls_branch = tree->GetBranch("ls");
-		ls_branch->SetAddress(&ls_);
+		if (ls_branch) {ls_branch->SetAddress(&ls_);}
 	}
 	evt_branch = 0;
 	if (tree->GetBranch("evt") != 0) {
 		evt_branch = tree->GetBranch("evt");
-		evt_branch->SetAddress(&evt_);
+		if (evt_branch) {evt_branch->SetAddress(&evt_);}
 	}
 	weight_branch = 0;
 	if (tree->GetBranch("weight") != 0) {
 		weight_branch = tree->GetBranch("weight");
-		weight_branch->SetAddress(&weight_);
+		if (weight_branch) {weight_branch->SetAddress(&weight_);}
+	}
+	is_real_data_branch = 0;
+	if (tree->GetBranch("is_real_data") != 0) {
+		is_real_data_branch = tree->GetBranch("is_real_data");
+		if (is_real_data_branch) {is_real_data_branch->SetAddress(&is_real_data_);}
+	}
+	dataset_branch = 0;
+	if (tree->GetBranch("dataset") != 0) {
+		dataset_branch = tree->GetBranch("dataset");
+		if (dataset_branch) {dataset_branch->SetAddress(&dataset_);}
+	}
+	filename_branch = 0;
+	if (tree->GetBranch("filename") != 0) {
+		filename_branch = tree->GetBranch("filename");
+		if (filename_branch) {filename_branch->SetAddress(&filename_);}
 	}
 	is_real_data_branch = 0;
 	if (tree->GetBranch("is_real_data") != 0) {
@@ -1068,387 +1083,402 @@ void Init(TTree *tree) {
 	pu_nPUvertices_branch = 0;
 	if (tree->GetBranch("pu_nPUvertices") != 0) {
 		pu_nPUvertices_branch = tree->GetBranch("pu_nPUvertices");
-		pu_nPUvertices_branch->SetAddress(&pu_nPUvertices_);
+		if (pu_nPUvertices_branch) {pu_nPUvertices_branch->SetAddress(&pu_nPUvertices_);}
 	}
 	evt_nvtxs_branch = 0;
 	if (tree->GetBranch("evt_nvtxs") != 0) {
 		evt_nvtxs_branch = tree->GetBranch("evt_nvtxs");
-		evt_nvtxs_branch->SetAddress(&evt_nvtxs_);
+		if (evt_nvtxs_branch) {evt_nvtxs_branch->SetAddress(&evt_nvtxs_);}
 	}
 	nFOels_branch = 0;
 	if (tree->GetBranch("nFOels") != 0) {
 		nFOels_branch = tree->GetBranch("nFOels");
-		nFOels_branch->SetAddress(&nFOels_);
+		if (nFOels_branch) {nFOels_branch->SetAddress(&nFOels_);}
 	}
 	nFOmus_branch = 0;
 	if (tree->GetBranch("nFOmus") != 0) {
 		nFOmus_branch = tree->GetBranch("nFOmus");
-		nFOmus_branch->SetAddress(&nFOmus_);
+		if (nFOmus_branch) {nFOmus_branch->SetAddress(&nFOmus_);}
 	}
 	ngsfs_branch = 0;
 	if (tree->GetBranch("ngsfs") != 0) {
 		ngsfs_branch = tree->GetBranch("ngsfs");
-		ngsfs_branch->SetAddress(&ngsfs_);
+		if (ngsfs_branch) {ngsfs_branch->SetAddress(&ngsfs_);}
 	}
 	nmus_branch = 0;
 	if (tree->GetBranch("nmus") != 0) {
 		nmus_branch = tree->GetBranch("nmus");
-		nmus_branch->SetAddress(&nmus_);
+		if (nmus_branch) {nmus_branch->SetAddress(&nmus_);}
 	}
 	foel_id_branch = 0;
 	if (tree->GetBranch("foel_id") != 0) {
 		foel_id_branch = tree->GetBranch("foel_id");
-		foel_id_branch->SetAddress(&foel_id_);
+		if (foel_id_branch) {foel_id_branch->SetAddress(&foel_id_);}
 	}
 	fomu_id_branch = 0;
 	if (tree->GetBranch("fomu_id") != 0) {
 		fomu_id_branch = tree->GetBranch("fomu_id");
-		fomu_id_branch->SetAddress(&fomu_id_);
+		if (fomu_id_branch) {fomu_id_branch->SetAddress(&fomu_id_);}
 	}
 	foel_mass_branch = 0;
 	if (tree->GetBranch("foel_mass") != 0) {
 		foel_mass_branch = tree->GetBranch("foel_mass");
-		foel_mass_branch->SetAddress(&foel_mass_);
+		if (foel_mass_branch) {foel_mass_branch->SetAddress(&foel_mass_);}
 	}
 	fomu_mass_branch = 0;
 	if (tree->GetBranch("fomu_mass") != 0) {
 		fomu_mass_branch = tree->GetBranch("fomu_mass");
-		fomu_mass_branch->SetAddress(&fomu_mass_);
+		if (fomu_mass_branch) {fomu_mass_branch->SetAddress(&fomu_mass_);}
 	}
 	pt_branch = 0;
 	if (tree->GetBranch("pt") != 0) {
 		pt_branch = tree->GetBranch("pt");
-		pt_branch->SetAddress(&pt_);
+		if (pt_branch) {pt_branch->SetAddress(&pt_);}
 	}
 	eta_branch = 0;
 	if (tree->GetBranch("eta") != 0) {
 		eta_branch = tree->GetBranch("eta");
-		eta_branch->SetAddress(&eta_);
+		if (eta_branch) {eta_branch->SetAddress(&eta_);}
 	}
 	sceta_branch = 0;
 	if (tree->GetBranch("sceta") != 0) {
 		sceta_branch = tree->GetBranch("sceta");
-		sceta_branch->SetAddress(&sceta_);
+		if (sceta_branch) {sceta_branch->SetAddress(&sceta_);}
 	}
 	phi_branch = 0;
 	if (tree->GetBranch("phi") != 0) {
 		phi_branch = tree->GetBranch("phi");
-		phi_branch->SetAddress(&phi_);
+		if (phi_branch) {phi_branch->SetAddress(&phi_);}
 	}
 	scet_branch = 0;
 	if (tree->GetBranch("scet") != 0) {
 		scet_branch = tree->GetBranch("scet");
-		scet_branch->SetAddress(&scet_);
+		if (scet_branch) {scet_branch->SetAddress(&scet_);}
 	}
 	hoe_branch = 0;
 	if (tree->GetBranch("hoe") != 0) {
 		hoe_branch = tree->GetBranch("hoe");
-		hoe_branch->SetAddress(&hoe_);
+		if (hoe_branch) {hoe_branch->SetAddress(&hoe_);}
 	}
 	pfmet_branch = 0;
 	if (tree->GetBranch("pfmet") != 0) {
 		pfmet_branch = tree->GetBranch("pfmet");
-		pfmet_branch->SetAddress(&pfmet_);
+		if (pfmet_branch) {pfmet_branch->SetAddress(&pfmet_);}
 	}
 	pfmetphi_branch = 0;
 	if (tree->GetBranch("pfmetphi") != 0) {
 		pfmetphi_branch = tree->GetBranch("pfmetphi");
-		pfmetphi_branch->SetAddress(&pfmetphi_);
+		if (pfmetphi_branch) {pfmetphi_branch->SetAddress(&pfmetphi_);}
 	}
 	iso_branch = 0;
 	if (tree->GetBranch("iso") != 0) {
 		iso_branch = tree->GetBranch("iso");
-		iso_branch->SetAddress(&iso_);
+		if (iso_branch) {iso_branch->SetAddress(&iso_);}
 	}
 	iso_nps_branch = 0;
 	if (tree->GetBranch("iso_nps") != 0) {
 		iso_nps_branch = tree->GetBranch("iso_nps");
-		iso_nps_branch->SetAddress(&iso_nps_);
+		if (iso_nps_branch) {iso_nps_branch->SetAddress(&iso_nps_);}
 	}
 	trck_iso_branch = 0;
 	if (tree->GetBranch("trck_iso") != 0) {
 		trck_iso_branch = tree->GetBranch("trck_iso");
-		trck_iso_branch->SetAddress(&trck_iso_);
+		if (trck_iso_branch) {trck_iso_branch->SetAddress(&trck_iso_);}
 	}
 	ecal_iso_branch = 0;
 	if (tree->GetBranch("ecal_iso") != 0) {
 		ecal_iso_branch = tree->GetBranch("ecal_iso");
-		ecal_iso_branch->SetAddress(&ecal_iso_);
+		if (ecal_iso_branch) {ecal_iso_branch->SetAddress(&ecal_iso_);}
 	}
 	ecal_iso_nps_branch = 0;
 	if (tree->GetBranch("ecal_iso_nps") != 0) {
 		ecal_iso_nps_branch = tree->GetBranch("ecal_iso_nps");
-		ecal_iso_nps_branch->SetAddress(&ecal_iso_nps_);
+		if (ecal_iso_nps_branch) {ecal_iso_nps_branch->SetAddress(&ecal_iso_nps_);}
 	}
 	hcal_iso_branch = 0;
 	if (tree->GetBranch("hcal_iso") != 0) {
 		hcal_iso_branch = tree->GetBranch("hcal_iso");
-		hcal_iso_branch->SetAddress(&hcal_iso_);
+		if (hcal_iso_branch) {hcal_iso_branch->SetAddress(&hcal_iso_);}
 	}
 	pfiso03_branch = 0;
 	if (tree->GetBranch("pfiso03") != 0) {
 		pfiso03_branch = tree->GetBranch("pfiso03");
-		pfiso03_branch->SetAddress(&pfiso03_);
+		if (pfiso03_branch) {pfiso03_branch->SetAddress(&pfiso03_);}
 	}
 	ch_pfiso03_branch = 0;
 	if (tree->GetBranch("ch_pfiso03") != 0) {
 		ch_pfiso03_branch = tree->GetBranch("ch_pfiso03");
-		ch_pfiso03_branch->SetAddress(&ch_pfiso03_);
+		if (ch_pfiso03_branch) {ch_pfiso03_branch->SetAddress(&ch_pfiso03_);}
 	}
 	nh_pfiso03_branch = 0;
 	if (tree->GetBranch("nh_pfiso03") != 0) {
 		nh_pfiso03_branch = tree->GetBranch("nh_pfiso03");
-		nh_pfiso03_branch->SetAddress(&nh_pfiso03_);
+		if (nh_pfiso03_branch) {nh_pfiso03_branch->SetAddress(&nh_pfiso03_);}
 	}
 	em_pfiso03_branch = 0;
 	if (tree->GetBranch("em_pfiso03") != 0) {
 		em_pfiso03_branch = tree->GetBranch("em_pfiso03");
-		em_pfiso03_branch->SetAddress(&em_pfiso03_);
+		if (em_pfiso03_branch) {em_pfiso03_branch->SetAddress(&em_pfiso03_);}
 	}
 	pfiso04_branch = 0;
 	if (tree->GetBranch("pfiso04") != 0) {
 		pfiso04_branch = tree->GetBranch("pfiso04");
-		pfiso04_branch->SetAddress(&pfiso04_);
+		if (pfiso04_branch) {pfiso04_branch->SetAddress(&pfiso04_);}
 	}
 	ch_pfiso04_branch = 0;
 	if (tree->GetBranch("ch_pfiso04") != 0) {
 		ch_pfiso04_branch = tree->GetBranch("ch_pfiso04");
-		ch_pfiso04_branch->SetAddress(&ch_pfiso04_);
+		if (ch_pfiso04_branch) {ch_pfiso04_branch->SetAddress(&ch_pfiso04_);}
 	}
 	nh_pfiso04_branch = 0;
 	if (tree->GetBranch("nh_pfiso04") != 0) {
 		nh_pfiso04_branch = tree->GetBranch("nh_pfiso04");
-		nh_pfiso04_branch->SetAddress(&nh_pfiso04_);
+		if (nh_pfiso04_branch) {nh_pfiso04_branch->SetAddress(&nh_pfiso04_);}
 	}
 	em_pfiso04_branch = 0;
 	if (tree->GetBranch("em_pfiso04") != 0) {
 		em_pfiso04_branch = tree->GetBranch("em_pfiso04");
-		em_pfiso04_branch->SetAddress(&em_pfiso04_);
+		if (em_pfiso04_branch) {em_pfiso04_branch->SetAddress(&em_pfiso04_);}
 	}
 	pfpupt03_branch = 0;
 	if (tree->GetBranch("pfpupt03") != 0) {
 		pfpupt03_branch = tree->GetBranch("pfpupt03");
-		pfpupt03_branch->SetAddress(&pfpupt03_);
+		if (pfpupt03_branch) {pfpupt03_branch->SetAddress(&pfpupt03_);}
 	}
 	pfpupt04_branch = 0;
 	if (tree->GetBranch("pfpupt04") != 0) {
 		pfpupt04_branch = tree->GetBranch("pfpupt04");
-		pfpupt04_branch->SetAddress(&pfpupt04_);
+		if (pfpupt04_branch) {pfpupt04_branch->SetAddress(&pfpupt04_);}
 	}
 	cpfiso03_rho_branch = 0;
 	if (tree->GetBranch("cpfiso03_rho") != 0) {
 		cpfiso03_rho_branch = tree->GetBranch("cpfiso03_rho");
-		cpfiso03_rho_branch->SetAddress(&cpfiso03_rho_);
+		if (cpfiso03_rho_branch) {cpfiso03_rho_branch->SetAddress(&cpfiso03_rho_);}
 	}
 	cpfiso03_db_branch = 0;
 	if (tree->GetBranch("cpfiso03_db") != 0) {
 		cpfiso03_db_branch = tree->GetBranch("cpfiso03_db");
-		cpfiso03_db_branch->SetAddress(&cpfiso03_db_);
+		if (cpfiso03_db_branch) {cpfiso03_db_branch->SetAddress(&cpfiso03_db_);}
 	}
 	id_branch = 0;
 	if (tree->GetBranch("id") != 0) {
 		id_branch = tree->GetBranch("id");
-		id_branch->SetAddress(&id_);
+		if (id_branch) {id_branch->SetAddress(&id_);}
 	}
 	closestMuon_branch = 0;
 	if (tree->GetBranch("closestMuon") != 0) {
 		closestMuon_branch = tree->GetBranch("closestMuon");
-		closestMuon_branch->SetAddress(&closestMuon_);
+		if (closestMuon_branch) {closestMuon_branch->SetAddress(&closestMuon_);}
 	}
 	el_id_sieie_branch = 0;
 	if (tree->GetBranch("el_id_sieie") != 0) {
 		el_id_sieie_branch = tree->GetBranch("el_id_sieie");
-		el_id_sieie_branch->SetAddress(&el_id_sieie_);
+		if (el_id_sieie_branch) {el_id_sieie_branch->SetAddress(&el_id_sieie_);}
 	}
 	el_id_detain_branch = 0;
 	if (tree->GetBranch("el_id_detain") != 0) {
 		el_id_detain_branch = tree->GetBranch("el_id_detain");
-		el_id_detain_branch->SetAddress(&el_id_detain_);
+		if (el_id_detain_branch) {el_id_detain_branch->SetAddress(&el_id_detain_);}
 	}
 	el_id_dphiin_branch = 0;
 	if (tree->GetBranch("el_id_dphiin") != 0) {
 		el_id_dphiin_branch = tree->GetBranch("el_id_dphiin");
-		el_id_dphiin_branch->SetAddress(&el_id_dphiin_);
+		if (el_id_dphiin_branch) {el_id_dphiin_branch->SetAddress(&el_id_dphiin_);}
 	}
 	el_id_smurfV5_branch = 0;
 	if (tree->GetBranch("el_id_smurfV5") != 0) {
 		el_id_smurfV5_branch = tree->GetBranch("el_id_smurfV5");
-		el_id_smurfV5_branch->SetAddress(&el_id_smurfV5_);
+		if (el_id_smurfV5_branch) {el_id_smurfV5_branch->SetAddress(&el_id_smurfV5_);}
 	}
 	el_id_vbtf80_branch = 0;
 	if (tree->GetBranch("el_id_vbtf80") != 0) {
 		el_id_vbtf80_branch = tree->GetBranch("el_id_vbtf80");
-		el_id_vbtf80_branch->SetAddress(&el_id_vbtf80_);
+		if (el_id_vbtf80_branch) {el_id_vbtf80_branch->SetAddress(&el_id_vbtf80_);}
 	}
 	el_id_vbtf90_branch = 0;
 	if (tree->GetBranch("el_id_vbtf90") != 0) {
 		el_id_vbtf90_branch = tree->GetBranch("el_id_vbtf90");
-		el_id_vbtf90_branch->SetAddress(&el_id_vbtf90_);
+		if (el_id_vbtf90_branch) {el_id_vbtf90_branch->SetAddress(&el_id_vbtf90_);}
 	}
 	el_effarea_branch = 0;
 	if (tree->GetBranch("el_effarea") != 0) {
 		el_effarea_branch = tree->GetBranch("el_effarea");
-		el_effarea_branch->SetAddress(&el_effarea_);
+		if (el_effarea_branch) {el_effarea_branch->SetAddress(&el_effarea_);}
 	}
 	mu_effarea03_branch = 0;
 	if (tree->GetBranch("mu_effarea03") != 0) {
 		mu_effarea03_branch = tree->GetBranch("mu_effarea03");
-		mu_effarea03_branch->SetAddress(&mu_effarea03_);
+		if (mu_effarea03_branch) {mu_effarea03_branch->SetAddress(&mu_effarea03_);}
 	}
 	mu_nh_effarea03_branch = 0;
 	if (tree->GetBranch("mu_nh_effarea03") != 0) {
 		mu_nh_effarea03_branch = tree->GetBranch("mu_nh_effarea03");
-		mu_nh_effarea03_branch->SetAddress(&mu_nh_effarea03_);
+		if (mu_nh_effarea03_branch) {mu_nh_effarea03_branch->SetAddress(&mu_nh_effarea03_);}
 	}
 	mu_em_effarea03_branch = 0;
 	if (tree->GetBranch("mu_em_effarea03") != 0) {
 		mu_em_effarea03_branch = tree->GetBranch("mu_em_effarea03");
-		mu_em_effarea03_branch->SetAddress(&mu_em_effarea03_);
+		if (mu_em_effarea03_branch) {mu_em_effarea03_branch->SetAddress(&mu_em_effarea03_);}
 	}
 	mu_effarea03_tight_branch = 0;
 	if (tree->GetBranch("mu_effarea03_tight") != 0) {
 		mu_effarea03_tight_branch = tree->GetBranch("mu_effarea03_tight");
-		mu_effarea03_tight_branch->SetAddress(&mu_effarea03_tight_);
+		if (mu_effarea03_tight_branch) {mu_effarea03_tight_branch->SetAddress(&mu_effarea03_tight_);}
 	}
 	mu_nh_effarea03_tight_branch = 0;
 	if (tree->GetBranch("mu_nh_effarea03_tight") != 0) {
 		mu_nh_effarea03_tight_branch = tree->GetBranch("mu_nh_effarea03_tight");
-		mu_nh_effarea03_tight_branch->SetAddress(&mu_nh_effarea03_tight_);
+		if (mu_nh_effarea03_tight_branch) {mu_nh_effarea03_tight_branch->SetAddress(&mu_nh_effarea03_tight_);}
 	}
 	mu_em_effarea03_tight_branch = 0;
 	if (tree->GetBranch("mu_em_effarea03_tight") != 0) {
 		mu_em_effarea03_tight_branch = tree->GetBranch("mu_em_effarea03_tight");
-		mu_em_effarea03_tight_branch->SetAddress(&mu_em_effarea03_tight_);
+		if (mu_em_effarea03_tight_branch) {mu_em_effarea03_tight_branch->SetAddress(&mu_em_effarea03_tight_);}
 	}
 	mu_effarea04_branch = 0;
 	if (tree->GetBranch("mu_effarea04") != 0) {
 		mu_effarea04_branch = tree->GetBranch("mu_effarea04");
-		mu_effarea04_branch->SetAddress(&mu_effarea04_);
+		if (mu_effarea04_branch) {mu_effarea04_branch->SetAddress(&mu_effarea04_);}
 	}
 	mu_nh_effarea04_branch = 0;
 	if (tree->GetBranch("mu_nh_effarea04") != 0) {
 		mu_nh_effarea04_branch = tree->GetBranch("mu_nh_effarea04");
-		mu_nh_effarea04_branch->SetAddress(&mu_nh_effarea04_);
+		if (mu_nh_effarea04_branch) {mu_nh_effarea04_branch->SetAddress(&mu_nh_effarea04_);}
 	}
 	mu_em_effarea04_branch = 0;
 	if (tree->GetBranch("mu_em_effarea04") != 0) {
 		mu_em_effarea04_branch = tree->GetBranch("mu_em_effarea04");
-		mu_em_effarea04_branch->SetAddress(&mu_em_effarea04_);
+		if (mu_em_effarea04_branch) {mu_em_effarea04_branch->SetAddress(&mu_em_effarea04_);}
 	}
 	mu_effarea04_tight_branch = 0;
 	if (tree->GetBranch("mu_effarea04_tight") != 0) {
 		mu_effarea04_tight_branch = tree->GetBranch("mu_effarea04_tight");
-		mu_effarea04_tight_branch->SetAddress(&mu_effarea04_tight_);
+		if (mu_effarea04_tight_branch) {mu_effarea04_tight_branch->SetAddress(&mu_effarea04_tight_);}
 	}
 	mu_nh_effarea04_tight_branch = 0;
 	if (tree->GetBranch("mu_nh_effarea04_tight") != 0) {
 		mu_nh_effarea04_tight_branch = tree->GetBranch("mu_nh_effarea04_tight");
-		mu_nh_effarea04_tight_branch->SetAddress(&mu_nh_effarea04_tight_);
+		if (mu_nh_effarea04_tight_branch) {mu_nh_effarea04_tight_branch->SetAddress(&mu_nh_effarea04_tight_);}
 	}
 	mu_em_effarea04_tight_branch = 0;
 	if (tree->GetBranch("mu_em_effarea04_tight") != 0) {
 		mu_em_effarea04_tight_branch = tree->GetBranch("mu_em_effarea04_tight");
-		mu_em_effarea04_tight_branch->SetAddress(&mu_em_effarea04_tight_);
+		if (mu_em_effarea04_tight_branch) {mu_em_effarea04_tight_branch->SetAddress(&mu_em_effarea04_tight_);}
 	}
 	conv0MissHits_branch = 0;
 	if (tree->GetBranch("conv0MissHits") != 0) {
 		conv0MissHits_branch = tree->GetBranch("conv0MissHits");
-		conv0MissHits_branch->SetAddress(&conv0MissHits_);
+		if (conv0MissHits_branch) {conv0MissHits_branch->SetAddress(&conv0MissHits_);}
 	}
 	convHitPattern_branch = 0;
 	if (tree->GetBranch("convHitPattern") != 0) {
 		convHitPattern_branch = tree->GetBranch("convHitPattern");
-		convHitPattern_branch->SetAddress(&convHitPattern_);
+		if (convHitPattern_branch) {convHitPattern_branch->SetAddress(&convHitPattern_);}
 	}
 	convPartnerTrack_branch = 0;
 	if (tree->GetBranch("convPartnerTrack") != 0) {
 		convPartnerTrack_branch = tree->GetBranch("convPartnerTrack");
-		convPartnerTrack_branch->SetAddress(&convPartnerTrack_);
+		if (convPartnerTrack_branch) {convPartnerTrack_branch->SetAddress(&convPartnerTrack_);}
 	}
 	convMIT_branch = 0;
 	if (tree->GetBranch("convMIT") != 0) {
 		convMIT_branch = tree->GetBranch("convMIT");
-		convMIT_branch->SetAddress(&convMIT_);
+		if (convMIT_branch) {convMIT_branch->SetAddress(&convMIT_);}
 	}
 	mt_branch = 0;
 	if (tree->GetBranch("mt") != 0) {
 		mt_branch = tree->GetBranch("mt");
-		mt_branch->SetAddress(&mt_);
+		if (mt_branch) {mt_branch->SetAddress(&mt_);}
 	}
 	pfmt_branch = 0;
 	if (tree->GetBranch("pfmt") != 0) {
 		pfmt_branch = tree->GetBranch("pfmt");
-		pfmt_branch->SetAddress(&pfmt_);
+		if (pfmt_branch) {pfmt_branch->SetAddress(&pfmt_);}
 	}
 	q3_branch = 0;
 	if (tree->GetBranch("q3") != 0) {
 		q3_branch = tree->GetBranch("q3");
-		q3_branch->SetAddress(&q3_);
+		if (q3_branch) {q3_branch->SetAddress(&q3_);}
 	}
 	els_exp_innerlayers_branch = 0;
 	if (tree->GetBranch("els_exp_innerlayers") != 0) {
 		els_exp_innerlayers_branch = tree->GetBranch("els_exp_innerlayers");
-		els_exp_innerlayers_branch->SetAddress(&els_exp_innerlayers_);
+		if (els_exp_innerlayers_branch) {els_exp_innerlayers_branch->SetAddress(&els_exp_innerlayers_);}
 	}
 	d0PV_wwV1_branch = 0;
 	if (tree->GetBranch("d0PV_wwV1") != 0) {
 		d0PV_wwV1_branch = tree->GetBranch("d0PV_wwV1");
-		d0PV_wwV1_branch->SetAddress(&d0PV_wwV1_);
+		if (d0PV_wwV1_branch) {d0PV_wwV1_branch->SetAddress(&d0PV_wwV1_);}
 	}
 	dzPV_wwV1_branch = 0;
 	if (tree->GetBranch("dzPV_wwV1") != 0) {
 		dzPV_wwV1_branch = tree->GetBranch("dzPV_wwV1");
-		dzPV_wwV1_branch->SetAddress(&dzPV_wwV1_);
+		if (dzPV_wwV1_branch) {dzPV_wwV1_branch->SetAddress(&dzPV_wwV1_);}
 	}
 	ht_pf_branch = 0;
 	if (tree->GetBranch("ht_pf") != 0) {
 		ht_pf_branch = tree->GetBranch("ht_pf");
-		ht_pf_branch->SetAddress(&ht_pf_);
+		if (ht_pf_branch) {ht_pf_branch->SetAddress(&ht_pf_);}
 	}
 	ht_pf_L2L3_branch = 0;
 	if (tree->GetBranch("ht_pf_L2L3") != 0) {
 		ht_pf_L2L3_branch = tree->GetBranch("ht_pf_L2L3");
-		ht_pf_L2L3_branch->SetAddress(&ht_pf_L2L3_);
+		if (ht_pf_L2L3_branch) {ht_pf_L2L3_branch->SetAddress(&ht_pf_L2L3_);}
 	}
 	ht_pf_L1FastL2L3_branch = 0;
 	if (tree->GetBranch("ht_pf_L1FastL2L3") != 0) {
 		ht_pf_L1FastL2L3_branch = tree->GetBranch("ht_pf_L1FastL2L3");
-		ht_pf_L1FastL2L3_branch->SetAddress(&ht_pf_L1FastL2L3_);
+		if (ht_pf_L1FastL2L3_branch) {ht_pf_L1FastL2L3_branch->SetAddress(&ht_pf_L1FastL2L3_);}
 	}
 	mcid_branch = 0;
 	if (tree->GetBranch("mcid") != 0) {
 		mcid_branch = tree->GetBranch("mcid");
-		mcid_branch->SetAddress(&mcid_);
+		if (mcid_branch) {mcid_branch->SetAddress(&mcid_);}
 	}
 	mcmotherid_branch = 0;
 	if (tree->GetBranch("mcmotherid") != 0) {
 		mcmotherid_branch = tree->GetBranch("mcmotherid");
-		mcmotherid_branch->SetAddress(&mcmotherid_);
+		if (mcmotherid_branch) {mcmotherid_branch->SetAddress(&mcmotherid_);}
 	}
 	mc3id_branch = 0;
 	if (tree->GetBranch("mc3id") != 0) {
 		mc3id_branch = tree->GetBranch("mc3id");
-		mc3id_branch->SetAddress(&mc3id_);
+		if (mc3id_branch) {mc3id_branch->SetAddress(&mc3id_);}
 	}
 	mc3pt_branch = 0;
 	if (tree->GetBranch("mc3pt") != 0) {
 		mc3pt_branch = tree->GetBranch("mc3pt");
-		mc3pt_branch->SetAddress(&mc3pt_);
+		if (mc3pt_branch) {mc3pt_branch->SetAddress(&mc3pt_);}
 	}
 	mc3dr_branch = 0;
 	if (tree->GetBranch("mc3dr") != 0) {
 		mc3dr_branch = tree->GetBranch("mc3dr");
-		mc3dr_branch->SetAddress(&mc3dr_);
+		if (mc3dr_branch) {mc3dr_branch->SetAddress(&mc3dr_);}
 	}
 	leptonIsFromW_branch = 0;
 	if (tree->GetBranch("leptonIsFromW") != 0) {
 		leptonIsFromW_branch = tree->GetBranch("leptonIsFromW");
-		leptonIsFromW_branch->SetAddress(&leptonIsFromW_);
+		if (leptonIsFromW_branch) {leptonIsFromW_branch->SetAddress(&leptonIsFromW_);}
 	}
 	mu_isCosmic_branch = 0;
 	if (tree->GetBranch("mu_isCosmic") != 0) {
 		mu_isCosmic_branch = tree->GetBranch("mu_isCosmic");
-		mu_isCosmic_branch->SetAddress(&mu_isCosmic_);
+		if (mu_isCosmic_branch) {mu_isCosmic_branch->SetAddress(&mu_isCosmic_);}
+	}
+	mu_ecal_veto_dep_branch = 0;
+	if (tree->GetBranch("mu_ecal_veto_dep") != 0) {
+		mu_ecal_veto_dep_branch = tree->GetBranch("mu_ecal_veto_dep");
+		if (mu_ecal_veto_dep_branch) {mu_ecal_veto_dep_branch->SetAddress(&mu_ecal_veto_dep_);}
+	}
+	mu_hcal_veto_dep_branch = 0;
+	if (tree->GetBranch("mu_hcal_veto_dep") != 0) {
+		mu_hcal_veto_dep_branch = tree->GetBranch("mu_hcal_veto_dep");
+		if (mu_hcal_veto_dep_branch) {mu_hcal_veto_dep_branch->SetAddress(&mu_hcal_veto_dep_);}
+	}
+	mu_nchi2_branch = 0;
+	if (tree->GetBranch("mu_nchi2") != 0) {
+		mu_nchi2_branch = tree->GetBranch("mu_nchi2");
+		if (mu_nchi2_branch) {mu_nchi2_branch->SetAddress(&mu_nchi2_);}
 	}
 	mu_ecal_veto_dep_branch = 0;
 	if (tree->GetBranch("mu_ecal_veto_dep") != 0) {
@@ -1468,77 +1498,197 @@ void Init(TTree *tree) {
 	mz_fo_gsf_branch = 0;
 	if (tree->GetBranch("mz_fo_gsf") != 0) {
 		mz_fo_gsf_branch = tree->GetBranch("mz_fo_gsf");
-		mz_fo_gsf_branch->SetAddress(&mz_fo_gsf_);
+		if (mz_fo_gsf_branch) {mz_fo_gsf_branch->SetAddress(&mz_fo_gsf_);}
 	}
 	mz_gsf_iso_branch = 0;
 	if (tree->GetBranch("mz_gsf_iso") != 0) {
 		mz_gsf_iso_branch = tree->GetBranch("mz_gsf_iso");
-		mz_gsf_iso_branch->SetAddress(&mz_gsf_iso_);
+		if (mz_gsf_iso_branch) {mz_gsf_iso_branch->SetAddress(&mz_gsf_iso_);}
 	}
 	mz_fo_ctf_branch = 0;
 	if (tree->GetBranch("mz_fo_ctf") != 0) {
 		mz_fo_ctf_branch = tree->GetBranch("mz_fo_ctf");
-		mz_fo_ctf_branch->SetAddress(&mz_fo_ctf_);
+		if (mz_fo_ctf_branch) {mz_fo_ctf_branch->SetAddress(&mz_fo_ctf_);}
 	}
 	mz_ctf_iso_branch = 0;
 	if (tree->GetBranch("mz_ctf_iso") != 0) {
 		mz_ctf_iso_branch = tree->GetBranch("mz_ctf_iso");
-		mz_ctf_iso_branch->SetAddress(&mz_ctf_iso_);
+		if (mz_ctf_iso_branch) {mz_ctf_iso_branch->SetAddress(&mz_ctf_iso_);}
 	}
 	mupsilon_fo_mu_branch = 0;
 	if (tree->GetBranch("mupsilon_fo_mu") != 0) {
 		mupsilon_fo_mu_branch = tree->GetBranch("mupsilon_fo_mu");
-		mupsilon_fo_mu_branch->SetAddress(&mupsilon_fo_mu_);
+		if (mupsilon_fo_mu_branch) {mupsilon_fo_mu_branch->SetAddress(&mupsilon_fo_mu_);}
 	}
 	mupsilon_mu_iso_branch = 0;
 	if (tree->GetBranch("mupsilon_mu_iso") != 0) {
 		mupsilon_mu_iso_branch = tree->GetBranch("mupsilon_mu_iso");
-		mupsilon_mu_iso_branch->SetAddress(&mupsilon_mu_iso_);
+		if (mupsilon_mu_iso_branch) {mupsilon_mu_iso_branch->SetAddress(&mupsilon_mu_iso_);}
 	}
 	num_el_ssV7_branch = 0;
 	if (tree->GetBranch("num_el_ssV7") != 0) {
 		num_el_ssV7_branch = tree->GetBranch("num_el_ssV7");
-		num_el_ssV7_branch->SetAddress(&num_el_ssV7_);
+		if (num_el_ssV7_branch) {num_el_ssV7_branch->SetAddress(&num_el_ssV7_);}
 	}
 	num_el_ssV7_noIso_branch = 0;
 	if (tree->GetBranch("num_el_ssV7_noIso") != 0) {
 		num_el_ssV7_noIso_branch = tree->GetBranch("num_el_ssV7_noIso");
-		num_el_ssV7_noIso_branch->SetAddress(&num_el_ssV7_noIso_);
+		if (num_el_ssV7_noIso_branch) {num_el_ssV7_noIso_branch->SetAddress(&num_el_ssV7_noIso_);}
 	}
 	v1_el_ssV7_branch = 0;
 	if (tree->GetBranch("v1_el_ssV7") != 0) {
 		v1_el_ssV7_branch = tree->GetBranch("v1_el_ssV7");
-		v1_el_ssV7_branch->SetAddress(&v1_el_ssV7_);
+		if (v1_el_ssV7_branch) {v1_el_ssV7_branch->SetAddress(&v1_el_ssV7_);}
 	}
 	v2_el_ssV7_branch = 0;
 	if (tree->GetBranch("v2_el_ssV7") != 0) {
 		v2_el_ssV7_branch = tree->GetBranch("v2_el_ssV7");
-		v2_el_ssV7_branch->SetAddress(&v2_el_ssV7_);
+		if (v2_el_ssV7_branch) {v2_el_ssV7_branch->SetAddress(&v2_el_ssV7_);}
 	}
 	v3_el_ssV7_branch = 0;
 	if (tree->GetBranch("v3_el_ssV7") != 0) {
 		v3_el_ssV7_branch = tree->GetBranch("v3_el_ssV7");
-		v3_el_ssV7_branch->SetAddress(&v3_el_ssV7_);
+		if (v3_el_ssV7_branch) {v3_el_ssV7_branch->SetAddress(&v3_el_ssV7_);}
 	}
 	num_mu_ssV5_branch = 0;
 	if (tree->GetBranch("num_mu_ssV5") != 0) {
 		num_mu_ssV5_branch = tree->GetBranch("num_mu_ssV5");
-		num_mu_ssV5_branch->SetAddress(&num_mu_ssV5_);
+		if (num_mu_ssV5_branch) {num_mu_ssV5_branch->SetAddress(&num_mu_ssV5_);}
 	}
 	num_mu_ssV5_noIso_branch = 0;
 	if (tree->GetBranch("num_mu_ssV5_noIso") != 0) {
 		num_mu_ssV5_noIso_branch = tree->GetBranch("num_mu_ssV5_noIso");
-		num_mu_ssV5_noIso_branch->SetAddress(&num_mu_ssV5_noIso_);
+		if (num_mu_ssV5_noIso_branch) {num_mu_ssV5_noIso_branch->SetAddress(&num_mu_ssV5_noIso_);}
 	}
 	fo_mu_ssV5_branch = 0;
 	if (tree->GetBranch("fo_mu_ssV5") != 0) {
 		fo_mu_ssV5_branch = tree->GetBranch("fo_mu_ssV5");
-		fo_mu_ssV5_branch->SetAddress(&fo_mu_ssV5_);
+		if (fo_mu_ssV5_branch) {fo_mu_ssV5_branch->SetAddress(&fo_mu_ssV5_);}
 	}
 	fo_mu_ssV5_noIso_branch = 0;
 	if (tree->GetBranch("fo_mu_ssV5_noIso") != 0) {
 		fo_mu_ssV5_noIso_branch = tree->GetBranch("fo_mu_ssV5_noIso");
-		fo_mu_ssV5_noIso_branch->SetAddress(&fo_mu_ssV5_noIso_);
+		if (fo_mu_ssV5_noIso_branch) {fo_mu_ssV5_noIso_branch->SetAddress(&fo_mu_ssV5_noIso_);}
+	}
+	num_el_TTZcuttightv1_branch = 0;
+	if (tree->GetBranch("num_el_TTZcuttightv1") != 0) {
+		num_el_TTZcuttightv1_branch = tree->GetBranch("num_el_TTZcuttightv1");
+		if (num_el_TTZcuttightv1_branch) {num_el_TTZcuttightv1_branch->SetAddress(&num_el_TTZcuttightv1_);}
+	}
+	num_el_TTZcuttightv1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZcuttightv1_noIso") != 0) {
+		num_el_TTZcuttightv1_noIso_branch = tree->GetBranch("num_el_TTZcuttightv1_noIso");
+		if (num_el_TTZcuttightv1_noIso_branch) {num_el_TTZcuttightv1_noIso_branch->SetAddress(&num_el_TTZcuttightv1_noIso_);}
+	}
+	fo_el_TTZcuttightv1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcuttightv1") != 0) {
+		fo_el_TTZcuttightv1_branch = tree->GetBranch("fo_el_TTZcuttightv1");
+		if (fo_el_TTZcuttightv1_branch) {fo_el_TTZcuttightv1_branch->SetAddress(&fo_el_TTZcuttightv1_);}
+	}
+	fo_el_TTZcuttightv1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcuttightv1_noIso") != 0) {
+		fo_el_TTZcuttightv1_noIso_branch = tree->GetBranch("fo_el_TTZcuttightv1_noIso");
+		if (fo_el_TTZcuttightv1_noIso_branch) {fo_el_TTZcuttightv1_noIso_branch->SetAddress(&fo_el_TTZcuttightv1_noIso_);}
+	}
+	num_el_TTZcutloosev1_branch = 0;
+	if (tree->GetBranch("num_el_TTZcutloosev1") != 0) {
+		num_el_TTZcutloosev1_branch = tree->GetBranch("num_el_TTZcutloosev1");
+		if (num_el_TTZcutloosev1_branch) {num_el_TTZcutloosev1_branch->SetAddress(&num_el_TTZcutloosev1_);}
+	}
+	num_el_TTZcutloosev1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZcutloosev1_noIso") != 0) {
+		num_el_TTZcutloosev1_noIso_branch = tree->GetBranch("num_el_TTZcutloosev1_noIso");
+		if (num_el_TTZcutloosev1_noIso_branch) {num_el_TTZcutloosev1_noIso_branch->SetAddress(&num_el_TTZcutloosev1_noIso_);}
+	}
+	fo_el_TTZcutloosev1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcutloosev1") != 0) {
+		fo_el_TTZcutloosev1_branch = tree->GetBranch("fo_el_TTZcutloosev1");
+		if (fo_el_TTZcutloosev1_branch) {fo_el_TTZcutloosev1_branch->SetAddress(&fo_el_TTZcutloosev1_);}
+	}
+	fo_el_TTZcutloosev1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZcutloosev1_noIso") != 0) {
+		fo_el_TTZcutloosev1_noIso_branch = tree->GetBranch("fo_el_TTZcutloosev1_noIso");
+		if (fo_el_TTZcutloosev1_noIso_branch) {fo_el_TTZcutloosev1_noIso_branch->SetAddress(&fo_el_TTZcutloosev1_noIso_);}
+	}
+	num_el_TTZMVAtightv1_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAtightv1") != 0) {
+		num_el_TTZMVAtightv1_branch = tree->GetBranch("num_el_TTZMVAtightv1");
+		if (num_el_TTZMVAtightv1_branch) {num_el_TTZMVAtightv1_branch->SetAddress(&num_el_TTZMVAtightv1_);}
+	}
+	num_el_TTZMVAtightv1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAtightv1_noIso") != 0) {
+		num_el_TTZMVAtightv1_noIso_branch = tree->GetBranch("num_el_TTZMVAtightv1_noIso");
+		if (num_el_TTZMVAtightv1_noIso_branch) {num_el_TTZMVAtightv1_noIso_branch->SetAddress(&num_el_TTZMVAtightv1_noIso_);}
+	}
+	fo_el_TTZMVAtightv1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAtightv1") != 0) {
+		fo_el_TTZMVAtightv1_branch = tree->GetBranch("fo_el_TTZMVAtightv1");
+		if (fo_el_TTZMVAtightv1_branch) {fo_el_TTZMVAtightv1_branch->SetAddress(&fo_el_TTZMVAtightv1_);}
+	}
+	fo_el_TTZMVAtightv1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAtightv1_noIso") != 0) {
+		fo_el_TTZMVAtightv1_noIso_branch = tree->GetBranch("fo_el_TTZMVAtightv1_noIso");
+		if (fo_el_TTZMVAtightv1_noIso_branch) {fo_el_TTZMVAtightv1_noIso_branch->SetAddress(&fo_el_TTZMVAtightv1_noIso_);}
+	}
+	num_el_TTZMVAloosev1_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAloosev1") != 0) {
+		num_el_TTZMVAloosev1_branch = tree->GetBranch("num_el_TTZMVAloosev1");
+		if (num_el_TTZMVAloosev1_branch) {num_el_TTZMVAloosev1_branch->SetAddress(&num_el_TTZMVAloosev1_);}
+	}
+	num_el_TTZMVAloosev1_noIso_branch = 0;
+	if (tree->GetBranch("num_el_TTZMVAloosev1_noIso") != 0) {
+		num_el_TTZMVAloosev1_noIso_branch = tree->GetBranch("num_el_TTZMVAloosev1_noIso");
+		if (num_el_TTZMVAloosev1_noIso_branch) {num_el_TTZMVAloosev1_noIso_branch->SetAddress(&num_el_TTZMVAloosev1_noIso_);}
+	}
+	fo_el_TTZMVAloosev1_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAloosev1") != 0) {
+		fo_el_TTZMVAloosev1_branch = tree->GetBranch("fo_el_TTZMVAloosev1");
+		if (fo_el_TTZMVAloosev1_branch) {fo_el_TTZMVAloosev1_branch->SetAddress(&fo_el_TTZMVAloosev1_);}
+	}
+	fo_el_TTZMVAloosev1_noIso_branch = 0;
+	if (tree->GetBranch("fo_el_TTZMVAloosev1_noIso") != 0) {
+		fo_el_TTZMVAloosev1_noIso_branch = tree->GetBranch("fo_el_TTZMVAloosev1_noIso");
+		if (fo_el_TTZMVAloosev1_noIso_branch) {fo_el_TTZMVAloosev1_noIso_branch->SetAddress(&fo_el_TTZMVAloosev1_noIso_);}
+	}
+	num_mu_TTZtightv1_branch = 0;
+	if (tree->GetBranch("num_mu_TTZtightv1") != 0) {
+		num_mu_TTZtightv1_branch = tree->GetBranch("num_mu_TTZtightv1");
+		if (num_mu_TTZtightv1_branch) {num_mu_TTZtightv1_branch->SetAddress(&num_mu_TTZtightv1_);}
+	}
+	num_mu_TTZtightv1_noIso_branch = 0;
+	if (tree->GetBranch("num_mu_TTZtightv1_noIso") != 0) {
+		num_mu_TTZtightv1_noIso_branch = tree->GetBranch("num_mu_TTZtightv1_noIso");
+		if (num_mu_TTZtightv1_noIso_branch) {num_mu_TTZtightv1_noIso_branch->SetAddress(&num_mu_TTZtightv1_noIso_);}
+	}
+	fo_mu_TTZtightv1_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZtightv1") != 0) {
+		fo_mu_TTZtightv1_branch = tree->GetBranch("fo_mu_TTZtightv1");
+		if (fo_mu_TTZtightv1_branch) {fo_mu_TTZtightv1_branch->SetAddress(&fo_mu_TTZtightv1_);}
+	}
+	fo_mu_TTZtightv1_noIso_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZtightv1_noIso") != 0) {
+		fo_mu_TTZtightv1_noIso_branch = tree->GetBranch("fo_mu_TTZtightv1_noIso");
+		if (fo_mu_TTZtightv1_noIso_branch) {fo_mu_TTZtightv1_noIso_branch->SetAddress(&fo_mu_TTZtightv1_noIso_);}
+	}
+	num_mu_TTZloosev1_branch = 0;
+	if (tree->GetBranch("num_mu_TTZloosev1") != 0) {
+		num_mu_TTZloosev1_branch = tree->GetBranch("num_mu_TTZloosev1");
+		if (num_mu_TTZloosev1_branch) {num_mu_TTZloosev1_branch->SetAddress(&num_mu_TTZloosev1_);}
+	}
+	num_mu_TTZloosev1_noIso_branch = 0;
+	if (tree->GetBranch("num_mu_TTZloosev1_noIso") != 0) {
+		num_mu_TTZloosev1_noIso_branch = tree->GetBranch("num_mu_TTZloosev1_noIso");
+		if (num_mu_TTZloosev1_noIso_branch) {num_mu_TTZloosev1_noIso_branch->SetAddress(&num_mu_TTZloosev1_noIso_);}
+	}
+	fo_mu_TTZloosev1_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZloosev1") != 0) {
+		fo_mu_TTZloosev1_branch = tree->GetBranch("fo_mu_TTZloosev1");
+		if (fo_mu_TTZloosev1_branch) {fo_mu_TTZloosev1_branch->SetAddress(&fo_mu_TTZloosev1_);}
+	}
+	fo_mu_TTZloosev1_noIso_branch = 0;
+	if (tree->GetBranch("fo_mu_TTZloosev1_noIso") != 0) {
+		fo_mu_TTZloosev1_noIso_branch = tree->GetBranch("fo_mu_TTZloosev1_noIso");
+		if (fo_mu_TTZloosev1_noIso_branch) {fo_mu_TTZloosev1_noIso_branch->SetAddress(&fo_mu_TTZloosev1_noIso_);}
 	}
 	num_el_TTZcuttightv1_branch = 0;
 	if (tree->GetBranch("num_el_TTZcuttightv1") != 0) {
@@ -1663,522 +1813,527 @@ void Init(TTree *tree) {
 	num_el_ssV6_branch = 0;
 	if (tree->GetBranch("num_el_ssV6") != 0) {
 		num_el_ssV6_branch = tree->GetBranch("num_el_ssV6");
-		num_el_ssV6_branch->SetAddress(&num_el_ssV6_);
+		if (num_el_ssV6_branch) {num_el_ssV6_branch->SetAddress(&num_el_ssV6_);}
 	}
 	num_el_ssV6_noIso_branch = 0;
 	if (tree->GetBranch("num_el_ssV6_noIso") != 0) {
 		num_el_ssV6_noIso_branch = tree->GetBranch("num_el_ssV6_noIso");
-		num_el_ssV6_noIso_branch->SetAddress(&num_el_ssV6_noIso_);
+		if (num_el_ssV6_noIso_branch) {num_el_ssV6_noIso_branch->SetAddress(&num_el_ssV6_noIso_);}
 	}
 	v1_el_ssV6_branch = 0;
 	if (tree->GetBranch("v1_el_ssV6") != 0) {
 		v1_el_ssV6_branch = tree->GetBranch("v1_el_ssV6");
-		v1_el_ssV6_branch->SetAddress(&v1_el_ssV6_);
+		if (v1_el_ssV6_branch) {v1_el_ssV6_branch->SetAddress(&v1_el_ssV6_);}
 	}
 	v2_el_ssV6_branch = 0;
 	if (tree->GetBranch("v2_el_ssV6") != 0) {
 		v2_el_ssV6_branch = tree->GetBranch("v2_el_ssV6");
-		v2_el_ssV6_branch->SetAddress(&v2_el_ssV6_);
+		if (v2_el_ssV6_branch) {v2_el_ssV6_branch->SetAddress(&v2_el_ssV6_);}
 	}
 	v3_el_ssV6_branch = 0;
 	if (tree->GetBranch("v3_el_ssV6") != 0) {
 		v3_el_ssV6_branch = tree->GetBranch("v3_el_ssV6");
-		v3_el_ssV6_branch->SetAddress(&v3_el_ssV6_);
+		if (v3_el_ssV6_branch) {v3_el_ssV6_branch->SetAddress(&v3_el_ssV6_);}
 	}
 	numNomSSv4_branch = 0;
 	if (tree->GetBranch("numNomSSv4") != 0) {
 		numNomSSv4_branch = tree->GetBranch("numNomSSv4");
-		numNomSSv4_branch->SetAddress(&numNomSSv4_);
+		if (numNomSSv4_branch) {numNomSSv4_branch->SetAddress(&numNomSSv4_);}
 	}
 	numNomSSv4noIso_branch = 0;
 	if (tree->GetBranch("numNomSSv4noIso") != 0) {
 		numNomSSv4noIso_branch = tree->GetBranch("numNomSSv4noIso");
-		numNomSSv4noIso_branch->SetAddress(&numNomSSv4noIso_);
+		if (numNomSSv4noIso_branch) {numNomSSv4noIso_branch->SetAddress(&numNomSSv4noIso_);}
 	}
 	fo_mussV4_04_branch = 0;
 	if (tree->GetBranch("fo_mussV4_04") != 0) {
 		fo_mussV4_04_branch = tree->GetBranch("fo_mussV4_04");
-		fo_mussV4_04_branch->SetAddress(&fo_mussV4_04_);
+		if (fo_mussV4_04_branch) {fo_mussV4_04_branch->SetAddress(&fo_mussV4_04_);}
 	}
 	fo_mussV4_noIso_branch = 0;
 	if (tree->GetBranch("fo_mussV4_noIso") != 0) {
 		fo_mussV4_noIso_branch = tree->GetBranch("fo_mussV4_noIso");
-		fo_mussV4_noIso_branch->SetAddress(&fo_mussV4_noIso_);
+		if (fo_mussV4_noIso_branch) {fo_mussV4_noIso_branch->SetAddress(&fo_mussV4_noIso_);}
 	}
 	num_el_smurfV6_branch = 0;
 	if (tree->GetBranch("num_el_smurfV6") != 0) {
 		num_el_smurfV6_branch = tree->GetBranch("num_el_smurfV6");
-		num_el_smurfV6_branch->SetAddress(&num_el_smurfV6_);
+		if (num_el_smurfV6_branch) {num_el_smurfV6_branch->SetAddress(&num_el_smurfV6_);}
 	}
 	num_el_smurfV6lh_branch = 0;
 	if (tree->GetBranch("num_el_smurfV6lh") != 0) {
 		num_el_smurfV6lh_branch = tree->GetBranch("num_el_smurfV6lh");
-		num_el_smurfV6lh_branch->SetAddress(&num_el_smurfV6lh_);
+		if (num_el_smurfV6lh_branch) {num_el_smurfV6lh_branch->SetAddress(&num_el_smurfV6lh_);}
 	}
 	v1_el_smurfV1_branch = 0;
 	if (tree->GetBranch("v1_el_smurfV1") != 0) {
 		v1_el_smurfV1_branch = tree->GetBranch("v1_el_smurfV1");
-		v1_el_smurfV1_branch->SetAddress(&v1_el_smurfV1_);
+		if (v1_el_smurfV1_branch) {v1_el_smurfV1_branch->SetAddress(&v1_el_smurfV1_);}
 	}
 	v2_el_smurfV1_branch = 0;
 	if (tree->GetBranch("v2_el_smurfV1") != 0) {
 		v2_el_smurfV1_branch = tree->GetBranch("v2_el_smurfV1");
-		v2_el_smurfV1_branch->SetAddress(&v2_el_smurfV1_);
+		if (v2_el_smurfV1_branch) {v2_el_smurfV1_branch->SetAddress(&v2_el_smurfV1_);}
 	}
 	v3_el_smurfV1_branch = 0;
 	if (tree->GetBranch("v3_el_smurfV1") != 0) {
 		v3_el_smurfV1_branch = tree->GetBranch("v3_el_smurfV1");
-		v3_el_smurfV1_branch->SetAddress(&v3_el_smurfV1_);
+		if (v3_el_smurfV1_branch) {v3_el_smurfV1_branch->SetAddress(&v3_el_smurfV1_);}
 	}
 	v4_el_smurfV1_branch = 0;
 	if (tree->GetBranch("v4_el_smurfV1") != 0) {
 		v4_el_smurfV1_branch = tree->GetBranch("v4_el_smurfV1");
-		v4_el_smurfV1_branch->SetAddress(&v4_el_smurfV1_);
+		if (v4_el_smurfV1_branch) {v4_el_smurfV1_branch->SetAddress(&v4_el_smurfV1_);}
 	}
 	num_mu_smurfV6_branch = 0;
 	if (tree->GetBranch("num_mu_smurfV6") != 0) {
 		num_mu_smurfV6_branch = tree->GetBranch("num_mu_smurfV6");
-		num_mu_smurfV6_branch->SetAddress(&num_mu_smurfV6_);
+		if (num_mu_smurfV6_branch) {num_mu_smurfV6_branch->SetAddress(&num_mu_smurfV6_);}
 	}
 	fo_mu_smurf_04_branch = 0;
 	if (tree->GetBranch("fo_mu_smurf_04") != 0) {
 		fo_mu_smurf_04_branch = tree->GetBranch("fo_mu_smurf_04");
-		fo_mu_smurf_04_branch->SetAddress(&fo_mu_smurf_04_);
+		if (fo_mu_smurf_04_branch) {fo_mu_smurf_04_branch->SetAddress(&fo_mu_smurf_04_);}
 	}
 	fo_mu_smurf_10_branch = 0;
 	if (tree->GetBranch("fo_mu_smurf_10") != 0) {
 		fo_mu_smurf_10_branch = tree->GetBranch("fo_mu_smurf_10");
-		fo_mu_smurf_10_branch->SetAddress(&fo_mu_smurf_10_);
+		if (fo_mu_smurf_10_branch) {fo_mu_smurf_10_branch->SetAddress(&fo_mu_smurf_10_);}
 	}
 	num_el_OSV2_branch = 0;
 	if (tree->GetBranch("num_el_OSV2") != 0) {
 		num_el_OSV2_branch = tree->GetBranch("num_el_OSV2");
-		num_el_OSV2_branch->SetAddress(&num_el_OSV2_);
+		if (num_el_OSV2_branch) {num_el_OSV2_branch->SetAddress(&num_el_OSV2_);}
 	}
 	num_mu_OSGV2_branch = 0;
 	if (tree->GetBranch("num_mu_OSGV2") != 0) {
 		num_mu_OSGV2_branch = tree->GetBranch("num_mu_OSGV2");
-		num_mu_OSGV2_branch->SetAddress(&num_mu_OSGV2_);
+		if (num_mu_OSGV2_branch) {num_mu_OSGV2_branch->SetAddress(&num_mu_OSGV2_);}
 	}
 	num_mu_OSZV2_branch = 0;
 	if (tree->GetBranch("num_mu_OSZV2") != 0) {
 		num_mu_OSZV2_branch = tree->GetBranch("num_mu_OSZV2");
-		num_mu_OSZV2_branch->SetAddress(&num_mu_OSZV2_);
+		if (num_mu_OSZV2_branch) {num_mu_OSZV2_branch->SetAddress(&num_mu_OSZV2_);}
 	}
 	fo_el_OSV2_branch = 0;
 	if (tree->GetBranch("fo_el_OSV2") != 0) {
 		fo_el_OSV2_branch = tree->GetBranch("fo_el_OSV2");
-		fo_el_OSV2_branch->SetAddress(&fo_el_OSV2_);
+		if (fo_el_OSV2_branch) {fo_el_OSV2_branch->SetAddress(&fo_el_OSV2_);}
 	}
 	fo_mu_OSGV2_branch = 0;
 	if (tree->GetBranch("fo_mu_OSGV2") != 0) {
 		fo_mu_OSGV2_branch = tree->GetBranch("fo_mu_OSGV2");
-		fo_mu_OSGV2_branch->SetAddress(&fo_mu_OSGV2_);
+		if (fo_mu_OSGV2_branch) {fo_mu_OSGV2_branch->SetAddress(&fo_mu_OSGV2_);}
 	}
 	num_el_OSV3_branch = 0;
 	if (tree->GetBranch("num_el_OSV3") != 0) {
 		num_el_OSV3_branch = tree->GetBranch("num_el_OSV3");
-		num_el_OSV3_branch->SetAddress(&num_el_OSV3_);
+		if (num_el_OSV3_branch) {num_el_OSV3_branch->SetAddress(&num_el_OSV3_);}
 	}
 	num_mu_OSGV3_branch = 0;
 	if (tree->GetBranch("num_mu_OSGV3") != 0) {
 		num_mu_OSGV3_branch = tree->GetBranch("num_mu_OSGV3");
-		num_mu_OSGV3_branch->SetAddress(&num_mu_OSGV3_);
+		if (num_mu_OSGV3_branch) {num_mu_OSGV3_branch->SetAddress(&num_mu_OSGV3_);}
 	}
 	fo_el_OSV3_branch = 0;
 	if (tree->GetBranch("fo_el_OSV3") != 0) {
 		fo_el_OSV3_branch = tree->GetBranch("fo_el_OSV3");
-		fo_el_OSV3_branch->SetAddress(&fo_el_OSV3_);
+		if (fo_el_OSV3_branch) {fo_el_OSV3_branch->SetAddress(&fo_el_OSV3_);}
 	}
 	fo_mu_OSGV3_branch = 0;
 	if (tree->GetBranch("fo_mu_OSGV3") != 0) {
 		fo_mu_OSGV3_branch = tree->GetBranch("fo_mu_OSGV3");
-		fo_mu_OSGV3_branch->SetAddress(&fo_mu_OSGV3_);
+		if (fo_mu_OSGV3_branch) {fo_mu_OSGV3_branch->SetAddress(&fo_mu_OSGV3_);}
 	}
 	ele8_vstar_branch = 0;
 	if (tree->GetBranch("ele8_vstar") != 0) {
 		ele8_vstar_branch = tree->GetBranch("ele8_vstar");
-		ele8_vstar_branch->SetAddress(&ele8_vstar_);
+		if (ele8_vstar_branch) {ele8_vstar_branch->SetAddress(&ele8_vstar_);}
 	}
 	ele8_CaloIdL_TrkIdVL_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdL_TrkIdVL_vstar") != 0) {
 		ele8_CaloIdL_TrkIdVL_vstar_branch = tree->GetBranch("ele8_CaloIdL_TrkIdVL_vstar");
-		ele8_CaloIdL_TrkIdVL_vstar_branch->SetAddress(&ele8_CaloIdL_TrkIdVL_vstar_);
+		if (ele8_CaloIdL_TrkIdVL_vstar_branch) {ele8_CaloIdL_TrkIdVL_vstar_branch->SetAddress(&ele8_CaloIdL_TrkIdVL_vstar_);}
 	}
 	ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdL_CaloIsoVL_Jet40_vstar") != 0) {
 		ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch = tree->GetBranch("ele8_CaloIdL_CaloIsoVL_Jet40_vstar");
-		ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_Jet40_vstar_);
+		if (ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch) {ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_Jet40_vstar_);}
 	}
 	ele8_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdL_CaloIsoVL_vstar") != 0) {
 		ele8_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("ele8_CaloIdL_CaloIsoVL_vstar");
-		ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_vstar_);
+		if (ele8_CaloIdL_CaloIsoVL_vstar_branch) {ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar") != 0) {
 		ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch = tree->GetBranch("ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar");
-		ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_);
+		if (ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch) {ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_);}
 	}
 	ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
 		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
+		if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch) {ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);}
 	}
 	ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
 		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
+		if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch) {ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);}
 	}
 	ele8_CaloIdT_TrkIdVL_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_TrkIdVL_vstar") != 0) {
 		ele8_CaloIdT_TrkIdVL_vstar_branch = tree->GetBranch("ele8_CaloIdT_TrkIdVL_vstar");
-		ele8_CaloIdT_TrkIdVL_vstar_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_vstar_);
+		if (ele8_CaloIdT_TrkIdVL_vstar_branch) {ele8_CaloIdT_TrkIdVL_vstar_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_vstar_);}
 	}
 	ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_TrkIdVL_Jet30_vstar") != 0) {
 		ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = tree->GetBranch("ele8_CaloIdT_TrkIdVL_Jet30_vstar");
-		ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_Jet30_vstar_);
+		if (ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch) {ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_Jet30_vstar_);}
 	}
 	ele17_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("ele17_CaloIdL_CaloIsoVL_vstar") != 0) {
 		ele17_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("ele17_CaloIdL_CaloIsoVL_vstar");
-		ele17_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&ele17_CaloIdL_CaloIsoVL_vstar_);
+		if (ele17_CaloIdL_CaloIsoVL_vstar_branch) {ele17_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&ele17_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
 		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
+		if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch) {ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);}
 	}
 	ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
 		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
+		if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch) {ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);}
 	}
 	photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar") != 0) {
 		photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar");
-		photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_);
+		if (photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch) {photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = 0;
 	if (tree->GetBranch("ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar") != 0) {
 		ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = tree->GetBranch("ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar");
-		ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->SetAddress(&ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_);
+		if (ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch) {ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->SetAddress(&ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_);}
 	}
 	ele27_WP80_vstar_branch = 0;
 	if (tree->GetBranch("ele27_WP80_vstar") != 0) {
 		ele27_WP80_vstar_branch = tree->GetBranch("ele27_WP80_vstar");
-		ele27_WP80_vstar_branch->SetAddress(&ele27_WP80_vstar_);
+		if (ele27_WP80_vstar_branch) {ele27_WP80_vstar_branch->SetAddress(&ele27_WP80_vstar_);}
 	}
 	ele8_version_branch = 0;
 	if (tree->GetBranch("ele8_version") != 0) {
 		ele8_version_branch = tree->GetBranch("ele8_version");
-		ele8_version_branch->SetAddress(&ele8_version_);
+		if (ele8_version_branch) {ele8_version_branch->SetAddress(&ele8_version_);}
 	}
 	ele8_CaloIdL_TrkIdVL_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdL_TrkIdVL_version") != 0) {
 		ele8_CaloIdL_TrkIdVL_version_branch = tree->GetBranch("ele8_CaloIdL_TrkIdVL_version");
-		ele8_CaloIdL_TrkIdVL_version_branch->SetAddress(&ele8_CaloIdL_TrkIdVL_version_);
+		if (ele8_CaloIdL_TrkIdVL_version_branch) {ele8_CaloIdL_TrkIdVL_version_branch->SetAddress(&ele8_CaloIdL_TrkIdVL_version_);}
 	}
 	ele8_CaloIdL_CaloIsoVL_Jet40_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdL_CaloIsoVL_Jet40_version") != 0) {
 		ele8_CaloIdL_CaloIsoVL_Jet40_version_branch = tree->GetBranch("ele8_CaloIdL_CaloIsoVL_Jet40_version");
-		ele8_CaloIdL_CaloIsoVL_Jet40_version_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_Jet40_version_);
+		if (ele8_CaloIdL_CaloIsoVL_Jet40_version_branch) {ele8_CaloIdL_CaloIsoVL_Jet40_version_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_Jet40_version_);}
 	}
 	ele8_CaloIdL_CaloIsoVL_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdL_CaloIsoVL_version") != 0) {
 		ele8_CaloIdL_CaloIsoVL_version_branch = tree->GetBranch("ele8_CaloIdL_CaloIsoVL_version");
-		ele8_CaloIdL_CaloIsoVL_version_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_version_);
+		if (ele8_CaloIdL_CaloIsoVL_version_branch) {ele8_CaloIdL_CaloIsoVL_version_branch->SetAddress(&ele8_CaloIdL_CaloIsoVL_version_);}
 	}
 	ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version") != 0) {
 		ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch = tree->GetBranch("ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version");
-		ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_);
+		if (ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch) {ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_version_);}
 	}
 	ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version") != 0) {
 		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch = tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version");
-		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_);
+		if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch) {ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_);}
 	}
 	ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version") != 0) {
 		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch = tree->GetBranch("ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version");
-		ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_);
+		if (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch) {ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch->SetAddress(&ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_);}
 	}
 	ele8_CaloIdT_TrkIdVL_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_TrkIdVL_version") != 0) {
 		ele8_CaloIdT_TrkIdVL_version_branch = tree->GetBranch("ele8_CaloIdT_TrkIdVL_version");
-		ele8_CaloIdT_TrkIdVL_version_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_version_);
+		if (ele8_CaloIdT_TrkIdVL_version_branch) {ele8_CaloIdT_TrkIdVL_version_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_version_);}
 	}
 	ele8_CaloIdT_TrkIdVL_Jet30_version_branch = 0;
 	if (tree->GetBranch("ele8_CaloIdT_TrkIdVL_Jet30_version") != 0) {
 		ele8_CaloIdT_TrkIdVL_Jet30_version_branch = tree->GetBranch("ele8_CaloIdT_TrkIdVL_Jet30_version");
-		ele8_CaloIdT_TrkIdVL_Jet30_version_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_Jet30_version_);
+		if (ele8_CaloIdT_TrkIdVL_Jet30_version_branch) {ele8_CaloIdT_TrkIdVL_Jet30_version_branch->SetAddress(&ele8_CaloIdT_TrkIdVL_Jet30_version_);}
 	}
 	ele17_CaloIdL_CaloIsoVL_version_branch = 0;
 	if (tree->GetBranch("ele17_CaloIdL_CaloIsoVL_version") != 0) {
 		ele17_CaloIdL_CaloIsoVL_version_branch = tree->GetBranch("ele17_CaloIdL_CaloIsoVL_version");
-		ele17_CaloIdL_CaloIsoVL_version_branch->SetAddress(&ele17_CaloIdL_CaloIsoVL_version_);
+		if (ele17_CaloIdL_CaloIsoVL_version_branch) {ele17_CaloIdL_CaloIsoVL_version_branch->SetAddress(&ele17_CaloIdL_CaloIsoVL_version_);}
 	}
 	ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch = 0;
 	if (tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version") != 0) {
 		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch = tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version");
-		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_);
+		if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch) {ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_version_);}
 	}
 	ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch = 0;
 	if (tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version") != 0) {
 		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch = tree->GetBranch("ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version");
-		ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_);
+		if (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch) {ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_branch->SetAddress(&ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_version_);}
 	}
 	photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch = 0;
 	if (tree->GetBranch("photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version") != 0) {
 		photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch = tree->GetBranch("photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version");
-		photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch->SetAddress(&photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_);
+		if (photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch) {photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_branch->SetAddress(&photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_version_);}
 	}
 	ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch = 0;
 	if (tree->GetBranch("ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version") != 0) {
 		ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch = tree->GetBranch("ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version");
-		ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch->SetAddress(&ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_);
+		if (ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch) {ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_branch->SetAddress(&ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_version_);}
 	}
 	ele27_WP80_version_branch = 0;
 	if (tree->GetBranch("ele27_WP80_version") != 0) {
 		ele27_WP80_version_branch = tree->GetBranch("ele27_WP80_version");
-		ele27_WP80_version_branch->SetAddress(&ele27_WP80_version_);
+		if (ele27_WP80_version_branch) {ele27_WP80_version_branch->SetAddress(&ele27_WP80_version_);}
 	}
 	dr_ele8_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_vstar") != 0) {
 		dr_ele8_vstar_branch = tree->GetBranch("dr_ele8_vstar");
-		dr_ele8_vstar_branch->SetAddress(&dr_ele8_vstar_);
+		if (dr_ele8_vstar_branch) {dr_ele8_vstar_branch->SetAddress(&dr_ele8_vstar_);}
 	}
 	dr_ele8_CaloIdL_TrkIdVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdL_TrkIdVL_vstar") != 0) {
 		dr_ele8_CaloIdL_TrkIdVL_vstar_branch = tree->GetBranch("dr_ele8_CaloIdL_TrkIdVL_vstar");
-		dr_ele8_CaloIdL_TrkIdVL_vstar_branch->SetAddress(&dr_ele8_CaloIdL_TrkIdVL_vstar_);
+		if (dr_ele8_CaloIdL_TrkIdVL_vstar_branch) {dr_ele8_CaloIdL_TrkIdVL_vstar_branch->SetAddress(&dr_ele8_CaloIdL_TrkIdVL_vstar_);}
 	}
 	dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar") != 0) {
 		dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch = tree->GetBranch("dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar");
-		dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->SetAddress(&dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_);
+		if (dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch) {dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->SetAddress(&dr_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_);}
 	}
 	dr_ele8_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdL_CaloIsoVL_vstar") != 0) {
 		dr_ele8_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("dr_ele8_CaloIdL_CaloIsoVL_vstar");
-		dr_ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&dr_ele8_CaloIdL_CaloIsoVL_vstar_);
+		if (dr_ele8_CaloIdL_CaloIsoVL_vstar_branch) {dr_ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&dr_ele8_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar") != 0) {
 		dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch = tree->GetBranch("dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar");
-		dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->SetAddress(&dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_);
+		if (dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch) {dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->SetAddress(&dr_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_);}
 	}
 	dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
 		dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
+		if (dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch) {dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);}
 	}
 	dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
 		dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
+		if (dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch) {dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&dr_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);}
 	}
 	dr_ele8_CaloIdT_TrkIdVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdT_TrkIdVL_vstar") != 0) {
 		dr_ele8_CaloIdT_TrkIdVL_vstar_branch = tree->GetBranch("dr_ele8_CaloIdT_TrkIdVL_vstar");
-		dr_ele8_CaloIdT_TrkIdVL_vstar_branch->SetAddress(&dr_ele8_CaloIdT_TrkIdVL_vstar_);
+		if (dr_ele8_CaloIdT_TrkIdVL_vstar_branch) {dr_ele8_CaloIdT_TrkIdVL_vstar_branch->SetAddress(&dr_ele8_CaloIdT_TrkIdVL_vstar_);}
 	}
 	dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar") != 0) {
 		dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = tree->GetBranch("dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar");
-		dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->SetAddress(&dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_);
+		if (dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch) {dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->SetAddress(&dr_ele8_CaloIdT_TrkIdVL_Jet30_vstar_);}
 	}
 	dr_ele17_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele17_CaloIdL_CaloIsoVL_vstar") != 0) {
 		dr_ele17_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("dr_ele17_CaloIdL_CaloIsoVL_vstar");
-		dr_ele17_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&dr_ele17_CaloIdL_CaloIsoVL_vstar_);
+		if (dr_ele17_CaloIdL_CaloIsoVL_vstar_branch) {dr_ele17_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&dr_ele17_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
 		dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
+		if (dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch) {dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);}
 	}
 	dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
 		dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
+		if (dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch) {dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&dr_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);}
 	}
 	dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar") != 0) {
 		dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar");
-		dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_);
+		if (dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch) {dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&dr_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar") != 0) {
 		dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = tree->GetBranch("dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar");
-		dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->SetAddress(&dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_);
+		if (dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch) {dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->SetAddress(&dr_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_);}
 	}
 	dr_ele27_WP80_vstar_branch = 0;
 	if (tree->GetBranch("dr_ele27_WP80_vstar") != 0) {
 		dr_ele27_WP80_vstar_branch = tree->GetBranch("dr_ele27_WP80_vstar");
-		dr_ele27_WP80_vstar_branch->SetAddress(&dr_ele27_WP80_vstar_);
+		if (dr_ele27_WP80_vstar_branch) {dr_ele27_WP80_vstar_branch->SetAddress(&dr_ele27_WP80_vstar_);}
 	}
 	hltps_ele8_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_vstar") != 0) {
 		hltps_ele8_vstar_branch = tree->GetBranch("hltps_ele8_vstar");
-		hltps_ele8_vstar_branch->SetAddress(&hltps_ele8_vstar_);
+		if (hltps_ele8_vstar_branch) {hltps_ele8_vstar_branch->SetAddress(&hltps_ele8_vstar_);}
 	}
 	hltps_ele8_CaloIdL_TrkIdVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdL_TrkIdVL_vstar") != 0) {
 		hltps_ele8_CaloIdL_TrkIdVL_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdL_TrkIdVL_vstar");
-		hltps_ele8_CaloIdL_TrkIdVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdL_TrkIdVL_vstar_);
+		if (hltps_ele8_CaloIdL_TrkIdVL_vstar_branch) {hltps_ele8_CaloIdL_TrkIdVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdL_TrkIdVL_vstar_);}
 	}
 	hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar") != 0) {
 		hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar");
-		hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->SetAddress(&hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_);
+		if (hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch) {hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_branch->SetAddress(&hltps_ele8_CaloIdL_CaloIsoVL_Jet40_vstar_);}
 	}
 	hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdL_CaloIsoVL_vstar") != 0) {
 		hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdL_CaloIsoVL_vstar");
-		hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdL_CaloIsoVL_vstar_);
+		if (hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch) {hltps_ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar") != 0) {
 		hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar");
-		hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_);
+		if (hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch) {hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_vstar_);}
 	}
 	hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
 		hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
+		if (hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch) {hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);}
 	}
 	hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
 		hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
+		if (hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch) {hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);}
 	}
 	hltps_ele8_CaloIdT_TrkIdVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdT_TrkIdVL_vstar") != 0) {
 		hltps_ele8_CaloIdT_TrkIdVL_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdT_TrkIdVL_vstar");
-		hltps_ele8_CaloIdT_TrkIdVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_TrkIdVL_vstar_);
+		if (hltps_ele8_CaloIdT_TrkIdVL_vstar_branch) {hltps_ele8_CaloIdT_TrkIdVL_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_TrkIdVL_vstar_);}
 	}
 	hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar") != 0) {
 		hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch = tree->GetBranch("hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar");
-		hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_);
+		if (hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch) {hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_branch->SetAddress(&hltps_ele8_CaloIdT_TrkIdVL_Jet30_vstar_);}
 	}
 	hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele17_CaloIdL_CaloIsoVL_vstar") != 0) {
 		hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("hltps_ele17_CaloIdL_CaloIsoVL_vstar");
-		hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&hltps_ele17_CaloIdL_CaloIsoVL_vstar_);
+		if (hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch) {hltps_ele17_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&hltps_ele17_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar") != 0) {
 		hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch = tree->GetBranch("hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar");
-		hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);
+		if (hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch) {hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_branch->SetAddress(&hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar_);}
 	}
 	hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar") != 0) {
 		hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch = tree->GetBranch("hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar");
-		hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);
+		if (hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch) {hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_branch->SetAddress(&hltps_ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar_);}
 	}
 	hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch = 0;
 	if (tree->GetBranch("hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar") != 0) {
 		hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch = tree->GetBranch("hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar");
-		hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_);
+		if (hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch) {hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_branch->SetAddress(&hltps_photon20_CaloIdVT_IsoT_Ele8_CaloIdL_CaloIsoVL_vstar_);}
 	}
 	hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar") != 0) {
 		hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch = tree->GetBranch("hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar");
-		hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->SetAddress(&hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_);
+		if (hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch) {hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_branch->SetAddress(&hltps_ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFJet30_vstar_);}
 	}
 	hltps_ele27_WP80_vstar_branch = 0;
 	if (tree->GetBranch("hltps_ele27_WP80_vstar") != 0) {
 		hltps_ele27_WP80_vstar_branch = tree->GetBranch("hltps_ele27_WP80_vstar");
-		hltps_ele27_WP80_vstar_branch->SetAddress(&hltps_ele27_WP80_vstar_);
+		if (hltps_ele27_WP80_vstar_branch) {hltps_ele27_WP80_vstar_branch->SetAddress(&hltps_ele27_WP80_vstar_);}
 	}
 	mu3_vstar_branch = 0;
 	if (tree->GetBranch("mu3_vstar") != 0) {
 		mu3_vstar_branch = tree->GetBranch("mu3_vstar");
-		mu3_vstar_branch->SetAddress(&mu3_vstar_);
+		if (mu3_vstar_branch) {mu3_vstar_branch->SetAddress(&mu3_vstar_);}
 	}
 	mu5_vstar_branch = 0;
 	if (tree->GetBranch("mu5_vstar") != 0) {
 		mu5_vstar_branch = tree->GetBranch("mu5_vstar");
-		mu5_vstar_branch->SetAddress(&mu5_vstar_);
+		if (mu5_vstar_branch) {mu5_vstar_branch->SetAddress(&mu5_vstar_);}
 	}
 	mu8_vstar_branch = 0;
 	if (tree->GetBranch("mu8_vstar") != 0) {
 		mu8_vstar_branch = tree->GetBranch("mu8_vstar");
-		mu8_vstar_branch->SetAddress(&mu8_vstar_);
+		if (mu8_vstar_branch) {mu8_vstar_branch->SetAddress(&mu8_vstar_);}
 	}
 	mu12_vstar_branch = 0;
 	if (tree->GetBranch("mu12_vstar") != 0) {
 		mu12_vstar_branch = tree->GetBranch("mu12_vstar");
-		mu12_vstar_branch->SetAddress(&mu12_vstar_);
+		if (mu12_vstar_branch) {mu12_vstar_branch->SetAddress(&mu12_vstar_);}
 	}
 	mu15_vstar_branch = 0;
 	if (tree->GetBranch("mu15_vstar") != 0) {
 		mu15_vstar_branch = tree->GetBranch("mu15_vstar");
-		mu15_vstar_branch->SetAddress(&mu15_vstar_);
+		if (mu15_vstar_branch) {mu15_vstar_branch->SetAddress(&mu15_vstar_);}
 	}
 	mu17_vstar_branch = 0;
 	if (tree->GetBranch("mu17_vstar") != 0) {
 		mu17_vstar_branch = tree->GetBranch("mu17_vstar");
-		mu17_vstar_branch->SetAddress(&mu17_vstar_);
+		if (mu17_vstar_branch) {mu17_vstar_branch->SetAddress(&mu17_vstar_);}
 	}
 	mu20_vstar_branch = 0;
 	if (tree->GetBranch("mu20_vstar") != 0) {
 		mu20_vstar_branch = tree->GetBranch("mu20_vstar");
-		mu20_vstar_branch->SetAddress(&mu20_vstar_);
+		if (mu20_vstar_branch) {mu20_vstar_branch->SetAddress(&mu20_vstar_);}
 	}
 	mu24_vstar_branch = 0;
 	if (tree->GetBranch("mu24_vstar") != 0) {
 		mu24_vstar_branch = tree->GetBranch("mu24_vstar");
-		mu24_vstar_branch->SetAddress(&mu24_vstar_);
+		if (mu24_vstar_branch) {mu24_vstar_branch->SetAddress(&mu24_vstar_);}
 	}
 	mu30_vstar_branch = 0;
 	if (tree->GetBranch("mu30_vstar") != 0) {
 		mu30_vstar_branch = tree->GetBranch("mu30_vstar");
-		mu30_vstar_branch->SetAddress(&mu30_vstar_);
+		if (mu30_vstar_branch) {mu30_vstar_branch->SetAddress(&mu30_vstar_);}
 	}
 	mu15_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("mu15_eta2p1_vstar") != 0) {
 		mu15_eta2p1_vstar_branch = tree->GetBranch("mu15_eta2p1_vstar");
-		mu15_eta2p1_vstar_branch->SetAddress(&mu15_eta2p1_vstar_);
+		if (mu15_eta2p1_vstar_branch) {mu15_eta2p1_vstar_branch->SetAddress(&mu15_eta2p1_vstar_);}
 	}
 	mu24_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("mu24_eta2p1_vstar") != 0) {
 		mu24_eta2p1_vstar_branch = tree->GetBranch("mu24_eta2p1_vstar");
-		mu24_eta2p1_vstar_branch->SetAddress(&mu24_eta2p1_vstar_);
+		if (mu24_eta2p1_vstar_branch) {mu24_eta2p1_vstar_branch->SetAddress(&mu24_eta2p1_vstar_);}
 	}
 	mu30_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("mu30_eta2p1_vstar") != 0) {
 		mu30_eta2p1_vstar_branch = tree->GetBranch("mu30_eta2p1_vstar");
-		mu30_eta2p1_vstar_branch->SetAddress(&mu30_eta2p1_vstar_);
+		if (mu30_eta2p1_vstar_branch) {mu30_eta2p1_vstar_branch->SetAddress(&mu30_eta2p1_vstar_);}
 	}
 	mu8_Jet40_vstar_branch = 0;
 	if (tree->GetBranch("mu8_Jet40_vstar") != 0) {
 		mu8_Jet40_vstar_branch = tree->GetBranch("mu8_Jet40_vstar");
-		mu8_Jet40_vstar_branch->SetAddress(&mu8_Jet40_vstar_);
+		if (mu8_Jet40_vstar_branch) {mu8_Jet40_vstar_branch->SetAddress(&mu8_Jet40_vstar_);}
 	}
 	isoMu20_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("isoMu20_eta2p1_vstar") != 0) {
 		isoMu20_eta2p1_vstar_branch = tree->GetBranch("isoMu20_eta2p1_vstar");
-		isoMu20_eta2p1_vstar_branch->SetAddress(&isoMu20_eta2p1_vstar_);
+		if (isoMu20_eta2p1_vstar_branch) {isoMu20_eta2p1_vstar_branch->SetAddress(&isoMu20_eta2p1_vstar_);}
 	}
 	isoMu24_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("isoMu24_eta2p1_vstar") != 0) {
 		isoMu24_eta2p1_vstar_branch = tree->GetBranch("isoMu24_eta2p1_vstar");
-		isoMu24_eta2p1_vstar_branch->SetAddress(&isoMu24_eta2p1_vstar_);
+		if (isoMu24_eta2p1_vstar_branch) {isoMu24_eta2p1_vstar_branch->SetAddress(&isoMu24_eta2p1_vstar_);}
 	}
 	isoMu30_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("isoMu30_eta2p1_vstar") != 0) {
 		isoMu30_eta2p1_vstar_branch = tree->GetBranch("isoMu30_eta2p1_vstar");
-		isoMu30_eta2p1_vstar_branch->SetAddress(&isoMu30_eta2p1_vstar_);
+		if (isoMu30_eta2p1_vstar_branch) {isoMu30_eta2p1_vstar_branch->SetAddress(&isoMu30_eta2p1_vstar_);}
 	}
 	relIso1p0Mu17_vstar_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu17_vstar") != 0) {
 		relIso1p0Mu17_vstar_branch = tree->GetBranch("relIso1p0Mu17_vstar");
-		relIso1p0Mu17_vstar_branch->SetAddress(&relIso1p0Mu17_vstar_);
+		if (relIso1p0Mu17_vstar_branch) {relIso1p0Mu17_vstar_branch->SetAddress(&relIso1p0Mu17_vstar_);}
+	}
+	relIso1p0Mu20_vstar_branch = 0;
+	if (tree->GetBranch("relIso1p0Mu20_vstar") != 0) {
+		relIso1p0Mu20_vstar_branch = tree->GetBranch("relIso1p0Mu20_vstar");
+		if (relIso1p0Mu20_vstar_branch) {relIso1p0Mu20_vstar_branch->SetAddress(&relIso1p0Mu20_vstar_);}
 	}
 	relIso1p0Mu20_vstar_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu20_vstar") != 0) {
@@ -2188,92 +2343,97 @@ void Init(TTree *tree) {
 	relIso1p0Mu5_vstar_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu5_vstar") != 0) {
 		relIso1p0Mu5_vstar_branch = tree->GetBranch("relIso1p0Mu5_vstar");
-		relIso1p0Mu5_vstar_branch->SetAddress(&relIso1p0Mu5_vstar_);
+		if (relIso1p0Mu5_vstar_branch) {relIso1p0Mu5_vstar_branch->SetAddress(&relIso1p0Mu5_vstar_);}
 	}
 	mu3_version_branch = 0;
 	if (tree->GetBranch("mu3_version") != 0) {
 		mu3_version_branch = tree->GetBranch("mu3_version");
-		mu3_version_branch->SetAddress(&mu3_version_);
+		if (mu3_version_branch) {mu3_version_branch->SetAddress(&mu3_version_);}
 	}
 	mu5_version_branch = 0;
 	if (tree->GetBranch("mu5_version") != 0) {
 		mu5_version_branch = tree->GetBranch("mu5_version");
-		mu5_version_branch->SetAddress(&mu5_version_);
+		if (mu5_version_branch) {mu5_version_branch->SetAddress(&mu5_version_);}
 	}
 	mu8_version_branch = 0;
 	if (tree->GetBranch("mu8_version") != 0) {
 		mu8_version_branch = tree->GetBranch("mu8_version");
-		mu8_version_branch->SetAddress(&mu8_version_);
+		if (mu8_version_branch) {mu8_version_branch->SetAddress(&mu8_version_);}
 	}
 	mu12_version_branch = 0;
 	if (tree->GetBranch("mu12_version") != 0) {
 		mu12_version_branch = tree->GetBranch("mu12_version");
-		mu12_version_branch->SetAddress(&mu12_version_);
+		if (mu12_version_branch) {mu12_version_branch->SetAddress(&mu12_version_);}
 	}
 	mu15_version_branch = 0;
 	if (tree->GetBranch("mu15_version") != 0) {
 		mu15_version_branch = tree->GetBranch("mu15_version");
-		mu15_version_branch->SetAddress(&mu15_version_);
+		if (mu15_version_branch) {mu15_version_branch->SetAddress(&mu15_version_);}
 	}
 	mu17_version_branch = 0;
 	if (tree->GetBranch("mu17_version") != 0) {
 		mu17_version_branch = tree->GetBranch("mu17_version");
-		mu17_version_branch->SetAddress(&mu17_version_);
+		if (mu17_version_branch) {mu17_version_branch->SetAddress(&mu17_version_);}
 	}
 	mu20_version_branch = 0;
 	if (tree->GetBranch("mu20_version") != 0) {
 		mu20_version_branch = tree->GetBranch("mu20_version");
-		mu20_version_branch->SetAddress(&mu20_version_);
+		if (mu20_version_branch) {mu20_version_branch->SetAddress(&mu20_version_);}
 	}
 	mu24_version_branch = 0;
 	if (tree->GetBranch("mu24_version") != 0) {
 		mu24_version_branch = tree->GetBranch("mu24_version");
-		mu24_version_branch->SetAddress(&mu24_version_);
+		if (mu24_version_branch) {mu24_version_branch->SetAddress(&mu24_version_);}
 	}
 	mu30_version_branch = 0;
 	if (tree->GetBranch("mu30_version") != 0) {
 		mu30_version_branch = tree->GetBranch("mu30_version");
-		mu30_version_branch->SetAddress(&mu30_version_);
+		if (mu30_version_branch) {mu30_version_branch->SetAddress(&mu30_version_);}
 	}
 	mu15_eta2p1_version_branch = 0;
 	if (tree->GetBranch("mu15_eta2p1_version") != 0) {
 		mu15_eta2p1_version_branch = tree->GetBranch("mu15_eta2p1_version");
-		mu15_eta2p1_version_branch->SetAddress(&mu15_eta2p1_version_);
+		if (mu15_eta2p1_version_branch) {mu15_eta2p1_version_branch->SetAddress(&mu15_eta2p1_version_);}
 	}
 	mu24_eta2p1_version_branch = 0;
 	if (tree->GetBranch("mu24_eta2p1_version") != 0) {
 		mu24_eta2p1_version_branch = tree->GetBranch("mu24_eta2p1_version");
-		mu24_eta2p1_version_branch->SetAddress(&mu24_eta2p1_version_);
+		if (mu24_eta2p1_version_branch) {mu24_eta2p1_version_branch->SetAddress(&mu24_eta2p1_version_);}
 	}
 	mu30_eta2p1_version_branch = 0;
 	if (tree->GetBranch("mu30_eta2p1_version") != 0) {
 		mu30_eta2p1_version_branch = tree->GetBranch("mu30_eta2p1_version");
-		mu30_eta2p1_version_branch->SetAddress(&mu30_eta2p1_version_);
+		if (mu30_eta2p1_version_branch) {mu30_eta2p1_version_branch->SetAddress(&mu30_eta2p1_version_);}
 	}
 	mu8_Jet40_version_branch = 0;
 	if (tree->GetBranch("mu8_Jet40_version") != 0) {
 		mu8_Jet40_version_branch = tree->GetBranch("mu8_Jet40_version");
-		mu8_Jet40_version_branch->SetAddress(&mu8_Jet40_version_);
+		if (mu8_Jet40_version_branch) {mu8_Jet40_version_branch->SetAddress(&mu8_Jet40_version_);}
 	}
 	isoMu20_eta2p1_version_branch = 0;
 	if (tree->GetBranch("isoMu20_eta2p1_version") != 0) {
 		isoMu20_eta2p1_version_branch = tree->GetBranch("isoMu20_eta2p1_version");
-		isoMu20_eta2p1_version_branch->SetAddress(&isoMu20_eta2p1_version_);
+		if (isoMu20_eta2p1_version_branch) {isoMu20_eta2p1_version_branch->SetAddress(&isoMu20_eta2p1_version_);}
 	}
 	isoMu24_eta2p1_version_branch = 0;
 	if (tree->GetBranch("isoMu24_eta2p1_version") != 0) {
 		isoMu24_eta2p1_version_branch = tree->GetBranch("isoMu24_eta2p1_version");
-		isoMu24_eta2p1_version_branch->SetAddress(&isoMu24_eta2p1_version_);
+		if (isoMu24_eta2p1_version_branch) {isoMu24_eta2p1_version_branch->SetAddress(&isoMu24_eta2p1_version_);}
 	}
 	isoMu30_eta2p1_version_branch = 0;
 	if (tree->GetBranch("isoMu30_eta2p1_version") != 0) {
 		isoMu30_eta2p1_version_branch = tree->GetBranch("isoMu30_eta2p1_version");
-		isoMu30_eta2p1_version_branch->SetAddress(&isoMu30_eta2p1_version_);
+		if (isoMu30_eta2p1_version_branch) {isoMu30_eta2p1_version_branch->SetAddress(&isoMu30_eta2p1_version_);}
 	}
 	relIso1p0Mu17_version_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu17_version") != 0) {
 		relIso1p0Mu17_version_branch = tree->GetBranch("relIso1p0Mu17_version");
-		relIso1p0Mu17_version_branch->SetAddress(&relIso1p0Mu17_version_);
+		if (relIso1p0Mu17_version_branch) {relIso1p0Mu17_version_branch->SetAddress(&relIso1p0Mu17_version_);}
+	}
+	relIso1p0Mu20_version_branch = 0;
+	if (tree->GetBranch("relIso1p0Mu20_version") != 0) {
+		relIso1p0Mu20_version_branch = tree->GetBranch("relIso1p0Mu20_version");
+		if (relIso1p0Mu20_version_branch) {relIso1p0Mu20_version_branch->SetAddress(&relIso1p0Mu20_version_);}
 	}
 	relIso1p0Mu20_version_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu20_version") != 0) {
@@ -2283,92 +2443,97 @@ void Init(TTree *tree) {
 	relIso1p0Mu5_version_branch = 0;
 	if (tree->GetBranch("relIso1p0Mu5_version") != 0) {
 		relIso1p0Mu5_version_branch = tree->GetBranch("relIso1p0Mu5_version");
-		relIso1p0Mu5_version_branch->SetAddress(&relIso1p0Mu5_version_);
+		if (relIso1p0Mu5_version_branch) {relIso1p0Mu5_version_branch->SetAddress(&relIso1p0Mu5_version_);}
 	}
 	dr_mu3_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu3_vstar") != 0) {
 		dr_mu3_vstar_branch = tree->GetBranch("dr_mu3_vstar");
-		dr_mu3_vstar_branch->SetAddress(&dr_mu3_vstar_);
+		if (dr_mu3_vstar_branch) {dr_mu3_vstar_branch->SetAddress(&dr_mu3_vstar_);}
 	}
 	dr_mu5_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu5_vstar") != 0) {
 		dr_mu5_vstar_branch = tree->GetBranch("dr_mu5_vstar");
-		dr_mu5_vstar_branch->SetAddress(&dr_mu5_vstar_);
+		if (dr_mu5_vstar_branch) {dr_mu5_vstar_branch->SetAddress(&dr_mu5_vstar_);}
 	}
 	dr_mu8_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu8_vstar") != 0) {
 		dr_mu8_vstar_branch = tree->GetBranch("dr_mu8_vstar");
-		dr_mu8_vstar_branch->SetAddress(&dr_mu8_vstar_);
+		if (dr_mu8_vstar_branch) {dr_mu8_vstar_branch->SetAddress(&dr_mu8_vstar_);}
 	}
 	dr_mu12_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu12_vstar") != 0) {
 		dr_mu12_vstar_branch = tree->GetBranch("dr_mu12_vstar");
-		dr_mu12_vstar_branch->SetAddress(&dr_mu12_vstar_);
+		if (dr_mu12_vstar_branch) {dr_mu12_vstar_branch->SetAddress(&dr_mu12_vstar_);}
 	}
 	dr_mu15_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu15_vstar") != 0) {
 		dr_mu15_vstar_branch = tree->GetBranch("dr_mu15_vstar");
-		dr_mu15_vstar_branch->SetAddress(&dr_mu15_vstar_);
+		if (dr_mu15_vstar_branch) {dr_mu15_vstar_branch->SetAddress(&dr_mu15_vstar_);}
 	}
 	dr_mu17_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu17_vstar") != 0) {
 		dr_mu17_vstar_branch = tree->GetBranch("dr_mu17_vstar");
-		dr_mu17_vstar_branch->SetAddress(&dr_mu17_vstar_);
+		if (dr_mu17_vstar_branch) {dr_mu17_vstar_branch->SetAddress(&dr_mu17_vstar_);}
 	}
 	dr_mu20_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu20_vstar") != 0) {
 		dr_mu20_vstar_branch = tree->GetBranch("dr_mu20_vstar");
-		dr_mu20_vstar_branch->SetAddress(&dr_mu20_vstar_);
+		if (dr_mu20_vstar_branch) {dr_mu20_vstar_branch->SetAddress(&dr_mu20_vstar_);}
 	}
 	dr_mu24_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu24_vstar") != 0) {
 		dr_mu24_vstar_branch = tree->GetBranch("dr_mu24_vstar");
-		dr_mu24_vstar_branch->SetAddress(&dr_mu24_vstar_);
+		if (dr_mu24_vstar_branch) {dr_mu24_vstar_branch->SetAddress(&dr_mu24_vstar_);}
 	}
 	dr_mu30_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu30_vstar") != 0) {
 		dr_mu30_vstar_branch = tree->GetBranch("dr_mu30_vstar");
-		dr_mu30_vstar_branch->SetAddress(&dr_mu30_vstar_);
+		if (dr_mu30_vstar_branch) {dr_mu30_vstar_branch->SetAddress(&dr_mu30_vstar_);}
 	}
 	dr_mu15_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu15_eta2p1_vstar") != 0) {
 		dr_mu15_eta2p1_vstar_branch = tree->GetBranch("dr_mu15_eta2p1_vstar");
-		dr_mu15_eta2p1_vstar_branch->SetAddress(&dr_mu15_eta2p1_vstar_);
+		if (dr_mu15_eta2p1_vstar_branch) {dr_mu15_eta2p1_vstar_branch->SetAddress(&dr_mu15_eta2p1_vstar_);}
 	}
 	dr_mu24_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu24_eta2p1_vstar") != 0) {
 		dr_mu24_eta2p1_vstar_branch = tree->GetBranch("dr_mu24_eta2p1_vstar");
-		dr_mu24_eta2p1_vstar_branch->SetAddress(&dr_mu24_eta2p1_vstar_);
+		if (dr_mu24_eta2p1_vstar_branch) {dr_mu24_eta2p1_vstar_branch->SetAddress(&dr_mu24_eta2p1_vstar_);}
 	}
 	dr_mu30_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu30_eta2p1_vstar") != 0) {
 		dr_mu30_eta2p1_vstar_branch = tree->GetBranch("dr_mu30_eta2p1_vstar");
-		dr_mu30_eta2p1_vstar_branch->SetAddress(&dr_mu30_eta2p1_vstar_);
+		if (dr_mu30_eta2p1_vstar_branch) {dr_mu30_eta2p1_vstar_branch->SetAddress(&dr_mu30_eta2p1_vstar_);}
 	}
 	dr_mu8_Jet40_vstar_branch = 0;
 	if (tree->GetBranch("dr_mu8_Jet40_vstar") != 0) {
 		dr_mu8_Jet40_vstar_branch = tree->GetBranch("dr_mu8_Jet40_vstar");
-		dr_mu8_Jet40_vstar_branch->SetAddress(&dr_mu8_Jet40_vstar_);
+		if (dr_mu8_Jet40_vstar_branch) {dr_mu8_Jet40_vstar_branch->SetAddress(&dr_mu8_Jet40_vstar_);}
 	}
 	dr_isoMu20_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("dr_isoMu20_eta2p1_vstar") != 0) {
 		dr_isoMu20_eta2p1_vstar_branch = tree->GetBranch("dr_isoMu20_eta2p1_vstar");
-		dr_isoMu20_eta2p1_vstar_branch->SetAddress(&dr_isoMu20_eta2p1_vstar_);
+		if (dr_isoMu20_eta2p1_vstar_branch) {dr_isoMu20_eta2p1_vstar_branch->SetAddress(&dr_isoMu20_eta2p1_vstar_);}
 	}
 	dr_isoMu24_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("dr_isoMu24_eta2p1_vstar") != 0) {
 		dr_isoMu24_eta2p1_vstar_branch = tree->GetBranch("dr_isoMu24_eta2p1_vstar");
-		dr_isoMu24_eta2p1_vstar_branch->SetAddress(&dr_isoMu24_eta2p1_vstar_);
+		if (dr_isoMu24_eta2p1_vstar_branch) {dr_isoMu24_eta2p1_vstar_branch->SetAddress(&dr_isoMu24_eta2p1_vstar_);}
 	}
 	dr_isoMu30_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("dr_isoMu30_eta2p1_vstar") != 0) {
 		dr_isoMu30_eta2p1_vstar_branch = tree->GetBranch("dr_isoMu30_eta2p1_vstar");
-		dr_isoMu30_eta2p1_vstar_branch->SetAddress(&dr_isoMu30_eta2p1_vstar_);
+		if (dr_isoMu30_eta2p1_vstar_branch) {dr_isoMu30_eta2p1_vstar_branch->SetAddress(&dr_isoMu30_eta2p1_vstar_);}
 	}
 	dr_relIso1p0Mu17_vstar_branch = 0;
 	if (tree->GetBranch("dr_relIso1p0Mu17_vstar") != 0) {
 		dr_relIso1p0Mu17_vstar_branch = tree->GetBranch("dr_relIso1p0Mu17_vstar");
-		dr_relIso1p0Mu17_vstar_branch->SetAddress(&dr_relIso1p0Mu17_vstar_);
+		if (dr_relIso1p0Mu17_vstar_branch) {dr_relIso1p0Mu17_vstar_branch->SetAddress(&dr_relIso1p0Mu17_vstar_);}
+	}
+	dr_relIso1p0Mu20_vstar_branch = 0;
+	if (tree->GetBranch("dr_relIso1p0Mu20_vstar") != 0) {
+		dr_relIso1p0Mu20_vstar_branch = tree->GetBranch("dr_relIso1p0Mu20_vstar");
+		if (dr_relIso1p0Mu20_vstar_branch) {dr_relIso1p0Mu20_vstar_branch->SetAddress(&dr_relIso1p0Mu20_vstar_);}
 	}
 	dr_relIso1p0Mu20_vstar_branch = 0;
 	if (tree->GetBranch("dr_relIso1p0Mu20_vstar") != 0) {
@@ -2378,92 +2543,97 @@ void Init(TTree *tree) {
 	dr_relIso1p0Mu5_vstar_branch = 0;
 	if (tree->GetBranch("dr_relIso1p0Mu5_vstar") != 0) {
 		dr_relIso1p0Mu5_vstar_branch = tree->GetBranch("dr_relIso1p0Mu5_vstar");
-		dr_relIso1p0Mu5_vstar_branch->SetAddress(&dr_relIso1p0Mu5_vstar_);
+		if (dr_relIso1p0Mu5_vstar_branch) {dr_relIso1p0Mu5_vstar_branch->SetAddress(&dr_relIso1p0Mu5_vstar_);}
 	}
 	hltps_mu3_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu3_vstar") != 0) {
 		hltps_mu3_vstar_branch = tree->GetBranch("hltps_mu3_vstar");
-		hltps_mu3_vstar_branch->SetAddress(&hltps_mu3_vstar_);
+		if (hltps_mu3_vstar_branch) {hltps_mu3_vstar_branch->SetAddress(&hltps_mu3_vstar_);}
 	}
 	hltps_mu5_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu5_vstar") != 0) {
 		hltps_mu5_vstar_branch = tree->GetBranch("hltps_mu5_vstar");
-		hltps_mu5_vstar_branch->SetAddress(&hltps_mu5_vstar_);
+		if (hltps_mu5_vstar_branch) {hltps_mu5_vstar_branch->SetAddress(&hltps_mu5_vstar_);}
 	}
 	hltps_mu8_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu8_vstar") != 0) {
 		hltps_mu8_vstar_branch = tree->GetBranch("hltps_mu8_vstar");
-		hltps_mu8_vstar_branch->SetAddress(&hltps_mu8_vstar_);
+		if (hltps_mu8_vstar_branch) {hltps_mu8_vstar_branch->SetAddress(&hltps_mu8_vstar_);}
 	}
 	hltps_mu12_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu12_vstar") != 0) {
 		hltps_mu12_vstar_branch = tree->GetBranch("hltps_mu12_vstar");
-		hltps_mu12_vstar_branch->SetAddress(&hltps_mu12_vstar_);
+		if (hltps_mu12_vstar_branch) {hltps_mu12_vstar_branch->SetAddress(&hltps_mu12_vstar_);}
 	}
 	hltps_mu15_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu15_vstar") != 0) {
 		hltps_mu15_vstar_branch = tree->GetBranch("hltps_mu15_vstar");
-		hltps_mu15_vstar_branch->SetAddress(&hltps_mu15_vstar_);
+		if (hltps_mu15_vstar_branch) {hltps_mu15_vstar_branch->SetAddress(&hltps_mu15_vstar_);}
 	}
 	hltps_mu17_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu17_vstar") != 0) {
 		hltps_mu17_vstar_branch = tree->GetBranch("hltps_mu17_vstar");
-		hltps_mu17_vstar_branch->SetAddress(&hltps_mu17_vstar_);
+		if (hltps_mu17_vstar_branch) {hltps_mu17_vstar_branch->SetAddress(&hltps_mu17_vstar_);}
 	}
 	hltps_mu20_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu20_vstar") != 0) {
 		hltps_mu20_vstar_branch = tree->GetBranch("hltps_mu20_vstar");
-		hltps_mu20_vstar_branch->SetAddress(&hltps_mu20_vstar_);
+		if (hltps_mu20_vstar_branch) {hltps_mu20_vstar_branch->SetAddress(&hltps_mu20_vstar_);}
 	}
 	hltps_mu24_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu24_vstar") != 0) {
 		hltps_mu24_vstar_branch = tree->GetBranch("hltps_mu24_vstar");
-		hltps_mu24_vstar_branch->SetAddress(&hltps_mu24_vstar_);
+		if (hltps_mu24_vstar_branch) {hltps_mu24_vstar_branch->SetAddress(&hltps_mu24_vstar_);}
 	}
 	hltps_mu30_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu30_vstar") != 0) {
 		hltps_mu30_vstar_branch = tree->GetBranch("hltps_mu30_vstar");
-		hltps_mu30_vstar_branch->SetAddress(&hltps_mu30_vstar_);
+		if (hltps_mu30_vstar_branch) {hltps_mu30_vstar_branch->SetAddress(&hltps_mu30_vstar_);}
 	}
 	hltps_mu15_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu15_eta2p1_vstar") != 0) {
 		hltps_mu15_eta2p1_vstar_branch = tree->GetBranch("hltps_mu15_eta2p1_vstar");
-		hltps_mu15_eta2p1_vstar_branch->SetAddress(&hltps_mu15_eta2p1_vstar_);
+		if (hltps_mu15_eta2p1_vstar_branch) {hltps_mu15_eta2p1_vstar_branch->SetAddress(&hltps_mu15_eta2p1_vstar_);}
 	}
 	hltps_mu24_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu24_eta2p1_vstar") != 0) {
 		hltps_mu24_eta2p1_vstar_branch = tree->GetBranch("hltps_mu24_eta2p1_vstar");
-		hltps_mu24_eta2p1_vstar_branch->SetAddress(&hltps_mu24_eta2p1_vstar_);
+		if (hltps_mu24_eta2p1_vstar_branch) {hltps_mu24_eta2p1_vstar_branch->SetAddress(&hltps_mu24_eta2p1_vstar_);}
 	}
 	hltps_mu30_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu30_eta2p1_vstar") != 0) {
 		hltps_mu30_eta2p1_vstar_branch = tree->GetBranch("hltps_mu30_eta2p1_vstar");
-		hltps_mu30_eta2p1_vstar_branch->SetAddress(&hltps_mu30_eta2p1_vstar_);
+		if (hltps_mu30_eta2p1_vstar_branch) {hltps_mu30_eta2p1_vstar_branch->SetAddress(&hltps_mu30_eta2p1_vstar_);}
 	}
 	hltps_mu8_Jet40_vstar_branch = 0;
 	if (tree->GetBranch("hltps_mu8_Jet40_vstar") != 0) {
 		hltps_mu8_Jet40_vstar_branch = tree->GetBranch("hltps_mu8_Jet40_vstar");
-		hltps_mu8_Jet40_vstar_branch->SetAddress(&hltps_mu8_Jet40_vstar_);
+		if (hltps_mu8_Jet40_vstar_branch) {hltps_mu8_Jet40_vstar_branch->SetAddress(&hltps_mu8_Jet40_vstar_);}
 	}
 	hltps_isoMu20_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("hltps_isoMu20_eta2p1_vstar") != 0) {
 		hltps_isoMu20_eta2p1_vstar_branch = tree->GetBranch("hltps_isoMu20_eta2p1_vstar");
-		hltps_isoMu20_eta2p1_vstar_branch->SetAddress(&hltps_isoMu20_eta2p1_vstar_);
+		if (hltps_isoMu20_eta2p1_vstar_branch) {hltps_isoMu20_eta2p1_vstar_branch->SetAddress(&hltps_isoMu20_eta2p1_vstar_);}
 	}
 	hltps_isoMu24_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("hltps_isoMu24_eta2p1_vstar") != 0) {
 		hltps_isoMu24_eta2p1_vstar_branch = tree->GetBranch("hltps_isoMu24_eta2p1_vstar");
-		hltps_isoMu24_eta2p1_vstar_branch->SetAddress(&hltps_isoMu24_eta2p1_vstar_);
+		if (hltps_isoMu24_eta2p1_vstar_branch) {hltps_isoMu24_eta2p1_vstar_branch->SetAddress(&hltps_isoMu24_eta2p1_vstar_);}
 	}
 	hltps_isoMu30_eta2p1_vstar_branch = 0;
 	if (tree->GetBranch("hltps_isoMu30_eta2p1_vstar") != 0) {
 		hltps_isoMu30_eta2p1_vstar_branch = tree->GetBranch("hltps_isoMu30_eta2p1_vstar");
-		hltps_isoMu30_eta2p1_vstar_branch->SetAddress(&hltps_isoMu30_eta2p1_vstar_);
+		if (hltps_isoMu30_eta2p1_vstar_branch) {hltps_isoMu30_eta2p1_vstar_branch->SetAddress(&hltps_isoMu30_eta2p1_vstar_);}
 	}
 	hltps_relIso1p0Mu17_vstar_branch = 0;
 	if (tree->GetBranch("hltps_relIso1p0Mu17_vstar") != 0) {
 		hltps_relIso1p0Mu17_vstar_branch = tree->GetBranch("hltps_relIso1p0Mu17_vstar");
-		hltps_relIso1p0Mu17_vstar_branch->SetAddress(&hltps_relIso1p0Mu17_vstar_);
+		if (hltps_relIso1p0Mu17_vstar_branch) {hltps_relIso1p0Mu17_vstar_branch->SetAddress(&hltps_relIso1p0Mu17_vstar_);}
+	}
+	hltps_relIso1p0Mu20_vstar_branch = 0;
+	if (tree->GetBranch("hltps_relIso1p0Mu20_vstar") != 0) {
+		hltps_relIso1p0Mu20_vstar_branch = tree->GetBranch("hltps_relIso1p0Mu20_vstar");
+		if (hltps_relIso1p0Mu20_vstar_branch) {hltps_relIso1p0Mu20_vstar_branch->SetAddress(&hltps_relIso1p0Mu20_vstar_);}
 	}
 	hltps_relIso1p0Mu20_vstar_branch = 0;
 	if (tree->GetBranch("hltps_relIso1p0Mu20_vstar") != 0) {
@@ -2473,97 +2643,102 @@ void Init(TTree *tree) {
 	hltps_relIso1p0Mu5_vstar_branch = 0;
 	if (tree->GetBranch("hltps_relIso1p0Mu5_vstar") != 0) {
 		hltps_relIso1p0Mu5_vstar_branch = tree->GetBranch("hltps_relIso1p0Mu5_vstar");
-		hltps_relIso1p0Mu5_vstar_branch->SetAddress(&hltps_relIso1p0Mu5_vstar_);
+		if (hltps_relIso1p0Mu5_vstar_branch) {hltps_relIso1p0Mu5_vstar_branch->SetAddress(&hltps_relIso1p0Mu5_vstar_);}
 	}
 	ptpfj1_branch = 0;
 	if (tree->GetBranch("ptpfj1") != 0) {
 		ptpfj1_branch = tree->GetBranch("ptpfj1");
-		ptpfj1_branch->SetAddress(&ptpfj1_);
+		if (ptpfj1_branch) {ptpfj1_branch->SetAddress(&ptpfj1_);}
 	}
 	npfj1_branch = 0;
 	if (tree->GetBranch("npfj1") != 0) {
 		npfj1_branch = tree->GetBranch("npfj1");
-		npfj1_branch->SetAddress(&npfj1_);
+		if (npfj1_branch) {npfj1_branch->SetAddress(&npfj1_);}
 	}
 	ptpfj1_b2b_branch = 0;
 	if (tree->GetBranch("ptpfj1_b2b") != 0) {
 		ptpfj1_b2b_branch = tree->GetBranch("ptpfj1_b2b");
-		ptpfj1_b2b_branch->SetAddress(&ptpfj1_b2b_);
+		if (ptpfj1_b2b_branch) {ptpfj1_b2b_branch->SetAddress(&ptpfj1_b2b_);}
 	}
 	dphipfj1_b2b_branch = 0;
 	if (tree->GetBranch("dphipfj1_b2b") != 0) {
 		dphipfj1_b2b_branch = tree->GetBranch("dphipfj1_b2b");
-		dphipfj1_b2b_branch->SetAddress(&dphipfj1_b2b_);
+		if (dphipfj1_b2b_branch) {dphipfj1_b2b_branch->SetAddress(&dphipfj1_b2b_);}
 	}
 	ptpfcj1_branch = 0;
 	if (tree->GetBranch("ptpfcj1") != 0) {
 		ptpfcj1_branch = tree->GetBranch("ptpfcj1");
-		ptpfcj1_branch->SetAddress(&ptpfcj1_);
+		if (ptpfcj1_branch) {ptpfcj1_branch->SetAddress(&ptpfcj1_);}
 	}
 	npfcj1_branch = 0;
 	if (tree->GetBranch("npfcj1") != 0) {
 		npfcj1_branch = tree->GetBranch("npfcj1");
-		npfcj1_branch->SetAddress(&npfcj1_);
+		if (npfcj1_branch) {npfcj1_branch->SetAddress(&npfcj1_);}
 	}
 	ptpfcj1_b2b_branch = 0;
 	if (tree->GetBranch("ptpfcj1_b2b") != 0) {
 		ptpfcj1_b2b_branch = tree->GetBranch("ptpfcj1_b2b");
-		ptpfcj1_b2b_branch->SetAddress(&ptpfcj1_b2b_);
+		if (ptpfcj1_b2b_branch) {ptpfcj1_b2b_branch->SetAddress(&ptpfcj1_b2b_);}
 	}
 	dphipfcj1_b2b_branch = 0;
 	if (tree->GetBranch("dphipfcj1_b2b") != 0) {
 		dphipfcj1_b2b_branch = tree->GetBranch("dphipfcj1_b2b");
-		dphipfcj1_b2b_branch->SetAddress(&dphipfcj1_b2b_);
+		if (dphipfcj1_b2b_branch) {dphipfcj1_b2b_branch->SetAddress(&dphipfcj1_b2b_);}
 	}
 	btagpfc_branch = 0;
 	if (tree->GetBranch("btagpfc") != 0) {
 		btagpfc_branch = tree->GetBranch("btagpfc");
-		btagpfc_branch->SetAddress(&btagpfc_);
+		if (btagpfc_branch) {btagpfc_branch->SetAddress(&btagpfc_);}
 	}
 	emfpfcL1Fj1_branch = 0;
 	if (tree->GetBranch("emfpfcL1Fj1") != 0) {
 		emfpfcL1Fj1_branch = tree->GetBranch("emfpfcL1Fj1");
-		emfpfcL1Fj1_branch->SetAddress(&emfpfcL1Fj1_);
+		if (emfpfcL1Fj1_branch) {emfpfcL1Fj1_branch->SetAddress(&emfpfcL1Fj1_);}
 	}
 	ptpfcL1Fj1_branch = 0;
 	if (tree->GetBranch("ptpfcL1Fj1") != 0) {
 		ptpfcL1Fj1_branch = tree->GetBranch("ptpfcL1Fj1");
-		ptpfcL1Fj1_branch->SetAddress(&ptpfcL1Fj1_);
+		if (ptpfcL1Fj1_branch) {ptpfcL1Fj1_branch->SetAddress(&ptpfcL1Fj1_);}
 	}
 	dphipfcL1Fj1_branch = 0;
 	if (tree->GetBranch("dphipfcL1Fj1") != 0) {
 		dphipfcL1Fj1_branch = tree->GetBranch("dphipfcL1Fj1");
-		dphipfcL1Fj1_branch->SetAddress(&dphipfcL1Fj1_);
+		if (dphipfcL1Fj1_branch) {dphipfcL1Fj1_branch->SetAddress(&dphipfcL1Fj1_);}
 	}
 	npfcL1Fj1_branch = 0;
 	if (tree->GetBranch("npfcL1Fj1") != 0) {
 		npfcL1Fj1_branch = tree->GetBranch("npfcL1Fj1");
-		npfcL1Fj1_branch->SetAddress(&npfcL1Fj1_);
+		if (npfcL1Fj1_branch) {npfcL1Fj1_branch->SetAddress(&npfcL1Fj1_);}
 	}
 	npfc30L1Fj1_branch = 0;
 	if (tree->GetBranch("npfc30L1Fj1") != 0) {
 		npfc30L1Fj1_branch = tree->GetBranch("npfc30L1Fj1");
-		npfc30L1Fj1_branch->SetAddress(&npfc30L1Fj1_);
+		if (npfc30L1Fj1_branch) {npfc30L1Fj1_branch->SetAddress(&npfc30L1Fj1_);}
 	}
 	npfc40L1Fj1_branch = 0;
 	if (tree->GetBranch("npfc40L1Fj1") != 0) {
 		npfc40L1Fj1_branch = tree->GetBranch("npfc40L1Fj1");
-		npfc40L1Fj1_branch->SetAddress(&npfc40L1Fj1_);
+		if (npfc40L1Fj1_branch) {npfc40L1Fj1_branch->SetAddress(&npfc40L1Fj1_);}
 	}
 	ptpfcL1Fj1_b2b_branch = 0;
 	if (tree->GetBranch("ptpfcL1Fj1_b2b") != 0) {
 		ptpfcL1Fj1_b2b_branch = tree->GetBranch("ptpfcL1Fj1_b2b");
-		ptpfcL1Fj1_b2b_branch->SetAddress(&ptpfcL1Fj1_b2b_);
+		if (ptpfcL1Fj1_b2b_branch) {ptpfcL1Fj1_b2b_branch->SetAddress(&ptpfcL1Fj1_b2b_);}
 	}
 	dphipfcL1Fj1_b2b_branch = 0;
 	if (tree->GetBranch("dphipfcL1Fj1_b2b") != 0) {
 		dphipfcL1Fj1_b2b_branch = tree->GetBranch("dphipfcL1Fj1_b2b");
-		dphipfcL1Fj1_b2b_branch->SetAddress(&dphipfcL1Fj1_b2b_);
+		if (dphipfcL1Fj1_b2b_branch) {dphipfcL1Fj1_b2b_branch->SetAddress(&dphipfcL1Fj1_b2b_);}
 	}
 	btagpfcL1F_branch = 0;
 	if (tree->GetBranch("btagpfcL1F") != 0) {
 		btagpfcL1F_branch = tree->GetBranch("btagpfcL1F");
-		btagpfcL1F_branch->SetAddress(&btagpfcL1F_);
+		if (btagpfcL1F_branch) {btagpfcL1F_branch->SetAddress(&btagpfcL1F_);}
+	}
+	npfc50L1Fj1_eth_branch = 0;
+	if (tree->GetBranch("npfc50L1Fj1_eth") != 0) {
+		npfc50L1Fj1_eth_branch = tree->GetBranch("npfc50L1Fj1_eth");
+		if (npfc50L1Fj1_eth_branch) {npfc50L1Fj1_eth_branch->SetAddress(&npfc50L1Fj1_eth_);}
 	}
 	npfc50L1Fj1_eth_branch = 0;
 	if (tree->GetBranch("npfc50L1Fj1_eth") != 0) {
@@ -2573,47 +2748,52 @@ void Init(TTree *tree) {
 	emfpfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("emfpfcL1Fj1res") != 0) {
 		emfpfcL1Fj1res_branch = tree->GetBranch("emfpfcL1Fj1res");
-		emfpfcL1Fj1res_branch->SetAddress(&emfpfcL1Fj1res_);
+		if (emfpfcL1Fj1res_branch) {emfpfcL1Fj1res_branch->SetAddress(&emfpfcL1Fj1res_);}
 	}
 	ptpfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("ptpfcL1Fj1res") != 0) {
 		ptpfcL1Fj1res_branch = tree->GetBranch("ptpfcL1Fj1res");
-		ptpfcL1Fj1res_branch->SetAddress(&ptpfcL1Fj1res_);
+		if (ptpfcL1Fj1res_branch) {ptpfcL1Fj1res_branch->SetAddress(&ptpfcL1Fj1res_);}
 	}
 	dphipfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("dphipfcL1Fj1res") != 0) {
 		dphipfcL1Fj1res_branch = tree->GetBranch("dphipfcL1Fj1res");
-		dphipfcL1Fj1res_branch->SetAddress(&dphipfcL1Fj1res_);
+		if (dphipfcL1Fj1res_branch) {dphipfcL1Fj1res_branch->SetAddress(&dphipfcL1Fj1res_);}
 	}
 	npfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("npfcL1Fj1res") != 0) {
 		npfcL1Fj1res_branch = tree->GetBranch("npfcL1Fj1res");
-		npfcL1Fj1res_branch->SetAddress(&npfcL1Fj1res_);
+		if (npfcL1Fj1res_branch) {npfcL1Fj1res_branch->SetAddress(&npfcL1Fj1res_);}
 	}
 	npfc30L1Fj1res_branch = 0;
 	if (tree->GetBranch("npfc30L1Fj1res") != 0) {
 		npfc30L1Fj1res_branch = tree->GetBranch("npfc30L1Fj1res");
-		npfc30L1Fj1res_branch->SetAddress(&npfc30L1Fj1res_);
+		if (npfc30L1Fj1res_branch) {npfc30L1Fj1res_branch->SetAddress(&npfc30L1Fj1res_);}
 	}
 	npfc40L1Fj1res_branch = 0;
 	if (tree->GetBranch("npfc40L1Fj1res") != 0) {
 		npfc40L1Fj1res_branch = tree->GetBranch("npfc40L1Fj1res");
-		npfc40L1Fj1res_branch->SetAddress(&npfc40L1Fj1res_);
+		if (npfc40L1Fj1res_branch) {npfc40L1Fj1res_branch->SetAddress(&npfc40L1Fj1res_);}
 	}
 	ptpfcL1Fj1res_b2b_branch = 0;
 	if (tree->GetBranch("ptpfcL1Fj1res_b2b") != 0) {
 		ptpfcL1Fj1res_b2b_branch = tree->GetBranch("ptpfcL1Fj1res_b2b");
-		ptpfcL1Fj1res_b2b_branch->SetAddress(&ptpfcL1Fj1res_b2b_);
+		if (ptpfcL1Fj1res_b2b_branch) {ptpfcL1Fj1res_b2b_branch->SetAddress(&ptpfcL1Fj1res_b2b_);}
 	}
 	dphipfcL1Fj1res_b2b_branch = 0;
 	if (tree->GetBranch("dphipfcL1Fj1res_b2b") != 0) {
 		dphipfcL1Fj1res_b2b_branch = tree->GetBranch("dphipfcL1Fj1res_b2b");
-		dphipfcL1Fj1res_b2b_branch->SetAddress(&dphipfcL1Fj1res_b2b_);
+		if (dphipfcL1Fj1res_b2b_branch) {dphipfcL1Fj1res_b2b_branch->SetAddress(&dphipfcL1Fj1res_b2b_);}
 	}
 	btagpfcL1Fres_branch = 0;
 	if (tree->GetBranch("btagpfcL1Fres") != 0) {
 		btagpfcL1Fres_branch = tree->GetBranch("btagpfcL1Fres");
-		btagpfcL1Fres_branch->SetAddress(&btagpfcL1Fres_);
+		if (btagpfcL1Fres_branch) {btagpfcL1Fres_branch->SetAddress(&btagpfcL1Fres_);}
+	}
+	npfc50L1Fj1res_eth_branch = 0;
+	if (tree->GetBranch("npfc50L1Fj1res_eth") != 0) {
+		npfc50L1Fj1res_eth_branch = tree->GetBranch("npfc50L1Fj1res_eth");
+		if (npfc50L1Fj1res_eth_branch) {npfc50L1Fj1res_eth_branch->SetAddress(&npfc50L1Fj1res_eth_);}
 	}
 	npfc50L1Fj1res_eth_branch = 0;
 	if (tree->GetBranch("npfc50L1Fj1res_eth") != 0) {
@@ -2623,42 +2803,42 @@ void Init(TTree *tree) {
 	ptbtagpfcL1Fj1_branch = 0;
 	if (tree->GetBranch("ptbtagpfcL1Fj1") != 0) {
 		ptbtagpfcL1Fj1_branch = tree->GetBranch("ptbtagpfcL1Fj1");
-		ptbtagpfcL1Fj1_branch->SetAddress(&ptbtagpfcL1Fj1_);
+		if (ptbtagpfcL1Fj1_branch) {ptbtagpfcL1Fj1_branch->SetAddress(&ptbtagpfcL1Fj1_);}
 	}
 	dphibtagpfcL1Fj1_branch = 0;
 	if (tree->GetBranch("dphibtagpfcL1Fj1") != 0) {
 		dphibtagpfcL1Fj1_branch = tree->GetBranch("dphibtagpfcL1Fj1");
-		dphibtagpfcL1Fj1_branch->SetAddress(&dphibtagpfcL1Fj1_);
+		if (dphibtagpfcL1Fj1_branch) {dphibtagpfcL1Fj1_branch->SetAddress(&dphibtagpfcL1Fj1_);}
 	}
 	ptbtagpfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("ptbtagpfcL1Fj1res") != 0) {
 		ptbtagpfcL1Fj1res_branch = tree->GetBranch("ptbtagpfcL1Fj1res");
-		ptbtagpfcL1Fj1res_branch->SetAddress(&ptbtagpfcL1Fj1res_);
+		if (ptbtagpfcL1Fj1res_branch) {ptbtagpfcL1Fj1res_branch->SetAddress(&ptbtagpfcL1Fj1res_);}
 	}
 	dphibtagpfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("dphibtagpfcL1Fj1res") != 0) {
 		dphibtagpfcL1Fj1res_branch = tree->GetBranch("dphibtagpfcL1Fj1res");
-		dphibtagpfcL1Fj1res_branch->SetAddress(&dphibtagpfcL1Fj1res_);
+		if (dphibtagpfcL1Fj1res_branch) {dphibtagpfcL1Fj1res_branch->SetAddress(&dphibtagpfcL1Fj1res_);}
 	}
 	nbpfcjet_branch = 0;
 	if (tree->GetBranch("nbpfcjet") != 0) {
 		nbpfcjet_branch = tree->GetBranch("nbpfcjet");
-		nbpfcjet_branch->SetAddress(&nbpfcjet_);
+		if (nbpfcjet_branch) {nbpfcjet_branch->SetAddress(&nbpfcjet_);}
 	}
 	dRpfcNear_branch = 0;
 	if (tree->GetBranch("dRpfcNear") != 0) {
 		dRpfcNear_branch = tree->GetBranch("dRpfcNear");
-		dRpfcNear_branch->SetAddress(&dRpfcNear_);
+		if (dRpfcNear_branch) {dRpfcNear_branch->SetAddress(&dRpfcNear_);}
 	}
 	dRpfcFar_branch = 0;
 	if (tree->GetBranch("dRpfcFar") != 0) {
 		dRpfcFar_branch = tree->GetBranch("dRpfcFar");
-		dRpfcFar_branch->SetAddress(&dRpfcFar_);
+		if (dRpfcFar_branch) {dRpfcFar_branch->SetAddress(&dRpfcFar_);}
 	}
 	rho_branch = 0;
 	if (tree->GetBranch("rho") != 0) {
 		rho_branch = tree->GetBranch("rho");
-		rho_branch->SetAddress(&rho_);
+		if (rho_branch) {rho_branch->SetAddress(&rho_);}
 	}
   tree->SetMakeClass(0);
 }
@@ -3409,7 +3589,7 @@ void LoadAllBranches()
 			}
 			dataset_isLoaded = true;
 		}
-		return dataset_;
+		return *dataset_;
 	}
 	TString &filename()
 	{
@@ -3422,7 +3602,7 @@ void LoadAllBranches()
 			}
 			filename_isLoaded = true;
 		}
-		return filename_;
+		return *filename_;
 	}
 	int &pu_nPUvertices()
 	{

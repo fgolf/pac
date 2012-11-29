@@ -308,16 +308,18 @@ namespace at
             	    i_permilleOld = i_permille;
             	}
 
-				// stop on a specific event
-                //if (tas::evt_isRealData() && !(evt_run() == 190538 && evt_lumiBlock() == 636 && evt_event() == 928975370))
-                //if (tas::evt_isRealData() && !(tas::evt_run() == 190538))
-        		//{
-        		//    continue;
-        		//}
-
                 unsigned int run = Run(ntuple_class);
                 unsigned int ls  = LumiBlock(ntuple_class);
                 unsigned int evt = Event(ntuple_class);
+
+				// stop on a specific event
+                //if (tas::evt_isRealData() && !(evt_run() == 190538 && evt_lumiBlock() == 636 && evt_event() == 928975370))
+                //if (tas::evt_isRealData() && !(tas::evt_run() == 190538))
+                //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
+                //if (!(run == 1 && ls == 7023 && evt == 2106435))
+        		//{
+        		//    continue;
+        		//}
 
                 // filter out events
                 if (IsRealData(ntuple_class))
@@ -352,7 +354,7 @@ namespace at
 				// print run/ls/event
         		if (verbose)
         		{
-        		    cout << Form("run %d, ls %d, evt %d", run, ls, evt) << endl;
+        		    //cout << Form("run %d, ls %d, evt %d", run, ls, evt) << endl;
         		}
 
                 // analysis
