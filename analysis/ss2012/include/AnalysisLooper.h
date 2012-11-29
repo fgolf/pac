@@ -66,6 +66,11 @@ private:
     bool m_sync_print;
     bool m_verbose;
 
+    int hyp_count;
+    //int good_lep_count;
+    //int iso_lep_count;
+    //int num_lep_count;
+
     // 0 mm, 1 em, 2 ee
     std::tr1::array<float, 4> m_count_ss;
     std::tr1::array<float, 4> m_count_sf;
@@ -76,6 +81,7 @@ private:
     std::tr1::array<float, 4> m_count_nobtag_sf;
     std::tr1::array<float, 4> m_count_nobtag_df;
     std::tr1::array<float, 4> m_count_nobtag_os;
+
 
     // fake rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;

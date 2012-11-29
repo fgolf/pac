@@ -37,7 +37,7 @@ try
     std::string output_file         = "";
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_24Sep2012.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_26Nov2012.root";
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string fake_rate_hist_name = "h_mufr40c";
     std::string sample_name         = "";
@@ -61,7 +61,7 @@ try
         ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                                                 )
         ("gen_only"      , po::value<bool>(&gen_only)                   , "only fill gen variables"                                                           )
         ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                           )
-        ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from at/Sample.h)"                                           )
+        ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from at/AnalysisType.h)"                                     )
         ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, tensor, ...)"                                     )
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
@@ -70,7 +70,7 @@ try
         ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c)"                                     )  // to do for muons
         ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                              )
         ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                        )
-        ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms"                                                                 )
+        ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms (default is false)"                                              )
         //("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
         ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync"                                                                    )
         ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
@@ -99,23 +99,23 @@ try
     if (verbose)
     {
         cout << "inputs:" << endl;
-        cout << "number_of_events   :\t" << number_of_events    << endl;
-        cout << "luminosity         :\t" << luminosity          << endl;
-        cout << "verbose            :\t" << verbose             << endl;
-        cout << "sample_name        :\t" << sample_name         << endl;
-        cout << "analysis_type_name :\t" << analysis_type_name         << endl;
-        cout << "ntuple_type_name   :\t" << ntuple_type_name    << endl;
-        cout << "output_file        :\t" << output_file         << endl;
-        cout << "input_file         :\t" << input_file          << endl;
-        cout << "vtxreweight_file   :\t" << vtxreweight_file    << endl;
-        cout << "good_run_list      :\t" << good_run_list       << endl;
-        cout << "fake_rate_file_name:\t" << fake_rate_file_name << endl;
-        cout << "flip_rate_file_name:\t" << flip_rate_file_name << endl;
-        cout << "sparms             :\t" << sparms              << endl;
+        cout << "number_of_events   :\t" << number_of_events     << endl;
+        cout << "luminosity         :\t" << luminosity           << endl;
+        cout << "verbose            :\t" << verbose              << endl;
+        cout << "sample_name        :\t" << sample_name          << endl;
+        cout << "analysis_type_name :\t" << analysis_type_name   << endl;
+        cout << "ntuple_type_name   :\t" << ntuple_type_name     << endl;
+        cout << "output_file        :\t" << output_file          << endl;
+        cout << "input_file         :\t" << input_file           << endl;
+        cout << "vtxreweight_file   :\t" << vtxreweight_file     << endl;
+        cout << "good_run_list      :\t" << good_run_list        << endl;
+        cout << "fake_rate_file_name:\t" << fake_rate_file_name  << endl;
+        cout << "flip_rate_file_name:\t" << flip_rate_file_name  << endl;
+        cout << "sparms             :\t" << sparms               << endl;
         //cout << "switchSigns        :\t" << switchSigns         << endl;
-        cout << "jetMetScale        :\t" << jetMetScale         << endl;
-        cout << "isFastSim          :\t" << isFastSim           << endl;
-        cout << "apply_jec_otf      :\t" << apply_jec_otf       << endl;
+        cout << "jetMetScale        :\t" << jetMetScale          << endl;
+        cout << "isFastSim          :\t" << isFastSim            << endl;
+        cout << "apply_jec_otf      :\t" << apply_jec_otf        << endl;
     }
 
     // test inputs boundary conditions
