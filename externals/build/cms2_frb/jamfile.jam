@@ -1,0 +1,27 @@
+# libs for CMS2 NtupleMacros/fakeRate
+# -------------------------------------------------------------------- #
+
+lib cms2_frb
+  : # sources
+    $(CMS2_FRB)/myBabyMaker.cc
+    [ rootcint Dict
+        : # requirements
+          <include>$(CMS2_FRB)
+          <header>myBabyMaker.h
+    ]
+    # dependent packages
+    /ROOT
+    /CMS2//cms2_header
+    /CMS2_CORE//cms2_core
+    /AnalysisTools//AnalysisTools
+  : # requirements
+    <include>$(CMS2_FRB)
+    <define>__NON_ROOT_BUILD__  
+    #<define>__CMS2_SLIM__  
+  : # default-build
+  : # usage-requirements
+    <include>$(CMS2_FRB)
+    <define>__NON_ROOT_BUILD__  
+  ;
+
+#default-install cms2_frb/<link>shared ;
