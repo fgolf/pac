@@ -17,6 +17,7 @@ sources         := MiscTools.cc              	\
 				   Keyboard.cc					\
 				   MergeTChain.cc               \
 				   MiscTools.cc				    \
+				   FillHist.cc				    \
 				   PrintFakeRateTable.cc        \
 				   TDRStyle.cc					\
 				   TH1Container.cc				\
@@ -28,6 +29,7 @@ defines         := __RTINT__
 
 # for ROOT interactive use (rootcint)
 headers         := rt/MiscTools.h               \
+              	   rt/FillHist.h                \
               	   rt/TH1Container.h            \
               	   rt/TH1Overlay.h			    \
               	   rt/PrintFakeRateTable.h      \
