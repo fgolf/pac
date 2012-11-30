@@ -117,8 +117,15 @@ void FRClosureLooper::EndJob()
     yield_ss[2] = rt::Integral(hc["h_yield_em"]);
     yield_ss[3] = rt::Integral(hc["h_yield_ll"]);
 
+    std::tr1::array<float, 4> yield_ss_error;
+    yield_ss_error[0] = rt::IntegralAndError(hc["h_yield_ee"]).second;
+    yield_ss_error[1] = rt::IntegralAndError(hc["h_yield_mm"]).second;
+    yield_ss_error[2] = rt::IntegralAndError(hc["h_yield_em"]).second;
+    yield_ss_error[3] = rt::IntegralAndError(hc["h_yield_ll"]).second;
+
     // set the error to the lumi*scale1fb if the yield < weight*0.5 
-    float weight = (m_lumi * m_scale1fb);
+    //float weight = (m_lumi * m_scale1fb);
+    float weight = 1.0; 
     if (rt::Integral(hc["h_yield_ee"]) < (weight * 0.5)) {hc["h_yield_ee"]->SetBinError(2, weight);}
     if (rt::Integral(hc["h_yield_mm"]) < (weight * 0.5)) {hc["h_yield_mm"]->SetBinError(2, weight);}
     if (rt::Integral(hc["h_yield_em"]) < (weight * 0.5)) {hc["h_yield_em"]->SetBinError(2, weight);}
@@ -190,22 +197,42 @@ void FRClosureLooper::EndJob()
     PredSummary mc(Pred(00.0, 0.0), Pred(11.3, 0.3), Pred(00.0, 0.0));
 
     // total prediciton
-    PredSummary pred = fake + mc;
+    //PredSummary pred = fake + mc;
+    PredSummary pred = fake;
+    
+    // ratio of pred/obs
+    float ratio_value = pred.mm.value/yield_ss[1];
+    float ratio_error = ratio_value * sqrt(pow(pred.mm.error/pred.mm.value, 2) + pow(yield_ss_error[1]/yield_ss[1], 2));
+    string ratio      = rt::pm(ratio_value, ratio_error);
 
 
     // print the output
+    //CTable t_yields;
+    //t_yields.useTitle();
+    //t_yields.setTitle("yields table");
+    //string f = "1.2";
+    //t_yields.setTable() (                      "em",            "mm",            "me",            "me")
+    //                    ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
+    //                    ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
+    //                    ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
+    //                    ("Fakes"   ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
+    //                    //("MC"      ,     mc.ee.str(f),     mc.mm.str(f),     mc.em.str(f),     mc.ll.str(f))    
+    //                    ("Pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   pred.ll.str(f))    
+    //                    ("obs"     , (int)yield_ss[0],  (int)yield_ss[1],  (int)yield_ss[2],  (int)yield_ss[3]);
+    //                    ("pred/obs",         ratio[0],      ratio[1],      ratio[2],      ratio[3]);
+    //t_yields.print();
     CTable t_yields;
     t_yields.useTitle();
     t_yields.setTitle("yields table");
     string f = "1.2";
-    t_yields.setTable() (                      "ee",            "mm",            "em",            "ll")
-                        ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
-                        ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
-                        ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
-                        ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
-                        ("MC"     ,     mc.ee.str(f),     mc.mm.str(f),     mc.em.str(f),     mc.ll.str(f))    
-                        ("Pred"   ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   pred.ll.str(f))    
-                        ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
+    t_yields.setTable() (                       "qcd")
+                        ("SF raw"  , sf_raw.mm.str(f))
+                        ("SF"      ,     sf.mm.str(f))
+                        ("DF"      ,     df.mm.str(f))
+                        ("Fakes"   ,   fake.mm.str(f))
+                        ("Pred"    ,   pred.mm.str(f))
+                        ("obs"     , (int)yield_ss[1])
+                        ("pred/obs",            ratio);
     t_yields.print();
 }
 
@@ -289,7 +316,10 @@ int FRClosureLooper::operator()(long event)
         }
 
         // scale 1b (set before cuts) 
-        m_scale1fb = scale1fb();
+        if (not is_real_data() && event == 0)
+        {
+            m_scale1fb = scale1fb();
+        }
 
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
@@ -349,10 +379,10 @@ int FRClosureLooper::operator()(long event)
         }
 
         // passes signal region
-        //if (not PassesSignalRegion(m_signal_region, m_nbtags))
-        //{
-        //    return 0;
-        //}
+        if (not PassesSignalRegion(m_signal_region, m_nbtags))
+        {
+            return 0;
+        }
 
         // ttbar breakdown 
         switch (m_sample)
@@ -403,18 +433,20 @@ int FRClosureLooper::operator()(long event)
         string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
         string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
 
-        bool mc3_matched = is_real_data() ? true : (lep1_mc3id()!=-999 && lep2_mc3id()!=-999);
-		bool direct_b_l1 = is_real_data() ? true : (mc3_matched && abs(lep1_mc3id())==5 && idIsBeauty(lep1_mc3_momid()) && lep1_is_fromw()<1);
-		bool direct_b_l2 = is_real_data() ? true : (mc3_matched && abs(lep2_mc3id())==5 && idIsBeauty(lep2_mc3_momid()) && lep2_is_fromw()<1);
-		bool fromw_l1    = is_real_data() ? true : (lep1_is_fromw()==1);
-		bool fromw_l2    = is_real_data() ? true : (lep1_is_fromw()==1);
+        bool mc3_matched  = is_real_data() ? true : (lep1_mc3id()!=-999 && lep2_mc3id()!=-999);
+		bool direct_b_l1  = is_real_data() ? true : (mc3_matched && abs(lep1_mc3id())==5 && idIsBeauty(lep1_mc3_momid()) && lep1_is_fromw()<1);
+		bool direct_b_l2  = is_real_data() ? true : (mc3_matched && abs(lep2_mc3id())==5 && idIsBeauty(lep2_mc3_momid()) && lep2_is_fromw()<1);
+		bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
+		bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
+		bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
+		bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
 
         // SS
         if (is_ss())
         {
-            //if ((fromw_l1 && !fromw_l2) || (!fromw_l1 && fromw_l2))
-            //if (fromw_l1 || fromw_l2)
+            if ((fromw_l1 && not_fromw_l2) || (not_fromw_l1 && fromw_l2))
             {
+                //cout << lep1_mc3_momid() << "\t" << lep2_mc3_momid() << endl;
                 rt::Fill(hc["h_yield_ll"], 1, evt_weight);
                 rt::Fill(hc["h_yield"+hs], 1, evt_weight);
             }
@@ -425,7 +457,7 @@ int FRClosureLooper::operator()(long event)
         {
             const LorentzVector& p4 = lep1_is_fo() ? lep1_p4()    : lep2_p4();
             int id                  = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
-            //if (!fromw_l1 || !fromw_l2)
+            if (!fromw_l1 || !fromw_l2)
             {
                 if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
                 if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}

@@ -18,7 +18,9 @@ bool ValidDatasetName(const std::string& dataset)
         return true;
     if (dataset == "data2012ABv1")
         return true;
-    if (dataset == "ttbar12")
+    if (dataset == "ttbar")
+        return true;
+    if (dataset == "qcd")
         return true;
     return false;
 }
@@ -71,28 +73,32 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
     {
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";     // 920 /pb
         //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_11p38fb/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_11p38fb/";     // 10.45 /fb
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_12p26fb/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_12p26fb/";     // 12.26 /fb
+        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_12p26fb/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_12p26fb/";     // 12.26 /fb
+        const std::string& ntuple_path = "/nfs-7/userdata/rwkelley/babies/fr/FakeRate15Nov2012/";   
         if (channel=="mu")
         {
             // don't have all of these yet
-			chain->Add(Form("%s/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
 			chain->Add(Form("%s/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
 			chain->Add(Form("%s/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root"         , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"         , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
+			chain->Add(Form("%s/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root"         , ntuple_path.c_str()));
 			chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
+			chain->Add(Form("%s/SingleMu_Run2012D-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
         }
         else if (channel=="el")
         {
-            chain->Add(Form("%s/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root", ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
             chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root"       , ntuple_path.c_str())); 
+            chain->Add(Form("%s/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root"       , ntuple_path.c_str())); 
 			
         }
     }    
@@ -150,10 +156,17 @@ boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", cons
             chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
         }
     }    
-    else if (dataset == "ttbar12")
+    else if (dataset == "ttbar")
     {
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_mc/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_mc";
-        chain->Add(Form("%s/TTJets_TuneZ2star_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v1/*.root", ntuple_path.c_str())); 
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate15Nov2012/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate15Nov2012";
+        chain->Add(Form("%s/TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root", ntuple_path.c_str())); 
+    }    
+
+    // QCD
+    else if (dataset == "qcd")
+    {
+        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate15Nov2012/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate15Nov2012";
+        chain->Add(Form("%s/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", ntuple_path.c_str())); 
     }    
 
     return chain;

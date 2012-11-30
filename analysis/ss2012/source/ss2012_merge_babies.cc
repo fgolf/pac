@@ -130,6 +130,7 @@ try
         chain,
         output_file,
         simple_skim(njets),
+        //keep_all_events,
         samesignbtag,
         number_of_events,
         run_list,

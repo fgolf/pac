@@ -98,6 +98,26 @@ void FakeRateBabyLooper::EndJob()
         hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num20c"],hc["h_mu_fo20c"], "h_mufr20c", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20);|#eta|;p_{T} (GeV)"));
         hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num40c"],hc["h_mu_fo40c"], "h_mufr40c", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40);|#eta|;p_{T} (GeV)"));
         hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num60c"],hc["h_mu_fo60c"], "h_mufr60c", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60);|#eta|;p_{T} (GeV)"));
+
+        // FR(# vertices)
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num20c_iso_vs_nvtxs"],hc["h_mu_fo20c_iso_vs_nvtxs"], "h_mufr20c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, p_{T} > 20, iso);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num40c_iso_vs_nvtxs"],hc["h_mu_fo40c_iso_vs_nvtxs"], "h_mufr40c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, p_{T} > 20, iso);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num60c_iso_vs_nvtxs"],hc["h_mu_fo60c_iso_vs_nvtxs"], "h_mufr60c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, p_{T} > 20, iso);# vtxs"));
+
+        // FR(pt)
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "y", "h_mufr20c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, iso);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "y", "h_mufr40c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, iso);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "y", "h_mufr60c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, iso);p_{T}"));
+                                                                                                                                                      
+        // FR(eta)
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "x", "h_mufr20c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, p_{T} > 20, iso);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "x", "h_mufr40c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, p_{T} > 20, iso);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "x", "h_mufr60c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, p_{T} > 20, iso);|#eta|", 20, 100));
+
+        // FR(eta, pT)
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "h_mufr20c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, iso);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "h_mufr40c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, iso);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "h_mufr60c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, iso);|#eta|;p_{T} (GeV)"));
     }
 
     // electrons
@@ -192,6 +212,24 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH2F("h_mu_fo20c", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
         hc.Add(new TH2F("h_mu_fo40c", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
         hc.Add(new TH2F("h_mu_fo60c", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+
+        // numerator (iso)
+        hc.Add(new TH1F("h_mu_num20c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_num40c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_num60c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+
+        hc.Add(new TH2F("h_mu_num20c_iso", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_num40c_iso", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_num60c_iso", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+
+        // denominator (iso)
+        hc.Add(new TH1F("h_mu_fo20c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_fo40c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_fo60c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+
+        hc.Add(new TH2F("h_mu_fo20c_iso", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_fo40c_iso", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_fo60c_iso", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
     }
 
     // electrons
@@ -323,13 +361,19 @@ int FakeRateBabyLooper::operator()(long event)
 
         // trigger cuts
         bool trig_cut       = is_data ? false : true;
-        bool trig_cut_noiso = is_data ? false : true;
+        bool trig_cut_noiso = is_data ? false : true;  // electron non-isolated triggers
+        bool trig_cut_iso   = is_data ? false : true;  // muon isolated triggers
         if (is_data && is_mu)
         {
+            // trigger without isolation
             trig_cut = ((pt() > 30 && (mu30_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
                         (pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
                         (pt() > 17 && (mu17_vstar()>1 || mu8_vstar()>1)) || 
                         (pt() > 8  && (mu8_vstar()>1)));
+
+            // trigger with isolaiont
+            trig_cut_iso = ((pt() > 20 && (relIso1p0Mu20_vstar()>1 || relIso1p0Mu5_vstar()>1)) || 
+                            (pt() > 5  && (relIso1p0Mu5_vstar()>1)));
         }
         else if(is_data && is_el)
         {
@@ -339,7 +383,7 @@ int FakeRateBabyLooper::operator()(long event)
             trig_cut |= (pt() > 8  && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
 
             // triggers without isolation
-            trig_cut_noiso = (pt() > 8  && (ele8_CaloIdT_TrkIdVL_Jet30_vstar()  > 1 || ele8_CaloIdT_TrkIdVL_vstar() > 1));
+            trig_cut_noiso = (pt() > 8  && (ele8_CaloIdT_TrkIdVL_Jet30_vstar() > 1 || ele8_CaloIdT_TrkIdVL_vstar() > 1));
         }
 
         // no additional FO's in event
@@ -386,23 +430,29 @@ int FakeRateBabyLooper::operator()(long event)
             fo_lep_cut = (abs(id()) == 11 && v3_el_ssV7());
         }
 
+        // not for W
+        bool not_fromw = is_ttbar ? not leptonIsFromW() : true;
+
         // passes selection (no isolaiton)
-        bool num_lep_sel_notrig     = (nFOcut && num_lep_cut);
-        bool fo_lep_sel_notrig      = (nFOcut && fo_lep_cut);
+        bool num_lep_sel_notrig     = (nFOcut && num_lep_cut && not_fromw);
+        bool fo_lep_sel_notrig      = (nFOcut && fo_lep_cut && not_fromw);
         bool num_lep_sel            = (trig_cut && num_lep_sel_notrig);
         bool fo_lep_sel             = (trig_cut && fo_lep_sel_notrig);
         bool num_lep_sel_trig_noiso = (trig_cut_noiso && num_lep_sel_notrig);
         bool fo_lep_sel_trig_noiso  = (trig_cut_noiso && fo_lep_sel_notrig);
+        bool num_lep_sel_trig_iso   = (trig_cut_iso && num_lep_sel_notrig);
+        bool fo_lep_sel_trig_iso    = (trig_cut_iso && fo_lep_sel_notrig);
 
         // skip if not FO
-        if (!fo_lep_sel)
+        if (!fo_lep_sel_notrig)
         {
             if (m_verbose) {cout << "fails FO ID cut" << endl;}
             return 0;
         }
 
         // vertex reweight for ttbar
-        float evt_weight = weight();
+        //float evt_weight = weight();
+        float evt_weight = 1.0; 
 
         // muons
         // ----------------------------------------------------------------------------------------------------------------------------//
@@ -438,6 +488,37 @@ int FakeRateBabyLooper::operator()(long event)
                     if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
+                }
+            }
+
+            // numerator (with iso)
+            if (num_lep_sel_trig_iso)
+            {
+                if (cpfiso03_db()<0.1)
+                {
+                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_num40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_num60c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+
+                    if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_num20c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_num40c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_num60c_iso"], fabs(eta()), pt(), evt_weight); } 
+                }
+            }
+
+            // denominator (with iso)
+            if (fo_lep_sel_trig_iso)
+            {
+                if (cpfiso03_db()<0.4)
+                {
+                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_fo60c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+
+                    if (m_verbose) {cout << "passing lepton" << endl;}
+                    if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_fo20c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_fo40c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_fo60c_iso"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
         }
