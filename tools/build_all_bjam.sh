@@ -1,10 +1,31 @@
 #!/bin/bash
 
-bjam release -j20 $PAC/externals/build/MiniFWLite
-bjam release -j20 $PAC/externals/build/SimpleTable
-bjam release -j20 $PAC/externals/build/cms2_core
-bjam release -j20 $PAC/packages/RootTools
-bjam release -j20 $PAC/packages/AnalysisTools
-bjam release -j20 $PAC/packages/FGTools
-bjam release -j20 $PAC/packages/cms2
-bjam release -j20 $PAC/analysis/ss2012
+function run_bjam
+{
+    local dir=$1
+    pushd $dir
+    bjam release -j20
+    if [ $? -eq 0 ]; then
+        echo "release build succeded"
+    else
+        echo "release build failed"
+    fi
+    bjam debug -j20
+    if [ $? -eq 0 ]; then
+        echo "debug build succeded"
+    else
+        echo "debug build failed"
+    fi
+    popd
+}
+
+run_bjam $PAC/externals/build/MiniFWLite 
+run_bjam $PAC/externals/build/SimpleTable
+run_bjam $PAC/externals/build/cms2_core  
+run_bjam $PAC/externals/build/cms2_frb   
+run_bjam $PAC/packages/RootTools         
+run_bjam $PAC/packages/AnalysisTools     
+run_bjam $PAC/packages/FGTools           
+run_bjam $PAC/packages/cms2              
+run_bjam $PAC/analysis/ss2012            
+run_bjam $PAC/analysis/FakeRateStudy2011 
