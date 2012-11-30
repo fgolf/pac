@@ -334,7 +334,9 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
 
     //printf("%11d %7.3f  %6.3f  %5.3f %11d %7.3f %6.3f  %5.3f %13.3f %5d %6d %11.3f \n", ll_id, ll_p4.pt(), ll_p4.eta(), ll_iso, lt_id, lt_p4.pt(), lt_p4.eta(), lt_iso, met, num_jets, num_btags, ht);
 
-    if (samesign::isNumeratorHypothesis(ihyp))
+    //if (samesign::isNumeratorHypothesis(ihyp))
+    //if (samesign::isNumeratorHypothesis(ihyp))
+    //if (samesign::isDenominatorHypothesis(ihyp))
     {
         //cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
         cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
@@ -347,18 +349,18 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
                      num_jets,
                      num_btags) << endl;
     }
-    else
-    {
-        cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
-                     evt_run(), evt_lumiBlock(), evt_event(),
-                     channel_names[type].c_str(),
-                     l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
-                     l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
-                     met,
-                     "-",
-                     "-",
-                     "-") << endl;
-    }
+    //else
+    //{
+    //    cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
+    //                 evt_run(), evt_lumiBlock(), evt_event(),
+    //                 channel_names[type].c_str(),
+    //                 l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
+    //                 l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
+    //                 met,
+    //                 "-",
+    //                 "-",
+    //                 "-") << endl;
+    //}
 
     //if (evt_run() == 191247 && evt_lumiBlock() == 189 && evt_event() == 281392234)
     //if (evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 91075424)
@@ -615,10 +617,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // select specific events
         //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
         //if (!(evt_run() == 1 && evt_lumiBlock() == 15021 && evt_event() == 4505298))
+        //if (!(evt_event() ==  2413713))
         //{
         //    return 0;
         //}
         //{
+        //    cout << "\n-----------------------------------------" << endl; 
         //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
         //}
 
@@ -682,7 +686,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 // get LorenzVectors
                 LorentzVector p41;
                 if (abs(best_gen_hyp.first.id_) == 15)
-                {
+                { 
                     p41 = genps_lepdaughter_p4().at(best_gen_hyp.first.idx_).at(idx1);
                 }
                 else
@@ -747,7 +751,6 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
 
         // loop over hypotheses
-        //pair<size_t, DileptonChargeType::value_type> best_hyp(0, DileptonChargeType::static_size);
         HypInfo best_hyp(0, DileptonChargeType::static_size, DileptonHypType::static_size);
         for (size_t ihyp = 0; ihyp != hyp_type().size(); ihyp++)
         {                
@@ -801,6 +804,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             {
                 if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
                 continue;
+            }            // check that leptons are from the same vertex
+            if (!hypsFromFirstGoodVertex(ihyp))
+            {
+                if (m_verbose) {std::cout << "fails leptons are from the first good vertex requirement" << std::endl;}
+                continue;
             }
 
             // check extra Z veto
@@ -811,12 +819,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
 
             // check if event passes num_jet cut
-            //int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-            //if (num_jets < m_njets)
-            //{
-            //    if (m_verbose) {std::cout << "fails # jets requirement" << std::endl;}
-            //    continue;
-            //}
+            int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+            if (num_jets < m_njets)
+            {
+                if (m_verbose) {std::cout << "fails # jets >= " << m_njets << " requirement with " << num_jets << " jets" << std::endl;}
+                continue;
+            }
 
             // check extra Gamma* veto
             if (samesign::makesExtraGammaStar(ihyp))
@@ -826,7 +834,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
 
             // skip if both are not numerators
-            if (!samesign::isDenominatorLepton(lt_id, lt_idx) || !samesign::isDenominatorLepton(ll_id, ll_idx))
+            if (!samesign::isDenominatorHypothesis(ihyp))
             {
                 if (m_verbose) {std::cout << "fails both leptons are at least denominator requirement" << std::endl;}
                 continue;
@@ -841,13 +849,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             int hyp_q = dummy * hyp_lt_charge().at(ihyp) * hyp_ll_charge().at(ihyp);
             if (hyp_q < 0)
             {
-                if (m_verbose) {std::cout << "fails SS requirement" << std::endl;}
+                if (m_verbose) {std::cout << "selected OS hyp" << std::endl;}
                 if (!samesign::isNumeratorHypothesis(ihyp))
                 {
                     if (m_verbose) {std::cout << "OS hyp doesn't pass ID/ISO requirement" << std::endl;}
                     continue; 
                 }
-                //CompareHyps(best_hyp, ihyp, DileptonChargeType::OS);
                 best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::OS, type));
             }
             else if (hyp_q > 0)
@@ -856,7 +863,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 if (samesign::isNumeratorHypothesis(ihyp))
                 {
                     hyp_count++;
-                    if (m_verbose) {std::cout << "selected goog hyp" << std::endl;}
+                    if (m_verbose) {std::cout << "selected SS hyp" << std::endl;}
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SS, type));
                 }
                 //else
@@ -878,11 +885,13 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 // single fake event (SF)
                 else if (samesign::isNumeratorLepton(lt_id, lt_idx) || samesign::isNumeratorLepton(ll_id, ll_idx))
                 {
+                    if (m_verbose) {std::cout << "selected SF hyp" << std::endl;}
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SF, type));
                 }
                 // double fake event (DF)
                 else
                 {
+                    if (m_verbose) {std::cout << "selected DF hyp" << std::endl;}
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::DF, type));
                 }
             }
