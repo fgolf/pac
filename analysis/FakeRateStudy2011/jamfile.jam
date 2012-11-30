@@ -34,33 +34,12 @@ exe fake_rate_study_2011
     # dependent packages
     fake_rate_tools/<link>static
     /ROOT
-    /MiniFWLite//libMiniFWLite<link>shared
-    /SimpleTable//SimpleTable/<link>static
-    /RootTools//RootTools/<link>static
-    /boost//program_options/<link>static
-    /boost//headers/<link>static
-  : # requirements
-		<define>__NON_ROOT_BUILD__
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
-
-exe create_fake_pred_2011
-  : # sources
-    ./source/FakePredMain.cc
-    ./source/FakePredScanChain.cc
-    ./source/FakePredLooper.cc
-    ./source/SSB2011.cc
-    # dependent packages
-    /ROOT
-    /MiniFWLite//libMiniFWLite<link>shared
-    /boost//program_options/<link>static
-    /boost//headers/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
     /SimpleTable//SimpleTable/<link>static
     /RootTools//RootTools/<link>static
     /AnalysisTools//AnalysisTools/<link>static
+    /boost//program_options/<link>static
+    /boost//headers/<link>static
   : # requirements
 		<define>__NON_ROOT_BUILD__
     <include>./include
@@ -69,8 +48,30 @@ exe create_fake_pred_2011
   : # usage-requirements
   ;
 
+#exe create_fake_pred_2011
+#  : # sources
+#    ./source/FakePredMain.cc
+#    ./source/FakePredScanChain.cc
+#    ./source/FakePredLooper.cc
+#    ./source/SSB2011.cc
+#    # dependent packages
+#    /ROOT
+#    /MiniFWLite//libMiniFWLite<link>shared
+#    /boost//program_options/<link>static
+#    /boost//headers/<link>static
+#    /SimpleTable//SimpleTable/<link>static
+#    /RootTools//RootTools/<link>static
+#    /AnalysisTools//AnalysisTools/<link>static
+#  : # requirements
+#		<define>__NON_ROOT_BUILD__
+#    <include>./include
+#    <include>./source
+#  : # default-build
+#  : # usage-requirements
+#  ;
+
 
 # #install libs and exes
-default-install create_fake_pred_2011 ;
-default-install fake_rate_study_2011 ;
+#default-install create_fake_pred_2011 ;
+#default-install fake_rate_study_2011 ;
 default-install fake_rate_tools/<link>shared ;

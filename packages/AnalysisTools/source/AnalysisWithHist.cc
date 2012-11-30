@@ -1,6 +1,7 @@
 #include "at/AnalysisWithHist.h"
 #include "at/AnalysisBase.h"
 #include "rt/MiscTools.h"
+#include "rt/FillHist.h"
 #include <iostream>
 
 using namespace std;

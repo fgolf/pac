@@ -16,8 +16,6 @@ namespace at
     // destroy:
     AnalysisBase::~AnalysisBase()
     {
-        EndJob();
-        m_root_file->Close();
     }
 
     // function operator 
@@ -48,6 +46,7 @@ namespace at
 
     void AnalysisBase::EndJob()
     {
+        m_root_file->Close();
     }
 
 } // namespace at

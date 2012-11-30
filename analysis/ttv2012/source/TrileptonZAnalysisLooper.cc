@@ -264,7 +264,6 @@ TrileptonZAnalysisLooper::TrileptonZAnalysisLooper
 // destroy:
 TrileptonZAnalysisLooper::~TrileptonZAnalysisLooper()
 {
-    EndJob();
     delete jet_corrector;
     delete met_corrector;
     delete trigEleMVA;
@@ -304,6 +303,9 @@ void TrileptonZAnalysisLooper::EndJob()
     yield_table.setTable() (   "eee",         "eem",          "mme",          "mmm",        "all")
         ("count" , m_count[0], m_count[1], m_count[2], m_count[3], m_count[0]+m_count[1]+m_count[2]+m_count[3]);
     yield_table.print();
+
+    // call base class end job to save the tree
+    AnalysisWithTree::EndJob();
 }
 
 int TrileptonZAnalysisLooper::SetJetCorrector(std::vector<std::string> &list_of_filenames)

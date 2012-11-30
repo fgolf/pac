@@ -25,6 +25,9 @@ namespace at
             // function operator:
             virtual int operator () (long event);
 
+            // methods:
+            virtual void EndJob();
+
         protected:
             // members:
             TTree* m_tree;

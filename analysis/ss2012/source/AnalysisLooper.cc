@@ -535,7 +535,6 @@ SSAnalysisLooper::SSAnalysisLooper
 // destroy:
 SSAnalysisLooper::~SSAnalysisLooper()
 {
-    EndJob();
     delete jet_corrector;
     delete met_corrector;
 }
@@ -590,6 +589,9 @@ void SSAnalysisLooper::EndJob()
                             ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
                             ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
     yield_table2.print();
+
+    // call base class end job
+    AnalysisWithTree::EndJob();
 }
 
 int SSAnalysisLooper::SetJetCorrector(std::vector<std::string> &list_of_filenames)

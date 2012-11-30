@@ -223,6 +223,7 @@ try
     }
 
     cout << "sample has " << chain->GetEntries() << " entries" << endl;
+    cout << "sample has " << chain->GetListOfFiles()->GetEntries() << " files" << endl;
     if (verbose) {rt::PrintFilesFromTChain(chain);}
 
     // scan the chain
@@ -261,10 +262,10 @@ try
     // done
     return 0;
 }
-    catch (std::exception& e)
-    {
-        cerr << "ss2012_analysis failed..." << endl;
-        cerr << e.what() << endl;
-        return 1;
-    }
+catch (std::exception& e)
+{
+    cerr << "ss2012_analysis failed..." << endl;
+    cerr << e.what() << endl;
+    return 1;
+}
 

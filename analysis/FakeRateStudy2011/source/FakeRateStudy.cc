@@ -1,7 +1,7 @@
 #include "FakeRateBaby.h"
 #include "FakeRateStudy.h"
 #include "mcSelections.h"
-#include "rt/MiscTools.h"
+#include "rt/RootTools.h"
 #include <iostream>
 #include <algorithm>
 #include <tr1/array>

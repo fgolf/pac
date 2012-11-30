@@ -26,20 +26,24 @@ namespace at
     // destroy:
     AnalysisWithTree::~AnalysisWithTree()
     {
-        // end job
-        EndJob();
-
-        // write output
-        cout << "Writing ntuple root file to:    " << m_root_file->GetName() << endl;
-		cout << "TTree " << m_tree->GetName() << " has " << m_tree->GetEntries() << " entries" << endl;
-        m_root_file->cd();
-        m_tree->Write();
     }
 
     // function operator
     int AnalysisWithTree::operator () (long event)
     {
         return 0;
+    }
+
+    void AnalysisWithTree::EndJob()
+    {
+        // write output
+        cout << "Writing ntuple root file to:    " << m_root_file->GetName() << endl;
+		cout << "TTree " << m_tree->GetName() << " has " << m_tree->GetEntries() << " entries" << endl;
+        m_root_file->cd();
+        m_tree->Write();
+
+        // call base classes EndJob
+        AnalysisBase::EndJob();
     }
 
     // methods:

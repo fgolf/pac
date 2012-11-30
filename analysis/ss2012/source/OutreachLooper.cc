@@ -76,7 +76,6 @@ OutreachLooper::OutreachLooper
 // destroy:
 OutreachLooper::~OutreachLooper()
 {
-    EndJob();
 }
 
 // function operator: operate on each event
@@ -96,6 +95,8 @@ void OutreachLooper::BeginJob()
 
 void OutreachLooper::EndJob()
 {
+    // call base class end job to save the tree
+    AnalysisWithTree::EndJob();
 }
 
 

@@ -37,14 +37,13 @@ namespace at
         {
             throw std::invalid_argument("at::ScanChain: chain is NULL!");
         }
-        //rt::PrintFilesFromTChain(chain);
-        string tree_name = chain->GetName();
-    
-        //if (chain->GetListOfBranches()->FindObject("EventAuxiliary"))
-        //{
-        //    chain->SetBranchStatus("EventAuxiliary",0);
-        //}
+        if (chain->GetListOfFiles()->GetEntries()<1)
+        {
+            throw std::invalid_argument("at::ScanChain: chain has no files!");
+        }
 
+        // tree name
+        string tree_name = chain->GetName();
 
         // set the "good run" list 
         if (!goodrun_file_name.empty())
@@ -187,6 +186,9 @@ namespace at
                 << "(" << num_events_total << ")." 
                 << endl;
         }
+
+        // save the output
+        analyze.EndJob();
     
         // the benchmark results 
         // -------------------------------------------------------------------------------------------------//
@@ -225,15 +227,14 @@ namespace at
         {
             throw std::invalid_argument("at::ScanChain: chain is NULL!");
         }
+        if (chain->GetListOfFiles()->GetEntries()<1)
+        {
+            throw std::invalid_argument("at::ScanChain: chain has no files!");
+        }
+
         //rt::PrintFilesFromTChain(chain);
         string tree_name = chain->GetName();
     
-        //if (chain->GetListOfBranches()->FindObject("EventAuxiliary"))
-        //{
-        //    chain->SetBranchStatus("EventAuxiliary",0);
-        //}
-
-
         // set the "good run" list 
         if (!goodrun_file_name.empty())
         {
@@ -377,6 +378,9 @@ namespace at
                 << "(" << num_events_total << ")." 
                 << endl;
         }
+    
+        // save the output
+        analyze.EndJob();
     
         // the benchmark results 
         // -------------------------------------------------------------------------------------------------//
