@@ -10,6 +10,7 @@ local cmssw = [ os.environ CMSSW_BASE ] ;
 lib RootTools
     : # sources
       ./source/MiscTools.cc
+      ./source/FillHist.cc
       ./source/TH1Container.cc
       ./source/TH1Overlay.cc
       ./source/Keyboard.cc
@@ -37,6 +38,7 @@ lib RootTools
 lib RootTools
     : # sources
       ./source/MiscTools.cc
+      ./source/FillHist.cc
       ./source/TH1Container.cc
       ./source/TH1Overlay.cc
       ./source/Keyboard.cc
@@ -53,6 +55,7 @@ lib RootTools
             <include>./include
             <include>./source
             <header>rt/MiscTools.h
+            <header>rt/FillHist.h
             <header>rt/TH1Container.h
             <header>rt/TH1Overlay.h
             <header>rt/PrintFakeRateTable.h

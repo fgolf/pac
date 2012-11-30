@@ -33,6 +33,12 @@ class TH1Container
         void Add(TH1* hist_ptr, bool overwrite = false);
         void Add(TH1* hist_ptr, const std::string& option, bool overwrite = false);
 
+        // add a histogram to the container 
+        // (default is to skip duplicates, set overwite to write over)
+        // These will make a clone of the histogram
+        void Add(const TH1& hist_ptr, bool overwrite = false);
+        void Add(const TH1& hist_ptr, const std::string& option, bool overwrite = false);
+
         // set the directory of the hists (needed for draw)
         void SetDirectory(TDirectory* dir = NULL);
         void SetDirectory(const std::string& hist_name, TDirectory* dir = NULL);

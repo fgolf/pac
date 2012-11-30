@@ -19,4 +19,8 @@
 // TDR Style plots 
 #include "rt/TDRStyle.h"
 
+// Wrapper to Fill with over/underflow bins in the last/fist bin 
+#include "rt/FillHist.h"
+
+
 #endif // RT_ROOTTOOLS_H 

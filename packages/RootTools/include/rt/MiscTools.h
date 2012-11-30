@@ -286,17 +286,6 @@ namespace rt
     // scale the histogram to scale 
     void Scale(TH1* hist, double scale = 1.0);
 
-    // fill the histogram with overflow bins
-    void Fill(TH1* hist, double x, double w = 1.0);
-
-    // fill the 2D histogram with overflow bins
-    void Fill2D(TH2* hist, double x, double y, double w = 1.0);
-    void Fill2D(TH1* hist, double x, double y, double w = 1.0);
-
-    // fill the 3D histogram with overflow bins
-    void Fill3D(TH3* hist, double x, double y, double z, double w = 1.0);
-    void Fill3D(TH1* hist, double x, double y, double z, double w = 1.0);
-
     // calulate Mt between two vectors
     double Mt(const LorentzVector& p1, const LorentzVector& p2);
 

@@ -45,7 +45,7 @@ struct TH1Container::impl
     map<string, TH1Ptr> hist_map;
 };
 
-// constructors
+// constructor
 // ---------------------------------------------------------------------------------------- //
 
 TH1Container::TH1Container()
@@ -170,8 +170,18 @@ void TH1Container::Add(TH1* hist_ptr, bool overwrite)
 
 void TH1Container::Add(TH1* hist_ptr, const std::string& option, bool overwrite)
 {
-	hist_ptr->SetOption(option.c_str());
+    hist_ptr->SetOption(option.c_str());
 	Add(hist_ptr, overwrite);
+}
+
+void TH1Container::Add(const TH1& hist, bool overwrite)
+{
+    Add(dynamic_cast<TH1*>(hist.Clone()), overwrite);
+}
+
+void TH1Container::Add(const TH1& hist, const std::string& option, bool overwrite)
+{
+    Add(dynamic_cast<TH1*>(hist.Clone()), option, overwrite);
 }
 
 // set the directory of the hists (needed for draw)
