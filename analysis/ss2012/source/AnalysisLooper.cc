@@ -72,7 +72,7 @@ HypInfo::HypInfo(int i, const at::DileptonChargeType::value_type& c, const at::D
 
 float HypInfo::pt() const
 {
-    if (-1 < idx || idx > static_cast<int>(hyp_lt_p4().size()))
+    if (-1 < idx && static_cast<unsigned int>(idx) >= hyp_lt_p4().size())
     {
         return -999999.0;
     }
@@ -612,7 +612,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
     {
         // select specific events
         //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
-        //if (!(evt_run() == 1 && evt_lumiBlock() == 7023 && evt_event() == 2106435))
+        //if (!(evt_run() == 1 && evt_lumiBlock() == 15021 && evt_event() == 4505298))
         //{
         //    return 0;
         //}
@@ -855,14 +855,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 {
                     hyp_count++;
                     if (m_verbose) {std::cout << "selected goog hyp" << std::endl;}
-                   // CompareHyps(best_hyp, ihyp, DileptonChargeType::SS);
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SS, type));
-                //    // print for syncing
-                //    if (m_sync_print)
-                //    {
-                //        //cout << "printing for hyp index " << ihyp << endl;
-                //        //PrintForSync(ihyp, mu_min_pt, el_min_pt, jet_type, m_jetMetScale, jet_corrector, met_corrector);
-                //    }
                 }
                 //else
                 //{
@@ -883,13 +876,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 // single fake event (SF)
                 else if (samesign::isNumeratorLepton(lt_id, lt_idx) || samesign::isNumeratorLepton(ll_id, ll_idx))
                 {
-                    //CompareHyps(best_hyp, ihyp, DileptonChargeType::SF);
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SF, type));
                 }
                 // double fake event (DF)
                 else
                 {
-                    //CompareHyps(best_hyp, ihyp, DileptonChargeType::DF);
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::DF, type));
                 }
             }
