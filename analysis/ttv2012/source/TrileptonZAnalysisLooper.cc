@@ -96,7 +96,7 @@ void SetBtagDiscriminator(const vector<LorentzVector>& jets_p4, vector<float>& j
         return;
     }
     jets_disc.clear();
-    vector<float>& btags = pfjets_combinedSecondaryVertexBJetTag();
+    const vector<float>& btags = pfjets_combinedSecondaryVertexBJetTag();
     for (size_t j = 0; j < jets_p4.size(); j++)
     {
         for (size_t i = 0; i < pfjets_p4().size(); i++)

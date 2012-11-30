@@ -42,9 +42,11 @@ use-project /boost : $(boost_current) ;
 
 # ROOT
 local rootsys = [ os.environ ROOTSYS ] ;
-path-constant ROOT_PATH       : $(rootsys) ;
-#path-constant ROOT_PATH_DEBUG : $(rootsys)_debug ;
-use-project /ROOT             : ./externals/build/root ;
+path-constant ROOT_PATH : $(rootsys) ;
+use-project /ROOT       : ./externals/build/root ;
+
+path-constant ROOFIT_PATH : $(rootsys) ;
+use-project /RooFit       : ./externals/build/RooFit ;
 
 # MiniFWLite
 path-constant MINIFWLITE_PATH : ./externals/source/MiniFWLite ;
@@ -64,6 +66,10 @@ use-project /CMS2_CORE  : ./externals/build/cms2_core ;
 local cms2_frb_tag = HEAD ;
 path-constant CMS2_FRB : ./externals/source/cms2_frb/$(cms2_frb_tag) ;
 use-project /CMS2_FRB  : ./externals/build/cms2_frb ;
+
+# Tag and Probe 
+#path-constant TAP_PATH   : ./externals/source/TagAndProbeStudy/TagAndProbe ;
+#use-project /TagAndProbe : ./externals/build/TagAndProbe  ;
 
 # reusable packages 
 # ----------------------------------------------------------------------#
