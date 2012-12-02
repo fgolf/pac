@@ -77,16 +77,18 @@ namespace at
             TFile *file = TFile::Open(current_file->GetTitle());
             if (!file || file->IsZombie())
             {
-                std::cout << "Skipping bad input file: " << current_file->GetTitle() << std::endl;
-                continue;
+                //std::cout << "Skipping bad input file: " << current_file->GetTitle() << std::endl;
+                //continue;
+                throw std::runtime_error(Form("File from TChain is invalid or corrupt: %s", current_file->GetTitle()));
             }
 
             // get the trees in each file
             TTree *tree = dynamic_cast<TTree*>(file->Get(tree_name.c_str()));
             if (!tree || tree->IsZombie())
             {
-                std::cout << "Skipping bad input file (missing tree): " << current_file->GetTitle() << std::endl;
-                continue;
+                //std::cout << "Skipping bad input file (missing tree): " << current_file->GetTitle() << std::endl;
+                //continue;
+                throw std::runtime_error(Form("File from TChain has an invalid TTree or is corrupt: %s", current_file->GetTitle()));
             }
 
             if (fast)
@@ -267,16 +269,18 @@ namespace at
             TFile *file = TFile::Open(current_file->GetTitle());
             if (!file || file->IsZombie())
             {
-                std::cout << "Skipping bad input file: " << current_file->GetTitle() << std::endl;
-                continue;
+                //std::cout << "Skipping bad input file: " << current_file->GetTitle() << std::endl;
+                //continue;
+                throw std::runtime_error(Form("File from TChain is invalid or corrupt: %s", current_file->GetTitle()));
             }
 
             // get the trees in each file
             TTree *tree = dynamic_cast<TTree*>(file->Get(tree_name.c_str()));
             if (!tree || tree->IsZombie())
             {
-                std::cout << "Skipping bad input file (missing tree): " << current_file->GetTitle() << std::endl;
-                continue;
+                //std::cout << "Skipping bad input file (missing tree): " << current_file->GetTitle() << std::endl;
+                //continue;
+                throw std::runtime_error(Form("File from TChain has an invalid TTree or is corrupt: %s", current_file->GetTitle()));
             }
 
             if (fast)
