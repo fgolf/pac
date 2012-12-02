@@ -989,7 +989,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         float scale = evt_isRealData() ? 1.0 : m_lumi * xsec * vtxw; 
 
         // fill event level info 
-        m_evt.event_info.FillCommon(m_sample);
+        m_evt.event_info.FillCommon(m_sample, filename);
 
         // fill the dilepton analysis independent variables 
         m_evt.FillCommon(hyp_idx);
