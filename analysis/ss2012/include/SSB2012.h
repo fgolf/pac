@@ -68,6 +68,9 @@ protected:
 	TString *dataset_;
 	TBranch *dataset_branch;
 	bool dataset_isLoaded;
+	TString *filename_;
+	TBranch *filename_branch;
+	bool filename_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_p4_;
 	TBranch *lep1_p4_branch;
 	bool lep1_p4_isLoaded;
@@ -851,15 +854,27 @@ protected:
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vjets_p4_;
 	TBranch *vjets_p4_branch;
 	bool vjets_p4_isLoaded;
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vjets_mc3p4_;
+	TBranch *vjets_mc3p4_branch;
+	bool vjets_mc3p4_isLoaded;
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vgenjets_p4_;
 	TBranch *vgenjets_p4_branch;
 	bool vgenjets_p4_isLoaded;
+	vector<int> *vjets_mc3id_;
+	TBranch *vjets_mc3id_branch;
+	bool vjets_mc3id_isLoaded;
+	vector<int> *vjets_momid_;
+	TBranch *vjets_momid_branch;
+	bool vjets_momid_isLoaded;
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vjets_nearjet_p4_;
 	TBranch *vjets_nearjet_p4_branch;
 	bool vjets_nearjet_p4_isLoaded;
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vbjets_p4_;
 	TBranch *vbjets_p4_branch;
 	bool vbjets_p4_isLoaded;
+	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vbjets_mc3p4_;
+	TBranch *vbjets_mc3p4_branch;
+	bool vbjets_mc3p4_isLoaded;
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vbjets_nearjet_p4_;
 	TBranch *vbjets_nearjet_p4_branch;
 	bool vbjets_nearjet_p4_isLoaded;
@@ -869,6 +884,12 @@ protected:
 	vector<float> *vbjets_nearjet_dr_;
 	TBranch *vbjets_nearjet_dr_branch;
 	bool vbjets_nearjet_dr_isLoaded;
+	vector<int> *vbjets_mc3id_;
+	TBranch *vbjets_mc3id_branch;
+	bool vbjets_mc3id_isLoaded;
+	vector<int> *vbjets_momid_;
+	TBranch *vbjets_momid_branch;
+	bool vbjets_momid_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *gen_lep1_p4_;
 	TBranch *gen_lep1_p4_branch;
 	bool gen_lep1_p4_isLoaded;
@@ -904,1473 +925,1508 @@ void Init(TTree *tree) {
 	lep1_p4_branch = 0;
 	if (tree->GetBranch("lep1_p4") != 0) {
 		lep1_p4_branch = tree->GetBranch("lep1_p4");
-		lep1_p4_branch->SetAddress(&lep1_p4_);
+		if (lep1_p4_branch) {lep1_p4_branch->SetAddress(&lep1_p4_);}
 	}
 	lep1_mcp4_branch = 0;
 	if (tree->GetBranch("lep1_mcp4") != 0) {
 		lep1_mcp4_branch = tree->GetBranch("lep1_mcp4");
-		lep1_mcp4_branch->SetAddress(&lep1_mcp4_);
+		if (lep1_mcp4_branch) {lep1_mcp4_branch->SetAddress(&lep1_mcp4_);}
 	}
 	lep1_mc3p4_branch = 0;
 	if (tree->GetBranch("lep1_mc3p4") != 0) {
 		lep1_mc3p4_branch = tree->GetBranch("lep1_mc3p4");
-		lep1_mc3p4_branch->SetAddress(&lep1_mc3p4_);
+		if (lep1_mc3p4_branch) {lep1_mc3p4_branch->SetAddress(&lep1_mc3p4_);}
 	}
 	lep1_mc_momp4_branch = 0;
 	if (tree->GetBranch("lep1_mc_momp4") != 0) {
 		lep1_mc_momp4_branch = tree->GetBranch("lep1_mc_momp4");
-		lep1_mc_momp4_branch->SetAddress(&lep1_mc_momp4_);
+		if (lep1_mc_momp4_branch) {lep1_mc_momp4_branch->SetAddress(&lep1_mc_momp4_);}
 	}
 	lep1_gsf_p4_branch = 0;
 	if (tree->GetBranch("lep1_gsf_p4") != 0) {
 		lep1_gsf_p4_branch = tree->GetBranch("lep1_gsf_p4");
-		lep1_gsf_p4_branch->SetAddress(&lep1_gsf_p4_);
+		if (lep1_gsf_p4_branch) {lep1_gsf_p4_branch->SetAddress(&lep1_gsf_p4_);}
 	}
 	lep1_ctf_p4_branch = 0;
 	if (tree->GetBranch("lep1_ctf_p4") != 0) {
 		lep1_ctf_p4_branch = tree->GetBranch("lep1_ctf_p4");
-		lep1_ctf_p4_branch->SetAddress(&lep1_ctf_p4_);
+		if (lep1_ctf_p4_branch) {lep1_ctf_p4_branch->SetAddress(&lep1_ctf_p4_);}
 	}
 	lep1_sc_p4_branch = 0;
 	if (tree->GetBranch("lep1_sc_p4") != 0) {
 		lep1_sc_p4_branch = tree->GetBranch("lep1_sc_p4");
-		lep1_sc_p4_branch->SetAddress(&lep1_sc_p4_);
+		if (lep1_sc_p4_branch) {lep1_sc_p4_branch->SetAddress(&lep1_sc_p4_);}
 	}
 	lep1_gfit_p4_branch = 0;
 	if (tree->GetBranch("lep1_gfit_p4") != 0) {
 		lep1_gfit_p4_branch = tree->GetBranch("lep1_gfit_p4");
-		lep1_gfit_p4_branch->SetAddress(&lep1_gfit_p4_);
+		if (lep1_gfit_p4_branch) {lep1_gfit_p4_branch->SetAddress(&lep1_gfit_p4_);}
 	}
 	lep2_p4_branch = 0;
 	if (tree->GetBranch("lep2_p4") != 0) {
 		lep2_p4_branch = tree->GetBranch("lep2_p4");
-		lep2_p4_branch->SetAddress(&lep2_p4_);
+		if (lep2_p4_branch) {lep2_p4_branch->SetAddress(&lep2_p4_);}
 	}
 	lep2_mcp4_branch = 0;
 	if (tree->GetBranch("lep2_mcp4") != 0) {
 		lep2_mcp4_branch = tree->GetBranch("lep2_mcp4");
-		lep2_mcp4_branch->SetAddress(&lep2_mcp4_);
+		if (lep2_mcp4_branch) {lep2_mcp4_branch->SetAddress(&lep2_mcp4_);}
 	}
 	lep2_mc3p4_branch = 0;
 	if (tree->GetBranch("lep2_mc3p4") != 0) {
 		lep2_mc3p4_branch = tree->GetBranch("lep2_mc3p4");
-		lep2_mc3p4_branch->SetAddress(&lep2_mc3p4_);
+		if (lep2_mc3p4_branch) {lep2_mc3p4_branch->SetAddress(&lep2_mc3p4_);}
 	}
 	lep2_mc_momp4_branch = 0;
 	if (tree->GetBranch("lep2_mc_momp4") != 0) {
 		lep2_mc_momp4_branch = tree->GetBranch("lep2_mc_momp4");
-		lep2_mc_momp4_branch->SetAddress(&lep2_mc_momp4_);
+		if (lep2_mc_momp4_branch) {lep2_mc_momp4_branch->SetAddress(&lep2_mc_momp4_);}
 	}
 	lep2_gsf_p4_branch = 0;
 	if (tree->GetBranch("lep2_gsf_p4") != 0) {
 		lep2_gsf_p4_branch = tree->GetBranch("lep2_gsf_p4");
-		lep2_gsf_p4_branch->SetAddress(&lep2_gsf_p4_);
+		if (lep2_gsf_p4_branch) {lep2_gsf_p4_branch->SetAddress(&lep2_gsf_p4_);}
 	}
 	lep2_ctf_p4_branch = 0;
 	if (tree->GetBranch("lep2_ctf_p4") != 0) {
 		lep2_ctf_p4_branch = tree->GetBranch("lep2_ctf_p4");
-		lep2_ctf_p4_branch->SetAddress(&lep2_ctf_p4_);
+		if (lep2_ctf_p4_branch) {lep2_ctf_p4_branch->SetAddress(&lep2_ctf_p4_);}
 	}
 	lep2_sc_p4_branch = 0;
 	if (tree->GetBranch("lep2_sc_p4") != 0) {
 		lep2_sc_p4_branch = tree->GetBranch("lep2_sc_p4");
-		lep2_sc_p4_branch->SetAddress(&lep2_sc_p4_);
+		if (lep2_sc_p4_branch) {lep2_sc_p4_branch->SetAddress(&lep2_sc_p4_);}
 	}
 	lep2_gfit_p4_branch = 0;
 	if (tree->GetBranch("lep2_gfit_p4") != 0) {
 		lep2_gfit_p4_branch = tree->GetBranch("lep2_gfit_p4");
-		lep2_gfit_p4_branch->SetAddress(&lep2_gfit_p4_);
+		if (lep2_gfit_p4_branch) {lep2_gfit_p4_branch->SetAddress(&lep2_gfit_p4_);}
 	}
 	dilep_p4_branch = 0;
 	if (tree->GetBranch("dilep_p4") != 0) {
 		dilep_p4_branch = tree->GetBranch("dilep_p4");
-		dilep_p4_branch->SetAddress(&dilep_p4_);
+		if (dilep_p4_branch) {dilep_p4_branch->SetAddress(&dilep_p4_);}
 	}
 	lep1_nearbjet_p4_branch = 0;
 	if (tree->GetBranch("lep1_nearbjet_p4") != 0) {
 		lep1_nearbjet_p4_branch = tree->GetBranch("lep1_nearbjet_p4");
-		lep1_nearbjet_p4_branch->SetAddress(&lep1_nearbjet_p4_);
+		if (lep1_nearbjet_p4_branch) {lep1_nearbjet_p4_branch->SetAddress(&lep1_nearbjet_p4_);}
 	}
 	lep1_nearjet_p4_branch = 0;
 	if (tree->GetBranch("lep1_nearjet_p4") != 0) {
 		lep1_nearjet_p4_branch = tree->GetBranch("lep1_nearjet_p4");
-		lep1_nearjet_p4_branch->SetAddress(&lep1_nearjet_p4_);
+		if (lep1_nearjet_p4_branch) {lep1_nearjet_p4_branch->SetAddress(&lep1_nearjet_p4_);}
 	}
 	lep1_nearlep_p4_branch = 0;
 	if (tree->GetBranch("lep1_nearlep_p4") != 0) {
 		lep1_nearlep_p4_branch = tree->GetBranch("lep1_nearlep_p4");
-		lep1_nearlep_p4_branch->SetAddress(&lep1_nearlep_p4_);
+		if (lep1_nearlep_p4_branch) {lep1_nearlep_p4_branch->SetAddress(&lep1_nearlep_p4_);}
 	}
 	lep2_nearbjet_p4_branch = 0;
 	if (tree->GetBranch("lep2_nearbjet_p4") != 0) {
 		lep2_nearbjet_p4_branch = tree->GetBranch("lep2_nearbjet_p4");
-		lep2_nearbjet_p4_branch->SetAddress(&lep2_nearbjet_p4_);
+		if (lep2_nearbjet_p4_branch) {lep2_nearbjet_p4_branch->SetAddress(&lep2_nearbjet_p4_);}
 	}
 	lep2_nearjet_p4_branch = 0;
 	if (tree->GetBranch("lep2_nearjet_p4") != 0) {
 		lep2_nearjet_p4_branch = tree->GetBranch("lep2_nearjet_p4");
-		lep2_nearjet_p4_branch->SetAddress(&lep2_nearjet_p4_);
+		if (lep2_nearjet_p4_branch) {lep2_nearjet_p4_branch->SetAddress(&lep2_nearjet_p4_);}
 	}
 	lep2_nearlep_p4_branch = 0;
 	if (tree->GetBranch("lep2_nearlep_p4") != 0) {
 		lep2_nearlep_p4_branch = tree->GetBranch("lep2_nearlep_p4");
-		lep2_nearlep_p4_branch->SetAddress(&lep2_nearlep_p4_);
+		if (lep2_nearlep_p4_branch) {lep2_nearlep_p4_branch->SetAddress(&lep2_nearlep_p4_);}
 	}
 	vgenb_p4_branch = 0;
 	if (tree->GetBranch("vgenb_p4") != 0) {
 		vgenb_p4_branch = tree->GetBranch("vgenb_p4");
-		vgenb_p4_branch->SetAddress(&vgenb_p4_);
+		if (vgenb_p4_branch) {vgenb_p4_branch->SetAddress(&vgenb_p4_);}
 	}
 	vjets_p4_branch = 0;
 	if (tree->GetBranch("vjets_p4") != 0) {
 		vjets_p4_branch = tree->GetBranch("vjets_p4");
-		vjets_p4_branch->SetAddress(&vjets_p4_);
+		if (vjets_p4_branch) {vjets_p4_branch->SetAddress(&vjets_p4_);}
+	}
+	vjets_mc3p4_branch = 0;
+	if (tree->GetBranch("vjets_mc3p4") != 0) {
+		vjets_mc3p4_branch = tree->GetBranch("vjets_mc3p4");
+		if (vjets_mc3p4_branch) {vjets_mc3p4_branch->SetAddress(&vjets_mc3p4_);}
 	}
 	vgenjets_p4_branch = 0;
 	if (tree->GetBranch("vgenjets_p4") != 0) {
 		vgenjets_p4_branch = tree->GetBranch("vgenjets_p4");
-		vgenjets_p4_branch->SetAddress(&vgenjets_p4_);
+		if (vgenjets_p4_branch) {vgenjets_p4_branch->SetAddress(&vgenjets_p4_);}
 	}
 	vjets_nearjet_p4_branch = 0;
 	if (tree->GetBranch("vjets_nearjet_p4") != 0) {
 		vjets_nearjet_p4_branch = tree->GetBranch("vjets_nearjet_p4");
-		vjets_nearjet_p4_branch->SetAddress(&vjets_nearjet_p4_);
+		if (vjets_nearjet_p4_branch) {vjets_nearjet_p4_branch->SetAddress(&vjets_nearjet_p4_);}
 	}
 	vbjets_p4_branch = 0;
 	if (tree->GetBranch("vbjets_p4") != 0) {
 		vbjets_p4_branch = tree->GetBranch("vbjets_p4");
-		vbjets_p4_branch->SetAddress(&vbjets_p4_);
+		if (vbjets_p4_branch) {vbjets_p4_branch->SetAddress(&vbjets_p4_);}
+	}
+	vbjets_mc3p4_branch = 0;
+	if (tree->GetBranch("vbjets_mc3p4") != 0) {
+		vbjets_mc3p4_branch = tree->GetBranch("vbjets_mc3p4");
+		if (vbjets_mc3p4_branch) {vbjets_mc3p4_branch->SetAddress(&vbjets_mc3p4_);}
 	}
 	vbjets_nearjet_p4_branch = 0;
 	if (tree->GetBranch("vbjets_nearjet_p4") != 0) {
 		vbjets_nearjet_p4_branch = tree->GetBranch("vbjets_nearjet_p4");
-		vbjets_nearjet_p4_branch->SetAddress(&vbjets_nearjet_p4_);
+		if (vbjets_nearjet_p4_branch) {vbjets_nearjet_p4_branch->SetAddress(&vbjets_nearjet_p4_);}
 	}
 	gen_lep1_p4_branch = 0;
 	if (tree->GetBranch("gen_lep1_p4") != 0) {
 		gen_lep1_p4_branch = tree->GetBranch("gen_lep1_p4");
-		gen_lep1_p4_branch->SetAddress(&gen_lep1_p4_);
+		if (gen_lep1_p4_branch) {gen_lep1_p4_branch->SetAddress(&gen_lep1_p4_);}
 	}
 	gen_lep2_p4_branch = 0;
 	if (tree->GetBranch("gen_lep2_p4") != 0) {
 		gen_lep2_p4_branch = tree->GetBranch("gen_lep2_p4");
-		gen_lep2_p4_branch->SetAddress(&gen_lep2_p4_);
+		if (gen_lep2_p4_branch) {gen_lep2_p4_branch->SetAddress(&gen_lep2_p4_);}
 	}
 	gen_dilep_p4_branch = 0;
 	if (tree->GetBranch("gen_dilep_p4") != 0) {
 		gen_dilep_p4_branch = tree->GetBranch("gen_dilep_p4");
-		gen_dilep_p4_branch->SetAddress(&gen_dilep_p4_);
+		if (gen_dilep_p4_branch) {gen_dilep_p4_branch->SetAddress(&gen_dilep_p4_);}
 	}
   tree->SetMakeClass(1);
 	run_branch = 0;
 	if (tree->GetBranch("run") != 0) {
 		run_branch = tree->GetBranch("run");
-		run_branch->SetAddress(&run_);
+		if (run_branch) {run_branch->SetAddress(&run_);}
 	}
 	ls_branch = 0;
 	if (tree->GetBranch("ls") != 0) {
 		ls_branch = tree->GetBranch("ls");
-		ls_branch->SetAddress(&ls_);
+		if (ls_branch) {ls_branch->SetAddress(&ls_);}
 	}
 	evt_branch = 0;
 	if (tree->GetBranch("evt") != 0) {
 		evt_branch = tree->GetBranch("evt");
-		evt_branch->SetAddress(&evt_);
+		if (evt_branch) {evt_branch->SetAddress(&evt_);}
 	}
 	is_real_data_branch = 0;
 	if (tree->GetBranch("is_real_data") != 0) {
 		is_real_data_branch = tree->GetBranch("is_real_data");
-		is_real_data_branch->SetAddress(&is_real_data_);
+		if (is_real_data_branch) {is_real_data_branch->SetAddress(&is_real_data_);}
 	}
 	sample_branch = 0;
 	if (tree->GetBranch("sample") != 0) {
 		sample_branch = tree->GetBranch("sample");
-		sample_branch->SetAddress(&sample_);
+		if (sample_branch) {sample_branch->SetAddress(&sample_);}
 	}
 	nvtxs_branch = 0;
 	if (tree->GetBranch("nvtxs") != 0) {
 		nvtxs_branch = tree->GetBranch("nvtxs");
-		nvtxs_branch->SetAddress(&nvtxs_);
+		if (nvtxs_branch) {nvtxs_branch->SetAddress(&nvtxs_);}
 	}
 	vtx_idx_branch = 0;
 	if (tree->GetBranch("vtx_idx") != 0) {
 		vtx_idx_branch = tree->GetBranch("vtx_idx");
-		vtx_idx_branch->SetAddress(&vtx_idx_);
+		if (vtx_idx_branch) {vtx_idx_branch->SetAddress(&vtx_idx_);}
 	}
 	pfmet_branch = 0;
 	if (tree->GetBranch("pfmet") != 0) {
 		pfmet_branch = tree->GetBranch("pfmet");
-		pfmet_branch->SetAddress(&pfmet_);
+		if (pfmet_branch) {pfmet_branch->SetAddress(&pfmet_);}
 	}
 	pfmet_phi_branch = 0;
 	if (tree->GetBranch("pfmet_phi") != 0) {
 		pfmet_phi_branch = tree->GetBranch("pfmet_phi");
-		pfmet_phi_branch->SetAddress(&pfmet_phi_);
+		if (pfmet_phi_branch) {pfmet_phi_branch->SetAddress(&pfmet_phi_);}
 	}
 	uncorpfmet_branch = 0;
 	if (tree->GetBranch("uncorpfmet") != 0) {
 		uncorpfmet_branch = tree->GetBranch("uncorpfmet");
-		uncorpfmet_branch->SetAddress(&uncorpfmet_);
+		if (uncorpfmet_branch) {uncorpfmet_branch->SetAddress(&uncorpfmet_);}
 	}
 	uncorpfmet_phi_branch = 0;
 	if (tree->GetBranch("uncorpfmet_phi") != 0) {
 		uncorpfmet_phi_branch = tree->GetBranch("uncorpfmet_phi");
-		uncorpfmet_phi_branch->SetAddress(&uncorpfmet_phi_);
+		if (uncorpfmet_phi_branch) {uncorpfmet_phi_branch->SetAddress(&uncorpfmet_phi_);}
 	}
 	scale1fb_branch = 0;
 	if (tree->GetBranch("scale1fb") != 0) {
 		scale1fb_branch = tree->GetBranch("scale1fb");
-		scale1fb_branch->SetAddress(&scale1fb_);
+		if (scale1fb_branch) {scale1fb_branch->SetAddress(&scale1fb_);}
 	}
 	xsec_branch = 0;
 	if (tree->GetBranch("xsec") != 0) {
 		xsec_branch = tree->GetBranch("xsec");
-		xsec_branch->SetAddress(&xsec_);
+		if (xsec_branch) {xsec_branch->SetAddress(&xsec_);}
 	}
 	kfactor_branch = 0;
 	if (tree->GetBranch("kfactor") != 0) {
 		kfactor_branch = tree->GetBranch("kfactor");
-		kfactor_branch->SetAddress(&kfactor_);
+		if (kfactor_branch) {kfactor_branch->SetAddress(&kfactor_);}
 	}
 	gen_met_branch = 0;
 	if (tree->GetBranch("gen_met") != 0) {
 		gen_met_branch = tree->GetBranch("gen_met");
-		gen_met_branch->SetAddress(&gen_met_);
+		if (gen_met_branch) {gen_met_branch->SetAddress(&gen_met_);}
 	}
 	gen_met_phi_branch = 0;
 	if (tree->GetBranch("gen_met_phi") != 0) {
 		gen_met_phi_branch = tree->GetBranch("gen_met_phi");
-		gen_met_phi_branch->SetAddress(&gen_met_phi_);
+		if (gen_met_phi_branch) {gen_met_phi_branch->SetAddress(&gen_met_phi_);}
 	}
 	dataset_branch = 0;
 	if (tree->GetBranch("dataset") != 0) {
 		dataset_branch = tree->GetBranch("dataset");
-		dataset_branch->SetAddress(&dataset_);
+		if (dataset_branch) {dataset_branch->SetAddress(&dataset_);}
+	}
+	filename_branch = 0;
+	if (tree->GetBranch("filename") != 0) {
+		filename_branch = tree->GetBranch("filename");
+		if (filename_branch) {filename_branch->SetAddress(&filename_);}
 	}
 	lep1_passes_id_branch = 0;
 	if (tree->GetBranch("lep1_passes_id") != 0) {
 		lep1_passes_id_branch = tree->GetBranch("lep1_passes_id");
-		lep1_passes_id_branch->SetAddress(&lep1_passes_id_);
+		if (lep1_passes_id_branch) {lep1_passes_id_branch->SetAddress(&lep1_passes_id_);}
 	}
 	lep1_passes_iso_branch = 0;
 	if (tree->GetBranch("lep1_passes_iso") != 0) {
 		lep1_passes_iso_branch = tree->GetBranch("lep1_passes_iso");
-		lep1_passes_iso_branch->SetAddress(&lep1_passes_iso_);
+		if (lep1_passes_iso_branch) {lep1_passes_iso_branch->SetAddress(&lep1_passes_iso_);}
 	}
 	lep1_is_num_branch = 0;
 	if (tree->GetBranch("lep1_is_num") != 0) {
 		lep1_is_num_branch = tree->GetBranch("lep1_is_num");
-		lep1_is_num_branch->SetAddress(&lep1_is_num_);
+		if (lep1_is_num_branch) {lep1_is_num_branch->SetAddress(&lep1_is_num_);}
 	}
 	lep1_is_fo_branch = 0;
 	if (tree->GetBranch("lep1_is_fo") != 0) {
 		lep1_is_fo_branch = tree->GetBranch("lep1_is_fo");
-		lep1_is_fo_branch->SetAddress(&lep1_is_fo_);
+		if (lep1_is_fo_branch) {lep1_is_fo_branch->SetAddress(&lep1_is_fo_);}
 	}
 	lep1_is_fromw_branch = 0;
 	if (tree->GetBranch("lep1_is_fromw") != 0) {
 		lep1_is_fromw_branch = tree->GetBranch("lep1_is_fromw");
-		lep1_is_fromw_branch->SetAddress(&lep1_is_fromw_);
+		if (lep1_is_fromw_branch) {lep1_is_fromw_branch->SetAddress(&lep1_is_fromw_);}
 	}
 	lep1_charge_branch = 0;
 	if (tree->GetBranch("lep1_charge") != 0) {
 		lep1_charge_branch = tree->GetBranch("lep1_charge");
-		lep1_charge_branch->SetAddress(&lep1_charge_);
+		if (lep1_charge_branch) {lep1_charge_branch->SetAddress(&lep1_charge_);}
 	}
 	lep1_pdgid_branch = 0;
 	if (tree->GetBranch("lep1_pdgid") != 0) {
 		lep1_pdgid_branch = tree->GetBranch("lep1_pdgid");
-		lep1_pdgid_branch->SetAddress(&lep1_pdgid_);
+		if (lep1_pdgid_branch) {lep1_pdgid_branch->SetAddress(&lep1_pdgid_);}
 	}
 	lep1_type_branch = 0;
 	if (tree->GetBranch("lep1_type") != 0) {
 		lep1_type_branch = tree->GetBranch("lep1_type");
-		lep1_type_branch->SetAddress(&lep1_type_);
+		if (lep1_type_branch) {lep1_type_branch->SetAddress(&lep1_type_);}
 	}
 	lep1_d0_branch = 0;
 	if (tree->GetBranch("lep1_d0") != 0) {
 		lep1_d0_branch = tree->GetBranch("lep1_d0");
-		lep1_d0_branch->SetAddress(&lep1_d0_);
+		if (lep1_d0_branch) {lep1_d0_branch->SetAddress(&lep1_d0_);}
 	}
 	lep1_dz_branch = 0;
 	if (tree->GetBranch("lep1_dz") != 0) {
 		lep1_dz_branch = tree->GetBranch("lep1_dz");
-		lep1_dz_branch->SetAddress(&lep1_dz_);
+		if (lep1_dz_branch) {lep1_dz_branch->SetAddress(&lep1_dz_);}
 	}
 	lep1_mt_branch = 0;
 	if (tree->GetBranch("lep1_mt") != 0) {
 		lep1_mt_branch = tree->GetBranch("lep1_mt");
-		lep1_mt_branch->SetAddress(&lep1_mt_);
+		if (lep1_mt_branch) {lep1_mt_branch->SetAddress(&lep1_mt_);}
 	}
 	lep1_corpfiso_branch = 0;
 	if (tree->GetBranch("lep1_corpfiso") != 0) {
 		lep1_corpfiso_branch = tree->GetBranch("lep1_corpfiso");
-		lep1_corpfiso_branch->SetAddress(&lep1_corpfiso_);
+		if (lep1_corpfiso_branch) {lep1_corpfiso_branch->SetAddress(&lep1_corpfiso_);}
 	}
 	lep1_pfiso_branch = 0;
 	if (tree->GetBranch("lep1_pfiso") != 0) {
 		lep1_pfiso_branch = tree->GetBranch("lep1_pfiso");
-		lep1_pfiso_branch->SetAddress(&lep1_pfiso_);
+		if (lep1_pfiso_branch) {lep1_pfiso_branch->SetAddress(&lep1_pfiso_);}
 	}
 	lep1_chiso_branch = 0;
 	if (tree->GetBranch("lep1_chiso") != 0) {
 		lep1_chiso_branch = tree->GetBranch("lep1_chiso");
-		lep1_chiso_branch->SetAddress(&lep1_chiso_);
+		if (lep1_chiso_branch) {lep1_chiso_branch->SetAddress(&lep1_chiso_);}
 	}
 	lep1_emiso_branch = 0;
 	if (tree->GetBranch("lep1_emiso") != 0) {
 		lep1_emiso_branch = tree->GetBranch("lep1_emiso");
-		lep1_emiso_branch->SetAddress(&lep1_emiso_);
+		if (lep1_emiso_branch) {lep1_emiso_branch->SetAddress(&lep1_emiso_);}
 	}
 	lep1_nhiso_branch = 0;
 	if (tree->GetBranch("lep1_nhiso") != 0) {
 		lep1_nhiso_branch = tree->GetBranch("lep1_nhiso");
-		lep1_nhiso_branch->SetAddress(&lep1_nhiso_);
+		if (lep1_nhiso_branch) {lep1_nhiso_branch->SetAddress(&lep1_nhiso_);}
 	}
 	lep1_corpfiso04_branch = 0;
 	if (tree->GetBranch("lep1_corpfiso04") != 0) {
 		lep1_corpfiso04_branch = tree->GetBranch("lep1_corpfiso04");
-		lep1_corpfiso04_branch->SetAddress(&lep1_corpfiso04_);
+		if (lep1_corpfiso04_branch) {lep1_corpfiso04_branch->SetAddress(&lep1_corpfiso04_);}
 	}
 	lep1_pfiso04_branch = 0;
 	if (tree->GetBranch("lep1_pfiso04") != 0) {
 		lep1_pfiso04_branch = tree->GetBranch("lep1_pfiso04");
-		lep1_pfiso04_branch->SetAddress(&lep1_pfiso04_);
+		if (lep1_pfiso04_branch) {lep1_pfiso04_branch->SetAddress(&lep1_pfiso04_);}
 	}
 	lep1_chiso04_branch = 0;
 	if (tree->GetBranch("lep1_chiso04") != 0) {
 		lep1_chiso04_branch = tree->GetBranch("lep1_chiso04");
-		lep1_chiso04_branch->SetAddress(&lep1_chiso04_);
+		if (lep1_chiso04_branch) {lep1_chiso04_branch->SetAddress(&lep1_chiso04_);}
 	}
 	lep1_emiso04_branch = 0;
 	if (tree->GetBranch("lep1_emiso04") != 0) {
 		lep1_emiso04_branch = tree->GetBranch("lep1_emiso04");
-		lep1_emiso04_branch->SetAddress(&lep1_emiso04_);
+		if (lep1_emiso04_branch) {lep1_emiso04_branch->SetAddress(&lep1_emiso04_);}
 	}
 	lep1_nhiso04_branch = 0;
 	if (tree->GetBranch("lep1_nhiso04") != 0) {
 		lep1_nhiso04_branch = tree->GetBranch("lep1_nhiso04");
-		lep1_nhiso04_branch->SetAddress(&lep1_nhiso04_);
+		if (lep1_nhiso04_branch) {lep1_nhiso04_branch->SetAddress(&lep1_nhiso04_);}
 	}
 	lep1_cordetiso_branch = 0;
 	if (tree->GetBranch("lep1_cordetiso") != 0) {
 		lep1_cordetiso_branch = tree->GetBranch("lep1_cordetiso");
-		lep1_cordetiso_branch->SetAddress(&lep1_cordetiso_);
+		if (lep1_cordetiso_branch) {lep1_cordetiso_branch->SetAddress(&lep1_cordetiso_);}
 	}
 	lep1_detiso_branch = 0;
 	if (tree->GetBranch("lep1_detiso") != 0) {
 		lep1_detiso_branch = tree->GetBranch("lep1_detiso");
-		lep1_detiso_branch->SetAddress(&lep1_detiso_);
+		if (lep1_detiso_branch) {lep1_detiso_branch->SetAddress(&lep1_detiso_);}
 	}
 	lep1_trkiso_branch = 0;
 	if (tree->GetBranch("lep1_trkiso") != 0) {
 		lep1_trkiso_branch = tree->GetBranch("lep1_trkiso");
-		lep1_trkiso_branch->SetAddress(&lep1_trkiso_);
+		if (lep1_trkiso_branch) {lep1_trkiso_branch->SetAddress(&lep1_trkiso_);}
 	}
 	lep1_ecaliso_branch = 0;
 	if (tree->GetBranch("lep1_ecaliso") != 0) {
 		lep1_ecaliso_branch = tree->GetBranch("lep1_ecaliso");
-		lep1_ecaliso_branch->SetAddress(&lep1_ecaliso_);
+		if (lep1_ecaliso_branch) {lep1_ecaliso_branch->SetAddress(&lep1_ecaliso_);}
 	}
 	lep1_hcaliso_branch = 0;
 	if (tree->GetBranch("lep1_hcaliso") != 0) {
 		lep1_hcaliso_branch = tree->GetBranch("lep1_hcaliso");
-		lep1_hcaliso_branch->SetAddress(&lep1_hcaliso_);
+		if (lep1_hcaliso_branch) {lep1_hcaliso_branch->SetAddress(&lep1_hcaliso_);}
 	}
 	lep1_cordetiso04_branch = 0;
 	if (tree->GetBranch("lep1_cordetiso04") != 0) {
 		lep1_cordetiso04_branch = tree->GetBranch("lep1_cordetiso04");
-		lep1_cordetiso04_branch->SetAddress(&lep1_cordetiso04_);
+		if (lep1_cordetiso04_branch) {lep1_cordetiso04_branch->SetAddress(&lep1_cordetiso04_);}
 	}
 	lep1_detiso04_branch = 0;
 	if (tree->GetBranch("lep1_detiso04") != 0) {
 		lep1_detiso04_branch = tree->GetBranch("lep1_detiso04");
-		lep1_detiso04_branch->SetAddress(&lep1_detiso04_);
+		if (lep1_detiso04_branch) {lep1_detiso04_branch->SetAddress(&lep1_detiso04_);}
 	}
 	lep1_trkiso04_branch = 0;
 	if (tree->GetBranch("lep1_trkiso04") != 0) {
 		lep1_trkiso04_branch = tree->GetBranch("lep1_trkiso04");
-		lep1_trkiso04_branch->SetAddress(&lep1_trkiso04_);
+		if (lep1_trkiso04_branch) {lep1_trkiso04_branch->SetAddress(&lep1_trkiso04_);}
 	}
 	lep1_ecaliso04_branch = 0;
 	if (tree->GetBranch("lep1_ecaliso04") != 0) {
 		lep1_ecaliso04_branch = tree->GetBranch("lep1_ecaliso04");
-		lep1_ecaliso04_branch->SetAddress(&lep1_ecaliso04_);
+		if (lep1_ecaliso04_branch) {lep1_ecaliso04_branch->SetAddress(&lep1_ecaliso04_);}
 	}
 	lep1_hcaliso04_branch = 0;
 	if (tree->GetBranch("lep1_hcaliso04") != 0) {
 		lep1_hcaliso04_branch = tree->GetBranch("lep1_hcaliso04");
-		lep1_hcaliso04_branch->SetAddress(&lep1_hcaliso04_);
+		if (lep1_hcaliso04_branch) {lep1_hcaliso04_branch->SetAddress(&lep1_hcaliso04_);}
 	}
 	lep1_effarea_branch = 0;
 	if (tree->GetBranch("lep1_effarea") != 0) {
 		lep1_effarea_branch = tree->GetBranch("lep1_effarea");
-		lep1_effarea_branch->SetAddress(&lep1_effarea_);
+		if (lep1_effarea_branch) {lep1_effarea_branch->SetAddress(&lep1_effarea_);}
 	}
 	lep1_effarea04_branch = 0;
 	if (tree->GetBranch("lep1_effarea04") != 0) {
 		lep1_effarea04_branch = tree->GetBranch("lep1_effarea04");
-		lep1_effarea04_branch->SetAddress(&lep1_effarea04_);
+		if (lep1_effarea04_branch) {lep1_effarea04_branch->SetAddress(&lep1_effarea04_);}
 	}
 	lep1_dbeta_branch = 0;
 	if (tree->GetBranch("lep1_dbeta") != 0) {
 		lep1_dbeta_branch = tree->GetBranch("lep1_dbeta");
-		lep1_dbeta_branch->SetAddress(&lep1_dbeta_);
+		if (lep1_dbeta_branch) {lep1_dbeta_branch->SetAddress(&lep1_dbeta_);}
 	}
 	lep1_dbeta04_branch = 0;
 	if (tree->GetBranch("lep1_dbeta04") != 0) {
 		lep1_dbeta04_branch = tree->GetBranch("lep1_dbeta04");
-		lep1_dbeta04_branch->SetAddress(&lep1_dbeta04_);
+		if (lep1_dbeta04_branch) {lep1_dbeta04_branch->SetAddress(&lep1_dbeta04_);}
 	}
 	lep1_sf_lepeff_branch = 0;
 	if (tree->GetBranch("lep1_sf_lepeff") != 0) {
 		lep1_sf_lepeff_branch = tree->GetBranch("lep1_sf_lepeff");
-		lep1_sf_lepeff_branch->SetAddress(&lep1_sf_lepeff_);
+		if (lep1_sf_lepeff_branch) {lep1_sf_lepeff_branch->SetAddress(&lep1_sf_lepeff_);}
 	}
 	lep1_sf_trig_branch = 0;
 	if (tree->GetBranch("lep1_sf_trig") != 0) {
 		lep1_sf_trig_branch = tree->GetBranch("lep1_sf_trig");
-		lep1_sf_trig_branch->SetAddress(&lep1_sf_trig_);
+		if (lep1_sf_trig_branch) {lep1_sf_trig_branch->SetAddress(&lep1_sf_trig_);}
 	}
 	lep1_mcid_branch = 0;
 	if (tree->GetBranch("lep1_mcid") != 0) {
 		lep1_mcid_branch = tree->GetBranch("lep1_mcid");
-		lep1_mcid_branch->SetAddress(&lep1_mcid_);
+		if (lep1_mcid_branch) {lep1_mcid_branch->SetAddress(&lep1_mcid_);}
 	}
 	lep1_mc3id_branch = 0;
 	if (tree->GetBranch("lep1_mc3id") != 0) {
 		lep1_mc3id_branch = tree->GetBranch("lep1_mc3id");
-		lep1_mc3id_branch->SetAddress(&lep1_mc3id_);
+		if (lep1_mc3id_branch) {lep1_mc3id_branch->SetAddress(&lep1_mc3id_);}
 	}
 	lep1_momid_branch = 0;
 	if (tree->GetBranch("lep1_momid") != 0) {
 		lep1_momid_branch = tree->GetBranch("lep1_momid");
-		lep1_momid_branch->SetAddress(&lep1_momid_);
+		if (lep1_momid_branch) {lep1_momid_branch->SetAddress(&lep1_momid_);}
 	}
 	lep1_mc3_momid_branch = 0;
 	if (tree->GetBranch("lep1_mc3_momid") != 0) {
 		lep1_mc3_momid_branch = tree->GetBranch("lep1_mc3_momid");
-		lep1_mc3_momid_branch->SetAddress(&lep1_mc3_momid_);
+		if (lep1_mc3_momid_branch) {lep1_mc3_momid_branch->SetAddress(&lep1_mc3_momid_);}
 	}
 	lep1_q3agree_branch = 0;
 	if (tree->GetBranch("lep1_q3agree") != 0) {
 		lep1_q3agree_branch = tree->GetBranch("lep1_q3agree");
-		lep1_q3agree_branch->SetAddress(&lep1_q3agree_);
+		if (lep1_q3agree_branch) {lep1_q3agree_branch->SetAddress(&lep1_q3agree_);}
 	}
 	lep1_is_conv_branch = 0;
 	if (tree->GetBranch("lep1_is_conv") != 0) {
 		lep1_is_conv_branch = tree->GetBranch("lep1_is_conv");
-		lep1_is_conv_branch->SetAddress(&lep1_is_conv_);
+		if (lep1_is_conv_branch) {lep1_is_conv_branch->SetAddress(&lep1_is_conv_);}
 	}
 	lep1_qsc_branch = 0;
 	if (tree->GetBranch("lep1_qsc") != 0) {
 		lep1_qsc_branch = tree->GetBranch("lep1_qsc");
-		lep1_qsc_branch->SetAddress(&lep1_qsc_);
+		if (lep1_qsc_branch) {lep1_qsc_branch->SetAddress(&lep1_qsc_);}
 	}
 	lep1_qctf_branch = 0;
 	if (tree->GetBranch("lep1_qctf") != 0) {
 		lep1_qctf_branch = tree->GetBranch("lep1_qctf");
-		lep1_qctf_branch->SetAddress(&lep1_qctf_);
+		if (lep1_qctf_branch) {lep1_qctf_branch->SetAddress(&lep1_qctf_);}
 	}
 	lep1_qgsf_branch = 0;
 	if (tree->GetBranch("lep1_qgsf") != 0) {
 		lep1_qgsf_branch = tree->GetBranch("lep1_qgsf");
-		lep1_qgsf_branch->SetAddress(&lep1_qgsf_);
+		if (lep1_qgsf_branch) {lep1_qgsf_branch->SetAddress(&lep1_qgsf_);}
 	}
 	lep1_nmhits_branch = 0;
 	if (tree->GetBranch("lep1_nmhits") != 0) {
 		lep1_nmhits_branch = tree->GetBranch("lep1_nmhits");
-		lep1_nmhits_branch->SetAddress(&lep1_nmhits_);
+		if (lep1_nmhits_branch) {lep1_nmhits_branch->SetAddress(&lep1_nmhits_);}
 	}
 	lep1_eleid_veto_branch = 0;
 	if (tree->GetBranch("lep1_eleid_veto") != 0) {
 		lep1_eleid_veto_branch = tree->GetBranch("lep1_eleid_veto");
-		lep1_eleid_veto_branch->SetAddress(&lep1_eleid_veto_);
+		if (lep1_eleid_veto_branch) {lep1_eleid_veto_branch->SetAddress(&lep1_eleid_veto_);}
 	}
 	lep1_eleid_loose_branch = 0;
 	if (tree->GetBranch("lep1_eleid_loose") != 0) {
 		lep1_eleid_loose_branch = tree->GetBranch("lep1_eleid_loose");
-		lep1_eleid_loose_branch->SetAddress(&lep1_eleid_loose_);
+		if (lep1_eleid_loose_branch) {lep1_eleid_loose_branch->SetAddress(&lep1_eleid_loose_);}
 	}
 	lep1_eleid_medium_branch = 0;
 	if (tree->GetBranch("lep1_eleid_medium") != 0) {
 		lep1_eleid_medium_branch = tree->GetBranch("lep1_eleid_medium");
-		lep1_eleid_medium_branch->SetAddress(&lep1_eleid_medium_);
+		if (lep1_eleid_medium_branch) {lep1_eleid_medium_branch->SetAddress(&lep1_eleid_medium_);}
 	}
 	lep1_eleid_tight_branch = 0;
 	if (tree->GetBranch("lep1_eleid_tight") != 0) {
 		lep1_eleid_tight_branch = tree->GetBranch("lep1_eleid_tight");
-		lep1_eleid_tight_branch->SetAddress(&lep1_eleid_tight_);
+		if (lep1_eleid_tight_branch) {lep1_eleid_tight_branch->SetAddress(&lep1_eleid_tight_);}
 	}
 	lep1_dphiin_branch = 0;
 	if (tree->GetBranch("lep1_dphiin") != 0) {
 		lep1_dphiin_branch = tree->GetBranch("lep1_dphiin");
-		lep1_dphiin_branch->SetAddress(&lep1_dphiin_);
+		if (lep1_dphiin_branch) {lep1_dphiin_branch->SetAddress(&lep1_dphiin_);}
 	}
 	lep1_detain_branch = 0;
 	if (tree->GetBranch("lep1_detain") != 0) {
 		lep1_detain_branch = tree->GetBranch("lep1_detain");
-		lep1_detain_branch->SetAddress(&lep1_detain_);
+		if (lep1_detain_branch) {lep1_detain_branch->SetAddress(&lep1_detain_);}
 	}
 	lep1_sieie_branch = 0;
 	if (tree->GetBranch("lep1_sieie") != 0) {
 		lep1_sieie_branch = tree->GetBranch("lep1_sieie");
-		lep1_sieie_branch->SetAddress(&lep1_sieie_);
+		if (lep1_sieie_branch) {lep1_sieie_branch->SetAddress(&lep1_sieie_);}
 	}
 	lep1_hoe_branch = 0;
 	if (tree->GetBranch("lep1_hoe") != 0) {
 		lep1_hoe_branch = tree->GetBranch("lep1_hoe");
-		lep1_hoe_branch->SetAddress(&lep1_hoe_);
+		if (lep1_hoe_branch) {lep1_hoe_branch->SetAddress(&lep1_hoe_);}
 	}
 	lep1_ooemoop_branch = 0;
 	if (tree->GetBranch("lep1_ooemoop") != 0) {
 		lep1_ooemoop_branch = tree->GetBranch("lep1_ooemoop");
-		lep1_ooemoop_branch->SetAddress(&lep1_ooemoop_);
+		if (lep1_ooemoop_branch) {lep1_ooemoop_branch->SetAddress(&lep1_ooemoop_);}
 	}
 	lep1_conv_dist_branch = 0;
 	if (tree->GetBranch("lep1_conv_dist") != 0) {
 		lep1_conv_dist_branch = tree->GetBranch("lep1_conv_dist");
-		lep1_conv_dist_branch->SetAddress(&lep1_conv_dist_);
+		if (lep1_conv_dist_branch) {lep1_conv_dist_branch->SetAddress(&lep1_conv_dist_);}
 	}
 	lep1_conv_dcot_branch = 0;
 	if (tree->GetBranch("lep1_conv_dcot") != 0) {
 		lep1_conv_dcot_branch = tree->GetBranch("lep1_conv_dcot");
-		lep1_conv_dcot_branch->SetAddress(&lep1_conv_dcot_);
+		if (lep1_conv_dcot_branch) {lep1_conv_dcot_branch->SetAddress(&lep1_conv_dcot_);}
 	}
 	lep1_is_global_branch = 0;
 	if (tree->GetBranch("lep1_is_global") != 0) {
 		lep1_is_global_branch = tree->GetBranch("lep1_is_global");
-		lep1_is_global_branch->SetAddress(&lep1_is_global_);
+		if (lep1_is_global_branch) {lep1_is_global_branch->SetAddress(&lep1_is_global_);}
 	}
 	lep1_is_tracker_branch = 0;
 	if (tree->GetBranch("lep1_is_tracker") != 0) {
 		lep1_is_tracker_branch = tree->GetBranch("lep1_is_tracker");
-		lep1_is_tracker_branch->SetAddress(&lep1_is_tracker_);
+		if (lep1_is_tracker_branch) {lep1_is_tracker_branch->SetAddress(&lep1_is_tracker_);}
 	}
 	lep1_is_stamu_branch = 0;
 	if (tree->GetBranch("lep1_is_stamu") != 0) {
 		lep1_is_stamu_branch = tree->GetBranch("lep1_is_stamu");
-		lep1_is_stamu_branch->SetAddress(&lep1_is_stamu_);
+		if (lep1_is_stamu_branch) {lep1_is_stamu_branch->SetAddress(&lep1_is_stamu_);}
 	}
 	lep1_is_pfmu_branch = 0;
 	if (tree->GetBranch("lep1_is_pfmu") != 0) {
 		lep1_is_pfmu_branch = tree->GetBranch("lep1_is_pfmu");
-		lep1_is_pfmu_branch->SetAddress(&lep1_is_pfmu_);
+		if (lep1_is_pfmu_branch) {lep1_is_pfmu_branch->SetAddress(&lep1_is_pfmu_);}
 	}
 	lep1_is_loosemu_branch = 0;
 	if (tree->GetBranch("lep1_is_loosemu") != 0) {
 		lep1_is_loosemu_branch = tree->GetBranch("lep1_is_loosemu");
-		lep1_is_loosemu_branch->SetAddress(&lep1_is_loosemu_);
+		if (lep1_is_loosemu_branch) {lep1_is_loosemu_branch->SetAddress(&lep1_is_loosemu_);}
 	}
 	lep1_is_tightmu_branch = 0;
 	if (tree->GetBranch("lep1_is_tightmu") != 0) {
 		lep1_is_tightmu_branch = tree->GetBranch("lep1_is_tightmu");
-		lep1_is_tightmu_branch->SetAddress(&lep1_is_tightmu_);
+		if (lep1_is_tightmu_branch) {lep1_is_tightmu_branch->SetAddress(&lep1_is_tightmu_);}
 	}
 	lep1_npixelhits_branch = 0;
 	if (tree->GetBranch("lep1_npixelhits") != 0) {
 		lep1_npixelhits_branch = tree->GetBranch("lep1_npixelhits");
-		lep1_npixelhits_branch->SetAddress(&lep1_npixelhits_);
+		if (lep1_npixelhits_branch) {lep1_npixelhits_branch->SetAddress(&lep1_npixelhits_);}
 	}
 	lep1_nsihits_branch = 0;
 	if (tree->GetBranch("lep1_nsihits") != 0) {
 		lep1_nsihits_branch = tree->GetBranch("lep1_nsihits");
-		lep1_nsihits_branch->SetAddress(&lep1_nsihits_);
+		if (lep1_nsihits_branch) {lep1_nsihits_branch->SetAddress(&lep1_nsihits_);}
 	}
 	lep1_nsilayers_branch = 0;
 	if (tree->GetBranch("lep1_nsilayers") != 0) {
 		lep1_nsilayers_branch = tree->GetBranch("lep1_nsilayers");
-		lep1_nsilayers_branch->SetAddress(&lep1_nsilayers_);
+		if (lep1_nsilayers_branch) {lep1_nsilayers_branch->SetAddress(&lep1_nsilayers_);}
 	}
 	lep1_nstahits_branch = 0;
 	if (tree->GetBranch("lep1_nstahits") != 0) {
 		lep1_nstahits_branch = tree->GetBranch("lep1_nstahits");
-		lep1_nstahits_branch->SetAddress(&lep1_nstahits_);
+		if (lep1_nstahits_branch) {lep1_nstahits_branch->SetAddress(&lep1_nstahits_);}
 	}
 	lep1_nstations_branch = 0;
 	if (tree->GetBranch("lep1_nstations") != 0) {
 		lep1_nstations_branch = tree->GetBranch("lep1_nstations");
-		lep1_nstations_branch->SetAddress(&lep1_nstations_);
+		if (lep1_nstations_branch) {lep1_nstations_branch->SetAddress(&lep1_nstations_);}
 	}
 	lep1_chi2_branch = 0;
 	if (tree->GetBranch("lep1_chi2") != 0) {
 		lep1_chi2_branch = tree->GetBranch("lep1_chi2");
-		lep1_chi2_branch->SetAddress(&lep1_chi2_);
+		if (lep1_chi2_branch) {lep1_chi2_branch->SetAddress(&lep1_chi2_);}
 	}
 	lep1_ndof_branch = 0;
 	if (tree->GetBranch("lep1_ndof") != 0) {
 		lep1_ndof_branch = tree->GetBranch("lep1_ndof");
-		lep1_ndof_branch->SetAddress(&lep1_ndof_);
+		if (lep1_ndof_branch) {lep1_ndof_branch->SetAddress(&lep1_ndof_);}
 	}
 	lep1_pterr_branch = 0;
 	if (tree->GetBranch("lep1_pterr") != 0) {
 		lep1_pterr_branch = tree->GetBranch("lep1_pterr");
-		lep1_pterr_branch->SetAddress(&lep1_pterr_);
+		if (lep1_pterr_branch) {lep1_pterr_branch->SetAddress(&lep1_pterr_);}
 	}
 	lep1_ecal_vetodep_branch = 0;
 	if (tree->GetBranch("lep1_ecal_vetodep") != 0) {
 		lep1_ecal_vetodep_branch = tree->GetBranch("lep1_ecal_vetodep");
-		lep1_ecal_vetodep_branch->SetAddress(&lep1_ecal_vetodep_);
+		if (lep1_ecal_vetodep_branch) {lep1_ecal_vetodep_branch->SetAddress(&lep1_ecal_vetodep_);}
 	}
 	lep1_hcal_vetodep_branch = 0;
 	if (tree->GetBranch("lep1_hcal_vetodep") != 0) {
 		lep1_hcal_vetodep_branch = tree->GetBranch("lep1_hcal_vetodep");
-		lep1_hcal_vetodep_branch->SetAddress(&lep1_hcal_vetodep_);
+		if (lep1_hcal_vetodep_branch) {lep1_hcal_vetodep_branch->SetAddress(&lep1_hcal_vetodep_);}
 	}
 	lep2_passes_id_branch = 0;
 	if (tree->GetBranch("lep2_passes_id") != 0) {
 		lep2_passes_id_branch = tree->GetBranch("lep2_passes_id");
-		lep2_passes_id_branch->SetAddress(&lep2_passes_id_);
+		if (lep2_passes_id_branch) {lep2_passes_id_branch->SetAddress(&lep2_passes_id_);}
 	}
 	lep2_passes_iso_branch = 0;
 	if (tree->GetBranch("lep2_passes_iso") != 0) {
 		lep2_passes_iso_branch = tree->GetBranch("lep2_passes_iso");
-		lep2_passes_iso_branch->SetAddress(&lep2_passes_iso_);
+		if (lep2_passes_iso_branch) {lep2_passes_iso_branch->SetAddress(&lep2_passes_iso_);}
 	}
 	lep2_is_num_branch = 0;
 	if (tree->GetBranch("lep2_is_num") != 0) {
 		lep2_is_num_branch = tree->GetBranch("lep2_is_num");
-		lep2_is_num_branch->SetAddress(&lep2_is_num_);
+		if (lep2_is_num_branch) {lep2_is_num_branch->SetAddress(&lep2_is_num_);}
 	}
 	lep2_is_fo_branch = 0;
 	if (tree->GetBranch("lep2_is_fo") != 0) {
 		lep2_is_fo_branch = tree->GetBranch("lep2_is_fo");
-		lep2_is_fo_branch->SetAddress(&lep2_is_fo_);
+		if (lep2_is_fo_branch) {lep2_is_fo_branch->SetAddress(&lep2_is_fo_);}
 	}
 	lep2_is_fromw_branch = 0;
 	if (tree->GetBranch("lep2_is_fromw") != 0) {
 		lep2_is_fromw_branch = tree->GetBranch("lep2_is_fromw");
-		lep2_is_fromw_branch->SetAddress(&lep2_is_fromw_);
+		if (lep2_is_fromw_branch) {lep2_is_fromw_branch->SetAddress(&lep2_is_fromw_);}
 	}
 	lep2_charge_branch = 0;
 	if (tree->GetBranch("lep2_charge") != 0) {
 		lep2_charge_branch = tree->GetBranch("lep2_charge");
-		lep2_charge_branch->SetAddress(&lep2_charge_);
+		if (lep2_charge_branch) {lep2_charge_branch->SetAddress(&lep2_charge_);}
 	}
 	lep2_pdgid_branch = 0;
 	if (tree->GetBranch("lep2_pdgid") != 0) {
 		lep2_pdgid_branch = tree->GetBranch("lep2_pdgid");
-		lep2_pdgid_branch->SetAddress(&lep2_pdgid_);
+		if (lep2_pdgid_branch) {lep2_pdgid_branch->SetAddress(&lep2_pdgid_);}
 	}
 	lep2_type_branch = 0;
 	if (tree->GetBranch("lep2_type") != 0) {
 		lep2_type_branch = tree->GetBranch("lep2_type");
-		lep2_type_branch->SetAddress(&lep2_type_);
+		if (lep2_type_branch) {lep2_type_branch->SetAddress(&lep2_type_);}
 	}
 	lep2_d0_branch = 0;
 	if (tree->GetBranch("lep2_d0") != 0) {
 		lep2_d0_branch = tree->GetBranch("lep2_d0");
-		lep2_d0_branch->SetAddress(&lep2_d0_);
+		if (lep2_d0_branch) {lep2_d0_branch->SetAddress(&lep2_d0_);}
 	}
 	lep2_dz_branch = 0;
 	if (tree->GetBranch("lep2_dz") != 0) {
 		lep2_dz_branch = tree->GetBranch("lep2_dz");
-		lep2_dz_branch->SetAddress(&lep2_dz_);
+		if (lep2_dz_branch) {lep2_dz_branch->SetAddress(&lep2_dz_);}
 	}
 	lep2_mt_branch = 0;
 	if (tree->GetBranch("lep2_mt") != 0) {
 		lep2_mt_branch = tree->GetBranch("lep2_mt");
-		lep2_mt_branch->SetAddress(&lep2_mt_);
+		if (lep2_mt_branch) {lep2_mt_branch->SetAddress(&lep2_mt_);}
 	}
 	lep2_corpfiso_branch = 0;
 	if (tree->GetBranch("lep2_corpfiso") != 0) {
 		lep2_corpfiso_branch = tree->GetBranch("lep2_corpfiso");
-		lep2_corpfiso_branch->SetAddress(&lep2_corpfiso_);
+		if (lep2_corpfiso_branch) {lep2_corpfiso_branch->SetAddress(&lep2_corpfiso_);}
 	}
 	lep2_pfiso_branch = 0;
 	if (tree->GetBranch("lep2_pfiso") != 0) {
 		lep2_pfiso_branch = tree->GetBranch("lep2_pfiso");
-		lep2_pfiso_branch->SetAddress(&lep2_pfiso_);
+		if (lep2_pfiso_branch) {lep2_pfiso_branch->SetAddress(&lep2_pfiso_);}
 	}
 	lep2_chiso_branch = 0;
 	if (tree->GetBranch("lep2_chiso") != 0) {
 		lep2_chiso_branch = tree->GetBranch("lep2_chiso");
-		lep2_chiso_branch->SetAddress(&lep2_chiso_);
+		if (lep2_chiso_branch) {lep2_chiso_branch->SetAddress(&lep2_chiso_);}
 	}
 	lep2_emiso_branch = 0;
 	if (tree->GetBranch("lep2_emiso") != 0) {
 		lep2_emiso_branch = tree->GetBranch("lep2_emiso");
-		lep2_emiso_branch->SetAddress(&lep2_emiso_);
+		if (lep2_emiso_branch) {lep2_emiso_branch->SetAddress(&lep2_emiso_);}
 	}
 	lep2_nhiso_branch = 0;
 	if (tree->GetBranch("lep2_nhiso") != 0) {
 		lep2_nhiso_branch = tree->GetBranch("lep2_nhiso");
-		lep2_nhiso_branch->SetAddress(&lep2_nhiso_);
+		if (lep2_nhiso_branch) {lep2_nhiso_branch->SetAddress(&lep2_nhiso_);}
 	}
 	lep2_corpfiso04_branch = 0;
 	if (tree->GetBranch("lep2_corpfiso04") != 0) {
 		lep2_corpfiso04_branch = tree->GetBranch("lep2_corpfiso04");
-		lep2_corpfiso04_branch->SetAddress(&lep2_corpfiso04_);
+		if (lep2_corpfiso04_branch) {lep2_corpfiso04_branch->SetAddress(&lep2_corpfiso04_);}
 	}
 	lep2_pfiso04_branch = 0;
 	if (tree->GetBranch("lep2_pfiso04") != 0) {
 		lep2_pfiso04_branch = tree->GetBranch("lep2_pfiso04");
-		lep2_pfiso04_branch->SetAddress(&lep2_pfiso04_);
+		if (lep2_pfiso04_branch) {lep2_pfiso04_branch->SetAddress(&lep2_pfiso04_);}
 	}
 	lep2_chiso04_branch = 0;
 	if (tree->GetBranch("lep2_chiso04") != 0) {
 		lep2_chiso04_branch = tree->GetBranch("lep2_chiso04");
-		lep2_chiso04_branch->SetAddress(&lep2_chiso04_);
+		if (lep2_chiso04_branch) {lep2_chiso04_branch->SetAddress(&lep2_chiso04_);}
 	}
 	lep2_emiso04_branch = 0;
 	if (tree->GetBranch("lep2_emiso04") != 0) {
 		lep2_emiso04_branch = tree->GetBranch("lep2_emiso04");
-		lep2_emiso04_branch->SetAddress(&lep2_emiso04_);
+		if (lep2_emiso04_branch) {lep2_emiso04_branch->SetAddress(&lep2_emiso04_);}
 	}
 	lep2_nhiso04_branch = 0;
 	if (tree->GetBranch("lep2_nhiso04") != 0) {
 		lep2_nhiso04_branch = tree->GetBranch("lep2_nhiso04");
-		lep2_nhiso04_branch->SetAddress(&lep2_nhiso04_);
+		if (lep2_nhiso04_branch) {lep2_nhiso04_branch->SetAddress(&lep2_nhiso04_);}
 	}
 	lep2_cordetiso_branch = 0;
 	if (tree->GetBranch("lep2_cordetiso") != 0) {
 		lep2_cordetiso_branch = tree->GetBranch("lep2_cordetiso");
-		lep2_cordetiso_branch->SetAddress(&lep2_cordetiso_);
+		if (lep2_cordetiso_branch) {lep2_cordetiso_branch->SetAddress(&lep2_cordetiso_);}
 	}
 	lep2_detiso_branch = 0;
 	if (tree->GetBranch("lep2_detiso") != 0) {
 		lep2_detiso_branch = tree->GetBranch("lep2_detiso");
-		lep2_detiso_branch->SetAddress(&lep2_detiso_);
+		if (lep2_detiso_branch) {lep2_detiso_branch->SetAddress(&lep2_detiso_);}
 	}
 	lep2_trkiso_branch = 0;
 	if (tree->GetBranch("lep2_trkiso") != 0) {
 		lep2_trkiso_branch = tree->GetBranch("lep2_trkiso");
-		lep2_trkiso_branch->SetAddress(&lep2_trkiso_);
+		if (lep2_trkiso_branch) {lep2_trkiso_branch->SetAddress(&lep2_trkiso_);}
 	}
 	lep2_ecaliso_branch = 0;
 	if (tree->GetBranch("lep2_ecaliso") != 0) {
 		lep2_ecaliso_branch = tree->GetBranch("lep2_ecaliso");
-		lep2_ecaliso_branch->SetAddress(&lep2_ecaliso_);
+		if (lep2_ecaliso_branch) {lep2_ecaliso_branch->SetAddress(&lep2_ecaliso_);}
 	}
 	lep2_hcaliso_branch = 0;
 	if (tree->GetBranch("lep2_hcaliso") != 0) {
 		lep2_hcaliso_branch = tree->GetBranch("lep2_hcaliso");
-		lep2_hcaliso_branch->SetAddress(&lep2_hcaliso_);
+		if (lep2_hcaliso_branch) {lep2_hcaliso_branch->SetAddress(&lep2_hcaliso_);}
 	}
 	lep2_cordetiso04_branch = 0;
 	if (tree->GetBranch("lep2_cordetiso04") != 0) {
 		lep2_cordetiso04_branch = tree->GetBranch("lep2_cordetiso04");
-		lep2_cordetiso04_branch->SetAddress(&lep2_cordetiso04_);
+		if (lep2_cordetiso04_branch) {lep2_cordetiso04_branch->SetAddress(&lep2_cordetiso04_);}
 	}
 	lep2_detiso04_branch = 0;
 	if (tree->GetBranch("lep2_detiso04") != 0) {
 		lep2_detiso04_branch = tree->GetBranch("lep2_detiso04");
-		lep2_detiso04_branch->SetAddress(&lep2_detiso04_);
+		if (lep2_detiso04_branch) {lep2_detiso04_branch->SetAddress(&lep2_detiso04_);}
 	}
 	lep2_trkiso04_branch = 0;
 	if (tree->GetBranch("lep2_trkiso04") != 0) {
 		lep2_trkiso04_branch = tree->GetBranch("lep2_trkiso04");
-		lep2_trkiso04_branch->SetAddress(&lep2_trkiso04_);
+		if (lep2_trkiso04_branch) {lep2_trkiso04_branch->SetAddress(&lep2_trkiso04_);}
 	}
 	lep2_ecaliso04_branch = 0;
 	if (tree->GetBranch("lep2_ecaliso04") != 0) {
 		lep2_ecaliso04_branch = tree->GetBranch("lep2_ecaliso04");
-		lep2_ecaliso04_branch->SetAddress(&lep2_ecaliso04_);
+		if (lep2_ecaliso04_branch) {lep2_ecaliso04_branch->SetAddress(&lep2_ecaliso04_);}
 	}
 	lep2_hcaliso04_branch = 0;
 	if (tree->GetBranch("lep2_hcaliso04") != 0) {
 		lep2_hcaliso04_branch = tree->GetBranch("lep2_hcaliso04");
-		lep2_hcaliso04_branch->SetAddress(&lep2_hcaliso04_);
+		if (lep2_hcaliso04_branch) {lep2_hcaliso04_branch->SetAddress(&lep2_hcaliso04_);}
 	}
 	lep2_effarea_branch = 0;
 	if (tree->GetBranch("lep2_effarea") != 0) {
 		lep2_effarea_branch = tree->GetBranch("lep2_effarea");
-		lep2_effarea_branch->SetAddress(&lep2_effarea_);
+		if (lep2_effarea_branch) {lep2_effarea_branch->SetAddress(&lep2_effarea_);}
 	}
 	lep2_effarea04_branch = 0;
 	if (tree->GetBranch("lep2_effarea04") != 0) {
 		lep2_effarea04_branch = tree->GetBranch("lep2_effarea04");
-		lep2_effarea04_branch->SetAddress(&lep2_effarea04_);
+		if (lep2_effarea04_branch) {lep2_effarea04_branch->SetAddress(&lep2_effarea04_);}
 	}
 	lep2_dbeta_branch = 0;
 	if (tree->GetBranch("lep2_dbeta") != 0) {
 		lep2_dbeta_branch = tree->GetBranch("lep2_dbeta");
-		lep2_dbeta_branch->SetAddress(&lep2_dbeta_);
+		if (lep2_dbeta_branch) {lep2_dbeta_branch->SetAddress(&lep2_dbeta_);}
 	}
 	lep2_dbeta04_branch = 0;
 	if (tree->GetBranch("lep2_dbeta04") != 0) {
 		lep2_dbeta04_branch = tree->GetBranch("lep2_dbeta04");
-		lep2_dbeta04_branch->SetAddress(&lep2_dbeta04_);
+		if (lep2_dbeta04_branch) {lep2_dbeta04_branch->SetAddress(&lep2_dbeta04_);}
 	}
 	lep2_sf_lepeff_branch = 0;
 	if (tree->GetBranch("lep2_sf_lepeff") != 0) {
 		lep2_sf_lepeff_branch = tree->GetBranch("lep2_sf_lepeff");
-		lep2_sf_lepeff_branch->SetAddress(&lep2_sf_lepeff_);
+		if (lep2_sf_lepeff_branch) {lep2_sf_lepeff_branch->SetAddress(&lep2_sf_lepeff_);}
 	}
 	lep2_sf_trig_branch = 0;
 	if (tree->GetBranch("lep2_sf_trig") != 0) {
 		lep2_sf_trig_branch = tree->GetBranch("lep2_sf_trig");
-		lep2_sf_trig_branch->SetAddress(&lep2_sf_trig_);
+		if (lep2_sf_trig_branch) {lep2_sf_trig_branch->SetAddress(&lep2_sf_trig_);}
 	}
 	lep2_mcid_branch = 0;
 	if (tree->GetBranch("lep2_mcid") != 0) {
 		lep2_mcid_branch = tree->GetBranch("lep2_mcid");
-		lep2_mcid_branch->SetAddress(&lep2_mcid_);
+		if (lep2_mcid_branch) {lep2_mcid_branch->SetAddress(&lep2_mcid_);}
 	}
 	lep2_mc3id_branch = 0;
 	if (tree->GetBranch("lep2_mc3id") != 0) {
 		lep2_mc3id_branch = tree->GetBranch("lep2_mc3id");
-		lep2_mc3id_branch->SetAddress(&lep2_mc3id_);
+		if (lep2_mc3id_branch) {lep2_mc3id_branch->SetAddress(&lep2_mc3id_);}
 	}
 	lep2_momid_branch = 0;
 	if (tree->GetBranch("lep2_momid") != 0) {
 		lep2_momid_branch = tree->GetBranch("lep2_momid");
-		lep2_momid_branch->SetAddress(&lep2_momid_);
+		if (lep2_momid_branch) {lep2_momid_branch->SetAddress(&lep2_momid_);}
 	}
 	lep2_mc3_momid_branch = 0;
 	if (tree->GetBranch("lep2_mc3_momid") != 0) {
 		lep2_mc3_momid_branch = tree->GetBranch("lep2_mc3_momid");
-		lep2_mc3_momid_branch->SetAddress(&lep2_mc3_momid_);
+		if (lep2_mc3_momid_branch) {lep2_mc3_momid_branch->SetAddress(&lep2_mc3_momid_);}
 	}
 	lep2_q3agree_branch = 0;
 	if (tree->GetBranch("lep2_q3agree") != 0) {
 		lep2_q3agree_branch = tree->GetBranch("lep2_q3agree");
-		lep2_q3agree_branch->SetAddress(&lep2_q3agree_);
+		if (lep2_q3agree_branch) {lep2_q3agree_branch->SetAddress(&lep2_q3agree_);}
 	}
 	lep2_is_conv_branch = 0;
 	if (tree->GetBranch("lep2_is_conv") != 0) {
 		lep2_is_conv_branch = tree->GetBranch("lep2_is_conv");
-		lep2_is_conv_branch->SetAddress(&lep2_is_conv_);
+		if (lep2_is_conv_branch) {lep2_is_conv_branch->SetAddress(&lep2_is_conv_);}
 	}
 	lep2_qsc_branch = 0;
 	if (tree->GetBranch("lep2_qsc") != 0) {
 		lep2_qsc_branch = tree->GetBranch("lep2_qsc");
-		lep2_qsc_branch->SetAddress(&lep2_qsc_);
+		if (lep2_qsc_branch) {lep2_qsc_branch->SetAddress(&lep2_qsc_);}
 	}
 	lep2_qctf_branch = 0;
 	if (tree->GetBranch("lep2_qctf") != 0) {
 		lep2_qctf_branch = tree->GetBranch("lep2_qctf");
-		lep2_qctf_branch->SetAddress(&lep2_qctf_);
+		if (lep2_qctf_branch) {lep2_qctf_branch->SetAddress(&lep2_qctf_);}
 	}
 	lep2_qgsf_branch = 0;
 	if (tree->GetBranch("lep2_qgsf") != 0) {
 		lep2_qgsf_branch = tree->GetBranch("lep2_qgsf");
-		lep2_qgsf_branch->SetAddress(&lep2_qgsf_);
+		if (lep2_qgsf_branch) {lep2_qgsf_branch->SetAddress(&lep2_qgsf_);}
 	}
 	lep2_nmhits_branch = 0;
 	if (tree->GetBranch("lep2_nmhits") != 0) {
 		lep2_nmhits_branch = tree->GetBranch("lep2_nmhits");
-		lep2_nmhits_branch->SetAddress(&lep2_nmhits_);
+		if (lep2_nmhits_branch) {lep2_nmhits_branch->SetAddress(&lep2_nmhits_);}
 	}
 	lep2_eleid_veto_branch = 0;
 	if (tree->GetBranch("lep2_eleid_veto") != 0) {
 		lep2_eleid_veto_branch = tree->GetBranch("lep2_eleid_veto");
-		lep2_eleid_veto_branch->SetAddress(&lep2_eleid_veto_);
+		if (lep2_eleid_veto_branch) {lep2_eleid_veto_branch->SetAddress(&lep2_eleid_veto_);}
 	}
 	lep2_eleid_loose_branch = 0;
 	if (tree->GetBranch("lep2_eleid_loose") != 0) {
 		lep2_eleid_loose_branch = tree->GetBranch("lep2_eleid_loose");
-		lep2_eleid_loose_branch->SetAddress(&lep2_eleid_loose_);
+		if (lep2_eleid_loose_branch) {lep2_eleid_loose_branch->SetAddress(&lep2_eleid_loose_);}
 	}
 	lep2_eleid_medium_branch = 0;
 	if (tree->GetBranch("lep2_eleid_medium") != 0) {
 		lep2_eleid_medium_branch = tree->GetBranch("lep2_eleid_medium");
-		lep2_eleid_medium_branch->SetAddress(&lep2_eleid_medium_);
+		if (lep2_eleid_medium_branch) {lep2_eleid_medium_branch->SetAddress(&lep2_eleid_medium_);}
 	}
 	lep2_eleid_tight_branch = 0;
 	if (tree->GetBranch("lep2_eleid_tight") != 0) {
 		lep2_eleid_tight_branch = tree->GetBranch("lep2_eleid_tight");
-		lep2_eleid_tight_branch->SetAddress(&lep2_eleid_tight_);
+		if (lep2_eleid_tight_branch) {lep2_eleid_tight_branch->SetAddress(&lep2_eleid_tight_);}
 	}
 	lep2_dphiin_branch = 0;
 	if (tree->GetBranch("lep2_dphiin") != 0) {
 		lep2_dphiin_branch = tree->GetBranch("lep2_dphiin");
-		lep2_dphiin_branch->SetAddress(&lep2_dphiin_);
+		if (lep2_dphiin_branch) {lep2_dphiin_branch->SetAddress(&lep2_dphiin_);}
 	}
 	lep2_detain_branch = 0;
 	if (tree->GetBranch("lep2_detain") != 0) {
 		lep2_detain_branch = tree->GetBranch("lep2_detain");
-		lep2_detain_branch->SetAddress(&lep2_detain_);
+		if (lep2_detain_branch) {lep2_detain_branch->SetAddress(&lep2_detain_);}
 	}
 	lep2_sieie_branch = 0;
 	if (tree->GetBranch("lep2_sieie") != 0) {
 		lep2_sieie_branch = tree->GetBranch("lep2_sieie");
-		lep2_sieie_branch->SetAddress(&lep2_sieie_);
+		if (lep2_sieie_branch) {lep2_sieie_branch->SetAddress(&lep2_sieie_);}
 	}
 	lep2_hoe_branch = 0;
 	if (tree->GetBranch("lep2_hoe") != 0) {
 		lep2_hoe_branch = tree->GetBranch("lep2_hoe");
-		lep2_hoe_branch->SetAddress(&lep2_hoe_);
+		if (lep2_hoe_branch) {lep2_hoe_branch->SetAddress(&lep2_hoe_);}
 	}
 	lep2_ooemoop_branch = 0;
 	if (tree->GetBranch("lep2_ooemoop") != 0) {
 		lep2_ooemoop_branch = tree->GetBranch("lep2_ooemoop");
-		lep2_ooemoop_branch->SetAddress(&lep2_ooemoop_);
+		if (lep2_ooemoop_branch) {lep2_ooemoop_branch->SetAddress(&lep2_ooemoop_);}
 	}
 	lep2_conv_dist_branch = 0;
 	if (tree->GetBranch("lep2_conv_dist") != 0) {
 		lep2_conv_dist_branch = tree->GetBranch("lep2_conv_dist");
-		lep2_conv_dist_branch->SetAddress(&lep2_conv_dist_);
+		if (lep2_conv_dist_branch) {lep2_conv_dist_branch->SetAddress(&lep2_conv_dist_);}
 	}
 	lep2_conv_dcot_branch = 0;
 	if (tree->GetBranch("lep2_conv_dcot") != 0) {
 		lep2_conv_dcot_branch = tree->GetBranch("lep2_conv_dcot");
-		lep2_conv_dcot_branch->SetAddress(&lep2_conv_dcot_);
+		if (lep2_conv_dcot_branch) {lep2_conv_dcot_branch->SetAddress(&lep2_conv_dcot_);}
 	}
 	lep2_is_global_branch = 0;
 	if (tree->GetBranch("lep2_is_global") != 0) {
 		lep2_is_global_branch = tree->GetBranch("lep2_is_global");
-		lep2_is_global_branch->SetAddress(&lep2_is_global_);
+		if (lep2_is_global_branch) {lep2_is_global_branch->SetAddress(&lep2_is_global_);}
 	}
 	lep2_is_tracker_branch = 0;
 	if (tree->GetBranch("lep2_is_tracker") != 0) {
 		lep2_is_tracker_branch = tree->GetBranch("lep2_is_tracker");
-		lep2_is_tracker_branch->SetAddress(&lep2_is_tracker_);
+		if (lep2_is_tracker_branch) {lep2_is_tracker_branch->SetAddress(&lep2_is_tracker_);}
 	}
 	lep2_is_stamu_branch = 0;
 	if (tree->GetBranch("lep2_is_stamu") != 0) {
 		lep2_is_stamu_branch = tree->GetBranch("lep2_is_stamu");
-		lep2_is_stamu_branch->SetAddress(&lep2_is_stamu_);
+		if (lep2_is_stamu_branch) {lep2_is_stamu_branch->SetAddress(&lep2_is_stamu_);}
 	}
 	lep2_is_pfmu_branch = 0;
 	if (tree->GetBranch("lep2_is_pfmu") != 0) {
 		lep2_is_pfmu_branch = tree->GetBranch("lep2_is_pfmu");
-		lep2_is_pfmu_branch->SetAddress(&lep2_is_pfmu_);
+		if (lep2_is_pfmu_branch) {lep2_is_pfmu_branch->SetAddress(&lep2_is_pfmu_);}
 	}
 	lep2_is_loosemu_branch = 0;
 	if (tree->GetBranch("lep2_is_loosemu") != 0) {
 		lep2_is_loosemu_branch = tree->GetBranch("lep2_is_loosemu");
-		lep2_is_loosemu_branch->SetAddress(&lep2_is_loosemu_);
+		if (lep2_is_loosemu_branch) {lep2_is_loosemu_branch->SetAddress(&lep2_is_loosemu_);}
 	}
 	lep2_is_tightmu_branch = 0;
 	if (tree->GetBranch("lep2_is_tightmu") != 0) {
 		lep2_is_tightmu_branch = tree->GetBranch("lep2_is_tightmu");
-		lep2_is_tightmu_branch->SetAddress(&lep2_is_tightmu_);
+		if (lep2_is_tightmu_branch) {lep2_is_tightmu_branch->SetAddress(&lep2_is_tightmu_);}
 	}
 	lep2_npixelhits_branch = 0;
 	if (tree->GetBranch("lep2_npixelhits") != 0) {
 		lep2_npixelhits_branch = tree->GetBranch("lep2_npixelhits");
-		lep2_npixelhits_branch->SetAddress(&lep2_npixelhits_);
+		if (lep2_npixelhits_branch) {lep2_npixelhits_branch->SetAddress(&lep2_npixelhits_);}
 	}
 	lep2_nsihits_branch = 0;
 	if (tree->GetBranch("lep2_nsihits") != 0) {
 		lep2_nsihits_branch = tree->GetBranch("lep2_nsihits");
-		lep2_nsihits_branch->SetAddress(&lep2_nsihits_);
+		if (lep2_nsihits_branch) {lep2_nsihits_branch->SetAddress(&lep2_nsihits_);}
 	}
 	lep2_nsilayers_branch = 0;
 	if (tree->GetBranch("lep2_nsilayers") != 0) {
 		lep2_nsilayers_branch = tree->GetBranch("lep2_nsilayers");
-		lep2_nsilayers_branch->SetAddress(&lep2_nsilayers_);
+		if (lep2_nsilayers_branch) {lep2_nsilayers_branch->SetAddress(&lep2_nsilayers_);}
 	}
 	lep2_nstahits_branch = 0;
 	if (tree->GetBranch("lep2_nstahits") != 0) {
 		lep2_nstahits_branch = tree->GetBranch("lep2_nstahits");
-		lep2_nstahits_branch->SetAddress(&lep2_nstahits_);
+		if (lep2_nstahits_branch) {lep2_nstahits_branch->SetAddress(&lep2_nstahits_);}
 	}
 	lep2_nstations_branch = 0;
 	if (tree->GetBranch("lep2_nstations") != 0) {
 		lep2_nstations_branch = tree->GetBranch("lep2_nstations");
-		lep2_nstations_branch->SetAddress(&lep2_nstations_);
+		if (lep2_nstations_branch) {lep2_nstations_branch->SetAddress(&lep2_nstations_);}
 	}
 	lep2_chi2_branch = 0;
 	if (tree->GetBranch("lep2_chi2") != 0) {
 		lep2_chi2_branch = tree->GetBranch("lep2_chi2");
-		lep2_chi2_branch->SetAddress(&lep2_chi2_);
+		if (lep2_chi2_branch) {lep2_chi2_branch->SetAddress(&lep2_chi2_);}
 	}
 	lep2_ndof_branch = 0;
 	if (tree->GetBranch("lep2_ndof") != 0) {
 		lep2_ndof_branch = tree->GetBranch("lep2_ndof");
-		lep2_ndof_branch->SetAddress(&lep2_ndof_);
+		if (lep2_ndof_branch) {lep2_ndof_branch->SetAddress(&lep2_ndof_);}
 	}
 	lep2_pterr_branch = 0;
 	if (tree->GetBranch("lep2_pterr") != 0) {
 		lep2_pterr_branch = tree->GetBranch("lep2_pterr");
-		lep2_pterr_branch->SetAddress(&lep2_pterr_);
+		if (lep2_pterr_branch) {lep2_pterr_branch->SetAddress(&lep2_pterr_);}
 	}
 	lep2_ecal_vetodep_branch = 0;
 	if (tree->GetBranch("lep2_ecal_vetodep") != 0) {
 		lep2_ecal_vetodep_branch = tree->GetBranch("lep2_ecal_vetodep");
-		lep2_ecal_vetodep_branch->SetAddress(&lep2_ecal_vetodep_);
+		if (lep2_ecal_vetodep_branch) {lep2_ecal_vetodep_branch->SetAddress(&lep2_ecal_vetodep_);}
 	}
 	lep2_hcal_vetodep_branch = 0;
 	if (tree->GetBranch("lep2_hcal_vetodep") != 0) {
 		lep2_hcal_vetodep_branch = tree->GetBranch("lep2_hcal_vetodep");
-		lep2_hcal_vetodep_branch->SetAddress(&lep2_hcal_vetodep_);
+		if (lep2_hcal_vetodep_branch) {lep2_hcal_vetodep_branch->SetAddress(&lep2_hcal_vetodep_);}
 	}
 	is_os_branch = 0;
 	if (tree->GetBranch("is_os") != 0) {
 		is_os_branch = tree->GetBranch("is_os");
-		is_os_branch->SetAddress(&is_os_);
+		if (is_os_branch) {is_os_branch->SetAddress(&is_os_);}
 	}
 	is_ss_branch = 0;
 	if (tree->GetBranch("is_ss") != 0) {
 		is_ss_branch = tree->GetBranch("is_ss");
-		is_ss_branch->SetAddress(&is_ss_);
+		if (is_ss_branch) {is_ss_branch->SetAddress(&is_ss_);}
 	}
 	dilep_type_branch = 0;
 	if (tree->GetBranch("dilep_type") != 0) {
 		dilep_type_branch = tree->GetBranch("dilep_type");
-		dilep_type_branch->SetAddress(&dilep_type_);
+		if (dilep_type_branch) {dilep_type_branch->SetAddress(&dilep_type_);}
 	}
 	dilep_gen_type_branch = 0;
 	if (tree->GetBranch("dilep_gen_type") != 0) {
 		dilep_gen_type_branch = tree->GetBranch("dilep_gen_type");
-		dilep_gen_type_branch->SetAddress(&dilep_gen_type_);
+		if (dilep_gen_type_branch) {dilep_gen_type_branch->SetAddress(&dilep_gen_type_);}
 	}
 	dilep_mass_branch = 0;
 	if (tree->GetBranch("dilep_mass") != 0) {
 		dilep_mass_branch = tree->GetBranch("dilep_mass");
-		dilep_mass_branch->SetAddress(&dilep_mass_);
+		if (dilep_mass_branch) {dilep_mass_branch->SetAddress(&dilep_mass_);}
 	}
 	dilep_dphi_branch = 0;
 	if (tree->GetBranch("dilep_dphi") != 0) {
 		dilep_dphi_branch = tree->GetBranch("dilep_dphi");
-		dilep_dphi_branch->SetAddress(&dilep_dphi_);
+		if (dilep_dphi_branch) {dilep_dphi_branch->SetAddress(&dilep_dphi_);}
 	}
 	dilep_deta_branch = 0;
 	if (tree->GetBranch("dilep_deta") != 0) {
 		dilep_deta_branch = tree->GetBranch("dilep_deta");
-		dilep_deta_branch->SetAddress(&dilep_deta_);
+		if (dilep_deta_branch) {dilep_deta_branch->SetAddress(&dilep_deta_);}
 	}
 	dilep_dr_branch = 0;
 	if (tree->GetBranch("dilep_dr") != 0) {
 		dilep_dr_branch = tree->GetBranch("dilep_dr");
-		dilep_dr_branch->SetAddress(&dilep_dr_);
+		if (dilep_dr_branch) {dilep_dr_branch->SetAddress(&dilep_dr_);}
 	}
 	fiduciality_branch = 0;
 	if (tree->GetBranch("fiduciality") != 0) {
 		fiduciality_branch = tree->GetBranch("fiduciality");
-		fiduciality_branch->SetAddress(&fiduciality_);
+		if (fiduciality_branch) {fiduciality_branch->SetAddress(&fiduciality_);}
 	}
 	selection_branch = 0;
 	if (tree->GetBranch("selection") != 0) {
 		selection_branch = tree->GetBranch("selection");
-		selection_branch->SetAddress(&selection_);
+		if (selection_branch) {selection_branch->SetAddress(&selection_);}
 	}
 	is_good_lumi_branch = 0;
 	if (tree->GetBranch("is_good_lumi") != 0) {
 		is_good_lumi_branch = tree->GetBranch("is_good_lumi");
-		is_good_lumi_branch->SetAddress(&is_good_lumi_);
+		if (is_good_lumi_branch) {is_good_lumi_branch->SetAddress(&is_good_lumi_);}
 	}
 	njets_branch = 0;
 	if (tree->GetBranch("njets") != 0) {
 		njets_branch = tree->GetBranch("njets");
-		njets_branch->SetAddress(&njets_);
+		if (njets_branch) {njets_branch->SetAddress(&njets_);}
 	}
 	njets20_branch = 0;
 	if (tree->GetBranch("njets20") != 0) {
 		njets20_branch = tree->GetBranch("njets20");
-		njets20_branch->SetAddress(&njets20_);
+		if (njets20_branch) {njets20_branch->SetAddress(&njets20_);}
 	}
 	njets30_branch = 0;
 	if (tree->GetBranch("njets30") != 0) {
 		njets30_branch = tree->GetBranch("njets30");
-		njets30_branch->SetAddress(&njets30_);
+		if (njets30_branch) {njets30_branch->SetAddress(&njets30_);}
 	}
 	nbtags_branch = 0;
 	if (tree->GetBranch("nbtags") != 0) {
 		nbtags_branch = tree->GetBranch("nbtags");
-		nbtags_branch->SetAddress(&nbtags_);
+		if (nbtags_branch) {nbtags_branch->SetAddress(&nbtags_);}
 	}
 	nbtags20_branch = 0;
 	if (tree->GetBranch("nbtags20") != 0) {
 		nbtags20_branch = tree->GetBranch("nbtags20");
-		nbtags20_branch->SetAddress(&nbtags20_);
+		if (nbtags20_branch) {nbtags20_branch->SetAddress(&nbtags20_);}
 	}
 	nbtags30_branch = 0;
 	if (tree->GetBranch("nbtags30") != 0) {
 		nbtags30_branch = tree->GetBranch("nbtags30");
-		nbtags30_branch->SetAddress(&nbtags30_);
+		if (nbtags30_branch) {nbtags30_branch->SetAddress(&nbtags30_);}
 	}
 	ttbar_bkdn_branch = 0;
 	if (tree->GetBranch("ttbar_bkdn") != 0) {
 		ttbar_bkdn_branch = tree->GetBranch("ttbar_bkdn");
-		ttbar_bkdn_branch->SetAddress(&ttbar_bkdn_);
+		if (ttbar_bkdn_branch) {ttbar_bkdn_branch->SetAddress(&ttbar_bkdn_);}
 	}
 	vtxw_branch = 0;
 	if (tree->GetBranch("vtxw") != 0) {
 		vtxw_branch = tree->GetBranch("vtxw");
-		vtxw_branch->SetAddress(&vtxw_);
+		if (vtxw_branch) {vtxw_branch->SetAddress(&vtxw_);}
 	}
 	mt_branch = 0;
 	if (tree->GetBranch("mt") != 0) {
 		mt_branch = tree->GetBranch("mt");
-		mt_branch->SetAddress(&mt_);
+		if (mt_branch) {mt_branch->SetAddress(&mt_);}
 	}
 	ht_branch = 0;
 	if (tree->GetBranch("ht") != 0) {
 		ht_branch = tree->GetBranch("ht");
-		ht_branch->SetAddress(&ht_);
+		if (ht_branch) {ht_branch->SetAddress(&ht_);}
 	}
 	ht20_branch = 0;
 	if (tree->GetBranch("ht20") != 0) {
 		ht20_branch = tree->GetBranch("ht20");
-		ht20_branch->SetAddress(&ht20_);
+		if (ht20_branch) {ht20_branch->SetAddress(&ht20_);}
 	}
 	ht30_branch = 0;
 	if (tree->GetBranch("ht30") != 0) {
 		ht30_branch = tree->GetBranch("ht30");
-		ht30_branch->SetAddress(&ht30_);
+		if (ht30_branch) {ht30_branch->SetAddress(&ht30_);}
 	}
 	rho_branch = 0;
 	if (tree->GetBranch("rho") != 0) {
 		rho_branch = tree->GetBranch("rho");
-		rho_branch->SetAddress(&rho_);
+		if (rho_branch) {rho_branch->SetAddress(&rho_);}
 	}
 	rho_iso_branch = 0;
 	if (tree->GetBranch("rho_iso") != 0) {
 		rho_iso_branch = tree->GetBranch("rho_iso");
-		rho_iso_branch->SetAddress(&rho_iso_);
+		if (rho_iso_branch) {rho_iso_branch->SetAddress(&rho_iso_);}
 	}
 	trig_mm_branch = 0;
 	if (tree->GetBranch("trig_mm") != 0) {
 		trig_mm_branch = tree->GetBranch("trig_mm");
-		trig_mm_branch->SetAddress(&trig_mm_);
+		if (trig_mm_branch) {trig_mm_branch->SetAddress(&trig_mm_);}
 	}
 	trig_em_branch = 0;
 	if (tree->GetBranch("trig_em") != 0) {
 		trig_em_branch = tree->GetBranch("trig_em");
-		trig_em_branch->SetAddress(&trig_em_);
+		if (trig_em_branch) {trig_em_branch->SetAddress(&trig_em_);}
 	}
 	trig_ee_branch = 0;
 	if (tree->GetBranch("trig_ee") != 0) {
 		trig_ee_branch = tree->GetBranch("trig_ee");
-		trig_ee_branch->SetAddress(&trig_ee_);
+		if (trig_ee_branch) {trig_ee_branch->SetAddress(&trig_ee_);}
 	}
 	njets_dn_branch = 0;
 	if (tree->GetBranch("njets_dn") != 0) {
 		njets_dn_branch = tree->GetBranch("njets_dn");
-		njets_dn_branch->SetAddress(&njets_dn_);
+		if (njets_dn_branch) {njets_dn_branch->SetAddress(&njets_dn_);}
 	}
 	njets_up_branch = 0;
 	if (tree->GetBranch("njets_up") != 0) {
 		njets_up_branch = tree->GetBranch("njets_up");
-		njets_up_branch->SetAddress(&njets_up_);
+		if (njets_up_branch) {njets_up_branch->SetAddress(&njets_up_);}
 	}
 	nbtags_dn_branch = 0;
 	if (tree->GetBranch("nbtags_dn") != 0) {
 		nbtags_dn_branch = tree->GetBranch("nbtags_dn");
-		nbtags_dn_branch->SetAddress(&nbtags_dn_);
+		if (nbtags_dn_branch) {nbtags_dn_branch->SetAddress(&nbtags_dn_);}
 	}
 	nbtags_up_branch = 0;
 	if (tree->GetBranch("nbtags_up") != 0) {
 		nbtags_up_branch = tree->GetBranch("nbtags_up");
-		nbtags_up_branch->SetAddress(&nbtags_up_);
+		if (nbtags_up_branch) {nbtags_up_branch->SetAddress(&nbtags_up_);}
 	}
 	ht_dn_branch = 0;
 	if (tree->GetBranch("ht_dn") != 0) {
 		ht_dn_branch = tree->GetBranch("ht_dn");
-		ht_dn_branch->SetAddress(&ht_dn_);
+		if (ht_dn_branch) {ht_dn_branch->SetAddress(&ht_dn_);}
 	}
 	ht_up_branch = 0;
 	if (tree->GetBranch("ht_up") != 0) {
 		ht_up_branch = tree->GetBranch("ht_up");
-		ht_up_branch->SetAddress(&ht_up_);
+		if (ht_up_branch) {ht_up_branch->SetAddress(&ht_up_);}
 	}
 	njets20_dn_branch = 0;
 	if (tree->GetBranch("njets20_dn") != 0) {
 		njets20_dn_branch = tree->GetBranch("njets20_dn");
-		njets20_dn_branch->SetAddress(&njets20_dn_);
+		if (njets20_dn_branch) {njets20_dn_branch->SetAddress(&njets20_dn_);}
 	}
 	njets20_up_branch = 0;
 	if (tree->GetBranch("njets20_up") != 0) {
 		njets20_up_branch = tree->GetBranch("njets20_up");
-		njets20_up_branch->SetAddress(&njets20_up_);
+		if (njets20_up_branch) {njets20_up_branch->SetAddress(&njets20_up_);}
 	}
 	nbtags20_dn_branch = 0;
 	if (tree->GetBranch("nbtags20_dn") != 0) {
 		nbtags20_dn_branch = tree->GetBranch("nbtags20_dn");
-		nbtags20_dn_branch->SetAddress(&nbtags20_dn_);
+		if (nbtags20_dn_branch) {nbtags20_dn_branch->SetAddress(&nbtags20_dn_);}
 	}
 	nbtags20_up_branch = 0;
 	if (tree->GetBranch("nbtags20_up") != 0) {
 		nbtags20_up_branch = tree->GetBranch("nbtags20_up");
-		nbtags20_up_branch->SetAddress(&nbtags20_up_);
+		if (nbtags20_up_branch) {nbtags20_up_branch->SetAddress(&nbtags20_up_);}
 	}
 	ht20_dn_branch = 0;
 	if (tree->GetBranch("ht20_dn") != 0) {
 		ht20_dn_branch = tree->GetBranch("ht20_dn");
-		ht20_dn_branch->SetAddress(&ht20_dn_);
+		if (ht20_dn_branch) {ht20_dn_branch->SetAddress(&ht20_dn_);}
 	}
 	ht20_up_branch = 0;
 	if (tree->GetBranch("ht20_up") != 0) {
 		ht20_up_branch = tree->GetBranch("ht20_up");
-		ht20_up_branch->SetAddress(&ht20_up_);
+		if (ht20_up_branch) {ht20_up_branch->SetAddress(&ht20_up_);}
 	}
 	njets30_dn_branch = 0;
 	if (tree->GetBranch("njets30_dn") != 0) {
 		njets30_dn_branch = tree->GetBranch("njets30_dn");
-		njets30_dn_branch->SetAddress(&njets30_dn_);
+		if (njets30_dn_branch) {njets30_dn_branch->SetAddress(&njets30_dn_);}
 	}
 	njets30_up_branch = 0;
 	if (tree->GetBranch("njets30_up") != 0) {
 		njets30_up_branch = tree->GetBranch("njets30_up");
-		njets30_up_branch->SetAddress(&njets30_up_);
+		if (njets30_up_branch) {njets30_up_branch->SetAddress(&njets30_up_);}
 	}
 	nbtags30_dn_branch = 0;
 	if (tree->GetBranch("nbtags30_dn") != 0) {
 		nbtags30_dn_branch = tree->GetBranch("nbtags30_dn");
-		nbtags30_dn_branch->SetAddress(&nbtags30_dn_);
+		if (nbtags30_dn_branch) {nbtags30_dn_branch->SetAddress(&nbtags30_dn_);}
 	}
 	nbtags30_up_branch = 0;
 	if (tree->GetBranch("nbtags30_up") != 0) {
 		nbtags30_up_branch = tree->GetBranch("nbtags30_up");
-		nbtags30_up_branch->SetAddress(&nbtags30_up_);
+		if (nbtags30_up_branch) {nbtags30_up_branch->SetAddress(&nbtags30_up_);}
 	}
 	ht30_dn_branch = 0;
 	if (tree->GetBranch("ht30_dn") != 0) {
 		ht30_dn_branch = tree->GetBranch("ht30_dn");
-		ht30_dn_branch->SetAddress(&ht30_dn_);
+		if (ht30_dn_branch) {ht30_dn_branch->SetAddress(&ht30_dn_);}
 	}
 	ht30_up_branch = 0;
 	if (tree->GetBranch("ht30_up") != 0) {
 		ht30_up_branch = tree->GetBranch("ht30_up");
-		ht30_up_branch->SetAddress(&ht30_up_);
+		if (ht30_up_branch) {ht30_up_branch->SetAddress(&ht30_up_);}
 	}
 	pfmet_dn_branch = 0;
 	if (tree->GetBranch("pfmet_dn") != 0) {
 		pfmet_dn_branch = tree->GetBranch("pfmet_dn");
-		pfmet_dn_branch->SetAddress(&pfmet_dn_);
+		if (pfmet_dn_branch) {pfmet_dn_branch->SetAddress(&pfmet_dn_);}
 	}
 	pfmet_up_branch = 0;
 	if (tree->GetBranch("pfmet_up") != 0) {
 		pfmet_up_branch = tree->GetBranch("pfmet_up");
-		pfmet_up_branch->SetAddress(&pfmet_up_);
+		if (pfmet_up_branch) {pfmet_up_branch->SetAddress(&pfmet_up_);}
 	}
 	pfmet_phi_dn_branch = 0;
 	if (tree->GetBranch("pfmet_phi_dn") != 0) {
 		pfmet_phi_dn_branch = tree->GetBranch("pfmet_phi_dn");
-		pfmet_phi_dn_branch->SetAddress(&pfmet_phi_dn_);
+		if (pfmet_phi_dn_branch) {pfmet_phi_dn_branch->SetAddress(&pfmet_phi_dn_);}
 	}
 	pfmet_phi_up_branch = 0;
 	if (tree->GetBranch("pfmet_phi_up") != 0) {
 		pfmet_phi_up_branch = tree->GetBranch("pfmet_phi_up");
-		pfmet_phi_up_branch->SetAddress(&pfmet_phi_up_);
+		if (pfmet_phi_up_branch) {pfmet_phi_up_branch->SetAddress(&pfmet_phi_up_);}
 	}
 	sf_dileptrig_branch = 0;
 	if (tree->GetBranch("sf_dileptrig") != 0) {
 		sf_dileptrig_branch = tree->GetBranch("sf_dileptrig");
-		sf_dileptrig_branch->SetAddress(&sf_dileptrig_);
+		if (sf_dileptrig_branch) {sf_dileptrig_branch->SetAddress(&sf_dileptrig_);}
 	}
 	sf_lepeff_branch = 0;
 	if (tree->GetBranch("sf_lepeff") != 0) {
 		sf_lepeff_branch = tree->GetBranch("sf_lepeff");
-		sf_lepeff_branch->SetAddress(&sf_lepeff_);
+		if (sf_lepeff_branch) {sf_lepeff_branch->SetAddress(&sf_lepeff_);}
 	}
 	sparm0_branch = 0;
 	if (tree->GetBranch("sparm0") != 0) {
 		sparm0_branch = tree->GetBranch("sparm0");
-		sparm0_branch->SetAddress(&sparm0_);
+		if (sparm0_branch) {sparm0_branch->SetAddress(&sparm0_);}
 	}
 	sparm1_branch = 0;
 	if (tree->GetBranch("sparm1") != 0) {
 		sparm1_branch = tree->GetBranch("sparm1");
-		sparm1_branch->SetAddress(&sparm1_);
+		if (sparm1_branch) {sparm1_branch->SetAddress(&sparm1_);}
 	}
 	sparm2_branch = 0;
 	if (tree->GetBranch("sparm2") != 0) {
 		sparm2_branch = tree->GetBranch("sparm2");
-		sparm2_branch->SetAddress(&sparm2_);
+		if (sparm2_branch) {sparm2_branch->SetAddress(&sparm2_);}
 	}
 	sparm3_branch = 0;
 	if (tree->GetBranch("sparm3") != 0) {
 		sparm3_branch = tree->GetBranch("sparm3");
-		sparm3_branch->SetAddress(&sparm3_);
+		if (sparm3_branch) {sparm3_branch->SetAddress(&sparm3_);}
 	}
 	is_pp_branch = 0;
 	if (tree->GetBranch("is_pp") != 0) {
 		is_pp_branch = tree->GetBranch("is_pp");
-		is_pp_branch->SetAddress(&is_pp_);
+		if (is_pp_branch) {is_pp_branch->SetAddress(&is_pp_);}
 	}
 	is_mm_branch = 0;
 	if (tree->GetBranch("is_mm") != 0) {
 		is_mm_branch = tree->GetBranch("is_mm");
-		is_mm_branch->SetAddress(&is_mm_);
+		if (is_mm_branch) {is_mm_branch->SetAddress(&is_mm_);}
 	}
 	is_sf_branch = 0;
 	if (tree->GetBranch("is_sf") != 0) {
 		is_sf_branch = tree->GetBranch("is_sf");
-		is_sf_branch->SetAddress(&is_sf_);
+		if (is_sf_branch) {is_sf_branch->SetAddress(&is_sf_);}
 	}
 	is_df_branch = 0;
 	if (tree->GetBranch("is_df") != 0) {
 		is_df_branch = tree->GetBranch("is_df");
-		is_df_branch->SetAddress(&is_df_);
+		if (is_df_branch) {is_df_branch->SetAddress(&is_df_);}
 	}
 	no_extraz_branch = 0;
 	if (tree->GetBranch("no_extraz") != 0) {
 		no_extraz_branch = tree->GetBranch("no_extraz");
-		no_extraz_branch->SetAddress(&no_extraz_);
+		if (no_extraz_branch) {no_extraz_branch->SetAddress(&no_extraz_);}
 	}
 	no_extrag_branch = 0;
 	if (tree->GetBranch("no_extrag") != 0) {
 		no_extrag_branch = tree->GetBranch("no_extrag");
-		no_extrag_branch->SetAddress(&no_extrag_);
+		if (no_extrag_branch) {no_extrag_branch->SetAddress(&no_extrag_);}
 	}
 	clean_branch = 0;
 	if (tree->GetBranch("clean") != 0) {
 		clean_branch = tree->GetBranch("clean");
-		clean_branch->SetAddress(&clean_);
+		if (clean_branch) {clean_branch->SetAddress(&clean_);}
 	}
 	presel_branch = 0;
 	if (tree->GetBranch("presel") != 0) {
 		presel_branch = tree->GetBranch("presel");
-		presel_branch->SetAddress(&presel_);
+		if (presel_branch) {presel_branch->SetAddress(&presel_);}
 	}
 	hyp_good_vtx_branch = 0;
 	if (tree->GetBranch("hyp_good_vtx") != 0) {
 		hyp_good_vtx_branch = tree->GetBranch("hyp_good_vtx");
-		hyp_good_vtx_branch->SetAddress(&hyp_good_vtx_);
+		if (hyp_good_vtx_branch) {hyp_good_vtx_branch->SetAddress(&hyp_good_vtx_);}
 	}
 	is_gen_pp_branch = 0;
 	if (tree->GetBranch("is_gen_pp") != 0) {
 		is_gen_pp_branch = tree->GetBranch("is_gen_pp");
-		is_gen_pp_branch->SetAddress(&is_gen_pp_);
+		if (is_gen_pp_branch) {is_gen_pp_branch->SetAddress(&is_gen_pp_);}
 	}
 	is_gen_mm_branch = 0;
 	if (tree->GetBranch("is_gen_mm") != 0) {
 		is_gen_mm_branch = tree->GetBranch("is_gen_mm");
-		is_gen_mm_branch->SetAddress(&is_gen_mm_);
+		if (is_gen_mm_branch) {is_gen_mm_branch->SetAddress(&is_gen_mm_);}
 	}
 	gen_nbtags_branch = 0;
 	if (tree->GetBranch("gen_nbtags") != 0) {
 		gen_nbtags_branch = tree->GetBranch("gen_nbtags");
-		gen_nbtags_branch->SetAddress(&gen_nbtags_);
+		if (gen_nbtags_branch) {gen_nbtags_branch->SetAddress(&gen_nbtags_);}
 	}
 	gen_njets_branch = 0;
 	if (tree->GetBranch("gen_njets") != 0) {
 		gen_njets_branch = tree->GetBranch("gen_njets");
-		gen_njets_branch->SetAddress(&gen_njets_);
+		if (gen_njets_branch) {gen_njets_branch->SetAddress(&gen_njets_);}
 	}
 	gen_ht_branch = 0;
 	if (tree->GetBranch("gen_ht") != 0) {
 		gen_ht_branch = tree->GetBranch("gen_ht");
-		gen_ht_branch->SetAddress(&gen_ht_);
+		if (gen_ht_branch) {gen_ht_branch->SetAddress(&gen_ht_);}
 	}
 	lep1_wfr_branch = 0;
 	if (tree->GetBranch("lep1_wfr") != 0) {
 		lep1_wfr_branch = tree->GetBranch("lep1_wfr");
-		lep1_wfr_branch->SetAddress(&lep1_wfr_);
+		if (lep1_wfr_branch) {lep1_wfr_branch->SetAddress(&lep1_wfr_);}
 	}
 	lep1_wflip_branch = 0;
 	if (tree->GetBranch("lep1_wflip") != 0) {
 		lep1_wflip_branch = tree->GetBranch("lep1_wflip");
-		lep1_wflip_branch->SetAddress(&lep1_wflip_);
+		if (lep1_wflip_branch) {lep1_wflip_branch->SetAddress(&lep1_wflip_);}
 	}
 	lep1_nearbjet_dr_branch = 0;
 	if (tree->GetBranch("lep1_nearbjet_dr") != 0) {
 		lep1_nearbjet_dr_branch = tree->GetBranch("lep1_nearbjet_dr");
-		lep1_nearbjet_dr_branch->SetAddress(&lep1_nearbjet_dr_);
+		if (lep1_nearbjet_dr_branch) {lep1_nearbjet_dr_branch->SetAddress(&lep1_nearbjet_dr_);}
 	}
 	lep1_nearjet_dr_branch = 0;
 	if (tree->GetBranch("lep1_nearjet_dr") != 0) {
 		lep1_nearjet_dr_branch = tree->GetBranch("lep1_nearjet_dr");
-		lep1_nearjet_dr_branch->SetAddress(&lep1_nearjet_dr_);
+		if (lep1_nearjet_dr_branch) {lep1_nearjet_dr_branch->SetAddress(&lep1_nearjet_dr_);}
 	}
 	lep1_nearlep_dr_branch = 0;
 	if (tree->GetBranch("lep1_nearlep_dr") != 0) {
 		lep1_nearlep_dr_branch = tree->GetBranch("lep1_nearlep_dr");
-		lep1_nearlep_dr_branch->SetAddress(&lep1_nearlep_dr_);
+		if (lep1_nearlep_dr_branch) {lep1_nearlep_dr_branch->SetAddress(&lep1_nearlep_dr_);}
 	}
 	lep1_nearlep_id_branch = 0;
 	if (tree->GetBranch("lep1_nearlep_id") != 0) {
 		lep1_nearlep_id_branch = tree->GetBranch("lep1_nearlep_id");
-		lep1_nearlep_id_branch->SetAddress(&lep1_nearlep_id_);
+		if (lep1_nearlep_id_branch) {lep1_nearlep_id_branch->SetAddress(&lep1_nearlep_id_);}
 	}
 	lep2_wfr_branch = 0;
 	if (tree->GetBranch("lep2_wfr") != 0) {
 		lep2_wfr_branch = tree->GetBranch("lep2_wfr");
-		lep2_wfr_branch->SetAddress(&lep2_wfr_);
+		if (lep2_wfr_branch) {lep2_wfr_branch->SetAddress(&lep2_wfr_);}
 	}
 	lep2_wflip_branch = 0;
 	if (tree->GetBranch("lep2_wflip") != 0) {
 		lep2_wflip_branch = tree->GetBranch("lep2_wflip");
-		lep2_wflip_branch->SetAddress(&lep2_wflip_);
+		if (lep2_wflip_branch) {lep2_wflip_branch->SetAddress(&lep2_wflip_);}
 	}
 	lep2_nearbjet_dr_branch = 0;
 	if (tree->GetBranch("lep2_nearbjet_dr") != 0) {
 		lep2_nearbjet_dr_branch = tree->GetBranch("lep2_nearbjet_dr");
-		lep2_nearbjet_dr_branch->SetAddress(&lep2_nearbjet_dr_);
+		if (lep2_nearbjet_dr_branch) {lep2_nearbjet_dr_branch->SetAddress(&lep2_nearbjet_dr_);}
 	}
 	lep2_nearjet_dr_branch = 0;
 	if (tree->GetBranch("lep2_nearjet_dr") != 0) {
 		lep2_nearjet_dr_branch = tree->GetBranch("lep2_nearjet_dr");
-		lep2_nearjet_dr_branch->SetAddress(&lep2_nearjet_dr_);
+		if (lep2_nearjet_dr_branch) {lep2_nearjet_dr_branch->SetAddress(&lep2_nearjet_dr_);}
 	}
 	lep2_nearlep_dr_branch = 0;
 	if (tree->GetBranch("lep2_nearlep_dr") != 0) {
 		lep2_nearlep_dr_branch = tree->GetBranch("lep2_nearlep_dr");
-		lep2_nearlep_dr_branch->SetAddress(&lep2_nearlep_dr_);
+		if (lep2_nearlep_dr_branch) {lep2_nearlep_dr_branch->SetAddress(&lep2_nearlep_dr_);}
 	}
 	lep2_nearlep_id_branch = 0;
 	if (tree->GetBranch("lep2_nearlep_id") != 0) {
 		lep2_nearlep_id_branch = tree->GetBranch("lep2_nearlep_id");
-		lep2_nearlep_id_branch->SetAddress(&lep2_nearlep_id_);
+		if (lep2_nearlep_id_branch) {lep2_nearlep_id_branch->SetAddress(&lep2_nearlep_id_);}
 	}
 	sf_nbtag_branch = 0;
 	if (tree->GetBranch("sf_nbtag") != 0) {
 		sf_nbtag_branch = tree->GetBranch("sf_nbtag");
-		sf_nbtag_branch->SetAddress(&sf_nbtag_);
+		if (sf_nbtag_branch) {sf_nbtag_branch->SetAddress(&sf_nbtag_);}
 	}
 	sf_nbtag3_branch = 0;
 	if (tree->GetBranch("sf_nbtag3") != 0) {
 		sf_nbtag3_branch = tree->GetBranch("sf_nbtag3");
-		sf_nbtag3_branch->SetAddress(&sf_nbtag3_);
+		if (sf_nbtag3_branch) {sf_nbtag3_branch->SetAddress(&sf_nbtag3_);}
 	}
 	sf_unc_nbtag_branch = 0;
 	if (tree->GetBranch("sf_unc_nbtag") != 0) {
 		sf_unc_nbtag_branch = tree->GetBranch("sf_unc_nbtag");
-		sf_unc_nbtag_branch->SetAddress(&sf_unc_nbtag_);
+		if (sf_unc_nbtag_branch) {sf_unc_nbtag_branch->SetAddress(&sf_unc_nbtag_);}
 	}
 	sf_unc_nbtag3_branch = 0;
 	if (tree->GetBranch("sf_unc_nbtag3") != 0) {
 		sf_unc_nbtag3_branch = tree->GetBranch("sf_unc_nbtag3");
-		sf_unc_nbtag3_branch->SetAddress(&sf_unc_nbtag3_);
+		if (sf_unc_nbtag3_branch) {sf_unc_nbtag3_branch->SetAddress(&sf_unc_nbtag3_);}
 	}
 	jets_dr12_branch = 0;
 	if (tree->GetBranch("jets_dr12") != 0) {
 		jets_dr12_branch = tree->GetBranch("jets_dr12");
-		jets_dr12_branch->SetAddress(&jets_dr12_);
+		if (jets_dr12_branch) {jets_dr12_branch->SetAddress(&jets_dr12_);}
 	}
 	bjets_dr12_branch = 0;
 	if (tree->GetBranch("bjets_dr12") != 0) {
 		bjets_dr12_branch = tree->GetBranch("bjets_dr12");
-		bjets_dr12_branch->SetAddress(&bjets_dr12_);
+		if (bjets_dr12_branch) {bjets_dr12_branch->SetAddress(&bjets_dr12_);}
+	}
+	vjets_mc3id_branch = 0;
+	if (tree->GetBranch("vjets_mc3id") != 0) {
+		vjets_mc3id_branch = tree->GetBranch("vjets_mc3id");
+		if (vjets_mc3id_branch) {vjets_mc3id_branch->SetAddress(&vjets_mc3id_);}
+	}
+	vjets_momid_branch = 0;
+	if (tree->GetBranch("vjets_momid") != 0) {
+		vjets_momid_branch = tree->GetBranch("vjets_momid");
+		if (vjets_momid_branch) {vjets_momid_branch->SetAddress(&vjets_momid_);}
 	}
 	vbtags_branch = 0;
 	if (tree->GetBranch("vbtags") != 0) {
 		vbtags_branch = tree->GetBranch("vbtags");
-		vbtags_branch->SetAddress(&vbtags_);
+		if (vbtags_branch) {vbtags_branch->SetAddress(&vbtags_);}
 	}
 	vbjets_nearjet_dr_branch = 0;
 	if (tree->GetBranch("vbjets_nearjet_dr") != 0) {
 		vbjets_nearjet_dr_branch = tree->GetBranch("vbjets_nearjet_dr");
-		vbjets_nearjet_dr_branch->SetAddress(&vbjets_nearjet_dr_);
+		if (vbjets_nearjet_dr_branch) {vbjets_nearjet_dr_branch->SetAddress(&vbjets_nearjet_dr_);}
+	}
+	vbjets_mc3id_branch = 0;
+	if (tree->GetBranch("vbjets_mc3id") != 0) {
+		vbjets_mc3id_branch = tree->GetBranch("vbjets_mc3id");
+		if (vbjets_mc3id_branch) {vbjets_mc3id_branch->SetAddress(&vbjets_mc3id_);}
+	}
+	vbjets_momid_branch = 0;
+	if (tree->GetBranch("vbjets_momid") != 0) {
+		vbjets_momid_branch = tree->GetBranch("vbjets_momid");
+		if (vbjets_momid_branch) {vbjets_momid_branch->SetAddress(&vbjets_momid_);}
 	}
 	gen_lep1_pdgid_branch = 0;
 	if (tree->GetBranch("gen_lep1_pdgid") != 0) {
 		gen_lep1_pdgid_branch = tree->GetBranch("gen_lep1_pdgid");
-		gen_lep1_pdgid_branch->SetAddress(&gen_lep1_pdgid_);
+		if (gen_lep1_pdgid_branch) {gen_lep1_pdgid_branch->SetAddress(&gen_lep1_pdgid_);}
 	}
 	gen_lep2_pdgid_branch = 0;
 	if (tree->GetBranch("gen_lep2_pdgid") != 0) {
 		gen_lep2_pdgid_branch = tree->GetBranch("gen_lep2_pdgid");
-		gen_lep2_pdgid_branch->SetAddress(&gen_lep2_pdgid_);
+		if (gen_lep2_pdgid_branch) {gen_lep2_pdgid_branch->SetAddress(&gen_lep2_pdgid_);}
 	}
 	gen_dilep_type_branch = 0;
 	if (tree->GetBranch("gen_dilep_type") != 0) {
 		gen_dilep_type_branch = tree->GetBranch("gen_dilep_type");
-		gen_dilep_type_branch->SetAddress(&gen_dilep_type_);
+		if (gen_dilep_type_branch) {gen_dilep_type_branch->SetAddress(&gen_dilep_type_);}
 	}
 	gen_dilep_mass_branch = 0;
 	if (tree->GetBranch("gen_dilep_mass") != 0) {
 		gen_dilep_mass_branch = tree->GetBranch("gen_dilep_mass");
-		gen_dilep_mass_branch->SetAddress(&gen_dilep_mass_);
+		if (gen_dilep_mass_branch) {gen_dilep_mass_branch->SetAddress(&gen_dilep_mass_);}
 	}
 	gen_dilep_dphi_branch = 0;
 	if (tree->GetBranch("gen_dilep_dphi") != 0) {
 		gen_dilep_dphi_branch = tree->GetBranch("gen_dilep_dphi");
-		gen_dilep_dphi_branch->SetAddress(&gen_dilep_dphi_);
+		if (gen_dilep_dphi_branch) {gen_dilep_dphi_branch->SetAddress(&gen_dilep_dphi_);}
 	}
 	gen_dilep_deta_branch = 0;
 	if (tree->GetBranch("gen_dilep_deta") != 0) {
 		gen_dilep_deta_branch = tree->GetBranch("gen_dilep_deta");
-		gen_dilep_deta_branch->SetAddress(&gen_dilep_deta_);
+		if (gen_dilep_deta_branch) {gen_dilep_deta_branch->SetAddress(&gen_dilep_deta_);}
 	}
 	gen_dilep_dr_branch = 0;
 	if (tree->GetBranch("gen_dilep_dr") != 0) {
 		gen_dilep_dr_branch = tree->GetBranch("gen_dilep_dr");
-		gen_dilep_dr_branch->SetAddress(&gen_dilep_dr_);
+		if (gen_dilep_dr_branch) {gen_dilep_dr_branch->SetAddress(&gen_dilep_dr_);}
 	}
   tree->SetMakeClass(0);
 }
@@ -2395,6 +2451,7 @@ void GetEntry(unsigned int idx)
 		gen_met_isLoaded = false;
 		gen_met_phi_isLoaded = false;
 		dataset_isLoaded = false;
+		filename_isLoaded = false;
 		lep1_p4_isLoaded = false;
 		lep1_passes_id_isLoaded = false;
 		lep1_passes_iso_isLoaded = false;
@@ -2656,12 +2713,18 @@ void GetEntry(unsigned int idx)
 		bjets_dr12_isLoaded = false;
 		vgenb_p4_isLoaded = false;
 		vjets_p4_isLoaded = false;
+		vjets_mc3p4_isLoaded = false;
 		vgenjets_p4_isLoaded = false;
+		vjets_mc3id_isLoaded = false;
+		vjets_momid_isLoaded = false;
 		vjets_nearjet_p4_isLoaded = false;
 		vbjets_p4_isLoaded = false;
+		vbjets_mc3p4_isLoaded = false;
 		vbjets_nearjet_p4_isLoaded = false;
 		vbtags_isLoaded = false;
 		vbjets_nearjet_dr_isLoaded = false;
+		vbjets_mc3id_isLoaded = false;
+		vbjets_momid_isLoaded = false;
 		gen_lep1_p4_isLoaded = false;
 		gen_lep1_pdgid_isLoaded = false;
 		gen_lep2_p4_isLoaded = false;
@@ -2694,6 +2757,7 @@ void LoadAllBranches()
 	if (gen_met_branch != 0) gen_met();
 	if (gen_met_phi_branch != 0) gen_met_phi();
 	if (dataset_branch != 0) dataset();
+	if (filename_branch != 0) filename();
 	if (lep1_p4_branch != 0) lep1_p4();
 	if (lep1_passes_id_branch != 0) lep1_passes_id();
 	if (lep1_passes_iso_branch != 0) lep1_passes_iso();
@@ -2955,12 +3019,18 @@ void LoadAllBranches()
 	if (bjets_dr12_branch != 0) bjets_dr12();
 	if (vgenb_p4_branch != 0) vgenb_p4();
 	if (vjets_p4_branch != 0) vjets_p4();
+	if (vjets_mc3p4_branch != 0) vjets_mc3p4();
 	if (vgenjets_p4_branch != 0) vgenjets_p4();
+	if (vjets_mc3id_branch != 0) vjets_mc3id();
+	if (vjets_momid_branch != 0) vjets_momid();
 	if (vjets_nearjet_p4_branch != 0) vjets_nearjet_p4();
 	if (vbjets_p4_branch != 0) vbjets_p4();
+	if (vbjets_mc3p4_branch != 0) vbjets_mc3p4();
 	if (vbjets_nearjet_p4_branch != 0) vbjets_nearjet_p4();
 	if (vbtags_branch != 0) vbtags();
 	if (vbjets_nearjet_dr_branch != 0) vbjets_nearjet_dr();
+	if (vbjets_mc3id_branch != 0) vbjets_mc3id();
+	if (vbjets_momid_branch != 0) vbjets_momid();
 	if (gen_lep1_p4_branch != 0) gen_lep1_p4();
 	if (gen_lep1_pdgid_branch != 0) gen_lep1_pdgid();
 	if (gen_lep2_p4_branch != 0) gen_lep2_p4();
@@ -3193,6 +3263,19 @@ void LoadAllBranches()
 			dataset_isLoaded = true;
 		}
 		return *dataset_;
+	}
+	TString &filename()
+	{
+		if (not filename_isLoaded) {
+			if (filename_branch != 0) {
+				filename_branch->GetEntry(index);
+			} else { 
+				printf("branch filename_branch does not exist!\n");
+				exit(1);
+			}
+			filename_isLoaded = true;
+		}
+		return *filename_;
 	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4()
 	{
@@ -6561,7 +6644,7 @@ void LoadAllBranches()
 		}
 		return bjets_dr12_;
 	}
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenb_p4()
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenb_p4()
 	{
 		if (not vgenb_p4_isLoaded) {
 			if (vgenb_p4_branch != 0) {
@@ -6574,7 +6657,7 @@ void LoadAllBranches()
 		}
 		return *vgenb_p4_;
 	}
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4()
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4()
 	{
 		if (not vjets_p4_isLoaded) {
 			if (vjets_p4_branch != 0) {
@@ -6587,7 +6670,20 @@ void LoadAllBranches()
 		}
 		return *vjets_p4_;
 	}
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4()
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4()
+	{
+		if (not vjets_mc3p4_isLoaded) {
+			if (vjets_mc3p4_branch != 0) {
+				vjets_mc3p4_branch->GetEntry(index);
+			} else { 
+				printf("branch vjets_mc3p4_branch does not exist!\n");
+				exit(1);
+			}
+			vjets_mc3p4_isLoaded = true;
+		}
+		return *vjets_mc3p4_;
+	}
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4()
 	{
 		if (not vgenjets_p4_isLoaded) {
 			if (vgenjets_p4_branch != 0) {
@@ -6600,7 +6696,33 @@ void LoadAllBranches()
 		}
 		return *vgenjets_p4_;
 	}
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4()
+	const vector<int> &vjets_mc3id()
+	{
+		if (not vjets_mc3id_isLoaded) {
+			if (vjets_mc3id_branch != 0) {
+				vjets_mc3id_branch->GetEntry(index);
+			} else { 
+				printf("branch vjets_mc3id_branch does not exist!\n");
+				exit(1);
+			}
+			vjets_mc3id_isLoaded = true;
+		}
+		return *vjets_mc3id_;
+	}
+	const vector<int> &vjets_momid()
+	{
+		if (not vjets_momid_isLoaded) {
+			if (vjets_momid_branch != 0) {
+				vjets_momid_branch->GetEntry(index);
+			} else { 
+				printf("branch vjets_momid_branch does not exist!\n");
+				exit(1);
+			}
+			vjets_momid_isLoaded = true;
+		}
+		return *vjets_momid_;
+	}
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4()
 	{
 		if (not vjets_nearjet_p4_isLoaded) {
 			if (vjets_nearjet_p4_branch != 0) {
@@ -6613,7 +6735,7 @@ void LoadAllBranches()
 		}
 		return *vjets_nearjet_p4_;
 	}
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4()
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4()
 	{
 		if (not vbjets_p4_isLoaded) {
 			if (vbjets_p4_branch != 0) {
@@ -6626,7 +6748,20 @@ void LoadAllBranches()
 		}
 		return *vbjets_p4_;
 	}
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4()
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4()
+	{
+		if (not vbjets_mc3p4_isLoaded) {
+			if (vbjets_mc3p4_branch != 0) {
+				vbjets_mc3p4_branch->GetEntry(index);
+			} else { 
+				printf("branch vbjets_mc3p4_branch does not exist!\n");
+				exit(1);
+			}
+			vbjets_mc3p4_isLoaded = true;
+		}
+		return *vbjets_mc3p4_;
+	}
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4()
 	{
 		if (not vbjets_nearjet_p4_isLoaded) {
 			if (vbjets_nearjet_p4_branch != 0) {
@@ -6639,7 +6774,7 @@ void LoadAllBranches()
 		}
 		return *vbjets_nearjet_p4_;
 	}
-	vector<bool> &vbtags()
+	const vector<bool> &vbtags()
 	{
 		if (not vbtags_isLoaded) {
 			if (vbtags_branch != 0) {
@@ -6652,7 +6787,7 @@ void LoadAllBranches()
 		}
 		return *vbtags_;
 	}
-	vector<float> &vbjets_nearjet_dr()
+	const vector<float> &vbjets_nearjet_dr()
 	{
 		if (not vbjets_nearjet_dr_isLoaded) {
 			if (vbjets_nearjet_dr_branch != 0) {
@@ -6664,6 +6799,32 @@ void LoadAllBranches()
 			vbjets_nearjet_dr_isLoaded = true;
 		}
 		return *vbjets_nearjet_dr_;
+	}
+	const vector<int> &vbjets_mc3id()
+	{
+		if (not vbjets_mc3id_isLoaded) {
+			if (vbjets_mc3id_branch != 0) {
+				vbjets_mc3id_branch->GetEntry(index);
+			} else { 
+				printf("branch vbjets_mc3id_branch does not exist!\n");
+				exit(1);
+			}
+			vbjets_mc3id_isLoaded = true;
+		}
+		return *vbjets_mc3id_;
+	}
+	const vector<int> &vbjets_momid()
+	{
+		if (not vbjets_momid_isLoaded) {
+			if (vbjets_momid_branch != 0) {
+				vbjets_momid_branch->GetEntry(index);
+			} else { 
+				printf("branch vbjets_momid_branch does not exist!\n");
+				exit(1);
+			}
+			vbjets_momid_isLoaded = true;
+		}
+		return *vbjets_momid_;
 	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4()
 	{
@@ -6823,299 +6984,306 @@ extern SSB2012 samesignbtag;
 #endif
 
 namespace ssb {
-	unsigned int &run();
-	unsigned int &ls();
-	unsigned int &evt();
-	bool &is_real_data();
-	int &sample();
-	int &nvtxs();
-	int &vtx_idx();
-	float &pfmet();
-	float &pfmet_phi();
-	float &uncorpfmet();
-	float &uncorpfmet_phi();
-	float &scale1fb();
-	float &xsec();
-	float &kfactor();
-	float &gen_met();
-	float &gen_met_phi();
-	TString &dataset();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
-	bool &lep1_passes_id();
-	bool &lep1_passes_iso();
-	bool &lep1_is_num();
-	bool &lep1_is_fo();
-	int &lep1_is_fromw();
-	int &lep1_charge();
-	int &lep1_pdgid();
-	int &lep1_type();
-	float &lep1_d0();
-	float &lep1_dz();
-	float &lep1_mt();
-	float &lep1_corpfiso();
-	float &lep1_pfiso();
-	float &lep1_chiso();
-	float &lep1_emiso();
-	float &lep1_nhiso();
-	float &lep1_corpfiso04();
-	float &lep1_pfiso04();
-	float &lep1_chiso04();
-	float &lep1_emiso04();
-	float &lep1_nhiso04();
-	float &lep1_cordetiso();
-	float &lep1_detiso();
-	float &lep1_trkiso();
-	float &lep1_ecaliso();
-	float &lep1_hcaliso();
-	float &lep1_cordetiso04();
-	float &lep1_detiso04();
-	float &lep1_trkiso04();
-	float &lep1_ecaliso04();
-	float &lep1_hcaliso04();
-	float &lep1_effarea();
-	float &lep1_effarea04();
-	float &lep1_dbeta();
-	float &lep1_dbeta04();
-	float &lep1_sf_lepeff();
-	float &lep1_sf_trig();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4();
-	int &lep1_mcid();
-	int &lep1_mc3id();
-	int &lep1_momid();
-	int &lep1_mc3_momid();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4();
-	bool &lep1_q3agree();
-	bool &lep1_is_conv();
-	int &lep1_qsc();
-	int &lep1_qctf();
-	int &lep1_qgsf();
-	int &lep1_nmhits();
-	int &lep1_eleid_veto();
-	int &lep1_eleid_loose();
-	int &lep1_eleid_medium();
-	int &lep1_eleid_tight();
-	float &lep1_dphiin();
-	float &lep1_detain();
-	float &lep1_sieie();
-	float &lep1_hoe();
-	float &lep1_ooemoop();
-	float &lep1_conv_dist();
-	float &lep1_conv_dcot();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4();
-	bool &lep1_is_global();
-	bool &lep1_is_tracker();
-	bool &lep1_is_stamu();
-	bool &lep1_is_pfmu();
-	bool &lep1_is_loosemu();
-	bool &lep1_is_tightmu();
-	int &lep1_npixelhits();
-	int &lep1_nsihits();
-	int &lep1_nsilayers();
-	int &lep1_nstahits();
-	int &lep1_nstations();
-	float &lep1_chi2();
-	float &lep1_ndof();
-	float &lep1_pterr();
-	float &lep1_ecal_vetodep();
-	float &lep1_hcal_vetodep();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4();
-	bool &lep2_passes_id();
-	bool &lep2_passes_iso();
-	bool &lep2_is_num();
-	bool &lep2_is_fo();
-	int &lep2_is_fromw();
-	int &lep2_charge();
-	int &lep2_pdgid();
-	int &lep2_type();
-	float &lep2_d0();
-	float &lep2_dz();
-	float &lep2_mt();
-	float &lep2_corpfiso();
-	float &lep2_pfiso();
-	float &lep2_chiso();
-	float &lep2_emiso();
-	float &lep2_nhiso();
-	float &lep2_corpfiso04();
-	float &lep2_pfiso04();
-	float &lep2_chiso04();
-	float &lep2_emiso04();
-	float &lep2_nhiso04();
-	float &lep2_cordetiso();
-	float &lep2_detiso();
-	float &lep2_trkiso();
-	float &lep2_ecaliso();
-	float &lep2_hcaliso();
-	float &lep2_cordetiso04();
-	float &lep2_detiso04();
-	float &lep2_trkiso04();
-	float &lep2_ecaliso04();
-	float &lep2_hcaliso04();
-	float &lep2_effarea();
-	float &lep2_effarea04();
-	float &lep2_dbeta();
-	float &lep2_dbeta04();
-	float &lep2_sf_lepeff();
-	float &lep2_sf_trig();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4();
-	int &lep2_mcid();
-	int &lep2_mc3id();
-	int &lep2_momid();
-	int &lep2_mc3_momid();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4();
-	bool &lep2_q3agree();
-	bool &lep2_is_conv();
-	int &lep2_qsc();
-	int &lep2_qctf();
-	int &lep2_qgsf();
-	int &lep2_nmhits();
-	int &lep2_eleid_veto();
-	int &lep2_eleid_loose();
-	int &lep2_eleid_medium();
-	int &lep2_eleid_tight();
-	float &lep2_dphiin();
-	float &lep2_detain();
-	float &lep2_sieie();
-	float &lep2_hoe();
-	float &lep2_ooemoop();
-	float &lep2_conv_dist();
-	float &lep2_conv_dcot();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4();
-	bool &lep2_is_global();
-	bool &lep2_is_tracker();
-	bool &lep2_is_stamu();
-	bool &lep2_is_pfmu();
-	bool &lep2_is_loosemu();
-	bool &lep2_is_tightmu();
-	int &lep2_npixelhits();
-	int &lep2_nsihits();
-	int &lep2_nsilayers();
-	int &lep2_nstahits();
-	int &lep2_nstations();
-	float &lep2_chi2();
-	float &lep2_ndof();
-	float &lep2_pterr();
-	float &lep2_ecal_vetodep();
-	float &lep2_hcal_vetodep();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &dilep_p4();
-	bool &is_os();
-	bool &is_ss();
-	int &dilep_type();
-	int &dilep_gen_type();
-	float &dilep_mass();
-	float &dilep_dphi();
-	float &dilep_deta();
-	float &dilep_dr();
-	int &fiduciality();
-	unsigned int &selection();
-	bool &is_good_lumi();
-	int &njets();
-	int &njets20();
-	int &njets30();
-	int &nbtags();
-	int &nbtags20();
-	int &nbtags30();
-	int &ttbar_bkdn();
-	float &vtxw();
-	float &mt();
-	float &ht();
-	float &ht20();
-	float &ht30();
-	float &rho();
-	float &rho_iso();
-	bool &trig_mm();
-	bool &trig_em();
-	bool &trig_ee();
-	int &njets_dn();
-	int &njets_up();
-	int &nbtags_dn();
-	int &nbtags_up();
-	float &ht_dn();
-	float &ht_up();
-	int &njets20_dn();
-	int &njets20_up();
-	int &nbtags20_dn();
-	int &nbtags20_up();
-	float &ht20_dn();
-	float &ht20_up();
-	int &njets30_dn();
-	int &njets30_up();
-	int &nbtags30_dn();
-	int &nbtags30_up();
-	float &ht30_dn();
-	float &ht30_up();
-	float &pfmet_dn();
-	float &pfmet_up();
-	float &pfmet_phi_dn();
-	float &pfmet_phi_up();
-	float &sf_dileptrig();
-	float &sf_lepeff();
-	float &sparm0();
-	float &sparm1();
-	float &sparm2();
-	float &sparm3();
-	bool &is_pp();
-	bool &is_mm();
-	bool &is_sf();
-	bool &is_df();
-	bool &no_extraz();
-	bool &no_extrag();
-	bool &clean();
-	bool &presel();
-	bool &hyp_good_vtx();
-	bool &is_gen_pp();
-	bool &is_gen_mm();
-	int &gen_nbtags();
-	int &gen_njets();
-	float &gen_ht();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearbjet_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearlep_p4();
-	float &lep1_wfr();
-	float &lep1_wflip();
-	float &lep1_nearbjet_dr();
-	float &lep1_nearjet_dr();
-	float &lep1_nearlep_dr();
-	int &lep1_nearlep_id();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearjet_p4();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4();
-	float &lep2_wfr();
-	float &lep2_wflip();
-	float &lep2_nearbjet_dr();
-	float &lep2_nearjet_dr();
-	float &lep2_nearlep_dr();
-	int &lep2_nearlep_id();
-	float &sf_nbtag();
-	float &sf_nbtag3();
-	float &sf_unc_nbtag();
-	float &sf_unc_nbtag3();
-	float &jets_dr12();
-	float &bjets_dr12();
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenb_p4();
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4();
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4();
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4();
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4();
-	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4();
-	vector<bool> &vbtags();
-	vector<float> &vbjets_nearjet_dr();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4();
-	int &gen_lep1_pdgid();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep2_p4();
-	int &gen_lep2_pdgid();
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_dilep_p4();
-	int &gen_dilep_type();
-	float &gen_dilep_mass();
-	float &gen_dilep_dphi();
-	float &gen_dilep_deta();
-	float &gen_dilep_dr();
+	const unsigned int &run();
+	const unsigned int &ls();
+	const unsigned int &evt();
+	const bool &is_real_data();
+	const int &sample();
+	const int &nvtxs();
+	const int &vtx_idx();
+	const float &pfmet();
+	const float &pfmet_phi();
+	const float &uncorpfmet();
+	const float &uncorpfmet_phi();
+	const float &scale1fb();
+	const float &xsec();
+	const float &kfactor();
+	const float &gen_met();
+	const float &gen_met_phi();
+	const TString &dataset();
+	const TString &filename();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
+	const bool &lep1_passes_id();
+	const bool &lep1_passes_iso();
+	const bool &lep1_is_num();
+	const bool &lep1_is_fo();
+	const int &lep1_is_fromw();
+	const int &lep1_charge();
+	const int &lep1_pdgid();
+	const int &lep1_type();
+	const float &lep1_d0();
+	const float &lep1_dz();
+	const float &lep1_mt();
+	const float &lep1_corpfiso();
+	const float &lep1_pfiso();
+	const float &lep1_chiso();
+	const float &lep1_emiso();
+	const float &lep1_nhiso();
+	const float &lep1_corpfiso04();
+	const float &lep1_pfiso04();
+	const float &lep1_chiso04();
+	const float &lep1_emiso04();
+	const float &lep1_nhiso04();
+	const float &lep1_cordetiso();
+	const float &lep1_detiso();
+	const float &lep1_trkiso();
+	const float &lep1_ecaliso();
+	const float &lep1_hcaliso();
+	const float &lep1_cordetiso04();
+	const float &lep1_detiso04();
+	const float &lep1_trkiso04();
+	const float &lep1_ecaliso04();
+	const float &lep1_hcaliso04();
+	const float &lep1_effarea();
+	const float &lep1_effarea04();
+	const float &lep1_dbeta();
+	const float &lep1_dbeta04();
+	const float &lep1_sf_lepeff();
+	const float &lep1_sf_trig();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4();
+	const int &lep1_mcid();
+	const int &lep1_mc3id();
+	const int &lep1_momid();
+	const int &lep1_mc3_momid();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4();
+	const bool &lep1_q3agree();
+	const bool &lep1_is_conv();
+	const int &lep1_qsc();
+	const int &lep1_qctf();
+	const int &lep1_qgsf();
+	const int &lep1_nmhits();
+	const int &lep1_eleid_veto();
+	const int &lep1_eleid_loose();
+	const int &lep1_eleid_medium();
+	const int &lep1_eleid_tight();
+	const float &lep1_dphiin();
+	const float &lep1_detain();
+	const float &lep1_sieie();
+	const float &lep1_hoe();
+	const float &lep1_ooemoop();
+	const float &lep1_conv_dist();
+	const float &lep1_conv_dcot();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4();
+	const bool &lep1_is_global();
+	const bool &lep1_is_tracker();
+	const bool &lep1_is_stamu();
+	const bool &lep1_is_pfmu();
+	const bool &lep1_is_loosemu();
+	const bool &lep1_is_tightmu();
+	const int &lep1_npixelhits();
+	const int &lep1_nsihits();
+	const int &lep1_nsilayers();
+	const int &lep1_nstahits();
+	const int &lep1_nstations();
+	const float &lep1_chi2();
+	const float &lep1_ndof();
+	const float &lep1_pterr();
+	const float &lep1_ecal_vetodep();
+	const float &lep1_hcal_vetodep();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4();
+	const bool &lep2_passes_id();
+	const bool &lep2_passes_iso();
+	const bool &lep2_is_num();
+	const bool &lep2_is_fo();
+	const int &lep2_is_fromw();
+	const int &lep2_charge();
+	const int &lep2_pdgid();
+	const int &lep2_type();
+	const float &lep2_d0();
+	const float &lep2_dz();
+	const float &lep2_mt();
+	const float &lep2_corpfiso();
+	const float &lep2_pfiso();
+	const float &lep2_chiso();
+	const float &lep2_emiso();
+	const float &lep2_nhiso();
+	const float &lep2_corpfiso04();
+	const float &lep2_pfiso04();
+	const float &lep2_chiso04();
+	const float &lep2_emiso04();
+	const float &lep2_nhiso04();
+	const float &lep2_cordetiso();
+	const float &lep2_detiso();
+	const float &lep2_trkiso();
+	const float &lep2_ecaliso();
+	const float &lep2_hcaliso();
+	const float &lep2_cordetiso04();
+	const float &lep2_detiso04();
+	const float &lep2_trkiso04();
+	const float &lep2_ecaliso04();
+	const float &lep2_hcaliso04();
+	const float &lep2_effarea();
+	const float &lep2_effarea04();
+	const float &lep2_dbeta();
+	const float &lep2_dbeta04();
+	const float &lep2_sf_lepeff();
+	const float &lep2_sf_trig();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4();
+	const int &lep2_mcid();
+	const int &lep2_mc3id();
+	const int &lep2_momid();
+	const int &lep2_mc3_momid();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4();
+	const bool &lep2_q3agree();
+	const bool &lep2_is_conv();
+	const int &lep2_qsc();
+	const int &lep2_qctf();
+	const int &lep2_qgsf();
+	const int &lep2_nmhits();
+	const int &lep2_eleid_veto();
+	const int &lep2_eleid_loose();
+	const int &lep2_eleid_medium();
+	const int &lep2_eleid_tight();
+	const float &lep2_dphiin();
+	const float &lep2_detain();
+	const float &lep2_sieie();
+	const float &lep2_hoe();
+	const float &lep2_ooemoop();
+	const float &lep2_conv_dist();
+	const float &lep2_conv_dcot();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4();
+	const bool &lep2_is_global();
+	const bool &lep2_is_tracker();
+	const bool &lep2_is_stamu();
+	const bool &lep2_is_pfmu();
+	const bool &lep2_is_loosemu();
+	const bool &lep2_is_tightmu();
+	const int &lep2_npixelhits();
+	const int &lep2_nsihits();
+	const int &lep2_nsilayers();
+	const int &lep2_nstahits();
+	const int &lep2_nstations();
+	const float &lep2_chi2();
+	const float &lep2_ndof();
+	const float &lep2_pterr();
+	const float &lep2_ecal_vetodep();
+	const float &lep2_hcal_vetodep();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &dilep_p4();
+	const bool &is_os();
+	const bool &is_ss();
+	const int &dilep_type();
+	const int &dilep_gen_type();
+	const float &dilep_mass();
+	const float &dilep_dphi();
+	const float &dilep_deta();
+	const float &dilep_dr();
+	const int &fiduciality();
+	const unsigned int &selection();
+	const bool &is_good_lumi();
+	const int &njets();
+	const int &njets20();
+	const int &njets30();
+	const int &nbtags();
+	const int &nbtags20();
+	const int &nbtags30();
+	const int &ttbar_bkdn();
+	const float &vtxw();
+	const float &mt();
+	const float &ht();
+	const float &ht20();
+	const float &ht30();
+	const float &rho();
+	const float &rho_iso();
+	const bool &trig_mm();
+	const bool &trig_em();
+	const bool &trig_ee();
+	const int &njets_dn();
+	const int &njets_up();
+	const int &nbtags_dn();
+	const int &nbtags_up();
+	const float &ht_dn();
+	const float &ht_up();
+	const int &njets20_dn();
+	const int &njets20_up();
+	const int &nbtags20_dn();
+	const int &nbtags20_up();
+	const float &ht20_dn();
+	const float &ht20_up();
+	const int &njets30_dn();
+	const int &njets30_up();
+	const int &nbtags30_dn();
+	const int &nbtags30_up();
+	const float &ht30_dn();
+	const float &ht30_up();
+	const float &pfmet_dn();
+	const float &pfmet_up();
+	const float &pfmet_phi_dn();
+	const float &pfmet_phi_up();
+	const float &sf_dileptrig();
+	const float &sf_lepeff();
+	const float &sparm0();
+	const float &sparm1();
+	const float &sparm2();
+	const float &sparm3();
+	const bool &is_pp();
+	const bool &is_mm();
+	const bool &is_sf();
+	const bool &is_df();
+	const bool &no_extraz();
+	const bool &no_extrag();
+	const bool &clean();
+	const bool &presel();
+	const bool &hyp_good_vtx();
+	const bool &is_gen_pp();
+	const bool &is_gen_mm();
+	const int &gen_nbtags();
+	const int &gen_njets();
+	const float &gen_ht();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearbjet_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearlep_p4();
+	const float &lep1_wfr();
+	const float &lep1_wflip();
+	const float &lep1_nearbjet_dr();
+	const float &lep1_nearjet_dr();
+	const float &lep1_nearlep_dr();
+	const int &lep1_nearlep_id();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearbjet_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearjet_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4();
+	const float &lep2_wfr();
+	const float &lep2_wflip();
+	const float &lep2_nearbjet_dr();
+	const float &lep2_nearjet_dr();
+	const float &lep2_nearlep_dr();
+	const int &lep2_nearlep_id();
+	const float &sf_nbtag();
+	const float &sf_nbtag3();
+	const float &sf_unc_nbtag();
+	const float &sf_unc_nbtag3();
+	const float &jets_dr12();
+	const float &bjets_dr12();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenb_p4();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4();
+	const vector<int> &vjets_mc3id();
+	const vector<int> &vjets_momid();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4();
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4();
+	const vector<bool> &vbtags();
+	const vector<float> &vbjets_nearjet_dr();
+	const vector<int> &vbjets_mc3id();
+	const vector<int> &vbjets_momid();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4();
+	const int &gen_lep1_pdgid();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep2_p4();
+	const int &gen_lep2_pdgid();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_dilep_p4();
+	const int &gen_dilep_type();
+	const float &gen_dilep_mass();
+	const float &gen_dilep_dphi();
+	const float &gen_dilep_deta();
+	const float &gen_dilep_dr();
 }
 #endif
