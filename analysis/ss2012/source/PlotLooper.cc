@@ -46,6 +46,8 @@ PlotLooper::PlotLooper
     float sparm3,
     float sf_flip,
     float lumi,
+    float min_pt,
+    float max_pt,
     bool verbose,
     bool print,
     const std::string& suffix
@@ -65,6 +67,8 @@ PlotLooper::PlotLooper
     , m_sparm2(sparm2)
     , m_sparm3(sparm3)
     , m_sf_flip(sf_flip)
+    , m_min_pt(min_pt)
+    , m_max_pt(max_pt)
     , m_sample(sample)
     , m_signal_region(signal_region)
 {
@@ -444,6 +448,16 @@ int PlotLooper::operator()(long event)
         // dilepton hyp type: 1 mm, 2 em, 3ee
         DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
         if (hyp_type == DileptonHypType::static_size)
+        {
+            return 0;
+        }
+
+        // lepton PT requirement
+        if (std::min(lep1_p4().pt(), lep2_p4().pt()) < m_min_pt)
+        {
+            return 0;
+        }
+        if (std::min(lep1_p4().pt(), lep2_p4().pt()) > m_max_pt)
         {
             return 0;
         }

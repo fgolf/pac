@@ -7,7 +7,7 @@ out_path=${3:-}
 exclusive=${4:-0}
 nbtags=${5:-2}
 charge_option=${6:-0}  # -1 means --, 1 means ++, anything else means both
-options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root --charge $charge_option"
+options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root --charge $charge_option --min_pt 20 --max_pt 1000000"
 
 charge_stem=
 if [ $charge_option -eq 1 ]; then

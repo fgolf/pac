@@ -41,6 +41,8 @@ try
     unsigned int signal_region_num  = 0;
     bool exclusive                  = false;
     float lumi                      = 1.0;
+    float min_pt                    = 20.0;
+    float max_pt                    = 10000000.0;
     bool verbose                    = false;
 
     namespace po = boost::program_options;
@@ -68,6 +70,8 @@ try
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                )
         ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
         ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
+        ("min_pt"   , po::value<float>(&min_pt)                   , "min pT"                                                    )
+        ("max_pt"   , po::value<float>(&max_pt)                   , "max pT"                                                    )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
         ;
 
@@ -209,6 +213,8 @@ try
             sparm3,
             sf_flip,
             lumi,
+            min_pt,
+            max_pt,
             verbose,
             !suffix.empty(),  
             suffix
