@@ -198,6 +198,18 @@ namespace rt
         return std::make_pair(integral, error);
     }
 
+    // calculate the integral and error
+    std::pair<double, double> EntriesAndError(TH1* hist_ptr, const std::string& option)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::EntriesAndError() -- hist pointer is NULL!");
+        }
+        double entries = hist_ptr->GetEntries(); 
+        double error   = sqrt(entries); 
+        return std::make_pair(entries, error);
+    }
+
     // calculate the percent of integral 
     double CalcPercentOfIntegral(TH1* hist_ptr, float low, float high, const std::string& option)
     {

@@ -72,6 +72,7 @@
 #pragma link C++ function rt::GetVectorOfTH1s;
 #pragma link C++ fucntion rt::Integral;
 #pragma link C++ fucntion rt::IntegralAndError;
+#pragma link C++ fucntion rt::EntriesAndError;
 #pragma link C++ fucntion rt::CalcErrorsForProfile;
 #pragma link C++ fucntion rt::MakeProjectionPlot;
 #pragma link C++ fucntion rt::MakeEfficiencyProjectionPlot;

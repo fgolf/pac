@@ -316,6 +316,9 @@ namespace rt
     std::pair<double, double> IntegralAndError(TH1* h, const std::string& option = "");
     std::pair<double, double> IntegralAndError(TH1* h, float low, float high, const std::string& option = "");
 
+    // calculate the integral and Error
+    std::pair<double, double> EntriesAndError(TH1* h, const std::string& option = "");
+
     // Add with error
     std::pair<double, double> AddWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2);
     std::pair<float, float>   AddWithError(const std::pair<float, float>& v1  , const std::pair<float, float>& v2  );
