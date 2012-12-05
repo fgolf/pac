@@ -112,7 +112,7 @@ PlotLooper::PlotLooper
 PlotLooper::~PlotLooper()
 {
     // end  job
-    EndJob();
+    //EndJob();
 }
 
 // methods:
@@ -300,15 +300,28 @@ void PlotLooper::EndJob()
     CTable t_yields;
     t_yields.useTitle();
     t_yields.setTitle("yields table");
-    string f = "1.2";
+    string f = "1.3";
     t_yields.setTable() (                      "ee",            "mm",            "em",            "ll")
                         ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
                         ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
                         ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
                         ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
-                        ("Flips"  ,    flip.ee.str(),    flip.mm.str(),    flip.em.str(),    flip.ll.str())
+                        ("Flips"  ,   flip.ee.str(f),   flip.mm.str(f),   flip.em.str(f),   flip.ll.str(f))
                         ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
     t_yields.print();
+
+    //CTable t_yields;
+    //t_yields.useTitle();
+    //t_yields.setTitle("yields table");
+    //string f = "1.3";
+    //t_yields.setTable() (                      "ee",            "mm",            "em",            "ll")
+    //                    ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
+    //                    ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
+    //                    ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
+    //                    ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
+    //                    ("Flips"  ,   flip.ee.str(f),   flip.mm.str(f),   flip.em.str(f),   flip.ll.str(f))
+    //                    ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
+    //t_yields.print();
 }
 
 // binning contants

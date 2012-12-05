@@ -37,7 +37,7 @@ try
     std::string output_file         = "";
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_26Nov2012.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_24Sep2012.root";
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string fake_rate_hist_name = "h_mufr40c";
     std::string sample_name         = "";
@@ -62,7 +62,7 @@ try
         ("gen_only"      , po::value<bool>(&gen_only)                   , "only fill gen variables"                                                           )
         ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                           )
         ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from at/AnalysisType.h)"                                     )
-        ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, tensor, ...)"                                     )
+        ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, ...) (from at/Sample.h)"                          )
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
         ("fr"            , po::value<std::string>(&fake_rate_file_name) , "fake rate file name (default: data/fake_rates/ssFR_data_standard_24May2012.root)"  )
