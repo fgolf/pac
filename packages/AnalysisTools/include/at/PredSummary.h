@@ -2,6 +2,7 @@
 #define AT_PREDSUMMARY_H
 
 #include <string>
+#include <utility>
 
 namespace at
 {
@@ -11,6 +12,8 @@ namespace at
     struct Pred
     {
         Pred(float v, float e);
+        Pred(const std::pair<float, float>& v);
+        Pred(const std::pair<double, double>& v);
         float value;
         float error;
 
@@ -45,6 +48,7 @@ namespace at
     // non member methods
     PredSummary operator-(const PredSummary& lhs, const PredSummary& rhs);
     PredSummary operator+(const PredSummary& lhs, const PredSummary& rhs);
+    std::ostream& operator << (std::ostream& os, const PredSummary& p);
 
 } // namepace at
 

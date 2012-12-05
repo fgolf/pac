@@ -47,6 +47,8 @@ namespace at
             PredSummary GetSingleFakePrediction() const;
             PredSummary GetDoubleFakePrediction() const;
             PredSummary GetFakePrediction() const;
+            PredSummary GetSingleFakeCount() const;
+            PredSummary GetDoubleFakeCount() const;
 
         private:
             // members: 
@@ -58,6 +60,8 @@ namespace at
             PredSummary sf;
             PredSummary df;
             PredSummary all;
+            PredSummary sf_count;
+            PredSummary df_count;
 
             // methods: 
             Pred SingleFakePrediction(const TH2F*, FakeRateType::value_type, at::DileptonHypType::value_type); 

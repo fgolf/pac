@@ -12,7 +12,19 @@ namespace at
     // construct
     Pred::Pred(float v, float e)
         : value(v)
-          , error(e)
+        , error(e)
+    {
+    }
+
+    Pred::Pred(const std::pair<float, float>& v)
+        : value(v.first)
+        , error(v.second)
+    {
+    }
+
+    Pred::Pred(const std::pair<double, double>& v)
+        : value(v.first)
+        , error(v.second)
     {
     }
 
@@ -98,9 +110,9 @@ namespace at
     // construct:
     PredSummary::PredSummary()
         : ee(0.0, 0.0)
-          , mm(0.0, 0.0)
-          , em(0.0, 0.0)
-          , ll(0.0, 0.0)
+        , mm(0.0, 0.0)
+        , em(0.0, 0.0)
+        , ll(0.0, 0.0)
     {
     }
 
@@ -134,6 +146,12 @@ namespace at
     PredSummary operator-(const PredSummary& lhs, const PredSummary& rhs)
     {
         return PredSummary(lhs) -= rhs; 
+    }
+
+    std::ostream& operator << (std::ostream& os, const PredSummary& p)
+    {
+        os << "ee: " << p.ee << " em: " << p.em << " mm: " << p.mm << " ll: " << p.ll; 
+        return os;
     }
 
 } // namespace at
