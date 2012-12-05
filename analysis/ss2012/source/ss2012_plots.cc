@@ -29,7 +29,7 @@ try
     std::string vtxreweight_file    = "";
     std::string sample_name         = "";
     bool do_scale_factors           = true;
-    bool check_good_lumi            = false;
+    bool check_good_lumi            = true;
     float sparm0                    = -999;
     float sparm1                    = -999;
     float sparm2                    = -999;

@@ -306,22 +306,36 @@ void PlotLooper::EndJob()
                         ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
                         ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
                         ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
-                        ("Flips"  ,   flip.ee.str(f),   flip.mm.str(f),   flip.em.str(f),   flip.ll.str(f))
+                        ("Flips"  ,   flip.ee.str(f),             "NA",   flip.em.str(f),   flip.ll.str(f))
                         ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
+    cout << endl;
     t_yields.print();
 
-    //CTable t_yields;
-    //t_yields.useTitle();
-    //t_yields.setTitle("yields table");
-    //string f = "1.3";
-    //t_yields.setTable() (                      "ee",            "mm",            "em",            "ll")
-    //                    ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
-    //                    ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
-    //                    ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
-    //                    ("Fakes"  ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
-    //                    ("Flips"  ,   flip.ee.str(f),   flip.mm.str(f),   flip.em.str(f),   flip.ll.str(f))
-    //                    ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
-    //t_yields.print();
+    // print raw yields
+    Pred y_sf_ee(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_ee"]));
+    Pred y_sf_em(rt::AddWithError(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_em"]), rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_em"])));
+    Pred y_sf_mm(rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_mm"]));
+    Pred y_df_ee(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_ee"]));
+    Pred y_df_em(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_mm"]));
+    Pred y_df_mm(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_em"]));
+    Pred y_os_ee(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_ee"]));
+    Pred y_os_em(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_em"]));
+    Pred y_os_mm(rt::EntriesAndError(hc["h_os_pt1_vs_eta1_mm"]));
+
+    PredSummary y_sf(y_sf_ee, y_sf_mm, y_sf_em);
+    PredSummary y_df(y_df_ee, y_df_mm, y_df_em);
+    PredSummary y_os(y_os_ee, y_os_mm, y_os_em);
+
+    CTable t_counts;
+    t_counts.useTitle();
+    t_counts.setTitle("counts table");
+    t_counts.setTable() (                "ee",         "mm",          "em",          "ll")
+                        ("SF", y_sf.ee.value, y_sf.mm.value, y_sf.em.value, y_sf.ll.value)
+                        ("DF", y_df.ee.value, y_df.mm.value, y_df.em.value, y_df.ll.value)
+                        ("OS", y_os.ee.value, y_os.mm.value, y_os.em.value, y_os.ll.value)
+                        ("SS",   yield_ss[0],    yield_ss[1],   yield_ss[2],   yield_ss[3]);
+    cout << endl;
+    t_counts.print();
 }
 
 // binning contants
@@ -364,12 +378,15 @@ void PlotLooper::BookHists()
             hc.Add(new TH2F(Form("h_sf_elfo_pt_vs_eta%s", ns.c_str()), Form("electron FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()),el_eta_bins.size()-1,el_eta_bins.data(),el_pt_bins.size()-1,el_pt_bins.data()));
 
             // DF plots
-            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()), 20, 0, 20, 20, 0, 20));
+            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO (%s) (special binning)", ts.c_str()), 20, 0, 20, 20, 0, 20));
         }
 
         // OS plots (for flip pred)
-        hc.Add(new TH2F("h_os_fo_pt_vs_eta_ee", "OS FO (ee ) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)" , 136, 0, 136, 136, 0, 136)); 
-        hc.Add(new TH2F("h_os_fo_pt_vs_eta_em", "OS FO (e#mu) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
+        hc.Add(new TH2F("h_os_fo_pt_vs_eta_ee", "OS (ee ) (special binning)"                    , 136, 0, 136, 136, 0, 136)); 
+        hc.Add(new TH2F("h_os_fo_pt_vs_eta_em", "OS (e#mu) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)"  , el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
+
+        hc.Add(new TH2F("h_os_pt1_vs_eta1_mm", "OS (#mu#mu) #mu1 p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
+        hc.Add(new TH2F("h_os_pt2_vs_eta2_mm", "OS (#mu#mu) #mu2 p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
 
         // kinematic plots
         for (size_t i = 0; i != at::DileptonChargeType::static_size; i++)
@@ -492,7 +509,7 @@ int PlotLooper::operator()(long event)
             case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
             default: passes_trigger = false; break;
         };
-        if (not passes_trigger)
+        if (is_real_data() && not passes_trigger)
         {
             //cout << "fails trigger" << endl;
             return 0;
@@ -575,7 +592,7 @@ int PlotLooper::operator()(long event)
 		}
         else
         {
-            evt_weight *= scale1fb();
+            //evt_weight *= scale1fb();
         }
 
         // apply scale factors
@@ -650,6 +667,11 @@ int PlotLooper::operator()(long event)
             {
                 if      (abs(l1_id) == 11) {rt::Fill2D(hc["h_os_fo_pt_vs_eta_em"], fabs(l1_p4.eta()), l1_p4.pt(), weight);}
                 else if (abs(l2_id) == 11) {rt::Fill2D(hc["h_os_fo_pt_vs_eta_em"], fabs(l2_p4.eta()), l2_p4.pt(), weight);}
+            }
+            else if (hyp_type == DileptonHypType::MUMU) 
+            {
+                rt::Fill2D(hc["h_os_pt1_vs_eta1_mm"], fabs(l1_p4.eta()), l1_p4.pt(), weight);
+                rt::Fill2D(hc["h_os_pt2_vs_eta2_mm"], fabs(l2_p4.eta()), l2_p4.pt(), weight);
             }
         }
 
