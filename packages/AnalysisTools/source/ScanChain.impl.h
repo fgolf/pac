@@ -41,6 +41,10 @@ namespace at
         {
             throw std::invalid_argument("at::ScanChain: chain has no files!");
         }
+        if (not chain->GetFile())
+        {
+            throw std::invalid_argument("at::ScanChain: chain has no files or file path is invalid!");
+        }
 
         // tree name
         string tree_name = chain->GetName();
@@ -232,6 +236,10 @@ namespace at
         if (chain->GetListOfFiles()->GetEntries()<1)
         {
             throw std::invalid_argument("at::ScanChain: chain has no files!");
+        }
+        if (not chain->GetFile())
+        {
+            throw std::invalid_argument("at::ScanChain: chain has no files or file path is invalid!");
         }
 
         //rt::PrintFilesFromTChain(chain);

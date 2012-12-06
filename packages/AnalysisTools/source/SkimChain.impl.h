@@ -43,6 +43,10 @@ namespace at
         {
             throw std::invalid_argument("at::ScanChain: chain has no files!");
         }
+        if (not chain->GetFile())
+        {
+            throw std::invalid_argument("at::ScanChain: chain has no files or file path is invalid!");
+        }
         rt::PrintFilesFromTChain(chain);
         string tree_name = chain->GetName();
         if (chain->GetListOfBranches()->Contains("EventAuxiliary"))
