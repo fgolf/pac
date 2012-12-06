@@ -273,6 +273,13 @@ namespace rt
         TChain chain2(tree2_name.c_str());
         chain2.Add(tree2_file.c_str());
 
+        // check for valid chains
+        if (!chain1.GetFile() || !chain2.GetFile())
+        {
+            cout << "rt::CompareContentsOfTrees - one or both TChains have no files associated with them" << endl;
+            return;
+        }
+
         CompareContentOfTTrees(&chain1, &chain2, output_folder, tree1_label, tree2_label, selection, option, num_entries, suffix);
     }
 
