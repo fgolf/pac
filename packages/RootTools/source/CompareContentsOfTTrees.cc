@@ -33,7 +33,6 @@ namespace rt
         bool operator () (const BranchInfo& b1, const BranchInfo& b2) const {return b1 == b2;}
     };
 
-
     // compare the contents of two trees 
     void CompareContentOfTTrees
     (
@@ -250,6 +249,31 @@ namespace rt
 
         // done
         return;
+    }
+
+    // compare the contents of two trees 
+    void CompareContentOfTTrees
+    (
+        const std::string& tree1_file, 
+        const std::string& tree2_file, 
+        const std::string& tree1_name, 
+        const std::string& tree2_name, 
+        const std::string& output_folder,
+        const std::string& tree1_label,
+        const std::string& tree2_label,
+        const std::string& selection, 
+        const std::string& option, 
+        long num_entries,
+        const std::string& suffix
+    )
+    {
+        TChain chain1(tree1_name.c_str());
+        chain1.Add(tree1_file.c_str());
+
+        TChain chain2(tree2_name.c_str());
+        chain2.Add(tree2_file.c_str());
+
+        CompareContentOfTTrees(&chain1, &chain2, output_folder, tree1_label, tree2_label, selection, option, num_entries, suffix);
     }
 
 } // namespace rt
