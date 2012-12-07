@@ -19,6 +19,8 @@ namespace rt
     {
         BranchInfo(TBranch* b) : name(b->GetName()), classname(b->GetTitle()) {}
         BranchInfo(TBranchElement* b) : name(b->GetName()), classname(b->GetClassName()) {}
+        BranchInfo(const std::string& alias_name, TBranch* b) : name(alias_name), classname(b->GetTitle()) {}
+        BranchInfo(const std::string& alias_name, TBranchElement* b) : name(alias_name), classname(b->GetClassName()) {}
         std::string name;
         std::string classname;
     };
@@ -47,43 +49,88 @@ namespace rt
         const std::string& suffix
     )
     {
-        TObjArray* array1 = tree1->GetListOfBranches();
-        TObjArray* array2 = tree2->GetListOfBranches();
+        TObjArray* array1  = tree1->GetListOfBranches();
+        TObjArray* array2  = tree2->GetListOfBranches();
+        TList* alias_list1 = tree1->GetListOfAliases();
+        TList* alias_list2 = tree2->GetListOfAliases();
 
         cout << "rt::CompareContentOfTTrees:" << endl;
         cout << tree1_label << ": " << tree1->GetName() << "\t# entries:  " << tree1->GetEntries() << endl;
         cout << tree1_label << " has " << array1->GetEntries() << " branches" << endl; 
+        if (alias_list1) {cout << tree1_label << " has " << alias_list1->GetEntries() << " aliases" << endl;}
         cout << tree2_label << ": " << tree2->GetName() << "\t# entries:  " << tree2->GetEntries() << endl;
         cout << tree2_label << " has " << array2->GetEntries() << " branches" << endl; 
+        if (alias_list2) {cout << tree2_label << " has " << alias_list2->GetEntries() << " aliases" << endl;}
 
         vector<BranchInfo> tree1_branches;
-        for (int i = 0; i < array1->GetEntries(); i++)
+        if (alias_list1 && alias_list1->GetEntries()>0)
         {
-            TBranch* b = dynamic_cast<TBranch*>(tree1->GetListOfBranches()->At(i));
-            if (TBranchElement* be = dynamic_cast<TBranchElement*>(b))
+            for (int i = 0; i < alias_list1->GetEntries(); i++)
             {
-                tree1_branches.push_back(BranchInfo(be));
-            }
-            else
+                string alias_name = alias_list1->At(i)->GetName();
+                TBranch* b = tree1->GetBranch(tree1->GetAlias(alias_name.c_str()));
+                if (TBranchElement* be = dynamic_cast<TBranchElement*>(b))
+                {
+                    tree1_branches.push_back(BranchInfo(alias_name, be));
+                }
+                else
+                {
+                    tree1_branches.push_back(BranchInfo(alias_name, b));
+                }
+                //cout << tree1_branches.back().name << "\t" << tree1_branches.back().classname << endl;
+            }     
+        }
+        else
+        {
+            for (int i = 0; i < array1->GetEntries(); i++)
             {
-                tree1_branches.push_back(BranchInfo(b));
-            }
-            //cout << tree1_branches.back().name << "\t" << tree1_branches.back().classname << endl;
-        }     
+                TBranch* b = dynamic_cast<TBranch*>(tree1->GetListOfBranches()->At(i));
+                if (TBranchElement* be = dynamic_cast<TBranchElement*>(b))
+                {
+                    tree1_branches.push_back(BranchInfo(be));
+                }
+                else
+                {
+                    tree1_branches.push_back(BranchInfo(b));
+                }
+                //cout << tree1_branches.back().name << "\t" << tree1_branches.back().classname << endl;
+            }     
+        }
+
         vector<BranchInfo> tree2_branches;
-        for (int i = 0; i < array2->GetEntries(); i++)
+        if (alias_list2 && alias_list2->GetEntries()>0)
         {
-            TBranch* b = dynamic_cast<TBranch*>(tree2->GetListOfBranches()->At(i));
-            if (TBranchElement* be = dynamic_cast<TBranchElement*>(b))
+            for (int i = 0; i < alias_list2->GetEntries(); i++)
             {
-                tree2_branches.push_back(BranchInfo(be));
-            }
-            else
+                string alias_name = alias_list2->At(i)->GetName();
+                TBranch* b = tree2->GetBranch(tree2->GetAlias(alias_name.c_str()));
+                if (TBranchElement* be = dynamic_cast<TBranchElement*>(b))
+                {
+                    tree2_branches.push_back(BranchInfo(alias_name, be));
+                }
+                else
+                {
+                    tree2_branches.push_back(BranchInfo(alias_name, b));
+                }
+                //cout << tree2_branches.back().name << "\t" << tree2_branches.back().classname << endl;
+            }     
+        }
+        else
+        {
+            for (int i = 0; i < array2->GetEntries(); i++)
             {
-                tree2_branches.push_back(BranchInfo(b));
-            }
-            //cout << tree2_branches.back().name << "\t" << tree2_branches.back().classname << endl;
-        }     
+                TBranch* b = dynamic_cast<TBranch*>(tree2->GetListOfBranches()->At(i));
+                if (TBranchElement* be = dynamic_cast<TBranchElement*>(b))
+                {
+                    tree2_branches.push_back(BranchInfo(be));
+                }
+                else
+                {
+                    tree2_branches.push_back(BranchInfo(b));
+                }
+                //cout << tree2_branches.back().name << "\t" << tree2_branches.back().classname << endl;
+            }     
+        }
 
         // compare sizes of branches
         if (tree1_branches.size() != tree2_branches.size())
@@ -267,20 +314,45 @@ namespace rt
         const std::string& suffix
     )
     {
-        TChain chain1(tree1_name.c_str());
-        chain1.Add(tree1_file.c_str());
+        //TChain chain1(tree1_name.c_str());
+        //chain1.Add(tree1_file.c_str());
 
-        TChain chain2(tree2_name.c_str());
-        chain2.Add(tree2_file.c_str());
+        //TChain chain2(tree2_name.c_str());
+        //chain2.Add(tree2_file.c_str());
 
-        // check for valid chains
-        if (!chain1.GetFile() || !chain2.GetFile())
+        //// check for valid chains
+        //if (!chain1.GetFile() || !chain2.GetFile())
+        //{
+        //    cout << "rt::CompareContentsOfTrees - one or both TChains have no files associated with them" << endl;
+        //    return;
+        //}
+        TFile f1(tree1_file.c_str());
+        if (f1.IsZombie())
         {
-            cout << "rt::CompareContentsOfTrees - one or both TChains have no files associated with them" << endl;
+            cout << "rt::CompareContentsOfTrees - tree1 file is a zombie" << endl;
+            return;
+        }
+        TTree* tree1 = dynamic_cast<TTree*>(f1.Get(tree1_name.c_str()));
+        if (not tree1)
+        {
+            cout << "rt::CompareContentsOfTrees - tree1 is not found" << endl;
             return;
         }
 
-        CompareContentOfTTrees(&chain1, &chain2, output_folder, tree1_label, tree2_label, selection, option, num_entries, suffix);
+        TFile f2(tree2_file.c_str());
+        if (f2.IsZombie())
+        {
+            cout << "rt::CompareContentsOfTrees - tree2 file is a zombie" << endl;
+            return;
+        }
+        TTree* tree2 = dynamic_cast<TTree*>(f2.Get(tree2_name.c_str()));
+        if (not tree2)
+        {
+            cout << "rt::CompareContentsOfTrees - tree2 is not found" << endl;
+            return;
+        }
+
+        CompareContentOfTTrees(tree1, tree2, output_folder, tree1_label, tree2_label, selection, option, num_entries, suffix);
     }
 
 } // namespace rt
