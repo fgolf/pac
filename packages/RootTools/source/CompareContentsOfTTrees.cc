@@ -97,7 +97,7 @@ namespace rt
             }     
         }
 
-        // get all branches or aliaes for tree1
+        // get all branches or aliaes for tree2
         vector<BranchInfo> tree2_branches;
         if (alias_list2 && alias_list2->GetEntries()>0)
         {
