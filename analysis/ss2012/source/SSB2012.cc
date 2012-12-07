@@ -212,6 +212,44 @@ namespace ssb {
 	const bool &trig_mm() { return samesignbtag.trig_mm(); }
 	const bool &trig_em() { return samesignbtag.trig_em(); }
 	const bool &trig_ee() { return samesignbtag.trig_ee(); }
+	const bool &trig_mm_mu17_mu8() { return samesignbtag.trig_mm_mu17_mu8(); }
+	const bool &trig_mm_dmu14_m8_pfmet40() { return samesignbtag.trig_mm_dmu14_m8_pfmet40(); }
+	const bool &trig_mm_dmu14_m8_pfmet50() { return samesignbtag.trig_mm_dmu14_m8_pfmet50(); }
+	const bool &trig_mm_dmu8_m8_pfnopuht175() { return samesignbtag.trig_mm_dmu8_m8_pfnopuht175(); }
+	const bool &trig_mm_dmu8_m8_pfnopuht225() { return samesignbtag.trig_mm_dmu8_m8_pfnopuht225(); }
+	const bool &trig_mm_dreliso1p0mu5_m8_pfnopuht175() { return samesignbtag.trig_mm_dreliso1p0mu5_m8_pfnopuht175(); }
+	const bool &trig_mm_dreliso1p0mu5_m8_pfnopuht225() { return samesignbtag.trig_mm_dreliso1p0mu5_m8_pfnopuht225(); }
+	const bool &trig_mm_dmu8_m8_pfht175() { return samesignbtag.trig_mm_dmu8_m8_pfht175(); }
+	const bool &trig_mm_dmu8_m8_pfht225() { return samesignbtag.trig_mm_dmu8_m8_pfht225(); }
+	const bool &trig_mm_dreliso1p0mu5_m8_pfht175() { return samesignbtag.trig_mm_dreliso1p0mu5_m8_pfht175(); }
+	const bool &trig_mm_dreliso1p0mu5_m8_pfht225() { return samesignbtag.trig_mm_dreliso1p0mu5_m8_pfht225(); }
+	const bool &trig_ee_el17_el8_id_iso() { return samesignbtag.trig_ee_el17_el8_id_iso(); }
+	const bool &trig_ee_del8_id_m8_pfnopuht175() { return samesignbtag.trig_ee_del8_id_m8_pfnopuht175(); }
+	const bool &trig_ee_del8_id_m8_pfnopuht225() { return samesignbtag.trig_ee_del8_id_m8_pfnopuht225(); }
+	const bool &trig_ee_del8_id_m8_pfht175() { return samesignbtag.trig_ee_del8_id_m8_pfht175(); }
+	const bool &trig_ee_del8_id_m8_pfht225() { return samesignbtag.trig_ee_del8_id_m8_pfht225(); }
+	const bool &trig_ee_del14_id_m8_pfmet40() { return samesignbtag.trig_ee_del14_id_m8_pfmet40(); }
+	const bool &trig_ee_del14_id_m8_pfmet50() { return samesignbtag.trig_ee_del14_id_m8_pfmet50(); }
+	const bool &trig_em_mu17_el8_id_iso() { return samesignbtag.trig_em_mu17_el8_id_iso(); }
+	const bool &trig_em_mu8_el17_id_iso() { return samesignbtag.trig_em_mu8_el17_id_iso(); }
+	const bool &trig_em_mu14_el14_id_m8_pfmet40() { return samesignbtag.trig_em_mu14_el14_id_m8_pfmet40(); }
+	const bool &trig_em_mu14_el14_id_m8_pfmet50() { return samesignbtag.trig_em_mu14_el14_id_m8_pfmet50(); }
+	const bool &trig_em_mu8_el8_id_m8_pfnopuht175() { return samesignbtag.trig_em_mu8_el8_id_m8_pfnopuht175(); }
+	const bool &trig_em_mu8_el8_id_m8_pfnopuht225() { return samesignbtag.trig_em_mu8_el8_id_m8_pfnopuht225(); }
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175(); }
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht225() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfnopuht225(); }
+	const bool &trig_em_mu8_el8_id_m8_pfht175() { return samesignbtag.trig_em_mu8_el8_id_m8_pfht175(); }
+	const bool &trig_em_mu8_el8_id_m8_pfht225() { return samesignbtag.trig_em_mu8_el8_id_m8_pfht225(); }
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfht175() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfht175(); }
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfht225() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfht225(); }
+	const bool &trig_mm_met() { return samesignbtag.trig_mm_met(); }
+	const bool &trig_mm_ht() { return samesignbtag.trig_mm_ht(); }
+	const bool &trig_mm_iso_ht() { return samesignbtag.trig_mm_iso_ht(); }
+	const bool &trig_ee_noiso_met() { return samesignbtag.trig_ee_noiso_met(); }
+	const bool &trig_ee_noiso_ht() { return samesignbtag.trig_ee_noiso_ht(); }
+	const bool &trig_em_met() { return samesignbtag.trig_em_met(); }
+	const bool &trig_em_ht() { return samesignbtag.trig_em_ht(); }
+	const bool &trig_em_iso_ht() { return samesignbtag.trig_em_iso_ht(); }
 	const int &njets_dn() { return samesignbtag.njets_dn(); }
 	const int &njets_up() { return samesignbtag.njets_up(); }
 	const int &nbtags_dn() { return samesignbtag.nbtags_dn(); }
@@ -248,6 +286,11 @@ namespace ssb {
 	const bool &no_extrag() { return samesignbtag.no_extrag(); }
 	const bool &clean() { return samesignbtag.clean(); }
 	const bool &presel() { return samesignbtag.presel(); }
+	const bool &ee() { return samesignbtag.ee(); }
+	const bool &mm() { return samesignbtag.mm(); }
+	const bool &em() { return samesignbtag.em(); }
+	const bool &em_mufo() { return samesignbtag.em_mufo(); }
+	const bool &em_elfo() { return samesignbtag.em_elfo(); }
 	const bool &hyp_good_vtx() { return samesignbtag.hyp_good_vtx(); }
 	const bool &is_gen_pp() { return samesignbtag.is_gen_pp(); }
 	const bool &is_gen_mm() { return samesignbtag.is_gen_mm(); }

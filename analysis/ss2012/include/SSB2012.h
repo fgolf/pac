@@ -650,6 +650,120 @@ protected:
 	bool	trig_ee_;
 	TBranch *trig_ee_branch;
 	bool trig_ee_isLoaded;
+	bool	trig_mm_mu17_mu8_;
+	TBranch *trig_mm_mu17_mu8_branch;
+	bool trig_mm_mu17_mu8_isLoaded;
+	bool	trig_mm_dmu14_m8_pfmet40_;
+	TBranch *trig_mm_dmu14_m8_pfmet40_branch;
+	bool trig_mm_dmu14_m8_pfmet40_isLoaded;
+	bool	trig_mm_dmu14_m8_pfmet50_;
+	TBranch *trig_mm_dmu14_m8_pfmet50_branch;
+	bool trig_mm_dmu14_m8_pfmet50_isLoaded;
+	bool	trig_mm_dmu8_m8_pfnopuht175_;
+	TBranch *trig_mm_dmu8_m8_pfnopuht175_branch;
+	bool trig_mm_dmu8_m8_pfnopuht175_isLoaded;
+	bool	trig_mm_dmu8_m8_pfnopuht225_;
+	TBranch *trig_mm_dmu8_m8_pfnopuht225_branch;
+	bool trig_mm_dmu8_m8_pfnopuht225_isLoaded;
+	bool	trig_mm_dreliso1p0mu5_m8_pfnopuht175_;
+	TBranch *trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch;
+	bool trig_mm_dreliso1p0mu5_m8_pfnopuht175_isLoaded;
+	bool	trig_mm_dreliso1p0mu5_m8_pfnopuht225_;
+	TBranch *trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch;
+	bool trig_mm_dreliso1p0mu5_m8_pfnopuht225_isLoaded;
+	bool	trig_mm_dmu8_m8_pfht175_;
+	TBranch *trig_mm_dmu8_m8_pfht175_branch;
+	bool trig_mm_dmu8_m8_pfht175_isLoaded;
+	bool	trig_mm_dmu8_m8_pfht225_;
+	TBranch *trig_mm_dmu8_m8_pfht225_branch;
+	bool trig_mm_dmu8_m8_pfht225_isLoaded;
+	bool	trig_mm_dreliso1p0mu5_m8_pfht175_;
+	TBranch *trig_mm_dreliso1p0mu5_m8_pfht175_branch;
+	bool trig_mm_dreliso1p0mu5_m8_pfht175_isLoaded;
+	bool	trig_mm_dreliso1p0mu5_m8_pfht225_;
+	TBranch *trig_mm_dreliso1p0mu5_m8_pfht225_branch;
+	bool trig_mm_dreliso1p0mu5_m8_pfht225_isLoaded;
+	bool	trig_ee_el17_el8_id_iso_;
+	TBranch *trig_ee_el17_el8_id_iso_branch;
+	bool trig_ee_el17_el8_id_iso_isLoaded;
+	bool	trig_ee_del8_id_m8_pfnopuht175_;
+	TBranch *trig_ee_del8_id_m8_pfnopuht175_branch;
+	bool trig_ee_del8_id_m8_pfnopuht175_isLoaded;
+	bool	trig_ee_del8_id_m8_pfnopuht225_;
+	TBranch *trig_ee_del8_id_m8_pfnopuht225_branch;
+	bool trig_ee_del8_id_m8_pfnopuht225_isLoaded;
+	bool	trig_ee_del8_id_m8_pfht175_;
+	TBranch *trig_ee_del8_id_m8_pfht175_branch;
+	bool trig_ee_del8_id_m8_pfht175_isLoaded;
+	bool	trig_ee_del8_id_m8_pfht225_;
+	TBranch *trig_ee_del8_id_m8_pfht225_branch;
+	bool trig_ee_del8_id_m8_pfht225_isLoaded;
+	bool	trig_ee_del14_id_m8_pfmet40_;
+	TBranch *trig_ee_del14_id_m8_pfmet40_branch;
+	bool trig_ee_del14_id_m8_pfmet40_isLoaded;
+	bool	trig_ee_del14_id_m8_pfmet50_;
+	TBranch *trig_ee_del14_id_m8_pfmet50_branch;
+	bool trig_ee_del14_id_m8_pfmet50_isLoaded;
+	bool	trig_em_mu17_el8_id_iso_;
+	TBranch *trig_em_mu17_el8_id_iso_branch;
+	bool trig_em_mu17_el8_id_iso_isLoaded;
+	bool	trig_em_mu8_el17_id_iso_;
+	TBranch *trig_em_mu8_el17_id_iso_branch;
+	bool trig_em_mu8_el17_id_iso_isLoaded;
+	bool	trig_em_mu14_el14_id_m8_pfmet40_;
+	TBranch *trig_em_mu14_el14_id_m8_pfmet40_branch;
+	bool trig_em_mu14_el14_id_m8_pfmet40_isLoaded;
+	bool	trig_em_mu14_el14_id_m8_pfmet50_;
+	TBranch *trig_em_mu14_el14_id_m8_pfmet50_branch;
+	bool trig_em_mu14_el14_id_m8_pfmet50_isLoaded;
+	bool	trig_em_mu8_el8_id_m8_pfnopuht175_;
+	TBranch *trig_em_mu8_el8_id_m8_pfnopuht175_branch;
+	bool trig_em_mu8_el8_id_m8_pfnopuht175_isLoaded;
+	bool	trig_em_mu8_el8_id_m8_pfnopuht225_;
+	TBranch *trig_em_mu8_el8_id_m8_pfnopuht225_branch;
+	bool trig_em_mu8_el8_id_m8_pfnopuht225_isLoaded;
+	bool	trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_;
+	TBranch *trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch;
+	bool trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_isLoaded;
+	bool	trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_;
+	TBranch *trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch;
+	bool trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_isLoaded;
+	bool	trig_em_mu8_el8_id_m8_pfht175_;
+	TBranch *trig_em_mu8_el8_id_m8_pfht175_branch;
+	bool trig_em_mu8_el8_id_m8_pfht175_isLoaded;
+	bool	trig_em_mu8_el8_id_m8_pfht225_;
+	TBranch *trig_em_mu8_el8_id_m8_pfht225_branch;
+	bool trig_em_mu8_el8_id_m8_pfht225_isLoaded;
+	bool	trig_em_riso1p0mu5_el8_id_m8_pfht175_;
+	TBranch *trig_em_riso1p0mu5_el8_id_m8_pfht175_branch;
+	bool trig_em_riso1p0mu5_el8_id_m8_pfht175_isLoaded;
+	bool	trig_em_riso1p0mu5_el8_id_m8_pfht225_;
+	TBranch *trig_em_riso1p0mu5_el8_id_m8_pfht225_branch;
+	bool trig_em_riso1p0mu5_el8_id_m8_pfht225_isLoaded;
+	bool	trig_mm_met_;
+	TBranch *trig_mm_met_branch;
+	bool trig_mm_met_isLoaded;
+	bool	trig_mm_ht_;
+	TBranch *trig_mm_ht_branch;
+	bool trig_mm_ht_isLoaded;
+	bool	trig_mm_iso_ht_;
+	TBranch *trig_mm_iso_ht_branch;
+	bool trig_mm_iso_ht_isLoaded;
+	bool	trig_ee_noiso_met_;
+	TBranch *trig_ee_noiso_met_branch;
+	bool trig_ee_noiso_met_isLoaded;
+	bool	trig_ee_noiso_ht_;
+	TBranch *trig_ee_noiso_ht_branch;
+	bool trig_ee_noiso_ht_isLoaded;
+	bool	trig_em_met_;
+	TBranch *trig_em_met_branch;
+	bool trig_em_met_isLoaded;
+	bool	trig_em_ht_;
+	TBranch *trig_em_ht_branch;
+	bool trig_em_ht_isLoaded;
+	bool	trig_em_iso_ht_;
+	TBranch *trig_em_iso_ht_branch;
+	bool trig_em_iso_ht_isLoaded;
 	int	njets_dn_;
 	TBranch *njets_dn_branch;
 	bool njets_dn_isLoaded;
@@ -758,6 +872,21 @@ protected:
 	bool	presel_;
 	TBranch *presel_branch;
 	bool presel_isLoaded;
+	bool	ee_;
+	TBranch *ee_branch;
+	bool ee_isLoaded;
+	bool	mm_;
+	TBranch *mm_branch;
+	bool mm_isLoaded;
+	bool	em_;
+	TBranch *em_branch;
+	bool em_isLoaded;
+	bool	em_mufo_;
+	TBranch *em_mufo_branch;
+	bool em_mufo_isLoaded;
+	bool	em_elfo_;
+	TBranch *em_elfo_branch;
+	bool em_elfo_isLoaded;
 	bool	hyp_good_vtx_;
 	TBranch *hyp_good_vtx_branch;
 	bool hyp_good_vtx_isLoaded;
@@ -2063,6 +2192,196 @@ void Init(TTree *tree) {
 		trig_ee_branch = tree->GetBranch("trig_ee");
 		if (trig_ee_branch) {trig_ee_branch->SetAddress(&trig_ee_);}
 	}
+	trig_mm_mu17_mu8_branch = 0;
+	if (tree->GetBranch("trig_mm_mu17_mu8") != 0) {
+		trig_mm_mu17_mu8_branch = tree->GetBranch("trig_mm_mu17_mu8");
+		if (trig_mm_mu17_mu8_branch) {trig_mm_mu17_mu8_branch->SetAddress(&trig_mm_mu17_mu8_);}
+	}
+	trig_mm_dmu14_m8_pfmet40_branch = 0;
+	if (tree->GetBranch("trig_mm_dmu14_m8_pfmet40") != 0) {
+		trig_mm_dmu14_m8_pfmet40_branch = tree->GetBranch("trig_mm_dmu14_m8_pfmet40");
+		if (trig_mm_dmu14_m8_pfmet40_branch) {trig_mm_dmu14_m8_pfmet40_branch->SetAddress(&trig_mm_dmu14_m8_pfmet40_);}
+	}
+	trig_mm_dmu14_m8_pfmet50_branch = 0;
+	if (tree->GetBranch("trig_mm_dmu14_m8_pfmet50") != 0) {
+		trig_mm_dmu14_m8_pfmet50_branch = tree->GetBranch("trig_mm_dmu14_m8_pfmet50");
+		if (trig_mm_dmu14_m8_pfmet50_branch) {trig_mm_dmu14_m8_pfmet50_branch->SetAddress(&trig_mm_dmu14_m8_pfmet50_);}
+	}
+	trig_mm_dmu8_m8_pfnopuht175_branch = 0;
+	if (tree->GetBranch("trig_mm_dmu8_m8_pfnopuht175") != 0) {
+		trig_mm_dmu8_m8_pfnopuht175_branch = tree->GetBranch("trig_mm_dmu8_m8_pfnopuht175");
+		if (trig_mm_dmu8_m8_pfnopuht175_branch) {trig_mm_dmu8_m8_pfnopuht175_branch->SetAddress(&trig_mm_dmu8_m8_pfnopuht175_);}
+	}
+	trig_mm_dmu8_m8_pfnopuht225_branch = 0;
+	if (tree->GetBranch("trig_mm_dmu8_m8_pfnopuht225") != 0) {
+		trig_mm_dmu8_m8_pfnopuht225_branch = tree->GetBranch("trig_mm_dmu8_m8_pfnopuht225");
+		if (trig_mm_dmu8_m8_pfnopuht225_branch) {trig_mm_dmu8_m8_pfnopuht225_branch->SetAddress(&trig_mm_dmu8_m8_pfnopuht225_);}
+	}
+	trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch = 0;
+	if (tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfnopuht175") != 0) {
+		trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch = tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfnopuht175");
+		if (trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch) {trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch->SetAddress(&trig_mm_dreliso1p0mu5_m8_pfnopuht175_);}
+	}
+	trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch = 0;
+	if (tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfnopuht225") != 0) {
+		trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch = tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfnopuht225");
+		if (trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch) {trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch->SetAddress(&trig_mm_dreliso1p0mu5_m8_pfnopuht225_);}
+	}
+	trig_mm_dmu8_m8_pfht175_branch = 0;
+	if (tree->GetBranch("trig_mm_dmu8_m8_pfht175") != 0) {
+		trig_mm_dmu8_m8_pfht175_branch = tree->GetBranch("trig_mm_dmu8_m8_pfht175");
+		if (trig_mm_dmu8_m8_pfht175_branch) {trig_mm_dmu8_m8_pfht175_branch->SetAddress(&trig_mm_dmu8_m8_pfht175_);}
+	}
+	trig_mm_dmu8_m8_pfht225_branch = 0;
+	if (tree->GetBranch("trig_mm_dmu8_m8_pfht225") != 0) {
+		trig_mm_dmu8_m8_pfht225_branch = tree->GetBranch("trig_mm_dmu8_m8_pfht225");
+		if (trig_mm_dmu8_m8_pfht225_branch) {trig_mm_dmu8_m8_pfht225_branch->SetAddress(&trig_mm_dmu8_m8_pfht225_);}
+	}
+	trig_mm_dreliso1p0mu5_m8_pfht175_branch = 0;
+	if (tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfht175") != 0) {
+		trig_mm_dreliso1p0mu5_m8_pfht175_branch = tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfht175");
+		if (trig_mm_dreliso1p0mu5_m8_pfht175_branch) {trig_mm_dreliso1p0mu5_m8_pfht175_branch->SetAddress(&trig_mm_dreliso1p0mu5_m8_pfht175_);}
+	}
+	trig_mm_dreliso1p0mu5_m8_pfht225_branch = 0;
+	if (tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfht225") != 0) {
+		trig_mm_dreliso1p0mu5_m8_pfht225_branch = tree->GetBranch("trig_mm_dreliso1p0mu5_m8_pfht225");
+		if (trig_mm_dreliso1p0mu5_m8_pfht225_branch) {trig_mm_dreliso1p0mu5_m8_pfht225_branch->SetAddress(&trig_mm_dreliso1p0mu5_m8_pfht225_);}
+	}
+	trig_ee_el17_el8_id_iso_branch = 0;
+	if (tree->GetBranch("trig_ee_el17_el8_id_iso") != 0) {
+		trig_ee_el17_el8_id_iso_branch = tree->GetBranch("trig_ee_el17_el8_id_iso");
+		if (trig_ee_el17_el8_id_iso_branch) {trig_ee_el17_el8_id_iso_branch->SetAddress(&trig_ee_el17_el8_id_iso_);}
+	}
+	trig_ee_del8_id_m8_pfnopuht175_branch = 0;
+	if (tree->GetBranch("trig_ee_del8_id_m8_pfnopuht175") != 0) {
+		trig_ee_del8_id_m8_pfnopuht175_branch = tree->GetBranch("trig_ee_del8_id_m8_pfnopuht175");
+		if (trig_ee_del8_id_m8_pfnopuht175_branch) {trig_ee_del8_id_m8_pfnopuht175_branch->SetAddress(&trig_ee_del8_id_m8_pfnopuht175_);}
+	}
+	trig_ee_del8_id_m8_pfnopuht225_branch = 0;
+	if (tree->GetBranch("trig_ee_del8_id_m8_pfnopuht225") != 0) {
+		trig_ee_del8_id_m8_pfnopuht225_branch = tree->GetBranch("trig_ee_del8_id_m8_pfnopuht225");
+		if (trig_ee_del8_id_m8_pfnopuht225_branch) {trig_ee_del8_id_m8_pfnopuht225_branch->SetAddress(&trig_ee_del8_id_m8_pfnopuht225_);}
+	}
+	trig_ee_del8_id_m8_pfht175_branch = 0;
+	if (tree->GetBranch("trig_ee_del8_id_m8_pfht175") != 0) {
+		trig_ee_del8_id_m8_pfht175_branch = tree->GetBranch("trig_ee_del8_id_m8_pfht175");
+		if (trig_ee_del8_id_m8_pfht175_branch) {trig_ee_del8_id_m8_pfht175_branch->SetAddress(&trig_ee_del8_id_m8_pfht175_);}
+	}
+	trig_ee_del8_id_m8_pfht225_branch = 0;
+	if (tree->GetBranch("trig_ee_del8_id_m8_pfht225") != 0) {
+		trig_ee_del8_id_m8_pfht225_branch = tree->GetBranch("trig_ee_del8_id_m8_pfht225");
+		if (trig_ee_del8_id_m8_pfht225_branch) {trig_ee_del8_id_m8_pfht225_branch->SetAddress(&trig_ee_del8_id_m8_pfht225_);}
+	}
+	trig_ee_del14_id_m8_pfmet40_branch = 0;
+	if (tree->GetBranch("trig_ee_del14_id_m8_pfmet40") != 0) {
+		trig_ee_del14_id_m8_pfmet40_branch = tree->GetBranch("trig_ee_del14_id_m8_pfmet40");
+		if (trig_ee_del14_id_m8_pfmet40_branch) {trig_ee_del14_id_m8_pfmet40_branch->SetAddress(&trig_ee_del14_id_m8_pfmet40_);}
+	}
+	trig_ee_del14_id_m8_pfmet50_branch = 0;
+	if (tree->GetBranch("trig_ee_del14_id_m8_pfmet50") != 0) {
+		trig_ee_del14_id_m8_pfmet50_branch = tree->GetBranch("trig_ee_del14_id_m8_pfmet50");
+		if (trig_ee_del14_id_m8_pfmet50_branch) {trig_ee_del14_id_m8_pfmet50_branch->SetAddress(&trig_ee_del14_id_m8_pfmet50_);}
+	}
+	trig_em_mu17_el8_id_iso_branch = 0;
+	if (tree->GetBranch("trig_em_mu17_el8_id_iso") != 0) {
+		trig_em_mu17_el8_id_iso_branch = tree->GetBranch("trig_em_mu17_el8_id_iso");
+		if (trig_em_mu17_el8_id_iso_branch) {trig_em_mu17_el8_id_iso_branch->SetAddress(&trig_em_mu17_el8_id_iso_);}
+	}
+	trig_em_mu8_el17_id_iso_branch = 0;
+	if (tree->GetBranch("trig_em_mu8_el17_id_iso") != 0) {
+		trig_em_mu8_el17_id_iso_branch = tree->GetBranch("trig_em_mu8_el17_id_iso");
+		if (trig_em_mu8_el17_id_iso_branch) {trig_em_mu8_el17_id_iso_branch->SetAddress(&trig_em_mu8_el17_id_iso_);}
+	}
+	trig_em_mu14_el14_id_m8_pfmet40_branch = 0;
+	if (tree->GetBranch("trig_em_mu14_el14_id_m8_pfmet40") != 0) {
+		trig_em_mu14_el14_id_m8_pfmet40_branch = tree->GetBranch("trig_em_mu14_el14_id_m8_pfmet40");
+		if (trig_em_mu14_el14_id_m8_pfmet40_branch) {trig_em_mu14_el14_id_m8_pfmet40_branch->SetAddress(&trig_em_mu14_el14_id_m8_pfmet40_);}
+	}
+	trig_em_mu14_el14_id_m8_pfmet50_branch = 0;
+	if (tree->GetBranch("trig_em_mu14_el14_id_m8_pfmet50") != 0) {
+		trig_em_mu14_el14_id_m8_pfmet50_branch = tree->GetBranch("trig_em_mu14_el14_id_m8_pfmet50");
+		if (trig_em_mu14_el14_id_m8_pfmet50_branch) {trig_em_mu14_el14_id_m8_pfmet50_branch->SetAddress(&trig_em_mu14_el14_id_m8_pfmet50_);}
+	}
+	trig_em_mu8_el8_id_m8_pfnopuht175_branch = 0;
+	if (tree->GetBranch("trig_em_mu8_el8_id_m8_pfnopuht175") != 0) {
+		trig_em_mu8_el8_id_m8_pfnopuht175_branch = tree->GetBranch("trig_em_mu8_el8_id_m8_pfnopuht175");
+		if (trig_em_mu8_el8_id_m8_pfnopuht175_branch) {trig_em_mu8_el8_id_m8_pfnopuht175_branch->SetAddress(&trig_em_mu8_el8_id_m8_pfnopuht175_);}
+	}
+	trig_em_mu8_el8_id_m8_pfnopuht225_branch = 0;
+	if (tree->GetBranch("trig_em_mu8_el8_id_m8_pfnopuht225") != 0) {
+		trig_em_mu8_el8_id_m8_pfnopuht225_branch = tree->GetBranch("trig_em_mu8_el8_id_m8_pfnopuht225");
+		if (trig_em_mu8_el8_id_m8_pfnopuht225_branch) {trig_em_mu8_el8_id_m8_pfnopuht225_branch->SetAddress(&trig_em_mu8_el8_id_m8_pfnopuht225_);}
+	}
+	trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch = 0;
+	if (tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfnopuht175") != 0) {
+		trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch = tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfnopuht175");
+		if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch) {trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch->SetAddress(&trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_);}
+	}
+	trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch = 0;
+	if (tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfnopuht225") != 0) {
+		trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch = tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfnopuht225");
+		if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch) {trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch->SetAddress(&trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_);}
+	}
+	trig_em_mu8_el8_id_m8_pfht175_branch = 0;
+	if (tree->GetBranch("trig_em_mu8_el8_id_m8_pfht175") != 0) {
+		trig_em_mu8_el8_id_m8_pfht175_branch = tree->GetBranch("trig_em_mu8_el8_id_m8_pfht175");
+		if (trig_em_mu8_el8_id_m8_pfht175_branch) {trig_em_mu8_el8_id_m8_pfht175_branch->SetAddress(&trig_em_mu8_el8_id_m8_pfht175_);}
+	}
+	trig_em_mu8_el8_id_m8_pfht225_branch = 0;
+	if (tree->GetBranch("trig_em_mu8_el8_id_m8_pfht225") != 0) {
+		trig_em_mu8_el8_id_m8_pfht225_branch = tree->GetBranch("trig_em_mu8_el8_id_m8_pfht225");
+		if (trig_em_mu8_el8_id_m8_pfht225_branch) {trig_em_mu8_el8_id_m8_pfht225_branch->SetAddress(&trig_em_mu8_el8_id_m8_pfht225_);}
+	}
+	trig_em_riso1p0mu5_el8_id_m8_pfht175_branch = 0;
+	if (tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfht175") != 0) {
+		trig_em_riso1p0mu5_el8_id_m8_pfht175_branch = tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfht175");
+		if (trig_em_riso1p0mu5_el8_id_m8_pfht175_branch) {trig_em_riso1p0mu5_el8_id_m8_pfht175_branch->SetAddress(&trig_em_riso1p0mu5_el8_id_m8_pfht175_);}
+	}
+	trig_em_riso1p0mu5_el8_id_m8_pfht225_branch = 0;
+	if (tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfht225") != 0) {
+		trig_em_riso1p0mu5_el8_id_m8_pfht225_branch = tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfht225");
+		if (trig_em_riso1p0mu5_el8_id_m8_pfht225_branch) {trig_em_riso1p0mu5_el8_id_m8_pfht225_branch->SetAddress(&trig_em_riso1p0mu5_el8_id_m8_pfht225_);}
+	}
+	trig_mm_met_branch = 0;
+	if (tree->GetBranch("trig_mm_met") != 0) {
+		trig_mm_met_branch = tree->GetBranch("trig_mm_met");
+		if (trig_mm_met_branch) {trig_mm_met_branch->SetAddress(&trig_mm_met_);}
+	}
+	trig_mm_ht_branch = 0;
+	if (tree->GetBranch("trig_mm_ht") != 0) {
+		trig_mm_ht_branch = tree->GetBranch("trig_mm_ht");
+		if (trig_mm_ht_branch) {trig_mm_ht_branch->SetAddress(&trig_mm_ht_);}
+	}
+	trig_mm_iso_ht_branch = 0;
+	if (tree->GetBranch("trig_mm_iso_ht") != 0) {
+		trig_mm_iso_ht_branch = tree->GetBranch("trig_mm_iso_ht");
+		if (trig_mm_iso_ht_branch) {trig_mm_iso_ht_branch->SetAddress(&trig_mm_iso_ht_);}
+	}
+	trig_ee_noiso_met_branch = 0;
+	if (tree->GetBranch("trig_ee_noiso_met") != 0) {
+		trig_ee_noiso_met_branch = tree->GetBranch("trig_ee_noiso_met");
+		if (trig_ee_noiso_met_branch) {trig_ee_noiso_met_branch->SetAddress(&trig_ee_noiso_met_);}
+	}
+	trig_ee_noiso_ht_branch = 0;
+	if (tree->GetBranch("trig_ee_noiso_ht") != 0) {
+		trig_ee_noiso_ht_branch = tree->GetBranch("trig_ee_noiso_ht");
+		if (trig_ee_noiso_ht_branch) {trig_ee_noiso_ht_branch->SetAddress(&trig_ee_noiso_ht_);}
+	}
+	trig_em_met_branch = 0;
+	if (tree->GetBranch("trig_em_met") != 0) {
+		trig_em_met_branch = tree->GetBranch("trig_em_met");
+		if (trig_em_met_branch) {trig_em_met_branch->SetAddress(&trig_em_met_);}
+	}
+	trig_em_ht_branch = 0;
+	if (tree->GetBranch("trig_em_ht") != 0) {
+		trig_em_ht_branch = tree->GetBranch("trig_em_ht");
+		if (trig_em_ht_branch) {trig_em_ht_branch->SetAddress(&trig_em_ht_);}
+	}
+	trig_em_iso_ht_branch = 0;
+	if (tree->GetBranch("trig_em_iso_ht") != 0) {
+		trig_em_iso_ht_branch = tree->GetBranch("trig_em_iso_ht");
+		if (trig_em_iso_ht_branch) {trig_em_iso_ht_branch->SetAddress(&trig_em_iso_ht_);}
+	}
 	njets_dn_branch = 0;
 	if (tree->GetBranch("njets_dn") != 0) {
 		njets_dn_branch = tree->GetBranch("njets_dn");
@@ -2242,6 +2561,31 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("presel") != 0) {
 		presel_branch = tree->GetBranch("presel");
 		if (presel_branch) {presel_branch->SetAddress(&presel_);}
+	}
+	ee_branch = 0;
+	if (tree->GetBranch("ee") != 0) {
+		ee_branch = tree->GetBranch("ee");
+		if (ee_branch) {ee_branch->SetAddress(&ee_);}
+	}
+	mm_branch = 0;
+	if (tree->GetBranch("mm") != 0) {
+		mm_branch = tree->GetBranch("mm");
+		if (mm_branch) {mm_branch->SetAddress(&mm_);}
+	}
+	em_branch = 0;
+	if (tree->GetBranch("em") != 0) {
+		em_branch = tree->GetBranch("em");
+		if (em_branch) {em_branch->SetAddress(&em_);}
+	}
+	em_mufo_branch = 0;
+	if (tree->GetBranch("em_mufo") != 0) {
+		em_mufo_branch = tree->GetBranch("em_mufo");
+		if (em_mufo_branch) {em_mufo_branch->SetAddress(&em_mufo_);}
+	}
+	em_elfo_branch = 0;
+	if (tree->GetBranch("em_elfo") != 0) {
+		em_elfo_branch = tree->GetBranch("em_elfo");
+		if (em_elfo_branch) {em_elfo_branch->SetAddress(&em_elfo_);}
 	}
 	hyp_good_vtx_branch = 0;
 	if (tree->GetBranch("hyp_good_vtx") != 0) {
@@ -2645,6 +2989,44 @@ void GetEntry(unsigned int idx)
 		trig_mm_isLoaded = false;
 		trig_em_isLoaded = false;
 		trig_ee_isLoaded = false;
+		trig_mm_mu17_mu8_isLoaded = false;
+		trig_mm_dmu14_m8_pfmet40_isLoaded = false;
+		trig_mm_dmu14_m8_pfmet50_isLoaded = false;
+		trig_mm_dmu8_m8_pfnopuht175_isLoaded = false;
+		trig_mm_dmu8_m8_pfnopuht225_isLoaded = false;
+		trig_mm_dreliso1p0mu5_m8_pfnopuht175_isLoaded = false;
+		trig_mm_dreliso1p0mu5_m8_pfnopuht225_isLoaded = false;
+		trig_mm_dmu8_m8_pfht175_isLoaded = false;
+		trig_mm_dmu8_m8_pfht225_isLoaded = false;
+		trig_mm_dreliso1p0mu5_m8_pfht175_isLoaded = false;
+		trig_mm_dreliso1p0mu5_m8_pfht225_isLoaded = false;
+		trig_ee_el17_el8_id_iso_isLoaded = false;
+		trig_ee_del8_id_m8_pfnopuht175_isLoaded = false;
+		trig_ee_del8_id_m8_pfnopuht225_isLoaded = false;
+		trig_ee_del8_id_m8_pfht175_isLoaded = false;
+		trig_ee_del8_id_m8_pfht225_isLoaded = false;
+		trig_ee_del14_id_m8_pfmet40_isLoaded = false;
+		trig_ee_del14_id_m8_pfmet50_isLoaded = false;
+		trig_em_mu17_el8_id_iso_isLoaded = false;
+		trig_em_mu8_el17_id_iso_isLoaded = false;
+		trig_em_mu14_el14_id_m8_pfmet40_isLoaded = false;
+		trig_em_mu14_el14_id_m8_pfmet50_isLoaded = false;
+		trig_em_mu8_el8_id_m8_pfnopuht175_isLoaded = false;
+		trig_em_mu8_el8_id_m8_pfnopuht225_isLoaded = false;
+		trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_isLoaded = false;
+		trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_isLoaded = false;
+		trig_em_mu8_el8_id_m8_pfht175_isLoaded = false;
+		trig_em_mu8_el8_id_m8_pfht225_isLoaded = false;
+		trig_em_riso1p0mu5_el8_id_m8_pfht175_isLoaded = false;
+		trig_em_riso1p0mu5_el8_id_m8_pfht225_isLoaded = false;
+		trig_mm_met_isLoaded = false;
+		trig_mm_ht_isLoaded = false;
+		trig_mm_iso_ht_isLoaded = false;
+		trig_ee_noiso_met_isLoaded = false;
+		trig_ee_noiso_ht_isLoaded = false;
+		trig_em_met_isLoaded = false;
+		trig_em_ht_isLoaded = false;
+		trig_em_iso_ht_isLoaded = false;
 		njets_dn_isLoaded = false;
 		njets_up_isLoaded = false;
 		nbtags_dn_isLoaded = false;
@@ -2681,6 +3063,11 @@ void GetEntry(unsigned int idx)
 		no_extrag_isLoaded = false;
 		clean_isLoaded = false;
 		presel_isLoaded = false;
+		ee_isLoaded = false;
+		mm_isLoaded = false;
+		em_isLoaded = false;
+		em_mufo_isLoaded = false;
+		em_elfo_isLoaded = false;
 		hyp_good_vtx_isLoaded = false;
 		is_gen_pp_isLoaded = false;
 		is_gen_mm_isLoaded = false;
@@ -2951,6 +3338,44 @@ void LoadAllBranches()
 	if (trig_mm_branch != 0) trig_mm();
 	if (trig_em_branch != 0) trig_em();
 	if (trig_ee_branch != 0) trig_ee();
+	if (trig_mm_mu17_mu8_branch != 0) trig_mm_mu17_mu8();
+	if (trig_mm_dmu14_m8_pfmet40_branch != 0) trig_mm_dmu14_m8_pfmet40();
+	if (trig_mm_dmu14_m8_pfmet50_branch != 0) trig_mm_dmu14_m8_pfmet50();
+	if (trig_mm_dmu8_m8_pfnopuht175_branch != 0) trig_mm_dmu8_m8_pfnopuht175();
+	if (trig_mm_dmu8_m8_pfnopuht225_branch != 0) trig_mm_dmu8_m8_pfnopuht225();
+	if (trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch != 0) trig_mm_dreliso1p0mu5_m8_pfnopuht175();
+	if (trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch != 0) trig_mm_dreliso1p0mu5_m8_pfnopuht225();
+	if (trig_mm_dmu8_m8_pfht175_branch != 0) trig_mm_dmu8_m8_pfht175();
+	if (trig_mm_dmu8_m8_pfht225_branch != 0) trig_mm_dmu8_m8_pfht225();
+	if (trig_mm_dreliso1p0mu5_m8_pfht175_branch != 0) trig_mm_dreliso1p0mu5_m8_pfht175();
+	if (trig_mm_dreliso1p0mu5_m8_pfht225_branch != 0) trig_mm_dreliso1p0mu5_m8_pfht225();
+	if (trig_ee_el17_el8_id_iso_branch != 0) trig_ee_el17_el8_id_iso();
+	if (trig_ee_del8_id_m8_pfnopuht175_branch != 0) trig_ee_del8_id_m8_pfnopuht175();
+	if (trig_ee_del8_id_m8_pfnopuht225_branch != 0) trig_ee_del8_id_m8_pfnopuht225();
+	if (trig_ee_del8_id_m8_pfht175_branch != 0) trig_ee_del8_id_m8_pfht175();
+	if (trig_ee_del8_id_m8_pfht225_branch != 0) trig_ee_del8_id_m8_pfht225();
+	if (trig_ee_del14_id_m8_pfmet40_branch != 0) trig_ee_del14_id_m8_pfmet40();
+	if (trig_ee_del14_id_m8_pfmet50_branch != 0) trig_ee_del14_id_m8_pfmet50();
+	if (trig_em_mu17_el8_id_iso_branch != 0) trig_em_mu17_el8_id_iso();
+	if (trig_em_mu8_el17_id_iso_branch != 0) trig_em_mu8_el17_id_iso();
+	if (trig_em_mu14_el14_id_m8_pfmet40_branch != 0) trig_em_mu14_el14_id_m8_pfmet40();
+	if (trig_em_mu14_el14_id_m8_pfmet50_branch != 0) trig_em_mu14_el14_id_m8_pfmet50();
+	if (trig_em_mu8_el8_id_m8_pfnopuht175_branch != 0) trig_em_mu8_el8_id_m8_pfnopuht175();
+	if (trig_em_mu8_el8_id_m8_pfnopuht225_branch != 0) trig_em_mu8_el8_id_m8_pfnopuht225();
+	if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch != 0) trig_em_riso1p0mu5_el8_id_m8_pfnopuht175();
+	if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch != 0) trig_em_riso1p0mu5_el8_id_m8_pfnopuht225();
+	if (trig_em_mu8_el8_id_m8_pfht175_branch != 0) trig_em_mu8_el8_id_m8_pfht175();
+	if (trig_em_mu8_el8_id_m8_pfht225_branch != 0) trig_em_mu8_el8_id_m8_pfht225();
+	if (trig_em_riso1p0mu5_el8_id_m8_pfht175_branch != 0) trig_em_riso1p0mu5_el8_id_m8_pfht175();
+	if (trig_em_riso1p0mu5_el8_id_m8_pfht225_branch != 0) trig_em_riso1p0mu5_el8_id_m8_pfht225();
+	if (trig_mm_met_branch != 0) trig_mm_met();
+	if (trig_mm_ht_branch != 0) trig_mm_ht();
+	if (trig_mm_iso_ht_branch != 0) trig_mm_iso_ht();
+	if (trig_ee_noiso_met_branch != 0) trig_ee_noiso_met();
+	if (trig_ee_noiso_ht_branch != 0) trig_ee_noiso_ht();
+	if (trig_em_met_branch != 0) trig_em_met();
+	if (trig_em_ht_branch != 0) trig_em_ht();
+	if (trig_em_iso_ht_branch != 0) trig_em_iso_ht();
 	if (njets_dn_branch != 0) njets_dn();
 	if (njets_up_branch != 0) njets_up();
 	if (nbtags_dn_branch != 0) nbtags_dn();
@@ -2987,6 +3412,11 @@ void LoadAllBranches()
 	if (no_extrag_branch != 0) no_extrag();
 	if (clean_branch != 0) clean();
 	if (presel_branch != 0) presel();
+	if (ee_branch != 0) ee();
+	if (mm_branch != 0) mm();
+	if (em_branch != 0) em();
+	if (em_mufo_branch != 0) em_mufo();
+	if (em_elfo_branch != 0) em_elfo();
 	if (hyp_good_vtx_branch != 0) hyp_good_vtx();
 	if (is_gen_pp_branch != 0) is_gen_pp();
 	if (is_gen_mm_branch != 0) is_gen_mm();
@@ -5786,6 +6216,500 @@ void LoadAllBranches()
 		}
 		return trig_ee_;
 	}
+	bool &	trig_mm_mu17_mu8()
+	{
+		if (not trig_mm_mu17_mu8_isLoaded) {
+			if (trig_mm_mu17_mu8_branch != 0) {
+				trig_mm_mu17_mu8_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_mu17_mu8_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_mu17_mu8_isLoaded = true;
+		}
+		return trig_mm_mu17_mu8_;
+	}
+	bool &	trig_mm_dmu14_m8_pfmet40()
+	{
+		if (not trig_mm_dmu14_m8_pfmet40_isLoaded) {
+			if (trig_mm_dmu14_m8_pfmet40_branch != 0) {
+				trig_mm_dmu14_m8_pfmet40_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dmu14_m8_pfmet40_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dmu14_m8_pfmet40_isLoaded = true;
+		}
+		return trig_mm_dmu14_m8_pfmet40_;
+	}
+	bool &	trig_mm_dmu14_m8_pfmet50()
+	{
+		if (not trig_mm_dmu14_m8_pfmet50_isLoaded) {
+			if (trig_mm_dmu14_m8_pfmet50_branch != 0) {
+				trig_mm_dmu14_m8_pfmet50_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dmu14_m8_pfmet50_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dmu14_m8_pfmet50_isLoaded = true;
+		}
+		return trig_mm_dmu14_m8_pfmet50_;
+	}
+	bool &	trig_mm_dmu8_m8_pfnopuht175()
+	{
+		if (not trig_mm_dmu8_m8_pfnopuht175_isLoaded) {
+			if (trig_mm_dmu8_m8_pfnopuht175_branch != 0) {
+				trig_mm_dmu8_m8_pfnopuht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dmu8_m8_pfnopuht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dmu8_m8_pfnopuht175_isLoaded = true;
+		}
+		return trig_mm_dmu8_m8_pfnopuht175_;
+	}
+	bool &	trig_mm_dmu8_m8_pfnopuht225()
+	{
+		if (not trig_mm_dmu8_m8_pfnopuht225_isLoaded) {
+			if (trig_mm_dmu8_m8_pfnopuht225_branch != 0) {
+				trig_mm_dmu8_m8_pfnopuht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dmu8_m8_pfnopuht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dmu8_m8_pfnopuht225_isLoaded = true;
+		}
+		return trig_mm_dmu8_m8_pfnopuht225_;
+	}
+	bool &	trig_mm_dreliso1p0mu5_m8_pfnopuht175()
+	{
+		if (not trig_mm_dreliso1p0mu5_m8_pfnopuht175_isLoaded) {
+			if (trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch != 0) {
+				trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dreliso1p0mu5_m8_pfnopuht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dreliso1p0mu5_m8_pfnopuht175_isLoaded = true;
+		}
+		return trig_mm_dreliso1p0mu5_m8_pfnopuht175_;
+	}
+	bool &	trig_mm_dreliso1p0mu5_m8_pfnopuht225()
+	{
+		if (not trig_mm_dreliso1p0mu5_m8_pfnopuht225_isLoaded) {
+			if (trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch != 0) {
+				trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dreliso1p0mu5_m8_pfnopuht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dreliso1p0mu5_m8_pfnopuht225_isLoaded = true;
+		}
+		return trig_mm_dreliso1p0mu5_m8_pfnopuht225_;
+	}
+	bool &	trig_mm_dmu8_m8_pfht175()
+	{
+		if (not trig_mm_dmu8_m8_pfht175_isLoaded) {
+			if (trig_mm_dmu8_m8_pfht175_branch != 0) {
+				trig_mm_dmu8_m8_pfht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dmu8_m8_pfht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dmu8_m8_pfht175_isLoaded = true;
+		}
+		return trig_mm_dmu8_m8_pfht175_;
+	}
+	bool &	trig_mm_dmu8_m8_pfht225()
+	{
+		if (not trig_mm_dmu8_m8_pfht225_isLoaded) {
+			if (trig_mm_dmu8_m8_pfht225_branch != 0) {
+				trig_mm_dmu8_m8_pfht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dmu8_m8_pfht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dmu8_m8_pfht225_isLoaded = true;
+		}
+		return trig_mm_dmu8_m8_pfht225_;
+	}
+	bool &	trig_mm_dreliso1p0mu5_m8_pfht175()
+	{
+		if (not trig_mm_dreliso1p0mu5_m8_pfht175_isLoaded) {
+			if (trig_mm_dreliso1p0mu5_m8_pfht175_branch != 0) {
+				trig_mm_dreliso1p0mu5_m8_pfht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dreliso1p0mu5_m8_pfht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dreliso1p0mu5_m8_pfht175_isLoaded = true;
+		}
+		return trig_mm_dreliso1p0mu5_m8_pfht175_;
+	}
+	bool &	trig_mm_dreliso1p0mu5_m8_pfht225()
+	{
+		if (not trig_mm_dreliso1p0mu5_m8_pfht225_isLoaded) {
+			if (trig_mm_dreliso1p0mu5_m8_pfht225_branch != 0) {
+				trig_mm_dreliso1p0mu5_m8_pfht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_dreliso1p0mu5_m8_pfht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_dreliso1p0mu5_m8_pfht225_isLoaded = true;
+		}
+		return trig_mm_dreliso1p0mu5_m8_pfht225_;
+	}
+	bool &	trig_ee_el17_el8_id_iso()
+	{
+		if (not trig_ee_el17_el8_id_iso_isLoaded) {
+			if (trig_ee_el17_el8_id_iso_branch != 0) {
+				trig_ee_el17_el8_id_iso_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_el17_el8_id_iso_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_el17_el8_id_iso_isLoaded = true;
+		}
+		return trig_ee_el17_el8_id_iso_;
+	}
+	bool &	trig_ee_del8_id_m8_pfnopuht175()
+	{
+		if (not trig_ee_del8_id_m8_pfnopuht175_isLoaded) {
+			if (trig_ee_del8_id_m8_pfnopuht175_branch != 0) {
+				trig_ee_del8_id_m8_pfnopuht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_del8_id_m8_pfnopuht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_del8_id_m8_pfnopuht175_isLoaded = true;
+		}
+		return trig_ee_del8_id_m8_pfnopuht175_;
+	}
+	bool &	trig_ee_del8_id_m8_pfnopuht225()
+	{
+		if (not trig_ee_del8_id_m8_pfnopuht225_isLoaded) {
+			if (trig_ee_del8_id_m8_pfnopuht225_branch != 0) {
+				trig_ee_del8_id_m8_pfnopuht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_del8_id_m8_pfnopuht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_del8_id_m8_pfnopuht225_isLoaded = true;
+		}
+		return trig_ee_del8_id_m8_pfnopuht225_;
+	}
+	bool &	trig_ee_del8_id_m8_pfht175()
+	{
+		if (not trig_ee_del8_id_m8_pfht175_isLoaded) {
+			if (trig_ee_del8_id_m8_pfht175_branch != 0) {
+				trig_ee_del8_id_m8_pfht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_del8_id_m8_pfht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_del8_id_m8_pfht175_isLoaded = true;
+		}
+		return trig_ee_del8_id_m8_pfht175_;
+	}
+	bool &	trig_ee_del8_id_m8_pfht225()
+	{
+		if (not trig_ee_del8_id_m8_pfht225_isLoaded) {
+			if (trig_ee_del8_id_m8_pfht225_branch != 0) {
+				trig_ee_del8_id_m8_pfht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_del8_id_m8_pfht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_del8_id_m8_pfht225_isLoaded = true;
+		}
+		return trig_ee_del8_id_m8_pfht225_;
+	}
+	bool &	trig_ee_del14_id_m8_pfmet40()
+	{
+		if (not trig_ee_del14_id_m8_pfmet40_isLoaded) {
+			if (trig_ee_del14_id_m8_pfmet40_branch != 0) {
+				trig_ee_del14_id_m8_pfmet40_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_del14_id_m8_pfmet40_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_del14_id_m8_pfmet40_isLoaded = true;
+		}
+		return trig_ee_del14_id_m8_pfmet40_;
+	}
+	bool &	trig_ee_del14_id_m8_pfmet50()
+	{
+		if (not trig_ee_del14_id_m8_pfmet50_isLoaded) {
+			if (trig_ee_del14_id_m8_pfmet50_branch != 0) {
+				trig_ee_del14_id_m8_pfmet50_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_del14_id_m8_pfmet50_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_del14_id_m8_pfmet50_isLoaded = true;
+		}
+		return trig_ee_del14_id_m8_pfmet50_;
+	}
+	bool &	trig_em_mu17_el8_id_iso()
+	{
+		if (not trig_em_mu17_el8_id_iso_isLoaded) {
+			if (trig_em_mu17_el8_id_iso_branch != 0) {
+				trig_em_mu17_el8_id_iso_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu17_el8_id_iso_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu17_el8_id_iso_isLoaded = true;
+		}
+		return trig_em_mu17_el8_id_iso_;
+	}
+	bool &	trig_em_mu8_el17_id_iso()
+	{
+		if (not trig_em_mu8_el17_id_iso_isLoaded) {
+			if (trig_em_mu8_el17_id_iso_branch != 0) {
+				trig_em_mu8_el17_id_iso_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu8_el17_id_iso_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu8_el17_id_iso_isLoaded = true;
+		}
+		return trig_em_mu8_el17_id_iso_;
+	}
+	bool &	trig_em_mu14_el14_id_m8_pfmet40()
+	{
+		if (not trig_em_mu14_el14_id_m8_pfmet40_isLoaded) {
+			if (trig_em_mu14_el14_id_m8_pfmet40_branch != 0) {
+				trig_em_mu14_el14_id_m8_pfmet40_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu14_el14_id_m8_pfmet40_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu14_el14_id_m8_pfmet40_isLoaded = true;
+		}
+		return trig_em_mu14_el14_id_m8_pfmet40_;
+	}
+	bool &	trig_em_mu14_el14_id_m8_pfmet50()
+	{
+		if (not trig_em_mu14_el14_id_m8_pfmet50_isLoaded) {
+			if (trig_em_mu14_el14_id_m8_pfmet50_branch != 0) {
+				trig_em_mu14_el14_id_m8_pfmet50_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu14_el14_id_m8_pfmet50_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu14_el14_id_m8_pfmet50_isLoaded = true;
+		}
+		return trig_em_mu14_el14_id_m8_pfmet50_;
+	}
+	bool &	trig_em_mu8_el8_id_m8_pfnopuht175()
+	{
+		if (not trig_em_mu8_el8_id_m8_pfnopuht175_isLoaded) {
+			if (trig_em_mu8_el8_id_m8_pfnopuht175_branch != 0) {
+				trig_em_mu8_el8_id_m8_pfnopuht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu8_el8_id_m8_pfnopuht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu8_el8_id_m8_pfnopuht175_isLoaded = true;
+		}
+		return trig_em_mu8_el8_id_m8_pfnopuht175_;
+	}
+	bool &	trig_em_mu8_el8_id_m8_pfnopuht225()
+	{
+		if (not trig_em_mu8_el8_id_m8_pfnopuht225_isLoaded) {
+			if (trig_em_mu8_el8_id_m8_pfnopuht225_branch != 0) {
+				trig_em_mu8_el8_id_m8_pfnopuht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu8_el8_id_m8_pfnopuht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu8_el8_id_m8_pfnopuht225_isLoaded = true;
+		}
+		return trig_em_mu8_el8_id_m8_pfnopuht225_;
+	}
+	bool &	trig_em_riso1p0mu5_el8_id_m8_pfnopuht175()
+	{
+		if (not trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_isLoaded) {
+			if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch != 0) {
+				trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_isLoaded = true;
+		}
+		return trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_;
+	}
+	bool &	trig_em_riso1p0mu5_el8_id_m8_pfnopuht225()
+	{
+		if (not trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_isLoaded) {
+			if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch != 0) {
+				trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_isLoaded = true;
+		}
+		return trig_em_riso1p0mu5_el8_id_m8_pfnopuht225_;
+	}
+	bool &	trig_em_mu8_el8_id_m8_pfht175()
+	{
+		if (not trig_em_mu8_el8_id_m8_pfht175_isLoaded) {
+			if (trig_em_mu8_el8_id_m8_pfht175_branch != 0) {
+				trig_em_mu8_el8_id_m8_pfht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu8_el8_id_m8_pfht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu8_el8_id_m8_pfht175_isLoaded = true;
+		}
+		return trig_em_mu8_el8_id_m8_pfht175_;
+	}
+	bool &	trig_em_mu8_el8_id_m8_pfht225()
+	{
+		if (not trig_em_mu8_el8_id_m8_pfht225_isLoaded) {
+			if (trig_em_mu8_el8_id_m8_pfht225_branch != 0) {
+				trig_em_mu8_el8_id_m8_pfht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_mu8_el8_id_m8_pfht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_mu8_el8_id_m8_pfht225_isLoaded = true;
+		}
+		return trig_em_mu8_el8_id_m8_pfht225_;
+	}
+	bool &	trig_em_riso1p0mu5_el8_id_m8_pfht175()
+	{
+		if (not trig_em_riso1p0mu5_el8_id_m8_pfht175_isLoaded) {
+			if (trig_em_riso1p0mu5_el8_id_m8_pfht175_branch != 0) {
+				trig_em_riso1p0mu5_el8_id_m8_pfht175_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_riso1p0mu5_el8_id_m8_pfht175_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_riso1p0mu5_el8_id_m8_pfht175_isLoaded = true;
+		}
+		return trig_em_riso1p0mu5_el8_id_m8_pfht175_;
+	}
+	bool &	trig_em_riso1p0mu5_el8_id_m8_pfht225()
+	{
+		if (not trig_em_riso1p0mu5_el8_id_m8_pfht225_isLoaded) {
+			if (trig_em_riso1p0mu5_el8_id_m8_pfht225_branch != 0) {
+				trig_em_riso1p0mu5_el8_id_m8_pfht225_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_riso1p0mu5_el8_id_m8_pfht225_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_riso1p0mu5_el8_id_m8_pfht225_isLoaded = true;
+		}
+		return trig_em_riso1p0mu5_el8_id_m8_pfht225_;
+	}
+	bool &	trig_mm_met()
+	{
+		if (not trig_mm_met_isLoaded) {
+			if (trig_mm_met_branch != 0) {
+				trig_mm_met_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_met_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_met_isLoaded = true;
+		}
+		return trig_mm_met_;
+	}
+	bool &	trig_mm_ht()
+	{
+		if (not trig_mm_ht_isLoaded) {
+			if (trig_mm_ht_branch != 0) {
+				trig_mm_ht_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_ht_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_ht_isLoaded = true;
+		}
+		return trig_mm_ht_;
+	}
+	bool &	trig_mm_iso_ht()
+	{
+		if (not trig_mm_iso_ht_isLoaded) {
+			if (trig_mm_iso_ht_branch != 0) {
+				trig_mm_iso_ht_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_mm_iso_ht_branch does not exist!\n");
+				exit(1);
+			}
+			trig_mm_iso_ht_isLoaded = true;
+		}
+		return trig_mm_iso_ht_;
+	}
+	bool &	trig_ee_noiso_met()
+	{
+		if (not trig_ee_noiso_met_isLoaded) {
+			if (trig_ee_noiso_met_branch != 0) {
+				trig_ee_noiso_met_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_noiso_met_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_noiso_met_isLoaded = true;
+		}
+		return trig_ee_noiso_met_;
+	}
+	bool &	trig_ee_noiso_ht()
+	{
+		if (not trig_ee_noiso_ht_isLoaded) {
+			if (trig_ee_noiso_ht_branch != 0) {
+				trig_ee_noiso_ht_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_ee_noiso_ht_branch does not exist!\n");
+				exit(1);
+			}
+			trig_ee_noiso_ht_isLoaded = true;
+		}
+		return trig_ee_noiso_ht_;
+	}
+	bool &	trig_em_met()
+	{
+		if (not trig_em_met_isLoaded) {
+			if (trig_em_met_branch != 0) {
+				trig_em_met_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_met_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_met_isLoaded = true;
+		}
+		return trig_em_met_;
+	}
+	bool &	trig_em_ht()
+	{
+		if (not trig_em_ht_isLoaded) {
+			if (trig_em_ht_branch != 0) {
+				trig_em_ht_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_ht_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_ht_isLoaded = true;
+		}
+		return trig_em_ht_;
+	}
+	bool &	trig_em_iso_ht()
+	{
+		if (not trig_em_iso_ht_isLoaded) {
+			if (trig_em_iso_ht_branch != 0) {
+				trig_em_iso_ht_branch->GetEntry(index);
+			} else { 
+				printf("branch trig_em_iso_ht_branch does not exist!\n");
+				exit(1);
+			}
+			trig_em_iso_ht_isLoaded = true;
+		}
+		return trig_em_iso_ht_;
+	}
 	int &njets_dn()
 	{
 		if (not njets_dn_isLoaded) {
@@ -6253,6 +7177,71 @@ void LoadAllBranches()
 			presel_isLoaded = true;
 		}
 		return presel_;
+	}
+	bool &	ee()
+	{
+		if (not ee_isLoaded) {
+			if (ee_branch != 0) {
+				ee_branch->GetEntry(index);
+			} else { 
+				printf("branch ee_branch does not exist!\n");
+				exit(1);
+			}
+			ee_isLoaded = true;
+		}
+		return ee_;
+	}
+	bool &	mm()
+	{
+		if (not mm_isLoaded) {
+			if (mm_branch != 0) {
+				mm_branch->GetEntry(index);
+			} else { 
+				printf("branch mm_branch does not exist!\n");
+				exit(1);
+			}
+			mm_isLoaded = true;
+		}
+		return mm_;
+	}
+	bool &	em()
+	{
+		if (not em_isLoaded) {
+			if (em_branch != 0) {
+				em_branch->GetEntry(index);
+			} else { 
+				printf("branch em_branch does not exist!\n");
+				exit(1);
+			}
+			em_isLoaded = true;
+		}
+		return em_;
+	}
+	bool &	em_mufo()
+	{
+		if (not em_mufo_isLoaded) {
+			if (em_mufo_branch != 0) {
+				em_mufo_branch->GetEntry(index);
+			} else { 
+				printf("branch em_mufo_branch does not exist!\n");
+				exit(1);
+			}
+			em_mufo_isLoaded = true;
+		}
+		return em_mufo_;
+	}
+	bool &	em_elfo()
+	{
+		if (not em_elfo_isLoaded) {
+			if (em_elfo_branch != 0) {
+				em_elfo_branch->GetEntry(index);
+			} else { 
+				printf("branch em_elfo_branch does not exist!\n");
+				exit(1);
+			}
+			em_elfo_isLoaded = true;
+		}
+		return em_elfo_;
 	}
 	bool &	hyp_good_vtx()
 	{
@@ -7195,6 +8184,44 @@ namespace ssb {
 	const bool &trig_mm();
 	const bool &trig_em();
 	const bool &trig_ee();
+	const bool &trig_mm_mu17_mu8();
+	const bool &trig_mm_dmu14_m8_pfmet40();
+	const bool &trig_mm_dmu14_m8_pfmet50();
+	const bool &trig_mm_dmu8_m8_pfnopuht175();
+	const bool &trig_mm_dmu8_m8_pfnopuht225();
+	const bool &trig_mm_dreliso1p0mu5_m8_pfnopuht175();
+	const bool &trig_mm_dreliso1p0mu5_m8_pfnopuht225();
+	const bool &trig_mm_dmu8_m8_pfht175();
+	const bool &trig_mm_dmu8_m8_pfht225();
+	const bool &trig_mm_dreliso1p0mu5_m8_pfht175();
+	const bool &trig_mm_dreliso1p0mu5_m8_pfht225();
+	const bool &trig_ee_el17_el8_id_iso();
+	const bool &trig_ee_del8_id_m8_pfnopuht175();
+	const bool &trig_ee_del8_id_m8_pfnopuht225();
+	const bool &trig_ee_del8_id_m8_pfht175();
+	const bool &trig_ee_del8_id_m8_pfht225();
+	const bool &trig_ee_del14_id_m8_pfmet40();
+	const bool &trig_ee_del14_id_m8_pfmet50();
+	const bool &trig_em_mu17_el8_id_iso();
+	const bool &trig_em_mu8_el17_id_iso();
+	const bool &trig_em_mu14_el14_id_m8_pfmet40();
+	const bool &trig_em_mu14_el14_id_m8_pfmet50();
+	const bool &trig_em_mu8_el8_id_m8_pfnopuht175();
+	const bool &trig_em_mu8_el8_id_m8_pfnopuht225();
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175();
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht225();
+	const bool &trig_em_mu8_el8_id_m8_pfht175();
+	const bool &trig_em_mu8_el8_id_m8_pfht225();
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfht175();
+	const bool &trig_em_riso1p0mu5_el8_id_m8_pfht225();
+	const bool &trig_mm_met();
+	const bool &trig_mm_ht();
+	const bool &trig_mm_iso_ht();
+	const bool &trig_ee_noiso_met();
+	const bool &trig_ee_noiso_ht();
+	const bool &trig_em_met();
+	const bool &trig_em_ht();
+	const bool &trig_em_iso_ht();
 	const int &njets_dn();
 	const int &njets_up();
 	const int &nbtags_dn();
@@ -7231,6 +8258,11 @@ namespace ssb {
 	const bool &no_extrag();
 	const bool &clean();
 	const bool &presel();
+	const bool &ee();
+	const bool &mm();
+	const bool &em();
+	const bool &em_mufo();
+	const bool &em_elfo();
 	const bool &hyp_good_vtx();
 	const bool &is_gen_pp();
 	const bool &is_gen_mm();
