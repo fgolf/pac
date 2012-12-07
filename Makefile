@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------- #
 # Makefile for PAC 
-# creates an shared lib and executables
+# creates shared libs and executables
 # ----------------------------------------------------------------------- #
 
 all:

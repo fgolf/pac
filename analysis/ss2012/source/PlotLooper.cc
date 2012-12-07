@@ -82,7 +82,7 @@ PlotLooper::PlotLooper
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
     cout << "using FR file : " << fake_rate_file->GetName() << endl;
-    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_mufr40c")->Clone()));
+    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_mufr40c_iso")->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_elfr40c")->Clone()));
     if (not h_mufr) {throw std::runtime_error("ERROR: SSAnalysisLooper: h_mufr40c doesn't exist");}
     h_mufr->SetDirectory(0);
@@ -509,11 +509,11 @@ int PlotLooper::operator()(long event)
             case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
             default: passes_trigger = false; break;
         };
-        if (is_real_data() && not passes_trigger)
-        {
-            //cout << "fails trigger" << endl;
-            return 0;
-        }
+        //if (is_real_data() && not passes_trigger)
+        //{
+        //    //cout << "fails trigger" << endl;
+        //    return 0;
+        //}
 
         // two jet events
         if (njets() < static_cast<int>(m_njets))
@@ -534,11 +534,11 @@ int PlotLooper::operator()(long event)
         }
 
         // apply gamma*/upsilon veto
-        bool has_gamma_cand = false;
-        if (has_gamma_cand)
-        {
-            return 0;
-        }
+        //bool has_gamma_cand = false;
+        //if (has_gamma_cand)
+        //{
+        //    return 0;
+        //}
 
         // select m_gluino and m_lsp
         if 
@@ -592,7 +592,7 @@ int PlotLooper::operator()(long event)
 		}
         else
         {
-            //evt_weight *= scale1fb();
+            evt_weight *= scale1fb();
         }
 
         // apply scale factors

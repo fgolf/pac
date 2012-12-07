@@ -90,6 +90,44 @@ public:
     bool trig_mm;
     bool trig_em;
     bool trig_ee;
+    bool trig_mm_mu17_mu8;
+    bool trig_mm_dmu14_m8_pfmet40;
+    bool trig_mm_dmu14_m8_pfmet50;
+    bool trig_mm_dmu8_m8_pfnopuht175;
+    bool trig_mm_dmu8_m8_pfnopuht225;
+    bool trig_mm_dreliso1p0mu5_m8_pfnopuht175;
+    bool trig_mm_dreliso1p0mu5_m8_pfnopuht225;
+    bool trig_mm_dmu8_m8_pfht175;
+    bool trig_mm_dmu8_m8_pfht225;
+    bool trig_mm_dreliso1p0mu5_m8_pfht175;
+    bool trig_mm_dreliso1p0mu5_m8_pfht225;
+    bool trig_ee_el17_el8_id_iso;
+    bool trig_ee_del8_id_m8_pfnopuht175;
+    bool trig_ee_del8_id_m8_pfnopuht225;
+    bool trig_ee_del8_id_m8_pfht175;
+    bool trig_ee_del8_id_m8_pfht225;
+    bool trig_ee_del14_id_m8_pfmet40;
+    bool trig_ee_del14_id_m8_pfmet50;
+    bool trig_em_mu17_el8_id_iso;
+    bool trig_em_mu8_el17_id_iso;
+    bool trig_em_mu14_el14_id_m8_pfmet40;
+    bool trig_em_mu14_el14_id_m8_pfmet50;
+    bool trig_em_mu8_el8_id_m8_pfnopuht175;
+    bool trig_em_mu8_el8_id_m8_pfnopuht225;
+    bool trig_em_riso1p0mu5_el8_id_m8_pfnopuht175;
+    bool trig_em_riso1p0mu5_el8_id_m8_pfnopuht225;
+    bool trig_em_mu8_el8_id_m8_pfht175;
+    bool trig_em_mu8_el8_id_m8_pfht225;
+    bool trig_em_riso1p0mu5_el8_id_m8_pfht175;
+    bool trig_em_riso1p0mu5_el8_id_m8_pfht225;
+    bool trig_mm_met;
+    bool trig_mm_ht;
+    bool trig_mm_iso_ht;
+    bool trig_ee_noiso_met;
+    bool trig_ee_noiso_ht;
+    bool trig_em_met;
+    bool trig_em_ht;
+    bool trig_em_iso_ht;
 
     //
     // for JES sysetmatics
@@ -137,6 +175,11 @@ public:
     bool clean;
     bool hyp_good_vtx;
     bool presel;
+    bool ee;
+    bool mm;
+    bool em;
+    bool em_mufo;
+    bool em_elfo;
 
     //
     // gen level info
