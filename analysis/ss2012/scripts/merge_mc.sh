@@ -56,7 +56,7 @@ function merge2
 #merge zz          ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12-PU_S7_START52_V9-v3
 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/53X/v9_lowpt
-output_path=babies_njets${njets}_lowpt
+output_path=babies_njets${njets}_lowpt_grid
 merge dy       DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge wjets    WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge wz       WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
