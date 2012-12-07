@@ -58,10 +58,12 @@ namespace rt
         cout << tree1_label << ": " << tree1->GetName() << "\t# entries:  " << tree1->GetEntries() << endl;
         cout << tree1_label << " has " << array1->GetEntries() << " branches" << endl; 
         if (alias_list1) {cout << tree1_label << " has " << alias_list1->GetEntries() << " aliases" << endl;}
+
         cout << tree2_label << ": " << tree2->GetName() << "\t# entries:  " << tree2->GetEntries() << endl;
         cout << tree2_label << " has " << array2->GetEntries() << " branches" << endl; 
         if (alias_list2) {cout << tree2_label << " has " << alias_list2->GetEntries() << " aliases" << endl;}
 
+        // get all branches or aliaes for tree1
         vector<BranchInfo> tree1_branches;
         if (alias_list1 && alias_list1->GetEntries()>0)
         {
@@ -77,7 +79,6 @@ namespace rt
                 {
                     tree1_branches.push_back(BranchInfo(alias_name, b));
                 }
-                //cout << tree1_branches.back().name << "\t" << tree1_branches.back().classname << endl;
             }     
         }
         else
@@ -93,10 +94,10 @@ namespace rt
                 {
                     tree1_branches.push_back(BranchInfo(b));
                 }
-                //cout << tree1_branches.back().name << "\t" << tree1_branches.back().classname << endl;
             }     
         }
 
+        // get all branches or aliaes for tree1
         vector<BranchInfo> tree2_branches;
         if (alias_list2 && alias_list2->GetEntries()>0)
         {
@@ -112,7 +113,6 @@ namespace rt
                 {
                     tree2_branches.push_back(BranchInfo(alias_name, b));
                 }
-                //cout << tree2_branches.back().name << "\t" << tree2_branches.back().classname << endl;
             }     
         }
         else
@@ -128,7 +128,6 @@ namespace rt
                 {
                     tree2_branches.push_back(BranchInfo(b));
                 }
-                //cout << tree2_branches.back().name << "\t" << tree2_branches.back().classname << endl;
             }     
         }
 
@@ -314,18 +313,7 @@ namespace rt
         const std::string& suffix
     )
     {
-        //TChain chain1(tree1_name.c_str());
-        //chain1.Add(tree1_file.c_str());
-
-        //TChain chain2(tree2_name.c_str());
-        //chain2.Add(tree2_file.c_str());
-
-        //// check for valid chains
-        //if (!chain1.GetFile() || !chain2.GetFile())
-        //{
-        //    cout << "rt::CompareContentsOfTrees - one or both TChains have no files associated with them" << endl;
-        //    return;
-        //}
+        // get tree1
         TFile f1(tree1_file.c_str());
         if (f1.IsZombie())
         {
@@ -339,6 +327,7 @@ namespace rt
             return;
         }
 
+        // get tree2
         TFile f2(tree2_file.c_str());
         if (f2.IsZombie())
         {
