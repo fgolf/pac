@@ -1195,8 +1195,8 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep2.corpfiso04  = -999999.0;   // this is not implemented yet 
         m_evt.lep2.effarea     = EffectiveArea03(lep2_id, lep2_idx);  // is there a diffenece for different cone sizes? 
         m_evt.lep2.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
-        m_evt.lep2.dbeta       = (lep1_is_mu) ? mus_isoR03_pf_PUPt().at(lep2_idx) : -99999.0;
-        m_evt.lep2.dbeta04     = (lep1_is_mu) ? mus_isoR04_pf_PUPt().at(lep2_idx) : -99999.0;
+        m_evt.lep2.dbeta       = (lep2_is_mu) ? mus_isoR03_pf_PUPt().at(lep2_idx) : -99999.0;
+        m_evt.lep2.dbeta04     = (lep2_is_mu) ? mus_isoR04_pf_PUPt().at(lep2_idx) : -99999.0;
         m_evt.lep2.is_fo       = lep2_fo; 
         m_evt.lep2.is_num      = lep2_num;
         //m_evt.lep2.is_conv     = false; 
