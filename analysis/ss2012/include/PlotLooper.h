@@ -5,6 +5,7 @@
 #include "at/Sample.h"
 #include "at/DileptonHypType.h"
 #include "SignalRegion.h"
+#include "AnalysisType.h"
 #include <string>
 #include <tr1/array>
 #include <tr1/memory>
@@ -20,6 +21,7 @@ class PlotLooper : public at::AnalysisWithHist
              const std::string& root_file_name,
              at::Sample::value_type sample,
              ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
+             ss::AnalysisType::value_type analysis_type = ss::AnalysisType::high_pt,
              const std::string& vtxreweight_file_name = "",
              const std::string& fake_rate_file_name = "",
              const std::string& flip_rate_file_name = "",
@@ -73,6 +75,7 @@ class PlotLooper : public at::AnalysisWithHist
         float m_max_pt;
         at::Sample::value_type m_sample;
         ss::SignalRegion::value_type m_signal_region;
+        ss::AnalysisType::value_type m_analysis_type;
 
         // fake/flip rate hists
         std::tr1::shared_ptr<TH2F> h_mufr;
@@ -85,29 +88,6 @@ class PlotLooper : public at::AnalysisWithHist
 
         float GetFlipRateValue(int lep_id, float pt, float eta) const; 
         float GetFlipRateError(int lep_id, float pt, float eta) const; 
-
-        //void FillDoubleFakeHist
-        //(
-        //     TH2F* hist, 
-        //     const at::DileptonHypType::value_type& hyp, 
-        //     int id1, 
-        //     float pt1, 
-        //     float eta1, 
-        //     int id2, 
-        //     float pt2, 
-        //     float eta2, 
-        //     float weight
-        // );
-
-        //void FillDoubleFlipHist
-        //(
-        //    TH2F* hist, 
-        //    float pt1, 
-        //    float eta1, 
-        //    float pt2, 
-        //    float eta2, 
-        //    float weight
-        //);
 };
 
 #endif // PLOTLOOPER_HPP

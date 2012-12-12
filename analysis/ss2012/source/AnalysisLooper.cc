@@ -504,20 +504,32 @@ SSAnalysisLooper::SSAnalysisLooper
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
     cout << "using FR file : " << fake_rate_file->GetName() << endl;
-    //h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(fake_rate_hist_name.c_str())->Clone()));
-    if (m_analysis_type == ss::AnalysisType::high_pt)
+    string mufr_name = "";
+    string elfr_name = "";
+    switch (m_analysis_type)
     {
-        h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_mufr40c")->Clone()));
-        h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_elfr40c")->Clone()));
+        case AnalysisType::high_pt:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+        case AnalysisType::low_pt:
+            mufr_name = "h_mufr40c_iso";
+            elfr_name = "h_elfr40c_noiso";
+            break;
+        case AnalysisType::low_pt_v2:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c_noiso";
+            break;
+        default:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
     }
-    else if (m_analysis_type == ss::AnalysisType::low_pt)
-    {
-        h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_mufr40c_iso"  )->Clone()));
-        h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_elfr40c_noiso")->Clone()));
-    }
-    if (not h_mufr) {throw std::runtime_error("ERROR: SSAnalysisLooper: h_mufr40c doesn't exist");}
+    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
+    h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
+    if (not h_mufr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", mufr_name.c_str()));}
+    if (not h_elfr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", elfr_name.c_str()));}
     h_mufr->SetDirectory(0);
-    if (not h_elfr) {throw std::runtime_error("ERROR: SSAnalysisLooper: h_elfr40c doesn't exist");}
     h_elfr->SetDirectory(0);
 
     cout << "using mu FR hist : " << h_mufr->GetName() << endl;

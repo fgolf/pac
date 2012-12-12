@@ -28,6 +28,7 @@ try
     std::string suffix              = "";
     std::string vtxreweight_file    = "";
     std::string sample_name         = "";
+    std::string analysis_type_name  = "high_pt";
     bool do_scale_factors           = true;
     bool check_good_lumi            = true;
     float sparm0                    = -999;
@@ -53,6 +54,7 @@ try
         ("output"   , po::value<std::string>(&output_file)        , "name of output root file"                                  )
         ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                                   )
         ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                   )
+        ("anal_type", po::value<std::string>(&analysis_type_name) , "name of input sample (from at/AnalysisType.h)"             )
         ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                       )
         ("fl_file"  , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                       )
         ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"      )
@@ -190,6 +192,9 @@ try
         cout << input_file << endl;
 	}
 
+	// analysis type
+    ss::AnalysisType::value_type analysis_type = ss::GetAnalysisTypeFromName(analysis_type_name); 
+
     // scan the chain
     ScanChain
     (
@@ -199,6 +204,7 @@ try
             output_file,       
             sample,
             signal_region,
+			analysis_type,
             vtxreweight_file,
             fake_rate_file_name,
             flip_rate_file_name,

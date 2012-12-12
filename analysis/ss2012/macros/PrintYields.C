@@ -634,6 +634,13 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
                 t_yields.setCell(static_cast<int>(y.em), i, 2);
                 t_yields.setCell(static_cast<int>(y.ll), i, 3);
             }
+            else if (y.title == "Flipts")
+            {
+                t_yields.setCell(static_cast<int>(y.ee), i, 0);
+                t_yields.setCell("NA"                  , i, 1);
+                t_yields.setCell(static_cast<int>(y.em), i, 2);
+                t_yields.setCell(static_cast<int>(y.ll), i, 3);
+            }
             else 
             {
                 t_yields.setCell(rt::pm(y.ee, y.dee, "1.2"), i, 0);

@@ -1,5 +1,6 @@
 #include "AnalysisType.h"
 #include "SSB2012.h"
+#include "TTree.h"
 #include <stdexcept>
 
 ss::AnalysisTypeInfo s_AnalysisTypeInfos[] = 
@@ -10,17 +11,25 @@ ss::AnalysisTypeInfo s_AnalysisTypeInfos[] =
         "low_pt", 
         // ROOT title
         "low p_{T}",
-        // ROOT title
-        "low p_{T}"
+        // latex title
+        "low $p_{T}$"
     },
     {
         // name
         "high_pt", 
         // ROOT title
         "high p_{T}",
-        // ROOT title
-        "high p_{T}"
+        // latex title
+        "high $p_{T}$"
     },
+    {
+        // name
+        "low_pt_v2", 
+        // ROOT title
+        "low p_{T} (no iso on #mu trigger)",
+        // latex title
+        "low $p_{T}$ (no iso on $\\mu$ trigger)"
+    }
 };
 
 // check that the AnalysisTypeInfoArray is the same size as the enum
@@ -71,5 +80,20 @@ namespace ss
         AnalysisType::value_type analysis_type = static_cast<AnalysisType::value_type>(analysis_type_number); 
         return GetAnalysisTypeInfo(analysis_type); 
     }
+
+	void SetAnalysisTypeAliases(TTree& tree)
+	{
+		tree.SetAlias("trig_mm_hpt", "trig_mm");
+		tree.SetAlias("trig_em_hpt", "trig_em");
+		tree.SetAlias("trig_ee_hpt", "trig_ee");
+
+		tree.SetAlias("trig_mm_lpt", "trig_mm_iso_ht");
+		tree.SetAlias("trig_em_lpt", "trig_em_iso_ht");
+		tree.SetAlias("trig_ee_lpt", "trig_ee_noiso_ht");
+
+		tree.SetAlias("trig_mm_lptv2", "trig_mm_ht");
+		tree.SetAlias("trig_em_lptv2", "trig_em_ht");
+		tree.SetAlias("trig_ee_lptv2", "trig_ee_noiso_ht");
+	}
 
 } // namespace ss

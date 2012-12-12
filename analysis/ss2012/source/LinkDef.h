@@ -32,5 +32,6 @@
 #pragma link C++ function ss::GetAnalysisTypeFromName;
 #pragma link C++ function ss::GetAnalysisTypeInfo;
 #pragma link C++ function ss::GetAnalysisTypeInfo;
+#pragma link C++ function ss::SetAnalysisTypeAliases;
 
 #endif // __CINT__

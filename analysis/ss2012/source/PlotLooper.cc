@@ -30,8 +30,9 @@ using namespace ss;
 PlotLooper::PlotLooper
 (
     const std::string& root_file_name,
-    at::Sample::value_type sample,
+    Sample::value_type sample,
     SignalRegion::value_type signal_region,
+    AnalysisType::value_type analysis_type,
     const std::string& vtxreweight_file_name,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
@@ -71,6 +72,7 @@ PlotLooper::PlotLooper
     , m_max_pt(max_pt)
     , m_sample(sample)
     , m_signal_region(signal_region)
+    , m_analysis_type(analysis_type)
 {
     // set vertex weight file
     if (m_do_vtx_reweight)
@@ -82,11 +84,32 @@ PlotLooper::PlotLooper
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
     cout << "using FR file : " << fake_rate_file->GetName() << endl;
-    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_mufr40c_iso")->Clone()));
-    h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get("h_elfr40c")->Clone()));
-    if (not h_mufr) {throw std::runtime_error("ERROR: SSAnalysisLooper: h_mufr40c doesn't exist");}
+    string mufr_name = "";
+    string elfr_name = "";
+    switch (m_analysis_type)
+    {
+        case AnalysisType::high_pt:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+        case AnalysisType::low_pt:
+            mufr_name = "h_mufr40c_iso";
+            elfr_name = "h_elfr40c_noiso";
+            break;
+        case AnalysisType::low_pt_v2:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c_noiso";
+            break;
+        default:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+    }
+    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
+    h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
+    if (not h_mufr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", mufr_name.c_str()));}
+    if (not h_elfr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", elfr_name.c_str()));}
     h_mufr->SetDirectory(0);
-    if (not h_elfr) {throw std::runtime_error("ERROR: SSAnalysisLooper: h_elfr40c doesn't exist");}
     h_elfr->SetDirectory(0);
 
     cout << "using mu FR hist : " << h_mufr->GetName() << endl;
@@ -162,15 +185,19 @@ void PlotLooper::EndJob()
 
     // SF (raw)
     PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
-    hc.Add(new TH1F("h_sf_pred_raw", "SF prediction, raw", 4, 0, 4));
+    hc.Add(new TH1F("h_sf_pred_raw", "SF prediction, raw", 6, 0, 6));
     hc["h_sf_pred_raw"]->SetBinContent(1, sf_raw.ee.value);
     hc["h_sf_pred_raw"]->SetBinContent(2, sf_raw.mm.value);
     hc["h_sf_pred_raw"]->SetBinContent(3, sf_raw.em.value);
     hc["h_sf_pred_raw"]->SetBinContent(4, sf_raw.ll.value);
+    hc["h_sf_pred_raw"]->SetBinContent(5, sf_raw.em_mufo.value);
+    hc["h_sf_pred_raw"]->SetBinContent(6, sf_raw.em_elfo.value);
     hc["h_sf_pred_raw"]->SetBinError(1, sf_raw.ee.error);
     hc["h_sf_pred_raw"]->SetBinError(2, sf_raw.mm.error);
     hc["h_sf_pred_raw"]->SetBinError(3, sf_raw.em.error);
     hc["h_sf_pred_raw"]->SetBinError(4, sf_raw.ll.error);
+    hc["h_sf_pred_raw"]->SetBinError(5, sf_raw.em_mufo.error);
+    hc["h_sf_pred_raw"]->SetBinError(6, sf_raw.em_elfo.error);
 
     // DF
     PredSummary df = frp.GetDoubleFakePrediction();
@@ -301,7 +328,7 @@ void PlotLooper::EndJob()
     t_yields.useTitle();
     t_yields.setTitle("yields table");
     string f = "1.3";
-    t_yields.setTable() (                      "ee",            "mm",            "em",            "ll")
+    t_yields.setTable() (                      "ee",            "mm",            "em",                "ll")
                         ("SF raw" , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
                         ("SF"     ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
                         ("DF"     ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
@@ -310,6 +337,21 @@ void PlotLooper::EndJob()
                         ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
     cout << endl;
     t_yields.print();
+
+    // print the output
+    CTable t_em_breakdown;
+    t_em_breakdown.useTitle();
+    t_em_breakdown.setTitle("SF breakdown table");
+    t_em_breakdown.setTable() (                                       "pred")
+                              ("SF raw ee"           , sf_raw.ee.str(f)     )
+                              ("SF raw mm"           , sf_raw.mm.str(f)     )
+                              ("SF raw em"           , sf_raw.em.str(f)     )
+                              ("SF raw em (mu fake)" , sf_raw.em_mufo.str(f))
+                              ("SF raw em (el fake)" , sf_raw.em_elfo.str(f))
+                              ("SF raw ll"           , sf_raw.ll.str(f)     );
+    cout << endl;
+    t_em_breakdown.print();
+
 
     // print raw yields
     Pred y_sf_ee(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_ee"]));
@@ -343,6 +385,7 @@ std::tr1::array<float, 5> el_eta_bins      = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 5> mu_eta_bins      = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 6> el_pt_bins       = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
 std::tr1::array<float, 6> mu_pt_bins       = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
+std::tr1::array<float, 18> lep_pt_bins      = {{0.0, 5.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0, 120.0, 130.0, 140.0, 160.0, 200.0}};
 //std::tr1::array<float, 9> mu_vtx_bins    = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 //std::tr1::array<float, 9> el_vtx_bins    = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 2.1, 2.2, 2.4 }};
@@ -399,12 +442,12 @@ void PlotLooper::BookHists()
 
             // SS kinematic plots
             hc.Add(new TH1F(Form("h_nvtxs%s"      , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                                        , ts.c_str()), 20 , 0   , 40  ));
-            hc.Add(new TH1F(Form("h_pt1%s"        , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), 25 , 0   , 250 ));
-            hc.Add(new TH1F(Form("h_pt2%s"        , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 25 , 0   , 250 ));
-            hc.Add(new TH1F(Form("h_pt1_el%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), 25 , 0   , 250 ));
-            hc.Add(new TH1F(Form("h_pt2_el%s"     , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), 25 , 0   , 250 ));
-            hc.Add(new TH1F(Form("h_pt1_mu%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), 25 , 0   , 250 ));
-            hc.Add(new TH1F(Form("h_pt2_mu%s"     , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), 25 , 0   , 250 ));
+            hc.Add(new TH1F(Form("h_pt1%s"        , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
+            hc.Add(new TH1F(Form("h_pt2%s"        , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
+            hc.Add(new TH1F(Form("h_pt1_el%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
+            hc.Add(new TH1F(Form("h_pt2_el%s"     , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
+            hc.Add(new TH1F(Form("h_pt1_mu%s"     , ns.c_str()), Form("Higher p_{T} muons%s;p_{T} (GeV);Events"                       , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
+            hc.Add(new TH1F(Form("h_pt2_mu%s"     , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
             //hc.Add(new TH1F(Form("h_ht%s"         , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), ht_bins.size()-1, ht_bins.data()));
             hc.Add(new TH1F(Form("h_ht%s"         , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), 20 , 0   , 1000));
             hc.Add(new TH1F(Form("h_mt%s"         , ns.c_str()), Form("m_{T}%s;m_{T} (GeV);Events"                                    , ts.c_str()), 8  , 0   , 400 ));
@@ -501,19 +544,46 @@ int PlotLooper::operator()(long event)
         }
 
         // check that it passes the trigger requirement
-        bool passes_trigger = false;
-        switch (hyp_type)
+        if (is_real_data())
         {
-            case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
-            case DileptonHypType::EMU : passes_trigger = trig_em(); break;
-            case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
-            default: passes_trigger = false; break;
-        };
-        //if (is_real_data() && not passes_trigger)
-        //{
-        //    //cout << "fails trigger" << endl;
-        //    return 0;
-        //}
+            bool passes_trigger = true;
+            if (m_analysis_type == AnalysisType::high_pt)
+            {
+                switch (hyp_type)
+                {
+                    case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
+                    case DileptonHypType::EMU : passes_trigger = trig_em(); break;
+                    case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
+                    default: passes_trigger = false; break;
+                };
+            }
+            else if (m_analysis_type == AnalysisType::low_pt)
+            {
+                switch (hyp_type)
+                {
+                    case DileptonHypType::MUMU: passes_trigger = trig_mm_iso_ht(); break;
+                    case DileptonHypType::EMU : passes_trigger = trig_em_iso_ht(); break;
+                    case DileptonHypType::EE  : passes_trigger = trig_ee_noiso_ht(); break;
+                    default: passes_trigger = false; break;
+                };
+            }
+            else if (m_analysis_type == AnalysisType::low_pt_v2)
+            {
+                switch (hyp_type)
+                {
+                    case DileptonHypType::MUMU: passes_trigger = trig_mm_ht(); break;
+                    case DileptonHypType::EMU : passes_trigger = trig_em_ht(); break;
+                    case DileptonHypType::EE  : passes_trigger = trig_ee_noiso_ht(); break;
+                    default: passes_trigger = false; break;
+                };
+            }
+
+            // return if fails trigger
+            if (not passes_trigger)
+            {
+                return 0;
+            }
+        }
 
         // two jet events
         if (njets() < static_cast<int>(m_njets))
@@ -539,6 +609,11 @@ int PlotLooper::operator()(long event)
         //{
         //    return 0;
         //}
+
+        if (ht() < 250.0)
+        {
+            return 0;
+        }
 
         // select m_gluino and m_lsp
         if 

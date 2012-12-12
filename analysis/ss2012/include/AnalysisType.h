@@ -3,6 +3,8 @@
 
 #include <string>
 
+class TTree;
+
 namespace ss
 {
     struct AnalysisType
@@ -11,6 +13,7 @@ namespace ss
         {
             low_pt,
             high_pt,
+            low_pt_v2,
             static_size
         };
     };
@@ -30,6 +33,9 @@ namespace ss
     // Get the info for the Signal region
     AnalysisTypeInfo GetAnalysisTypeInfo(const AnalysisType::value_type& analysis_type);
     AnalysisTypeInfo GetAnalysisTypeInfo(const std::string& analysis_type_name);
+
+	// set a ROOT CINT alias
+	void SetAnalysisTypeAliases(TTree& tree);
 
 } // namespace ss
 

@@ -52,35 +52,35 @@ rt::TH1Overlay CreateOverlay
     TH1* h_fake = hc_data[Form("h_%s_fake", hist_stem.c_str())];
     TH1* h_flip = hc_data[Form("h_%s_os"  , hist_stem.c_str())];
     TH1* h_mc   = hc_mc  [Form("h_%s_ss"  , hist_stem.c_str())];
-    p.Add(GetTotalPredHist(h_fake, h_flip, h_mc), /*no_stack=*/true);
+    p.Add(GetTotalPredHist(h_fake, h_flip, h_mc), /*no_stack=*/true, "statistical unc");
 
     return p;
 }
 
 // Overlay the kinematic plots
-void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const std::string& path = "", const std::string& suffix = "png")
+void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const std::string& output_name = "", const std::string& suffix = "png")
 {
     ss::SignalRegionInfo sr = ss::GetSignalRegionInfo(signal_region_num);
 
-    rt::TH1Container hc_data(Form("plots/%s/%s/data.root", path.c_str(), sr.name.c_str()));
+    rt::TH1Container hc_data(Form("plots/%s/%s/data.root", output_name.c_str(), sr.name.c_str()));
     rt::TH1Container hc_mc;
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wz.root"       , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/zz.root"       , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttg.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttw.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttww.root"     , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttz.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwg.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/www.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwz.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wzz.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/zzz.root"      , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wmwmqq.root"   , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wpwpqq.root"   , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2e.root" , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2m.root" , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t.root" , path.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ww_ds.root"    , path.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wz.root"       , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/zz.root"       , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttg.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttw.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttww.root"     , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttz.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwg.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/www.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwz.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wzz.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/zzz.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wmwmqq.root"   , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wpwpqq.root"   , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2e.root" , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2m.root" , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t.root" , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ww_ds.root"    , output_name.c_str() , sr.name.c_str()));
     
 	// set style
 	rt::SetTDRStyle();
@@ -116,6 +116,6 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     }
 
      // write
- 	rt::CopyIndexPhp(Form("plots/%s/%s/kin", path.c_str(), sr.name.c_str()));
-    rt::Print(p, Form("plots/%s/%s/kin", path.c_str(), sr.name.c_str()), suffix);
+ 	rt::CopyIndexPhp(Form("plots/%s/%s/kin", output_name.c_str(), sr.name.c_str()));
+    rt::Print(p, Form("plots/%s/%s/kin", output_name.c_str(), sr.name.c_str()), suffix);
 }

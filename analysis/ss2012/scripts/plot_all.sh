@@ -4,12 +4,13 @@
 signal_region=${1:-0}
 lumi=${2:-1.0}
 output_name=${3:-}
-exclusive=${4:-0}
-nbtags=${5:-2}
-charge_option=${6:-0}  # -1 means --, 1 means ++, anything else means both
-options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_26Nov2012.root --charge $charge_option --min_pt 20 --max_pt 1000000"
-#options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_26Nov2012.root --charge $charge_option --min_pt 10 --max_pt 20"
-#options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_26Nov2012.root --charge $charge_option --min_pt 5 --max_pt 10"
+min_pt=${4:-20}
+max_pt=${5:-1000000}
+anal_type=${6:-"high_pt"}
+nbtags=${7:-2}
+exclusive=${8:-0}
+charge_option=${9:-0}  # -1 means --, 1 means ++, anything else means both
+options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_26Nov2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --anal_type $anal_type"
 
 charge_stem=
 if [ $charge_option -eq 1 ]; then
@@ -82,6 +83,7 @@ fi
 # print txt 
 mkdir -p tables
 root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$output_name\", $charge_option, 0)" >> tables/yields_${output_name}.txt
+cat tables/yields_${output_name}.txt
 
 # print tex
 mkdir -p tables/${output_name}
