@@ -32,15 +32,15 @@ namespace at
     Pred& Pred::operator+=(const Pred& rhs)
     {
         Pred temp(value + rhs.value, 0.0);
-        if (is_zero(value) && is_zero(rhs.value))
+        if (rt::is_zero(value) && rt::is_zero(rhs.value))
         {
             temp.error = std::max(error, rhs.error);
         }
-        else if (is_zero(value))
+        else if (rt::is_zero(value))
         {
             temp.error = rhs.error;
         }
-        else if (is_zero(rhs.value))
+        else if (rt::is_zero(rhs.value))
         {
             temp.error = error;
         }
@@ -55,15 +55,15 @@ namespace at
     Pred& Pred::operator-=(const Pred& rhs)
     {
         Pred temp(value - rhs.value, 0.0);
-        if (is_zero(value) && is_zero(rhs.value))
+        if (rt::is_zero(value) && rt::is_zero(rhs.value))
         {
             temp.error = std::max(error, rhs.error);
         }
-        else if (is_zero(value))
+        else if (rt::is_zero(value))
         {
             temp.error = rhs.error;
         }
-        else if (is_zero(rhs.value))
+        else if (rt::is_zero(rhs.value))
         {
             temp.error = error;
         }
@@ -82,6 +82,11 @@ namespace at
 
 
     // non member methods
+    bool at::is_empty(const Pred& pred)
+    {
+        return rt::is_zero(pred.value) && rt::is_zero(pred.error);
+    }
+
     Pred operator*(float scale, const Pred& fp)
     {
         Pred result(scale * fp.value, scale * fp.error);
@@ -113,27 +118,41 @@ namespace at
         , mm(0.0, 0.0)
         , em(0.0, 0.0)
         , ll(0.0, 0.0)
+        , em_mufo(0.0, 0.0)
+        , em_elfo(0.0, 0.0)
     {
     }
 
     PredSummary::PredSummary(const Pred& ee_, const Pred& mm_, const Pred& em_)
         : ee(ee_)
-          , mm(mm_)
-          , em(em_)
-          , ll(ee + mm + em)
+        , mm(mm_)
+        , em(em_)
+        , ll(ee + mm + em)
+        , em_mufo(0.0, 0.0)
+        , em_elfo(0.0, 0.0)
+    {
+    }
+
+    PredSummary::PredSummary(const Pred& ee_, const Pred& mm_, const Pred& em_, const Pred& me_)
+        : ee(ee_)
+        , mm(mm_)
+        , em(em_ + me_)
+        , ll(ee + mm + em)
+        , em_mufo(me_)
+        , em_elfo(em_)
     {
     }
 
     PredSummary& PredSummary::operator+=(const PredSummary& rhs)
     {
-        PredSummary temp(this->ee + rhs.ee, this->mm + rhs.mm, this->em + rhs.em);
+        PredSummary temp(this->ee + rhs.ee, this->mm + rhs.mm, this->em_elfo + rhs.em_elfo, this->em_mufo + this->em_mufo);
         std::swap(*this, temp);
         return *this; 
     }
 
     PredSummary& PredSummary::operator-=(const PredSummary& rhs)
     {
-        PredSummary temp(this->ee - rhs.ee, this->mm - rhs.mm, this->em - rhs.em);
+        PredSummary temp(this->ee - rhs.ee, this->mm - rhs.mm, this->em_elfo - rhs.em_elfo, this->em_mufo - this->em_mufo);
         std::swap(*this, temp);
         return *this; 
     }
@@ -151,6 +170,14 @@ namespace at
     std::ostream& operator << (std::ostream& os, const PredSummary& p)
     {
         os << "ee: " << p.ee << " em: " << p.em << " mm: " << p.mm << " ll: " << p.ll; 
+        if (!is_empty(p.em_elfo))
+        {
+            os << " em (mu fake): " << p.em_mufo;
+        }
+        if (!is_empty(p.em_elfo))
+        {
+            os << " em (el fake): " << p.em_elfo;
+        }
         return os;
     }
 

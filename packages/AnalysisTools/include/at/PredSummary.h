@@ -24,6 +24,7 @@ namespace at
     };
 
     // non member methods:
+    bool is_empty(const Pred& p);
     Pred operator*(float scale, const Pred& fp);
     Pred operator-(const Pred& lhs, const Pred& rhs);
     Pred operator+(const Pred& lhs, const Pred& rhs);
@@ -36,6 +37,7 @@ namespace at
     {
         PredSummary();
         PredSummary(const Pred& ee_, const Pred& mm_, const Pred& em_);
+        PredSummary(const Pred& ee_, const Pred& mm_, const Pred& em_, const Pred& me_);
         PredSummary& operator+=(const PredSummary& rhs);
         PredSummary& operator-=(const PredSummary& rhs);
 
@@ -43,6 +45,8 @@ namespace at
         Pred mm;
         Pred em;
         Pred ll;
+        Pred em_mufo;  // optional: em channel where the muon is the FO
+        Pred em_elfo;  // optional: em channel where the electron is the FO
     };
 
     // non member methods

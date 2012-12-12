@@ -359,8 +359,8 @@ namespace at
         Pred mm = SingleFakePrediction(h_sf_mm, FakeRateType::MU, DileptonHypType::MUMU);
         Pred em = SingleFakePrediction(h_sf_em, FakeRateType::E , DileptonHypType::EMU );
         Pred me = SingleFakePrediction(h_sf_me, FakeRateType::MU, DileptonHypType::EMU );
-        em += me;
-        sf_raw = PredSummary(ee, mm, em);
+        //em += me;
+        sf_raw = PredSummary(ee, mm, em, me);
 
         // DF
         ee = DoubleFakePrediction(h_df_ee, FakeRateType::EE  );
