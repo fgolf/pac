@@ -1046,8 +1046,8 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                             m_evt.trig_em_mu8_el8_id_m8_pfht225;
         m_evt.trig_em_iso_ht  = m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 ||
                                 m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht225 ||
-                                m_evt.trig_mm_dreliso1p0mu5_m8_pfht175         ||
-                                m_evt.trig_mm_dreliso1p0mu5_m8_pfht225;
+                                m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175     ||
+                                m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht225;
                                 
         // event wieghts 
         //float vtxw  = evt_isRealData() ? 1.0 : vtxweight_n(numberOfGoodVertices(), evt_isRealData(), false);
