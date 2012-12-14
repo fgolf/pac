@@ -82,7 +82,7 @@ namespace at
 
 
     // non member methods
-    bool at::is_empty(const Pred& pred)
+    bool is_empty(const Pred& pred)
     {
         return rt::is_zero(pred.value) && rt::is_zero(pred.error);
     }
