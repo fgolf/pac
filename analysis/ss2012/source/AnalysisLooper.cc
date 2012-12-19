@@ -334,9 +334,8 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
 
     //printf("%11d %7.3f  %6.3f  %5.3f %11d %7.3f %6.3f  %5.3f %13.3f %5d %6d %11.3f \n", ll_id, ll_p4.pt(), ll_p4.eta(), ll_iso, lt_id, lt_p4.pt(), lt_p4.eta(), lt_iso, met, num_jets, num_btags, ht);
 
-    //if (samesign::isNumeratorHypothesis(ihyp))
-    //if (samesign::isNumeratorHypothesis(ihyp))
     //if (samesign::isDenominatorHypothesis(ihyp))
+    if (samesign::isNumeratorHypothesis(ihyp))
     {
         //cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
         cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
@@ -349,18 +348,18 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
                      num_jets,
                      num_btags) << endl;
     }
-    //else
-    //{
-    //    cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
-    //                 evt_run(), evt_lumiBlock(), evt_event(),
-    //                 channel_names[type].c_str(),
-    //                 l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
-    //                 l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
-    //                 met,
-    //                 "-",
-    //                 "-",
-    //                 "-") << endl;
-    //}
+    else
+    {
+        cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
+                     evt_run(), evt_lumiBlock(), evt_event(),
+                     channel_names[type].c_str(),
+                     l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
+                     l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
+                     met,
+                     "-",
+                     "-",
+                     "-") << endl;
+    }
 
     //if (evt_run() == 191247 && evt_lumiBlock() == 189 && evt_event() == 281392234)
     //if (evt_run() == 191247 && evt_lumiBlock() == 59 && evt_event() == 91075424)
@@ -777,13 +776,6 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             float lt_min_pt = abs(lt_id)==11 ? el_min_pt : mu_min_pt;
             float ll_min_pt = abs(ll_id)==11 ? el_min_pt : mu_min_pt;
 
-            // print for syncing
-            if (m_sync_print)
-            {
-                cout << "printing for hyp index " << ihyp << endl;
-                PrintForSync(ihyp, mu_min_pt, el_min_pt, jet_type, m_jetMetScale, jet_corrector, met_corrector);
-            }
-
             // check if hyp passes lepton kinematics
             if (fabs(lt_p4.Eta())>2.4 || lt_p4.pt()<lt_min_pt) 
             {
@@ -804,19 +796,14 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 continue;
             }
 
-            // check that leptons are from the same vertex
-            if (!hypsFromFirstGoodVertex(ihyp))
-            {
-                if (m_verbose) {std::cout << "fails leptons are from the first good vertex requirement" << std::endl;}
-                continue;
-            }
-
             // check if hyp passes trigger
             if (evt_isRealData() && !samesign::passesTrigger(hyp_type().at(ihyp), is_high_pt))
             {
                 if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
                 continue;
-            }            // check that leptons are from the same vertex
+            }            
+
+            // check that leptons are from the same vertex
             if (!hypsFromFirstGoodVertex(ihyp))
             {
                 if (m_verbose) {std::cout << "fails leptons are from the first good vertex requirement" << std::endl;}
@@ -843,6 +830,13 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             {
                 if (m_verbose) {std::cout << "fails extra Gamma* veto requirement" << std::endl;}
                 continue;
+            }
+
+            // print for syncing
+            if (m_sync_print)
+            {
+                //cout << "printing for hyp index " << ihyp << endl;
+                PrintForSync(ihyp, mu_min_pt, el_min_pt, jet_type, m_jetMetScale, jet_corrector, met_corrector);
             }
 
             // skip if both are not numerators
