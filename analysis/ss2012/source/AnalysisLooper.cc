@@ -512,10 +512,6 @@ SSAnalysisLooper::SSAnalysisLooper
             elfr_name = "h_elfr40c";
             break;
         case AnalysisType::low_pt:
-            mufr_name = "h_mufr40c_iso";
-            elfr_name = "h_elfr40c_noiso";
-            break;
-        case AnalysisType::low_pt_v2:
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c_noiso";
             break;

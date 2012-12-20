@@ -25,6 +25,7 @@ class PlotLooper : public at::AnalysisWithHist
              const std::string& vtxreweight_file_name = "",
              const std::string& fake_rate_file_name = "",
              const std::string& flip_rate_file_name = "",
+             const std::string& event_list_name = "",
              unsigned int num_btags = 0,
              unsigned int num_jets = 0,
              int charge_option = 0,

@@ -23,12 +23,14 @@ try
     long number_of_events           = -1;
     std::string input_file          = "";
     std::string output_file         = "";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_24Sep2012.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_16Dec2012.root";
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string suffix              = "";
     std::string vtxreweight_file    = "";
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";
+    std::string event_list_name     = "";
+    std::string good_run_list       = "";
     bool do_scale_factors           = true;
     bool check_good_lumi            = true;
     float sparm0                    = -999;
@@ -58,6 +60,8 @@ try
         ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                       )
         ("fl_file"  , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                       )
         ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"      )
+        ("evt_list" , po::value<std::string>(&event_list_name)    , "name of file for event list.  empty for none"              )
+        ("run_list" , po::value<std::string>(&good_run_list)      , "Good Run list (no default)"                                )
         ("suffix"   , po::value<std::string>(&suffix)             , "suffix to pring (png, eps, pdf).  empty for none"          )
         ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                                 )
         ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                  )
@@ -137,6 +141,9 @@ try
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
     
+	// analysis type
+    ss::AnalysisType::value_type analysis_type = ss::GetAnalysisTypeFromName(analysis_type_name); 
+
 	// input
     TChain* chain  = NULL;
     bool is_data   = false;
@@ -170,7 +177,7 @@ try
         is_signal = false; // not used 
         if (input_file.empty())
         {
-            input_file = Form("babies/%s.root", sample_name.c_str());
+            input_file = Form("babies/%s/%s.root", GetAnalysisTypeInfo(analysis_type).short_name.c_str(), sample_name.c_str());
             // special case for ttbar breakdown
             switch (sample)
             {
@@ -185,15 +192,12 @@ try
         if (output_file.empty())
         {
             const char* sr = GetSignalRegionInfo(signal_region).name.c_str();
-            output_file = Form("plots/%s/%s.root", sr, sample_name.c_str());
+            output_file = Form("plots/test/%s/%s.root", sr, sample_name.c_str());
         }
 		chain = new TChain("tree");
 		chain->Add(input_file.c_str());
         cout << input_file << endl;
 	}
-
-	// analysis type
-    ss::AnalysisType::value_type analysis_type = ss::GetAnalysisTypeFromName(analysis_type_name); 
 
     // scan the chain
     ScanChain
@@ -208,6 +212,7 @@ try
             vtxreweight_file,
             fake_rate_file_name,
             flip_rate_file_name,
+			event_list_name,
             num_btags,
             num_jets,
             charge_option,
@@ -227,7 +232,7 @@ try
         ),
         samesignbtag,
         number_of_events,
-        /*good_run_file=*/"",
+        good_run_list,
         is_data,
         verbose
     );

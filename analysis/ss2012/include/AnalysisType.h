@@ -11,9 +11,9 @@ namespace ss
     {
         enum value_type
         {
-            low_pt,
             high_pt,
-            low_pt_v2,
+            low_pt,
+            //low_pt_v2,
             static_size
         };
     };
@@ -22,6 +22,7 @@ namespace ss
     struct AnalysisTypeInfo
     {
         std::string name;
+        std::string short_name;
         std::string title;
         std::string latex;
     };

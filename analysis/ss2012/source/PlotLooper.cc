@@ -1,5 +1,6 @@
 #include "PlotLooper.h"
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <tr1/array>
 #include <cmath>
@@ -26,6 +27,9 @@ using namespace std;
 using namespace at;
 using namespace ss;
 
+// event list
+fstream fout;
+
 // construct:
 PlotLooper::PlotLooper
 (
@@ -36,6 +40,7 @@ PlotLooper::PlotLooper
     const std::string& vtxreweight_file_name,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
+    const std::string& event_list_name,
     unsigned int num_btags,
     unsigned int num_jets,
     int charge_option,
@@ -93,10 +98,6 @@ PlotLooper::PlotLooper
             elfr_name = "h_elfr40c";
             break;
         case AnalysisType::low_pt:
-            mufr_name = "h_mufr40c_iso";
-            elfr_name = "h_elfr40c_noiso";
-            break;
-        case AnalysisType::low_pt_v2:
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c_noiso";
             break;
@@ -107,8 +108,8 @@ PlotLooper::PlotLooper
     }
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
-    if (not h_mufr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", mufr_name.c_str()));}
-    if (not h_elfr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", elfr_name.c_str()));}
+    if (not h_mufr) {throw std::runtime_error(Form("ERROR: PlotLooper: %s doesn't exist", mufr_name.c_str()));}
+    if (not h_elfr) {throw std::runtime_error(Form("ERROR: PlotLooper: %s doesn't exist", elfr_name.c_str()));}
     h_mufr->SetDirectory(0);
     h_elfr->SetDirectory(0);
 
@@ -119,13 +120,30 @@ PlotLooper::PlotLooper
     std::auto_ptr<TFile> flip_rate_file(rt::OpenRootFile(flip_rate_file_name));
     cout << "using FL file : " << flip_rate_file->GetName() << endl;
     h_flip.reset(dynamic_cast<TH2F*>(flip_rate_file->Get("flipRate")->Clone()));
-    if (not h_flip) {throw std::runtime_error("ERROR: SSAnalysisLooper: flipRate doesn't exist");}
+    if (not h_flip) {throw std::runtime_error("ERROR: PlotLooper: flipRate doesn't exist");}
     h_flip->SetDirectory(0);
 
     // number of jets/btags
     cout << "Cutting on the number of jets/btags" << endl;
     cout << "nbtags >= " << m_nbtags << endl;
     cout << "njets  >= " << m_njets  << endl;
+
+	// event list
+	if (!event_list_name.empty())
+	{
+		fout.open(event_list_name.c_str(), fstream::out);
+		if (not fout.is_open())
+		{
+    		throw std::runtime_error(Form("ERROR: PlotLooper: %s cannot be opened", event_list_name.c_str()));
+		}
+		else
+		{
+        	fout << "Run | LS | Event | channel | " 
+        	        "Lep1Pt | Lep1Eta | Lep1Phi | Lep1Iso | "
+        	        "Lep2Pt | Lep2Eta | Lep2Phi | Lep1Iso | "
+        	        "MET | HT | nJets | nbJets" << endl;
+		}
+	}
 
     // begin job
     BeginJob();
@@ -137,10 +155,11 @@ PlotLooper::~PlotLooper()
     // end  job
     //EndJob();
 }
-
+		
 // methods:
 void PlotLooper::BeginJob()
 {
+	// book the histograms
     BookHists();
 }
 
@@ -378,6 +397,14 @@ void PlotLooper::EndJob()
                         ("SS",   yield_ss[0],    yield_ss[1],   yield_ss[2],   yield_ss[3]);
     cout << endl;
     t_counts.print();
+
+	// close the event list file
+	if (fout.is_open())
+	{
+		fout.close();	
+
+		// sort it
+	}
 }
 
 // binning contants
@@ -402,7 +429,7 @@ void PlotLooper::BookHists()
         rt::TH1Container& hc = m_hist_container;
         TH1::SetDefaultSumw2(true);
 
-        hc.Add(new TH1F("h_lumi"   , "integrated lumi used for these plots", 10000, 0, 100));
+        hc.Add(new TH1F("h_lumi", "integrated lumi used for these plots", 10000, 0, 100));
 
         // basic yield plots
         for (size_t i = 0; i != at::DileptonHypType::static_size; i++)
@@ -495,12 +522,6 @@ int PlotLooper::operator()(long event)
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
-        // ichep uppper run
-        //if (run() > 195947)
-        //{
-        //    return 0;
-        //}
-
         // only keep good lumi (data only) -- is_good_lumi branch not set
         if (m_check_good_lumi && is_real_data() && not is_good_lumi())
         {
@@ -561,16 +582,6 @@ int PlotLooper::operator()(long event)
             {
                 switch (hyp_type)
                 {
-                    case DileptonHypType::MUMU: passes_trigger = trig_mm_iso_ht(); break;
-                    case DileptonHypType::EMU : passes_trigger = trig_em_iso_ht(); break;
-                    case DileptonHypType::EE  : passes_trigger = trig_ee_noiso_ht(); break;
-                    default: passes_trigger = false; break;
-                };
-            }
-            else if (m_analysis_type == AnalysisType::low_pt_v2)
-            {
-                switch (hyp_type)
-                {
                     case DileptonHypType::MUMU: passes_trigger = trig_mm_ht(); break;
                     case DileptonHypType::EMU : passes_trigger = trig_em_ht(); break;
                     case DileptonHypType::EE  : passes_trigger = trig_ee_noiso_ht(); break;
@@ -609,11 +620,6 @@ int PlotLooper::operator()(long event)
         //{
         //    return 0;
         //}
-
-        if (ht() < 250.0)
-        {
-            return 0;
-        }
 
         // select m_gluino and m_lsp
         if 
@@ -701,6 +707,29 @@ int PlotLooper::operator()(long event)
         {
             rt::Fill(hc["h_yield_ll"], 1, evt_weight);
             rt::Fill(hc["h_yield"+hs], 1, evt_weight);
+
+			if (fout.is_open())
+			{
+				string channel;
+				switch (hyp_type)
+				{
+					case DileptonHypType::MUMU : channel = "MuMu"; break;
+					case DileptonHypType::EMU  : channel = "EMu" ; break;
+					case DileptonHypType::EE   : channel = "EE"  ; break;
+					default                    : channel = "none"; 
+				}
+				channel.append(":");
+				//fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
+				fout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %u | %u",
+                     run(), ls(), evt(),
+                     channel.c_str(),
+                     lep1_p4().pt(), lep1_p4().eta(), lep1_p4().phi(), lep1_corpfiso(),
+                     lep2_p4().pt(), lep2_p4().eta(), lep2_p4().phi(), lep2_corpfiso(),
+                     pfmet(),
+                     ht(),
+                     njets(),
+                     nbtags()) << endl;
+			}
         }
 
         // SF 

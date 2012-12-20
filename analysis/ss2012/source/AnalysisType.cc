@@ -8,15 +8,9 @@ ss::AnalysisTypeInfo s_AnalysisTypeInfos[] =
     // inclusive
     {
         // name
-        "low_pt", 
-        // ROOT title
-        "low p_{T}",
-        // latex title
-        "low $p_{T}$"
-    },
-    {
-        // name
         "high_pt", 
+        // short name
+        "hpt", 
         // ROOT title
         "high p_{T}",
         // latex title
@@ -24,12 +18,22 @@ ss::AnalysisTypeInfo s_AnalysisTypeInfos[] =
     },
     {
         // name
-        "low_pt_v2", 
+        "low_pt", 
+        // short name
+        "lpt", 
         // ROOT title
-        "low p_{T} (no iso on #mu trigger)",
+        "low p_{T}",
         // latex title
-        "low $p_{T}$ (no iso on $\\mu$ trigger)"
+        "low $p_{T}$"
     }
+    //{
+    //    // name
+    //    "low_pt_v2", 
+    //    // ROOT title
+    //    "low p_{T} (no iso on #mu trigger)",
+    //    // latex title
+    //    "low $p_{T}$ (no iso on $\\mu$ trigger)"
+    //}
 };
 
 // check that the AnalysisTypeInfoArray is the same size as the enum
