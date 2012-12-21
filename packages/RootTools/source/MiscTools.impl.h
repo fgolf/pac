@@ -83,7 +83,7 @@ namespace rt
 		bool logy
     )
 	{
-		if( !( suffix == "eps" || suffix == "png" || suffix == "pdf" ))
+		if( !( suffix == "eps" || suffix == "png" || suffix == "pdf" || suffix == "all"))
 		{
 			std::cout << "suffix " << suffix << " not valid!  No print." << std::endl;
 			return;
@@ -101,7 +101,16 @@ namespace rt
 			return;
 		}
 		impl::source(obj).Draw( option.c_str() );
-		c1.Print( (file_name + "." + suffix).c_str() );
+        if (suffix != "all")
+        {
+		    c1.Print( (file_name + "." + suffix).c_str() );
+        }
+        else
+        {
+		    c1.Print( (file_name + ".png").c_str() );
+		    c1.Print( (file_name + ".eps").c_str() );
+		    c1.Print( (file_name + ".pdf").c_str() );
+        }
 		//rt::CopyIndexPhp(dir_name);
 
 		return;
@@ -119,7 +128,7 @@ namespace rt
 		bool logy
     )
     {
-        if( !( suffix == "eps" || suffix == "png" || suffix == "pdf" ))
+		if( !( suffix == "eps" || suffix == "png" || suffix == "pdf" || suffix == "all"))
         {
             std::cout << "suffix " << suffix << " not valid!  No print." << std::endl;
             return;
@@ -140,7 +149,16 @@ namespace rt
                 continue;
             }
             impl::source(itr->second).Draw( option.c_str() );
-            c1.Print( (dir_name + "/" + itr->first + "." + suffix).c_str() );
+            if (suffix != "all")
+            {
+                c1.Print( (dir_name + "/" + itr->first + "." + suffix).c_str() );
+            }
+            else
+            {
+                c1.Print( (dir_name + "/" + itr->first + ".png").c_str() );
+                c1.Print( (dir_name + "/" + itr->first + ".pdf").c_str() );
+                c1.Print( (dir_name + "/" + itr->first + ".eps").c_str() );
+            }
         }
         rt::CopyIndexPhp(dir_name);
 
