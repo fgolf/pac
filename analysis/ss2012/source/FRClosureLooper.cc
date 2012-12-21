@@ -90,7 +90,7 @@ FRClosureLooper::FRClosureLooper
 FRClosureLooper::~FRClosureLooper()
 {
     // end  job
-    EndJob();
+    //EndJob();
 }
 
 // methods:
@@ -147,15 +147,19 @@ void FRClosureLooper::EndJob()
 
     // SF (raw)
     PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
-    hc.Add(new TH1F("h_sf_pred_raw", "SF prediction, raw", 4, 0, 4));
+    hc.Add(new TH1F("h_sf_pred_raw", "SF prediction, raw", 6, 0, 6));
     hc["h_sf_pred_raw"]->SetBinContent(1, sf_raw.ee.value);
     hc["h_sf_pred_raw"]->SetBinContent(2, sf_raw.mm.value);
     hc["h_sf_pred_raw"]->SetBinContent(3, sf_raw.em.value);
     hc["h_sf_pred_raw"]->SetBinContent(4, sf_raw.ll.value);
+    hc["h_sf_pred_raw"]->SetBinContent(5, sf_raw.em_mufo.value);
+    hc["h_sf_pred_raw"]->SetBinContent(6, sf_raw.em_elfo.value);
     hc["h_sf_pred_raw"]->SetBinError(1, sf_raw.ee.error);
     hc["h_sf_pred_raw"]->SetBinError(2, sf_raw.mm.error);
     hc["h_sf_pred_raw"]->SetBinError(3, sf_raw.em.error);
     hc["h_sf_pred_raw"]->SetBinError(4, sf_raw.ll.error);
+    hc["h_sf_pred_raw"]->SetBinError(5, sf_raw.em_mufo.error);
+    hc["h_sf_pred_raw"]->SetBinError(6, sf_raw.em_elfo.error);
 
     // DF
     PredSummary df = frp.GetDoubleFakePrediction();
@@ -201,38 +205,45 @@ void FRClosureLooper::EndJob()
     PredSummary pred = fake;
     
     // ratio of pred/obs
-    float ratio_value = pred.mm.value/yield_ss[1];
-    float ratio_error = ratio_value * sqrt(pow(pred.mm.error/pred.mm.value, 2) + pow(yield_ss_error[1]/yield_ss[1], 2));
-    string ratio      = rt::pm(ratio_value, ratio_error);
+	int obs_ee = static_cast<int>(yield_ss[0]);
+	int obs_mm = static_cast<int>(yield_ss[1]);
+	int obs_em = static_cast<int>(yield_ss[2]);
+	int obs_ll = static_cast<int>(yield_ss[3]);
 
+	float obs_ee_error = yield_ss_error[0];
+	float obs_mm_error = yield_ss_error[1];
+	float obs_em_error = yield_ss_error[2];
+	float obs_ll_error = yield_ss_error[3];
+
+    float ee_ratio_value = pred.ee.value/obs_ee;
+    float ee_ratio_error = ee_ratio_value * sqrt(pow(pred.ee.error/pred.ee.value, 2) + pow(obs_ee_error/obs_ee, 2));
+    string ee_ratio      = rt::pm(ee_ratio_value, ee_ratio_error);
+
+    float mm_ratio_value = pred.mm.value/obs_mm;
+    float mm_ratio_error = mm_ratio_value * sqrt(pow(pred.mm.error/pred.mm.value, 2) + pow(obs_mm_error/obs_mm, 2));
+    string mm_ratio      = rt::pm(mm_ratio_value, mm_ratio_error);
+
+    float em_ratio_value = pred.em.value/obs_em;
+    float em_ratio_error = em_ratio_value * sqrt(pow(pred.em.error/pred.em.value, 2) + pow(obs_em_error/obs_em, 2));
+    string em_ratio      = rt::pm(em_ratio_value, em_ratio_error);
+
+    float ll_ratio_value = pred.ll.value/obs_ll;
+    float ll_ratio_error = ll_ratio_value * sqrt(pow(pred.ll.error/pred.ll.value, 2) + pow(obs_ll_error/obs_ll, 2));
+    string ll_ratio      = rt::pm(ll_ratio_value, ll_ratio_error);
 
     // print the output
-    //CTable t_yields;
-    //t_yields.useTitle();
-    //t_yields.setTitle("yields table");
-    //string f = "1.2";
-    //t_yields.setTable() (                      "em",            "mm",            "me",            "me")
-    //                    ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
-    //                    ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),     sf.ll.str(f))
-    //                    ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),     df.ll.str(f))
-    //                    ("Fakes"   ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   fake.ll.str(f))
-    //                    //("MC"      ,     mc.ee.str(f),     mc.mm.str(f),     mc.em.str(f),     mc.ll.str(f))    
-    //                    ("Pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   pred.ll.str(f))    
-    //                    ("obs"     , (int)yield_ss[0],  (int)yield_ss[1],  (int)yield_ss[2],  (int)yield_ss[3]);
-    //                    ("pred/obs",         ratio[0],      ratio[1],      ratio[2],      ratio[3]);
-    //t_yields.print();
     CTable t_yields;
     t_yields.useTitle();
-    t_yields.setTitle("yields table");
+    t_yields.setTitle(Form("closure test table (# jets >=2, # btags > %d, SR %d)", m_nbtags, m_signal_region));
     string f = "1.2";
-    t_yields.setTable() (                       "qcd")
-                        ("SF raw"  , sf_raw.mm.str(f))
-                        ("SF"      ,     sf.mm.str(f))
-                        ("DF"      ,     df.mm.str(f))
-                        ("Fakes"   ,   fake.mm.str(f))
-                        ("Pred"    ,   pred.mm.str(f))
-                        ("obs"     , (int)yield_ss[1])
-                        ("pred/obs",            ratio);
+    t_yields.setTable() (                       "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
+                        ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f), sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
+                        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),   				"NA",   				"NA",    sf.ll.str(f))
+                        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",    df.ll.str(f))
+                        //("Fakes"   ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   				"NA",   				"NA",  fake.ll.str(f))
+                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",  pred.ll.str(f))
+                        ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",          obs_ll)
+                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",        ll_ratio);
     t_yields.print();
 }
 
@@ -433,9 +444,9 @@ int FRClosureLooper::operator()(long event)
         string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
         string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
 
-        bool mc3_matched  = is_real_data() ? true : (lep1_mc3id()!=-999 && lep2_mc3id()!=-999);
-		bool direct_b_l1  = is_real_data() ? true : (mc3_matched && abs(lep1_mc3id())==5 && idIsBeauty(lep1_mc3_momid()) && lep1_is_fromw()<1);
-		bool direct_b_l2  = is_real_data() ? true : (mc3_matched && abs(lep2_mc3id())==5 && idIsBeauty(lep2_mc3_momid()) && lep2_is_fromw()<1);
+        //bool mc3_matched  = is_real_data() ? true : (lep1_mc3id()!=-999 && lep2_mc3id()!=-999);
+		//bool direct_b_l1  = is_real_data() ? true : (mc3_matched && abs(lep1_mc3id())==5 && idIsBeauty(lep1_mc3_momid()) && lep1_is_fromw()<1);
+		//bool direct_b_l2  = is_real_data() ? true : (mc3_matched && abs(lep2_mc3id())==5 && idIsBeauty(lep2_mc3_momid()) && lep2_is_fromw()<1);
 		bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
 		bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
 		bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
