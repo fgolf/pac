@@ -24,6 +24,7 @@ namespace at
             ttw,
             ttz,
             ttg,
+            tbz,
             ttww,
             ttjets,
             ttdil,
@@ -51,13 +52,14 @@ namespace at
             ww_ds,
             lm6,
             lm9,
-            qcd_mu15,
             dy4jets,
             w3jets,
             w4jets,
             wz2l,
             zz2l,
             ttpowheg,
+			qcd,
+            qcd_mu15,
             static_size
         };
     };
