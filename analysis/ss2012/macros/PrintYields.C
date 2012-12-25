@@ -480,6 +480,7 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_num, charge_option, output_path));
     yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, charge_option, output_path));
     yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, charge_option, output_path));
+    yields_bkgd.push_back(GetSSYield("tbz"     , signal_region_num, charge_option, output_path));
     yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, charge_option, output_path));
     yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, charge_option, output_path));
     yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, charge_option, output_path));
@@ -497,6 +498,7 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     //yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, charge_option, output_path));
     //yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, charge_option, output_path));
     //yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, charge_option, output_path));
+    //yields_bkgd.push_back(GetSSYield("tbz"     , signal_region_num, charge_option, output_path));
     //yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, charge_option, output_path));
     //yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, charge_option, output_path));
     //yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, charge_option, output_path));
@@ -690,6 +692,7 @@ void PrintSummaryYields(const std::string output_path = "", int charge_option = 
         yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, charge_option, output_path));
+        yields_bkgd.push_back(GetSSYield("tbz"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, charge_option, output_path));
@@ -841,6 +844,7 @@ void CreateProjPlots(const std::string& output_path = "", int charge_option = 0,
         yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_num, charge_option, output_path));
+        yields_bkgd.push_back(GetSSYield("tbz"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("www"     , signal_region_num, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_num, charge_option, output_path));

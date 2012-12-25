@@ -90,6 +90,9 @@ public:
     bool trig_mm;
     bool trig_em;
     bool trig_ee;
+    bool trig_hpt;
+    bool trig_lpt;
+    bool trig_lpt_isomu;
     bool trig_mm_mu17_mu8;
     bool trig_mm_dmu14_m8_pfmet40;
     bool trig_mm_dmu14_m8_pfmet50;

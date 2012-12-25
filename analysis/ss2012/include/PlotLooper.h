@@ -39,6 +39,7 @@ class PlotLooper : public at::AnalysisWithHist
              float lumi = 1.0,
              float min_pt = 20.0,
              float max_pt = 10000000.0,
+             float min_ht = 80.0,
              bool verbose = false,
              bool print = false,
              const std::string& suffix = "png"
@@ -74,6 +75,7 @@ class PlotLooper : public at::AnalysisWithHist
         float m_sf_flip;
         float m_min_pt;
         float m_max_pt;
+        float m_min_ht;
         at::Sample::value_type m_sample;
         ss::SignalRegion::value_type m_signal_region;
         ss::AnalysisType::value_type m_analysis_type;

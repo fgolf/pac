@@ -35,6 +35,9 @@ void SameSignTree::Reset()
     trig_mm                                  = false;
     trig_em                                  = false;
     trig_ee                                  = false;
+    trig_hpt                                 = false;
+    trig_lpt                                 = false;
+    trig_lpt_isomu                           = false;
     trig_mm_mu17_mu8                         = false;
     trig_mm_dmu14_m8_pfmet40                 = false;
     trig_mm_dmu14_m8_pfmet50                 = false;
@@ -193,6 +196,9 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("trig_mm"                                  , &trig_mm                                  , "trig_mm/O"                                  ); 
     tree.Branch("trig_em"                                  , &trig_em                                  , "trig_em/O"                                  ); 
     tree.Branch("trig_ee"                                  , &trig_ee                                  , "trig_ee/O"                                  ); 
+    tree.Branch("trig_hpt"                                 , &trig_hpt                                 , "trig_hpt/O"                                 ); 
+    tree.Branch("trig_lpt"                                 , &trig_lpt                                 , "trig_lpt/O"                                 ); 
+    tree.Branch("trig_lpt_isomu"                           , &trig_lpt_isomu                           , "trig_lpt_isomu/O"                           ); 
     tree.Branch("trig_mm_mu17_mu8"                         , &trig_mm_mu17_mu8                         , "trig_mm_mu17_mu8/O"                         ); 
     tree.Branch("trig_mm_dmu14_m8_pfmet40"                 , &trig_mm_dmu14_m8_pfmet40                 , "trig_mm_dmu14_m8_pfmet40/O"                 ); 
     tree.Branch("trig_mm_dmu14_m8_pfmet50"                 , &trig_mm_dmu14_m8_pfmet50                 , "trig_mm_dmu14_m8_pfmet50/O"                 ); 

@@ -66,6 +66,9 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     rt::TH1Container hc_mc;
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wz.root"       , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/zz.root"       , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t.root" , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2m.root" , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2e.root" , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttg.root"      , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttw.root"      , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttww.root"     , output_name.c_str() , sr.name.c_str()));
@@ -92,6 +95,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     // overlays
     map<string, rt::TH1Overlay> p;
     rt::TH1Overlay::profile_marker_size_default = 10.0;
+    p["p_yield"       ] = CreateOverlay(hc_data, hc_mc, "yield"      , Form("%s;channel;Events"                  , title.c_str()), "sb::off dt::stack lg::top_left" );
     p["p_pt1"         ] = CreateOverlay(hc_data, hc_mc, "pt1"        , Form("%s;p^{lep1}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_pt2"         ] = CreateOverlay(hc_data, hc_mc, "pt2"        , Form("%s;p^{lep2}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_met"         ] = CreateOverlay(hc_data, hc_mc, "met"        , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
@@ -106,6 +110,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     p["p_drjetb"      ] = CreateOverlay(hc_data, hc_mc, "drjetb"     , Form("%s;#DeltaR(btag, jet);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_ptjetlep"    ] = CreateOverlay(hc_data, hc_mc, "ptjetlep"   , Form("%s;jet p_{T} / lep p_{T} - 1;Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_drlep3rdlep" ] = CreateOverlay(hc_data, hc_mc, "drlep3rdlep", Form("%s;#DeltaR(lep, 3rd lep);Events"    , title.c_str()), "sb::off dt::stack lg::top_right");
+
 
 	// SR label
     TLatex t1(0.16, 0.87, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 

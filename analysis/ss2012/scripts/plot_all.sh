@@ -10,7 +10,15 @@ anal_type=${6:-"high_pt"}
 nbtags=${7:-2}
 exclusive=${8:-0}
 charge_option=${9:-0}  # -1 means --, 1 means ++, anything else means both
-options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_26Nov2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --anal_type $anal_type"
+#options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_26Nov2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --anal_type $anal_type"
+#options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --anal_type $anal_type"
+
+if [ $anal_type == "low_pt" ]; then
+    min_ht=200
+else
+    min_ht=80
+fi
+options=" --nbtags $nbtags --njets 0 --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_16Dec2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --ht $min_ht --anal_type $anal_type"
 
 charge_stem=
 if [ $charge_option -eq 1 ]; then
@@ -41,8 +49,9 @@ make_hists wz       "$options"
 make_hists zz       "$options"
 make_hists ttg      "$options"
 make_hists ttw      "$options"
-make_hists ttww     "$options"
 make_hists ttz      "$options"
+make_hists tbz      "$options"
+make_hists ttww     "$options"
 make_hists wwg      "$options"
 make_hists www      "$options"
 make_hists wwz      "$options"
@@ -83,7 +92,7 @@ fi
 # print txt 
 mkdir -p tables
 root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$output_name\", $charge_option, 0)" >> tables/yields_${output_name}.txt
-cat tables/yields_${output_name}.txt
+#cat tables/yields_${output_name}.txt
 
 # print tex
 mkdir -p tables/${output_name}

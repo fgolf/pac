@@ -46,6 +46,7 @@ try
     float lumi                      = 1.0;
     float min_pt                    = 20.0;
     float max_pt                    = 10000000.0;
+    float min_ht                    = 80.0;
     bool verbose                    = false;
 
     namespace po = boost::program_options;
@@ -78,6 +79,7 @@ try
         ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
         ("min_pt"   , po::value<float>(&min_pt)                   , "min pT"                                                    )
         ("max_pt"   , po::value<float>(&max_pt)                   , "max pT"                                                    )
+        ("ht"       , po::value<float>(&min_ht)                   , "min HT"                                                    )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
         ;
 
@@ -177,14 +179,15 @@ try
         is_signal = false; // not used 
         if (input_file.empty())
         {
-            input_file = Form("babies/%s/%s.root", GetAnalysisTypeInfo(analysis_type).short_name.c_str(), sample_name.c_str());
+			const string short_name = GetAnalysisTypeInfo(analysis_type).short_name.c_str();
+            input_file = Form("babies/%s/%s.root", short_name.c_str(), sample_name.c_str());
             // special case for ttbar breakdown
             switch (sample)
             {
-                case at::Sample::ttdil: input_file = "babies/ttjets.root"; break; 
-                case at::Sample::ttotr: input_file = "babies/ttjets.root"; break;
-                case at::Sample::ttslb: input_file = "babies/ttjets.root"; break;
-                case at::Sample::ttslo: input_file = "babies/ttjets.root"; break;
+                case at::Sample::ttdil: input_file = Form("babies/%s/ttjets.root", short_name.c_str()) ; break; 
+                case at::Sample::ttotr: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break;
+                case at::Sample::ttslb: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break;
+                case at::Sample::ttslo: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break;
                 default: {/*do nothing*/}
             }
 
@@ -226,6 +229,7 @@ try
             lumi,
             min_pt,
             max_pt,
+            min_ht,
             verbose,
             !suffix.empty(),  
             suffix
