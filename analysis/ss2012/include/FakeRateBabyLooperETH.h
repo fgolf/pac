@@ -24,7 +24,7 @@ public:
     ~FakeRateBabyLooperETH();
 
     // function operator:
-    int operator()(long event);
+    int operator()(long event, const std::string& current_file_name = "");
 
     // members
     virtual void BeginJob();

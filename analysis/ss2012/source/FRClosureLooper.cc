@@ -68,9 +68,7 @@ FRClosureLooper::FRClosureLooper
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_hist_name.c_str())->Clone()));
     if (not h_mufr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", mufr_hist_name.c_str()));}
     h_mufr->SetDirectory(0);
-
-    std::auto_ptr<TFile> elfr_file(rt::OpenRootFile("data/fake_rates/ssFR_data_standard_24Sep2012.root"));  // hard coded for now
-    h_elfr.reset(dynamic_cast<TH2F*>(elfr_file->Get(elfr_hist_name.c_str())->Clone()));
+    h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_hist_name.c_str())->Clone()));
     if (not h_elfr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", elfr_hist_name.c_str()));}
     h_elfr->SetDirectory(0);
 

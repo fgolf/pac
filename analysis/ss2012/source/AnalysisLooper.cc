@@ -954,33 +954,39 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         else
         {
 
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET40_v"            ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET50_v"            ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v"         ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT225_v"         ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT225_v") ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"             ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT225_v"             ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v"    ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT225_v"    );
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v") ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"    ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"   ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"   );
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"           ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"           ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v"         ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v"         ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                            passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v") ||
-                            passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"             ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"             ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    ) ||
-                            passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"    );
+            //m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET40_v"            ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET50_v"            ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v"         ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT225_v"         ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT225_v") ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"             ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT225_v"             ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v"    ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT225_v"    );
+            //m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v") ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"    ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"   ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"   );
+            //m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"           ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"           ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v"         ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v"         ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v") ||
+            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"             ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"             ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    ) ||
+            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"    );
 
+            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
+                            passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"    );
+            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                            passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
+            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                            passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
         }
 
         // individual triggers: mm
@@ -1050,6 +1056,31 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                                 m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht225 ||
                                 m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175     ||
                                 m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht225;
+
+		// convenience
+        switch (dilepton_type)
+        {
+            case DileptonHypType::MUMU: m_evt.trig_hpt = m_evt.trig_mm; break;
+            case DileptonHypType::EMU : m_evt.trig_hpt = m_evt.trig_em; break;
+            case DileptonHypType::EE  : m_evt.trig_hpt = m_evt.trig_ee; break;
+            default: {/*do nothing*/}
+        };
+        switch (dilepton_type)
+        {
+            case DileptonHypType::MUMU: m_evt.trig_lpt = (m_evt.trig_mm_dmu8_m8_pfnopuht175 || m_evt.trig_mm_dmu8_m8_pfht175)             ; break;
+            case DileptonHypType::EMU : m_evt.trig_lpt = (m_evt.trig_em_mu8_el8_id_m8_pfnopuht175 || m_evt.trig_em_mu8_el8_id_m8_pfht175) ; break;
+            case DileptonHypType::EE  : m_evt.trig_lpt = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)       ; break;
+            default: {/*do nothing*/}
+        };
+        switch (dilepton_type)
+        {
+            case DileptonHypType::MUMU: m_evt.trig_lpt_isomu = (m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 || m_evt.trig_mm_dreliso1p0mu5_m8_pfht175)         ; break;
+            case DileptonHypType::EMU : m_evt.trig_lpt_isomu = (m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 || m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175) ; break;
+            case DileptonHypType::EE  : m_evt.trig_lpt_isomu = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)                     ; break;
+            default: {/*do nothing*/}
+        };
+
+	
                                 
         // event wieghts 
         //float vtxw  = evt_isRealData() ? 1.0 : vtxweight_n(numberOfGoodVertices(), evt_isRealData(), false);

@@ -203,18 +203,6 @@ Yield AddUncertaintiesAbsolute(const Yield& y1, const Yield& y2)
 // members
 Yield& Yield::operator+=(const Yield& y)
 {
-    //ee  += y.ee;
-    //mm  += y.mm;
-    //em  += y.em;
-    //ll  += y.ll;
-    //dee = sqrt(dee*dee + y.dee*y.dee); 
-    //dmm = sqrt(dmm*dmm + y.dmm*y.dmm);
-    //dem = sqrt(dem*dem + y.dem*y.dem);
-    //dll = sqrt(dll*dll + y.dll*y.dll);
-    //see = sqrt(see*see + y.see*y.see); 
-    //smm = sqrt(smm*smm + y.smm*y.smm);
-    //sem = sqrt(sem*sem + y.sem*y.sem);
-    //sll = sqrt(sll*sll + y.sll*y.sll);
     string title_temp = this->title;
     Yield temp_yield = (*this) + y;
     *this = temp_yield;
@@ -224,19 +212,6 @@ Yield& Yield::operator+=(const Yield& y)
 
 Yield& Yield::operator-=(const Yield& y)
 {
-    //ee  -= y.ee;
-    //mm  -= y.mm;
-    //em  -= y.em;
-    //ll  -= y.ll;
-    //dee = sqrt(dee*dee + y.dee*y.dee); 
-    //dmm = sqrt(dmm*dmm + y.dmm*y.dmm);
-    //dem = sqrt(dem*dem + y.dem*y.dem);
-    //dll = sqrt(dll*dll + y.dll*y.dll);
-    //see = sqrt(see*see + y.see*y.see); 
-    //smm = sqrt(smm*smm + y.smm*y.smm);
-    //sem = sqrt(sem*sem + y.sem*y.sem);
-    //sll = sqrt(sll*sll + y.sll*y.sll);
-    //return *this; 
     string title_temp = this->title;
     Yield temp_yield = (*this) - y;
     *this = temp_yield;
@@ -366,8 +341,8 @@ Yield GetDFYield(const std::string sample_name, unsigned int signal_region_num =
 {
     // hists  
     rt::TH1Container hc = GetSampleHists(sample_name, signal_region_num, charge_option, output_path);
-    pair<double, double> ee(hc["h_df_pred"]->GetBinContent(1), hc["h_df_pred"]->GetBinError(1));
-    pair<double, double> mm(hc["h_df_pred"]->GetBinContent(2), hc["h_df_pred"]->GetBinError(2));
+    pair<double, double> mm(hc["h_df_pred"]->GetBinContent(1), hc["h_df_pred"]->GetBinError(1));
+    pair<double, double> ee(hc["h_df_pred"]->GetBinContent(2), hc["h_df_pred"]->GetBinError(2));
     pair<double, double> em(hc["h_df_pred"]->GetBinContent(3), hc["h_df_pred"]->GetBinError(3));
     pair<double, double> ll(hc["h_df_pred"]->GetBinContent(4), hc["h_df_pred"]->GetBinError(4));
     Yield yield("DF", ee, mm, em, ll);
@@ -381,8 +356,8 @@ Yield GetSFYield(const std::string sample_name, unsigned int signal_region_num =
 {
     // hists  
     rt::TH1Container hc = GetSampleHists(sample_name, signal_region_num, charge_option, output_path);
-    pair<double, double> ee(hc["h_sf_pred"]->GetBinContent(1), hc["h_sf_pred"]->GetBinError(1));
-    pair<double, double> mm(hc["h_sf_pred"]->GetBinContent(2), hc["h_sf_pred"]->GetBinError(2));
+    pair<double, double> mm(hc["h_sf_pred"]->GetBinContent(1), hc["h_sf_pred"]->GetBinError(1));
+    pair<double, double> ee(hc["h_sf_pred"]->GetBinContent(2), hc["h_sf_pred"]->GetBinError(2));
     pair<double, double> em(hc["h_sf_pred"]->GetBinContent(3), hc["h_sf_pred"]->GetBinError(3));
     pair<double, double> ll(hc["h_sf_pred"]->GetBinContent(4), hc["h_sf_pred"]->GetBinError(4));
     Yield yield("SF", ee, mm, em, ll);
@@ -396,8 +371,8 @@ Yield GetFakeYield(const std::string sample_name, unsigned int signal_region_num
 {
     // hists  
     rt::TH1Container hc = GetSampleHists(sample_name, signal_region_num, charge_option, output_path);
-    pair<double, double> ee(hc["h_fake_pred"]->GetBinContent(1), hc["h_fake_pred"]->GetBinError(1));
-    pair<double, double> mm(hc["h_fake_pred"]->GetBinContent(2), hc["h_fake_pred"]->GetBinError(2));
+    pair<double, double> mm(hc["h_fake_pred"]->GetBinContent(1), hc["h_fake_pred"]->GetBinError(1));
+    pair<double, double> ee(hc["h_fake_pred"]->GetBinContent(2), hc["h_fake_pred"]->GetBinError(2));
     pair<double, double> em(hc["h_fake_pred"]->GetBinContent(3), hc["h_fake_pred"]->GetBinError(3));
     pair<double, double> ll(hc["h_fake_pred"]->GetBinContent(4), hc["h_fake_pred"]->GetBinError(4));
     Yield yield("Fakes", ee, mm, em, ll);
@@ -411,8 +386,8 @@ Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num
 {
     // hists  
     rt::TH1Container hc = GetSampleHists(sample_name, signal_region_num, charge_option, output_path);
-    pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
-    pair<double, double> mm(hc["h_flip_pred"]->GetBinContent(2), hc["h_flip_pred"]->GetBinError(2));
+    pair<double, double> mm(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
+    pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(2), hc["h_flip_pred"]->GetBinError(2));
     pair<double, double> em(hc["h_flip_pred"]->GetBinContent(3), hc["h_flip_pred"]->GetBinError(3));
     pair<double, double> ll(hc["h_flip_pred"]->GetBinContent(4), hc["h_flip_pred"]->GetBinError(4));
     Yield yield("Flips", ee, mm, em, ll);

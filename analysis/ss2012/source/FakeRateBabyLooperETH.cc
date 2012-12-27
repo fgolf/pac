@@ -34,8 +34,6 @@ FakeRateBabyLooperETH::FakeRateBabyLooperETH
 // destroy:
 FakeRateBabyLooperETH::~FakeRateBabyLooperETH()
 {
-    // end  job
-    EndJob();
 }
 
 // methods:
@@ -90,48 +88,48 @@ void FakeRateBabyLooperETH::EndJob()
     if (m_lepton == "mu")
     {   
         // FR(# vertices)
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num20c_vs_nvtxs"],hc["h_mu_fo20c_vs_nvtxs"], "h_mufr30c_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30, p_{T} > 20);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num40c_vs_nvtxs"],hc["h_mu_fo40c_vs_nvtxs"], "h_mufr50c_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50, p_{T} > 20);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num60c_vs_nvtxs"],hc["h_mu_fo60c_vs_nvtxs"], "h_mufr70c_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70, p_{T} > 20);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num30c_vs_nvtxs"],hc["h_mu_fo30c_vs_nvtxs"], "h_mufr30c_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30, p_{T} > 20);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num50c_vs_nvtxs"],hc["h_mu_fo50c_vs_nvtxs"], "h_mufr50c_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50, p_{T} > 20);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num70c_vs_nvtxs"],hc["h_mu_fo70c_vs_nvtxs"], "h_mufr70c_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70, p_{T} > 20);# vtxs"));
 
         // FR(pt)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c"],hc["h_mu_fo20c"], "y", "h_mufr20c_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c"],hc["h_mu_fo40c"], "y", "h_mufr40c_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c"],hc["h_mu_fo60c"], "y", "h_mufr60c_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num30c"],hc["h_mu_fo30c"], "y", "h_mufr30c_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num50c"],hc["h_mu_fo50c"], "y", "h_mufr50c_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num70c"],hc["h_mu_fo70c"], "y", "h_mufr70c_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70);p_{T}"));
                                                                                                                                                       
         // FR(eta)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c"],hc["h_mu_fo20c"], "x", "h_mufr20c_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30, p_{T} > 20);|#eta|", 20, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c"],hc["h_mu_fo40c"], "x", "h_mufr40c_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50, p_{T} > 20);|#eta|", 20, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c"],hc["h_mu_fo60c"], "x", "h_mufr60c_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70, p_{T} > 20);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num30c"],hc["h_mu_fo30c"], "x", "h_mufr30c_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30, p_{T} > 20);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num50c"],hc["h_mu_fo50c"], "x", "h_mufr50c_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50, p_{T} > 20);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num70c"],hc["h_mu_fo70c"], "x", "h_mufr70c_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70, p_{T} > 20);|#eta|", 20, 100));
 
         // FR(eta, pT)
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num20c"],hc["h_mu_fo20c"], "h_mufr20c", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num40c"],hc["h_mu_fo40c"], "h_mufr40c", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num60c"],hc["h_mu_fo60c"], "h_mufr60c", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num30c"],hc["h_mu_fo30c"], "h_mufr30c", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 30);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num50c"],hc["h_mu_fo50c"], "h_mufr50c", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 50);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num70c"],hc["h_mu_fo70c"], "h_mufr70c", "#mu FR cpfiso03 #Delta#beta (0.1, 1.0) (away jet p_{T} > 70);|#eta|;p_{T} (GeV)"));
     }
 
     // electrons
     if (m_lepton == "el")
     {   
         // FR(# vertices)
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num20c_vs_nvtxs"],hc["h_el_fo20c_vs_nvtxs"], "h_elfr20c_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>20);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num40c_vs_nvtxs"],hc["h_el_fo40c_vs_nvtxs"], "h_elfr40c_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>20);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num60c_vs_nvtxs"],hc["h_el_fo60c_vs_nvtxs"], "h_elfr60c_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>20);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num30c_vs_nvtxs"],hc["h_el_fo30c_vs_nvtxs"], "h_elfr30c_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>20);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num50c_vs_nvtxs"],hc["h_el_fo50c_vs_nvtxs"], "h_elfr50c_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>20);# vtxs"));
+        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num70c_vs_nvtxs"],hc["h_el_fo70c_vs_nvtxs"], "h_elfr70c_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>20);# vtxs"));
 
         // FR(pt)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num20c"],hc["h_el_fo20c"], "y", "h_elfr20c_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num40c"],hc["h_el_fo40c"], "y", "h_elfr40c_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num60c"],hc["h_el_fo60c"], "y", "h_elfr60c_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num30c"],hc["h_el_fo30c"], "y", "h_elfr30c_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num50c"],hc["h_el_fo50c"], "y", "h_elfr50c_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40);p_{T}"));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num70c"],hc["h_el_fo70c"], "y", "h_elfr70c_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60);p_{T}"));
                                                                                                                                                       
         // FR(eta)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num20c"],hc["h_el_fo20c"], "x", "h_elfr20c_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>20);|#eta|", 20, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num40c"],hc["h_el_fo40c"], "x", "h_elfr40c_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>20);|#eta|", 20, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num60c"],hc["h_el_fo60c"], "x", "h_elfr60c_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>20);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num30c"],hc["h_el_fo30c"], "x", "h_elfr30c_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>20);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num50c"],hc["h_el_fo50c"], "x", "h_elfr50c_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>20);|#eta|", 20, 100));
+        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num70c"],hc["h_el_fo70c"], "x", "h_elfr70c_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>20);|#eta|", 20, 100));
 
         // FR(eta, pT)
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num20c"],hc["h_el_fo20c"], "h_elfr20c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num40c"],hc["h_el_fo40c"], "h_elfr40c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num60c"],hc["h_el_fo60c"], "h_elfr60c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num30c"],hc["h_el_fo30c"], "h_elfr30c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num50c"],hc["h_el_fo50c"], "h_elfr50c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40);|#eta|;p_{T} (GeV)"));
+        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num70c"],hc["h_el_fo70c"], "h_elfr70c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60);|#eta|;p_{T} (GeV)"));
     }
 
     //if (m_verbose)
@@ -147,8 +145,9 @@ std::tr1::array<float, 5>  el_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 9>  mu_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 std::tr1::array<float, 6>  mu_eta_bins = {{0.0, 0.5, 1.0, 1.5, 2.0, 2.5}};
 //std::tr1::array<float, 10> mu_pt_bins  = {{5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
-std::tr1::array<float, 7> mu_pt_bins  = {{20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
-std::tr1::array<float, 6>  el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
+//std::tr1::array<float, 7> mu_pt_bins  = {{20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
+std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
+std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
 
 // book hists 
 void FakeRateBabyLooperETH::BookHists()
@@ -167,22 +166,22 @@ void FakeRateBabyLooperETH::BookHists()
         //float mu_vtx_max = 30;
 
         // numerator
-        hc.Add(new TH1F("h_mu_num20c_vs_nvtxs", "num #mu (away jet p_{T} > 30, cpfiso03 < 0.1 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_mu_num40c_vs_nvtxs", "num #mu (away jet p_{T} > 50, cpfiso03 < 0.1 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_mu_num60c_vs_nvtxs", "num #mu (away jet p_{T} > 70, cpfiso03 < 0.1 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_num30c_vs_nvtxs", "num #mu (away jet p_{T} > 30, cpfiso03 < 0.1 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_num50c_vs_nvtxs", "num #mu (away jet p_{T} > 50, cpfiso03 < 0.1 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_num70c_vs_nvtxs", "num #mu (away jet p_{T} > 70, cpfiso03 < 0.1 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
 
-        hc.Add(new TH2F("h_mu_num20c", "num #mu (away jet p_{T} > 30, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_mu_num40c", "num #mu (away jet p_{T} > 50, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_mu_num60c", "num #mu (away jet p_{T} > 70, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_num30c", "num #mu (away jet p_{T} > 30, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_num50c", "num #mu (away jet p_{T} > 50, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_num70c", "num #mu (away jet p_{T} > 70, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
 
         // denominator
-        hc.Add(new TH1F("h_mu_fo20c_vs_nvtxs", "fo #mu (away jet p_{T} > 30, cpfiso03 < 1.0 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_mu_fo40c_vs_nvtxs", "fo #mu (away jet p_{T} > 50, cpfiso03 < 1.0 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_mu_fo60c_vs_nvtxs", "fo #mu (away jet p_{T} > 70, cpfiso03 < 1.0 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_fo30c_vs_nvtxs", "fo #mu (away jet p_{T} > 30, cpfiso03 < 1.0 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_fo50c_vs_nvtxs", "fo #mu (away jet p_{T} > 50, cpfiso03 < 1.0 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_mu_fo70c_vs_nvtxs", "fo #mu (away jet p_{T} > 70, cpfiso03 < 1.0 (#Delta#beta));# vtxs", mu_vtx_bins.size()-1, mu_vtx_bins.data()), "texte");
 
-        hc.Add(new TH2F("h_mu_fo20c", "fo #mu (away jet p_{T} > 30, cpfiso03 < 1.0 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_mu_fo40c", "fo #mu (away jet p_{T} > 50, cpfiso03 < 1.0 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_mu_fo60c", "fo #mu (away jet p_{T} > 70, cpfiso03 < 1.0 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_fo30c", "fo #mu (away jet p_{T} > 30, cpfiso03 < 1.0 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_fo50c", "fo #mu (away jet p_{T} > 50, cpfiso03 < 1.0 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_mu_fo70c", "fo #mu (away jet p_{T} > 70, cpfiso03 < 1.0 (#Delta#beta));|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
     }
 
     // electrons
@@ -196,22 +195,22 @@ void FakeRateBabyLooperETH::BookHists()
         //float el_vtx_max = 30;
 
         // numerator
-        hc.Add(new TH1F("h_el_num20c_vs_nvtxs", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_el_num40c_vs_nvtxs", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_el_num60c_vs_nvtxs", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_el_num30c_vs_nvtxs", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_el_num50c_vs_nvtxs", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_el_num70c_vs_nvtxs", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
 
-        hc.Add(new TH2F("h_el_num20c", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_el_num40c", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_el_num60c", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_el_num30c", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_el_num50c", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_el_num70c", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
 
         // denominator
-        hc.Add(new TH1F("h_el_fo20c_vs_nvtxs", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_el_fo40c_vs_nvtxs", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
-        hc.Add(new TH1F("h_el_fo60c_vs_nvtxs", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_el_fo30c_vs_nvtxs", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_el_fo50c_vs_nvtxs", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
+        hc.Add(new TH1F("h_el_fo70c_vs_nvtxs", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", el_vtx_bins.size()-1, el_vtx_bins.data()), "texte");
 
-        hc.Add(new TH2F("h_el_fo20c", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_el_fo40c", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
-        hc.Add(new TH2F("h_el_fo60c", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_el_fo30c", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_el_fo50c", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
+        hc.Add(new TH2F("h_el_fo70c", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
     }
 
     hc.Sumw2();
@@ -219,7 +218,7 @@ void FakeRateBabyLooperETH::BookHists()
 }
 
 // main analysis function operator 
-int FakeRateBabyLooperETH::operator()(long event)
+int FakeRateBabyLooperETH::operator()(long event, const std::string& current_file_name)
 {
     using namespace std;
     using namespace frb;
@@ -234,33 +233,37 @@ int FakeRateBabyLooperETH::operator()(long event)
 
         // FO selection cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
-        //
+        
         // which dataset
-        bool is_data = rt::string_contains(m_dataset, "data");
+        bool is_data  = rt::string_contains(m_dataset, "data");
+        //bool is_ttbar = rt::string_contains(m_dataset, "ttbar");
+        bool is_qcd   = rt::string_contains(m_dataset, "qcd");
         bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
         bool is_el = (m_lepton=="el") ? abs(id())==11 : false;
 
-        // quit for these runs 
-        //if (run() > 202016) // just for preapproval for HCP
-        //{
-        //    return 0;
-        //}
-        
-        // check the charge
-        switch (m_charge)
-        {
-        case  1: if (id()>0) {return 0;} break; // 11/13   --> e-/mu- (reject)
-        case -1: if (id()<0) {return 0;} break; // -11/-13 --> e+/mu+ (reject)
-        case  0: /* do nothing*/ break;
-        default: /*do nothing*/ break;
-        };
-
-        // pT cut
-        if (is_mu && (pt()<20 || pt()>60))
+        // qcd muon cuts (for the different qcd samples)
+        bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
+        bool qcd_mu_high = rt::string_contains(current_file_name, "MuEnrichedPt_15") && pt() >= 16.0; 
+        if (is_mu && is_qcd && not (qcd_mu_low || qcd_mu_high))
         {
             return 0;
         }
-        if (is_el && (pt()<20 || pt()>55))
+
+        // check the charge
+        switch (m_charge)
+        {
+            case  1: if (id()>0) {return 0;} break; // 11/13   --> e-/mu- (reject)
+            case -1: if (id()<0) {return 0;} break; // -11/-13 --> e+/mu+ (reject)
+            case  0: /* do nothing*/ break;
+            default: /*do nothing*/ break;
+        };
+
+        // pT cut
+        if (is_mu && (pt()<5 || pt()>55))
+        {
+            return 0;
+        }
+        if (is_el && (pt()<10 || pt()>55))
         {
             return 0;
         }
@@ -377,13 +380,13 @@ int FakeRateBabyLooperETH::operator()(long event)
 
                 if (cpfiso03_db()<0.1)
                 {
-                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_mu_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_mu_num60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_mu_num30c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_mu_num50c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_mu_num70c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet30c_cut           ) { rt::Fill2D(hc["h_mu_num20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet50c_cut           ) { rt::Fill2D(hc["h_mu_num40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet70c_cut           ) { rt::Fill2D(hc["h_mu_num60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet30c_cut           ) { rt::Fill2D(hc["h_mu_num30c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet50c_cut           ) { rt::Fill2D(hc["h_mu_num50c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet70c_cut           ) { rt::Fill2D(hc["h_mu_num70c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -391,13 +394,13 @@ int FakeRateBabyLooperETH::operator()(long event)
             {                
                 if (cpfiso03_db()<1.0)
                 {
-                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_mu_fo30c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_mu_fo50c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_mu_fo70c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet30c_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet50c_cut           ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet70c_cut           ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet30c_cut           ) { rt::Fill2D(hc["h_mu_fo30c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet50c_cut           ) { rt::Fill2D(hc["h_mu_fo50c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet70c_cut           ) { rt::Fill2D(hc["h_mu_fo70c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
         }
@@ -415,13 +418,13 @@ int FakeRateBabyLooperETH::operator()(long event)
 
                 if (cpfiso03_rho()<0.09)
                 {
-                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_el_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_el_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_el_num60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_el_num30c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_el_num50c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_el_num70c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet30c_cut           ) { rt::Fill2D(hc["h_el_num20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet50c_cut           ) { rt::Fill2D(hc["h_el_num40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet70c_cut           ) { rt::Fill2D(hc["h_el_num60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet30c_cut           ) { rt::Fill2D(hc["h_el_num30c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet50c_cut           ) { rt::Fill2D(hc["h_el_num50c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet70c_cut           ) { rt::Fill2D(hc["h_el_num70c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -430,13 +433,13 @@ int FakeRateBabyLooperETH::operator()(long event)
             {
                 if (cpfiso03_rho()<0.6)
                 {
-                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_el_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_el_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet30c_cut && pt()>20) { rt::Fill( hc["h_el_fo30c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet50c_cut && pt()>20) { rt::Fill( hc["h_el_fo50c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet70c_cut && pt()>20) { rt::Fill( hc["h_el_fo70c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet30c_cut           ) { rt::Fill2D(hc["h_el_fo20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet50c_cut           ) { rt::Fill2D(hc["h_el_fo40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet70c_cut           ) { rt::Fill2D(hc["h_el_fo60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet30c_cut           ) { rt::Fill2D(hc["h_el_fo30c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet50c_cut           ) { rt::Fill2D(hc["h_el_fo50c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet70c_cut           ) { rt::Fill2D(hc["h_el_fo70c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
         }
