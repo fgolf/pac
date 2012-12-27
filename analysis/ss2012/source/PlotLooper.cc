@@ -388,26 +388,26 @@ void PlotLooper::EndJob()
     // fakes 
     hc.Add(dynamic_cast<TH1*>(hc["h_yield_sf"]->Clone("h_yield_fake"))); 
     hc["h_yield_fake"]->SetTitle("fake prediction (with sys unc)");
-    hc["h_yield_fake"]->SetBinContent(2, fake.mm.value);
-    hc["h_yield_fake"]->SetBinContent(3, fake.ee.value);
-    hc["h_yield_fake"]->SetBinContent(4, fake.em.value);
-    hc["h_yield_fake"]->SetBinContent(5, fake.ll.value);
-    hc["h_yield_fake"]->SetBinError  (2, sqrt(m_fr_unc*m_fr_unc*fake.mm.value*fake.mm.value + fake.mm.error*fake.mm.error));
-    hc["h_yield_fake"]->SetBinError  (3, sqrt(m_fr_unc*m_fr_unc*fake.ee.value*fake.ee.value + fake.ee.error*fake.ee.error));
-    hc["h_yield_fake"]->SetBinError  (4, sqrt(m_fr_unc*m_fr_unc*fake.em.value*fake.em.value + fake.em.error*fake.em.error));
-    hc["h_yield_fake"]->SetBinError  (5, sqrt(m_fr_unc*m_fr_unc*fake.ll.value*fake.ll.value + fake.ll.error*fake.ll.error));
+    hc["h_yield_fake"]->SetBinContent(1, fake.mm.value);
+    hc["h_yield_fake"]->SetBinContent(2, fake.ee.value);
+    hc["h_yield_fake"]->SetBinContent(3, fake.em.value);
+    hc["h_yield_fake"]->SetBinContent(4, fake.ll.value);
+    hc["h_yield_fake"]->SetBinError  (1, sqrt(m_fr_unc*m_fr_unc*fake.mm.value*fake.mm.value + fake.mm.error*fake.mm.error));
+    hc["h_yield_fake"]->SetBinError  (2, sqrt(m_fr_unc*m_fr_unc*fake.ee.value*fake.ee.value + fake.ee.error*fake.ee.error));
+    hc["h_yield_fake"]->SetBinError  (3, sqrt(m_fr_unc*m_fr_unc*fake.em.value*fake.em.value + fake.em.error*fake.em.error));
+    hc["h_yield_fake"]->SetBinError  (4, sqrt(m_fr_unc*m_fr_unc*fake.ll.value*fake.ll.value + fake.ll.error*fake.ll.error));
 
     // flips
     hc.Add(dynamic_cast<TH1*>(hc["h_yield_os"]->Clone("h_yield_flip"))); 
     hc["h_yield_flip"]->SetTitle("flip prediction (with sys unc)");
-    hc["h_yield_flip"]->SetBinContent(2, hc["h_flip_pred"]->GetBinContent(2));
-    hc["h_yield_flip"]->SetBinContent(3, hc["h_flip_pred"]->GetBinContent(3));
-    hc["h_yield_flip"]->SetBinContent(4, hc["h_flip_pred"]->GetBinContent(1));
-    hc["h_yield_flip"]->SetBinContent(5, hc["h_flip_pred"]->GetBinContent(4));
-    hc["h_yield_flip"]->SetBinError  (2, hc["h_flip_pred"]->GetBinError  (2));
-    hc["h_yield_flip"]->SetBinError  (3, hc["h_flip_pred"]->GetBinError  (3));
-    hc["h_yield_flip"]->SetBinError  (4, hc["h_flip_pred"]->GetBinError  (1));
-    hc["h_yield_flip"]->SetBinError  (5, hc["h_flip_pred"]->GetBinError  (4));
+    hc["h_yield_flip"]->SetBinContent(1, flip.mm.value);
+    hc["h_yield_flip"]->SetBinContent(2, flip.ee.value);
+    hc["h_yield_flip"]->SetBinContent(3, flip.em.value);
+    hc["h_yield_flip"]->SetBinContent(4, flip.ll.value);
+    hc["h_yield_flip"]->SetBinError  (1, sqrt(m_fl_unc*m_fl_unc*flip.mm.value*flip.mm.value + flip.mm.error*flip.mm.error));
+    hc["h_yield_flip"]->SetBinError  (2, sqrt(m_fl_unc*m_fl_unc*flip.ee.value*flip.ee.value + flip.ee.error*flip.ee.error));
+    hc["h_yield_flip"]->SetBinError  (3, sqrt(m_fl_unc*m_fl_unc*flip.em.value*flip.em.value + flip.em.error*flip.em.error));
+    hc["h_yield_flip"]->SetBinError  (4, sqrt(m_fl_unc*m_fl_unc*flip.ll.value*flip.ll.value + flip.ll.error*flip.ll.error));
 
     // mc (fold in the systematic uncertainty)
     if (m_sample != at::Sample::data)
@@ -545,12 +545,14 @@ void PlotLooper::BookHists()
 
             // yield plot
             hc.Add(new TH1F(Form("h_yield%s", ns.c_str()), Form("yields%s;yield;Events", ts.c_str()), 4, 0.5, 4.5));
-            hc["h_yield"+ns]->GetXaxis()->SetLabelSize(0.5);
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(1, "#mu#mu");
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(2, "ee"    );
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(3, "e#mu"  );
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(4, "ll"    );
-            hc["h_yield"+ns]->SetBarWidth(0.5);
+            //hc["h_yield"+ns]->GetXaxis()->SetLabelSize(0.05);
+            //hc["h_yield"+ns]->SetBarOffset(0.2);
+            //hc["h_yield"+ns]->SetBarWidth(0.6);
+            //hc["h_yield"+ns]->SetOption("hist B");
 
             // SS kinematic plots
             hc.Add(new TH1F(Form("h_nvtxs%s"      , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                                        , ts.c_str()), 20 , 0   , 40  ));

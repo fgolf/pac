@@ -33,7 +33,7 @@ rt::TH1Overlay CreateOverlay
     rt::TH1Container& hc_rare, 
     const std::string& hist_stem, 
     const std::string& title, 
-    const std::string& option = "sb::off dt::stack lg::top_right"
+    std::string option = "sb::off dt::stack lg::top_right"
 )
 {
 	// colors
@@ -62,14 +62,24 @@ rt::TH1Overlay CreateOverlay
     TH1* h_pred = GetTotalPredHist(h_fake, h_flip, h_rare);
     h_data->SetMarkerSize(marker_size);
 
-    if (hist_stem == "yield")
-    {
-        h_data->SetBarWidth(0.01);
-        h_fake->SetBarWidth(0.01);
-        h_flip->SetBarWidth(0.01);
-        h_rare->SetBarWidth(0.01);
-        h_pred->SetBarWidth(0.01);
-    }
+    //if (hist_stem == "yield")
+    //{
+    //    option.append(" hist B");
+    //    h_data->SetBarWidth(0.6);
+    //    h_fake->SetBarWidth(0.6);
+    //    h_flip->SetBarWidth(0.6);
+    //    h_rare->SetBarWidth(0.6);
+    //    h_pred->SetBarWidth(0.6);
+    //    h_data->SetBarOffset(0.2);
+    //    h_fake->SetBarOffset(0.2);
+    //    h_flip->SetBarOffset(0.2);
+    //    h_rare->SetBarOffset(0.2);
+    //    h_pred->SetBarOffset(0.2);
+    //    //h_fake->SetOption("hist B");
+    //    //h_flip->SetOption("hist B");
+    //    //h_rare->SetOption("hist B");
+    //    //h_pred->SetOption("hist B");
+    //}
 
     rt::TH1Overlay p(title, option);
     p.Add(h_data, /*no_stack=*/true, data_legend, data_color, 2, data_marker);
@@ -88,16 +98,16 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
 
     rt::TH1Container hc_data(Form("plots/%s/%s/data.root", output_name.c_str(), sr.name.c_str()));
     rt::TH1Container hc_mc;
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wz.root"       , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/zz.root"       , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t.root" , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2m.root" , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2e.root" , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wz.root"       , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/zz.root"       , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttg.root"      , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttw.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttww.root"     , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ttz.root"      , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/tbz.root"      , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttww.root"     , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wwg.root"      , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/www.root"      , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wwz.root"      , output_name.c_str() , sr.name.c_str()));
@@ -105,9 +115,6 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     hc_mc += rt::TH1Container(Form("plots/%s/%s/zzz.root"      , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wmwmqq.root"   , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/wpwpqq.root"   , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2e.root" , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2m.root" , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t.root" , output_name.c_str() , sr.name.c_str()));
     hc_mc += rt::TH1Container(Form("plots/%s/%s/ww_ds.root"    , output_name.c_str() , sr.name.c_str()));
     
 	// set style
