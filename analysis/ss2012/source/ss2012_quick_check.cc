@@ -21,12 +21,17 @@ class QuickAnalysis : public AnalysisWithHist
 		QuickAnalysis(const std::string& file_name); 
 		int operator() (long event);
 		void BookHists();
+		virtual void EndJob();
 };
 
 QuickAnalysis::QuickAnalysis(const std::string& file_name)
-: AnalysisWithHist(file_name)
+	: AnalysisWithHist(file_name)
 {
 	BookHists();
+}
+
+void QuickAnalysis::EndJob()
+{
 }
 
 void QuickAnalysis::BookHists()

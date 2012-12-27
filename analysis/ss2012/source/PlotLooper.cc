@@ -517,7 +517,7 @@ void PlotLooper::BookHists()
             //hc.Add(new TH1F(Form("h_pt2_mu%s"     , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
             //hc.Add(new TH1F(Form("h_ht%s"         , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), ht_bins.size()-1, ht_bins.data()));
             //hc.Add(new TH1F(Form("h_met%s"        , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"                               , ts.c_str()), met_bins.size()-1, met_bins.data()));
-            hc.Add(new TH1F(Form("h_dilep_mass%s" , ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 20, 0, 200));
+            hc.Add(new TH1F(Form("h_dilep_mass%s" , ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 100, 0, 200));
             hc.Add(new TH1F(Form("h_pt1%s"        , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), 20, 0, 200));
             hc.Add(new TH1F(Form("h_pt2%s"        , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 20, 0, 200));
             hc.Add(new TH1F(Form("h_pt1_el%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), 20, 0, 200));
@@ -592,6 +592,9 @@ int PlotLooper::operator()(long event)
         // dilepton hyp type: 1 mm, 2 em, 3ee
         DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
         if (hyp_type == DileptonHypType::static_size)
+        if (hyp_type != DileptonHypType::MUMU)
+        if (hyp_type != DileptonHypType::EE)
+        if (hyp_type != DileptonHypType::EMU)
         {
             return 0;
         }
@@ -607,10 +610,10 @@ int PlotLooper::operator()(long event)
         }
 
 		// if low pt (HT cut)
-		if (not is_high_pt && ht() < m_min_ht)
-		{
-			return 0;
-		}
+		//if (not is_high_pt && ht() < m_min_ht)
+		//{
+		//	return 0;
+		//}
 
         // charge option (1 == ++, -1 == --)
         switch (m_charge_option)
@@ -872,7 +875,8 @@ int PlotLooper::operator()(long event)
         const LorentzVector& p42 = lep2_p4();
 
         rt::Fill(hc["h_nvtxs"     +qs], nvtxs()     , evt_weight);
-        rt::Fill(hc["h_dilep_mass"+qs], dilep_mass(), evt_weight);
+        //rt::Fill(hc["h_dilep_mass"+qs], dilep_mass(), evt_weight);
+        hc["h_dilep_mass"+qs]->Fill( dilep_mass(), evt_weight);
         rt::Fill(hc["h_pt1"       +qs], p41.pt()    , evt_weight);
         rt::Fill(hc["h_pt2"       +qs], p42.pt()    , evt_weight);
         rt::Fill(hc["h_ht"        +qs], ht()        , evt_weight);

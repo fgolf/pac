@@ -1,8 +1,8 @@
 #!/bin/bash 
 
-tag=27Nov2012
+tag=16Dec2012
 #run_list=json/preapproval_v2_cms2.txt
-run_list=json/merged_190456-206456_15p86fb_cms2.txt
+run_list=json/final_19p47fb_cms2.txt
 
 ss2012_create_fakerate.exe --nev -1 --dataset data --channel el --root_file_name electrons_${tag}.root --run_list $run_list
 ss2012_create_fakerate.exe --nev -1 --dataset data --channel mu --root_file_name muons_${tag}.root     --run_list $run_list

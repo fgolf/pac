@@ -1048,13 +1048,14 @@ void CreateProjPlots(const std::string& output_path = "", int charge_option = 0,
     // print
     if (!suffix.empty())
     {
-        rt::mkdir("plots/note/nbtags0", true);
-        rt::CopyIndexPhp("plots/note/nbtags0");
-        c1->cd(); c1->Print(Form("plots/note/nbtags0/p_proj_ht.%s"    , suffix.c_str()));
-        c1->cd(); c2->Print(Form("plots/note/nbtags0/p_proj_met.%s"   , suffix.c_str()));
-        c3->cd(); c3->Print(Form("plots/note/nbtags0/p_proj_njets.%s" , suffix.c_str()));
-        c4->cd(); c4->Print(Form("plots/note/nbtags0/p_proj_nbtags.%s", suffix.c_str()));
-        c5->cd(); c5->Print(Form("plots/note/nbtags0/p_proj_pt1.%s"   , suffix.c_str()));
-        c6->cd(); c6->Print(Form("plots/note/nbtags0/p_proj_pt2.%s"   , suffix.c_str()));
+        const char* dir = Form("plots/%s/proj", output_path.c_str());
+        rt::mkdir(dir, true);
+        rt::CopyIndexPhp(dir);
+        c1->cd(); c1->Print(Form("%s/p_proj_ht.%s"    , dir, suffix.c_str()));
+        c1->cd(); c2->Print(Form("%s/p_proj_met.%s"   , dir, suffix.c_str()));
+        c3->cd(); c3->Print(Form("%s/p_proj_njets.%s" , dir, suffix.c_str()));
+        c4->cd(); c4->Print(Form("%s/p_proj_nbtags.%s", dir, suffix.c_str()));
+        c5->cd(); c5->Print(Form("%s/p_proj_pt1.%s"   , dir, suffix.c_str()));
+        c6->cd(); c6->Print(Form("%s/p_proj_pt2.%s"   , dir, suffix.c_str()));
     }
 }

@@ -625,6 +625,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
         //if (!(evt_run() == 1 && evt_lumiBlock() == 15021 && evt_event() == 4505298))
         //if (!(evt_event() ==  2413713))
+        //if (!(evt_event() ==  781701827)) // fails extra Z --> probably an Z --> ee event
+        //if (!(evt_event() ==  72925705))  // fails gamma*
+        //if (!(evt_event() ==  1766536290))  // fails gamma*
+        //if (!(evt_event() ==  113167649))  // fails gamma*
+        //if (!(evt_event()==663249061 || evt_event()==27490600 || evt_event()==131247937)) 
         //{
         //    return 0;
         //}
@@ -757,6 +762,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // jet type
         JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
 
+        if (m_sync_print)
+        {
+            cout << "number of dilep pairs: " << hyp_type().size() << endl;
+        }
+
         // loop over hypotheses
         HypInfo best_hyp(0, DileptonChargeType::static_size, DileptonHypType::static_size);
         for (size_t ihyp = 0; ihyp != hyp_type().size(); ihyp++)
@@ -771,6 +781,13 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 
             float lt_min_pt = abs(lt_id)==11 ? el_min_pt : mu_min_pt;
             float ll_min_pt = abs(ll_id)==11 ? el_min_pt : mu_min_pt;
+
+            // print for syncing
+            if (m_sync_print)
+            {
+                cout << "printing for hyp index " << ihyp << endl;
+                PrintForSync(ihyp, mu_min_pt, el_min_pt, jet_type, m_jetMetScale, jet_corrector, met_corrector);
+            }
 
             // check if hyp passes lepton kinematics
             if (fabs(lt_p4.Eta())>2.4 || lt_p4.pt()<lt_min_pt) 
@@ -809,7 +826,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             // check extra Z veto
             if (samesign::makesExtraZ(ihyp))
             {
-                if (m_verbose) {std::cout << "fails btag extra Z veto requirement" << std::endl;}
+                if (m_verbose) {std::cout << "fails extra Z veto requirement" << std::endl;}
                 continue;
             }
 
@@ -826,13 +843,6 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             {
                 if (m_verbose) {std::cout << "fails extra Gamma* veto requirement" << std::endl;}
                 continue;
-            }
-
-            // print for syncing
-            if (m_sync_print)
-            {
-                //cout << "printing for hyp index " << ihyp << endl;
-                PrintForSync(ihyp, mu_min_pt, el_min_pt, jet_type, m_jetMetScale, jet_corrector, met_corrector);
             }
 
             // skip if both are not numerators

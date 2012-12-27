@@ -36,16 +36,13 @@ class PlotLooper : public at::AnalysisWithHist
              float sparm2 = -999,
              float sparm3 = -999,
              float sf_flip = 1.0,
-             float fr_unc = 0.5,
-             float fl_unc = 0.2,
-             float mc_unc = 0.5,
              float lumi = 1.0,
-             float l1_min_pt = 20.0,
-             float l1_max_pt = 10000000.0,
-             float l2_min_pt = 20.0,
-             float l2_max_pt = 10000000.0,
+             float min_pt = 20.0,
+             float max_pt = 10000000.0,
              float min_ht = 80.0,
-             bool verbose = false
+             bool verbose = false,
+             bool print = false,
+             const std::string& suffix = "png"
         );
 
         // destroy:
@@ -76,13 +73,8 @@ class PlotLooper : public at::AnalysisWithHist
         float m_sparm3;
         float m_scale1fb;
         float m_sf_flip;
-        float m_fr_unc;
-        float m_fl_unc;
-        float m_mc_unc;
-        float m_l1_min_pt;
-        float m_l1_max_pt;
-        float m_l2_min_pt;
-        float m_l2_max_pt;
+        float m_min_pt;
+        float m_max_pt;
         float m_min_ht;
         at::Sample::value_type m_sample;
         ss::SignalRegion::value_type m_signal_region;

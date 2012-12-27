@@ -22,7 +22,7 @@ bool SelectSameSign(long event)
     using namespace at;
 
     // not used yet
-    // FactorizedJetCorrector* jet_pf_corrector=NULL
+    //FactorizedJetCorrector* jet_pf_corrector = NULL;
 
     // loop over hypothesis
     for (unsigned int ihyp = 0; ihyp < cms2.hyp_p4().size(); ihyp++)
@@ -44,23 +44,32 @@ bool SelectSameSign(long event)
         int ll_idx  = cms2.hyp_ll_index().at(ihyp);
         float ll_pt = cms2.hyp_ll_p4().at(ihyp).pt();
 
-        // require 20/10 GeV leptons
-        if (min(lt_pt, ll_pt) < 10.0 || max(lt_pt, ll_pt) < 20.0)
+        // require 5/10 GeV muons/electrons 
+        float mu_minpt = 5.0;
+        float el_minpt = 10.0;
+        float l1_pt = max(lt_pt, ll_pt);
+        float l2_pt = min(lt_pt, ll_pt);
+        //unsigned int l1_id = lt_pt > ll_pt ? abs(lt_id) : abs(ll_id);
+        unsigned int l2_id = lt_pt > ll_pt ? abs(ll_id) : abs(lt_id);
+        float minpt = l2_id == 13 ? mu_minpt : el_minpt; 
+
+        if (l1_pt < minpt || l2_pt < minpt)
+        //if (min(ll_pt, lt_pt) < 10)
         {
             continue;
         }
 
         // jet type
-        JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
+        //JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
 
         // require 2 jets
-        //int njets = jet_pf_corrector  ? samesign::nJets(ihyp, jet_pf_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0) : 
-        //                                samesign::nJets(ihyp, jet_type,                   /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
-        int njets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/20.0, /*pt2>*/20.0);
-        if (njets < 2)
-        {
-            continue;
-        }
+        //int njets = jet_pf_corrector  ? samesign::nJets(ihyp, jet_pf_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/10.0, /*pt2>*/10.0) : 
+        //                                samesign::nJets(ihyp, jet_type,                   /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/10.0, /*pt2>*/10.0);
+        //int njets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/10.0, /*pt2>*/10.0);
+        //if (njets < 2)
+        //{
+        //    continue;
+        //}
 
         // need at least one good vertex
         int nGoodVertices = numberOfGoodVertices();
@@ -85,8 +94,9 @@ bool SelectSameSign(long event)
             if (evt_isRealData())
             {
                 // select specific events
-                bool ee_or_em = ((hyp_typeToHypType(hyp_type().at(ihyp)) == DileptonHypType::EE) || (hyp_typeToHypType(hyp_type().at(ihyp)) == DileptonHypType::EMU));
-                if (not (ee_or_em && samesign::isNumeratorHypothesis(ihyp)))
+                //bool ee_or_em = ((hyp_typeToHypType(hyp_type().at(ihyp)) == DileptonHypType::EE) || (hyp_typeToHypType(hyp_type().at(ihyp)) == DileptonHypType::EMU));
+                //if (not (ee_or_em && samesign::isNumeratorHypothesis(ihyp)))
+                if (not samesign::isNumeratorHypothesis(ihyp))
                 {
                     continue;
                 }

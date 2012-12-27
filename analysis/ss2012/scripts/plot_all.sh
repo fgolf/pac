@@ -82,11 +82,15 @@ else
 fi
 
 # overlay the hists
-if [[ $charge_option -eq 1 || $charge_option -eq 1 ]]; then
+if [[ $charge_option -eq 1 || $charge_option -eq -1 ]]; then
     mkdir -p plots/${output_name}
     root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"png\")"
     root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"eps\")"
     root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"pdf\")"
+#else
+#    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"png\")"
+#    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"eps\")"
+#    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"pdf\")"
 fi
 
 # print txt 

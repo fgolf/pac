@@ -96,6 +96,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     map<string, rt::TH1Overlay> p;
     rt::TH1Overlay::profile_marker_size_default = 10.0;
     p["p_yield"       ] = CreateOverlay(hc_data, hc_mc, "yield"      , Form("%s;channel;Events"                  , title.c_str()), "sb::off dt::stack lg::top_left" );
+    p["p_dilep_mass"  ] = CreateOverlay(hc_data, hc_mc, "dilep_mass" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_pt1"         ] = CreateOverlay(hc_data, hc_mc, "pt1"        , Form("%s;p^{lep1}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_pt2"         ] = CreateOverlay(hc_data, hc_mc, "pt2"        , Form("%s;p^{lep2}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_met"         ] = CreateOverlay(hc_data, hc_mc, "met"        , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");

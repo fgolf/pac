@@ -236,14 +236,15 @@ exe ss2012_quick_check
   : # usage-requirements
   ;
 
-#exe test_sync
+# quick and dirty cms2 looper
+#exe test_ntuples
 #  : # sources
-#    ./source/test.cc
+#    ./source/test_ntuples.cc
 #    # dependent packages
 #    /ROOT
 #    /MiniFWLite//libMiniFWLite/<link>shared
-#    /RootTools//RootTools/<link>static
 #    /AnalysisTools//AnalysisTools/<link>static
+#    /RootTools//RootTools/<link>static
 #  : # requirements
 #    <include>./include
 #    <include>./source
@@ -263,5 +264,5 @@ default-install ss2012_tools/<link>shared ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
 default-install ss2012_closure_test ;
+#default-install test_ntuples ;
 #default-install test_frb ;
-#default-install test_sync ;
