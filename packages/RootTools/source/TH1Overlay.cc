@@ -381,7 +381,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         //hist->SetLineColor(color);
         hist->SetLineColor(kBlack);
         hist->SetMarkerColor(color);
-        hist->SetMarkerSize(1.8);
+        hist->SetMarkerSize(0.9);
         hist->SetLineWidth(1);
         hist->SetFillStyle(1001);  // hard coded until i determine how to do this better
     }
@@ -393,7 +393,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetLineWidth(width);
         hist->SetFillStyle(fill);
         hist->SetMarkerStyle(style);
-        hist->SetMarkerSize(1.8);
+        hist->SetMarkerSize(0.9);
     }
     if (is_norm)
     {

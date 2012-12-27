@@ -99,5 +99,9 @@ exe merge_tchain
 
 # install
 # -----------------------------------------------------#
-default-install merge_tchain ;
-default-install RootTools : <link>shared ;
+
+if (!cmssw)
+{
+  default-install merge_tchain ;
+  default-install RootTools : <link>shared ;
+}
