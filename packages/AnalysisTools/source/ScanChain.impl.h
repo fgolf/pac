@@ -242,7 +242,7 @@ namespace at
             throw std::invalid_argument("at::ScanChain: chain has no files or file path is invalid!");
         }
 
-        //rt::PrintFilesFromTChain(chain);
+        rt::PrintFilesFromTChain(chain);
         string tree_name = chain->GetName();
     
         // set the "good run" list 

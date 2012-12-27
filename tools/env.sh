@@ -4,6 +4,9 @@
 tools_dir=$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 project_dir=$(cd -P $tools_dir/.. && pwd)
 
+# host name of the computer
+export HOSTNAME=`hostname`
+
 # setup boost (if its not already setup)
 if [ -z $BOOST_CURRENT ]; then
     export BOOST_CURRENT=/home/users/rwkelley/code/boost/1.49.0/
