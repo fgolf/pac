@@ -8,17 +8,16 @@ min_pt=${4:-20}
 max_pt=${5:-1000000}
 anal_type=${6:-"high_pt"}
 nbtags=${7:-2}
-exclusive=${8:-0}
-charge_option=${9:-0}  # -1 means --, 1 means ++, anything else means both
-#options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_26Nov2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --anal_type $anal_type"
-#options=" --nbtags $nbtags --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_24Sep2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --anal_type $anal_type"
+njets=${8:-2}
+exclusive=${9:-0}
+charge_option=${10:-0}  # -1 means --, 1 means ++, anything else means both
 
 if [ $anal_type == "low_pt" ]; then
     min_ht=200
 else
     min_ht=80
 fi
-options=" --nbtags $nbtags --njets 0 --sr $signal_region --excl $exclusive --lumi $lumi --fr data/fake_rates/ssFR_data_standard_16Dec2012.root --charge $charge_option --min_pt $min_pt --max_pt $max_pt --ht $min_ht --anal_type $anal_type"
+options=" --nbtags $nbtags --njets $njets --sr $signal_region --excl $exclusive --lumi $lumi --fr_file data/fake_rates/ssFR_data_standard_16Dec2012.root --charge $charge_option --l2_min_pt $min_pt --l2_max_pt $max_pt --ht $min_ht --anal_type $anal_type"
 
 charge_stem=
 if [ $charge_option -eq 1 ]; then
@@ -82,16 +81,7 @@ else
 fi
 
 # overlay the hists
-if [[ $charge_option -eq 1 || $charge_option -eq -1 ]]; then
-    mkdir -p plots/${output_name}
-    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"png\")"
-    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"eps\")"
-    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"pdf\")"
-#else
-#    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"png\")"
-#    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"eps\")"
-#    root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"pdf\")"
-fi
+root -b -q -l "macros/OverlaySSPlots.C+ ($lumi, $sr_num, \"$output_name\", \"all\")"
 
 # print txt 
 mkdir -p tables
@@ -100,6 +90,7 @@ root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$output_name\", $charge_option,
 
 # print tex
 mkdir -p tables/${output_name}
+mkdir -p temp 
 root -b -q -l "macros/PrintYields.C+ ($sr_num, \"$output_name\", $charge_option, 1)" > temp/temp.tex
 if [ $exclusive -eq 1 ]; then
 	tail -n +3 temp/temp.tex > tables/${output_name}/sr${signal_region}_nbtags${nbtags}_exclusive.tex

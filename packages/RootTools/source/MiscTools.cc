@@ -158,6 +158,19 @@ namespace rt
         return hist_ptr->Integral(left_bin, right_bin, bottom_bin, top_bin, option.c_str());
     }
 
+    // inflate the bin error by percentage of the bin value (used for systematic uncertainties)
+    void SetSystematicUncertainty(TH1* h, float sys_unc)
+    {
+        for (int i = 0; i != h->GetNbinsX()+1; i++)
+        {
+            float v = h->GetBinContent(i);
+            float e = h->GetBinError(i);
+            float error = sqrt(e*e + sys_unc*sys_unc*v*v);
+            h->SetBinError(i, error);
+        }
+        return;
+    }
+
     // calculate the integral and error
     std::pair<double, double> IntegralAndError(TH1* hist_ptr, const std::string& option)
     {

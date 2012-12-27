@@ -9,9 +9,9 @@ ss::SignalRegionInfo s_SignalRegionInfos[] =
         // name
         "sr0", 
         // ROOT title
-        "baseline",
-        // ROOT title
-        "baseline"
+        "# jets #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 0 GeV",
+        // Latex
+        "$\\# jets \\geq 2,\\ H_T > 80\\ \\text{GeV},\\ E_T^{miss} > 0\\ \\text{GeV}$"
     },
     {
         // name

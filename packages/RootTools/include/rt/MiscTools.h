@@ -312,6 +312,9 @@ namespace rt
     double Integral(TH2* h, const std::string& option = "");
     double Integral(TH2* h, float xlow, float xhigh, float ylow, float yhigh, const std::string& option = "");
 
+    // inflate the bin error by percentage of the bin value (used for systematic uncertainties)
+    void SetSystematicUncertainty(TH1* h, float sys_unc);
+
     // calculate the integral and Error
     std::pair<double, double> IntegralAndError(TH1* h, const std::string& option = "");
     std::pair<double, double> IntegralAndError(TH1* h, float low, float high, const std::string& option = "");

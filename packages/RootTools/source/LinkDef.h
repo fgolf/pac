@@ -96,6 +96,7 @@
 #pragma link C++ fucntion rt::SetTDRStyle;
 #pragma link C++ fucntion rt::MakeTChain;
 #pragma link C++ fucntion rt::CreateTChainFromCommaSeperatedList;
+#pragma link C++ fucntion rt::SetSystematicUncertainty;
 
 // constructors
 #pragma link C++ function rt::TH1Container::TH1Container;

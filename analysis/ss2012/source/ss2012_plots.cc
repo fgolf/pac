@@ -38,14 +38,19 @@ try
     float sparm2                    = -999;
     float sparm3                    = -999;
     float sf_flip                   = 0.8;
+    float fake_sys_unc              = 0.5;
+    float flip_sys_unc              = 0.2;
+    float mc_sys_unc                = 0.5;
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
     int charge_option               = 0;
     unsigned int signal_region_num  = 0;
     bool exclusive                  = false;
     float lumi                      = 1.0;
-    float min_pt                    = 20.0;
-    float max_pt                    = 10000000.0;
+    float l1_min_pt                 = 20.0;
+    float l1_max_pt                 = 10000000.0;
+    float l2_min_pt                 = 20.0;
+    float l2_max_pt                 = 10000000.0;
     float min_ht                    = 80.0;
     bool verbose                    = false;
 
@@ -53,34 +58,39 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"     , "print this menu")
-        ("nev"      , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                    )
-        ("output"   , po::value<std::string>(&output_file)        , "name of output root file"                                  )
-        ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                                   )
-        ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                   )
-        ("anal_type", po::value<std::string>(&analysis_type_name) , "name of input sample (from at/AnalysisType.h)"             )
-        ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                       )
-        ("fl_file"  , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                       )
-        ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"      )
-        ("evt_list" , po::value<std::string>(&event_list_name)    , "name of file for event list.  empty for none"              )
-        ("run_list" , po::value<std::string>(&good_run_list)      , "Good Run list (no default)"                                )
-        ("suffix"   , po::value<std::string>(&suffix)             , "suffix to pring (png, eps, pdf).  empty for none"          )
-        ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                                 )
-        ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                  )
-        ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                      )
-        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
-        ("gr"       , po::value<bool>(&check_good_lumi)           , "for data, check the is_good_lumi() method"                 )
-        ("sparm1"   , po::value<float>(&sparm0)                   , "sparm0"                                                    )
-        ("sparm2"   , po::value<float>(&sparm1)                   , "sparm1"                                                    )
-        ("sparm3"   , po::value<float>(&sparm2)                   , "sparm2"                                                    )
-        ("sparm4"   , po::value<float>(&sparm3)                   , "sparm3"                                                    )
-        ("sf_flip"  , po::value<float>(&sf_flip)                  , "scale factor for flips"                                    )
-        ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                )
-        ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
-        ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
-        ("min_pt"   , po::value<float>(&min_pt)                   , "min pT"                                                    )
-        ("max_pt"   , po::value<float>(&max_pt)                   , "max pT"                                                    )
-        ("ht"       , po::value<float>(&min_ht)                   , "min HT"                                                    )
-        ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
+        ("nev"      , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                     )
+        ("output"   , po::value<std::string>(&output_file)        , "name of output root file (optional)"                        )
+        ("input"    , po::value<std::string>(&input_file)         , "name of input root file (optional)"                         )
+        ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                    )
+        ("anal_type", po::value<std::string>(&analysis_type_name) , "name of input sample (from at/AnalysisType.h)"              )
+        ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                        )
+        ("fl_file"  , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                        )
+        ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"       )
+        ("evt_list" , po::value<std::string>(&event_list_name)    , "name of file for event list.  empty for none"               )
+        ("run_list" , po::value<std::string>(&good_run_list)      , "Good Run list (no default)"                                 )
+        ("suffix"   , po::value<std::string>(&suffix)             , "suffix to print (png, eps, pdf, all).  empty for none"      )
+        ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on (default is 0)"                   )
+        ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on (default is 2)"                    )
+        ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number (default is 0)"                        )
+        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the MC scale factors (default is true)"                 )
+        ("gr"       , po::value<bool>(&check_good_lumi)           , "for data, check the is_good_lumi() method"                  )
+        ("sparm1"   , po::value<float>(&sparm0)                   , "sparm0"                                                     )
+        ("sparm2"   , po::value<float>(&sparm1)                   , "sparm1"                                                     )
+        ("sparm3"   , po::value<float>(&sparm2)                   , "sparm2"                                                     )
+        ("sparm4"   , po::value<float>(&sparm3)                   , "sparm3"                                                     )
+        ("sf_flip"  , po::value<float>(&sf_flip)                  , "scale factor for flips (default is 0.8)"                    )
+        ("fr_unc"   , po::value<float>(&fake_sys_unc)             , "systematic uncertainty for fake prediction (default is 0.5)")
+        ("fl_unc"   , po::value<float>(&flip_sys_unc)             , "systematic uncertainty for flip prediction (default is 0.2)")
+        ("mc_unc"   , po::value<float>(&mc_sys_unc)               , "systematic uncertainty for MC prediction (default is 0.5)"  )
+        ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                 )
+        ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)" )
+        ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                                )
+        ("l1_min_pt", po::value<float>(&l2_min_pt)                , "trailing lepton min pT"                                     )
+        ("l1_max_pt", po::value<float>(&l2_max_pt)                , "trailing lepton max pT"                                     )
+        ("l2_min_pt", po::value<float>(&l1_min_pt)                , "leading lepton min pT"                                      )
+        ("l2_max_pt", po::value<float>(&l1_max_pt)                , "leading lepton max pT"                                      )
+        ("ht"       , po::value<float>(&min_ht)                   , "min HT"                                                     )
+        ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                  )
         ;
 
     po::variables_map vm;
@@ -226,13 +236,16 @@ try
             sparm2,
             sparm3,
             sf_flip,
+            fake_sys_unc,
+            flip_sys_unc,
+            mc_sys_unc,
             lumi,
-            min_pt,
-            max_pt,
+            l1_min_pt,
+            l1_max_pt,
+            l2_min_pt,
+            l2_max_pt,
             min_ht,
-            verbose,
-            !suffix.empty(),  
-            suffix
+            verbose
         ),
         samesignbtag,
         number_of_events,

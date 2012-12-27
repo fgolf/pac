@@ -2,24 +2,24 @@
 
 lumi=${1:-1.0}
 output_name=${2:test}
+nbtags=${3:-2}
 min_pt=${4:-20}
 max_pt=${5:-1000000}
 anal_type=${6:-"high_pt"}
-nbtags=${7:-2}
-charge_option=${8:-0}
+charge_option=${7:-0}
 
 # clear the old yield file
 echo "" > tables/yields_${output_name}.txt
 
 # do for all signal regions inclusive
 for i in {0..8}; do 
-    ./scripts/plot_all.sh $i $lumi $output_name $min_pt $max_pt $anal_type $nbtags 0 $charge_option; 
+    ./scripts/plot_all.sh $i $lumi $output_name $min_pt $max_pt $anal_type $nbtags 2 0 $charge_option; 
 done
 
 # do for all signal regions exclusive
 if [ $nbtags -eq 2 ]; then
     for i in {1..5}; do 
-        ./scripts/plot_all.sh $i $lumi $output_name $min_pt $max_pt $anal_type $nbtags 1 $charge_option; 
+        ./scripts/plot_all.sh $i $lumi $output_name $min_pt $max_pt $anal_type $nbtags 2 1 $charge_option; 
     done
 fi
 
