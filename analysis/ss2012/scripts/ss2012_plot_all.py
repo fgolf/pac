@@ -129,13 +129,17 @@ def make_hist(signal_region, sample):
 	# options
 	cmd += " --nbtags %s"                         % options.nbtags
 	cmd += " --njets %s"                          % options.njets
-	cmd += " --excl %s"                           % (1 if options.excl else 0)
 	cmd += " --fr_file %s"                        % "data/fake_rates/ssFR_data_standard_16Dec2012.root" 
 	cmd += " --charge %d"                         % options.charge
 	cmd += " --l1_min_pt %1.3f --l1_max_pt %1.3f" % (options.l1_min_pt, options.l1_max_pt)
 	cmd += " --l2_min_pt %1.3f --l2_max_pt %1.3f" % (options.l2_min_pt, options.l2_max_pt)
 	cmd += " --ht %1.3f"                          % options.min_ht 
 	cmd += " --anal_type %s"                      % options.anal_type 
+	if (options.excl):
+		cmd += " --excl 1"
+	else:
+		cmd += " --excl 0"
+
 
 	# logname
 	if (int(options.charge) == 1):
@@ -194,9 +198,9 @@ def print_yield_table(signal_region, do_append):
 
 	# tex file
 	if (options.excl):
-		tex_name = "%s/sr%d_nbtags%d_exclusive.tex" % (table_path, (signal_region-10), options.nbtags)
+		tex_name = "%s/sr%d_nbtags%d_exclusive.tex" % (table_path, int(signal_region)-10, int(options.nbtags))
 	else:
-		tex_name = "%s/sr%d_nbtags%d_inclusive.tex" % (table_path, signal_region, options.nbtags)
+		tex_name = "%s/sr%d_nbtags%d_inclusive.tex" % (table_path, int(signal_region), int(options.nbtags))
 	cmd = "root -b -q -l \"macros/PrintYields.C+ (%d, \\\"%s\\\", %d, 1); > %s\" " % (signal_region, options.out_name, int(options.charge), tex_name)
 	if (options.verbose):
 		print cmd
@@ -248,7 +252,7 @@ def main():
 					for sample in samples:	
 						make_hist(sr, sample)
 					overlay_hist(sr)
-					do_append = (False if (sr == excl_signal_regions[0]) else True)
+					do_append = (sr != excl_signal_regions[0])
 					print_yield_table(sr, do_append)
 			else:
 				print "making plots for all inclusive signal regions"
@@ -257,7 +261,7 @@ def main():
 					for sample in samples:	
 						make_hist(sr, sample)
 					overlay_hist(sr)
-					do_append = (False if (sr == incl_signal_regions[0]) else True)
+					do_append = (sr != incl_signal_regions[0])
 					print_yield_table(sr, do_append)
 				print_summary_table()
 		else:	
