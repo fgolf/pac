@@ -358,7 +358,6 @@ void PlotLooper::EndJob()
     // This does not have the full fake and flip rate errors' propogated properly.
     // This is a small effect and is ignored in the plots since they cannot be seen easily 
     // with the naked eye.
-    SetPredictionAndUncertainty(m_sample, hc, "nbtags"     , "# btags;# btags (X);Events"                                          , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "nvtxs"      ,"# vtxs (X); #vtxs;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "dilep_mass" ,"Dilepton Mass (X); M_{ll} (GeV);Events"                               , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pt1"        ,"Higher p_{T} lepton (X);p_{T} (GeV);Events"                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
@@ -549,28 +548,11 @@ void PlotLooper::BookHists()
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(2, "ee"    );
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(3, "e#mu"  );
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(4, "ll"    );
-            //hc["h_yield"+ns]->GetXaxis()->SetLabelSize(0.05);
-            //hc["h_yield"+ns]->SetBarOffset(0.2);
-            //hc["h_yield"+ns]->SetBarWidth(0.6);
-            //hc["h_yield"+ns]->SetOption("hist B");
 
             // SS kinematic plots
-            hc.Add(new TH1F(Form("h_nvtxs%s"      , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                                        , ts.c_str()), 20 , 0   , 40  ));
-            //hc.Add(new TH1F(Form("h_pt1%s"        , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
-            //hc.Add(new TH1F(Form("h_pt2%s"        , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
-            //hc.Add(new TH1F(Form("h_pt1_el%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
-            //hc.Add(new TH1F(Form("h_pt2_el%s"     , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
-            //hc.Add(new TH1F(Form("h_pt1_mu%s"     , ns.c_str()), Form("Higher p_{T} muons%s;p_{T} (GeV);Events"                       , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
-            //hc.Add(new TH1F(Form("h_pt2_mu%s"     , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), lep_pt_bins.size()-1, lep_pt_bins.data()));
-            //hc.Add(new TH1F(Form("h_ht%s"         , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), ht_bins.size()-1, ht_bins.data()));
-            //hc.Add(new TH1F(Form("h_met%s"        , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"                               , ts.c_str()), met_bins.size()-1, met_bins.data()));
-            hc.Add(new TH1F(Form("h_dilep_mass%s" , ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 20, 0, 200));
-            hc.Add(new TH1F(Form("h_pt1%s"        , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), 10, 0, 200));
-            hc.Add(new TH1F(Form("h_pt2%s"        , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 10, 0, 200));
-            hc.Add(new TH1F(Form("h_pt1_el%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), 10, 0, 200));
-            hc.Add(new TH1F(Form("h_pt2_el%s"     , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), 10, 0, 200));
-            hc.Add(new TH1F(Form("h_pt1_mu%s"     , ns.c_str()), Form("Higher p_{T} muons%s;p_{T} (GeV);Events"                       , ts.c_str()), 10, 0, 200));
-            hc.Add(new TH1F(Form("h_pt2_mu%s"     , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), 10, 0, 200));
+            hc.Add(new TH1F(Form("h_dilep_mass%s" , ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 20 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt1%s"        , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt2%s"        , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 10 , 0   , 200 ));
             hc.Add(new TH1F(Form("h_ht%s"         , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), 20 , 0   , 1000));
             hc.Add(new TH1F(Form("h_mt%s"         , ns.c_str()), Form("m_{T}%s;m_{T} (GeV);Events"                                    , ts.c_str()), 8  , 0   , 400 ));
             hc.Add(new TH1F(Form("h_met%s"        , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"                               , ts.c_str()), 8  , 0   , 400 ));
@@ -585,6 +567,11 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_ml3l%s"       , ns.c_str()), Form("M(lep,3rd lep)%s;M(l,3l);Events"                               , ts.c_str()), 10 , 0.  , 50. ));
             hc.Add(new TH1F(Form("h_drlep3rdlep%s", ns.c_str()), Form("#DeltaR(lep, lep3)%s:#DeltaR(lep, 3rd lep);Events"             , ts.c_str()), 40 , 0   , 4.  ));
             hc.Add(new TH1F(Form("h_ptjetlep%s"   , ns.c_str()), Form("jet p_{T} / lep p_{T} - 1%s;p_{T}^{jet}/p_{T}^{lep} - 1;Events", ts.c_str()), 50 , 0.  , 5.0 ));
+            hc.Add(new TH1F(Form("h_nvtxs%s"      , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                                        , ts.c_str()), 20 , 0   , 40  ));
+            hc.Add(new TH1F(Form("h_pt1_el%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt2_el%s"     , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt1_mu%s"     , ns.c_str()), Form("Higher p_{T} muons%s;p_{T} (GeV);Events"                       , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt2_mu%s"     , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), 10 , 0   , 200 ));
         }
 
         return;

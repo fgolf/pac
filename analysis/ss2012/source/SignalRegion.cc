@@ -208,7 +208,7 @@ namespace ss
         // throw if not found
         if (signal_region == SignalRegion::static_size)
         {
-            throw std::domain_error("ERROR: at::GetSignalRegionInfo(std::string): signal_region not found!");
+            throw std::domain_error(Form("ERROR: at::GetSignalRegionInfo(std::string): signal_region %s not found!", signal_region_name.c_str()));
         }
 
         return signal_region; 

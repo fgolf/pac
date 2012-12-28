@@ -23,7 +23,7 @@ TH1F* GetTotalPredHist(TH1* h_fake, TH1* h_flip, TH1* h_mc)
     h_pred->SetLineColor(kWhite);
     h_pred->SetFillColor(kBlack);
     h_pred->SetFillStyle(3335);
-    h_pred->SetDrawOption("hist E2");
+    h_pred->SetDrawOption("hist E5");
     return h_pred;
 }
 
@@ -37,16 +37,11 @@ rt::TH1Overlay CreateOverlay
 )
 {
 	// colors
-    //static Color_t data_color = kBlack;
-    //static Color_t mc_color   = kCyan-5;
-    //static Color_t fake_color = kRed-6;
-    //static Color_t flip_color = kBlue-8;
     const Color_t data_color  = kBlack;
     const Color_t rare_color  = kCyan-5;
     const Color_t fake_color  = kRed-6;
     const Color_t flip_color  = kOrange-8;
     const Style_t data_marker = 20;
-    //const float text_size     = 0.035;
     const float marker_size   = 1.5;
     const Style_t shade_style = 3335;
     const string flip_legend  = "Charge-flip";
@@ -62,24 +57,28 @@ rt::TH1Overlay CreateOverlay
     TH1* h_pred = GetTotalPredHist(h_fake, h_flip, h_rare);
     h_data->SetMarkerSize(marker_size);
 
-    //if (hist_stem == "yield")
-    //{
-    //    option.append(" hist B");
-    //    h_data->SetBarWidth(0.6);
-    //    h_fake->SetBarWidth(0.6);
-    //    h_flip->SetBarWidth(0.6);
-    //    h_rare->SetBarWidth(0.6);
-    //    h_pred->SetBarWidth(0.6);
-    //    h_data->SetBarOffset(0.2);
-    //    h_fake->SetBarOffset(0.2);
-    //    h_flip->SetBarOffset(0.2);
-    //    h_rare->SetBarOffset(0.2);
-    //    h_pred->SetBarOffset(0.2);
-    //    //h_fake->SetOption("hist B");
-    //    //h_flip->SetOption("hist B");
-    //    //h_rare->SetOption("hist B");
-    //    //h_pred->SetOption("hist B");
-    //}
+    if (hist_stem == "yield")
+    {
+        option.append(" B");
+        const float width = 0.6;
+        const float offset = 0.2;
+        const float label_size = 0.07;
+        h_data->SetBarWidth(width);
+        h_fake->SetBarWidth(width);
+        h_flip->SetBarWidth(width);
+        h_rare->SetBarWidth(width);
+        h_pred->SetBarWidth(width);
+        h_data->SetBarOffset(offset);
+        h_fake->SetBarOffset(offset);
+        h_flip->SetBarOffset(offset);
+        h_rare->SetBarOffset(offset);
+        h_pred->SetBarOffset(offset);
+        h_data->SetLabelSize(label_size);
+        h_fake->SetLabelSize(label_size);
+        h_flip->SetLabelSize(label_size);
+        h_rare->SetLabelSize(label_size);
+        h_pred->SetLabelSize(label_size);
+    }
 
     rt::TH1Overlay p(title, option);
     p.Add(h_data, /*no_stack=*/true, data_legend, data_color, 2, data_marker);
@@ -87,7 +86,6 @@ rt::TH1Overlay CreateOverlay
     p.Add(h_flip, flip_legend, flip_color);
     p.Add(h_rare, rare_legend, rare_color);
     p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style); 
-
     return p;
 }
 
@@ -145,14 +143,29 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
 
 
 	// SR label
-    TLatex t1(0.18, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
-    t1.SetTextSize(0.028);
+    TLatex t1_upper_left (0.18, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
+    TLatex t1_upper_right(0.58, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
+    t1_upper_left.SetTextSize(0.028);
+    t1_upper_right.SetTextSize(0.028);
     for (map<string, rt::TH1Overlay>::iterator p_iter = p.begin(); p_iter != p.end(); p_iter++)
     {
-        p_iter->second.AddText(t1);
+        if (p_iter->first == "p_yield")
+        {
+            p_iter->second.AddText(t1_upper_right);
+        }
+        else
+        {
+            p_iter->second.AddText(t1_upper_left);
+        }
     }
 
      // write
  	rt::CopyIndexPhp(Form("plots/%s/%s/kin", output_name.c_str(), sr.name.c_str()));
     rt::Print(p, Form("plots/%s/%s/kin", output_name.c_str(), sr.name.c_str()), suffix);
+
+    // print yield explicitly
+    // this is a kludge to the the x error bars the right size for the yeild plot
+    gStyle->SetErrorX(0.3);
+    rt::Print(p["p_yield"], Form("plots/%s/%s/kin/p_yield", output_name.c_str(), sr.name.c_str()), suffix);
+    gStyle->SetErrorX();
 }
