@@ -12,7 +12,8 @@ include ${PAC}/tools/Makefile.common
 libraries       := libFakeRateBabyTools.so
 package_dir_rel := packages/FakeRateBabyTools
 sources         := FakeRateBaby.cc         \
-				   FakeRateBabyWrapper.cc  
+				   FakeRateBabyWrapper.cc  \
+				   Sample.cc
 include_dir     := include source 
 
 # additional libraries

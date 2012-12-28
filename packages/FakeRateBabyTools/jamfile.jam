@@ -5,6 +5,7 @@ lib FakeRateBabyTools
   : # sources
     ./source/FakeRateBaby.cc
     ./source/FakeRateBabyWrapper.cc
+    ./source/Sample.cc
     # dependent packages
     /ROOT
     /RootTools//RootTools
