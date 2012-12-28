@@ -8,10 +8,10 @@ include ${PAC}/tools/Makefile.common
 # ----------------------------------------------------------------------- #
 
 # source files
-programs        := ss2012_create_fakerate.exe
+programs        := ss2012_create_fakerate_eth.exe
 program_dir_rel := analysis/ss2012
-sources         := ss2012_create_fakerate.cc \
-    			   FakeRateBabyLooper.cc 
+sources         := ss2012_create_fakerate_eth.cc \
+    			   FakeRateBabyLooperETH.cc 
 include_dir     := include source
 defines         := __NON_ROOT_BUILD__
 

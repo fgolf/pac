@@ -1,25 +1,13 @@
 #include <iostream>
 #include <string>
 #include "TChain.h"
-#include "at/ScanChain.h"
 #include "FakeRateBabyWrapper.h"
 #include "FakeRateBabyLooperETH.h"
+#include "at/ScanChain.h"
+#include "rt/RootTools.h"
+#include "fr/Sample.h"
 #include <boost/program_options.hpp>
 #include <boost/shared_ptr.hpp>
-#include "rt/RootTools.h"
-
-bool ValidDatasetName(const std::string& dataset)
-{
-    if (dataset == "data")
-        return true;
-    if (dataset == "data2012Cv2")
-        return true;
-    if (dataset == "data2012ABr")
-        return true;
-    if (dataset == "data2012ABv1")
-        return true;
-    return false;
-}
 
 bool ValidCharge(int charge)
 {
@@ -36,7 +24,6 @@ bool ValidCharge(int charge)
     return false;
 }
 
-
 bool ValidLeptonName(const std::string& channel)
 {
     if (channel == "mu")
@@ -46,113 +33,6 @@ bool ValidLeptonName(const std::string& channel)
 //    if (channel == "both")
 //        return true;
     return false;
-}
-
-// Factor function to gererate the datastets
-boost::shared_ptr<TChain> TChainFactory(const std::string& dataset = "qcd", const std::string& channel = "mu")
-{    
-    // check that the dataset is one of the supported
-    if (!ValidDatasetName(dataset))
-    {
-        throw std::runtime_error("ERROR: need valid option (\"data\", \"data2012Cv2\")");
-    }
-
-    // prefix name
-    bool local = rt::string_contains(rt::getenv("HOSTNAME"), "tensor");
-    //bool local = false;
-    boost::shared_ptr<TChain> chain(new TChain("tree"));
-     
-    // full 12.26 /fb of 2012AB reprocessed and 2012C
-    if (dataset == "data")
-    {
-        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";     // 920 /pb
-        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_11p38fb/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_11p38fb/";     // 10.45 /fb
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate15Nov2012/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate15Nov2012";     // full 2012ABCD 
-        //const std::string& ntuple_path = "/nfs-7/userdata/rwkelley/babies/fr/FakeRate15Nov2012/";   
-        cout << ntuple_path << endl;
-        if (channel=="mu")
-        {
-            // don't have all of these yet
-			chain->Add(Form("%s/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
-			chain->Add(Form("%s/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
-			chain->Add(Form("%s/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
-			chain->Add(Form("%s/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
-			chain->Add(Form("%s/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root"         , ntuple_path.c_str()));
-			chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v2_AOD/*.root"        , ntuple_path.c_str()));
-			chain->Add(Form("%s/SingleMu_Run2012D-PromptReco-v1_AOD/*.root"        , ntuple_path.c_str()));
-        }
-        else if (channel=="el")
-        {
-            chain->Add(Form("%s/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root"        , ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root"       , ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root"       , ntuple_path.c_str())); 
-			
-        }
-    }    
-    // 2012 AB prompt v1
-    if (dataset == "data2012ABv1")
-    {
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012v2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012v2/";             // 920 /pb from AN
-        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_3p95fb/"  : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_3p95fb/";  // 3.95 /fb 
-        //const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_5p098ifb/": "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_5p098ifb/";  // 5.1 /fb (full 2012AB)
-        if (channel=="mu")
-        {
-            chain->Add(Form("%s/SingleMu_Run2012A-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/SingleMu_Run2012B-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleMu_Run2012A-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleMu_Run2012B-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-        }
-        else if (channel=="el")
-        {
-            chain->Add(Form("%s/DoubleElectron_Run2012A-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012B-PromptReco-v1_AOD/*.root", ntuple_path.c_str())); 
-        }
-    }    
-    // 2012C prompt v2
-    else if (dataset == "data2012Cv2")
-    {
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_2012Cv2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_2012Cv2";
-        if (channel=="mu")
-        {
-            chain->Add(Form("%s/SingleMu_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
-        }
-        else if (channel=="el")
-        {
-            chain->Add(Form("%s/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root", ntuple_path.c_str())); 
-        }
-    }    
-    // 2012A/B rereco 13Jul2012 and 06Aug2012 recovery
-    else if (dataset == "data2012ABr")
-    {
-        const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_submit2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_submit2";
-        if (channel=="mu")
-        {
-        	const std::string& ntuple_path = local ? rt::getenv("HOME") + "/Data/babies/fr/FakeRate20May2012_submit2/" : "/nfs-7/userdata/rwkelley/babies/fr/FakeRate20May2012_submit2/";  
-            chain->Add(Form("%s/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleMu_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
-			chain->Add(Form("%s/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
-			chain->Add(Form("%s/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root" , ntuple_path.c_str()));
-        }
-        else if (channel=="el")
-        {
-            chain->Add(Form("%s/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
-            chain->Add(Form("%s/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root", ntuple_path.c_str())); 
-        }
-    }    
-
-    return chain;
 }
 
 int main(int argc, char* argv[])
@@ -167,7 +47,7 @@ try
     // -------------------------------------------------------------------------------------------------//
 
     long number_of_events          = -1;
-    std::string dataset            = "data";
+    std::string sample_name        = "data";
     std::string root_file_name     = "test.root";
     std::string channel            = "mu";
     std::string suffix             = "";
@@ -182,7 +62,7 @@ try
         ("help"          , "print this menu")
         ("nev"           , po::value<long>(&number_of_events)      , "number of events to run on (-1 == all)"           )
         ("lumi"          , po::value<float>(&lumi)                 , "luminosity (default is 1.0 fb)"                   )
-        ("dataset"       , po::value<std::string>(&dataset)        , "name of dataset"                                  )
+        ("sample"        , po::value<std::string>(&sample_name)    , "name of sample"                                   )
         ("channel"       , po::value<std::string>(&channel)        , "name of channel (valid options: \"mu\", \"el\")"  )
         ("root_file_name", po::value<std::string>(&root_file_name) , "name of output root file"                         )
         ("run_list"      , po::value<std::string>(&good_run_list)  , "good run list"                                    )
@@ -216,14 +96,6 @@ try
         return 1;
     }
 
-    // check that the dataset option is one of the supported
-    if (!ValidDatasetName(dataset))
-    {
-        cout << "ERROR: invalid dataset option" << endl;
-        cout << desc << "\n";
-        return 1;
-    }
-
     // check that the charge option is one of the supported
     if (!ValidCharge(charge))
     {
@@ -244,13 +116,14 @@ try
     cout << "output file: " << full_output_path << endl;
 
     // data
-    boost::shared_ptr<TChain> chain = TChainFactory(dataset, channel);
+    fr::Sample::value_type sample = fr::GetSampleFromName(sample_name); 
+    boost::shared_ptr<TChain> chain(fr::GetSampleTChain(sample));
 
     // scan the chain
     at::ScanChainWithFilename<FakeRateBaby>
     (
         /*input chain ptr =*/chain.get(), 
-        FakeRateBabyLooperETH(full_output_path, dataset, channel, lumi, charge, verbose, !suffix.empty(), suffix), 
+        FakeRateBabyLooperETH(full_output_path, sample, channel, lumi, charge, verbose, !suffix.empty(), suffix), 
         fake_rate_baby,
         number_of_events,
         good_run_list,

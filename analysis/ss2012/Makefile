@@ -7,6 +7,7 @@ all:
 	$(MAKE) -f build/ss2012_tools.mk
 	$(MAKE) -f build/ss2012_analysis.mk
 	$(MAKE) -f build/ss2012_create_fakerate.mk
+	$(MAKE) -f build/ss2012_create_fakerate_eth.mk
 	$(MAKE) -f build/ss2012_merge_babies.mk
 	$(MAKE) -f build/ss2012_skim.mk
 	$(MAKE) -f build/ss2012_plots.mk
@@ -19,6 +20,7 @@ clean:
 	$(MAKE) -f build/ss2012_tools.mk clean
 	$(MAKE) -f build/ss2012_analysis.mk clean
 	$(MAKE) -f build/ss2012_create_fakerate.mk clean
+	$(MAKE) -f build/ss2012_create_fakerate_eth.mk clean
 	$(MAKE) -f build/ss2012_skim.mk clean
 	$(MAKE) -f build/ss2012_plots.mk clean
 	$(MAKE) -f build/ss2012_merge_babies.mk clean

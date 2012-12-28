@@ -13,7 +13,7 @@ typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > v
 FakeRateBabyLooper::FakeRateBabyLooper
 (
     const std::string& root_file_name,
-    const std::string& dataset,
+    fr::Sample::value_type sample,
     const std::string& lepton,
     float lumi,
     int charge, 
@@ -22,7 +22,7 @@ FakeRateBabyLooper::FakeRateBabyLooper
     const std::string& suffix
     )
     : at::AnalysisWithHist(root_file_name, print, suffix)
-    , m_dataset(dataset)
+    , m_sample(sample)
     , m_lepton(lepton)
     , m_lumi(lumi)
     , m_charge(charge)
@@ -299,9 +299,9 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // ----------------------------------------------------------------------------------------------------------------------------//
         
         // which dataset
-        bool is_data  = rt::string_contains(m_dataset, "data");
-        bool is_ttbar = rt::string_contains(m_dataset, "ttbar");
-        bool is_qcd   = rt::string_contains(m_dataset, "qcd");
+        bool is_data  = fr::GetSampleInfo(m_sample).type == fr::SampleType::data;
+        bool is_ttbar = m_sample == fr::Sample::ttbar;
+        bool is_qcd   = m_sample == fr::Sample::qcd;
         bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
         bool is_el = (m_lepton=="el") ? abs(id())==11 : false;
 
