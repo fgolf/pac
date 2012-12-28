@@ -19,7 +19,7 @@ public:
         bool verbose = false,
         bool print = false,
         const std::string& suffix = "png"
-        );
+    );
 
     // destroy:
     ~FakeRateBabyLooper();

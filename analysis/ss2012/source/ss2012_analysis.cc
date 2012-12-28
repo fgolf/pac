@@ -37,7 +37,7 @@ try
     std::string output_file         = "";
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_24Sep2012.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_16Dec2012.root";
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string fake_rate_hist_name = "h_mufr40c";
     std::string sample_name         = "";
@@ -61,18 +61,18 @@ try
         ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                                                 )
         ("gen_only"      , po::value<bool>(&gen_only)                   , "only fill gen variables"                                                           )
         ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                           )
-        ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from at/AnalysisType.h)"                                     )
+        ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from AnalysisType.h)"                                        )
         ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, ...) (from at/Sample.h)"                          )
-        ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (<sample name>.root)"                               )
-        ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default for the sample in DataSetFactory.cpp)"                       )
-        ("fr"            , po::value<std::string>(&fake_rate_file_name) , "fake rate file name (default: data/fake_rates/ssFR_data_standard_24Sep2012.root)"  )
+        ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (default: <sample name>.root)"                      )
+        ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default is determined by the sample used)"                           )
+        ("fr"            , po::value<std::string>(&fake_rate_file_name) , "fake rate file name (default: data/fake_rates/ssFR_data_standard_16Dec2012.root)"  )
         ("fl"            , po::value<std::string>(&flip_rate_file_name) , "flip rate file name (default: data/flip_rates/fliprate42X.root)"                   )
-        ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c)"                                     )  // to do for muons
+        ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c)"                                     )  // to do for electrons
         ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                              )
         ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                        )
         ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms (default is false)"                                              )
         //("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
-        ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync"                                                                    )
+        ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync exercise"                                                           )
         ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
         ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                        )
         ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                    )
@@ -120,9 +120,6 @@ try
 
     // test inputs boundary conditions
     // -------------------------------------------------------------------------------------------------//
-
-    // path to the analysis
-    //std::string analysis_path = rt::getenv("SS");
 
     // Make sure jetMetScale is kosher
     if (jetMetScale < -1 || jetMetScale > 1) 

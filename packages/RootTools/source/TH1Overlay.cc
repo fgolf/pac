@@ -382,8 +382,9 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetLineColor(kBlack);
         hist->SetMarkerColor(color);
         hist->SetMarkerSize(hist->GetMarkerSize());
-        hist->SetBarWidth(hist->GetBarWidth());
+        //hist->SetBarWidth(hist->GetBarWidth());
         hist->SetLineWidth(1);
+        hist->SetOption(hist->GetOption());
         hist->SetFillStyle(1001);  // hard coded until i determine how to do this better
     }
     else
@@ -394,7 +395,8 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetLineWidth(width);
         hist->SetFillStyle(fill);
         hist->SetMarkerStyle(style);
-        hist->SetBarWidth(hist->GetBarWidth());
+        //hist->SetBarWidth(hist->GetBarWidth());
+        hist->SetOption(hist->GetOption());
         hist->SetMarkerSize(hist->GetMarkerSize());
     }
     if (is_norm)
@@ -930,7 +932,8 @@ void TH1Overlay::BuildStack(bool is_stack, bool is_norm)
         {
             if (!iter->nostack)
             {
-                m_pimpl->hist_stack->Add(iter->hist.get(), (m_pimpl->option + "hist").c_str());
+                //m_pimpl->hist_stack->Add(iter->hist.get(), (m_pimpl->option + "hist").c_str());
+                m_pimpl->hist_stack->Add(iter->hist.get(), (m_pimpl->option + "hist" + iter->hist->GetDrawOption()).c_str());
             }
         }
         else
@@ -964,6 +967,7 @@ void TH1Overlay::BuildStack(bool is_stack, bool is_norm)
             m_pimpl->hist_stack->SetMaximum(max_height*1.1);
         }
     }
+
     // this is a kludge to get the annoying THStack's blank histogram from showing up
     m_pimpl->hist_stack->Draw("goff");
    	//if (m_pimpl->xaxis_min < m_pimpl->xaxis_max)

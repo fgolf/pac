@@ -147,7 +147,6 @@ struct Yield
 
     std::string GetLatex(const std::string& latex = "", bool print_sys_err = false) const;
     void Print(bool print_sys_err = false) const;
-
 };
 
 float DetermineError(float v1, float v2, float e1, float e2)
@@ -396,6 +395,13 @@ Yield GetFlipYield(const std::string sample_name, unsigned int signal_region_num
     return yield;
 }
 
+// print the yields for an individual file
+// very crude (no systematic uncertainties)
+void PrintSampleYield(const std::string& sample_name, unsigned int signal_region_num = 0, const std::string output_path = "test", int charge_option = 0)
+{
+    Yield y(GetSSYield(sample_name, signal_region_num, charge_option, output_path));
+    y.Print();
+}
 
 // print the yields
 void PrintYields(unsigned int signal_region_num = 0, const std::string output_path = "", int charge_option = 0, bool print_latex = false)
