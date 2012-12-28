@@ -9,6 +9,7 @@
 #include "rt/TH1Container.h"
 #include "rt/TH1Overlay.h"
 #include "rt/MiscTools.h"
+#include "at/DileptonHypType.h"
 #include "SignalRegion.h"
 
 using namespace std;
@@ -126,10 +127,12 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     map<string, rt::TH1Overlay> p;
     rt::TH1Overlay::profile_marker_size_default = 10.0;
     p["p_yield"       ] = CreateOverlay(hc_data, hc_mc, "yield"      , Form("%s;channel;Events"                  , title.c_str()), "sb::off dt::stack lg::top_left" );
+    p["p_dilep_mass"  ] = CreateOverlay(hc_data, hc_mc, "dilep_mass" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
     p["p_pt1"         ] = CreateOverlay(hc_data, hc_mc, "pt1"        , Form("%s;p^{lep1}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_pt2"         ] = CreateOverlay(hc_data, hc_mc, "pt2"        , Form("%s;p^{lep2}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_met"         ] = CreateOverlay(hc_data, hc_mc, "met"        , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_ht"          ] = CreateOverlay(hc_data, hc_mc, "ht"         , Form("%s;H_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_mt"          ] = CreateOverlay(hc_data, hc_mc, "mt"         , Form("%s;m_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_nbtags"      ] = CreateOverlay(hc_data, hc_mc, "nbtags"     , Form("%s;number of b-tagged jets;Events"  , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_njets"       ] = CreateOverlay(hc_data, hc_mc, "njets"      , Form("%s;number of jets;Events"           , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_lepdphi"     ] = CreateOverlay(hc_data, hc_mc, "lepdphi"    , Form("%s;#Delta#Phi(lep1, lep2);Events"   , title.c_str()), "sb::off dt::stack lg::top_right");
@@ -141,6 +144,24 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     p["p_ptjetlep"    ] = CreateOverlay(hc_data, hc_mc, "ptjetlep"   , Form("%s;jet p_{T} / lep p_{T} - 1;Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_drlep3rdlep" ] = CreateOverlay(hc_data, hc_mc, "drlep3rdlep", Form("%s;#DeltaR(lep, 3rd lep);Events"    , title.c_str()), "sb::off dt::stack lg::top_right");
 
+    // overlay individual channels
+    for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
+    {
+        at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(i);
+
+        // name and title suffixes
+        string hn = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
+        //string ht = Form(" (%s)",  GetDileptonHypTypeTitle(hyp_type).c_str());
+
+        p["p_dilep_mass"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass"+hn , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
+        p["p_pt1"       +hn] = CreateOverlay(hc_data, hc_mc, "pt1"       +hn , Form("%s;p^{lep1}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_pt2"       +hn] = CreateOverlay(hc_data, hc_mc, "pt2"       +hn , Form("%s;p^{lep2}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_met"       +hn] = CreateOverlay(hc_data, hc_mc, "met"       +hn , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_ht"        +hn] = CreateOverlay(hc_data, hc_mc, "ht"        +hn , Form("%s;H_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_mt"        +hn] = CreateOverlay(hc_data, hc_mc, "mt"        +hn , Form("%s;m_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_nbtags"    +hn] = CreateOverlay(hc_data, hc_mc, "nbtags"    +hn , Form("%s;number of b-tagged jets;Events"  , title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_njets"     +hn] = CreateOverlay(hc_data, hc_mc, "njets"     +hn , Form("%s;number of jets;Events"           , title.c_str()), "sb::off dt::stack lg::top_right");
+    }
 
 	// SR label
     TLatex t1_upper_left (0.18, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
