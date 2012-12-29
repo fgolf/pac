@@ -144,6 +144,10 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     p["p_ptjetlep"    ] = CreateOverlay(hc_data, hc_mc, "ptjetlep"   , Form("%s;jet p_{T} / lep p_{T} - 1;Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_drlep3rdlep" ] = CreateOverlay(hc_data, hc_mc, "drlep3rdlep", Form("%s;#DeltaR(lep, 3rd lep);Events"    , title.c_str()), "sb::off dt::stack lg::top_right");
 
+    p["p_dilep_mass_nj0"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
+    p["p_dilep_mass_nj1"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
+    p["p_dilep_mass_nj2"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
+
     // overlay individual channels
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
     {
@@ -161,6 +165,10 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
         p["p_mt"        +hn] = CreateOverlay(hc_data, hc_mc, "mt"        +hn , Form("%s;m_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::top_right");
         p["p_nbtags"    +hn] = CreateOverlay(hc_data, hc_mc, "nbtags"    +hn , Form("%s;number of b-tagged jets;Events"  , title.c_str()), "sb::off dt::stack lg::top_right");
         p["p_njets"     +hn] = CreateOverlay(hc_data, hc_mc, "njets"     +hn , Form("%s;number of jets;Events"           , title.c_str()), "sb::off dt::stack lg::top_right");
+
+        p["p_dilep_mass_nj0"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_left" );
+        p["p_dilep_mass_nj1"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_left" );
+        p["p_dilep_mass_nj2"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_left" );
     }
 
 	// SR label

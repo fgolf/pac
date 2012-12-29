@@ -2,10 +2,10 @@
 
 lumi=${1:-1.0}
 output_name=${2:test}
-nbtags=${3:-2}
-min_pt=${4:-20}
-max_pt=${5:-1000000}
-anal_type=${6:-"high_pt"}
+min_pt=${3:-20}
+max_pt=${4:-1000000}
+anal_type=${5:-"high_pt"}
+nbtags=${6:-2}
 charge_option=${7:-0}
 
 # clear the old yield file

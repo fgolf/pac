@@ -363,6 +363,9 @@ void PlotLooper::EndJob()
     // with the naked eye.
     SetPredictionAndUncertainty(m_sample, hc, "nvtxs"      ,"# vtxs (X); #vtxs;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "dilep_mass" ,"Dilepton Mass (X); M_{ll} (GeV);Events"                               , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj0" ,"Dilepton Mass (X, # jets=0); M_{ll} (GeV);Events"                 , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj1" ,"Dilepton Mass (X, # jets=1); M_{ll} (GeV);Events"                 , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj2" ,"Dilepton Mass (X, # jets#geq2); M_{ll} (GeV);Events"              , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pt1"        ,"Higher p_{T} lepton (X);p_{T} (GeV);Events"                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pt2"        ,"Lower p_{T} lepton (X);p_{T} (GeV);Events"                            , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pt1_el"     ,"Higher p_{T} electron (X);p_{T} (GeV);Events"                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
@@ -400,6 +403,11 @@ void PlotLooper::EndJob()
         SetPredictionAndUncertainty(m_sample, hc, "met"       +hn, Form("MET;E_{T}^{miss} (GeV) (X, %s);Events"         ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
         SetPredictionAndUncertainty(m_sample, hc, "nbtags"    +hn, Form("# btags;# btags (X, %s);Events"                ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
         SetPredictionAndUncertainty(m_sample, hc, "njets"     +hn, Form("# jets (X, %s);# jets;Events"                  ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+
+        // plots for avi
+        SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj0"+hn,Form("Dilepton Mass (X, %s, # jets=0); M_{ll} (GeV);Events"   ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+        SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj1"+hn,Form("Dilepton Mass (X, %s, # jets=1); M_{ll} (GeV);Events"   ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+        SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj2"+hn,Form("Dilepton Mass (X, %s, # jets#geq2); M_{ll} (GeV);Events",ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     }
 
     // yield handled seperately
@@ -443,7 +451,7 @@ void PlotLooper::EndJob()
     t_yields.useTitle();
     t_yields.setTitle("yields table");
     string f = "1.3";
-    t_yields.setTable() (                      "mm",            "mm",            "em",                "ll")
+    t_yields.setTable() (                      "mm",            "ee",            "em",                "ll")
                         ("SF raw" , sf_raw.mm.str(f), sf_raw.ee.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
                         ("SF"     ,     sf.mm.str(f),     sf.ee.str(f),     sf.em.str(f),     sf.ll.str(f))
                         ("DF"     ,     df.mm.str(f),     df.ee.str(f),     df.em.str(f),     df.ll.str(f))
@@ -490,7 +498,7 @@ void PlotLooper::EndJob()
                         ("SF", y_sf.mm.value, y_sf.ee.value, y_sf.em.value, y_sf.ll.value)
                         ("DF", y_df.mm.value, y_df.ee.value, y_df.em.value, y_df.ll.value)
                         ("OS", y_os.mm.value, y_os.ee.value, y_os.em.value, y_os.ll.value)
-                        ("SS",    yield_ss[1],  yield_ss[0],   yield_ss[2],   yield_ss[3]);
+                        ("SS",    yield_ss[0],  yield_ss[1],   yield_ss[2],   yield_ss[3]);
     cout << endl;
     t_counts.print();
 
@@ -571,28 +579,31 @@ void PlotLooper::BookHists()
             hc["h_yield"+ns]->GetXaxis()->SetBinLabel(4, "ll"    );
 
             // SS kinematic plots
-            hc.Add(new TH1F(Form("h_dilep_mass%s" , ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 100, 0   , 200 ));
-            hc.Add(new TH1F(Form("h_pt1%s"        , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), 10 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_pt2%s"        , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 10 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_ht%s"         , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), 20 , 0   , 1000));
-            hc.Add(new TH1F(Form("h_mt%s"         , ns.c_str()), Form("m_{T}%s;m_{T} (GeV);Events"                                    , ts.c_str()), 8  , 0   , 400 ));
-            hc.Add(new TH1F(Form("h_met%s"        , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"                               , ts.c_str()), 8  , 0   , 400 ));
-            hc.Add(new TH1F(Form("h_nbtags%s"     , ns.c_str()), Form("# btags%s;# btags;Events"                                      , ts.c_str()), 7  , -0.5, 6.5 ));
-            hc.Add(new TH1F(Form("h_njets%s"      , ns.c_str()), Form("# jets%s;# jets;Events"                                        , ts.c_str()), 8  ,  1.5, 9.5 ));
-            hc.Add(new TH1F(Form("h_lepdphi%s"    , ns.c_str()), Form("#Delta#Phi(lep1, lep2)%s;#Delta#Phi(lep1, lep2);Events"        , ts.c_str()), 32 , 0   , 3.2 ));
-            hc.Add(new TH1F(Form("h_lepdeta%s"    , ns.c_str()), Form("#Delta#eta(lep1, lep2)%s;#Delta#eta(lep1, lep2);Events"        , ts.c_str()), 25 , -2.5, 2.5 ));
-            hc.Add(new TH1F(Form("h_lepdr%s"      , ns.c_str()), Form("#DeltaR(lep1, lep2)%s;#DeltaR(lep1, lep2);Events"              , ts.c_str()), 40 , 0   , 4.  ));
-            hc.Add(new TH1F(Form("h_drlepb%s"     , ns.c_str()), Form("#DeltaR(lep, btag)%s;#DeltaR(lep, btag);Events"                , ts.c_str()), 40 , 0   , 4.  ));
-            hc.Add(new TH1F(Form("h_btagdr%s"     , ns.c_str()), Form("#DeltaR(btag1, btag2)%s;#DeltaR(btag1, btag2);Events"          , ts.c_str()), 40 , 0   , 4.  ));
-            hc.Add(new TH1F(Form("h_drjetb%s"     , ns.c_str()), Form("#DeltaR(btag, jet)%s;#DeltaR(btag, jet);Events"                , ts.c_str()), 40 , 0   , 4.  ));
-            hc.Add(new TH1F(Form("h_ml3l%s"       , ns.c_str()), Form("M(lep,3rd lep)%s;M(l,3l);Events"                               , ts.c_str()), 10 , 0.  , 50. ));
-            hc.Add(new TH1F(Form("h_drlep3rdlep%s", ns.c_str()), Form("#DeltaR(lep, lep3)%s:#DeltaR(lep, 3rd lep);Events"             , ts.c_str()), 40 , 0   , 4.  ));
-            hc.Add(new TH1F(Form("h_ptjetlep%s"   , ns.c_str()), Form("jet p_{T} / lep p_{T} - 1%s;p_{T}^{jet}/p_{T}^{lep} - 1;Events", ts.c_str()), 50 , 0.  , 5.0 ));
-            hc.Add(new TH1F(Form("h_nvtxs%s"      , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                                        , ts.c_str()), 20 , 0   , 40  ));
-            hc.Add(new TH1F(Form("h_pt1_el%s"     , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), 10 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_pt2_el%s"     , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), 10 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_pt1_mu%s"     , ns.c_str()), Form("Higher p_{T} muons%s;p_{T} (GeV);Events"                       , ts.c_str()), 10 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_pt2_mu%s"     , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_dilep_mass%s"    , ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 100, 0   , 200 ));
+            hc.Add(new TH1F(Form("h_dilep_mass_nj0%s", ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 100, 0   , 200 ));
+            hc.Add(new TH1F(Form("h_dilep_mass_nj1%s", ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 100, 0   , 200 ));
+            hc.Add(new TH1F(Form("h_dilep_mass_nj2%s", ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 100, 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt1%s"           , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt2%s"           , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_ht%s"            , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), 20 , 0   , 1000));
+            hc.Add(new TH1F(Form("h_mt%s"            , ns.c_str()), Form("m_{T}%s;m_{T} (GeV);Events"                                    , ts.c_str()), 8  , 0   , 400 ));
+            hc.Add(new TH1F(Form("h_met%s"           , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"                               , ts.c_str()), 8  , 0   , 400 ));
+            hc.Add(new TH1F(Form("h_nbtags%s"        , ns.c_str()), Form("# btags%s;# btags;Events"                                      , ts.c_str()), 7  , -0.5, 6.5 ));
+            hc.Add(new TH1F(Form("h_njets%s"         , ns.c_str()), Form("# jets%s;# jets;Events"                                        , ts.c_str()), 8  ,  1.5, 9.5 ));
+            hc.Add(new TH1F(Form("h_lepdphi%s"       , ns.c_str()), Form("#Delta#Phi(lep1, lep2)%s;#Delta#Phi(lep1, lep2);Events"        , ts.c_str()), 32 , 0   , 3.2 ));
+            hc.Add(new TH1F(Form("h_lepdeta%s"       , ns.c_str()), Form("#Delta#eta(lep1, lep2)%s;#Delta#eta(lep1, lep2);Events"        , ts.c_str()), 25 , -2.5, 2.5 ));
+            hc.Add(new TH1F(Form("h_lepdr%s"         , ns.c_str()), Form("#DeltaR(lep1, lep2)%s;#DeltaR(lep1, lep2);Events"              , ts.c_str()), 40 , 0   , 4.  ));
+            hc.Add(new TH1F(Form("h_drlepb%s"        , ns.c_str()), Form("#DeltaR(lep, btag)%s;#DeltaR(lep, btag);Events"                , ts.c_str()), 40 , 0   , 4.  ));
+            hc.Add(new TH1F(Form("h_btagdr%s"        , ns.c_str()), Form("#DeltaR(btag1, btag2)%s;#DeltaR(btag1, btag2);Events"          , ts.c_str()), 40 , 0   , 4.  ));
+            hc.Add(new TH1F(Form("h_drjetb%s"        , ns.c_str()), Form("#DeltaR(btag, jet)%s;#DeltaR(btag, jet);Events"                , ts.c_str()), 40 , 0   , 4.  ));
+            hc.Add(new TH1F(Form("h_ml3l%s"          , ns.c_str()), Form("M(lep,3rd lep)%s;M(l,3l);Events"                               , ts.c_str()), 10 , 0.  , 50. ));
+            hc.Add(new TH1F(Form("h_drlep3rdlep%s"   , ns.c_str()), Form("#DeltaR(lep, lep3)%s:#DeltaR(lep, 3rd lep);Events"             , ts.c_str()), 40 , 0   , 4.  ));
+            hc.Add(new TH1F(Form("h_ptjetlep%s"      , ns.c_str()), Form("jet p_{T} / lep p_{T} - 1%s;p_{T}^{jet}/p_{T}^{lep} - 1;Events", ts.c_str()), 50 , 0.  , 5.0 ));
+            hc.Add(new TH1F(Form("h_nvtxs%s"         , ns.c_str()), Form("# vtxs%s; #vtxs;Events"                                        , ts.c_str()), 20 , 0   , 40  ));
+            hc.Add(new TH1F(Form("h_pt1_el%s"        , ns.c_str()), Form("Higher p_{T} electron%s;p_{T} (GeV);Events"                    , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt2_el%s"        , ns.c_str()), Form("Lower p_{T} electron%s;p_{T} (GeV);Events"                     , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt1_mu%s"        , ns.c_str()), Form("Higher p_{T} muons%s;p_{T} (GeV);Events"                       , ts.c_str()), 10 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt2_mu%s"        , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), 10 , 0   , 200 ));
 
             for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
             {
@@ -602,14 +613,17 @@ void PlotLooper::BookHists()
                 string hn = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
                 string ht = Form(" (%s)",  GetDileptonHypTypeTitle(hyp_type).c_str());
 
-                hc.Add(new TH1F(Form("h_dilep_mass%s%s", hn.c_str(), ns.c_str()), Form("dilepton mass%s%s;mass (GeV);Events"       , ts.c_str(), ht.c_str()), 100, 0   , 200 ));
-                hc.Add(new TH1F(Form("h_pt1%s%s"       , hn.c_str(), ns.c_str()), Form("Higher p_{T} lepton%s%s;p_{T} (GeV);Events", ts.c_str(), ht.c_str()), 10 , 0   , 200 ));
-                hc.Add(new TH1F(Form("h_pt2%s%s"       , hn.c_str(), ns.c_str()), Form("Lower p_{T} lepton%s%s;p_{T} (GeV);Events" , ts.c_str(), ht.c_str()), 10 , 0   , 200 ));
-                hc.Add(new TH1F(Form("h_ht%s%s"        , hn.c_str(), ns.c_str()), Form("H_{T}%s%s;H_{T} (GeV);Events"              , ts.c_str(), ht.c_str()), 20 , 0   , 1000));
-                hc.Add(new TH1F(Form("h_mt%s%s"        , hn.c_str(), ns.c_str()), Form("m_{T}%s%s;m_{T} (GeV);Events"              , ts.c_str(), ht.c_str()), 8  , 0   , 400 ));
-                hc.Add(new TH1F(Form("h_met%s%s"       , hn.c_str(), ns.c_str()), Form("MET%s%s;E_{T}^{miss} (GeV);Events"         , ts.c_str(), ht.c_str()), 8  , 0   , 400 ));
-                hc.Add(new TH1F(Form("h_nbtags%s%s"    , hn.c_str(), ns.c_str()), Form("# btags%s%s;# btags;Events"                , ts.c_str(), ht.c_str()), 7  , -0.5, 6.5 ));
-                hc.Add(new TH1F(Form("h_njets%s%s"     , hn.c_str(), ns.c_str()), Form("# jets%s%s;# jets;Events"                  , ts.c_str(), ht.c_str()), 8  ,  1.5, 9.5 ));
+                hc.Add(new TH1F(Form("h_dilep_mass%s%s"    , hn.c_str(), ns.c_str()), Form("dilepton mass%s%s;mass (GeV);Events"       , ts.c_str(), ht.c_str()), 100, 0   , 200 ));
+                hc.Add(new TH1F(Form("h_dilep_mass_nj0%s%s", hn.c_str(), ns.c_str()), Form("dilepton mass%s%s;mass (GeV);Events"       , ts.c_str(), ht.c_str()), 100, 0   , 200 ));
+                hc.Add(new TH1F(Form("h_dilep_mass_nj1%s%s", hn.c_str(), ns.c_str()), Form("dilepton mass%s%s;mass (GeV);Events"       , ts.c_str(), ht.c_str()), 100, 0   , 200 ));
+                hc.Add(new TH1F(Form("h_dilep_mass_nj2%s%s", hn.c_str(), ns.c_str()), Form("dilepton mass%s%s;mass (GeV);Events"       , ts.c_str(), ht.c_str()), 100, 0   , 200 ));
+                hc.Add(new TH1F(Form("h_pt1%s%s"           , hn.c_str(), ns.c_str()), Form("Higher p_{T} lepton%s%s;p_{T} (GeV);Events", ts.c_str(), ht.c_str()), 10 , 0   , 200 ));
+                hc.Add(new TH1F(Form("h_pt2%s%s"           , hn.c_str(), ns.c_str()), Form("Lower p_{T} lepton%s%s;p_{T} (GeV);Events" , ts.c_str(), ht.c_str()), 10 , 0   , 200 ));
+                hc.Add(new TH1F(Form("h_ht%s%s"            , hn.c_str(), ns.c_str()), Form("H_{T}%s%s;H_{T} (GeV);Events"              , ts.c_str(), ht.c_str()), 20 , 0   , 1000));
+                hc.Add(new TH1F(Form("h_mt%s%s"            , hn.c_str(), ns.c_str()), Form("m_{T}%s%s;m_{T} (GeV);Events"              , ts.c_str(), ht.c_str()), 8  , 0   , 400 ));
+                hc.Add(new TH1F(Form("h_met%s%s"           , hn.c_str(), ns.c_str()), Form("MET%s%s;E_{T}^{miss} (GeV);Events"         , ts.c_str(), ht.c_str()), 8  , 0   , 400 ));
+                hc.Add(new TH1F(Form("h_nbtags%s%s"        , hn.c_str(), ns.c_str()), Form("# btags%s%s;# btags;Events"                , ts.c_str(), ht.c_str()), 7  , -0.5, 6.5 ));
+                hc.Add(new TH1F(Form("h_njets%s%s"         , hn.c_str(), ns.c_str()), Form("# jets%s%s;# jets;Events"                  , ts.c_str(), ht.c_str()), 8  ,  1.5, 9.5 ));
             }
         }
 
@@ -970,6 +984,23 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_met"       +hs+qs], pfmet()     , evt_weight);
         rt::Fill(hc["h_nbtags"    +hs+qs], nbtags()    , evt_weight);
         rt::Fill(hc["h_njets"     +hs+qs], njets()     , evt_weight);
+
+        // njets cut
+        if (njets()==0) 
+        {
+            rt::Fill(hc["h_dilep_mass_nj0"+qs   ], dilep_mass(), evt_weight);
+            rt::Fill(hc["h_dilep_mass_nj0"+hs+qs], dilep_mass(), evt_weight);
+        }
+        if (njets()==1) 
+        {
+            rt::Fill(hc["h_dilep_mass_nj1"+qs   ], dilep_mass(), evt_weight);
+            rt::Fill(hc["h_dilep_mass_nj1"+hs+qs], dilep_mass(), evt_weight);
+        }
+        if (njets()>=2) 
+        {
+            rt::Fill(hc["h_dilep_mass_nj2"+qs   ], dilep_mass(), evt_weight);
+            rt::Fill(hc["h_dilep_mass_nj2"+hs+qs], dilep_mass(), evt_weight);
+        }
 
         double dphi_lep = fabs(ROOT::Math::VectorUtil::DeltaPhi(p41, p42));
         rt::Fill(hc["h_lepdphi"+qs], dphi_lep, evt_weight);
