@@ -41,11 +41,11 @@ namespace at
         }
         if (chain->GetListOfFiles()->GetEntries()<1)
         {
-            throw std::invalid_argument("at::ScanChain: chain has no files!");
+            throw std::invalid_argument("at::SkimChain: chain has no files!");
         }
         if (not chain->GetFile())
         {
-            throw std::invalid_argument("at::ScanChain: chain has no files or file path is invalid!");
+            throw std::invalid_argument("at::SkimChain: chain has no files or file path is invalid!");
         }
         rt::PrintFilesFromTChain(chain);
         string tree_name = chain->GetName();
@@ -113,28 +113,26 @@ namespace at
                 GetEntry(ntuple_class, event);
                 ++num_events_total;
 
-                unsigned int run = Run(ntuple_class);
-                unsigned int ls  = LumiBlock(ntuple_class);
-                unsigned int evt = Event(ntuple_class);
+                const unsigned int run = Run(ntuple_class);
+                const unsigned int ls  = LumiBlock(ntuple_class);
+                const unsigned int evt = Event(ntuple_class);
 
                 // filter out events
                 if (IsRealData(ntuple_class))
                 {
-                    //if (verbose) {cout << "good run file = " << goodrun_file_name << endl;}
                     if (!goodrun_file_name.empty())
                     {
                         // check for good run and events
                         if(!goodrun(run, ls)) 
-                            //if(!goodrun_json(tas::evt_run(), tas::evt_lumiBlock())) 
                         {
                             if (verbose) {cout << "Bad run and lumi:\t" << run << ", " << ls << endl;}
                             bad_events++;
                             continue;
                         }
-                        //else
-                        //{
-                        //    if (verbose) {cout << "Good run and lumi:\t" << tas::evt_run() << ", " << tas::evt_lumiBlock() << endl;}
-                        //}
+                        else
+                        {
+                            if (verbose) {cout << "Good run and lumi:\t" << tas::evt_run() << ", " << tas::evt_lumiBlock() << endl;}
+                        }
                     }
 
                     // check for dupiclate run and events
