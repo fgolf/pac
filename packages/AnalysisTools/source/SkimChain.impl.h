@@ -131,7 +131,7 @@ namespace at
                         }
                         else
                         {
-                            if (verbose) {cout << "Good run and lumi:\t" << tas::evt_run() << ", " << tas::evt_lumiBlock() << endl;}
+                            if (verbose) {cout << "Good run and lumi:\t" << run << ", " << ls << endl;}
                         }
                     }
 
