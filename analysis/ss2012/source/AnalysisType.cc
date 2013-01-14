@@ -25,15 +25,17 @@ ss::AnalysisTypeInfo s_AnalysisTypeInfos[] =
         "low p_{T}",
         // latex title
         "low $p_{T}$"
+    },
+    {
+        // name
+        "vlow_pt", 
+        // short name
+        "vpt", 
+        // ROOT title
+        "very low p_{T} (iso on #mu trigger)",
+        // latex title
+        "very low $p_{T}$ (iso on $\\mu$ trigger)"
     }
-    //{
-    //    // name
-    //    "low_pt_v2", 
-    //    // ROOT title
-    //    "low p_{T} (no iso on #mu trigger)",
-    //    // latex title
-    //    "low $p_{T}$ (no iso on $\\mu$ trigger)"
-    //}
 };
 
 // check that the AnalysisTypeInfoArray is the same size as the enum
@@ -85,6 +87,7 @@ namespace ss
         return GetAnalysisTypeInfo(analysis_type); 
     }
 
+    // aliases for TTree
 	void SetAnalysisTypeAliases(TTree& tree)
 	{
 		tree.SetAlias("trig_mm_hpt", "trig_mm");
@@ -95,9 +98,9 @@ namespace ss
 		tree.SetAlias("trig_em_lpt", "trig_em_iso_ht");
 		tree.SetAlias("trig_ee_lpt", "trig_ee_noiso_ht");
 
-		tree.SetAlias("trig_mm_lptv2", "trig_mm_ht");
-		tree.SetAlias("trig_em_lptv2", "trig_em_ht");
-		tree.SetAlias("trig_ee_lptv2", "trig_ee_noiso_ht");
+		tree.SetAlias("trig_mm_vpt", "trig_mm_ht");
+		tree.SetAlias("trig_em_vpt", "trig_em_ht");
+		tree.SetAlias("trig_ee_vpt", "trig_ee_noiso_ht");
 	}
 
 } // namespace ss

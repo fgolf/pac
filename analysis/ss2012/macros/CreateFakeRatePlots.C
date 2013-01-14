@@ -683,8 +683,8 @@ void PrintFRRatioPlot(const std::string& suffix = "png")
 
 void PrintFRDiffPlot(const std::string& suffix = "png")
 {
-    float max = 0.2;
-    float min = -0.2;
+    float max = 0.1;
+    float min = -0.1;
     string path = "plots/fake_rates/compare_19p5";
 
 	// set style
@@ -698,12 +698,13 @@ void PrintFRDiffPlot(const std::string& suffix = "png")
     float lumi1 = 10.5;
     float lumi2 = 19.5;
 
-    string mu_title = Form("differenc of #mu fake rates (%1.1f FR - %1.1f FR)"     , lumi2, lumi1);
-    string el_title = Form("differenc of electron fake rates (%1.1f FR - %1.1f FR)", lumi2, lumi1);
+    string mu_title = Form("Difference of #mu fake rates (%1.1f FR - %1.1f FR)/%1.1f FR"     , lumi2, lumi1, lumi2);
+    string el_title = Form("Difference of electron fake rates (%1.1f FR - %1.1f FR)/%1.1f FR", lumi2, lumi1, lumi2);
 
 	hc.Add(dynamic_cast<TH1*>(hc2["h_mufr40c_vs_pt"]->Clone("h_mufr_diff_vs_pt")));
 	hc["h_mufr_diff_vs_pt"]->SetTitle(Form("%s;p_{T} (GeV)", mu_title.c_str()));
 	hc["h_mufr_diff_vs_pt"]->Add(hc1["h_mufr40c_vs_pt"], -1.0);
+	hc["h_mufr_diff_vs_pt"]->Divide(hc2["h_mufr40c_vs_pt"]);
 	hc["h_mufr_diff_vs_pt"]->GetYaxis()->SetRangeUser(min, max);
 	hc["h_mufr_diff_vs_pt"]->SetMarkerSize(1.4);
 	hc["h_mufr_diff_vs_pt"]->SetMarkerStyle(20);
@@ -713,6 +714,7 @@ void PrintFRDiffPlot(const std::string& suffix = "png")
 	hc.Add(dynamic_cast<TH1*>(hc2["h_mufr40c_vs_eta"]->Clone("h_mufr_diff_vs_eta")));
 	hc["h_mufr_diff_vs_eta"]->SetTitle(Form("%s;|#eta|", mu_title.c_str()));
 	hc["h_mufr_diff_vs_eta"]->Add(hc1["h_mufr40c_vs_eta"], -1.0);
+	hc["h_mufr_diff_vs_eta"]->Divide(hc2["h_mufr40c_vs_eta"]);
 	hc["h_mufr_diff_vs_eta"]->GetYaxis()->SetRangeUser(min, max);
 	hc["h_mufr_diff_vs_eta"]->SetMarkerSize(1.4);
 	hc["h_mufr_diff_vs_eta"]->SetMarkerStyle(20);
@@ -722,6 +724,7 @@ void PrintFRDiffPlot(const std::string& suffix = "png")
 	hc.Add(dynamic_cast<TH1*>(hc2["h_mufr40c_vs_nvtxs"]->Clone("h_mufr_diff_vs_nvtxs")));
 	hc["h_mufr_diff_vs_nvtxs"]->SetTitle(Form("%s;# vertices", mu_title.c_str()));
 	hc["h_mufr_diff_vs_nvtxs"]->Add(hc1["h_mufr40c_vs_nvtxs"], -1.0);
+	hc["h_mufr_diff_vs_nvtxs"]->Divide(hc2["h_mufr40c_vs_nvtxs"]);
 	hc["h_mufr_diff_vs_nvtxs"]->GetYaxis()->SetRangeUser(min, max);
 	hc["h_mufr_diff_vs_nvtxs"]->SetMarkerSize(1.4);
 	hc["h_mufr_diff_vs_nvtxs"]->SetMarkerStyle(20);
@@ -729,8 +732,9 @@ void PrintFRDiffPlot(const std::string& suffix = "png")
 	hc["h_mufr_diff_vs_nvtxs"]->Draw();
 
 	hc.Add(dynamic_cast<TH1*>(hc2["h_elfr40c_vs_pt"]->Clone("h_elfr_diff_vs_pt")));
-	hc["h_elfr_diff_vs_pt"]->SetTitle(Form("%s5 FR);p_{T} (GeV)", el_title.c_str()));
+	hc["h_elfr_diff_vs_pt"]->SetTitle(Form("%s;p_{T} (GeV)", el_title.c_str()));
 	hc["h_elfr_diff_vs_pt"]->Add(hc1["h_elfr40c_vs_pt"], -1.0);
+	hc["h_elfr_diff_vs_pt"]->Divide(hc2["h_elfr40c_vs_pt"]);
 	hc["h_elfr_diff_vs_pt"]->GetYaxis()->SetRangeUser(min, max);
 	hc["h_elfr_diff_vs_pt"]->SetMarkerSize(1.4);
 	hc["h_elfr_diff_vs_pt"]->SetMarkerStyle(20);
@@ -738,8 +742,9 @@ void PrintFRDiffPlot(const std::string& suffix = "png")
 	hc["h_elfr_diff_vs_pt"]->Draw();
 
 	hc.Add(dynamic_cast<TH1*>(hc2["h_elfr40c_vs_eta"]->Clone("h_elfr_diff_vs_eta")));
-	hc["h_elfr_diff_vs_eta"]->SetTitle(Form("%s5 FR);|#eta|", el_title.c_str()));
+	hc["h_elfr_diff_vs_eta"]->SetTitle(Form("%s;|#eta|", el_title.c_str()));
 	hc["h_elfr_diff_vs_eta"]->Add(hc1["h_elfr40c_vs_eta"], -1.0);
+	hc["h_elfr_diff_vs_eta"]->Divide(hc2["h_elfr40c_vs_eta"]);
 	hc["h_elfr_diff_vs_eta"]->GetYaxis()->SetRangeUser(min, max);
 	hc["h_elfr_diff_vs_eta"]->SetMarkerSize(1.4);
 	hc["h_elfr_diff_vs_eta"]->SetMarkerStyle(20);
@@ -747,8 +752,9 @@ void PrintFRDiffPlot(const std::string& suffix = "png")
 	hc["h_elfr_diff_vs_eta"]->Draw();
 
 	hc.Add(dynamic_cast<TH1*>(hc2["h_elfr40c_vs_nvtxs"]->Clone("h_elfr_diff_vs_nvtxs")));
-	hc["h_elfr_diff_vs_nvtxs"]->SetTitle(Form("%s5 FR);# vertices", el_title.c_str()));
+	hc["h_elfr_diff_vs_nvtxs"]->SetTitle(Form("%s;# vertices", el_title.c_str()));
 	hc["h_elfr_diff_vs_nvtxs"]->Add(hc1["h_elfr40c_vs_nvtxs"], -1.0);
+	hc["h_elfr_diff_vs_nvtxs"]->Divide(hc2["h_elfr40c_vs_nvtxs"]);
 	hc["h_elfr_diff_vs_nvtxs"]->GetYaxis()->SetRangeUser(min, max);
 	hc["h_elfr_diff_vs_nvtxs"]->SetMarkerSize(1.4);
 	hc["h_elfr_diff_vs_nvtxs"]->SetMarkerStyle(20);

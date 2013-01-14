@@ -410,7 +410,8 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     Yield yield_sf(GetSFYield("data"    , signal_region_num, charge_option, output_path));
     Yield yield_df(GetDFYield("data"    , signal_region_num, charge_option, output_path));
     Yield yield_fake(GetFakeYield("data", signal_region_num, charge_option, output_path));
-    Yield yield_flip(GetFlipYield("data", signal_region_num, 0, output_path));
+    //Yield yield_flip(GetFlipYield("data", signal_region_num, /*charge_option=*/0, output_path));
+    Yield yield_flip(GetFlipYield("data", signal_region_num, charge_option, output_path));
     if (signal_region_num == 2 || signal_region_num == 9)
     {
         yield_flip = 0.5*GetFlipYield("data", 1, charge_option, output_path);
@@ -420,7 +421,8 @@ void PrintYields(unsigned int signal_region_num = 0, const std::string output_pa
     // handle ++/-- charge flip case
     if (charge_option == 1 || charge_option == -1)
     {
-        yield_flip = 0.5*GetFlipYield("data", signal_region_num, /*charge_option=*/0, output_path);
+        //yield_flip = 0.5*GetFlipYield("data", signal_region_num, /*charge_option=*/0, output_path);
+        yield_flip = 0.5*GetFlipYield("data", signal_region_num, /*charge_option=*/charge_option, output_path);
         yield_flip.title = "Flips";
     }
 

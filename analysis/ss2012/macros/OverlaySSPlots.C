@@ -43,7 +43,7 @@ rt::TH1Overlay CreateOverlay
     const Color_t fake_color  = kRed-6;
     const Color_t flip_color  = kOrange-8;
     const Style_t data_marker = 20;
-    const float marker_size   = 1.5;
+    const float marker_size   = 0.9;
     const Style_t shade_style = 3335;
     const string flip_legend  = "Charge-flip";
     const string fake_legend  = "Fakes";
@@ -91,43 +91,59 @@ rt::TH1Overlay CreateOverlay
 }
 
 // Overlay the kinematic plots
-void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const std::string& output_name = "", const std::string& suffix = "png")
+void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const std::string& output_name = "", int charge_type = 0, const std::string& suffix = "png")
 {
     ss::SignalRegionInfo sr = ss::GetSignalRegionInfo(signal_region_num);
 
-    rt::TH1Container hc_data(Form("plots/%s/%s/data.root", output_name.c_str(), sr.name.c_str()));
+	// charge type
+	string charge_stem = "";
+	switch (charge_type)
+	{
+		case 0 : charge_stem = ""; break;
+		case 1 : charge_stem = "_pp"; break;
+		case -1: charge_stem = "_mm"; break;
+	}
+
+    rt::TH1Container hc_data(Form("plots/%s/%s/data%s.root", output_name.c_str(), sr.name.c_str(), charge_stem.c_str()));
     rt::TH1Container hc_mc;
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t.root" , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2m.root" , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2e.root" , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wz.root"       , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/zz.root"       , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttg.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttw.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttz.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/tbz.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttww.root"     , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwg.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/www.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwz.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wzz.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/zzz.root"      , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wmwmqq.root"   , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/wpwpqq.root"   , output_name.c_str() , sr.name.c_str()));
-    hc_mc += rt::TH1Container(Form("plots/%s/%s/ww_ds.root"    , output_name.c_str() , sr.name.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2t%s.root" , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2m%s.root" , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wgstar2e%s.root" , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wz%s.root"       , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/zz%s.root"       , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttg%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttw%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttz%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/tbz%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ttww%s.root"     , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwg%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/www%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wwz%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wzz%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/zzz%s.root"      , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wmwmqq%s.root"   , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/wpwpqq%s.root"   , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
+    hc_mc += rt::TH1Container(Form("plots/%s/%s/ww_ds%s.root"    , output_name.c_str() , sr.name.c_str(), charge_stem.c_str()));
     
 	// set style
 	rt::SetTDRStyle();
     gStyle->SetHatchesSpacing(1.00);
 
     // title
-	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	string charge_title = "";
+	switch (charge_type)
+	{
+		case 0 : charge_title = ""; break;
+		case 1 : charge_title = ", (++)"; break;
+		case -1: charge_title = ", (--)"; break;
+	}
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}%s", lumi, charge_title.c_str());
 
     // overlays
     map<string, rt::TH1Overlay> p;
     rt::TH1Overlay::profile_marker_size_default = 10.0;
     p["p_yield"       ] = CreateOverlay(hc_data, hc_mc, "yield"      , Form("%s;channel;Events"                  , title.c_str()), "sb::off dt::stack lg::top_left" );
-    p["p_dilep_mass"  ] = CreateOverlay(hc_data, hc_mc, "dilep_mass" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
+    p["p_dilep_mass"  ] = CreateOverlay(hc_data, hc_mc, "dilep_mass" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_pt1"         ] = CreateOverlay(hc_data, hc_mc, "pt1"        , Form("%s;p^{lep1}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_pt2"         ] = CreateOverlay(hc_data, hc_mc, "pt2"        , Form("%s;p^{lep2}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_met"         ] = CreateOverlay(hc_data, hc_mc, "met"        , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
@@ -144,9 +160,9 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
     p["p_ptjetlep"    ] = CreateOverlay(hc_data, hc_mc, "ptjetlep"   , Form("%s;jet p_{T} / lep p_{T} - 1;Events", title.c_str()), "sb::off dt::stack lg::top_right");
     p["p_drlep3rdlep" ] = CreateOverlay(hc_data, hc_mc, "drlep3rdlep", Form("%s;#DeltaR(lep, 3rd lep);Events"    , title.c_str()), "sb::off dt::stack lg::top_right");
 
-    p["p_dilep_mass_nj0"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
-    p["p_dilep_mass_nj1"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
-    p["p_dilep_mass_nj2"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
+    p["p_dilep_mass_nj0"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_dilep_mass_nj1"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_right");
+    p["p_dilep_mass_nj2"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_right");
 
     // overlay individual channels
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
@@ -157,7 +173,7 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
         string hn = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
         //string ht = Form(" (%s)",  GetDileptonHypTypeTitle(hyp_type).c_str());
 
-        p["p_dilep_mass"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass"+hn , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_left" );
+        p["p_dilep_mass"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass"+hn , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::top_right");
         p["p_pt1"       +hn] = CreateOverlay(hc_data, hc_mc, "pt1"       +hn , Form("%s;p^{lep1}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
         p["p_pt2"       +hn] = CreateOverlay(hc_data, hc_mc, "pt2"       +hn , Form("%s;p^{lep2}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
         p["p_met"       +hn] = CreateOverlay(hc_data, hc_mc, "met"       +hn , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::top_right");
@@ -166,27 +182,27 @@ void OverlaySSPlots(float lumi = 1.0, unsigned int signal_region_num = 0, const 
         p["p_nbtags"    +hn] = CreateOverlay(hc_data, hc_mc, "nbtags"    +hn , Form("%s;number of b-tagged jets;Events"  , title.c_str()), "sb::off dt::stack lg::top_right");
         p["p_njets"     +hn] = CreateOverlay(hc_data, hc_mc, "njets"     +hn , Form("%s;number of jets;Events"           , title.c_str()), "sb::off dt::stack lg::top_right");
 
-        p["p_dilep_mass_nj0"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_left" );
-        p["p_dilep_mass_nj1"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_left" );
-        p["p_dilep_mass_nj2"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_left" );
+        p["p_dilep_mass_nj0"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_dilep_mass_nj1"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_right");
+        p["p_dilep_mass_nj2"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::top_right");
     }
 
 	// SR label
-    TLatex t1_upper_left (0.18, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
-    TLatex t1_upper_right(0.58, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
-    t1_upper_left.SetTextSize(0.028);
-    t1_upper_right.SetTextSize(0.028);
-    for (map<string, rt::TH1Overlay>::iterator p_iter = p.begin(); p_iter != p.end(); p_iter++)
-    {
-        if (p_iter->first == "p_yield")
-        {
-            p_iter->second.AddText(t1_upper_right);
-        }
-        else
-        {
-            p_iter->second.AddText(t1_upper_left);
-        }
-    }
+    //TLatex t1_upper_left (0.18, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
+    //TLatex t1_upper_right(0.58, 0.84, Form("%s: %s", sr.name.c_str(), sr.title.c_str())); 
+    //t1_upper_left.SetTextSize(0.028);
+    //t1_upper_right.SetTextSize(0.028);
+    //for (map<string, rt::TH1Overlay>::iterator p_iter = p.begin(); p_iter != p.end(); p_iter++)
+    //{
+    //    if (p_iter->first == "p_yield")
+    //    {
+    //        p_iter->second.AddText(t1_upper_right);
+    //    }
+    //    else
+    //    {
+    //        p_iter->second.AddText(t1_upper_left);
+    //    }
+    //}
 
      // write
  	rt::CopyIndexPhp(Form("plots/%s/%s/kin", output_name.c_str(), sr.name.c_str()));

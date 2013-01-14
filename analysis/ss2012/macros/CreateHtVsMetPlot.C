@@ -34,13 +34,18 @@ void CreateHtVsMetPlot(int nbtags = 2, bool high_pt = true, const std::string& s
     //TH2F* h2_ht_vs_pfmet_baseline_njge4_em = new TH2F("h2_ht_vs_pfmet_baseline_njge4_em", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
     //TH2F* h2_ht_vs_pfmet_baseline_njge4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njge4_ee", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
 
-    TCut selection = Form("is_ss && njets>=2 && nbtags>=%d && is_good_lumi", nbtags);
+    //TCut selection = Form("is_ss && njets>=2 && nbtags>=%d && is_good_lumi && lep1_p4.pt()>20 && lep2_p4.pt()> 20 && pfmet>30", nbtags);
+    TCut selection = Form("is_ss && njets>=2 && nbtags>=%d && is_good_lumi && pfmet>30", nbtags);
 	if (not high_pt)
 	{
 		selection = selection && TCut("(mm && (trig_mm_dmu8_m8_pfnopuht175 || trig_mm_dmu8_m8_pfht175)) || "
 								      "(em && (trig_em_mu8_el8_id_m8_pfnopuht175 || trig_em_mu8_el8_id_m8_pfht175)) || "
 									  "(ee && (trig_ee_del8_id_m8_pfnopuht175 || trig_ee_del8_id_m8_pfht175))"); 
-		selection = selection && TCut("ht > 200 && lep2_p4.pt()>10.0");
+		selection = selection && TCut("ht > 200 && lep1_p4.pt()>10.0 && lep2_p4.pt()>10.0");
+	}
+	else
+	{
+		selection = selection && TCut("lep1_p4.pt()>20.0 && lep2_p4.pt()>20.0");
 	}
 
     e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_mm", selection && "dilep_type==1 && njets<4" , "goff");
@@ -98,28 +103,44 @@ void CreateHtVsMetPlot(int nbtags = 2, bool high_pt = true, const std::string& s
     l1->SetFillStyle(0);
     l1->SetBorderSize(0);
     //l1->SetTextSize(0.1);
-    l1->AddEntry(h2_ht_vs_pfmet_baseline_njlt4_ee, "ee (2 #leq # jets < 4)"       , "p");
-    l1->AddEntry(h2_ht_vs_pfmet_baseline_njlt4_em, "e#mu (2 #leq # jets < 4)"     , "p");
-    l1->AddEntry(h2_ht_vs_pfmet_baseline_njlt4_mm, "#mu#mu (2 #leq # jets < 4)"   , "p");
-    l1->AddEntry(h2_ht_vs_pfmet_baseline_njge4_ee, "ee (# jets #geq 4)"    , "p");
-    l1->AddEntry(h2_ht_vs_pfmet_baseline_njge4_em, "e#mu (# jets #geq 4)"  , "p");
-    l1->AddEntry(h2_ht_vs_pfmet_baseline_njge4_mm, "#mu#mu (# jets #geq 4)", "p");
+    l1->AddEntry(h2_ht_vs_pfmet_baseline_njlt4_ee, "ee (2 #leq # jets < 4)"    , "p");
+    l1->AddEntry(h2_ht_vs_pfmet_baseline_njlt4_em, "e#mu (2 #leq # jets < 4)"  , "p");
+    l1->AddEntry(h2_ht_vs_pfmet_baseline_njlt4_mm, "#mu#mu (2 #leq # jets < 4)", "p");
+    l1->AddEntry(h2_ht_vs_pfmet_baseline_njge4_ee, "ee (# jets #geq 4)"        , "p");
+    l1->AddEntry(h2_ht_vs_pfmet_baseline_njge4_em, "e#mu (# jets #geq 4)"      , "p");
+    l1->AddEntry(h2_ht_vs_pfmet_baseline_njge4_mm, "#mu#mu (# jets #geq 4)"    , "p");
     l1->Draw();
 
     // cut out region
-    const int n=6;
-    float x1[n], y1[n];
-    for (Int_t i=0;i<n;i++)
+    const int n1=8;
+    float x1[n1], y1[n1];
+    for (Int_t i=0;i<n1;i++)
     {
-        x1[i] = 80.0; 
+        x1[i] = (high_pt ? 80.0 : 200); 
         y1[i] = i*50;
     }
-    TGraph* g_implied = new TGraph(n,x1,y1);
-    g_implied->SetLineColor(kWhite);
-    g_implied->SetLineWidth(0);
-    g_implied->SetLineWidth(7500);
-    g_implied->SetFillStyle(3005);
-    g_implied->Draw();
+    TGraph* g1 = new TGraph(n1,x1,y1);
+    g1->SetLineColor(kWhite);
+    g1->SetLineWidth(0);
+    g1->SetLineWidth(7500);
+    g1->SetFillStyle(3005);
+    g1->Draw();
+
+    //const int n2=13;
+    //float x2[n2], y2[n2];
+    //for (Int_t i=0;i<n2;i++)
+    //{
+    //    x2[i] = i*100;
+	//	y2[i] = 30; 
+	//	cout << Form("x2 %f y2 %f", x2[i], y2[i]) << endl;
+    //}
+    //TGraph* g2 = new TGraph(n2,x2,y2);
+    //g2->SetLineColor(kBlack);
+    //g2->SetFillColor(kBlack);
+    //g2->SetLineWidth(0);
+    ////g2->SetLineWidth(7500);
+    //g2->SetFillStyle(3005);
+    //g2->Draw();
 
     cout << "ee nj2 entried = " << h2_ht_vs_pfmet_baseline_njlt4_ee->GetEntries() << endl;
     cout << "em nj2 entried = " << h2_ht_vs_pfmet_baseline_njlt4_em->GetEntries() << endl;

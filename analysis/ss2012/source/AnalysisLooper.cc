@@ -196,24 +196,24 @@ bool IsDenominator(const HypInfo& hyp, bool is_lt)
     return false;
 }
 
-float EffectiveArea03(int id, int idx)
-{
-    if (abs(id)!=11)
-        return -999990.0;
-
-    float etaAbs = fabs(els_etaSC()[idx]);
-
-    // get effective area
-    float AEff = 0.;
-    if (etaAbs <= 1.0) AEff = 0.10;
-    else if (etaAbs > 1.0 && etaAbs <= 1.479) AEff = 0.12;
-    else if (etaAbs > 1.479 && etaAbs <= 2.0) AEff = 0.085;
-    else if (etaAbs > 2.0 && etaAbs <= 2.2) AEff = 0.11;
-    else if (etaAbs > 2.2 && etaAbs <= 2.3) AEff = 0.12;
-    else if (etaAbs > 2.3 && etaAbs <= 2.4) AEff = 0.12;
-    else if (etaAbs > 2.4) AEff = 0.13;
-    return AEff;
-}
+//float EffectiveArea03(int id, int idx)
+//{
+//    if (abs(id)!=11)
+//        return -999990.0;
+//
+//    float etaAbs = fabs(els_etaSC()[idx]);
+//
+//    // get effective area
+//    float AEff = 0.;
+//    if (etaAbs <= 1.0) AEff = 0.10;
+//    else if (etaAbs > 1.0 && etaAbs <= 1.479) AEff = 0.12;
+//    else if (etaAbs > 1.479 && etaAbs <= 2.0) AEff = 0.085;
+//    else if (etaAbs > 2.0 && etaAbs <= 2.2) AEff = 0.11;
+//    else if (etaAbs > 2.2 && etaAbs <= 2.3) AEff = 0.12;
+//    else if (etaAbs > 2.3 && etaAbs <= 2.4) AEff = 0.12;
+//    else if (etaAbs > 2.4) AEff = 0.13;
+//    return AEff;
+//}
 
 // place holder until I figure out the right thing
 float EffectiveArea04(int, int)
@@ -338,9 +338,9 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     if (samesign::isNumeratorHypothesis(ihyp))
     {
         //cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
-        cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
-                     evt_run(), evt_lumiBlock(), evt_event(),
-                     channel_names[type].c_str(),
+        cout << Form("%6u | %3u | %12u | %s | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
+                     evt_run(), evt_lumiBlock(), evt_event(), 
+                     channel_names[type].c_str(), (l1_p4 + l2_p4).M(), 
                      l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
                      l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
                      met,
@@ -350,9 +350,9 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     }
     else
     {
-        cout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
+        cout << Form("%6u | %3u | %12u | %s | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
                      evt_run(), evt_lumiBlock(), evt_event(),
-                     channel_names[type].c_str(),
+                     channel_names[type].c_str(), (l1_p4 + l2_p4).M(),
                      l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
                      l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
                      met,
@@ -372,12 +372,12 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     //if ((evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
     //if ((evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
     //if ((evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
-    //{
-    //	cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx);
-    //	cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx);
-    //	cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
-    //	cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
-    //}
+    {
+    	cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx, true);
+    	//cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
+    	cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx, true);
+    	//cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
+    }
 }
 
 // construct:
@@ -564,7 +564,7 @@ void SSAnalysisLooper::BeginJob()
 
     if (m_sync_print)
     {
-        cout << "Run | LS | Event | channel | " 
+        cout << "Run | LS | Event | channel | dilep Mass | " 
                 "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
                 "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
                 "MET | HT | nJets | nbJets" << endl;
@@ -630,6 +630,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //if (!(evt_event() ==  1766536290))  // fails gamma*
         //if (!(evt_event() ==  113167649))  // fails gamma*
         //if (!(evt_event()==663249061 || evt_event()==27490600 || evt_event()==131247937)) 
+        //if (!(evt_event() ==  373153872))  // fails gamma*
         //{
         //    return 0;
         //}
@@ -1218,7 +1219,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep1.cordetiso04 = m_evt.lep1.detiso04 - (log(m_evt.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep1.p4.pt()); // check that I have the correct formula 
         m_evt.lep1.corpfiso    = samesign::leptonIsolation(lep1_id, lep1_idx);
         m_evt.lep1.corpfiso04  = -999999.0;   // this is not implemented yet 
-        m_evt.lep1.effarea     = EffectiveArea03(lep1_id, lep1_idx);  // is there a diffenece for different cone sizes? 
+        m_evt.lep1.effarea     = samesign::EffectiveArea03(lep1_id, lep1_idx);  // is there a diffenece for different cone sizes? 
         m_evt.lep1.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
         m_evt.lep1.dbeta       = (lep1_is_mu) ? mus_isoR03_pf_PUPt().at(lep1_idx) : -99999.0;
         m_evt.lep1.dbeta04     = (lep1_is_mu) ? mus_isoR04_pf_PUPt().at(lep1_idx) : -99999.0;
@@ -1236,7 +1237,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep2.cordetiso04 = m_evt.lep2.detiso04 - (log(m_evt.lep2.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep2.p4.pt()); // check that I have the correct formula 
         m_evt.lep2.corpfiso    = samesign::leptonIsolation(lep2_id, lep2_idx);
         m_evt.lep2.corpfiso04  = -999999.0;   // this is not implemented yet 
-        m_evt.lep2.effarea     = EffectiveArea03(lep2_id, lep2_idx);  // is there a diffenece for different cone sizes? 
+        m_evt.lep2.effarea     = samesign::EffectiveArea03(lep2_id, lep2_idx);  // is there a diffenece for different cone sizes? 
         m_evt.lep2.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
         m_evt.lep2.dbeta       = (lep2_is_mu) ? mus_isoR03_pf_PUPt().at(lep2_idx) : -99999.0;
         m_evt.lep2.dbeta04     = (lep2_is_mu) ? mus_isoR04_pf_PUPt().at(lep2_idx) : -99999.0;

@@ -165,7 +165,7 @@ def make_hist(signal_region, sample):
 
 def overlay_hist(signal_region):
 	print "overlaying plots for signal region %d" % signal_region
-	cmd = "root -b -q -l \"macros/OverlaySSPlots.C+ (%1.3f, %d, \\\"%s\\\", \\\"%s\\\")\" 2> /dev/null" % (float(options.lumi), signal_region, options.out_name, options.suffix)
+	cmd = "root -b -q -l \"macros/OverlaySSPlots.C+ (%1.3f, %d, \\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" % (float(options.lumi), signal_region, options.out_name, int(options.charge), options.suffix)
 	if (options.verbose):
 		print cmd
 	if (not options.test):
@@ -192,6 +192,7 @@ def print_yield_table(signal_region, do_append):
 	# text file
 	text_name  = "%s/yields_%s.txt" % (table_path, options.out_name)
 	cmd = "root -b -q -l \"macros/PrintYields.C+ (%d, \\\"%s\\\", %d, 0); %s %s\" " % (signal_region, options.out_name, int(options.charge), operator, text_name)
+
 	if (options.verbose):
 		print cmd
 	if (not options.test):
