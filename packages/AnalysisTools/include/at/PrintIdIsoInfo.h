@@ -7,7 +7,7 @@ namespace at
     void PrintIsoInfo(int id, int idx);
 
     // print the ID variables
-    void PrintIdInfo(int id, int idx);
+    void PrintIdInfo(int id, int idx, bool use_el_eta = false);
 
 } // namespace at
 

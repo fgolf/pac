@@ -8,25 +8,6 @@
 #include "electronSelections.h"
 #include "trackSelections.h"
 
-float EffectiveArea(int id, int idx)
-{
-    if (abs(id)!=11)
-        return -999990.0;
-
-    float etaAbs = fabs(cms2.els_etaSC()[idx]);
-
-    // get effective area
-    float AEff = 0.;
-    if (etaAbs <= 1.0) AEff = 0.10;
-    else if (etaAbs > 1.0 && etaAbs <= 1.479) AEff = 0.12;
-    else if (etaAbs > 1.479 && etaAbs <= 2.0) AEff = 0.085;
-    else if (etaAbs > 2.0 && etaAbs <= 2.2) AEff = 0.11;
-    else if (etaAbs > 2.2 && etaAbs <= 2.3) AEff = 0.12;
-    else if (etaAbs > 2.3 && etaAbs <= 2.4) AEff = 0.12;
-    else if (etaAbs > 2.4) AEff = 0.13;
-    return AEff;
-}
-
 namespace at
 {
     void PrintIsoInfo(int id, int idx)
@@ -45,7 +26,7 @@ namespace at
             cout << "\tpfiso_em ext = " << cms2.els_iso03_pf2012ext_em().at(idx) << endl;
             cout << "\tpfiso_nh ext = " << cms2.els_iso03_pf2012ext_nh().at(idx) << endl;
             cout << "\trho          = " << cms2.evt_kt6pf_foregiso_rho() << endl;
-            cout << "\tA_eff        = " << EffectiveArea(id, idx) << endl;
+            cout << "\tA_eff        = " << samesign::EffectiveArea03(id, idx) << endl;
         }
         else if (abs(id) == 13)
         {
@@ -59,7 +40,7 @@ namespace at
     }
 
 
-    void PrintIdInfo(int id, int idx)
+    void PrintIdInfo(int id, int idx, bool use_el_eta)
     {
         using namespace tas;
 
@@ -93,8 +74,11 @@ namespace at
             // MIT conversion
             bool vtxFitConversion = isMITConversion(idx, 0,   1e-6,   2.0,   true,  false);
 
-
+            float sc_aeta = fabs(cms2.els_etaSC().at(idx));
+            float aeta = fabs(cms2.els_p4().at(idx).eta());
             bool isEB = (els_fiduciality().at(idx) & (1 << ISEB));
+            bool isEB_sc = sc_aeta < 1.4442;
+            bool isEB_eta = aeta < 1.4442;
             //cout << "electron ID variables:"                 << endl;
             //cout << "\tcharge = "                            << els_charge().at(idx) << endl;
             //cout << "\tpt = "                                << els_p4().at(idx).pt() << endl;
@@ -121,16 +105,25 @@ namespace at
 
             cuts_t cuts_passed = electronSelection(idx);
             //electronIdComponent_t wp2012_cuts = electronId_WP2012_v2(idx, MEDIUM);
-            unsigned int wp2012_cuts = static_cast<unsigned int>(electronId_WP2012_v2(idx, MEDIUM));
+            electronIdComponent_t wp2012_cuts = use_el_eta ? electronId_WP2012_noIso_useElEtaForIsEB(idx, MEDIUM) : electronId_WP2012_v2(idx, MEDIUM);
+            if ((wp2012_cuts & wp2012::PassWP2012CutsNoIso) == wp2012::PassWP2012CutsNoIso) 
+                cuts_passed |= (1ll<<ELEID_WP2012_MEDIUM_NOISO);
             cout << sizeof(wp2012_cuts) << "\t" << sizeof(wp2012::DETAIN) << "\t" << sizeof(1) << endl;
             cout << "electron ID variables:"          << endl;
-            cout << "\tpasses = "                     << samesign::isGoodLepton(id, idx) << endl;
-            cout << "\tcut bits = "                   << bitset<64>(cuts_passed).to_string() << endl;
-            cout << "\twp2012 bits = "                << bitset<64>(wp2012_cuts).to_string() << endl;
+            cout << "\tpasses = "                     << samesign::isGoodLepton(id, idx, use_el_eta) << endl;
+            cout << "\tcut bits                          = " << bitset<64>(cuts_passed).to_string() << endl;
+            cout << "\twp2012 bits                       = " << bitset<64>(wp2012_cuts).to_string() << endl;
+            cout << "\telectronSelection_ssV7_noIso bits = " << bitset<64>(electronSelection_ssV7_noIso).to_string() << endl;
+            cout << "\telectronSelectionFOV7_v3 bits     = " << bitset<64>(electronSelectionFOV7_v3).to_string() << endl;
             cout << "\tcharge = "                     << els_charge().at(idx) << endl;
             cout << "\tpt = "                         << els_p4().at(idx).pt() << endl;
             cout << "\t|eta| = "                      << fabs(els_p4().at(idx).eta()) << endl;
-            cout << "\tH/E < (0.120, 0.100)         = " << els_hOverE().at(idx) << "\tpasses = " << (isEB ? (els_hOverE().at(idx) < 0.10) : (els_hOverE().at(idx) < 0.075)) << endl;
+            cout << "\t|sc eta| = "                   << sc_aeta << endl;
+            cout << "\tisEB = "                       << isEB << endl;
+            cout << "\tisEB (sc determined) = "       << isEB_sc << endl;
+            cout << "\tisEB (eta determined) = "      << isEB_eta << endl;
+            cout << "\tH/E < (0.120, 0.100)(isEB)   = " << els_hOverE().at(idx) << "\tpasses = " << (isEB ? (els_hOverE().at(idx) < 0.10) : (els_hOverE().at(idx) < 0.075)) << endl;
+            cout << "\tH/E < (0.120, 0.100)(SC eta) = " << els_hOverE().at(idx) << "\tpasses = " << (isEB_sc ? (els_hOverE().at(idx) < 0.10) : (els_hOverE().at(idx) < 0.075)) << endl;
             cout << "\tELEETA_240                   = " << static_cast<bool>(cuts_passed & (1ll << ELEETA_240                  ))  << endl;
             cout << "\tELENOMUON_010_SS             = " << static_cast<bool>(cuts_passed & (1ll << ELENOMUON_010_SS            ))  << endl;
             cout << "\tELENOTCONV_HITPATTERN_0MHITS = " << static_cast<bool>(cuts_passed & (1ll << ELENOTCONV_HITPATTERN_0MHITS))  << endl;
