@@ -21,11 +21,13 @@ struct simple_skim
         using namespace ssb;
         if (is_real_data())
         {
-            return (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+            bool result = (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+			return result;
         }
         else
         {
-            return (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+            bool result = (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+			return result;
         }
     }
 	int m_njets;
@@ -139,7 +141,7 @@ try
     );
 
     // cleanup
-    //delete chain;
+    delete chain;
     
     // done 
     return 0;

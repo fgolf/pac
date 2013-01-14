@@ -34,4 +34,3 @@ unsigned int Event(SSB2012& samesignbtag)
 {
     return samesignbtag.evt();
 }
-

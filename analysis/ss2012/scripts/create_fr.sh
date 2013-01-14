@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-tag=16Dec2012
+tag=27Dec2012
 #run_list=json/preapproval_v2_cms2.txt
 run_list=json/final_19p47fb_cms2.txt
 

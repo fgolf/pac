@@ -283,6 +283,7 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     bool ll_passes_id          = samesign::isGoodLepton(ll_id, ll_idx);
     float lt_iso               = samesign::leptonIsolation(lt_id, lt_idx);
     float ll_iso               = samesign::leptonIsolation(ll_id, ll_idx);
+    float inv_mass             = (lt_p4 + ll_p4).M();
 
     // channel names
     const size_t n_channel_names = 4; 
@@ -339,8 +340,9 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     {
         //cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
         cout << Form("%6u | %3u | %12u | %s | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
-                     evt_run(), evt_lumiBlock(), evt_event(), 
-                     channel_names[type].c_str(), (l1_p4 + l2_p4).M(), 
+                     evt_run(), evt_lumiBlock(), evt_event(),
+                     channel_names[type].c_str(),
+                     inv_mass,
                      l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
                      l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
                      met,
@@ -352,7 +354,8 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     {
         cout << Form("%6u | %3u | %12u | %s | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %s | %s | %s",
                      evt_run(), evt_lumiBlock(), evt_event(),
-                     channel_names[type].c_str(), (l1_p4 + l2_p4).M(),
+                     channel_names[type].c_str(),
+                     inv_mass,
                      l1_p4.pt(), l1_p4.eta(), l1_p4.phi(), l1_passes_id, l1_iso,
                      l2_p4.pt(), l2_p4.eta(), l2_p4.phi(), l2_passes_id, l2_iso,
                      met,
@@ -372,12 +375,12 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     //if ((evt_run() == 191247 && evt_lumiBlock() == 60 && evt_event() == 93455346))
     //if ((evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
     //if ((evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
-    {
-    	cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx, true);
-    	//cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
-    	cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx, true);
-    	//cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
-    }
+    //{
+    //	cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx, true);
+    //	//cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
+    //	cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx, true);
+    //	//cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
+    //}
 }
 
 // construct:
@@ -630,6 +633,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //if (!(evt_event() ==  1766536290))  // fails gamma*
         //if (!(evt_event() ==  113167649))  // fails gamma*
         //if (!(evt_event()==663249061 || evt_event()==27490600 || evt_event()==131247937)) 
+        //if (!(evt_event()==131247937)) 
+        //if (!(evt_event()==95183650)) 
+        //if (!(evt_event()==1314345008)) 
+        //if (!(evt_event()==373153872)) 
+        //if (!(evt_event()==114032777)) 
         //if (!(evt_event() ==  373153872))  // fails gamma*
         //{
         //    return 0;
@@ -674,7 +682,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         bool is_high_pt = (m_analysis_type == AnalysisType::high_pt);
 
         // lepton pT cut values
-        float mu_min_pt = is_high_pt ? 20.0 : 5.0;
+        float mu_min_pt = is_high_pt ? 20.0 : 10.0; //5.0;
         float el_min_pt = is_high_pt ? 20.0 : 10.0;
         float min_pt    = std::min(mu_min_pt, el_min_pt);
 
@@ -950,7 +958,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         else
         {
             if (m_verbose) {std::cout << "passes good dilepton type requirement: " << at::GetDileptonHypTypeName(dilepton_type) << std::endl;}
-            if (m_verbose) {std::cout << "passes good charege type requirement:  " << at::GetDileptonChargeTypeName(event_type) << std::endl;}
+            if (m_verbose) {std::cout << "passes good charge type requirement:  "  << at::GetDileptonChargeTypeName(event_type) << std::endl;}
             if (m_verbose) {std::cout << "good hyp index is : " << hyp_idx << std::endl;}
         }
 
@@ -1436,6 +1444,13 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.em_elfo = m_evt.em && ((lep1_fo && lep1_is_el) || (lep2_fo && lep2_is_el));
         m_evt.is_pp   = hyp_lt_charge().at(hyp_idx)>0 && hyp_ll_charge().at(hyp_idx)>0; 
         m_evt.is_mm   = hyp_lt_charge().at(hyp_idx)<0 && hyp_ll_charge().at(hyp_idx)<0; 
+
+		// selected only triggered events
+		if (not((m_evt.ee && m_evt.trig_ee) || (m_evt.em && m_evt.trig_em) || (m_evt.mm && m_evt.trig_mm)))
+		{
+			if (m_verbose) {cout << "fails trigger selection" << endl;}
+			//return 0;
+		}
 
         // electron isolation correction variables
         m_evt.rho     = evt_kt6pf_foregiso_rho();
