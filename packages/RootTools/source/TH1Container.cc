@@ -398,6 +398,15 @@ void TH1Container::Scale(double scale, const std::string& option)
 }
 
 
+void TH1Container::Normalize(double value)
+{
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    {
+		rt::Scale(get(iter->second), value);
+    }
+}
+
+
 void TH1Container::Sumw2()
 {
     for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)

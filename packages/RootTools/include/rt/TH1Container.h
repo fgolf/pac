@@ -74,6 +74,9 @@ class TH1Container
         // scale all the histograms in the container 
         void Scale(double scale, const std::string& option = "");
         
+        // normalize all the histograms in the container to the given value 
+        void Normalize(double value = 1.0);
+        
         // call Sumw2() on each histogram
         void Sumw2();
         
