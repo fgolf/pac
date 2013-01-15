@@ -196,6 +196,27 @@ bool IsDenominator(const HypInfo& hyp, bool is_lt)
     return false;
 }
 
+bool passesETHfo(int lep_id, int lep_idx)
+{
+    if (abs(lep_id) == 13)
+    {
+        if (!samesign::isGoodLepton(lep_id, lep_idx)) return false;
+        if (muonIsoValuePF2012_deltaBeta(lep_idx) > 1.0) return false;
+        return true;
+    }
+    // NOTE: this is the wrong definition of the electron FO
+    // it's here as a place holder
+    // see AN-2011/466 v6 for the correct definition
+    else if (abs(lep_id) == 11)
+    {
+        if (!samesign::isGoodLepton(lep_id, lep_idx)) return false;
+        if (samesign::electronIsolationPF2012(lep_idx) > 0.6) return false;
+        return true;
+    }
+
+    return false;
+}
+
 //float EffectiveArea03(int id, int idx)
 //{
 //    if (abs(id)!=11)
@@ -854,11 +875,22 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 continue;
             }
 
-            // skip if both are not numerators
-            if (!samesign::isDenominatorHypothesis(ihyp))
+            // skip if both are not denominators
+            if (m_analysis_type == AnalysisType::high_pt_eth)
             {
-                if (m_verbose) {std::cout << "fails both leptons are at least denominator requirement" << std::endl;}
-                continue;
+                if (not passesETHfo(lt_id, lt_idx) || not passesETHfo(ll_id, ll_idx))
+                {
+                    if (m_verbose) {std::cout << "fails both leptons are at least ETH denominator requirement" << std::endl;}
+                    continue;
+                }                    
+            }
+            else
+            {
+                if (!samesign::isDenominatorHypothesis(ihyp))
+                {
+                    if (m_verbose) {std::cout << "fails both leptons are at least denominator requirement" << std::endl;}
+                    continue;
+                }
             }
 
             // get the hyp type
@@ -1183,9 +1215,9 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // set lepton info (lep1 is higher pT lepton, lep2 is lower pT lepton)
         float lt_pt = hyp_lt_p4().at(hyp_idx).pt();
         float ll_pt = hyp_ll_p4().at(hyp_idx).pt();
-        bool lt_fo  = IsDenominator(best_hyp, /*is_lt=*/true);  
+        bool lt_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_lt_id().at(hyp_idx), hyp_lt_index().at(hyp_idx)) : IsDenominator(best_hyp, /*is_lt=*/true);
         bool lt_num = IsNumerator  (best_hyp, /*is_lt=*/true);  
-        bool ll_fo  = IsDenominator(best_hyp, /*is_lt=*/false);  
+        bool ll_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_ll_id().at(hyp_idx), hyp_ll_index().at(hyp_idx)) : IsDenominator(best_hyp, /*is_lt=*/false);  
         bool ll_num = IsNumerator  (best_hyp, /*is_lt=*/false);  
 
         int lep1_id;

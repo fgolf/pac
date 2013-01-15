@@ -35,6 +35,16 @@ ss::AnalysisTypeInfo s_AnalysisTypeInfos[] =
         "very low p_{T} (iso on #mu trigger)",
         // latex title
         "very low $p_{T}$ (iso on $\\mu$ trigger)"
+    },
+    {
+        // name
+        "high_pt_eth", 
+        // short name
+        "hpt_eth", 
+        // ROOT title
+        "high p_{T} ETH",
+        // latex title
+        "high $p_{T}$ ETH"
     }
 };
 
@@ -88,19 +98,19 @@ namespace ss
     }
 
     // aliases for TTree
-	void SetAnalysisTypeAliases(TTree& tree)
-	{
-		tree.SetAlias("trig_mm_hpt", "trig_mm");
-		tree.SetAlias("trig_em_hpt", "trig_em");
-		tree.SetAlias("trig_ee_hpt", "trig_ee");
+    void SetAnalysisTypeAliases(TTree& tree)
+    {
+        tree.SetAlias("trig_mm_hpt", "trig_mm");
+        tree.SetAlias("trig_em_hpt", "trig_em");
+        tree.SetAlias("trig_ee_hpt", "trig_ee");
 
-		tree.SetAlias("trig_mm_lpt", "trig_mm_iso_ht");
-		tree.SetAlias("trig_em_lpt", "trig_em_iso_ht");
-		tree.SetAlias("trig_ee_lpt", "trig_ee_noiso_ht");
+        tree.SetAlias("trig_mm_lpt", "trig_mm_iso_ht");
+        tree.SetAlias("trig_em_lpt", "trig_em_iso_ht");
+        tree.SetAlias("trig_ee_lpt", "trig_ee_noiso_ht");
 
-		tree.SetAlias("trig_mm_vpt", "trig_mm_ht");
-		tree.SetAlias("trig_em_vpt", "trig_em_ht");
-		tree.SetAlias("trig_ee_vpt", "trig_ee_noiso_ht");
-	}
+        tree.SetAlias("trig_mm_vpt", "trig_mm_ht");
+        tree.SetAlias("trig_em_vpt", "trig_em_ht");
+        tree.SetAlias("trig_ee_vpt", "trig_ee_noiso_ht");
+    }
 
 } // namespace ss

@@ -14,6 +14,7 @@ namespace ss
             high_pt,
             low_pt,
             vlow_pt,
+            high_pt_eth,
             static_size
         };
     };
@@ -35,8 +36,8 @@ namespace ss
     AnalysisTypeInfo GetAnalysisTypeInfo(const AnalysisType::value_type& analysis_type);
     AnalysisTypeInfo GetAnalysisTypeInfo(const std::string& analysis_type_name);
 
-	// set a ROOT CINT alias
-	void SetAnalysisTypeAliases(TTree& tree);
+    // set a ROOT CINT alias
+    void SetAnalysisTypeAliases(TTree& tree);
 
 } // namespace ss
 
