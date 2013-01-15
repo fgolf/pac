@@ -144,9 +144,9 @@ std::tr1::array<float, 9>  el_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.
 std::tr1::array<float, 5>  el_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 9>  mu_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 std::tr1::array<float, 6>  mu_eta_bins = {{0.0, 0.5, 1.0, 1.5, 2.0, 2.5}};
-//std::tr1::array<float, 10> mu_pt_bins  = {{5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
-//std::tr1::array<float, 7> mu_pt_bins  = {{20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
-std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
+std::tr1::array<float, 10> mu_pt_bins  = {{5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
+//std::tr1::array<float, 7> mu_pt_bins   = {{20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
+//std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
 std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
 
 // book hists 
@@ -233,6 +233,11 @@ int FakeRateBabyLooperETH::operator()(long event, const std::string& current_fil
 
         // FO selection cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
+
+		if (run()>194076)
+		{
+			return 0;
+		}
         
         // which dataset
         bool is_data  = fr::GetSampleInfo(m_sample).type == fr::SampleType::data;
@@ -259,7 +264,7 @@ int FakeRateBabyLooperETH::operator()(long event, const std::string& current_fil
         };
 
         // pT cut
-        if (is_mu && (pt()<5 || pt()>55))
+        if (is_mu && (pt()<20 || pt()>60))
         {
             return 0;
         }
