@@ -24,6 +24,8 @@ void EventInfoTree::FillCommon (Sample::value_type sample_, const std::string& r
     vtx_idx        = firstGoodVertex();
     uncorpfmet     = cms2.evt_pfmet();
     uncorpfmet_phi = cms2.evt_pfmetPhi();
+    pu_nvtxs       = cms2.puInfo_nPUvertices().at(1);
+    pu_ntrueint    = cms2.puInfo_trueNumInteractions().at(1);
     pfmet          = cms2.evt_pfmet_type1cor();
     pfmet_phi      = cms2.evt_pfmetPhi_type1cor();
     dataset        = cms2.evt_dataset().at(0);
@@ -48,15 +50,17 @@ void EventInfoTree::Reset()
     sample         = Sample::static_size;
     nvtxs          = -999999;
     vtx_idx        = -999999;
-    pfmet          = -999999.;
-    pfmet_phi      = -999999.;
-    uncorpfmet     = -999999.;
-    uncorpfmet_phi = -999999.;
+    pfmet          = -999999.0;
+    pfmet_phi      = -999999.0;
+    uncorpfmet     = -999999.0;
+    uncorpfmet_phi = -999999.0;
+    pu_nvtxs       = -999999;
+    pu_ntrueint    = -999999.0;
     scale1fb       = 1.;
-    xsec           = -999999.;
-    kfactor        = -999999.;
-    gen_met        = -999999.;
-    gen_met_phi    = -999999.;
+    xsec           = -999999.0;
+    kfactor        = -999999.0;
+    gen_met        = -999999.0;
+    gen_met_phi    = -999999.0;
     dataset        = "";
     filename       = "";
 }
@@ -74,6 +78,8 @@ void EventInfoTree::SetBranches(TTree &tree)
     tree.Branch(Form("%spfmet_phi"      , prefix_.c_str()) , &pfmet_phi      , "pfmet_phi/F"      );
     tree.Branch(Form("%suncorpfmet"     , prefix_.c_str()) , &uncorpfmet     , "uncorpfmet/F"     );
     tree.Branch(Form("%suncorpfmet_phi" , prefix_.c_str()) , &uncorpfmet_phi , "uncorpfmet_phi/F" );
+    tree.Branch(Form("%spu_nvtxs"       , prefix_.c_str()) , &pu_nvtxs       , "pu_nvtxs/F"       );
+    tree.Branch(Form("%spu_ntrueint"    , prefix_.c_str()) , &pu_ntrueint    , "pu_ntrueint/F"    );
     tree.Branch(Form("%sscale1fb"       , prefix_.c_str()) , &scale1fb       , "scale1fb/F"       );
     tree.Branch(Form("%sxsec"           , prefix_.c_str()) , &xsec           , "xsec/F"           );
     tree.Branch(Form("%skfactor"        , prefix_.c_str()) , &kfactor        , "kfactor/F"        );

@@ -45,6 +45,8 @@ public:
     float pfmet_phi;
     float uncorpfmet;
     float uncorpfmet_phi;    
+    int pu_nvtxs;
+    float pu_ntrueint;
 
     //
     // some gen event level info
