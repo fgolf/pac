@@ -6,7 +6,6 @@
 #include <fstream>
 
 // cms2
-//#include "CMS2.h"
 #include "ssSelections.h"
 #include "eventSelections.h"
 #include "trackSelections.h"
@@ -99,42 +98,6 @@ bool HypInfo::operator < (const HypInfo& rhs) const
     return false;
 }
 
-void CompareHyps(std::pair<size_t, DileptonChargeType::value_type>& best_hyp, size_t hyp_idx, const DileptonChargeType::value_type& new_type)
-{
-    short current_type = best_hyp.second;
-    float new_pt       = hyp_lt_p4().at(hyp_idx).pt() + hyp_ll_p4().at(hyp_idx).pt();
-    float current_pt   = hyp_lt_p4().at(best_hyp.first).pt() + hyp_ll_p4().at(best_hyp.first).pt();
-
-    if (current_type == DileptonChargeType::static_size)
-    {
-        goto use_new_hyp;
-    }
-    else if (new_type < current_type)
-    {
-        goto use_new_hyp;
-    }
-    else if (new_type > current_type)
-    {
-        return;
-    }
-    else 
-    {
-        if (new_pt > current_pt)
-        {
-            goto use_new_hyp;
-        }
-        else
-        {
-            return;
-        }
-    }
-use_new_hyp:
-    {
-        best_hyp = make_pair(hyp_idx, new_type);    
-        return;
-    }
-}
-
 // set then numerator bool
 //bool IsNumerator(std::pair<size_t, DileptonChargeType::value_type>& hyp, bool is_lt)
 bool IsNumerator(const HypInfo& hyp, bool is_lt)
@@ -215,31 +178,6 @@ bool passesETHfo(int lep_id, int lep_idx)
     }
 
     return false;
-}
-
-//float EffectiveArea03(int id, int idx)
-//{
-//    if (abs(id)!=11)
-//        return -999990.0;
-//
-//    float etaAbs = fabs(els_etaSC()[idx]);
-//
-//    // get effective area
-//    float AEff = 0.;
-//    if (etaAbs <= 1.0) AEff = 0.10;
-//    else if (etaAbs > 1.0 && etaAbs <= 1.479) AEff = 0.12;
-//    else if (etaAbs > 1.479 && etaAbs <= 2.0) AEff = 0.085;
-//    else if (etaAbs > 2.0 && etaAbs <= 2.2) AEff = 0.11;
-//    else if (etaAbs > 2.2 && etaAbs <= 2.3) AEff = 0.12;
-//    else if (etaAbs > 2.3 && etaAbs <= 2.4) AEff = 0.12;
-//    else if (etaAbs > 2.4) AEff = 0.13;
-//    return AEff;
-//}
-
-// place holder until I figure out the right thing
-float EffectiveArea04(int, int)
-{
-    return -99999.0;
 }
 
 // use delta R to match
@@ -397,10 +335,10 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     //if ((evt_run() == 191247 && evt_lumiBlock() == 66 && evt_event() == 102084731))
     //if ((evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
     //{
-    //	cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx, true);
-    //	//cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
-    //	cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx, true);
-    //	//cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
+    //  cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx, true);
+    //  //cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
+    //  cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx, true);
+    //  //cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
     //}
 }
 
@@ -423,23 +361,23 @@ SSAnalysisLooper::SSAnalysisLooper
     bool sync_print,
     bool verbose,
     const std::string apply_jec_otf
-    )
-: AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
-                , m_sample(sample)
-                , m_analysis_type(analysis_type)
-                , m_lumi(luminosity)
-                , m_njets(njets)
-                , m_jetMetScale(jetMetScale)
-                , m_is_fast_sim(is_fast_sim)
-                , m_sparms(sparms)
-                , m_sync_print(sync_print)
-                , m_verbose(verbose)
-                , hyp_count(0)
-                //, good_lep_count(0)
-                //, iso_lep_count(0)
-                //, num_lep_count(0)
-                , jet_corrector(NULL)
-                , met_corrector(NULL)
+)
+    : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
+    , m_sample(sample)
+    , m_analysis_type(analysis_type)
+    , m_lumi(luminosity)
+    , m_njets(njets)
+    , m_jetMetScale(jetMetScale)
+    , m_is_fast_sim(is_fast_sim)
+    , m_sparms(sparms)
+    , m_sync_print(sync_print)
+    , m_verbose(verbose || sync_print)
+    , hyp_count(0)
+    //, good_lep_count(0)
+    //, iso_lep_count(0)
+    //, num_lep_count(0)
+    , jet_corrector(NULL)
+    , met_corrector(NULL)
 {
     // set vertex weight file
     if (!vtxreweight_file_name.empty())
@@ -593,9 +531,9 @@ void SSAnalysisLooper::BeginJob()
     if (m_sync_print)
     {
         cout << "Run | LS | Event | channel | dilep Mass | " 
-            "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
-            "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
-            "MET | HT | nJets | nbJets" << endl;
+                "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
+                "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
+                "MET | HT | nJets | nbJets" << endl;
     }
 }
 
@@ -610,21 +548,21 @@ void SSAnalysisLooper::EndJob()
     CTable yield_table;
     yield_table.setTitle("yields for SS Analysis 2012 (# btags >= 2)");
     yield_table.useTitle();
-    yield_table.setTable() (   "mm",         "em",          "ee",          "all")
-        ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
-        ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
-        ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
-        ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
+    yield_table.setTable() (                      "mm",          "em",          "ee",         "all")
+                           ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
+                           ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
+                           ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
+                           ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
     yield_table.print();
 
     CTable yield_table2;
     yield_table2.setTitle("yields for SS Analysis 2012 (no btags req)");
     yield_table2.useTitle();
-    yield_table2.setTable() (          "mm",                "em",                 "ee",                "all")
-        ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
-        ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
-        ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
-        ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
+    yield_table2.setTable() (                             "mm",                "em",                 "ee",                "all")
+                            ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
+                            ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
+                            ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
+                            ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
     yield_table2.print();
 
     // call base class end job
@@ -664,12 +602,22 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //if (!(evt_event()==373153872)) 
         //if (!(evt_event()==114032777)) 
         //if (!(evt_event() ==  373153872))  // fails gamma*
+        //if (!(evt_event() == 799539819))  
         //{
         //    return 0;
         //}
         //{
         //    cout << "\n-----------------------------------------" << endl; 
         //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
+        //}
+        //const int evt = evt_event();
+        //if (!(evt==585303423 || evt==543295632 || evt==285613115))  
+        //{
+        //    return 0;
+        //}
+        //if (m_verbose)
+        //{
+        //  cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
         //}
 
         // Reset Tree Variables
@@ -701,15 +649,36 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
         }
 
+        // switch for high/low pt analysis
+        bool is_high_pt = (m_analysis_type == AnalysisType::high_pt || m_analysis_type == AnalysisType::high_pt_eth);
+
         // gen level  
         // --------------------------------------------------------------------------------------------------------- //
-        //bool is_low_pt  = (m_analysis_type == AnalysisType::low_pt );
-        bool is_high_pt = (m_analysis_type == AnalysisType::high_pt);
 
         // lepton pT cut values
-        float mu_min_pt = is_high_pt ? 20.0 : 10.0; //5.0;
-        float el_min_pt = is_high_pt ? 20.0 : 10.0;
-        float min_pt    = std::min(mu_min_pt, el_min_pt);
+        float mu_min_pt = 0.0;
+        float el_min_pt = 0.0;
+        switch(m_analysis_type)
+        {
+            case AnalysisType::high_pt:
+            case AnalysisType::high_pt_eth:
+                mu_min_pt = 20;
+                el_min_pt = 20;
+                break;
+            case AnalysisType::low_pt:
+                mu_min_pt = 10;
+                el_min_pt = 10;
+                break;
+            case AnalysisType::vlow_pt:
+                mu_min_pt = 5;
+                el_min_pt = 10;
+                break;
+            default:
+                mu_min_pt = 20;
+                el_min_pt = 20;
+                break;
+        }
+        const float min_pt = std::min(mu_min_pt, el_min_pt);
 
         // gen jet info
         if (!evt_isRealData())
@@ -865,12 +834,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
 
             // check if event passes num_jet cut
-            //int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-            //if (num_jets < m_njets)
-            //{
-            //    if (m_verbose) {std::cout << "fails # jets >= " << m_njets << " requirement with " << num_jets << " jets" << std::endl;}
-            //    continue;
-            //}
+            int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+            if (num_jets < m_njets)
+            {
+                if (m_verbose) {std::cout << "fails # jets >= " << m_njets << " requirement with " << num_jets << " jets" << std::endl;}
+                continue;
+            }
 
             // check extra Gamma* veto
             if (samesign::makesExtraGammaStar(ihyp))
@@ -999,50 +968,26 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         }
 
         // trigger info
-        if (is_high_pt)
+        switch(m_analysis_type)
         {
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-        }
-        else
-        {
-
-            //m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET40_v"            ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET50_v"            ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v"         ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT225_v"         ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT225_v") ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"             ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT225_v"             ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v"    ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT225_v"    );
-            //m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v") ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"    ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"   ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"   );
-            //m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"           ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"           ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v"         ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v"         ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v") ||
-            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"             ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"             ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    ) ||
-            //                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"    );
-
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"    );
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
-        }
+            case AnalysisType::high_pt:
+            case AnalysisType::high_pt_eth:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                break;
+            case AnalysisType::low_pt:
+            case AnalysisType::vlow_pt:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"    );
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
+                break;
+            default: {/*do nothing*/}
+            }
 
         // individual triggers: mm
         m_evt.trig_mm_mu17_mu8                     = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v"                            );
@@ -1135,7 +1080,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         default: {/*do nothing*/}
         };
 
-	
+    
                                 
         // event wieghts 
         //float vtxw  = evt_isRealData() ? 1.0 : vtxweight_n(numberOfGoodVertices(), evt_isRealData(), false);
