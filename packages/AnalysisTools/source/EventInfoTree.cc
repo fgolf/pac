@@ -24,20 +24,20 @@ void EventInfoTree::FillCommon (Sample::value_type sample_, const std::string& r
     vtx_idx        = firstGoodVertex();
     uncorpfmet     = cms2.evt_pfmet();
     uncorpfmet_phi = cms2.evt_pfmetPhi();
-    pu_nvtxs       = cms2.puInfo_nPUvertices().at(1);
-    pu_ntrueint    = cms2.puInfo_trueNumInteractions().at(1);
     pfmet          = cms2.evt_pfmet_type1cor();
     pfmet_phi      = cms2.evt_pfmetPhi_type1cor();
     dataset        = cms2.evt_dataset().at(0);
     filename       = root_file_name;
 
     if (!cms2.evt_isRealData()) 
-	{
+    {
         scale1fb    = cms2.evt_scale1fb();
         xsec        = cms2.evt_xsec_incl();
         kfactor     = cms2.evt_kfactor();
         gen_met     = cms2.gen_met();
         gen_met_phi = cms2.gen_metPhi();
+        pu_nvtxs    = cms2.puInfo_nPUvertices().at(1);
+        pu_ntrueint = cms2.puInfo_trueNumInteractions().at(1);
     }
 }
 
