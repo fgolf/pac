@@ -20,7 +20,7 @@ namespace at
 
     // return the name of the name the DileptonHypType
     std::string GetDileptonHypTypeName(const DileptonHypType::value_type& hyp_type);
-    std::string GetDileptonHypTypeName(int hyp_type);
+    std::string GetDileptonHypTypeName(const int hyp_type);
 
     // return the title for ROOT of the name the DileptonHypType
     std::string GetDileptonHypTypeTitle(const DileptonHypType::value_type& hyp_type);
@@ -29,7 +29,7 @@ namespace at
     std::string GetDileptonHypTypeLatex(const DileptonHypType::value_type& hyp_type);
 
     // convert the int to a DileptonHypType
-    DileptonHypType::value_type hyp_typeToHypType(int hyp_type);
+    DileptonHypType::value_type hyp_typeToHypType(const int hyp_type);
 
     // convert the two pdgid's into hype type a DileptonHypType
     DileptonHypType::value_type PdgidToHypType(int id1, int id2);

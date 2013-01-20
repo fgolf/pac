@@ -659,6 +659,34 @@ namespace rt
         return;
     }
 
+    // save a histogram to a file 
+    void Write
+    (
+        const rt::TH1Ptr& hist_ptr, 
+        const string& file_name, 
+        const string& root_file_dir,
+        const string& option
+    )
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("rt::Write() Warning: histogram pointer is NULL!");
+        }
+
+        rt::mkdir(rt::dirname(file_name), /*recursive=*/true);
+        rt::TFilePtr output_file(new TFile(file_name.c_str(), option.c_str()));
+        output_file->cd("");
+        if (!output_file->cd(root_file_dir.c_str()))
+        {
+            output_file->mkdir(root_file_dir.c_str());
+        }
+        output_file->cd(root_file_dir.c_str());
+
+        hist_ptr->Write(hist_ptr->GetName(), TObject::kOverwrite);
+        output_file->Close();
+        return;
+    }
+
     // a fix to the issue of the erros on the profile hists
     void CalcErrorsForProfile(TProfile* profile)
     {
@@ -785,23 +813,6 @@ namespace rt
 	    return c;
 	}
 
-	//// create a chain from a comma serperated list (e.g. "file1,file2,...")
-    //// NOTE: user is charge of deleting!
-	//TChain* CreateTChainFromCommaSeperatedList
-	//(
-	//	const std::string& str, 
-	//	const std::string& treename 
-	//)
-    //{
-    //    TChain* chain = new TChain(treename.c_str());
-    //    vector<string> files = string_split(str, ",");
-    //    for (size_t i = 0; i != files.size(); i++)
-    //    {
-    //        chain->Add(files[i].c_str()); 
-    //    }
-    //    return chain;
-    //}
-
 	// create a chain from a comma serperated list (e.g. "file1,file2,...")
 	// NOTE: user is charge of deleting!
 	TChain* CreateTChainFromCommaSeperatedList
@@ -895,7 +906,6 @@ namespace rt
         const std::string& option
     )
     {
-        //num_hist->Draw();
         // check that hists are valid
         if (!num_hist || !den_hist)
         {
@@ -916,64 +926,6 @@ namespace rt
         delete h_num;
         delete h_den;
         return h_eff;
-        //TH2* result = MakeEfficiencyPlot2D(num_hist, den_hist);  
-        //return MakeProjectionPlot(result, axis);
-
-/*
-        // need to add 2 to number of bins to account for underflow/overflow
-        int nxbins = axis=="y" ? num_hist->GetNbinsY() : num_hist->GetNbinsX();
-        int nybins = axis=="y" ? num_hist->GetNbinsX() : num_hist->GetNbinsY();
-
-        TAxis* xaxis = axis=="y" ? num_hist->GetYaxis() : num_hist->GetXaxis();
-        const TArrayD* xbins = xaxis->GetXbins();
-        double* binsx = NULL;
-        int xsize = xbins->GetSize();     
-        binsx = new double[xsize];
-        for (int ibin = 0; ibin < xsize; ibin++)
-        {
-            binsx[ibin] = xbins->At(ibin);
-        }
-
-        string hist_name  = string(num_hist->GetName()) + "_proj" + axis;
-        string hist_title = string(num_hist->GetTitle()) + " " + axis + " projection";
-        TH1F* numproj = new TH1F(hist_name.c_str(), hist_title.c_str(), xsize-1, binsx);
-        numproj->GetXaxis()->ImportAttributes(xaxis);
-
-        hist_name  = string(den_hist->GetName()) + "_proj" + axis;
-        hist_title = string(den_hist->GetTitle()) + " " + axis + " projection";
-        TH1F* denproj = new TH1F(hist_name.c_str(), hist_title.c_str(), xsize-1, binsx);
-        denproj->GetXaxis()->ImportAttributes(xaxis);
-
-        // for each bin in x, sum column in y
-        for (int ix = 1; ix < nxbins+1; ix++) 
-        {
-            Double_t numsum   = 0.0;
-            Double_t numerror = 0.0;
-            Double_t densum   = 0.0;
-            Double_t denerror = 0.0;
-            for (int iy = 1; iy < nybins+1; iy++) 
-            {
-                // get absolute bin number from x,y bin count
-                int bin = axis=="y" ? num_hist->GetBin(iy, ix) : num_hist->GetBin(ix, iy); 
-
-                numsum += num_hist->GetBinContent(bin);
-                numerror += num_hist->GetBinError(bin) * num_hist->GetBinError(bin);	
-                densum += den_hist->GetBinContent(bin);
-                denerror += den_hist->GetBinError(bin) * den_hist->GetBinError(bin);
-            }
-            numproj->SetBinContent(ix, numsum);
-            numproj->SetBinError(ix, sqrt(numerror));
-            denproj->SetBinContent(ix, densum);
-            denproj->SetBinError(ix, sqrt(denerror));
-        }
-
-        TH1* proj = MakeEfficiencyPlot(numproj, denproj);
-        proj->GetXaxis()->ImportAttributes(xaxis);
-
-        delete numproj;
-        delete denproj;
-        return proj;
-*/
     }
 
     // create a Projection from num and den hists 
@@ -1087,6 +1039,63 @@ namespace rt
         copy_file(source, target_dir + "/index.php");
         return;
     }
+
+    // wrapper around TTree::Draw to manange underflow and overflow bins
+    long TTreeDraw1D
+    (
+        TTree* const tree, 
+        TH1* hist_ptr, 
+        const std::string& varexp, 
+        const TCut& selection, 
+        const std::string& option, 
+        long nentries, 
+        long firstentry
+    )
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("rt::TTreeDraw1D() Error: histogram pointer is NULL!");
+        }
+        if (!tree)
+        {
+            throw std::runtime_error("rt::TTreeDraw1D() Error: tree pointer is NULL!");
+        }
+
+        // parse the varexp
+        bool append = string_contains(varexp, ">>+");
+        string varexp_temp(varexp);
+        if (append)
+        {
+            varexp_temp = string_remove_all(varexp, ">>+");
+        }
+
+        const TAxis& axis     = *hist_ptr->GetXaxis();
+        int last_bin          = axis.GetLast();
+        int first_bin         = axis.GetFirst();
+        float last_bin_width  = axis.GetBinWidth(last_bin);
+        float first_bin_width = axis.GetBinWidth(last_bin);
+        float right_edge      = axis.GetBinUpEdge(last_bin) - 0.1*last_bin_width;
+        float left_edge       = axis.GetBinLowEdge(first_bin) + 0.1*first_bin_width;
+        const string varexp_formated = append ? Form("max(%f, min(%f, %s))>>+%s", left_edge, right_edge, varexp_temp.c_str(), hist_ptr->GetName()) :
+                                                Form("max(%f, min(%f, %s))>>%s" , left_edge, right_edge, varexp_temp.c_str(), hist_ptr->GetName());
+        //cout << varexp_formated << endl;
+        return tree->Draw(varexp_formated.c_str(), selection, option.c_str(), nentries, firstentry); 
+    }
+
+    long TTreeDraw1D
+    (
+        TTree* const tree, 
+        TH1* hist_ptr, 
+        const std::string& varexp, 
+        const std::string& selection, 
+        const std::string& option, 
+        long nentries, 
+        long firstentry
+    )
+    {
+        return TTreeDraw1D(tree, hist_ptr, varexp, TCut(selection.c_str()), option, nentries, firstentry);
+    }
+
 
     // add root files (returns 0 if successful) -- lower case to match the utility name
     int hadd(const std::string& target, const std::vector<std::string>& sources)

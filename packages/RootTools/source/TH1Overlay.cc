@@ -370,11 +370,6 @@ HistAttributes::HistAttributes(TH1* h, bool d, const string& l, Color_t c, Width
 
 void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_norm)
 {
-    if (min <= max)
-    {
-        hist->SetMinimum(min);
-        hist->SetMaximum(max);
-    }
     if (is_stack && !nostack)
     {
         hist->SetFillColor(color);
@@ -402,6 +397,11 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
     if (is_norm)
     {
         rt::Scale(hist.get(), 1.0);
+    }
+    if (min <= max)
+    {
+        hist->SetMinimum(min);
+        hist->SetMaximum(max);
     }
 }
 

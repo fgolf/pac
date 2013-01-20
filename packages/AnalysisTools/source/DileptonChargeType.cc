@@ -1,5 +1,7 @@
 #include "at/DileptonChargeType.h"
 #include <stdexcept> 
+#include "TString.h"
+#include "rt/MiscTools.h"
 
 namespace at 
 {
@@ -41,5 +43,17 @@ namespace at
                 throw std::domain_error("ERROR: at::GetDileptonChargeTitle: charge_type out of bounds");
         };
     }
+
+	DileptonChargeType::value_type GetDilepChargeTypeFromName(std::string charge_type_name) 
+	{
+		charge_type_name = rt::string_lower(charge_type_name);		
+        {
+            if (charge_type_name == "ss") {return DileptonChargeType::SS;}
+            if (charge_type_name == "sf") {return DileptonChargeType::SF;}
+            if (charge_type_name == "df") {return DileptonChargeType::DF;}
+            if (charge_type_name == "os") {return DileptonChargeType::OS;}
+        };
+        throw std::domain_error(Form("ERROR: at::GetDilepChargeTypeFromName: name %s not found", charge_type_name.c_str()));
+	}
 }
 

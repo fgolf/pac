@@ -5,7 +5,7 @@
 namespace at 
 {
 
-    DileptonHypType::value_type hyp_typeToHypType (int hyp_type)
+    DileptonHypType::value_type hyp_typeToHypType (const int hyp_type)
     {
         switch (hyp_type) 
         {
@@ -46,7 +46,7 @@ namespace at
         };
     }
 
-    std::string GetDileptonHypTypeName(int hyp_type)
+    std::string GetDileptonHypTypeName(const int hyp_type)
     {
 		return GetDileptonHypTypeName(static_cast<DileptonHypType::value_type>(hyp_type));
     }

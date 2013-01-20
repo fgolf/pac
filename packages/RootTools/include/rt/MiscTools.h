@@ -11,6 +11,8 @@
 // ROOT includes
 #include "TFile.h"
 #include "TChain.h"
+#include "TCut.h"
+#include "TTree.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TH3.h"
@@ -96,6 +98,15 @@ namespace rt
          const std::string& option = "UPDATE"
     );
 
+    // save a hist to a ROOT file 
+    void Write
+    (
+         const rt::TH1Ptr& hist_ptr, 
+         const std::string& file_name, 
+         const std::string& root_file_dir = "",
+         const std::string& option = "UPDATE"
+    );
+
     // print a single object to eps/png/pdf
     template <typename RootObjectType>
     void Print
@@ -176,14 +187,6 @@ namespace rt
 		TChain* chain_in = NULL, 
 		bool verbose = false
 	);
-
-	// create a chain from a comma serperated list (e.g. "file1,file2,...")
-    // NOTE: user is charge of deleting!
-	//TChain* CreateTChainFromCommaSeperatedList
-	//(
-	//	const std::string& str, 
-	//	const std::string& treename 
-	//);
 
 	// create a chain from a comma serperated list (e.g. "file1,file2,...")
     // NOTE: user is charge of deleting!
@@ -343,6 +346,30 @@ namespace rt
 
     // ostream for LorentzVector
     std::ostream& operator << (ostream& os, const LorentzVector& p4);
+
+    // wrapper around TTree::Draw to manange underflow and overflow bins
+    // NOTE: doesn't support yet tree->Draw("x>>+h") yet...
+    long TTreeDraw1D
+    (
+        TTree* const tree, 
+        TH1* hist_ptr, 
+        const std::string& varexp, 
+        const TCut& selection, 
+        const std::string& option = "", 
+        long nentries = 1000000000, 
+        long firstentry = 0
+    );
+
+    long TTreeDraw1D
+    (
+        TTree* const tree, 
+        TH1* hist_ptr, 
+        const std::string& varexp, 
+        const std::string& selection = "", 
+        const std::string& option = "", 
+        long nentries = 1000000000, 
+        long firstentry = 0
+    );
 
     // helper functions for OS operations (uses c++ name conventions)
     // -------------------------------------------------------------------------------------------------//

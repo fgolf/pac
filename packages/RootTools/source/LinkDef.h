@@ -65,6 +65,7 @@
 #pragma link C++ function rt::Scale;
 #pragma link C++ function rt::Fill;
 #pragma link C++ function rt::Fill2D;
+#pragma link C++ function rt::TTreeDraw1D;
 #pragma link C++ function rt::Mt;
 #pragma link C++ function rt::DeltaPhi;
 #pragma link C++ function rt::DeltaR;
