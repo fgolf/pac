@@ -45,7 +45,17 @@ ss::AnalysisTypeInfo s_AnalysisTypeInfos[] =
         "high p_{T} ETH",
         // latex title
         "high $p_{T}$ ETH"
-    }
+    },
+    {
+        // name
+        "hcp", 
+        // short name
+        "hcp", 
+        // ROOT title
+        "HCP",
+        // latex title
+        "HCP"
+    },
 };
 
 // check that the AnalysisTypeInfoArray is the same size as the enum

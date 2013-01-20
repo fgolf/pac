@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-tag=eth_v2
+tag=eth_v3
 run_list=json/hcp_10p45fb_cms2.txt
 #run_list=json/merged_190456-206456_15p86fb_cms2.txt
 

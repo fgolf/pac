@@ -142,22 +142,28 @@ PlotLooper::PlotLooper
     cout << "nbtags >= " << m_nbtags << endl;
     cout << "njets  >= " << m_njets  << endl;
 
-	// event list
-	if (!event_list_name.empty())
-	{
-		fout.open(event_list_name.c_str(), fstream::out);
-		if (not fout.is_open())
-		{
-    		throw std::runtime_error(Form("ERROR: PlotLooper: %s cannot be opened", event_list_name.c_str()));
-		}
-		else
-		{
-        	fout << "Run | LS | Event | channel | " 
-        	        "Lep1Pt | Lep1Eta | Lep1Phi | Lep1Iso | "
-        	        "Lep2Pt | Lep2Eta | Lep2Phi | Lep1Iso | "
-        	        "MET | HT | nJets | nbJets" << endl;
-		}
-	}
+    // initialize counters
+    for (size_t i = 0; i != m_count_ss.size(); i++) {m_count_ss[i]=0.0;}
+    for (size_t i = 0; i != m_count_sf.size(); i++) {m_count_sf[i]=0.0;}
+    for (size_t i = 0; i != m_count_df.size(); i++) {m_count_df[i]=0.0;}
+    for (size_t i = 0; i != m_count_os.size(); i++) {m_count_os[i]=0.0;}
+
+    // event list
+    if (!event_list_name.empty())
+    {
+        fout.open(event_list_name.c_str(), fstream::out);
+        if (not fout.is_open())
+        {
+            throw std::runtime_error(Form("ERROR: PlotLooper: %s cannot be opened", event_list_name.c_str()));
+        }
+        else
+        {
+            fout << "Run | LS | Event | channel | " 
+                    "Lep1Pt | Lep1Eta | Lep1Phi | Lep1Iso | "
+                    "Lep2Pt | Lep2Eta | Lep2Phi | Lep1Iso | "
+                    "MET | HT | nJets | nbJets" << endl;
+        }
+    }
 
     // begin job
     BeginJob();
@@ -167,11 +173,11 @@ PlotLooper::PlotLooper
 PlotLooper::~PlotLooper()
 {
 }
-		
+        
 // methods:
 void PlotLooper::BeginJob()
 {
-	// book the histograms
+    // book the histograms
     BookHists();
 }
 
@@ -481,38 +487,48 @@ void PlotLooper::EndJob()
 
 
     // print raw yields
-    Pred y_sf_ee(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_ee"]));
-    Pred y_sf_em(rt::AddWithError(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_em"]), rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_em"])));
-    Pred y_sf_mm(rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_mm"]));
-    Pred y_df_ee(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_ee"]));
-    Pred y_df_em(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_mm"]));
-    Pred y_df_mm(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_em"]));
-    Pred y_os_ee(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_ee"]));
-    Pred y_os_em(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_em"]));
-    Pred y_os_mm(rt::EntriesAndError(hc["h_os_pt1_vs_eta1_mm"]));
+    //Pred y_sf_ee(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_ee"]));
+    //Pred y_sf_em(rt::AddWithError(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_em"]), rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_em"])));
+    //Pred y_sf_mm(rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_mm"]));
+    //Pred y_df_ee(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_ee"]));
+    //Pred y_df_em(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_mm"]));
+    //Pred y_df_mm(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_em"]));
+    //Pred y_os_ee(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_ee"]));
+    //Pred y_os_em(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_em"]));
+    //Pred y_os_mm(rt::EntriesAndError(hc["h_os_pt1_vs_eta1_mm"]));
 
-    PredSummary y_sf(y_sf_ee, y_sf_mm, y_sf_em);
-    PredSummary y_df(y_df_ee, y_df_mm, y_df_em);
-    PredSummary y_os(y_os_ee, y_os_mm, y_os_em);
+    //PredSummary y_sf(y_sf_ee, y_sf_mm, y_sf_em);
+    //PredSummary y_df(y_df_ee, y_df_mm, y_df_em);
+    //PredSummary y_os(y_os_ee, y_os_mm, y_os_em);
 
+    //CTable t_counts;
+    //t_counts.useTitle();
+    //t_counts.setTitle("counts table");
+    //t_counts.setTable() (               "mm",          "ee",          "em",          "ll")
+    //                    ("SF", y_sf.mm.value, y_sf.ee.value, y_sf.em.value, y_sf.ll.value)
+    //                    ("DF", y_df.mm.value, y_df.ee.value, y_df.em.value, y_df.ll.value)
+    //                    ("OS", y_os.mm.value, y_os.ee.value, y_os.em.value, y_os.ll.value)
+    //                    ("SS",    yield_ss[0],  yield_ss[1],   yield_ss[2],   yield_ss[3]);
+    //cout << endl;
+    //t_counts.print();
     CTable t_counts;
+    t_counts.setTitle("counts for SS Analysis 2012");
     t_counts.useTitle();
-    t_counts.setTitle("counts table");
-    t_counts.setTable() (               "mm",          "ee",          "em",          "ll")
-                        ("SF", y_sf.mm.value, y_sf.ee.value, y_sf.em.value, y_sf.ll.value)
-                        ("DF", y_df.mm.value, y_df.ee.value, y_df.em.value, y_df.ll.value)
-                        ("OS", y_os.mm.value, y_os.ee.value, y_os.em.value, y_os.ll.value)
-                        ("SS",    yield_ss[0],  yield_ss[1],   yield_ss[2],   yield_ss[3]);
+    t_counts.setTable() (                      "mm",          "em",          "ee",         "all")
+                           ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
+                           ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
+                           ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
+                           ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
     cout << endl;
     t_counts.print();
 
-	// close the event list file
-	if (fout.is_open())
-	{
-		fout.close();	
+    // close the event list file
+    if (fout.is_open())
+    {
+        fout.close();   
 
-		// sort it
-	}
+        // sort it
+    }
 }
 
 // binning contants
@@ -657,11 +673,11 @@ int PlotLooper::operator()(long event)
         // scale 1b (set before cuts) 
         m_scale1fb = scale1fb();
 
-		// which analysis type
-		//bool is_high_pt = (m_analysis_type==ss::AnalysisType::high_pt);
+        // which analysis type
+        //bool is_high_pt = (m_analysis_type==ss::AnalysisType::high_pt);
 
-		//	//if (evt()==946339219)
-		//	if (
+        //  //if (evt()==946339219)
+        //  if (
         //        evt()==136681113  ||
         //        evt()==420345732  ||
         //        evt()==232659600  ||
@@ -675,19 +691,19 @@ int PlotLooper::operator()(long event)
         //        evt()==621112830  ||
         //        evt()==178599734
         //       )
-		//	{
-		//		string channel;
-		//		switch (hyp_type)
-		//		{
-		//			case DileptonHypType::MUMU : channel = "MuMu"; break;
-		//			case DileptonHypType::EMU  : channel = "EMu" ; break;
-		//			case DileptonHypType::EE   : channel = "EE"  ; break;
-		//			default                    : channel = "none"; 
-		//		}
-		//		channel.append(":");
-		//		//fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
+        //  {
+        //      string channel;
+        //      switch (hyp_type)
+        //      {
+        //          case DileptonHypType::MUMU : channel = "MuMu"; break;
+        //          case DileptonHypType::EMU  : channel = "EMu" ; break;
+        //          case DileptonHypType::EE   : channel = "EE"  ; break;
+        //          default                    : channel = "none"; 
+        //      }
+        //      channel.append(":");
+        //      //fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
         //        cout << "hyp_type = " << hyp_type << "\t" << channel << endl;
-		//		cout << Form("%6u | %3u | %12u | %s | %d | %4.3f | %2.3f | %2.3f | %4.3f | %d | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %u | %u",
+        //      cout << Form("%6u | %3u | %12u | %s | %d | %4.3f | %2.3f | %2.3f | %4.3f | %d | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %u | %u",
         //             run(), ls(), evt(),
         //             channel.c_str(),
         //             lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta(), lep1_p4().phi(), lep1_corpfiso(),
@@ -696,7 +712,7 @@ int PlotLooper::operator()(long event)
         //             ht(),
         //             njets(),
         //             nbtags()) << endl;
-		//	}
+        //  }
         //    else
         //    {
         //        return 0;
@@ -744,15 +760,15 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
-		// d0 requirement
+        // d0 requirement
         //if (abs(lep1_d0()) > (abs(lep1_pdgid())==11 ? 0.01 : 0.005))
-		//{
-		//	return 0;
-		//}
+        //{
+        //  return 0;
+        //}
         //if (abs(lep2_d0()) > (abs(lep2_pdgid())==11 ? 0.01 : 0.005))
-		//{
-		//	return 0;
-		//}
+        //{
+        //  return 0;
+        //}
 
         // ioslation
         //if (is_ss() && (lep1_corpfiso() > 0.08 || lep2_corpfiso() > 0.08))
@@ -774,12 +790,12 @@ int PlotLooper::operator()(long event)
         //    return 0;
         //}
 
-		// HT cut
-		if (ht() < m_min_ht)
-		{
+        // HT cut
+        if (ht() < m_min_ht)
+        {
             if (m_verbose) {cout << Form("failing minimum hT: %f < %f", ht(), m_min_ht) << endl;}
-			return 0;
-		}
+            return 0;
+        }
 
         // charge option (1 == ++, -1 == --)
         switch (m_charge_option)
@@ -858,18 +874,18 @@ int PlotLooper::operator()(long event)
         //}
 
         // select m_gluino and m_lsp
-        if 
-		(
-			m_sample == at::Sample::t1tttt || 
-		    m_sample == at::Sample::t1tttt_fastsim ||
-		    m_sample == at::Sample::sbottomtop
-		)
-        {
-            if (!rt::is_equal(m_sparm0, sparm0()) || !rt::is_equal(m_sparm1, sparm1()))
-            {
-                return 0;
-            }
-        }
+        //if 
+        //(
+        //  m_sample == at::Sample::t1tttt || 
+        //    m_sample == at::Sample::t1tttt_fastsim ||
+        //    m_sample == at::Sample::sbottomtop
+        //)
+        //{
+        //    if (!rt::is_equal(m_sparm0, sparm0()) || !rt::is_equal(m_sparm1, sparm1()))
+        //    {
+        //        return 0;
+        //    }
+        //}
 
         // ttbar breakdown 
         switch (m_sample)
@@ -879,6 +895,36 @@ int PlotLooper::operator()(long event)
             case at::Sample::ttslb: if (ttbar_bkdn() != TTbarBreakDown::TTSLB) return 0; break;
             case at::Sample::ttslo: if (ttbar_bkdn() != TTbarBreakDown::TTSLO) return 0; break;
             default: {/*do nothing*/}
+        }
+
+        // count events
+        if (dilep_type()==DileptonHypType::MUMU)
+        {
+            if(is_ss()) m_count_ss[0] += 1.0;
+            if(is_sf()) m_count_sf[0] += 1.0;
+            if(is_df()) m_count_df[0] += 1.0;
+            if(is_os()) m_count_os[0] += 1.0;
+        }
+        else if (dilep_type()==DileptonHypType::EMU)
+        {
+            if(is_ss()) m_count_ss[1] += 1.0;
+            if(is_sf()) m_count_sf[1] += 1.0;
+            if(is_df()) m_count_df[1] += 1.0;
+            if(is_os()) m_count_os[1] += 1.0;
+        }
+        else if (dilep_type()==DileptonHypType::EE)
+        {
+            if(is_ss()) m_count_ss[2] += 1.0;
+            if(is_sf()) m_count_sf[2] += 1.0;
+            if(is_df()) m_count_df[2] += 1.0;
+            if(is_os()) m_count_os[2] += 1.0;
+        }
+        // count all 
+        {
+            if(is_ss()) m_count_ss[3] += 1.0;
+            if(is_sf()) m_count_sf[3] += 1.0;
+            if(is_df()) m_count_df[3] += 1.0;
+            if(is_os()) m_count_os[3] += 1.0;
         }
 
         // Weight Factors
@@ -894,19 +940,19 @@ int PlotLooper::operator()(long event)
         //float evt_weight = m_lumi * scale1fb() * vtxw;
         float evt_weight = m_lumi * vtxw;
 
-		// T1tttt is not scaled properly (need make this automatic) 
+        // T1tttt is not scaled properly (need make this automatic) 
         if (m_sample == at::Sample::t1tttt || m_sample == at::Sample::t1tttt_fastsim)
         {
-			if (rt::is_equal(sparm0(), 900.0f)) {evt_weight *= (0.060276 *1000)/10000.0;}
-			if (rt::is_equal(sparm0(), 950.0f)) {evt_weight *= (0.0381246*1000)/10000.0;}
-		}
-		// SBottomTop is not scaled properl (need make this automatic)
+            if (rt::is_equal(sparm0(), 900.0f)) {evt_weight *= (0.060276 *1000)/10000.0;}
+            if (rt::is_equal(sparm0(), 950.0f)) {evt_weight *= (0.0381246*1000)/10000.0;}
+        }
+        // SBottomTop is not scaled properl (need make this automatic)
         else if (m_sample == at::Sample::sbottomtop)
         {
-			//evt_weight /= scale1fb();
-			if (rt::is_equal(sparm0(), 460.0f)) {evt_weight *= (0.152*1000)/10000.0;}
-			if (rt::is_equal(sparm0(), 380.0f)) {evt_weight *= (0.506*1000)/10000.0;}
-		}
+            //evt_weight /= scale1fb();
+            if (rt::is_equal(sparm0(), 460.0f)) {evt_weight *= (0.152*1000)/10000.0;}
+            if (rt::is_equal(sparm0(), 380.0f)) {evt_weight *= (0.506*1000)/10000.0;}
+        }
         else
         {
             evt_weight *= scale1fb();
@@ -944,19 +990,19 @@ int PlotLooper::operator()(long event)
             rt::Fill(hc["h_yield_ll"], 1, evt_weight);
             rt::Fill(hc["h_yield"+hs], 1, evt_weight);
 
-			if (fout.is_open())
-			{
-				string channel;
-				switch (hyp_type)
-				{
-					case DileptonHypType::MUMU : channel = "MuMu"; break;
-					case DileptonHypType::EMU  : channel = "EMu" ; break;
-					case DileptonHypType::EE   : channel = "EE"  ; break;
-					default                    : channel = "none"; 
-				}
-				channel.append(":");
-				//fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
-				fout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %u | %u",
+            if (fout.is_open())
+            {
+                string channel;
+                switch (hyp_type)
+                {
+                    case DileptonHypType::MUMU : channel = "MuMu"; break;
+                    case DileptonHypType::EMU  : channel = "EMu" ; break;
+                    case DileptonHypType::EE   : channel = "EE"  ; break;
+                    default                    : channel = "none"; 
+                }
+                channel.append(":");
+                //fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
+                fout << Form("%6u | %3u | %12u | %s | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %u | %u",
                      run(), ls(), evt(),
                      channel.c_str(),
                      lep1_p4().pt(), lep1_p4().eta(), lep1_p4().phi(), lep1_corpfiso(),
@@ -965,7 +1011,7 @@ int PlotLooper::operator()(long event)
                      ht(),
                      njets(),
                      nbtags()) << endl;
-			}
+            }
         }
 
         // SF 
@@ -1059,22 +1105,22 @@ int PlotLooper::operator()(long event)
         const LorentzVector& p41 = lep1_p4();
         const LorentzVector& p42 = lep2_p4();
 
-        rt::Fill(hc["h_nvtxs"     +qs], nvtxs()     , evt_weight);
-        rt::Fill(hc["h_pt1"       +qs], p41.pt()    , evt_weight);
-        rt::Fill(hc["h_pt2"       +qs], p42.pt()    , evt_weight);
-        rt::Fill(hc["h_ht"        +qs], ht()        , evt_weight);
-        rt::Fill(hc["h_mt"        +qs], lep1_mt()   , evt_weight);
-        rt::Fill(hc["h_met"       +qs], pfmet()     , evt_weight);
-        rt::Fill(hc["h_nbtags"    +qs], nbtags()    , evt_weight);
-        rt::Fill(hc["h_njets"     +qs], njets()     , evt_weight);
+        rt::Fill(hc["h_nvtxs" +qs], nvtxs()     , evt_weight);
+        rt::Fill(hc["h_pt1"   +qs], p41.pt()    , evt_weight);
+        rt::Fill(hc["h_pt2"   +qs], p42.pt()    , evt_weight);
+        rt::Fill(hc["h_ht"    +qs], ht()        , evt_weight);
+        rt::Fill(hc["h_mt"    +qs], lep1_mt()   , evt_weight);
+        rt::Fill(hc["h_met"   +qs], pfmet()     , evt_weight);
+        rt::Fill(hc["h_nbtags"+qs], nbtags()    , evt_weight);
+        rt::Fill(hc["h_njets" +qs], njets()     , evt_weight);
 
-        rt::Fill(hc["h_pt1"       +hs+qs], p41.pt()    , evt_weight);
-        rt::Fill(hc["h_pt2"       +hs+qs], p42.pt()    , evt_weight);
-        rt::Fill(hc["h_ht"        +hs+qs], ht()        , evt_weight);
-        rt::Fill(hc["h_mt"        +hs+qs], lep1_mt()   , evt_weight);
-        rt::Fill(hc["h_met"       +hs+qs], pfmet()     , evt_weight);
-        rt::Fill(hc["h_nbtags"    +hs+qs], nbtags()    , evt_weight);
-        rt::Fill(hc["h_njets"     +hs+qs], njets()     , evt_weight);
+        rt::Fill(hc["h_pt1"   +hs+qs], p41.pt()    , evt_weight);
+        rt::Fill(hc["h_pt2"   +hs+qs], p42.pt()    , evt_weight);
+        rt::Fill(hc["h_ht"    +hs+qs], ht()        , evt_weight);
+        rt::Fill(hc["h_mt"    +hs+qs], lep1_mt()   , evt_weight);
+        rt::Fill(hc["h_met"   +hs+qs], pfmet()     , evt_weight);
+        rt::Fill(hc["h_nbtags"+hs+qs], nbtags()    , evt_weight);
+        rt::Fill(hc["h_njets" +hs+qs], njets()     , evt_weight);
 
         // dilep
         hc["h_dilep_mass"+qs   ]->Fill(dilep_mass(), evt_weight);
@@ -1148,6 +1194,7 @@ int PlotLooper::operator()(long event)
         {
             rt::Fill(hc["h_pt2_el"+qs], p42.pt(), evt_weight);
         }
+
     }
     catch (std::exception& e)
     {

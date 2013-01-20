@@ -236,8 +236,8 @@ namespace ss
     bool PassesSignalRegion(const SignalRegion::value_type& signal_region, int num_btags)
     {
         using namespace ssb;
-        float pt1 = lep1_p4().pt();
-        float pt2 = lep2_p4().pt();
+        const float pt1 = samesignbtag.lep1_p4().pt();
+        const float pt2 = samesignbtag.lep2_p4().pt();
         switch (signal_region)
         {
             // inclusive

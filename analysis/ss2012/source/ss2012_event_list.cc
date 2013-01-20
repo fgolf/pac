@@ -61,7 +61,6 @@ CTable EventLists
         samesignbtag.GetEntry(entry);
 
         // selection
-        //if (!ss::PassesSignalRegion(signal_region)) {continue;}
         //if (is_real_data() && not is_good_lumi())   {continue;}
         switch(charge_type)
         {
@@ -71,9 +70,9 @@ CTable EventLists
             case at::DileptonChargeType::OS: if(not is_os()) {continue;}; break;
             default: continue;
         }
-        if (dilep_type()==4)           {continue;}
-        if (njets()<2)                 {continue;}
-        if (is_os() && dilep_type()==1){continue;}
+        if (!ss::PassesSignalRegion(signal_region)) {continue;}
+        //if (is_real_data() && not is_good_lumi()) {continue;}
+        if (is_os() && dilep_type()==1)           {continue;}
 
         // local variables
         string channel = at::GetDileptonHypTypeName(dilep_type());
@@ -141,11 +140,9 @@ CTable EventCounts
         //cout << Form("run: %d, ls: %d, event: %d", run(), ls(), evt()) << endl;
 
         // selection
-        //if (!ss::PassesSignalRegion(signal_region)) {continue;}
+        if (!ss::PassesSignalRegion(signal_region)) {continue;}
         //if (is_real_data() && not is_good_lumi())   {continue;}
-        if (dilep_type()==4) {continue;}
-        if (njets()<2)       {continue;}
-        if (is_os() && dilep_type()==1){continue;}
+        if (is_os() && dilep_type()==1)           {continue;}
 
         // fill counts
         if (is_ss()) 

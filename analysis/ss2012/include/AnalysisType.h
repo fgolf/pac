@@ -15,6 +15,7 @@ namespace ss
             low_pt,
             vlow_pt,
             high_pt_eth,
+			hcp,
             static_size
         };
     };
@@ -27,7 +28,6 @@ namespace ss
         std::string title;
         std::string latex;
     };
-
 
     // Get the AnalysisType from a string
     AnalysisType::value_type GetAnalysisTypeFromName(const std::string& analysis_type_name);

@@ -21,14 +21,15 @@
 // templated classes
 
 // classes or structs
-#pragma link C++ struct ss::SignalRegion;
-#pragma link C++ struct ss::AnalysisType;
+#pragma link C++ struct ss::SignalRegion+;
+#pragma link C++ struct ss::AnalysisType+;
 
 // functions
 #pragma link C++ function ss::GetSignalRegionFromName;
 #pragma link C++ function ss::GetSignalRegionInfo;
 #pragma link C++ function ss::GetSignalRegionInfo;
 #pragma link C++ function ss::SetSignalRegionAliases;
+#pragma link C++ function ss::PassesSignalRegion;
 #pragma link C++ function ss::GetAnalysisTypeFromName;
 #pragma link C++ function ss::GetAnalysisTypeInfo;
 #pragma link C++ function ss::GetAnalysisTypeInfo;

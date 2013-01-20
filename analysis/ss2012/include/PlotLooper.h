@@ -93,6 +93,12 @@ class PlotLooper : public at::AnalysisWithHist
         std::tr1::shared_ptr<TH2F> h_elfr;
         std::tr1::shared_ptr<TH2F> h_flip;
 
+        // quick count check
+        std::tr1::array<float, 4> m_count_ss;
+        std::tr1::array<float, 4> m_count_sf;
+        std::tr1::array<float, 4> m_count_df;
+        std::tr1::array<float, 4> m_count_os;
+
         // methods
         float GetFakeRateValue(int lep_id, float pt, float eta) const;
         float GetFakeRateError(int lep_id, float pt, float eta) const;

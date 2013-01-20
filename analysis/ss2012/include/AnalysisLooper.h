@@ -65,11 +65,17 @@ private:
     bool m_sparms;
     bool m_sync_print;
     bool m_verbose;
+    int m_hyp_count;
 
-    int hyp_count;
-    //int good_lep_count;
-    //int iso_lep_count;
-    //int num_lep_count;
+    // fake rate hists
+    std::tr1::shared_ptr<TH2F> h_mufr;
+    std::tr1::shared_ptr<TH2F> h_elfr;
+    std::tr1::shared_ptr<TH2F> h_flip;
+
+    // on-the-fly JEC
+    FactorizedJetCorrector* m_jet_corrector;
+    MetCorrector* m_met_corrector;
+    std::vector<std::string> m_list_of_jec_filenames;
 
     // 0 mm, 1 em, 2 ee
     std::tr1::array<float, 4> m_count_ss;
@@ -82,20 +88,9 @@ private:
     std::tr1::array<float, 4> m_count_nobtag_df;
     std::tr1::array<float, 4> m_count_nobtag_os;
 
-
-    // fake rate hists
-    std::tr1::shared_ptr<TH2F> h_mufr;
-    std::tr1::shared_ptr<TH2F> h_elfr;
-    std::tr1::shared_ptr<TH2F> h_flip;
-
     // struct to hold tree values
     SameSignTree m_evt;
 
-    // on-the-fly JEC
-    FactorizedJetCorrector *jet_corrector;
-    MetCorrector *met_corrector;
-
-    std::vector<std::string> m_list_of_jec_filenames;
 private:
     // methods:
     float GetFakeRateValue(int lep_id, int lep_idx) const;
