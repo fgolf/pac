@@ -49,6 +49,9 @@ public:
     LorentzVector dilep_p4;
     bool is_os;
     bool is_ss;
+	bool mm;
+	bool ee;
+	bool em;
     at::DileptonHypType::value_type dilep_type;
     at::DileptonHypType::value_type dilep_gen_type;
     Fiduciality::value_type fiduciality;

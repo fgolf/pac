@@ -34,11 +34,6 @@ void DileptonTree::FillCommon (int idx)
     float lt_pt = cms2.hyp_lt_p4().at(idx).pt();
     float ll_pt = cms2.hyp_ll_p4().at(idx).pt();
 
-//    int lep1_id  = (lt_pt > ll_pt) ? cms2.hyp_lt_id().at(idx)    : cms2.hyp_ll_id().at(idx);
-//    int lep1_idx = (lt_pt > ll_pt) ? cms2.hyp_lt_index().at(idx) : cms2.hyp_ll_index().at(idx);
-
-//    int lep2_id  = (lt_pt > ll_pt) ? cms2.hyp_ll_id().at(idx)    : cms2.hyp_lt_id().at(idx);
-//    int lep2_idx = (lt_pt > ll_pt) ? cms2.hyp_ll_index().at(idx) : cms2.hyp_lt_index().at(idx);
     int lep1_id;
     int lep1_idx;
     int lep2_id;
@@ -80,6 +75,11 @@ void DileptonTree::FillCommon (int idx)
     LorentzVector v1 = (abs(lep1_id) == 11) ? lep1.sc_p4 : lep1.p4;
     LorentzVector v2 = (abs(lep2_id) == 11) ? lep2.sc_p4 : lep2.p4;
 
+	// convenience bools
+	mm = (dilep_type == at::DileptonHypType::MUMU);
+	ee = (dilep_type == at::DileptonHypType::EE);
+	em = (dilep_type == at::DileptonHypType::EMU);
+
     fiduciality = GetFiduciality(v1, v2);
 }
 
@@ -91,6 +91,9 @@ void DileptonTree::Reset()
     dilep_p4       = LorentzVector(0, 0, 0, 0);
     is_os          = false;
     is_ss          = false;
+	mm			   = false;
+	ee			   = false;
+	em			   = false;
     dilep_type     = at::DileptonHypType::static_size;
     dilep_gen_type = at::DileptonHypType::static_size;
     dilep_mass     = -999999.;
@@ -108,6 +111,9 @@ void DileptonTree::SetBranches(TTree &tree)
     tree.Branch(Form("%sdilep_p4"       , prefix_.c_str()) , "LorentzVector" , &dilep_p4          );
     tree.Branch(Form("%sis_os"          , prefix_.c_str()) , &is_os          , "is_os/O"          );
     tree.Branch(Form("%sis_ss"          , prefix_.c_str()) , &is_ss          , "is_ss/O"          );
+    tree.Branch(Form("%smm"             , prefix_.c_str()) , &mm             , "mm/O"             );
+    tree.Branch(Form("%see"             , prefix_.c_str()) , &ee             , "ee/O"             );
+    tree.Branch(Form("%sem"             , prefix_.c_str()) , &em             , "em/O"             );
     tree.Branch(Form("%sdilep_type"     , prefix_.c_str()) , &dilep_type     , "dilep_type/I"     );
     tree.Branch(Form("%sdilep_gen_type" , prefix_.c_str()) , &dilep_gen_type , "dilep_gen_type/I" );
     tree.Branch(Form("%sdilep_mass"     , prefix_.c_str()) , &dilep_mass     , "dilep_mass/F"     );
