@@ -16,6 +16,7 @@ all:
 	$(MAKE) -f build/ss2012_outreach_closure.mk
 	$(MAKE) -f build/ss2012_closure_test.mk
 	$(MAKE) -f build/ss2012_event_list.mk  
+	$(MAKE) -f build/ss2012_event_list_eth.mk 
 
 clean:
 	$(MAKE) -f build/ss2012_tools.mk clean
@@ -30,5 +31,6 @@ clean:
 	$(MAKE) -f build/ss2012_outreach_closure.mk clean
 	$(MAKE) -f build/ss2012_closure_test.mk clean
 	$(MAKE) -f build/ss2012_event_list.mk clean
+	$(MAKE) -f build/ss2012_event_list_eth.mk clean
 
 .PHONY: all clean

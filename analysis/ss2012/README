@@ -125,7 +125,7 @@ These histograms are defined in PlotLooper.cc.
 
 For example:
 
-ss2012_plots.exe --sample data --sr 0 --lumi 19.47 --output output/test.root --nev -1
+ss2012_plots.exe --sample data --sr 0 --anal_type high_pt --lumi 19.47 --output output/test.root --nev -1
 
 Allowed options:
   --help                print this menu
@@ -133,7 +133,7 @@ Allowed options:
   --output arg          name of output root file (optional)
   --input arg           name of input root file (optional)
   --sample arg          name of input sample (from at/Sample.h)
-  --anal_type arg       name of input sample (from at/AnalysisType.h)
+  --anal_type arg       name of analysis type (from AnalysisType.h)
   --fr_file arg         fake rate file name
   --fl_file arg         flip rate file name
   --vtx_file arg        ROOT file for the vertex reweight (ignored for data)
