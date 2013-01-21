@@ -14,20 +14,22 @@ using namespace ssb;
 
 CTable EventLists
 (
-    const std::string& output_name = "",
-    const ss::AnalysisType::value_type& anal_type         = ss::AnalysisType::high_pt,
-    const ss::SignalRegion::value_type& signal_region     = ss::SignalRegion::sr0,
-    const at::DileptonChargeType::value_type& charge_type = at::DileptonChargeType::SS
+    const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
+    const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
+    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive,
+    const at::DileptonChargeType::value_type& charge_type      = at::DileptonChargeType::SS
 )
 {
-    ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
-    ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region);
+    const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
+    const std::string srt_name         = ss::GetSignalRegionTypeName(signal_region_type);
+    const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, anal_type, signal_region_type);
+	const std::string charge_type_name = at::GetDileptonChargeTypeName(charge_type);
+
     TChain chain("tree"); 
-    //chain.Add(Form("babies/%s/data.root", at_info.short_name.c_str()));
-    chain.Add("output/alex_sync.root");
+    chain.Add(Form("babies/%s/data.root", at_info.short_name.c_str()));
 
     CTable list;
-    list.setTitle(Form("SS events for %s, signal region %s", at_info.title.c_str(), sr_info.name.c_str()));
+    list.setTitle(Form("%s events for %s, signal region %s, %s", charge_type_name.c_str(), at_info.title.c_str(), sr_info.name.c_str(), srt_name.c_str()));
     list.useTitle();
 
     size_t col = 0;
@@ -70,8 +72,8 @@ CTable EventLists
             case at::DileptonChargeType::OS: if(not is_os()) {continue;}; break;
             default: continue;
         }
-        if (!ss::PassesSignalRegion(signal_region)) {continue;}
-        //if (is_real_data() && not is_good_lumi()) {continue;}
+        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
+        if (is_real_data() && not is_good_lumi()) {continue;}
         if (is_os() && dilep_type()==1)           {continue;}
 
         // local variables
@@ -112,18 +114,17 @@ CTable EventLists
 
 CTable EventCounts
 (
-    const ss::AnalysisType::value_type& anal_type     = ss::AnalysisType::high_pt,
-    const ss::SignalRegion::value_type& signal_region = ss::SignalRegion::sr0
+    const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
+    const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
+    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive
 )
 {
-    ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
-    ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region);
-    TChain chain("tree"); 
-    //chain.Add(Form("babies/%s/data.root", at_info.short_name.c_str()));
-    chain.Add("output/alex_sync.root");
-    //ss::SetSignalRegionAliases(chain);
-    //cout << chain.GetEntries() << endl;
+    const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
+    const std::string srt_name         = ss::GetSignalRegionTypeName(signal_region_type);
+    const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, anal_type, signal_region_type);
 
+    TChain chain("tree"); 
+    chain.Add(Form("babies/%s/data.root", at_info.short_name.c_str()));
 
     // yields         ee,  mm,  em,  ll
     float y_ss[4] = {0.0, 0.0, 0.0, 0.0};
@@ -140,8 +141,8 @@ CTable EventCounts
         //cout << Form("run: %d, ls: %d, event: %d", run(), ls(), evt()) << endl;
 
         // selection
-        if (!ss::PassesSignalRegion(signal_region)) {continue;}
-        //if (is_real_data() && not is_good_lumi())   {continue;}
+        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
+        if (is_real_data() && not is_good_lumi()) {continue;}
         if (is_os() && dilep_type()==1)           {continue;}
 
         // fill counts
@@ -177,7 +178,7 @@ CTable EventCounts
 
     // print tables
     CTable t1;
-    t1.setTitle(Form("yields for %s, signal region %s", at_info.title.c_str(), sr_info.name.c_str()));
+    t1.setTitle(Form("yields for %s, signal region %s, %s", at_info.title.c_str(), sr_info.name.c_str(), srt_name.c_str()));
     t1.useTitle();
     t1.setTable() (         "ee",    "mm",    "em",    "ll")
                   ("SS", y_ss[0], y_ss[1], y_ss[2], y_ss[3])
@@ -194,17 +195,19 @@ try
     // -------------------------------------------------------------------------------------------------//
 
     // parameters
-    std::string analysis_type_name  = "high_pt";
-    unsigned int signal_region_num  = 0;
-    std::string output_name         = "";
+    std::string analysis_type_name      = "high_pt";
+    std::string signal_region_name      = "sr0";
+    std::string signal_region_type_name = "inclusive";
+    std::string output_name             = "";
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"     , "print this menu")
-        ("anal_type", po::value<std::string>(&analysis_type_name) , "name of input sample (from at/AnalysisType.h)"           )
-        ("output"   , po::value<std::string>(&output_name)        , "output file name for lists (blank means print to screen)")
-        ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number (default is 0)"                     )
+        ("anal_type", po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"           )
+        ("output"   , po::value<std::string>(&output_name)             , "output file name for lists (blank means print to screen)")
+        ("sr"       , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                     )
+        ("sr_type"  , po::value<std::string>(&signal_region_type_name) , "signal region number (default is 0)"                     )
         ;
 
     po::variables_map vm;
@@ -220,9 +223,9 @@ try
     // do it
     // -------------------------------------------------------------------------------------------------//
 
-    const string signal_region_name = Form("sr%d", signal_region_num);
-    ss::SignalRegion::value_type sr = ss::GetSignalRegionFromName(signal_region_name);
-    ss::AnalysisType::value_type at = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::AnalysisType::value_type at      = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type srt = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    const ss::SignalRegion::value_type sr      = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
 
     // write output
     if (not output_name.empty())
@@ -236,17 +239,17 @@ try
     ostream* out_ptr = output_name.empty() ? &cout : new fstream(output_name.c_str(), fstream::out);
     ostream& out = *out_ptr;
 
-    CTable counts =  EventCounts(at, sr);
-    CTable ss_lists = EventLists(output_name, at, sr, at::DileptonChargeType::SS);
-    CTable sf_lists = EventLists(output_name, at, sr, at::DileptonChargeType::SF);
-    CTable df_lists = EventLists(output_name, at, sr, at::DileptonChargeType::DF);
-    CTable os_lists = EventLists(output_name, at, sr, at::DileptonChargeType::OS);
+    CTable counts =  EventCounts(at, sr, srt);
+    CTable ss_lists = EventLists(at, sr, srt, at::DileptonChargeType::SS);
+    CTable sf_lists = EventLists(at, sr, srt, at::DileptonChargeType::SF);
+    CTable df_lists = EventLists(at, sr, srt, at::DileptonChargeType::DF);
+    CTable os_lists = EventLists(at, sr, srt, at::DileptonChargeType::OS);
     out << "total yields:\n" << counts << endl; 
     out << "printing SS events:\n" << ss_lists << endl;
     out << "printing SF events:\n" << sf_lists << endl;
     out << "printing DF events:\n" << df_lists << endl;
     out << "printing OS events:\n" << os_lists << endl;
-    
+
     // done 
     return 0;
 }

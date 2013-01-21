@@ -45,24 +45,6 @@ lib ss2012_tools
     <include>./source
   ;
 
-#exe sr_test
-#  : # sources
-#    ./source/sr_test.cc
-#    ./source/SignalRegion.cc.new
-#    ./source/AnalysisType.cc
-#    # dependent packages
-#    ssb2012
-#    /SimpleTable//SimpleTable/<link>static
-#    /ROOT
-#  : # requirements
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#    <include>./include
-#    <include>./source
-#  ;
-
 exe ss2012_analysis
   : # sources
     ./source/ss2012_analysis.cc
@@ -74,6 +56,26 @@ exe ss2012_analysis
     /AnalysisTools//AnalysisTools/<link>static
     /RootTools//RootTools/<link>static
     /FGTools//FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_plots
+  : # sources
+    ./source/ss2012_plots.cc
+    ./source/PlotLooper.cc
+    # dependent packages
+    /ROOT
+    ss2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
     /boost//program_options/<link>static
     /SimpleTable//SimpleTable/<link>static
   : # requirements
@@ -105,10 +107,9 @@ exe ss2012_outreach
   : # usage-requirements
   ;
 
-exe ss2012_plots
+exe ss2012_event_list_eth
   : # sources
-    ./source/ss2012_plots.cc
-    ./source/PlotLooper.cc
+    ./source/ss2012_event_list_eth.cc
     # dependent packages
     /ROOT
     ss2012_tools/<link>static
@@ -118,7 +119,7 @@ exe ss2012_plots
     /boost//program_options/<link>static
     /SimpleTable//SimpleTable/<link>static
   : # requirements
-		<define>__NON_ROOT_BUILD__
+    <define>__NON_ROOT_BUILD__
     <include>./include
     <include>./source
   : # default-build
@@ -137,7 +138,7 @@ exe ss2012_event_list
     /boost//program_options/<link>static
     /SimpleTable//SimpleTable/<link>static
   : # requirements
-		<define>__NON_ROOT_BUILD__
+    <define>__NON_ROOT_BUILD__
     <include>./include
     <include>./source
   : # default-build
@@ -157,7 +158,7 @@ exe ss2012_closure_test
     /boost//program_options/<link>static
     /SimpleTable//SimpleTable/<link>static
   : # requirements
-		<define>__NON_ROOT_BUILD__
+    <define>__NON_ROOT_BUILD__
     <include>./include
     <include>./source
   : # default-build
@@ -178,7 +179,7 @@ exe ss2012_outreach_closure
     /boost//program_options/<link>static
     /SimpleTable//SimpleTable/<link>static
   : # requirements
-		<define>__NON_ROOT_BUILD__
+    <define>__NON_ROOT_BUILD__
     <include>./include
     <include>./source
   : # default-build
@@ -256,13 +257,12 @@ exe ss2012_create_fakerate_eth
   : # usage-requirements
   ;
 
-
 #exe test_frb
 #  : # sources
 #    ./source/test_frb.cc
 #    # dependent packages
 #    /ROOT
-#		/CMS2_FRB/<link>static
+#   /CMS2_FRB/<link>static
 #    /FakeRateBabyTools//FakeRateBabyTools/<link>static
 #    /MiniFWLite//libMiniFWLite/<link>shared
 #    /RootTools//RootTools/<link>static
@@ -293,53 +293,17 @@ exe ss2012_quick_check
   : # usage-requirements
   ;
 
-# quick and dirty cms2 looper
-#exe test_ntuples
-#  : # sources
-#    ./source/test_ntuples.cc
-#    # dependent packages
-#    /ROOT
-#    /MiniFWLite//libMiniFWLite/<link>shared
-#    /AnalysisTools//AnalysisTools/<link>static
-#    /RootTools//RootTools/<link>static
-#  : # requirements
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#  ;
-
-# quick and dirty cms2 looper
-#exe test_cf
-#  : # sources
-#    ./source/test_cf.cc
-#    ./source/looper.C
-#    # dependent packages
-#    /ROOT
-#    /MiniFWLite//libMiniFWLite/<link>shared
-#    /AnalysisTools//AnalysisTools/<link>static
-#    /RootTools//RootTools/<link>static
-#  : # requirements
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#  ;
-
 # install libs/exes
-default-install ss2012_merge_babies ;
+default-install ss2012_tools/<link>shared ;
 default-install ss2012_analysis ;
-default-install ss2012_skim ;
 default-install ss2012_plots ;
+default-install ss2012_event_list ;
+default-install ss2012_skim ;
+default-install ss2012_merge_babies ;
 default-install ss2012_outreach ;
 default-install ss2012_outreach_closure ;
-default-install ss2012_tools/<link>shared ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
 default-install ss2012_create_fakerate_eth ;
 default-install ss2012_closure_test ;
-default-install ss2012_event_list ;
-#default-install sr_test ;
-#default-install test_ntuples ;
 #default-install test_frb ;
-#default-install test_cf ;

@@ -22,6 +22,7 @@ class PlotLooper : public at::AnalysisWithHist
              at::Sample::value_type sample,
              ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
              ss::AnalysisType::value_type analysis_type = ss::AnalysisType::high_pt,
+             ss::SignalRegionType::value_type signal_region_type = ss::SignalRegionType::inclusive,
              const std::string& vtxreweight_file_name = "",
              const std::string& fake_rate_file_name = "",
              const std::string& flip_rate_file_name = "",
@@ -87,6 +88,7 @@ class PlotLooper : public at::AnalysisWithHist
         at::Sample::value_type m_sample;
         ss::SignalRegion::value_type m_signal_region;
         ss::AnalysisType::value_type m_analysis_type;
+        ss::SignalRegionType::value_type m_signal_region_type;
 
         // fake/flip rate hists
         std::tr1::shared_ptr<TH2F> h_mufr;

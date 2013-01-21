@@ -36,6 +36,10 @@ set-install-dir $(install-dir) ;
 # External Sources and programs
 # ----------------------------------------------------------------------#
 
+# CMSSW
+path-constant CMSSW_SRC : /usr/local/cmssw/osx107_amd64_gcc462/cms/cmssw/CMSSW_5_3_4/src ;
+use-project /CMSSW : ./externals/build/CMSSW ;
+
 # BOOST
 local boost_current = [ os.environ BOOST_CURRENT ] ;
 use-project /boost : $(boost_current) ;

@@ -37,6 +37,7 @@ PlotLooper::PlotLooper
     Sample::value_type sample,
     SignalRegion::value_type signal_region,
     AnalysisType::value_type analysis_type,
+    SignalRegionType::value_type signal_region_type,
     const std::string& vtxreweight_file_name,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
@@ -88,6 +89,7 @@ PlotLooper::PlotLooper
     , m_sample(sample)
     , m_signal_region(signal_region)
     , m_analysis_type(analysis_type)
+    , m_signal_region_type(signal_region_type)
 {
     // set vertex weight file
     if (m_do_vtx_reweight)
@@ -106,6 +108,10 @@ PlotLooper::PlotLooper
         case AnalysisType::high_pt:
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c";
+            break;
+        case AnalysisType::high_pt_eth:
+            mufr_name = "h_mufr50c";
+            elfr_name = "h_elfr50c";
             break;
         case AnalysisType::low_pt:
             mufr_name = "h_mufr40c";
@@ -861,7 +867,7 @@ int PlotLooper::operator()(long event)
         }
 
         // passes signal region
-        if (not PassesSignalRegion(m_signal_region, m_nbtags))
+        if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type))
         {
             return 0;
         }

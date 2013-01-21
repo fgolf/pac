@@ -32,6 +32,8 @@ FRClosureLooper::FRClosureLooper
     const std::string& root_file_name,
     at::Sample::value_type sample,
     SignalRegion::value_type signal_region,
+    AnalysisType::value_type analysis_type,
+    SignalRegionType::value_type signal_region_type,
     const std::string& vtxreweight_file_name,
     const std::string& fake_rate_file_name,
     const std::string& mufr_hist_name,
@@ -54,6 +56,8 @@ FRClosureLooper::FRClosureLooper
     , m_charge_option(charge_option)
     , m_sample(sample)
     , m_signal_region(signal_region)
+    , m_analysis_type(analysis_type)
+    , m_signal_region_type(signal_region_type)
 {
     // set vertex weight file
     if (m_do_vtx_reweight)
@@ -229,10 +233,14 @@ void FRClosureLooper::EndJob()
     float ll_ratio_error = ll_ratio_value * sqrt(pow(pred.ll.error/pred.ll.value, 2) + pow(obs_ll_error/obs_ll, 2));
     string ll_ratio      = rt::pm(ll_ratio_value, ll_ratio_error);
 
+
     // print the output
+    const SignalRegionInfo sr_info = GetSignalRegionInfo(m_signal_region, m_analysis_type, m_signal_region_type);
+
     CTable t_yields;
     t_yields.useTitle();
-    t_yields.setTitle(Form("closure test table (# jets >=2, # btags > %d, SR %d)", m_nbtags, m_signal_region));
+    //t_yields.setTitle(Form("closure test table (# jets >=2, # btags > %d, SR %d)", m_nbtags, m_signal_region));
+    t_yields.setTitle(Form("closure test table (%s, # btags > %d)", sr_info.title.c_str(), m_nbtags));
     string f = "1.2";
     t_yields.setTable() (                       "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
                         ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f), sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
@@ -381,14 +389,14 @@ int FRClosureLooper::operator()(long event)
             return 0;
         }
 
-        // two btagged jets
+        // # btagged jets
         if (nbtags() < static_cast<int>(m_nbtags))
         {
             return 0;
         }
 
         // passes signal region
-        if (not PassesSignalRegion(m_signal_region, m_nbtags))
+        if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type))
         {
             return 0;
         }

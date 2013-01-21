@@ -28,6 +28,8 @@ try
     std::string elfr_hist_name      = "h_elfr40c";
     std::string vtxreweight_file    = "";
     std::string sample_name         = "";
+    std::string analysis_type_name  = "high_pt";
+    bool exclusive                  = false;
     bool do_scale_factors           = true;
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
@@ -40,21 +42,23 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"     , "print this menu")
-        ("nev"      , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                                            )
-        ("output"   , po::value<std::string>(&output_file)        , "name of output root file"                                                          )
-        ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                                                           )
-        ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                                           )
-        ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                                               )
-        ("mufr"     , po::value<std::string>(&mufr_hist_name)     , "muon fake rate hist name"                                                          )
-        ("elfr"     , po::value<std::string>(&elfr_hist_name)     , "electron fake rate hist name"                                                      )
-        ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"                              )
-        ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                                                         )
-        ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                                          )
-        ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                                              )
-        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                                           )
-        ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                                        )
-        ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)"                        )
-        ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                                         )
+        ("nev"      , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                    )
+        ("output"   , po::value<std::string>(&output_file)        , "name of output root file"                                  )
+        ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                                   )
+        ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                   )
+        ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                       )
+        ("anal_type", po::value<std::string>(&analysis_type_name) , "name of analysis type (from AnalysisType.h)"               )
+        ("mufr"     , po::value<std::string>(&mufr_hist_name)     , "muon fake rate hist name"                                  )
+        ("elfr"     , po::value<std::string>(&elfr_hist_name)     , "electron fake rate hist name"                              )
+        ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"      )
+        ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                                 )
+        ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                  )
+        ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                      )
+        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
+        ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                )
+        ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
+        ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
+        ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
         ;
 
     po::variables_map vm;
@@ -117,12 +121,22 @@ try
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
     
+	// analysis type
+    const ss::AnalysisType::value_type analysis_type = ss::GetAnalysisTypeFromName(analysis_type_name); 
+    const ss::AnalysisTypeInfo ati                   = ss::GetAnalysisTypeInfo(analysis_type); 
+
+    // signal region and type
+    const SignalRegionType::value_type signal_region_type = (exclusive ? SignalRegionType::exclusive : SignalRegionType::inclusive);
+    const std::string signal_region_type_name             = GetSignalRegionTypeName(signal_region_type);
+    const string signal_region_name                       = Form("sr%d", signal_region_num);
+    const SignalRegion::value_type signal_region          = GetSignalRegionFromName(signal_region_name, ati.name, signal_region_type_name);
+    const SignalRegionInfo signal_region_info             = GetSignalRegionInfo(signal_region, analysis_type, signal_region_type);
+
 	// input
     TChain* chain  = NULL;
     bool is_data   = false;
     bool is_signal = false;
     at::Sample::value_type sample = at::Sample::static_size;
-    SignalRegion::value_type signal_region = GetSignalRegionFromName(Form("sr%d", signal_region_num));
     if (sample_name.empty())  // use input file
     {
 	    if (input_file.empty())
@@ -163,8 +177,7 @@ try
         }
         if (output_file.empty())
         {
-            const char* sr = GetSignalRegionInfo(signal_region).name.c_str();
-            output_file = Form("plots/%s/%s.root", sr, sample_name.c_str());
+            output_file = Form("plots/closure_test/%s/%s.root", signal_region_info.name.c_str(), sample_name.c_str());
         }
 		chain = new TChain("tree");
 		chain->Add(input_file.c_str());
@@ -180,6 +193,8 @@ try
             output_file,       
             sample,
             signal_region,
+            analysis_type,
+            signal_region_type,
             vtxreweight_file,
             fake_rate_file_name,
             mufr_hist_name,

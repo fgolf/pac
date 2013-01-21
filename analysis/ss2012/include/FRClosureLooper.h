@@ -19,7 +19,9 @@ class FRClosureLooper : public at::AnalysisWithHist
         (
              const std::string& root_file_name,
              at::Sample::value_type sample,
-             ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
+        	 ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
+        	 ss::AnalysisType::value_type analysis_type = ss::AnalysisType::high_pt,
+        	 ss::SignalRegionType::value_type signal_region_type = ss::SignalRegionType::inclusive,
              const std::string& vtxreweight_file_name = "",
              const std::string& fake_rate_file_name = "",
              const std::string& mufr_hist_name = "",
@@ -55,6 +57,8 @@ class FRClosureLooper : public at::AnalysisWithHist
         int m_charge_option;
         at::Sample::value_type m_sample;
         ss::SignalRegion::value_type m_signal_region;
+        ss::AnalysisType::value_type m_analysis_type;
+        ss::SignalRegionType::value_type m_signal_region_type;
         float m_scale1fb;
 
         // fake/flip rate hists

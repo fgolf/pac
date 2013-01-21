@@ -48,8 +48,12 @@ samples = [
 # supported signal regions
 # ---------------------------------------------------------------------------------- #
 
-incl_signal_regions = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-excl_signal_regions = [11, 12, 13, 14, 15]
+incl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+					   10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+					   20, 21, 22, 23, 24, 25, 26, 27, 18] 
+excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+					   10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+					   20, 21, 22, 23, 24, 25, 26, 27, 18] 
 
 # parse inputs
 # ---------------------------------------------------------------------------------- #
@@ -62,7 +66,7 @@ parser.add_option("--lumi"      , dest="lumi"      , default=1.0      , help="lu
 parser.add_option("--suffix"    , dest="suffix"    , default="all"    , help="The suffix for the histograms (eps, png, pdf, all)"       )
 parser.add_option("--out_name"  , dest="out_name"  , default="test"   , help="name for all the directories associated with these yields")
 parser.add_option("--anal_type" , dest="anal_type" , default="high_pt", help="analysis type"                                            )
-parser.add_option("--nbtags"    , dest="nbtags"    , default=2        , help="# btags"                                                  )
+parser.add_option("--nbtags"    , dest="nbtags"    , default=0        , help="# btags"                                                  )
 parser.add_option("--njets"     , dest="njets"     , default=2        , help="# jets"                                                   )
 parser.add_option("--l1_min_pt" , dest="l1_min_pt" , default=20.0     , help="minimum pT on leading lepton"                             )
 parser.add_option("--l1_max_pt" , dest="l1_max_pt" , default=100000.0 , help="maximum pT on leading lepton"                             )
@@ -88,9 +92,11 @@ def make_hist(signal_region, sample):
 
 	# check signal region
 	if (options.excl):
+		signal_region_type = "exclusive"
 		if (signal_region < excl_signal_regions[0] or signal_region > excl_signal_regions[-1]):
 			raise Error("signal region %d not supported. exiting" % signal_region)
 	else:
+		signal_region_type = "inclusive"
 		if (signal_region < incl_signal_regions[0] or signal_region > incl_signal_regions[-1]):
 			raise Error("signal region %d not supported. exiting" % signal_region)
 
@@ -101,19 +107,13 @@ def make_hist(signal_region, sample):
 	cmd += " --lumi %1.3f" % float(options.lumi)
 	
 	# the signal region
-	if (options.excl):
-		cmd += " --sr %d" % (signal_region-10)
-	else:
-		cmd += " --sr %d" % signal_region
+	cmd += " --sr %d" % signal_region
 
 	# the input sample
 	cmd += " --sample %s" % sample
 
 	# signal region stem 
-	if (options.excl):
-		signal_region_stem = "ex_sr%d" % (signal_region-10)
-	else:
-		signal_region_stem = "sr%d" % signal_region
+	signal_region_stem = "sr%d" % signal_region
 
 	# root file name
 	if (int(options.charge) == 1):
@@ -124,7 +124,7 @@ def make_hist(signal_region, sample):
 		root_file_name = "%s.root" % sample
 		
 	# output filename
-	cmd += " --output plots/%s/%s/%s" % (options.out_name, signal_region_stem, root_file_name)
+	cmd += " --output plots/%s/%s/%s/%s/%s" % (options.out_name, options.anal_type, signal_region_type, signal_region_stem, root_file_name)
 	
 	# options
 	cmd += " --nev %s"                            % int(options.nev)
@@ -141,12 +141,11 @@ def make_hist(signal_region, sample):
 	else:
 		cmd += " --excl 0"
 
-
 	# logname
 	if (int(options.charge) == 1):
 		log_file_name = "%s_pp.log" % sample
 	elif (int(options.charge) == -1):
-		log_file_name = "%s_mm.log" % sample
+		log_file_name = "%s_mm.log" % sampl#e
 	else:	
 		log_file_name = "%s.log" % sample
 	cmd += " > logs/%s" % log_file_name
@@ -165,7 +164,13 @@ def make_hist(signal_region, sample):
 
 def overlay_hist(signal_region):
 	print "overlaying plots for signal region %d" % signal_region
-	cmd = "root -b -q -l \"macros/OverlaySSPlots.C+ (%1.3f, %d, \\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" % (float(options.lumi), signal_region, options.out_name, int(options.charge), options.suffix)
+	sr_name = "sr%d" % signal_region
+	if (options.excl):
+		srt_name = "exclusive"
+	else:
+		srt_name = "inclusive"
+	cmd = "root -b -q -l \"macros/OverlaySSPlots.C+ (%1.3f,\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" \
+		% (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(srt_name), int(options.charge), str(options.suffix))
 	if (options.verbose):
 		print cmd
 	if (not options.test):
@@ -177,8 +182,14 @@ def overlay_hist(signal_region):
 def print_yield_table(signal_region, do_append):
 	print "printing yield tables for signal region %d" % signal_region
 
+	sr_name = "sr%d" % signal_region
+	if (options.excl):
+		srt_name = "exclusive"
+	else:
+		srt_name = "inclusive"
+
 	# table directory
-	table_path = "tables/%s" % options.out_name 
+	table_path = "tables/%s/%s/%s" % (options.out_name, options.anal_type, srt_name) 
 	if not os.path.isdir(table_path):
 		print "%s does not exist -- creating" % table_path
    		if (not options.test):
@@ -190,20 +201,20 @@ def print_yield_table(signal_region, do_append):
 		operator = ">"	
 
 	# text file
-	text_name  = "%s/yields_%s.txt" % (table_path, options.out_name)
-	cmd = "root -b -q -l \"macros/PrintYields.C+ (%d, \\\"%s\\\", %d, 0); %s %s\" " % (signal_region, options.out_name, int(options.charge), operator, text_name)
+	text_name  = "%s/sr%d.txt" % (table_path, signal_region)
 
+	cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, false); %s %s\" " \
+		% (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), operator, text_name)
 	if (options.verbose):
 		print cmd
 	if (not options.test):
 		os.system(cmd)
 
 	# tex file
-	if (options.excl):
-		tex_name = "%s/sr%d_nbtags%d_exclusive.tex" % (table_path, int(signal_region)-10, int(options.nbtags))
-	else:
-		tex_name = "%s/sr%d_nbtags%d_inclusive.tex" % (table_path, int(signal_region), int(options.nbtags))
-	cmd = "root -b -q -l \"macros/PrintYields.C+ (%d, \\\"%s\\\", %d, 1); > %s\" " % (signal_region, options.out_name, int(options.charge), tex_name)
+	tex_name  = "%s/sr%d.tex" % (table_path, signal_region)
+
+	cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, true); >& %s\" " \
+		% (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), tex_name)
 	if (options.verbose):
 		print cmd
 	if (not options.test):
@@ -246,40 +257,40 @@ def print_summary_table():
 
 def main():
 
-	try:
+	#try:
 		if (int(options.sr) < 0):
 			if (options.excl):
 				print "making plots for all exclusive signal regions"
 				for sr in excl_signal_regions:
 					for sample in samples:	
 						make_hist(sr, sample)
-					overlay_hist(sr)
+					#overlay_hist(sr)
 					do_append = (sr != excl_signal_regions[0])
-					print_yield_table(sr, do_append)
+					#print_yield_table(sr, do_append)
 			else:
 				print "making plots for all inclusive signal regions"
 				for sr in incl_signal_regions:
 					print "making plots for signal region %d..." % sr 
 					for sample in samples:	
 						make_hist(sr, sample)
-					overlay_hist(sr)
+					#overlay_hist(sr)
 					do_append = (sr != incl_signal_regions[0])
-					print_yield_table(sr, do_append)
-				print_summary_table()
+					#print_yield_table(sr, do_append)
+				#print_summary_table()
 		else:	
 			sr = int(options.sr)
 			print "making plots for signal region %d..." % sr
 			# make the plots for all the samples
-			for sample in samples:	
-				make_hist(sr, sample)
-			overlay_hist(sr)
+			#for sample in samples:	
+			#	make_hist(sr, sample)
+			#overlay_hist(sr)
 			print_yield_table(sr, False)
 		
 		# finished
 		print "finished"
-	except:
-		print "Unexpected error:", sys.exc_info()[0]
-		return 1
+	#except:
+	#	print "Unexpected error:", sys.exc_info()[0]
+	#	return 1
 
 
 # do it

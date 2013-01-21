@@ -2,6 +2,7 @@
 #define SIGNALREGIONS_H
 
 #include <string>
+#include "AnalysisType.h"
 #include "TTree.h"
 
 namespace ss
@@ -11,69 +12,37 @@ namespace ss
         enum value_type
         {
             // inclusive
-            sr0  = 0,  // baseline
-            sr1  = 1,  // #btags >= 2, #jets >= 2, HT > 80, MET > 30
-            sr2  = 2,  // #btags >= 2, #jets >= 2, HT > 80, MET > 30, ++
-            sr3  = 3,  // #btags >= 2, #jets >= 4, HT > 200, MET > 50
-            sr4  = 4,  // #btags >= 2, #jets >= 4, HT > 200, MET > 120
-            sr5  = 5,  // #btags >= 2, #jets >= 4, HT > 320, MET > 50
-            sr6  = 6,  // #btags >= 2, #jets >= 4, HT > 320, MET > 120
-            sr7  = 7,  // #btags >= 2, #jets >= 2, HT > 200, MET > 50
-            sr8  = 8,  // #btags >= 2, #jets >= 4, HT > 320, no MET cut
-            sr9  = 9,  // #btags >= 2, #jets >= 2, HT > 80, MET > 30, --
-            sr10 = 10, // not used
+            sr0  = 0,  // baseline:  #jets>=2, if HT<500 then MET>30, HT>80/250 (high/low pT analysis)
+            sr1  = 1,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT[200-400]
+            sr2  = 2,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT>400
+            sr3  = 3,  // baseline + #jets>=4, #btags>=0, MET[50-120], HT[200-400]
+            sr4  = 4,  // baseline + #jets>=4, #btags>=0, MET[50-120], HT>400
+            sr5  = 5,  // baseline + #jets>=2, #btags>=0, MET>120, HT[200-400]
+            sr6  = 6,  // baseline + #jets>=2, #btags>=0, MET>120, HT>400
+            sr7  = 7,  // baseline + #jets>=4, #btags>=0, MET>120, HT[200-400]
+            sr8  = 8,  // baseline + #jets>=4, #btags>=0, MET>120, HT>400
+            sr9  = 9,  // not used
+            sr10 = 10, // baseline:  #jets>=2, #btags>=1, if HT<500 then MET>30, HT>80/250 (high/low pT analysis)
+            sr11 = 11, // baseline + #jets>=2, #btags>=1, MET[50-120], HT[200-400]
+            sr12 = 12, // baseline + #jets>=2, #btags>=1, MET[50-120], HT>400
+            sr13 = 13, // baseline + #jets>=4, #btags>=1, MET[50-120], HT[200-400]
+            sr14 = 14, // baseline + #jets>=4, #btags>=1, MET[50-120], HT>400
+            sr15 = 15, // baseline + #jets>=2, #btags>=1, MET>120, HT[200-400]
+            sr16 = 16, // baseline + #jets>=2, #btags>=1, MET>120, HT>400
+            sr17 = 17, // baseline + #jets>=4, #btags>=1, MET>120, HT[200-400]
+            sr18 = 18, // baseline + #jets>=4, #btags>=1, MET>120, HT>400
+            sr19 = 19, // not used
+            sr20 = 20, // baseline:  #jets>=2, #btags>=2, if HT<500 then MET>30, HT>80/250 (high/low pT analysis)
+            sr21 = 21, // baseline + #jets>=2, #btags>=2, MET[50-120], HT[200-400]
+            sr22 = 22, // baseline + #jets>=2, #btags>=2, MET[50-120], HT>400
+            sr23 = 23, // baseline + #jets>=4, #btags>=2, MET[50-120], HT[200-400]
+            sr24 = 24, // baseline + #jets>=4, #btags>=2, MET[50-120], HT>400
+            sr25 = 25, // baseline + #jets>=2, #btags>=2, MET>120, HT[200-400]
+            sr26 = 26, // baseline + #jets>=2, #btags>=2, MET>120, HT>400
+            sr27 = 27, // baseline + #jets>=4, #btags>=2, MET>120, HT[200-400]
+            sr28 = 28, // baseline + #jets>=4, #btags>=2, MET>120, HT>400
 
-            // exclusive
-            ex_sr1 = 11, // #btags >= 2, #jets >= 4, 200 < HT < 320, 50 < MET < 120
-            ex_sr2 = 12, // #btags >= 2, #jets >= 4, 200 < HT < 320, MET > 120
-            ex_sr3 = 13, // #btags >= 2, #jets >= 4, HT > 320, 50 < MET < 120
-            ex_sr4 = 14, // #btags >= 2, #jets >= 4, HT > 320, MET > 120
-            ex_sr5 = 15, // #btags >= 2, #jets >= 4, HT > 320, MET < 50
-
-            sr16 = 16,  // met1
-            sr17 = 17,  // met2
-            sr18 = 18,  // met3
-            sr19 = 19,  // met3
-            sr20 = 20,  // ht1
-            sr21 = 21,  // ht2
-            sr22 = 22,  // ht3
-            sr23 = 23,  // njets1
-            sr24 = 24,  // njets2
-            sr25 = 25,  // njets3
-            sr26 = 26,  // njets4
-            sr27 = 27,  // njets5
-            sr28 = 28,  // njets6
-            sr29 = 29,  // njets7
-            sr30 = 30,  // njets8
-            sr31 = 31,  // nbtags1
-            sr32 = 32,  // nbtags2
-            sr33 = 33,  // nbtags3
-            sr34 = 34,  // nbtags4
-            sr35 = 35,  // nbtags5
-            sr36 = 36,  // nbtags6
-            sr37 = 37,  // nbtags7
-            sr38 = 38,  // nbtags8
-            sr39 = 39,  // l1_pt1
-            sr40 = 40,  // l1_pt2
-            sr41 = 41,  // l1_pt3
-            sr42 = 42,  // l1_pt4
-            sr43 = 43,  // l1_pt5
-            sr44 = 44,  // l1_pt6
-            sr45 = 45,  // l1_pt7
-            sr46 = 46,  // l1_pt9
-            sr47 = 47,  // l1_pt9
-            sr48 = 48,  // l1_pt10
-            sr49 = 49,  // l2_pt1
-            sr50 = 50,  // l2_pt2
-            sr51 = 51,  // l2_pt3
-            sr52 = 52,  // l2_pt4
-            sr53 = 53,  // l2_pt5
-            sr54 = 54,  // l2_pt6
-            sr55 = 55,  // l2_pt7
-            sr56 = 56,  // l2_pt9
-            sr57 = 57,  // l2_pt9
-            sr58 = 58,  // l2_pt10
-
+            // keep track of the size
             static_size
         };
     };
@@ -86,21 +55,64 @@ namespace ss
         std::string latex;
     };
 
+    // Signal Region type (exclusive vs inclusive)
+    struct SignalRegionType
+    {
+        enum value_type
+        {
+            inclusive, // inclusive signal region type
+            exclusive, // exclusive signal region type
+            static_size
+        };
+    };
 
     // Get the SignalRegion from a string
-    SignalRegion::value_type GetSignalRegionFromName(const std::string& signal_region_name);
+    SignalRegion::value_type GetSignalRegionFromName
+    (
+        const std::string& signal_region_name,
+        const std::string& analysis_type_name,
+        const std::string& signal_region_type_name = "inclusive"
+    );
 
     // Get the info for the Signal region
-    SignalRegionInfo GetSignalRegionInfo(const SignalRegion::value_type& signal_region);
-    SignalRegionInfo GetSignalRegionInfo(const std::string& signal_region_name);
-    SignalRegionInfo GetSignalRegionInfo(unsigned int signal_region_number);
+    SignalRegionInfo GetSignalRegionInfo
+    (
+        const SignalRegion::value_type& signal_region,
+        const AnalysisType::value_type anal_type,
+        const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive 
+    );
+
+    SignalRegionInfo GetSignalRegionInfo
+    (
+        const std::string& signal_region_name,
+        const std::string& analysis_type_name,
+        const std::string& signal_region_type_name = "inclusive" 
+    );
+
+    // Get the name of the SignalRegionType
+    std::string GetSignalRegionTypeName(const SignalRegionType::value_type& signal_region_type);
+
+    // Get the SignalRegionType from a string
+    SignalRegionType::value_type GetSignalRegionTypeFromName(const std::string& signal_region_type_name);
 
     // passes signal rgion
-    bool PassesSignalRegion(const SignalRegion::value_type& signal_region, int num_btags = 0);
-    bool PassesSignalRegion(unsigned int signal_region_number, int num_btags = 0);
+    bool PassesSignalRegion
+    (
+        const SignalRegion::value_type& signal_region,
+        const AnalysisType::value_type anal_type,
+        const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive
+    );
 
-	// set aliases for TTree
-    void SetSignalRegionAliases(TTree& tree);
+    // set aliases for TTree
+    //void SetSignalRegionAliases(TTree& tree);
+    //void SetSignalRegionAliases(TTree* tree);
+
+    // function to test the root titles
+    //void TestSignalRegionTitles
+    //(
+    //    const AnalysisType::value_type& at, 
+    //    const SignalRegionType::value_type& srt = SignalRegionType::inclusive
+    //);
 
 } // namespace ss
 

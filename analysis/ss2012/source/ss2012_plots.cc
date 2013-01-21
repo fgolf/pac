@@ -31,6 +31,7 @@ try
     std::string analysis_type_name  = "high_pt";
     std::string event_list_name     = "";
     std::string good_run_list       = "";
+    bool exclusive                  = false;
     bool do_scale_factors           = true;
     bool check_good_lumi            = true;
     float sparm0                    = -999;
@@ -45,7 +46,6 @@ try
     unsigned int num_jets           = 2;
     int charge_option               = 0;
     unsigned int signal_region_num  = 0;
-    bool exclusive                  = false;
     float lumi                      = 1.0;
     float l1_min_pt                 = 20.0;
     float l1_max_pt                 = 10000000.0;
@@ -62,7 +62,7 @@ try
         ("output"   , po::value<std::string>(&output_file)        , "name of output root file (optional)"                        )
         ("input"    , po::value<std::string>(&input_file)         , "name of input root file (optional)"                         )
         ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                    )
-        ("anal_type", po::value<std::string>(&analysis_type_name) , "name of input sample (from at/AnalysisType.h)"              )
+        ("anal_type", po::value<std::string>(&analysis_type_name) , "name of analysis type (from AnalysisType.h)"                )
         ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                        )
         ("fl_file"  , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                        )
         ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"       )
@@ -154,15 +154,20 @@ try
     // -------------------------------------------------------------------------------------------------//
     
 	// analysis type
-    ss::AnalysisType::value_type analysis_type = ss::GetAnalysisTypeFromName(analysis_type_name); 
+    const ss::AnalysisType::value_type analysis_type = ss::GetAnalysisTypeFromName(analysis_type_name); 
+    const ss::AnalysisTypeInfo ati                   = ss::GetAnalysisTypeInfo(analysis_type); 
+
+    // signal region and type
+    const SignalRegionType::value_type signal_region_type = (exclusive ? SignalRegionType::exclusive : SignalRegionType::inclusive);
+    const std::string signal_region_type_name             = GetSignalRegionTypeName(signal_region_type);
+    const string signal_region_name                       = Form("sr%d", signal_region_num);
+    const SignalRegion::value_type signal_region          = GetSignalRegionFromName(signal_region_name, ati.name, signal_region_type_name);
 
 	// input
     TChain* chain  = NULL;
     bool is_data   = false;
     bool is_signal = false;
     at::Sample::value_type sample = at::Sample::static_size;
-    string signal_region_name = Form(exclusive ? "ex_sr%d" : "sr%d", signal_region_num);
-    SignalRegion::value_type signal_region = GetSignalRegionFromName(signal_region_name);
     if (sample_name.empty())  // use input file
     {
 	    if (input_file.empty())
@@ -189,7 +194,7 @@ try
         is_signal = false; // not used 
         if (input_file.empty())
         {
-			const string short_name = GetAnalysisTypeInfo(analysis_type).short_name.c_str();
+			const string short_name = ati.short_name.c_str();
             input_file = Form("babies/%s/%s.root", short_name.c_str(), sample_name.c_str());
             // special case for ttbar breakdown
             switch (sample)
@@ -204,8 +209,8 @@ try
         }
         if (output_file.empty())
         {
-            const char* sr = GetSignalRegionInfo(signal_region).name.c_str();
-            output_file = Form("plots/test/%s/%s.root", sr, sample_name.c_str());
+            const char* sr = GetSignalRegionInfo(signal_region, analysis_type, signal_region_type).name.c_str();
+            output_file = Form("plots/test/%s/%s/%s/%s.root", ati.name.c_str(), signal_region_type_name.c_str(), sr, sample_name.c_str());
         }
 		chain = new TChain("tree");
 		chain->Add(input_file.c_str());
@@ -222,6 +227,7 @@ try
             sample,
             signal_region,
 			analysis_type,
+            signal_region_type,
             vtxreweight_file,
             fake_rate_file_name,
             flip_rate_file_name,
