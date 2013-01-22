@@ -452,8 +452,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // vertex reweight for ttbar
-        //float evt_weight = weight();
-        float evt_weight = 1.0; 
+        float evt_weight = weight();
+        //float evt_weight = 1.0; 
 
         // muons
         // ----------------------------------------------------------------------------------------------------------------------------//

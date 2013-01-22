@@ -826,11 +826,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 continue;
             }
 
-            // check if event passes num_jet cut
+            // check if event passes num_jet cut (hard coded to 2)
             int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-            if (num_jets < m_njets)
+            if (num_jets < 2)
             {
-                if (m_verbose) {std::cout << "fails # jets >= " << m_njets << " requirement with " << num_jets << " jets" << std::endl;}
+                if (m_verbose) {std::cout << "fails # jets >= " << 2 << " requirement with " << num_jets << " jets" << std::endl;}
                 continue;
             }
 
@@ -1072,6 +1072,14 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 
         // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
         m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
+
+		// met filters
+		m_evt.met_filters = (m_evt.event_info.filt_csc       &&
+		                     m_evt.event_info.filt_hbhenew   &&
+							 m_evt.event_info.filt_hcallaser &&
+		                     m_evt.event_info.filt_ecaltp    &&
+							 m_evt.event_info.filt_trkfail   &&
+							 m_evt.event_info.filt_eebadsc);
 
         // fill analysis specific branches 
         m_evt.vtxw = vtxw;

@@ -131,6 +131,7 @@ public:
     bool trig_em_met;
     bool trig_em_ht;
     bool trig_em_iso_ht;
+	bool met_filters; 
 
     //
     // for JES sysetmatics

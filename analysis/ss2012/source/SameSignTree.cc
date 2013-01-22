@@ -76,6 +76,7 @@ void SameSignTree::Reset()
     trig_em_met                              = false;
     trig_em_ht                               = false;
     trig_em_iso_ht                           = false;
+	met_filters							     = false;
     njets_dn                                 = -999999;
     njets_up                                 = -999999;
     nbtags_dn                                = -999999;
@@ -237,6 +238,7 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("trig_em_met"                              , &trig_em_met                              , "trig_em_met/O"                              ); 
     tree.Branch("trig_em_ht"                               , &trig_em_ht                               , "trig_em_ht/O"                               ); 
     tree.Branch("trig_em_iso_ht"                           , &trig_em_iso_ht                           , "trig_em_iso_ht/O"                           ); 
+    tree.Branch("met_filters"                              , &met_filters                              , "met_filters/O"                              ); 
     tree.Branch("njets_dn"                                 , &njets_dn                                 , "njets_dn/I"                                 ); 
     tree.Branch("njets_up"                                 , &njets_up                                 , "njets_up/I"                                 ); 
     tree.Branch("nbtags_dn"                                , &nbtags_dn                                , "nbtags_dn/I"                                ); 

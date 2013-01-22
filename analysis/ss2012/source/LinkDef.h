@@ -30,7 +30,7 @@
 #pragma link C++ function ss::GetSignalRegionInfo;
 #pragma link C++ function ss::GetSignalRegionTypeName;
 #pragma link C++ function ss::GetSignalRegionTypeFromName;
-//#pragma link C++ function ss::SetSignalRegionAliases;
+#pragma link C++ function ss::SetSignalRegionAliases;
 
 #pragma link C++ function ss::GetAnalysisTypeFromName;
 #pragma link C++ function ss::GetAnalysisTypeInfo;

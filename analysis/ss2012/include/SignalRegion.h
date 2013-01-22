@@ -99,13 +99,13 @@ namespace ss
     bool PassesSignalRegion
     (
         const SignalRegion::value_type& signal_region,
-        const AnalysisType::value_type anal_type,
+        const AnalysisType::value_type& anal_type,
         const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive
     );
 
     // set aliases for TTree
-    //void SetSignalRegionAliases(TTree& tree);
-    //void SetSignalRegionAliases(TTree* tree);
+    void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type);
+    void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type);
 
     // function to test the root titles
     //void TestSignalRegionTitles
