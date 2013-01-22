@@ -49,6 +49,17 @@ public:
     float pu_ntrueint;
 
     //
+    // met filters 
+    //
+	bool filt_csc;
+    bool filt_hbhe;
+    bool filt_hcallaser;
+    bool filt_ecaltp;
+    bool filt_trkfail;
+    bool filt_eebadsc;
+    bool filt_hbhenew;
+
+    //
     // some gen event level info
     //
     float scale1fb;
