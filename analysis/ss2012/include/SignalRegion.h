@@ -107,13 +107,6 @@ namespace ss
     void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type);
     void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type);
 
-    // function to test the root titles
-    //void TestSignalRegionTitles
-    //(
-    //    const AnalysisType::value_type& at, 
-    //    const SignalRegionType::value_type& srt = SignalRegionType::inclusive
-    //);
-
 } // namespace ss
 
 #endif // SIGNALREGIONS_H

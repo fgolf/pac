@@ -46,6 +46,7 @@ try
     std::string good_run_list       = "";
     bool sync_print                 = false;
     bool sparms                     = false;
+    bool use_el_eta                 = false;
     //bool switchSigns                = false;
     int num_jets                    = 0;
     int jetMetScale                 = 0;
@@ -76,6 +77,7 @@ try
         ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
         ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                        )
         ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                    )
+        ("use_el_eta"    , po::value<bool>(&use_el_eta)                 , "use the |et->eta| to determine is electron is barrel or endcap"                    )
         ("apply_jec_otf" , po::value<std::string>(&apply_jec_otf)       , "apply JEC on-the-fly using the specified global tag"                               )
         ;
 
@@ -241,6 +243,7 @@ try
             num_jets,
             sparms,
             jetMetScale,
+            use_el_eta,
             isFastSim,
             sync_print,
             verbose,

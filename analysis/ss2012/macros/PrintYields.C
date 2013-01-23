@@ -678,6 +678,116 @@ void PrintYields
     }
 }
 
+
+// print the yields
+void PrintYieldsETH
+(
+	const std::string& output_path, 
+	const std::string& analysis_type_name, 
+	const std::string& signal_region_type_name = "inclusive" 
+)
+{
+	// can be paramerized if needed (for now hard coded)
+	const int charge_option = 0; 
+
+	for (size_t sr_num = 0; sr_num != ss::SignalRegion::static_size; sr_num++)
+	{
+		const string signal_region_name       = Form("sr%lu", sr_num);
+		//const ss::SignalRegion::value_type sr = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
+		const ss::SignalRegionInfo sr_info    = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
+
+		Yield yield_data(GetSSYield("data"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		Yield yield_sf(GetSFYield("data"    , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		Yield yield_df(GetDFYield("data"    , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		Yield yield_fake(GetFakeYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		Yield yield_flip(GetFlipYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+
+		// The order matters for the formated tex table.
+		Yield yield_mc("Total MC");
+
+		// for display only
+		vector<Yield> yields_bkgd;
+		yields_bkgd.push_back(GetSSYield("ttdil"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ttslb"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ttslo"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ttotr"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("t_schan", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("t_tchan", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("t_tw"   , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("dy"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("wjets"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ww"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		size_t display_index = yields_bkgd.size();
+
+		// to include in prediction
+		Yield yield_wgstar("wgstar");
+		yield_wgstar += GetSSYield("wgstar2e", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
+		yield_wgstar += GetSSYield("wgstar2m", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
+		yield_wgstar += GetSSYield("wgstar2t", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
+
+		Yield yield_wwqq("wwqq");
+		yield_wwqq += GetSSYield("wmwmqq", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
+		yield_wwqq += GetSSYield("wpwpqq", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
+
+		yields_bkgd.push_back(yield_wgstar);
+		yields_bkgd.push_back(GetSSYield("wz"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("zz"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ttg" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ttw" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ttz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("tbz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("ttww", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("wwg" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("www" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("wwz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("wzz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(GetSSYield("zzz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+		yields_bkgd.push_back(yield_wwqq);
+		yields_bkgd.push_back(GetSSYield("ww_ds", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+
+		// add the backtrounds to get the totol MC and total prediction
+		for (size_t i = 0; i != yields_bkgd.size(); i++)
+		{
+			yield_mc = AddUncertaintiesAbsolute(yield_mc, yields_bkgd.at(i));
+		}
+		Yield yield_mc_pred("MC Pred");
+		for (size_t i = display_index; i != yields_bkgd.size(); i++)
+		{
+			yield_mc_pred = AddUncertaintiesAbsolute(yield_mc_pred, yields_bkgd.at(i));
+		}
+
+		// set systematic uncertainties
+		SetSysUncertainties(yield_fake   , 0.5);
+		SetSysUncertainties(yield_flip   , 0.2);
+		SetSysUncertainties(yield_mc_pred, 0.5);
+
+		// total predition
+		Yield yield_pred    = yield_mc_pred;
+		yield_pred.title    = "pred";
+		yield_pred += yield_fake;
+		yield_pred += yield_flip;
+
+		// print the table
+		const string sr_name = Form((sr_num < 10 ? "SR0%lu" : "SR%lu"), sr_num);
+
+		cout << "{" << endl;
+		cout << Form("'%s':{", sr_name.c_str()) << endl;
+		cout << Form("'f': %1.3f, 'fstat': %1.3f, 'fsyst': %1.3f,", yield_fake.ll   , yield_fake.dll   , yield_fake.sll   ) << endl;
+		cout << Form("'c': %1.3f, 'fstat': %1.3f, 'fsyst': %1.3f,", yield_flip.ll   , yield_flip.dll   , yield_flip.sll   ) << endl;
+		cout << Form("'r': %1.3f, 'fstat': %1.3f, 'fsyst': %1.3f,", yield_mc_pred.ll, yield_mc_pred.dll, yield_mc_pred.sll) << endl;
+		if (sr_num == (ss::SignalRegion::static_size - 1))
+		{
+			cout << "}" << endl;
+			cout << "}" << endl;
+		}
+		else
+		{
+			cout << "}," << endl;
+		}
+	}
+}
+
+
 // print the summary table 
 void PrintSummaryYields
 (

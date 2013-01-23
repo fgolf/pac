@@ -48,12 +48,12 @@ samples = [
 # supported signal regions
 # ---------------------------------------------------------------------------------- #
 
-incl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
-					   10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-					   20, 21, 22, 23, 24, 25, 26, 27, 18] 
-excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
-					   10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-					   20, 21, 22, 23, 24, 25, 26, 27, 18] 
+incl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
+					   10, 11, 12, 13, 14, 15, 16, 17, 18, 19, \
+					   20, 21, 22, 23, 24, 25, 26, 27, 28] 
+excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
+					   10, 11, 12, 13, 14, 15, 16, 17, 18, 19, \
+					   20, 21, 22, 23, 24, 25, 26, 27, 28] 
 
 # parse inputs
 # ---------------------------------------------------------------------------------- #
@@ -264,26 +264,26 @@ def main():
 				for sr in excl_signal_regions:
 					for sample in samples:	
 						make_hist(sr, sample)
-					#overlay_hist(sr)
+					overlay_hist(sr)
 					do_append = (sr != excl_signal_regions[0])
-					#print_yield_table(sr, do_append)
+					print_yield_table(sr, do_append)
 			else:
 				print "making plots for all inclusive signal regions"
 				for sr in incl_signal_regions:
 					print "making plots for signal region %d..." % sr 
 					for sample in samples:	
 						make_hist(sr, sample)
-					#overlay_hist(sr)
+					overlay_hist(sr)
 					do_append = (sr != incl_signal_regions[0])
-					#print_yield_table(sr, do_append)
+					print_yield_table(sr, do_append)
 				#print_summary_table()
 		else:	
 			sr = int(options.sr)
 			print "making plots for signal region %d..." % sr
 			# make the plots for all the samples
-			#for sample in samples:	
-			#	make_hist(sr, sample)
-			#overlay_hist(sr)
+			for sample in samples:	
+				make_hist(sr, sample)
+			overlay_hist(sr)
 			print_yield_table(sr, False)
 		
 		# finished

@@ -100,7 +100,7 @@ bool HypInfo::operator < (const HypInfo& rhs) const
 }
 
 // set then numerator bool
-bool IsNumerator(const HypInfo& hyp, bool is_lt)
+bool IsNumerator(const HypInfo& hyp, bool is_lt, bool use_el_eta)
 {
     if (hyp.charge_type == DileptonChargeType::static_size)
     {
@@ -112,8 +112,8 @@ bool IsNumerator(const HypInfo& hyp, bool is_lt)
     case DileptonChargeType::SS: return true; break;
     case DileptonChargeType::SF: 
     {
-        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.idx), cms2.hyp_lt_index().at(hyp.idx));
-        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.idx), cms2.hyp_ll_index().at(hyp.idx));
+        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.idx), cms2.hyp_lt_index().at(hyp.idx), use_el_eta);
+        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.idx), cms2.hyp_ll_index().at(hyp.idx), use_el_eta);
         if (lt_num && !ll_num)
         {
             return is_lt ? true : false;
@@ -129,7 +129,7 @@ bool IsNumerator(const HypInfo& hyp, bool is_lt)
     return false;
 }
 
-bool IsDenominator(const HypInfo& hyp, bool is_lt)
+bool IsDenominator(const HypInfo& hyp, bool is_lt, bool use_el_eta)
 {
     if (hyp.charge_type == DileptonChargeType::static_size)
     {
@@ -141,8 +141,8 @@ bool IsDenominator(const HypInfo& hyp, bool is_lt)
     case DileptonChargeType::SS: return false; break;
     case DileptonChargeType::SF: 
     {
-        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.idx), cms2.hyp_lt_index().at(hyp.idx));
-        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.idx), cms2.hyp_ll_index().at(hyp.idx));
+        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.idx), cms2.hyp_lt_index().at(hyp.idx), use_el_eta);
+        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.idx), cms2.hyp_ll_index().at(hyp.idx), use_el_eta);
         if (lt_num && !ll_num)
         {
             return is_lt ? false : true;
@@ -158,11 +158,11 @@ bool IsDenominator(const HypInfo& hyp, bool is_lt)
     return false;
 }
 
-bool passesETHfo(int lep_id, int lep_idx)
+bool passesETHfo(int lep_id, int lep_idx, bool use_el_eta)
 {
     if (abs(lep_id) == 13)
     {
-        if (!samesign::isGoodLepton(lep_id, lep_idx)) return false;
+        if (!samesign::isGoodLepton(lep_id, lep_idx, use_el_eta)) return false;
         if (muonIsoValuePF2012_deltaBeta(lep_idx) > 1.0) return false;
         return true;
     }
@@ -171,7 +171,7 @@ bool passesETHfo(int lep_id, int lep_idx)
     // see AN-2011/466 v6 for the correct definition
     else if (abs(lep_id) == 11)
     {
-        if (!samesign::isGoodLepton(lep_id, lep_idx)) return false;
+        if (!samesign::isGoodLepton(lep_id, lep_idx, use_el_eta)) return false;
         if (samesign::electronIsolationPF2012(lep_idx) > 0.6) return false;
         return true;
     }
@@ -238,7 +238,7 @@ void PrintJetInfo(const std::string& label, const vector<LorentzVector>& jets_p4
 //    }
 //}
 
-void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_type, int jet_met_scale, FactorizedJetCorrector *jet_corrector = NULL, MetCorrector *met_corrector = NULL)
+void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_type, int jet_met_scale, bool use_el_eta = true, FactorizedJetCorrector *jet_corrector = NULL, MetCorrector *met_corrector = NULL)
 {
     // convenience
     const LorentzVector& lt_p4 = hyp_lt_p4().at(ihyp);
@@ -247,8 +247,8 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     int ll_id                  = hyp_ll_id().at(ihyp);
     int lt_idx                 = hyp_lt_index().at(ihyp);
     int ll_idx                 = hyp_ll_index().at(ihyp);
-    bool lt_passes_id          = samesign::isGoodLepton(lt_id, lt_idx);
-    bool ll_passes_id          = samesign::isGoodLepton(ll_id, ll_idx);
+    bool lt_passes_id          = samesign::isGoodLepton(lt_id, lt_idx, use_el_eta);
+    bool ll_passes_id          = samesign::isGoodLepton(ll_id, ll_idx, use_el_eta);
     float lt_iso               = samesign::leptonIsolation(lt_id, lt_idx);
     float ll_iso               = samesign::leptonIsolation(ll_id, ll_idx);
     float inv_mass             = (lt_p4 + ll_p4).M();
@@ -303,8 +303,8 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
 
     //printf("%11d %7.3f  %6.3f  %5.3f %11d %7.3f %6.3f  %5.3f %13.3f %5d %6d %11.3f \n", ll_id, ll_p4.pt(), ll_p4.eta(), ll_iso, lt_id, lt_p4.pt(), lt_p4.eta(), lt_iso, met, num_jets, num_btags, ht);
 
+    if (samesign::isNumeratorHypothesis(ihyp), use_el_eta)
     //if (samesign::isDenominatorHypothesis(ihyp))
-    if (samesign::isNumeratorHypothesis(ihyp))
     {
         //cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
         cout << Form("%6u | %3u | %12u | %s | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
@@ -356,6 +356,7 @@ SSAnalysisLooper::SSAnalysisLooper
     int njets,
     bool sparms,
     int jetMetScale,
+	bool use_el_eta,
     bool is_fast_sim,
     bool sync_print,
     bool verbose,
@@ -368,6 +369,7 @@ SSAnalysisLooper::SSAnalysisLooper
     , m_njets(njets)
     , m_jetMetScale(jetMetScale)
     , m_is_fast_sim(is_fast_sim)
+	, m_use_el_eta(use_el_eta)
     , m_sparms(sparms)
     , m_sync_print(sync_print)
     , m_verbose(verbose || sync_print)
@@ -782,7 +784,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             if (m_sync_print)
             {
                 cout << "printing for hyp index " << ihyp << endl;
-                PrintForSync(ihyp, mu_min_pt, el_min_pt, jet_type, m_jetMetScale, m_jet_corrector, m_met_corrector);
+                PrintForSync(ihyp, mu_min_pt, el_min_pt, jet_type, m_jetMetScale, m_use_el_eta, m_jet_corrector, m_met_corrector);
             }
 
             // check if hyp passes lepton kinematics
@@ -844,7 +846,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             // skip if both are not denominators
             if (m_analysis_type == AnalysisType::high_pt_eth)
             {
-                if (not passesETHfo(lt_id, lt_idx) || not passesETHfo(ll_id, ll_idx))
+                if (not passesETHfo(lt_id, lt_idx, m_use_el_eta) || not passesETHfo(ll_id, ll_idx, m_use_el_eta))
                 {
                     if (m_verbose) {std::cout << "fails both leptons are at least ETH denominator requirement" << std::endl;}
                     continue;
@@ -852,7 +854,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
             else
             {
-                if (!samesign::isDenominatorHypothesis(ihyp))
+                if (!samesign::isDenominatorHypothesis(ihyp, m_use_el_eta))
                 {
                     if (m_verbose) {std::cout << "fails both leptons are at least denominator requirement" << std::endl;}
                     continue;
@@ -869,7 +871,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             if (hyp_q < 0)
             {
                 if (m_verbose) {std::cout << "selected OS hyp" << std::endl;}
-                if (!samesign::isNumeratorHypothesis(ihyp))
+                if (!samesign::isNumeratorHypothesis(ihyp, m_use_el_eta))
                 {
                     if (m_verbose) {std::cout << "OS hyp doesn't pass ID/ISO requirement" << std::endl;}
                     continue; 
@@ -879,14 +881,14 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             else if (hyp_q > 0)
             {
                 // same sign event (SS)
-                if (samesign::isNumeratorHypothesis(ihyp))
+                if (samesign::isNumeratorHypothesis(ihyp, m_use_el_eta))
                 {
                     m_hyp_count++;
                     if (m_verbose) {std::cout << "selected SS hyp" << std::endl;}
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SS, type));
                 }
                 // single fake event (SF)
-                else if (samesign::isNumeratorLepton(lt_id, lt_idx) || samesign::isNumeratorLepton(ll_id, ll_idx))
+                else if (samesign::isNumeratorLepton(lt_id, lt_idx, m_use_el_eta) || samesign::isNumeratorLepton(ll_id, ll_idx, m_use_el_eta))
                 {
                     if (m_verbose) {std::cout << "selected SF hyp" << std::endl;}
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SF, type));
@@ -1148,10 +1150,10 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // set lepton info (lep1 is higher pT lepton, lep2 is lower pT lepton)
         float lt_pt = hyp_lt_p4().at(hyp_idx).pt();
         float ll_pt = hyp_ll_p4().at(hyp_idx).pt();
-        bool lt_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_lt_id().at(hyp_idx), hyp_lt_index().at(hyp_idx)) : IsDenominator(best_hyp, /*is_lt=*/true);
-        bool lt_num = IsNumerator  (best_hyp, /*is_lt=*/true);  
-        bool ll_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_ll_id().at(hyp_idx), hyp_ll_index().at(hyp_idx)) : IsDenominator(best_hyp, /*is_lt=*/false);  
-        bool ll_num = IsNumerator  (best_hyp, /*is_lt=*/false);  
+        bool lt_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_lt_id().at(hyp_idx), hyp_lt_index().at(hyp_idx), m_use_el_eta) : IsDenominator(best_hyp, /*is_lt=*/true, m_use_el_eta);
+        bool lt_num = IsNumerator  (best_hyp, /*is_lt=*/true, m_use_el_eta);  
+        bool ll_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_ll_id().at(hyp_idx), hyp_ll_index().at(hyp_idx), m_use_el_eta) : IsDenominator(best_hyp, /*is_lt=*/false, m_use_el_eta);  
+        bool ll_num = IsNumerator  (best_hyp, /*is_lt=*/false, m_use_el_eta);  
 
         int lep1_id;
         int lep1_idx;
@@ -1201,7 +1203,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //m_evt.lep1.is_conv     = false; 
         m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, met, met_phi);
         m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, evt_pfmet(), evt_pfmetPhi());
-        m_evt.lep1.passes_id   = samesign::isGoodLepton(lep1_id, lep1_idx);
+        m_evt.lep1.passes_id   = samesign::isGoodLepton(lep1_id, lep1_idx, m_use_el_eta);
         m_evt.lep1.passes_iso  = samesign::isIsolatedLepton(lep1_id, lep1_idx);
         m_evt.lep1_wfr         = GetFakeRateValue(lep1_id, lep1_idx);
         m_evt.lep1_wflip       = GetFlipRateValue(lep1_id, lep1_idx);
@@ -1218,7 +1220,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep2.is_num      = lep2_num;
         //m_evt.lep2.is_conv     = false; 
         m_evt.lep2.mt          = rt::Mt(m_evt.lep2.p4, met, met_phi);
-        m_evt.lep2.passes_id   = samesign::isGoodLepton(lep2_id, lep2_idx);
+        m_evt.lep2.passes_id   = samesign::isGoodLepton(lep2_id, lep2_idx, m_use_el_eta);
         m_evt.lep2.passes_iso  = samesign::isIsolatedLepton(lep2_id, lep2_idx);
         m_evt.lep2_wfr         = GetFakeRateValue(lep2_id, lep2_idx);
         m_evt.lep2_wflip       = GetFlipRateValue(lep2_id, lep2_idx);
