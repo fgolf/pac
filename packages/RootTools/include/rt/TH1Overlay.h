@@ -48,6 +48,7 @@ namespace rt
             top_right,
             top_middle_right,
             right,
+            left,
             bottom_left,
             bottom_right,
             bottom,

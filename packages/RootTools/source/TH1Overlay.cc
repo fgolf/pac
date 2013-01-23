@@ -1011,10 +1011,16 @@ void TH1Overlay::BuildLegend()
             pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
             break;
         case LegendPlacement::right:
-            pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y1 = 0.7 - gStyle->GetPadTopMargin() - height;
-            pos.x2 = 0.5 + m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y2 = 0.7 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
+            pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*5.0 - m_pimpl->legend_width;
+            pos.y1 = 0.8 - gStyle->GetPadTopMargin() - height;
+            pos.x2 = (1.0 - gStyle->GetPadRightMargin()) + m_pimpl->legend_offset*5.0;
+            pos.y2 = 0.8 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
+            break;
+        case LegendPlacement::left:
+            pos.x1 = gStyle->GetPadLeftMargin() + m_pimpl->legend_offset;
+            pos.y1 = 0.9 - gStyle->GetPadTopMargin() - height;
+            pos.x2 = gStyle->GetPadLeftMargin() + m_pimpl->legend_width;
+            pos.y2 = 0.9 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
             break;
         case LegendPlacement::top_middle_right:
             pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
@@ -1252,7 +1258,8 @@ string TH1Overlay::ProcessOptionString(const std::string& option)
         legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::top_right       , "lg::top_right"       ));
         legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::top_middle_right, "lg::top_middle_right"));
         legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::top             , "lg::top"             ));
-        legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::right           , "lg::right"             ));
+        legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::right           , "lg::right"           ));
+        legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::left            , "lg::left"            ));
         legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::bottom_left     , "lg::bottom_left"     ));
         legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::bottom_right    , "lg::bottom_right"    ));
         legend_type_options.push_back(pair<LegendPlacement::value_type, string>(LegendPlacement::bottom          , "lg::bottom"          ));

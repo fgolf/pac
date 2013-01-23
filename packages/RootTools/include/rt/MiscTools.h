@@ -446,6 +446,11 @@ namespace rt
     std::string pm(const std::pair<double, double>& value_pair, const std::string& precision = "1.2");
     std::string pm(const std::pair<float, float>& value_pair, const std::string& precision = "1.2");
 
+    // print the value/error with +/- in latex
+    std::string pm_latex(double value, double error, const std::string& precision = "1.2");
+    std::string pm_latex(const std::pair<double, double>& value_pair, const std::string& precision = "1.2");
+    std::string pm_latex(const std::pair<float, float>& value_pair, const std::string& precision = "1.2");
+
     // helper functions for STL containters  (not in CINT)
     // -------------------------------------------------------------------------------------------------//
 

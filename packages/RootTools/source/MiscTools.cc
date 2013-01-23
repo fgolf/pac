@@ -320,6 +320,25 @@ namespace rt
         return std::string(Form(format_string.c_str(), value_pair.first, value_pair.second));
     }
 
+    // print value and error with +/- in latex
+    std::string pm_latex(double value, double error, const std::string& precision)
+    {
+        std::string format_string = "%" + precision + "f $\\pm$ %" + precision +"f";
+        return std::string(Form(format_string.c_str(), value, error));
+    }
+
+    std::string pm_latex(const std::pair<double, double>& value_pair, const std::string& precision)
+    {
+        std::string format_string = "%" + precision + "f $\\pm$ %" + precision +"f";
+        return std::string(Form(format_string.c_str(), value_pair.first, value_pair.second));
+    }
+    
+    std::string pm_latex(const std::pair<float, float>& value_pair, const std::string& precision)
+    {
+        std::string format_string = "%" + precision + "f $\\pm$ %" + precision +"f";
+        return std::string(Form(format_string.c_str(), value_pair.first, value_pair.second));
+    }
+
 
     // calculate the Mt between two 4 vectors (The FGolf way)
     double Mt(const LorentzVector& p1, const LorentzVector& p2)

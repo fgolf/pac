@@ -1420,8 +1420,8 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         }
 
         // electron isolation correction variables
-        m_evt.rho     = evt_kt6pf_foregiso_rho();
-        m_evt.rho_iso = -999999.0;
+        m_evt.rho_iso = evt_kt6pf_foregiso_rho();
+        m_evt.rho     = evt_ww_rho_vor(); 
 
         // eff and scale factors
         if (!evt_isRealData())
