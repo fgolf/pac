@@ -299,11 +299,11 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // ----------------------------------------------------------------------------------------------------------------------------//
         
         // which dataset
-        bool is_data  = fr::GetSampleInfo(m_sample).type == fr::SampleType::data;
-        bool is_ttbar = m_sample == fr::Sample::ttbar;
-        bool is_qcd   = m_sample == fr::Sample::qcd;
-        bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
-        bool is_el = (m_lepton=="el") ? abs(id())==11 : false;
+        bool is_data  = (m_sample==fr::Sample::data);
+        bool is_qcd   = (m_sample==fr::Sample::qcd);
+        bool is_ttbar = (m_sample==fr::Sample::ttbar);
+        bool is_mu    = (m_lepton=="mu") ? abs(id())==13 : false;
+        bool is_el    = (m_lepton=="el") ? abs(id())==11 : false;
 
         // qcd muon cuts (for the different qcd samples)
         bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
@@ -349,7 +349,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // no resonance's (Z or upsilon)
-        if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()>12)))
+        if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()<12)))
         {
             if (m_verbose) {cout << "fails no Z cut" << endl;}
             return 0;
@@ -399,9 +399,10 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // away jet cut
-        bool jet20c_cut = (ptpfcL1Fj1res() > 20);
-        bool jet40c_cut = (ptpfcL1Fj1res() > 40);
-        bool jet60c_cut = (ptpfcL1Fj1res() > 60);
+        bool jet20c_cut = is_data ? (ptpfcL1Fj1res() > 20) : (ptpfcL1Fj1() > 20);
+        bool jet40c_cut = is_data ? (ptpfcL1Fj1res() > 40) : (ptpfcL1Fj1() > 40);
+        bool jet60c_cut = is_data ? (ptpfcL1Fj1res() > 60) : (ptpfcL1Fj1() > 60);
+        //if (not is_data)
         if (is_ttbar)
         {
             jet20c_cut = true;
@@ -413,26 +414,26 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         bool num_lep_cut = false;
         if (is_mu)
         {
-            num_lep_cut = (abs(id()) == 13 && num_mu_ssV5_noIso());
+            num_lep_cut = num_mu_ssV5_noIso();
         }
         else if(is_el)
         {
-            num_lep_cut = (abs(id()) == 11 && num_el_ssV7_noIso());
+            num_lep_cut = num_el_ssV7_noIso();
         }
 
         // denominator cut
         bool fo_lep_cut = false;
         if (is_mu)
         {
-            fo_lep_cut = (abs(id()) == 13 && fo_mu_ssV5_noIso());
+            fo_lep_cut = fo_mu_ssV5_noIso();
         }
         else if(is_el)
         {
-            fo_lep_cut = (abs(id()) == 11 && v3_el_ssV7());
+            fo_lep_cut = v3_el_ssV7();
         }
 
         // not for W
-        bool not_fromw = is_ttbar ? not leptonIsFromW() : true;
+        bool not_fromw = is_ttbar ? leptonIsFromW()<1 : true;
 
         // passes selection (no isolaiton)
         bool num_lep_sel_notrig     = (nFOcut && num_lep_cut && not_fromw);
@@ -487,7 +488,6 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (m_verbose) {cout << "passing lepton" << endl;}
                     if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 

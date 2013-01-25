@@ -173,7 +173,7 @@ const ss::SignalRegionInfo s_HptInclSignalRegionInfos[] =
         // name
         "sr20",
         // title
-        "high p_{T} baseline: # jets #geq 2, # btags #geq 1, H_{T} > 80 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        "high p_{T} baseline: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
         // latex
         "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>80\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
     },
@@ -330,7 +330,7 @@ const ss::SignalRegionInfo s_LptInclSignalRegionInfos[] =
         // name
         "sr10",
         // title
-        "high p_{T} baseline: # jets #geq 2, # btags #geq 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        "low igh p_{T} baseline: # jets #geq 2, # btags #geq 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
         // latex
         "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
     },
@@ -410,7 +410,7 @@ const ss::SignalRegionInfo s_LptInclSignalRegionInfos[] =
         // name
         "sr20",
         // title
-        "high p_{T} baseline: # jets #geq 2, # btags #geq 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        "low p_{T} baseline: # jets #geq 2, # btags #geq 2, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
         // latex
         "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
     },
@@ -481,7 +481,7 @@ const ss::SignalRegionInfo s_LptInclSignalRegionInfos[] =
 };
 
 // very low pT, inclusive (same SRs as low pt)
-const ss::SignalRegionInfo (&s_VptInclSignalRegionInfos)[ss::SignalRegion::static_size] = s_VptInclSignalRegionInfos;
+const ss::SignalRegionInfo (&s_VptInclSignalRegionInfos)[ss::SignalRegion::static_size] = s_LptInclSignalRegionInfos;
 
 // HCP, inclusive
 const ss::SignalRegionInfo s_HcpInclSignalRegionInfos[] = 
@@ -1193,10 +1193,11 @@ namespace ss
             }
             if (analysis_type==AnalysisType::vlow_pt && signal_region_type==SignalRegionType::inclusive)
             {
+                cout << s_VptInclSignalRegionInfos[i].name << endl;
                 if (string(s_VptInclSignalRegionInfos[i].name) == signal_region_name)
                 {
-                    signal_region = static_cast<SignalRegion::value_type>(i);
-                    break;
+                  signal_region = static_cast<SignalRegion::value_type>(i);
+                   break;
                 }
             }
             if (analysis_type==AnalysisType::hcp && signal_region_type==SignalRegionType::inclusive)
@@ -1601,7 +1602,7 @@ namespace ss
 				tree.SetAlias("sr6" , "nbtags>=0 && njets>=2 && ht > 400 && pfmet > 120"                         ); 
 				tree.SetAlias("sr7" , "nbtags>=0 && njets>=4 && ht > 200 && pfmet > 120"                         ); 
 				tree.SetAlias("sr8" , "nbtags>=0 && njets>=4 && ht > 400 && pfmet > 120"                         ); 
-				tree.SetAlias("sr9" , "0"                                                                        ); 
+				tree.SetAlias("sr9" , "1==0"                                                                     ); 
 				tree.SetAlias("sr10", "nbtags>=1 && njets>=2 && ht > 80  && (ht > 500 ? pfmet > 30 : pfmet > 0)" ); 
 				tree.SetAlias("sr11", "nbtags>=1 && njets>=2 && ht > 200 && pfmet > 50"                          ); 
 				tree.SetAlias("sr12", "nbtags>=1 && njets>=2 && ht > 400 && pfmet > 50"                          ); 
@@ -1611,7 +1612,7 @@ namespace ss
 				tree.SetAlias("sr16", "nbtags>=1 && njets>=2 && ht > 400 && pfmet > 120"                         ); 
 				tree.SetAlias("sr17", "nbtags>=1 && njets>=4 && ht > 200 && pfmet > 120"                         ); 
 				tree.SetAlias("sr18", "nbtags>=1 && njets>=4 && ht > 400 && pfmet > 120"                         ); 
-				tree.SetAlias("sr19", "0"                                                                        ); 
+				tree.SetAlias("sr19", "1==0"                                                                     ); 
 				tree.SetAlias("sr20", "nbtags>=2 && njets>=2 && ht > 80  && (ht > 500 ? pfmet > 30 : pfmet > 0)" ); 
 				tree.SetAlias("sr21", "nbtags>=2 && njets>=2 && ht > 200 && pfmet > 50"                          ); 
 				tree.SetAlias("sr22", "nbtags>=2 && njets>=2 && ht > 400 && pfmet > 50"                          ); 
@@ -1633,7 +1634,7 @@ namespace ss
 				tree.SetAlias("sr6" , "nbtags>=0 && njets>=2 && ht > 400 && pfmet > 120"                         ); 
 				tree.SetAlias("sr7" , "nbtags>=0 && njets>=4 && ht > 250 && pfmet > 120"                         ); 
 				tree.SetAlias("sr8" , "nbtags>=0 && njets>=4 && ht > 400 && pfmet > 120"                         ); 
-				tree.SetAlias("sr9" , "0"                                                                        ); 
+				tree.SetAlias("sr9" , "1==0"                                                                     ); 
 				tree.SetAlias("sr10", "nbtags>=1 && njets>=2 && ht > 250 && (ht > 500 ? pfmet > 30 : pfmet > 0)" ); 
 				tree.SetAlias("sr11", "nbtags>=1 && njets>=2 && ht > 250 && pfmet > 50"                          ); 
 				tree.SetAlias("sr12", "nbtags>=1 && njets>=2 && ht > 400 && pfmet > 50"                          ); 
@@ -1643,7 +1644,7 @@ namespace ss
 				tree.SetAlias("sr16", "nbtags>=1 && njets>=2 && ht > 400 && pfmet > 120"                         ); 
 				tree.SetAlias("sr17", "nbtags>=1 && njets>=4 && ht > 250 && pfmet > 120"                         ); 
 				tree.SetAlias("sr18", "nbtags>=1 && njets>=4 && ht > 400 && pfmet > 120"                         ); 
-				tree.SetAlias("sr19", "0"                                                                        ); 
+				tree.SetAlias("sr19", "0==1"                                                                     ); 
 				tree.SetAlias("sr20", "nbtags>=2 && njets>=2 && ht > 250 && (ht > 500 ? pfmet > 30 : pfmet > 0)" ); 
 				tree.SetAlias("sr21", "nbtags>=2 && njets>=2 && ht > 250 && pfmet > 50"                          ); 
 				tree.SetAlias("sr22", "nbtags>=2 && njets>=2 && ht > 400 && pfmet > 50"                          ); 
@@ -1665,25 +1666,25 @@ namespace ss
 				tree.SetAlias("sr7", "nbtags>=0 && njets>=2 && ht > 200  && pfmet > 50"          ); 
 				tree.SetAlias("sr8", "nbtags>=0 && njets>=4 && ht > 320"                         ); 
 				tree.SetAlias("sr9", "nbtags>=0 && njets>=2 && ht > 80   && pfmet > 30 && is_mm" ); 
-				tree.SetAlias("sr10", "0"                                                        ); 
-				tree.SetAlias("sr11", "0"                                                        ); 
-				tree.SetAlias("sr12", "0"                                                        ); 
-				tree.SetAlias("sr13", "0"                                                        ); 
-				tree.SetAlias("sr14", "0"                                                        ); 
-				tree.SetAlias("sr15", "0"                                                        ); 
-				tree.SetAlias("sr16", "0"                                                        ); 
-				tree.SetAlias("sr17", "0"                                                        ); 
-				tree.SetAlias("sr18", "0"                                                        ); 
-				tree.SetAlias("sr19", "0"                                                        ); 
-				tree.SetAlias("sr20", "0"                                                        ); 
-				tree.SetAlias("sr21", "0"                                                        ); 
-				tree.SetAlias("sr22", "0"                                                        ); 
-				tree.SetAlias("sr23", "0"                                                        ); 
-				tree.SetAlias("sr24", "0"                                                        ); 
-				tree.SetAlias("sr25", "0"                                                        ); 
-				tree.SetAlias("sr26", "0"                                                        ); 
-				tree.SetAlias("sr27", "0"                                                        ); 
-				tree.SetAlias("sr28", "0"                                                        ); 
+				tree.SetAlias("sr10", "0==1"                                                     ); 
+				tree.SetAlias("sr11", "0==1"                                                     ); 
+				tree.SetAlias("sr12", "0==1"                                                     ); 
+				tree.SetAlias("sr13", "0==1"                                                     ); 
+				tree.SetAlias("sr14", "0==1"                                                     ); 
+				tree.SetAlias("sr15", "0==1"                                                     ); 
+				tree.SetAlias("sr16", "0==1"                                                     ); 
+				tree.SetAlias("sr17", "0==1"                                                     ); 
+				tree.SetAlias("sr18", "0==1"                                                     ); 
+				tree.SetAlias("sr19", "0==1"                                                     ); 
+				tree.SetAlias("sr20", "0==1"                                                     ); 
+				tree.SetAlias("sr21", "0==1"                                                     ); 
+				tree.SetAlias("sr22", "0==1"                                                     ); 
+				tree.SetAlias("sr23", "0==1"                                                     ); 
+				tree.SetAlias("sr24", "0==1"                                                     ); 
+				tree.SetAlias("sr25", "0==1"                                                     ); 
+				tree.SetAlias("sr26", "0==1"                                                     ); 
+				tree.SetAlias("sr27", "0==1"                                                     ); 
+				tree.SetAlias("sr28", "0==1"                                                     ); 
 				break;
 			case AnalysisType::static_size:
 				/*do nothing*/
@@ -1704,7 +1705,7 @@ namespace ss
 				tree.SetAlias("ex_sr6"  , "nbtags==0 && (2 <= njets && njets < 4) && (ht > 400            ) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr7"  , "nbtags==0 && (njets >= 4             ) && (200 < ht && ht < 400) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr8"  , "nbtags==0 && (njets >= 4             ) && (ht > 400            ) && (pfmet >= 120             )" ); 
-				tree.SetAlias("ex_sr9"  , "0"                                                                                               ); 
+				tree.SetAlias("ex_sr9"  , "0==1"                                                                                            ); 
 				tree.SetAlias("ex_sr10" , "nbtags==1 && njets>=2 && ht > 80  && (ht > 500 ? pfmet > 30 : pfmet > 0)"                        ); 
 				tree.SetAlias("ex_sr11" , "nbtags==1 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < pfmet && pfmet < 120)" ); 
 				tree.SetAlias("ex_sr12" , "nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < pfmet && pfmet < 120)" ); 
@@ -1714,7 +1715,7 @@ namespace ss
 				tree.SetAlias("ex_sr16" , "nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr17" , "nbtags==1 && (njets >= 4             ) && (200 < ht && ht < 400) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr18" , "nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (pfmet >= 120             )" ); 
-				tree.SetAlias("ex_sr19" , "0"                                                                                               ); 
+				tree.SetAlias("ex_sr19" , "0==1"                                                                                            ); 
 				tree.SetAlias("ex_sr20" , "nbtags==2 && njets>=2 && ht > 80  && (ht > 500 ? pfmet > 30 : pfmet > 0)"                        ); 
 				tree.SetAlias("ex_sr21" , "nbtags==2 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < pfmet && pfmet < 120)" ); 
 				tree.SetAlias("ex_sr22" , "nbtags==2 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < pfmet && pfmet < 120)" ); 
@@ -1736,7 +1737,7 @@ namespace ss
 				tree.SetAlias("ex_sr6"  , "nbtags==0 && (2 <= njets && njets < 4) && (ht > 400            ) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr7"  , "nbtags==0 && (njets >= 4             ) && (250 < ht && ht < 400) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr8"  , "nbtags==0 && (njets >= 4             ) && (ht > 400            ) && (pfmet >= 120             )" ); 
-				tree.SetAlias("ex_sr9"  , "0"                                                                                               ); 
+				tree.SetAlias("ex_sr9"  , "0==1"                                                                                            ); 
 				tree.SetAlias("ex_sr10" , "nbtags==1 && njets>=2 && ht > 250 && (ht > 500 ? pfmet > 30 : pfmet > 0)"                        ); 
 				tree.SetAlias("ex_sr11" , "nbtags==1 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < pfmet && pfmet < 120)" ); 
 				tree.SetAlias("ex_sr12" , "nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < pfmet && pfmet < 120)" ); 
@@ -1746,7 +1747,7 @@ namespace ss
 				tree.SetAlias("ex_sr16" , "nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr17" , "nbtags==1 && (njets >= 4             ) && (250 < ht && ht < 400) && (pfmet >= 120             )" ); 
 				tree.SetAlias("ex_sr18" , "nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (pfmet >= 120             )" ); 
-				tree.SetAlias("ex_sr19" , "0"                                                                                               ); 
+				tree.SetAlias("ex_sr19" , "0==1"                                                                                            ); 
 				tree.SetAlias("ex_sr20" , "nbtags==2 && njets>=2 && ht > 250 && (ht > 500 ? pfmet > 30 : pfmet > 0)"                        ); 
 				tree.SetAlias("ex_sr21" , "nbtags==2 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < pfmet && pfmet < 120)" ); 
 				tree.SetAlias("ex_sr22" , "nbtags==2 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < pfmet && pfmet < 120)" ); 
@@ -1758,44 +1759,44 @@ namespace ss
 				tree.SetAlias("ex_sr28" , "nbtags==2 && (njets >= 4             ) && (ht > 400            ) && (pfmet >= 120             )" ); 
 				break;
 			case AnalysisType::hcp:
-				tree.SetAlias("ex_sr0" , "0"                                                                 ); 
+				tree.SetAlias("ex_sr0" , "0==1"                                                              ); 
 				tree.SetAlias("ex_sr1" , "njets>=4 && (200 < ht && ht < 320) && (50 < pfmet && pfmet < 120)" ); 
 				tree.SetAlias("ex_sr2" , "njets>=4 && (200 < ht && ht < 320) && (pfmet > 120)"               ); 
 				tree.SetAlias("ex_sr3" , "njets>=4 && (ht > 320) && (50 < pfmet && pfmet < 120)"             ); 
 				tree.SetAlias("ex_sr4" , "njets>=4 && (ht > 320) && (pfmet > 120)"                           ); 
 				tree.SetAlias("ex_sr5" , "njets>=4 && (ht > 320) && (0 < pfmet && pfmet < 50)"               ); 
-				tree.SetAlias("ex_sr6" , "0"                                                                 ); 
-				tree.SetAlias("ex_sr7" , "0"                                                                 ); 
-				tree.SetAlias("ex_sr8" , "0"                                                                 ); 
-				tree.SetAlias("ex_sr9" , "0"                                                                 ); 
-				tree.SetAlias("ex_sr10", "0"                                                                 ); 
-				tree.SetAlias("ex_sr10", "0"                                                                 ); 
-				tree.SetAlias("ex_sr11", "0"                                                                 ); 
-				tree.SetAlias("ex_sr12", "0"                                                                 ); 
-				tree.SetAlias("ex_sr13", "0"                                                                 ); 
-				tree.SetAlias("ex_sr14", "0"                                                                 ); 
-				tree.SetAlias("ex_sr15", "0"                                                                 ); 
-				tree.SetAlias("ex_sr16", "0"                                                                 ); 
-				tree.SetAlias("ex_sr10", "0"                                                                 ); 
-				tree.SetAlias("ex_sr10", "0"                                                                 ); 
-				tree.SetAlias("ex_sr11", "0"                                                                 ); 
-				tree.SetAlias("ex_sr12", "0"                                                                 ); 
-				tree.SetAlias("ex_sr13", "0"                                                                 ); 
-				tree.SetAlias("ex_sr14", "0"                                                                 ); 
-				tree.SetAlias("ex_sr15", "0"                                                                 ); 
-				tree.SetAlias("ex_sr16", "0"                                                                 ); 
-				tree.SetAlias("ex_sr17", "0"                                                                 ); 
-				tree.SetAlias("ex_sr18", "0"                                                                 ); 
-				tree.SetAlias("ex_sr19", "0"                                                                 ); 
-				tree.SetAlias("ex_sr20", "0"                                                                 ); 
-				tree.SetAlias("ex_sr21", "0"                                                                 ); 
-				tree.SetAlias("ex_sr22", "0"                                                                 ); 
-				tree.SetAlias("ex_sr23", "0"                                                                 ); 
-				tree.SetAlias("ex_sr24", "0"                                                                 ); 
-				tree.SetAlias("ex_sr25", "0"                                                                 ); 
-				tree.SetAlias("ex_sr26", "0"                                                                 ); 
-				tree.SetAlias("ex_sr27", "0"                                                                 ); 
-				tree.SetAlias("ex_sr28", "0"                                                                 ); 
+				tree.SetAlias("ex_sr6" , "0==1"                                                              ); 
+				tree.SetAlias("ex_sr7" , "0==1"                                                              ); 
+				tree.SetAlias("ex_sr8" , "0==1"                                                              ); 
+				tree.SetAlias("ex_sr9" , "0==1"                                                              ); 
+				tree.SetAlias("ex_sr10", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr10", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr11", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr12", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr13", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr14", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr15", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr16", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr10", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr10", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr11", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr12", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr13", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr14", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr15", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr16", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr17", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr18", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr19", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr20", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr21", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr22", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr23", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr24", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr25", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr26", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr27", "0==1"                                                              ); 
+				tree.SetAlias("ex_sr28", "0==1"                                                              ); 
 				break;
 			case AnalysisType::static_size:
 				/*do nothing*/

@@ -815,7 +815,7 @@ int PlotLooper::operator()(long event)
         if (is_real_data())
         {
             bool passes_trigger = true;
-            if (m_analysis_type == AnalysisType::high_pt)
+            if (m_analysis_type == AnalysisType::high_pt or m_analysis_type == AnalysisType::hcp or m_analysis_type == AnalysisType::high_pt_eth)
             {
                 switch (hyp_type)
                 {

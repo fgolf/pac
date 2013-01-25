@@ -159,6 +159,7 @@ void SameSignTree::Reset()
 
     vgenb_p4.clear();
     vjets_p4.clear();
+    vjets_mcflavor.clear();
     vgenjets_p4.clear();
     vjets_nearjet_p4.clear();
     vjets_mc3id.clear();
@@ -168,6 +169,7 @@ void SameSignTree::Reset()
     vbjets_nearjet_p4.clear();
     vbtags.clear();
     vbjets_nearjet_dr.clear();
+    vbjets_mcflavor.clear();
     vbjets_mc3id.clear();
     vbjets_momid.clear();
     vbjets_mc3p4.clear();

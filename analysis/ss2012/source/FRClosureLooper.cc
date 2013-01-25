@@ -239,8 +239,7 @@ void FRClosureLooper::EndJob()
 
     CTable t_yields;
     t_yields.useTitle();
-    //t_yields.setTitle(Form("closure test table (# jets >=2, # btags > %d, SR %d)", m_nbtags, m_signal_region));
-    t_yields.setTitle(Form("closure test table (%s, # btags > %d)", sr_info.title.c_str(), m_nbtags));
+    t_yields.setTitle(Form("closure test table (%s)", sr_info.title.c_str()));
     string f = "1.2";
     t_yields.setTable() (                       "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
                         ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f), sf_raw.em_mufo.str(f), sf_raw.ll.str(f))

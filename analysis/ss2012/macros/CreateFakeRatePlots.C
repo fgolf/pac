@@ -245,6 +245,8 @@ void PrintMuonFakeRatePlotsETH(const std::string& suffix = "png")
     Style_t s50 = 22;
     Style_t s70 = 24;
 
+    hc.SetMarkerSize(1.1);
+
     // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
     p["p_mufr_vs_nvtxs"] = rt::TH1Overlay(Form("%s;number of vertices;TL ratio", title.c_str()), "sb::off lg::top");
     p["p_mufr_vs_nvtxs"].Add(hc["h_mufr30c_vs_nvtxs"], "away jet p_{T} > 30 GeV", c30, 2, s30);
@@ -317,8 +319,8 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 	rt::SetTDRStyle();
 	gStyle->SetTitleBorderSize(0);
 
-	std::string title = "QCD derived FR, #sqrt{s} = 8 TeV";
-	//std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	//std::string title = "QCD derived FR, #sqrt{s} = 8 TeV";
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("e^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("e^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 
@@ -331,6 +333,8 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     Style_t s20 = 20;
     Style_t s40 = 22;
     Style_t s60 = 24;
+
+    hc.SetMarkerSize(1.1);
 
     // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
 	std::map<std::string, rt::TH1Overlay> p;
@@ -557,7 +561,7 @@ void PrintFRTables(const std::string lepton="mu")
 	//rt::TH1Container hc("plots/fake_rates/eth/fakerate_eth.root");
     if (lepton=="mu")
     {
-        TH2F* h_mufr40c = dynamic_cast<TH2F*>(hc["h_mufr50c"]);
+        TH2F* h_mufr40c = dynamic_cast<TH2F*>(hc["h_mufr40c"]);
         printFRtable(h_mufr40c);
 
         TH2F* h_mufr40c_iso = dynamic_cast<TH2F*>(hc["h_mufr40c_iso"]);
@@ -565,7 +569,7 @@ void PrintFRTables(const std::string lepton="mu")
     }
     if (lepton=="el")
     {
-        TH2F* h_elfr40c = dynamic_cast<TH2F*>(hc["h_elfr50c"]);
+        TH2F* h_elfr40c = dynamic_cast<TH2F*>(hc["h_elfr40c"]);
         printFRtable(h_elfr40c);
 
         TH2F* h_elfr40c_noiso = dynamic_cast<TH2F*>(hc["h_elfr40c_noiso"]);
