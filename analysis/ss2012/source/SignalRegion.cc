@@ -1065,7 +1065,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
 };
 
 // very low pT, exclusive
-const ss::SignalRegionInfo (&s_VptExclSignalRegionInfos)[ss::SignalRegion::static_size] = s_VptExclSignalRegionInfos;
+const ss::SignalRegionInfo (&s_VptExclSignalRegionInfos)[ss::SignalRegion::static_size] = s_LptExclSignalRegionInfos;
 
 // HCP, exclusive
 const ss::SignalRegionInfo s_HcpExclSignalRegionInfos[] = 
