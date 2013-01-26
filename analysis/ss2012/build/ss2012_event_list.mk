@@ -35,6 +35,10 @@ $(eval $(include_simple_table))
 # ss2012_tools 
 $(eval $(include_ss2012_tools))
 
+# CMS2 
+$(eval $(include_cms2_header))
+$(eval $(include_cms2_core))
+
 # program setup
 # ----------------------------------------------------------------------- #
 

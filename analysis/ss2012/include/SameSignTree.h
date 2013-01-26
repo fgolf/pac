@@ -179,9 +179,9 @@ public:
     bool clean;
     bool hyp_good_vtx;
     bool presel;
-    bool ee;
-    bool mm;
-    bool em;
+    //bool ee;
+    //bool mm;
+    //bool em;
     bool em_mufo;
     bool em_elfo;
 

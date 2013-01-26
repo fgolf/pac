@@ -415,10 +415,12 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         if (is_mu)
         {
             num_lep_cut = num_mu_ssV5_noIso();
+            num_lep_cut &= (d0() < 0.05);
         }
         else if(is_el)
         {
             num_lep_cut = num_el_ssV7_noIso();
+            num_lep_cut &= (d0() < 0.10);
         }
 
         // denominator cut

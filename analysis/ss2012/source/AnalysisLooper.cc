@@ -1404,9 +1404,9 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.is_sf   = (event_type==DileptonChargeType::SF);
         m_evt.is_df   = (event_type==DileptonChargeType::DF);
         m_evt.is_os   = (event_type==DileptonChargeType::OS);
-        m_evt.ee      = (dilepton_type==DileptonHypType::EE);
-        m_evt.mm      = (dilepton_type==DileptonHypType::MUMU);
-        m_evt.em      = (dilepton_type==DileptonHypType::EMU);
+        //m_evt.ee      = (dilepton_type==DileptonHypType::EE);
+        //m_evt.mm      = (dilepton_type==DileptonHypType::MUMU);
+        //m_evt.em      = (dilepton_type==DileptonHypType::EMU);
         m_evt.em_mufo = m_evt.em && ((lep1_fo && lep1_is_mu) || (lep2_fo && lep2_is_mu));  
         m_evt.em_elfo = m_evt.em && ((lep1_fo && lep1_is_el) || (lep2_fo && lep2_is_el));
         m_evt.is_pp   = hyp_lt_charge().at(hyp_idx)>0 && hyp_ll_charge().at(hyp_idx)>0; 

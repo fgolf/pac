@@ -107,9 +107,9 @@ void SameSignTree::Reset()
     is_sf                                    = false;
     is_df                                    = false;
     is_os                                    = false;
-    ee                                       = false;
-    mm                                       = false;
-    em                                       = false;
+    //ee                                       = false;
+    //mm                                       = false;
+    //em                                       = false;
     em_mufo                                  = false;
     em_elfo                                  = false;
     is_df                                    = false;
@@ -277,9 +277,9 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("no_extrag"                                , &no_extrag                                , "no_extrag/O"                                ); 
     tree.Branch("clean"                                    , &clean                                    , "clean/O"                                    ); 
     tree.Branch("presel"                                   , &presel                                   , "presel/O"                                   ); 
-    tree.Branch("ee"                                       , &ee                                       , "ee/O"                                       ); 
-    tree.Branch("mm"                                       , &mm                                       , "mm/O"                                       ); 
-    tree.Branch("em"                                       , &em                                       , "em/O"                                       ); 
+    //tree.Branch("ee"                                       , &ee                                       , "ee/O"                                       ); 
+    //tree.Branch("mm"                                       , &mm                                       , "mm/O"                                       ); 
+    //tree.Branch("em"                                       , &em                                       , "em/O"                                       ); 
     tree.Branch("em_mufo"                                  , &em_mufo                                  , "em_mufo/O"                                  ); 
     tree.Branch("em_elfo"                                  , &em_elfo                                  , "em_elfo/O"                                  ); 
     tree.Branch("hyp_good_vtx"                             , &hyp_good_vtx                             , "hyp_good_vtx/O"                             ); 
