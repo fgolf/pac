@@ -17,12 +17,12 @@ void SSQuickYields()
     // chains
     TChain ch_hpt("tree"); ch_hpt.Add("babies/hpt/data.root");
     TChain ch_lpt("tree"); ch_lpt.Add("babies/lpt/data.root");
-    //TChain ch_vpt("tree"); ch_vpt.Add("babies/vpt/data.root");
+    TChain ch_vpt("tree"); ch_vpt.Add("babies/vpt/data.root");
 
     // aliases
     ss::SetSignalRegionAliases(ch_hpt, ss::AnalysisType::high_pt);
     ss::SetSignalRegionAliases(ch_lpt, ss::AnalysisType::low_pt);
-    //ss::SetSignalRegionAliases(ch_vpt, ss::AnalysisType::vlow_pt);
+    ss::SetSignalRegionAliases(ch_vpt, ss::AnalysisType::vlow_pt);
     
     // selection
     TCut ss = "is_ss && trig";
@@ -135,7 +135,7 @@ void SSQuickYields()
 
     CTable t_lpt;
     t_lpt.useTitle();
-    t_lpt.setTitle("high pT yields");
+    t_lpt.setTitle("low pT yields");
     t_lpt.setTable()(               "ee",         "mm",         "em",         "ll")
                     ("sr0" , y_lpt[0 ].ee, y_lpt[0 ].mm, y_lpt[0 ].em, y_lpt[0 ].ll)
                     ("sr1" , y_lpt[1 ].ee, y_lpt[1 ].mm, y_lpt[1 ].em, y_lpt[1 ].ll)
@@ -169,5 +169,73 @@ void SSQuickYields()
     cout << endl;
     t_lpt.print();
 
+    // very low pT
+    static const yield_t y_vpt[29] = 
+    {
+        {ch_vpt.GetEntries(ss && ee && "sr0" ), ch_vpt.GetEntries(ss && mm && "sr0" ), ch_vpt.GetEntries(ss && em && "sr0" ), ch_vpt.GetEntries(ss && "sr0" )},
+        {ch_vpt.GetEntries(ss && ee && "sr1" ), ch_vpt.GetEntries(ss && mm && "sr1" ), ch_vpt.GetEntries(ss && em && "sr1" ), ch_vpt.GetEntries(ss && "sr1" )},
+        {ch_vpt.GetEntries(ss && ee && "sr2" ), ch_vpt.GetEntries(ss && mm && "sr2" ), ch_vpt.GetEntries(ss && em && "sr2" ), ch_vpt.GetEntries(ss && "sr2" )},
+        {ch_vpt.GetEntries(ss && ee && "sr3" ), ch_vpt.GetEntries(ss && mm && "sr3" ), ch_vpt.GetEntries(ss && em && "sr3" ), ch_vpt.GetEntries(ss && "sr3" )},
+        {ch_vpt.GetEntries(ss && ee && "sr4" ), ch_vpt.GetEntries(ss && mm && "sr4" ), ch_vpt.GetEntries(ss && em && "sr4" ), ch_vpt.GetEntries(ss && "sr4" )},
+        {ch_vpt.GetEntries(ss && ee && "sr5" ), ch_vpt.GetEntries(ss && mm && "sr5" ), ch_vpt.GetEntries(ss && em && "sr5" ), ch_vpt.GetEntries(ss && "sr5" )},
+        {ch_vpt.GetEntries(ss && ee && "sr6" ), ch_vpt.GetEntries(ss && mm && "sr6" ), ch_vpt.GetEntries(ss && em && "sr6" ), ch_vpt.GetEntries(ss && "sr6" )},
+        {ch_vpt.GetEntries(ss && ee && "sr7" ), ch_vpt.GetEntries(ss && mm && "sr7" ), ch_vpt.GetEntries(ss && em && "sr7" ), ch_vpt.GetEntries(ss && "sr7" )},
+        {ch_vpt.GetEntries(ss && ee && "sr8" ), ch_vpt.GetEntries(ss && mm && "sr8" ), ch_vpt.GetEntries(ss && em && "sr8" ), ch_vpt.GetEntries(ss && "sr8" )},
+        {ch_vpt.GetEntries(ss && ee && "sr9" ), ch_vpt.GetEntries(ss && mm && "sr9" ), ch_vpt.GetEntries(ss && em && "sr9" ), ch_vpt.GetEntries(ss && "sr9" )},
+        {ch_vpt.GetEntries(ss && ee && "sr10"), ch_vpt.GetEntries(ss && mm && "sr10"), ch_vpt.GetEntries(ss && em && "sr10"), ch_vpt.GetEntries(ss && "sr10")},
+        {ch_vpt.GetEntries(ss && ee && "sr11"), ch_vpt.GetEntries(ss && mm && "sr11"), ch_vpt.GetEntries(ss && em && "sr11"), ch_vpt.GetEntries(ss && "sr11")},
+        {ch_vpt.GetEntries(ss && ee && "sr12"), ch_vpt.GetEntries(ss && mm && "sr12"), ch_vpt.GetEntries(ss && em && "sr12"), ch_vpt.GetEntries(ss && "sr12")},
+        {ch_vpt.GetEntries(ss && ee && "sr13"), ch_vpt.GetEntries(ss && mm && "sr13"), ch_vpt.GetEntries(ss && em && "sr13"), ch_vpt.GetEntries(ss && "sr13")},
+        {ch_vpt.GetEntries(ss && ee && "sr14"), ch_vpt.GetEntries(ss && mm && "sr14"), ch_vpt.GetEntries(ss && em && "sr14"), ch_vpt.GetEntries(ss && "sr14")},
+        {ch_vpt.GetEntries(ss && ee && "sr15"), ch_vpt.GetEntries(ss && mm && "sr15"), ch_vpt.GetEntries(ss && em && "sr15"), ch_vpt.GetEntries(ss && "sr15")},
+        {ch_vpt.GetEntries(ss && ee && "sr16"), ch_vpt.GetEntries(ss && mm && "sr16"), ch_vpt.GetEntries(ss && em && "sr16"), ch_vpt.GetEntries(ss && "sr16")},
+        {ch_vpt.GetEntries(ss && ee && "sr17"), ch_vpt.GetEntries(ss && mm && "sr17"), ch_vpt.GetEntries(ss && em && "sr17"), ch_vpt.GetEntries(ss && "sr17")},
+        {ch_vpt.GetEntries(ss && ee && "sr18"), ch_vpt.GetEntries(ss && mm && "sr18"), ch_vpt.GetEntries(ss && em && "sr18"), ch_vpt.GetEntries(ss && "sr18")},
+        {ch_vpt.GetEntries(ss && ee && "sr19"), ch_vpt.GetEntries(ss && mm && "sr19"), ch_vpt.GetEntries(ss && em && "sr19"), ch_vpt.GetEntries(ss && "sr19")},
+        {ch_vpt.GetEntries(ss && ee && "sr20"), ch_vpt.GetEntries(ss && mm && "sr20"), ch_vpt.GetEntries(ss && em && "sr20"), ch_vpt.GetEntries(ss && "sr20")},
+        {ch_vpt.GetEntries(ss && ee && "sr21"), ch_vpt.GetEntries(ss && mm && "sr21"), ch_vpt.GetEntries(ss && em && "sr21"), ch_vpt.GetEntries(ss && "sr21")},
+        {ch_vpt.GetEntries(ss && ee && "sr22"), ch_vpt.GetEntries(ss && mm && "sr22"), ch_vpt.GetEntries(ss && em && "sr22"), ch_vpt.GetEntries(ss && "sr22")},
+        {ch_vpt.GetEntries(ss && ee && "sr23"), ch_vpt.GetEntries(ss && mm && "sr23"), ch_vpt.GetEntries(ss && em && "sr23"), ch_vpt.GetEntries(ss && "sr23")},
+        {ch_vpt.GetEntries(ss && ee && "sr24"), ch_vpt.GetEntries(ss && mm && "sr24"), ch_vpt.GetEntries(ss && em && "sr24"), ch_vpt.GetEntries(ss && "sr24")},
+        {ch_vpt.GetEntries(ss && ee && "sr25"), ch_vpt.GetEntries(ss && mm && "sr25"), ch_vpt.GetEntries(ss && em && "sr25"), ch_vpt.GetEntries(ss && "sr25")},
+        {ch_vpt.GetEntries(ss && ee && "sr26"), ch_vpt.GetEntries(ss && mm && "sr26"), ch_vpt.GetEntries(ss && em && "sr26"), ch_vpt.GetEntries(ss && "sr26")},
+        {ch_vpt.GetEntries(ss && ee && "sr27"), ch_vpt.GetEntries(ss && mm && "sr27"), ch_vpt.GetEntries(ss && em && "sr27"), ch_vpt.GetEntries(ss && "sr27")},
+        {ch_vpt.GetEntries(ss && ee && "sr28"), ch_vpt.GetEntries(ss && mm && "sr28"), ch_vpt.GetEntries(ss && em && "sr28"), ch_vpt.GetEntries(ss && "sr28")}
+    };
 
+    CTable t_vpt;
+    t_vpt.useTitle();
+    t_vpt.setTitle("very low pT yields");
+    t_vpt.setTable()(               "ee",         "mm",         "em",         "ll")
+                    ("sr0" , y_vpt[0 ].ee, y_vpt[0 ].mm, y_vpt[0 ].em, y_vpt[0 ].ll)
+                    ("sr1" , y_vpt[1 ].ee, y_vpt[1 ].mm, y_vpt[1 ].em, y_vpt[1 ].ll)
+                    ("sr2" , y_vpt[2 ].ee, y_vpt[2 ].mm, y_vpt[2 ].em, y_vpt[2 ].ll)
+                    ("sr3" , y_vpt[3 ].ee, y_vpt[3 ].mm, y_vpt[3 ].em, y_vpt[3 ].ll)
+                    ("sr4" , y_vpt[4 ].ee, y_vpt[4 ].mm, y_vpt[4 ].em, y_vpt[4 ].ll)
+                    ("sr5" , y_vpt[5 ].ee, y_vpt[5 ].mm, y_vpt[5 ].em, y_vpt[5 ].ll)
+                    ("sr6" , y_vpt[6 ].ee, y_vpt[6 ].mm, y_vpt[6 ].em, y_vpt[6 ].ll)
+                    ("sr7" , y_vpt[7 ].ee, y_vpt[7 ].mm, y_vpt[7 ].em, y_vpt[7 ].ll)
+                    ("sr8" , y_vpt[8 ].ee, y_vpt[8 ].mm, y_vpt[8 ].em, y_vpt[8 ].ll)
+                    ("sr9" , "--"        , "--"        , "--"        , "--"        )
+                    ("sr10", y_vpt[10].ee, y_vpt[10].mm, y_vpt[10].em, y_vpt[10].ll)
+                    ("sr11", y_vpt[11].ee, y_vpt[11].mm, y_vpt[11].em, y_vpt[11].ll)
+                    ("sr12", y_vpt[12].ee, y_vpt[12].mm, y_vpt[12].em, y_vpt[12].ll)
+                    ("sr13", y_vpt[13].ee, y_vpt[13].mm, y_vpt[13].em, y_vpt[13].ll)
+                    ("sr14", y_vpt[14].ee, y_vpt[14].mm, y_vpt[14].em, y_vpt[14].ll)
+                    ("sr15", y_vpt[15].ee, y_vpt[15].mm, y_vpt[15].em, y_vpt[15].ll)
+                    ("sr16", y_vpt[16].ee, y_vpt[16].mm, y_vpt[16].em, y_vpt[16].ll)
+                    ("sr17", y_vpt[17].ee, y_vpt[17].mm, y_vpt[17].em, y_vpt[17].ll)
+                    ("sr18", y_vpt[18].ee, y_vpt[18].mm, y_vpt[18].em, y_vpt[18].ll)
+                    ("sr19", "--"        , "--"        , "--"        , "--"        )
+                    ("sr20", y_vpt[20].ee, y_vpt[20].mm, y_vpt[20].em, y_vpt[20].ll)
+                    ("sr21", y_vpt[21].ee, y_vpt[21].mm, y_vpt[21].em, y_vpt[21].ll)
+                    ("sr22", y_vpt[22].ee, y_vpt[22].mm, y_vpt[22].em, y_vpt[22].ll)
+                    ("sr23", y_vpt[23].ee, y_vpt[23].mm, y_vpt[23].em, y_vpt[23].ll)
+                    ("sr24", y_vpt[24].ee, y_vpt[24].mm, y_vpt[24].em, y_vpt[24].ll)
+                    ("sr25", y_vpt[25].ee, y_vpt[25].mm, y_vpt[25].em, y_vpt[25].ll)
+                    ("sr26", y_vpt[26].ee, y_vpt[26].mm, y_vpt[26].em, y_vpt[26].ll)
+                    ("sr27", y_vpt[27].ee, y_vpt[27].mm, y_vpt[27].em, y_vpt[27].ll)
+                    ("sr28", y_vpt[28].ee, y_vpt[28].mm, y_vpt[28].em, y_vpt[28].ll);
+    cout << endl;
+    t_vpt.print();
 }

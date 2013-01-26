@@ -114,7 +114,6 @@ void OverlaySSPlots
 	}
 
 	const string plots_path = Form("plots/%s/%s/%s/%s", output_name.c_str(), analysis_type_name.c_str(), signal_region_type_name.c_str(), sr.name.c_str());
-	cout << plots_path << endl;
 
     rt::TH1Container hc_data(Form("%s/data%s.root", plots_path.c_str(), charge_stem.c_str()));
     rt::TH1Container hc_mc;

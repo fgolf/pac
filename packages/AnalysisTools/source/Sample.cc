@@ -916,6 +916,16 @@ namespace at
             path = rt::string_replace_all(path, ",", "/V05-03-18_slim,");
             path.append("/V05-03-18_slim");
         }
+        else if (sample == Sample::ttw && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-21_slim,");
+            path.append("/V05-03-21_slim");
+        }
+        else if (sample == Sample::ttjets && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-18_slim,");
+            path.append("/V05-03-18_slim");
+        }
         else if (sample == Sample::dy && ntuple == NtupleType::cms2)
         {
             path = rt::string_replace_all(path, ",", "/V05-03-18_slim,");

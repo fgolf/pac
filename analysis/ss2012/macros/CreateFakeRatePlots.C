@@ -170,40 +170,40 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
     CountMuonNumDen(hc["h_mu_num60c"], hc["h_mu_fo60c"], "#mu count (num, den), away jet p_{T} > 60");
     cout << endl;
 
-    //p["p_mufr_iso_vs_nvtxs"] = rt::TH1Overlay(Form("%s;number of vertices;TL ratio", title.c_str()), "sb::off lg::top");
-    //p["p_mufr_iso_vs_nvtxs"].Add(hc["h_mufr20c_iso_vs_nvtxs"], "away jet p_{T} > 20 GeV", c20, 2, s20);
-    //p["p_mufr_iso_vs_nvtxs"].Add(hc["h_mufr40c_iso_vs_nvtxs"], "away jet p_{T} > 40 GeV", c40, 2, s40);
-    //p["p_mufr_iso_vs_nvtxs"].Add(hc["h_mufr60c_iso_vs_nvtxs"], "away jet p_{T} > 60 GeV", c60, 2, s60);
-    //p["p_mufr_iso_vs_nvtxs"].SetYAxisRange(0, max);
-    //p["p_mufr_iso_vs_nvtxs"].SetLegendOption("p");
-    //p["p_mufr_iso_vs_nvtxs"].SetLegendTextSize(0.042);
-    //p["p_mufr_iso_vs_nvtxs"].AddText("Muons"               , 0.25, 0.835);
-    //p["p_mufr_iso_vs_nvtxs"].AddText("p^{#mu}_{T} > 20 GeV", 0.25, 0.775);
+    p["p_mufr_iso_vs_nvtxs"] = rt::TH1Overlay(Form("%s;number of vertices;TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_iso_vs_nvtxs"].Add(hc["h_mufr20c_iso_vs_nvtxs"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_mufr_iso_vs_nvtxs"].Add(hc["h_mufr40c_iso_vs_nvtxs"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_mufr_iso_vs_nvtxs"].Add(hc["h_mufr60c_iso_vs_nvtxs"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_mufr_iso_vs_nvtxs"].SetYAxisRange(0, max);
+    p["p_mufr_iso_vs_nvtxs"].SetLegendOption("p");
+    p["p_mufr_iso_vs_nvtxs"].SetLegendTextSize(0.042);
+    p["p_mufr_iso_vs_nvtxs"].AddText("Muons"               , 0.25, 0.835);
+    p["p_mufr_iso_vs_nvtxs"].AddText("p^{#mu}_{T} > 20 GeV", 0.25, 0.775);
 
-    //p["p_mufr_iso_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
-    //p["p_mufr_iso_vs_pt"].Add(hc["h_mufr20c_iso_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
-    //p["p_mufr_iso_vs_pt"].Add(hc["h_mufr40c_iso_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
-    //p["p_mufr_iso_vs_pt"].Add(hc["h_mufr60c_iso_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
-    //p["p_mufr_iso_vs_pt"].SetYAxisRange(0, max);
-    //p["p_mufr_iso_vs_pt"].SetLegendOption("p");
-    //p["p_mufr_iso_vs_pt"].SetLegendTextSize(0.042);
-    //p["p_mufr_iso_vs_pt"].AddText("Muons", 0.25, 0.835);
+    p["p_mufr_iso_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_iso_vs_pt"].Add(hc["h_mufr20c_iso_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_mufr_iso_vs_pt"].Add(hc["h_mufr40c_iso_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_mufr_iso_vs_pt"].Add(hc["h_mufr60c_iso_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_mufr_iso_vs_pt"].SetYAxisRange(0, max);
+    p["p_mufr_iso_vs_pt"].SetLegendOption("p");
+    p["p_mufr_iso_vs_pt"].SetLegendTextSize(0.042);
+    p["p_mufr_iso_vs_pt"].AddText("Muons", 0.25, 0.835);
 
-    //p["p_mufr_iso_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
-    //p["p_mufr_iso_vs_eta"].Add(hc["h_mufr20c_iso_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
-    //p["p_mufr_iso_vs_eta"].Add(hc["h_mufr40c_iso_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
-    //p["p_mufr_iso_vs_eta"].Add(hc["h_mufr60c_iso_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
-    //p["p_mufr_iso_vs_eta"].SetYAxisRange(0, max);
-    //p["p_mufr_iso_vs_eta"].SetLegendOption("p");
-    //p["p_mufr_iso_vs_eta"].SetLegendTextSize(0.042);
-    //p["p_mufr_iso_vs_eta"].AddText("Muons"               , 0.25, 0.835);
-    //p["p_mufr_iso_vs_eta"].AddText("p^{#mu}_{T} > 20 GeV", 0.25, 0.775);
+    p["p_mufr_iso_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_iso_vs_eta"].Add(hc["h_mufr20c_iso_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_mufr_iso_vs_eta"].Add(hc["h_mufr40c_iso_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_mufr_iso_vs_eta"].Add(hc["h_mufr60c_iso_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_mufr_iso_vs_eta"].SetYAxisRange(0, max);
+    p["p_mufr_iso_vs_eta"].SetLegendOption("p");
+    p["p_mufr_iso_vs_eta"].SetLegendTextSize(0.042);
+    p["p_mufr_iso_vs_eta"].AddText("Muons"               , 0.25, 0.835);
+    p["p_mufr_iso_vs_eta"].AddText("p^{#mu}_{T} > 20 GeV", 0.25, 0.775);
 
-    //cout << endl;
-    //CountMuonNumDen(hc["h_mu_num20c_iso"], hc["h_mu_fo20c_iso"], "#mu count (num, den), away jet p_{T} > 20, iso triggers");
-    //CountMuonNumDen(hc["h_mu_num40c_iso"], hc["h_mu_fo40c_iso"], "#mu count (num, den), away jet p_{T} > 40, iso triggers");
-    //CountMuonNumDen(hc["h_mu_num60c_iso"], hc["h_mu_fo60c_iso"], "#mu count (num, den), away jet p_{T} > 60, iso triggers");
-    //cout << endl;
+    cout << endl;
+    CountMuonNumDen(hc["h_mu_num20c_iso"], hc["h_mu_fo20c_iso"], "#mu count (num, den), away jet p_{T} > 20, iso triggers");
+    CountMuonNumDen(hc["h_mu_num40c_iso"], hc["h_mu_fo40c_iso"], "#mu count (num, den), away jet p_{T} > 40, iso triggers");
+    CountMuonNumDen(hc["h_mu_num60c_iso"], hc["h_mu_fo60c_iso"], "#mu count (num, den), away jet p_{T} > 60, iso triggers");
+    cout << endl;
 
     // print
     if (suffix=="all")

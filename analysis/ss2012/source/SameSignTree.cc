@@ -314,12 +314,14 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("bjets_dr12"                               , &bjets_dr12                               , "bjets_dr12/F"                               ); 
     tree.Branch("vgenb_p4"                                 , "vecLorentzVector"                        , &vgenb_p4                                    ); 
     tree.Branch("vjets_p4"                                 , "vecLorentzVector"                        , &vjets_p4                                    ); 
+    tree.Branch("vjets_mcflavor"                           , "veci"                                    , &vjets_mcflavor                              ); 
     tree.Branch("vjets_mc3p4"                              , "vecLorentzVector"                        , &vjets_mc3p4                                 ); 
     tree.Branch("vgenjets_p4"                              , "vecLorentzVector"                        , &vgenjets_p4                                 ); 
     tree.Branch("vjets_mc3id"                              , "veci"                                    , &vjets_mc3id                                 ); 
     tree.Branch("vjets_momid"                              , "veci"                                    , &vjets_momid                                 ); 
     tree.Branch("vjets_nearjet_p4"                         , "vecLorentzVector"                        , &vjets_nearjet_p4                            ); 
     tree.Branch("vbjets_p4"                                , "vecLorentzVector"                        , &vbjets_p4                                   ); 
+    tree.Branch("vbjets_mcflavor"                          , "veci"                                    , &vbjets_mcflavor                             ); 
     tree.Branch("vbjets_mc3p4"                             , "vecLorentzVector"                        , &vbjets_mc3p4                                ); 
     tree.Branch("vbjets_nearjet_p4"                        , "vecLorentzVector"                        , &vbjets_nearjet_p4                           ); 
     tree.Branch("vbtags"                                   , "std::vector<bool>"                       , &vbtags                                      ); 
