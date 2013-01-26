@@ -95,6 +95,24 @@ protected:
 	float	scet_;
 	TBranch *scet_branch;
 	bool scet_isLoaded;
+	float	d0_;
+	TBranch *d0_branch;
+	bool d0_isLoaded;
+	float	dz_;
+	TBranch *dz_branch;
+	bool dz_isLoaded;
+	float	ip3d_;
+	TBranch *ip3d_branch;
+	bool ip3d_isLoaded;
+	float	d0err_;
+	TBranch *d0err_branch;
+	bool d0err_isLoaded;
+	float	dzerr_;
+	TBranch *dzerr_branch;
+	bool dzerr_isLoaded;
+	float	ip3derr_;
+	TBranch *ip3derr_branch;
+	bool ip3derr_isLoaded;
 	float	hoe_;
 	TBranch *hoe_branch;
 	bool hoe_isLoaded;
@@ -1139,6 +1157,36 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("scet") != 0) {
 		scet_branch = tree->GetBranch("scet");
 		if (scet_branch) {scet_branch->SetAddress(&scet_);}
+	}
+	d0_branch = 0;
+	if (tree->GetBranch("d0") != 0) {
+		d0_branch = tree->GetBranch("d0");
+		if (d0_branch) {d0_branch->SetAddress(&d0_);}
+	}
+	dz_branch = 0;
+	if (tree->GetBranch("dz") != 0) {
+		dz_branch = tree->GetBranch("dz");
+		if (dz_branch) {dz_branch->SetAddress(&dz_);}
+	}
+	ip3d_branch = 0;
+	if (tree->GetBranch("ip3d") != 0) {
+		ip3d_branch = tree->GetBranch("ip3d");
+		if (ip3d_branch) {ip3d_branch->SetAddress(&ip3d_);}
+	}
+	d0err_branch = 0;
+	if (tree->GetBranch("d0err") != 0) {
+		d0err_branch = tree->GetBranch("d0err");
+		if (d0err_branch) {d0err_branch->SetAddress(&d0err_);}
+	}
+	dzerr_branch = 0;
+	if (tree->GetBranch("dzerr") != 0) {
+		dzerr_branch = tree->GetBranch("dzerr");
+		if (dzerr_branch) {dzerr_branch->SetAddress(&dzerr_);}
+	}
+	ip3derr_branch = 0;
+	if (tree->GetBranch("ip3derr") != 0) {
+		ip3derr_branch = tree->GetBranch("ip3derr");
+		if (ip3derr_branch) {ip3derr_branch->SetAddress(&ip3derr_);}
 	}
 	hoe_branch = 0;
 	if (tree->GetBranch("hoe") != 0) {
@@ -2692,6 +2740,12 @@ void GetEntry(unsigned int idx)
 		sceta_isLoaded = false;
 		phi_isLoaded = false;
 		scet_isLoaded = false;
+		d0_isLoaded = false;
+		dz_isLoaded = false;
+		ip3d_isLoaded = false;
+		d0err_isLoaded = false;
+		dzerr_isLoaded = false;
+		ip3derr_isLoaded = false;
 		hoe_isLoaded = false;
 		pfmet_isLoaded = false;
 		pfmetphi_isLoaded = false;
@@ -3027,6 +3081,12 @@ void LoadAllBranches()
 	if (sceta_branch != 0) sceta();
 	if (phi_branch != 0) phi();
 	if (scet_branch != 0) scet();
+	if (d0_branch != 0) d0();
+	if (dz_branch != 0) dz();
+	if (ip3d_branch != 0) ip3d();
+	if (d0err_branch != 0) d0err();
+	if (dzerr_branch != 0) dzerr();
+	if (ip3derr_branch != 0) ip3derr();
 	if (hoe_branch != 0) hoe();
 	if (pfmet_branch != 0) pfmet();
 	if (pfmetphi_branch != 0) pfmetphi();
@@ -3670,6 +3730,84 @@ void LoadAllBranches()
 			scet_isLoaded = true;
 		}
 		return scet_;
+	}
+	float &d0()
+	{
+		if (not d0_isLoaded) {
+			if (d0_branch != 0) {
+				d0_branch->GetEntry(index);
+			} else { 
+				printf("branch d0_branch does not exist!\n");
+				exit(1);
+			}
+			d0_isLoaded = true;
+		}
+		return d0_;
+	}
+	float &dz()
+	{
+		if (not dz_isLoaded) {
+			if (dz_branch != 0) {
+				dz_branch->GetEntry(index);
+			} else { 
+				printf("branch dz_branch does not exist!\n");
+				exit(1);
+			}
+			dz_isLoaded = true;
+		}
+		return dz_;
+	}
+	float &ip3d()
+	{
+		if (not ip3d_isLoaded) {
+			if (ip3d_branch != 0) {
+				ip3d_branch->GetEntry(index);
+			} else { 
+				printf("branch ip3d_branch does not exist!\n");
+				exit(1);
+			}
+			ip3d_isLoaded = true;
+		}
+		return ip3d_;
+	}
+	float &d0err()
+	{
+		if (not d0err_isLoaded) {
+			if (d0err_branch != 0) {
+				d0err_branch->GetEntry(index);
+			} else { 
+				printf("branch d0err_branch does not exist!\n");
+				exit(1);
+			}
+			d0err_isLoaded = true;
+		}
+		return d0err_;
+	}
+	float &dzerr()
+	{
+		if (not dzerr_isLoaded) {
+			if (dzerr_branch != 0) {
+				dzerr_branch->GetEntry(index);
+			} else { 
+				printf("branch dzerr_branch does not exist!\n");
+				exit(1);
+			}
+			dzerr_isLoaded = true;
+		}
+		return dzerr_;
+	}
+	float &ip3derr()
+	{
+		if (not ip3derr_isLoaded) {
+			if (ip3derr_branch != 0) {
+				ip3derr_branch->GetEntry(index);
+			} else { 
+				printf("branch ip3derr_branch does not exist!\n");
+				exit(1);
+			}
+			ip3derr_isLoaded = true;
+		}
+		return ip3derr_;
 	}
 	float &hoe()
 	{
@@ -7677,6 +7815,12 @@ namespace frb {
 	const float &sceta();
 	const float &phi();
 	const float &scet();
+	const float &d0();
+	const float &dz();
+	const float &ip3d();
+	const float &d0err();
+	const float &dzerr();
+	const float &ip3derr();
 	const float &hoe();
 	const float &pfmet();
 	const float &pfmetphi();

@@ -27,6 +27,12 @@ namespace frb {
 	const float &sceta() { return fake_rate_baby.sceta(); }
 	const float &phi() { return fake_rate_baby.phi(); }
 	const float &scet() { return fake_rate_baby.scet(); }
+	const float &d0() { return fake_rate_baby.d0(); }
+	const float &dz() { return fake_rate_baby.dz(); }
+	const float &ip3d() { return fake_rate_baby.ip3d(); }
+	const float &d0err() { return fake_rate_baby.d0err(); }
+	const float &dzerr() { return fake_rate_baby.dzerr(); }
+	const float &ip3derr() { return fake_rate_baby.ip3derr(); }
 	const float &hoe() { return fake_rate_baby.hoe(); }
 	const float &pfmet() { return fake_rate_baby.pfmet(); }
 	const float &pfmetphi() { return fake_rate_baby.pfmetphi(); }
