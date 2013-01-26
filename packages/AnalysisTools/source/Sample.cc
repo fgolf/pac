@@ -929,9 +929,14 @@ namespace at
         else if (sample == Sample::dy && ntuple == NtupleType::cms2)
         {
             path = rt::string_replace_all(path, ",", "/V05-03-18_slim,");
-            path.append("/V05-03-18_slim");
+            path.append("/V05-03-18_slim");        
         }
-        else if (sample != Sample::tbz && ntuple == NtupleType::cms2)
+        else if (sample == Sample::ttw && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-21_slim,");
+            path.append("/V05-03-21_slim");
+        }
+        else if (sample == Sample::tbz && ntuple == NtupleType::cms2)
         {
             path = rt::string_replace_all(path, ",", "/V05-03-20");
             path.append("/V05-03-20");
