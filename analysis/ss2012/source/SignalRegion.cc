@@ -1596,7 +1596,31 @@ namespace ss
 		}
 
 		// trigger
-		tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
+		switch (at)
+		{
+			case AnalysisType::high_pt:
+		        tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
+				break;
+			case AnalysisType::high_pt_eth:
+		        tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
+				break;
+			case AnalysisType::hcp:
+		        tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
+				break;
+			case AnalysisType::low_pt:
+		        tree.SetAlias("trig", "((em && (trig_em_mu8_el8_id_m8_pfnopuht175 || trig_em_mu8_el8_id_m8_pfht175)) || "
+                                      "(mm && (trig_mm_dmu8_m8_pfnopuht175 || trig_mm_dmu8_m8_pfht175)) || "
+                                      "(ee && (trig_ee_del8_id_m8_pfnopuht175 || trig_ee_del8_id_m8_pfht175)))"); 
+				break;
+			case AnalysisType::vlow_pt:
+		        tree.SetAlias("trig", "((em && (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 || trig_em_riso1p0mu5_el8_id_m8_pfht175)) || "
+                                      "(mm && (trig_mm_dreliso1p0mu5_m8_pfnopuht175 || trig_mm_dreliso1p0mu5_m8_pfht175)) || "
+                                      "(ee && (trig_ee_del8_id_m8_pfnopuht175 || trig_ee_del8_id_m8_pfht175)))"); 
+				break;
+			case AnalysisType::static_size:
+				/*do nothing*/
+				break;
+		}
 
 		// inclusive
 		switch (at)
