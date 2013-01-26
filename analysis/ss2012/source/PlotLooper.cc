@@ -755,16 +755,16 @@ int PlotLooper::operator()(long event)
         }
 
         // lepton PT requirement
-        //if (lep2_p4().pt() < m_l2_min_pt || lep2_p4().pt() > m_l2_max_pt)
-        //{
-        //    if (m_verbose) {cout << "failing minimum/maximum lep2 pT" << endl;}
-        //    return 0;
-        //}
-        //if (lep1_p4().pt() < m_l1_min_pt || lep1_p4().pt() > m_l1_max_pt)
-        //{
-        //    if (m_verbose) {cout << "failing minimum/maximum lep1 pT" << endl;}
-        //    return 0;
-        //}
+        if (lep2_p4().pt() < m_l2_min_pt || lep2_p4().pt() > m_l2_max_pt)
+        {
+            if (m_verbose) {cout << "failing minimum/maximum lep2 pT" << endl;}
+            return 0;
+        }
+        if (lep1_p4().pt() < m_l1_min_pt || lep1_p4().pt() > m_l1_max_pt)
+        {
+            if (m_verbose) {cout << "failing minimum/maximum lep1 pT" << endl;}
+            return 0;
+        }
 
         // d0 requirement
         //if (abs(lep1_d0()) > (abs(lep1_pdgid())==11 ? 0.01 : 0.005))
@@ -797,11 +797,11 @@ int PlotLooper::operator()(long event)
         //}
 
         // HT cut
-        //if (ht() < m_min_ht)
-        //{
-        //    if (m_verbose) {cout << Form("failing minimum hT: %f < %f", ht(), m_min_ht) << endl;}
-        //    return 0;
-        //}
+        if (ht() < m_min_ht)
+        {
+            if (m_verbose) {cout << Form("failing minimum hT: %f < %f", ht(), m_min_ht) << endl;}
+            return 0;
+        }
 
         // charge option (1 == ++, -1 == --)
         switch (m_charge_option)
@@ -855,16 +855,16 @@ int PlotLooper::operator()(long event)
         }
 
         // two jet events
-        //if (njets() < static_cast<int>(m_njets))
-        //{
-        //    return 0;
-        //}
+        if (njets() < static_cast<int>(m_njets))
+        {
+            return 0;
+        }
 
-        //// two btagged jets
-        //if (nbtags() < static_cast<int>(m_nbtags))
-        //{
-        //    return 0;
-        //}
+        // two btagged jets
+        if (nbtags() < static_cast<int>(m_nbtags))
+        {
+            return 0;
+        }
 
         // passes signal region
         if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type))

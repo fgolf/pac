@@ -1302,7 +1302,13 @@ namespace ss
         switch(anal_type)
         {
             case AnalysisType::high_pt:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
             case AnalysisType::high_pt_eth:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
             case AnalysisType::hcp:
                 if (pt1 < 20.0) return false;
                 if (pt2 < 20.0) return false;
@@ -1570,7 +1576,11 @@ namespace ss
 		switch (at)
 		{
 			case AnalysisType::high_pt:
+				tree.SetAlias("lep_pt", "lep1_p4.pt()>20 && lep2_p4.pt()>20");
+				break;
 			case AnalysisType::high_pt_eth:
+				tree.SetAlias("lep_pt", "lep1_p4.pt()>20 && lep2_p4.pt()>20");
+				break;
 			case AnalysisType::hcp:
 				tree.SetAlias("lep_pt", "lep1_p4.pt()>20 && lep2_p4.pt()>20");
 				break;
@@ -1578,7 +1588,7 @@ namespace ss
 				tree.SetAlias("lep_pt", "lep1_p4.pt()>10 && lep2_p4.pt()>10");
 				break;
 			case AnalysisType::vlow_pt:
-				tree.SetAlias("lep_pt", "(lep1_p4.pt()>(abs(lep1_pdgid)==11 ? 10 : 5) && lep2_p4.pt()>(abs(lep2_pdgid)==11 ? 10 : 5)");
+	            tree.SetAlias("lep_pt", "(abs(lep1_pdgid)==11 ? lep1_p4.pt()>10 : lep1_p4.pt()>5) && (abs(lep2_pdgid)==11 ? lep2_p4.pt()>10 : lep2_p4.pt()>5)");
 				break;
 			case AnalysisType::static_size:
 				/*do nothing*/

@@ -12,12 +12,14 @@ struct yield_t
     int ll;
 };
 
-void SSQuickYields()
+void SSQuickYields(const std::string& srt_name = "inclusive")
 {
     // chains
     TChain ch_hpt("tree"); ch_hpt.Add("babies/hpt/data.root");
     TChain ch_lpt("tree"); ch_lpt.Add("babies/lpt/data.root");
     TChain ch_vpt("tree"); ch_vpt.Add("babies/vpt/data.root");
+
+	ss::SignalRegionType::value_type srt = ss::GetSignalRegionTypeFromName(srt_name);
 
     // aliases
     ss::SetSignalRegionAliases(ch_hpt, ss::AnalysisType::high_pt);
@@ -25,13 +27,13 @@ void SSQuickYields()
     ss::SetSignalRegionAliases(ch_vpt, ss::AnalysisType::vlow_pt);
     
     // selection
-    TCut ss = "is_ss && trig";
+    TCut ss = "is_ss && trig && lep_pt";
     TCut ee = "ee";
     TCut mm = "mm";
     TCut em = "em";
     
     // high pT
-    static const yield_t y_hpt[29] = 
+    const yield_t y_hpt[29] = 
     {
         {ch_hpt.GetEntries(ss && ee && "sr0" ), ch_hpt.GetEntries(ss && mm && "sr0" ), ch_hpt.GetEntries(ss && em && "sr0" ), ch_hpt.GetEntries(ss && "sr0" )},
         {ch_hpt.GetEntries(ss && ee && "sr1" ), ch_hpt.GetEntries(ss && mm && "sr1" ), ch_hpt.GetEntries(ss && em && "sr1" ), ch_hpt.GetEntries(ss && "sr1" )},
@@ -100,37 +102,37 @@ void SSQuickYields()
     t_hpt.print();
 
     // low pT
-    static const yield_t y_lpt[29] = 
-    {
-        {ch_lpt.GetEntries(ss && ee && "sr0" ), ch_lpt.GetEntries(ss && mm && "sr0" ), ch_lpt.GetEntries(ss && em && "sr0" ), ch_lpt.GetEntries(ss && "sr0" )},
-        {ch_lpt.GetEntries(ss && ee && "sr1" ), ch_lpt.GetEntries(ss && mm && "sr1" ), ch_lpt.GetEntries(ss && em && "sr1" ), ch_lpt.GetEntries(ss && "sr1" )},
-        {ch_lpt.GetEntries(ss && ee && "sr2" ), ch_lpt.GetEntries(ss && mm && "sr2" ), ch_lpt.GetEntries(ss && em && "sr2" ), ch_lpt.GetEntries(ss && "sr2" )},
-        {ch_lpt.GetEntries(ss && ee && "sr3" ), ch_lpt.GetEntries(ss && mm && "sr3" ), ch_lpt.GetEntries(ss && em && "sr3" ), ch_lpt.GetEntries(ss && "sr3" )},
-        {ch_lpt.GetEntries(ss && ee && "sr4" ), ch_lpt.GetEntries(ss && mm && "sr4" ), ch_lpt.GetEntries(ss && em && "sr4" ), ch_lpt.GetEntries(ss && "sr4" )},
-        {ch_lpt.GetEntries(ss && ee && "sr5" ), ch_lpt.GetEntries(ss && mm && "sr5" ), ch_lpt.GetEntries(ss && em && "sr5" ), ch_lpt.GetEntries(ss && "sr5" )},
-        {ch_lpt.GetEntries(ss && ee && "sr6" ), ch_lpt.GetEntries(ss && mm && "sr6" ), ch_lpt.GetEntries(ss && em && "sr6" ), ch_lpt.GetEntries(ss && "sr6" )},
-        {ch_lpt.GetEntries(ss && ee && "sr7" ), ch_lpt.GetEntries(ss && mm && "sr7" ), ch_lpt.GetEntries(ss && em && "sr7" ), ch_lpt.GetEntries(ss && "sr7" )},
-        {ch_lpt.GetEntries(ss && ee && "sr8" ), ch_lpt.GetEntries(ss && mm && "sr8" ), ch_lpt.GetEntries(ss && em && "sr8" ), ch_lpt.GetEntries(ss && "sr8" )},
-        {ch_lpt.GetEntries(ss && ee && "sr9" ), ch_lpt.GetEntries(ss && mm && "sr9" ), ch_lpt.GetEntries(ss && em && "sr9" ), ch_lpt.GetEntries(ss && "sr9" )},
-        {ch_lpt.GetEntries(ss && ee && "sr10"), ch_lpt.GetEntries(ss && mm && "sr10"), ch_lpt.GetEntries(ss && em && "sr10"), ch_lpt.GetEntries(ss && "sr10")},
-        {ch_lpt.GetEntries(ss && ee && "sr11"), ch_lpt.GetEntries(ss && mm && "sr11"), ch_lpt.GetEntries(ss && em && "sr11"), ch_lpt.GetEntries(ss && "sr11")},
-        {ch_lpt.GetEntries(ss && ee && "sr12"), ch_lpt.GetEntries(ss && mm && "sr12"), ch_lpt.GetEntries(ss && em && "sr12"), ch_lpt.GetEntries(ss && "sr12")},
-        {ch_lpt.GetEntries(ss && ee && "sr13"), ch_lpt.GetEntries(ss && mm && "sr13"), ch_lpt.GetEntries(ss && em && "sr13"), ch_lpt.GetEntries(ss && "sr13")},
-        {ch_lpt.GetEntries(ss && ee && "sr14"), ch_lpt.GetEntries(ss && mm && "sr14"), ch_lpt.GetEntries(ss && em && "sr14"), ch_lpt.GetEntries(ss && "sr14")},
-        {ch_lpt.GetEntries(ss && ee && "sr15"), ch_lpt.GetEntries(ss && mm && "sr15"), ch_lpt.GetEntries(ss && em && "sr15"), ch_lpt.GetEntries(ss && "sr15")},
-        {ch_lpt.GetEntries(ss && ee && "sr16"), ch_lpt.GetEntries(ss && mm && "sr16"), ch_lpt.GetEntries(ss && em && "sr16"), ch_lpt.GetEntries(ss && "sr16")},
-        {ch_lpt.GetEntries(ss && ee && "sr17"), ch_lpt.GetEntries(ss && mm && "sr17"), ch_lpt.GetEntries(ss && em && "sr17"), ch_lpt.GetEntries(ss && "sr17")},
-        {ch_lpt.GetEntries(ss && ee && "sr18"), ch_lpt.GetEntries(ss && mm && "sr18"), ch_lpt.GetEntries(ss && em && "sr18"), ch_lpt.GetEntries(ss && "sr18")},
-        {ch_lpt.GetEntries(ss && ee && "sr19"), ch_lpt.GetEntries(ss && mm && "sr19"), ch_lpt.GetEntries(ss && em && "sr19"), ch_lpt.GetEntries(ss && "sr19")},
-        {ch_lpt.GetEntries(ss && ee && "sr20"), ch_lpt.GetEntries(ss && mm && "sr20"), ch_lpt.GetEntries(ss && em && "sr20"), ch_lpt.GetEntries(ss && "sr20")},
-        {ch_lpt.GetEntries(ss && ee && "sr21"), ch_lpt.GetEntries(ss && mm && "sr21"), ch_lpt.GetEntries(ss && em && "sr21"), ch_lpt.GetEntries(ss && "sr21")},
-        {ch_lpt.GetEntries(ss && ee && "sr22"), ch_lpt.GetEntries(ss && mm && "sr22"), ch_lpt.GetEntries(ss && em && "sr22"), ch_lpt.GetEntries(ss && "sr22")},
-        {ch_lpt.GetEntries(ss && ee && "sr23"), ch_lpt.GetEntries(ss && mm && "sr23"), ch_lpt.GetEntries(ss && em && "sr23"), ch_lpt.GetEntries(ss && "sr23")},
-        {ch_lpt.GetEntries(ss && ee && "sr24"), ch_lpt.GetEntries(ss && mm && "sr24"), ch_lpt.GetEntries(ss && em && "sr24"), ch_lpt.GetEntries(ss && "sr24")},
-        {ch_lpt.GetEntries(ss && ee && "sr25"), ch_lpt.GetEntries(ss && mm && "sr25"), ch_lpt.GetEntries(ss && em && "sr25"), ch_lpt.GetEntries(ss && "sr25")},
-        {ch_lpt.GetEntries(ss && ee && "sr26"), ch_lpt.GetEntries(ss && mm && "sr26"), ch_lpt.GetEntries(ss && em && "sr26"), ch_lpt.GetEntries(ss && "sr26")},
-        {ch_lpt.GetEntries(ss && ee && "sr27"), ch_lpt.GetEntries(ss && mm && "sr27"), ch_lpt.GetEntries(ss && em && "sr27"), ch_lpt.GetEntries(ss && "sr27")},
-        {ch_lpt.GetEntries(ss && ee && "sr28"), ch_lpt.GetEntries(ss && mm && "sr28"), ch_lpt.GetEntries(ss && em && "sr28"), ch_lpt.GetEntries(ss && "sr28")}
+    const yield_t y_lpt[29] = 
+   	{ 
+       {ch_lpt.GetEntries(ss && ee && "sr0" ), ch_lpt.GetEntries(ss && mm && "sr0" ), ch_lpt.GetEntries(ss && em && "sr0" ), ch_lpt.GetEntries(ss && "sr0" )},
+       {ch_lpt.GetEntries(ss && ee && "sr1" ), ch_lpt.GetEntries(ss && mm && "sr1" ), ch_lpt.GetEntries(ss && em && "sr1" ), ch_lpt.GetEntries(ss && "sr1" )},
+       {ch_lpt.GetEntries(ss && ee && "sr2" ), ch_lpt.GetEntries(ss && mm && "sr2" ), ch_lpt.GetEntries(ss && em && "sr2" ), ch_lpt.GetEntries(ss && "sr2" )},
+       {ch_lpt.GetEntries(ss && ee && "sr3" ), ch_lpt.GetEntries(ss && mm && "sr3" ), ch_lpt.GetEntries(ss && em && "sr3" ), ch_lpt.GetEntries(ss && "sr3" )},
+       {ch_lpt.GetEntries(ss && ee && "sr4" ), ch_lpt.GetEntries(ss && mm && "sr4" ), ch_lpt.GetEntries(ss && em && "sr4" ), ch_lpt.GetEntries(ss && "sr4" )},
+       {ch_lpt.GetEntries(ss && ee && "sr5" ), ch_lpt.GetEntries(ss && mm && "sr5" ), ch_lpt.GetEntries(ss && em && "sr5" ), ch_lpt.GetEntries(ss && "sr5" )},
+       {ch_lpt.GetEntries(ss && ee && "sr6" ), ch_lpt.GetEntries(ss && mm && "sr6" ), ch_lpt.GetEntries(ss && em && "sr6" ), ch_lpt.GetEntries(ss && "sr6" )},
+       {ch_lpt.GetEntries(ss && ee && "sr7" ), ch_lpt.GetEntries(ss && mm && "sr7" ), ch_lpt.GetEntries(ss && em && "sr7" ), ch_lpt.GetEntries(ss && "sr7" )},
+       {ch_lpt.GetEntries(ss && ee && "sr8" ), ch_lpt.GetEntries(ss && mm && "sr8" ), ch_lpt.GetEntries(ss && em && "sr8" ), ch_lpt.GetEntries(ss && "sr8" )},
+       {ch_lpt.GetEntries(ss && ee && "sr9" ), ch_lpt.GetEntries(ss && mm && "sr9" ), ch_lpt.GetEntries(ss && em && "sr9" ), ch_lpt.GetEntries(ss && "sr9" )},
+       {ch_lpt.GetEntries(ss && ee && "sr10"), ch_lpt.GetEntries(ss && mm && "sr10"), ch_lpt.GetEntries(ss && em && "sr10"), ch_lpt.GetEntries(ss && "sr10")},
+       {ch_lpt.GetEntries(ss && ee && "sr11"), ch_lpt.GetEntries(ss && mm && "sr11"), ch_lpt.GetEntries(ss && em && "sr11"), ch_lpt.GetEntries(ss && "sr11")},
+       {ch_lpt.GetEntries(ss && ee && "sr12"), ch_lpt.GetEntries(ss && mm && "sr12"), ch_lpt.GetEntries(ss && em && "sr12"), ch_lpt.GetEntries(ss && "sr12")},
+       {ch_lpt.GetEntries(ss && ee && "sr13"), ch_lpt.GetEntries(ss && mm && "sr13"), ch_lpt.GetEntries(ss && em && "sr13"), ch_lpt.GetEntries(ss && "sr13")},
+       {ch_lpt.GetEntries(ss && ee && "sr14"), ch_lpt.GetEntries(ss && mm && "sr14"), ch_lpt.GetEntries(ss && em && "sr14"), ch_lpt.GetEntries(ss && "sr14")},
+       {ch_lpt.GetEntries(ss && ee && "sr15"), ch_lpt.GetEntries(ss && mm && "sr15"), ch_lpt.GetEntries(ss && em && "sr15"), ch_lpt.GetEntries(ss && "sr15")},
+       {ch_lpt.GetEntries(ss && ee && "sr16"), ch_lpt.GetEntries(ss && mm && "sr16"), ch_lpt.GetEntries(ss && em && "sr16"), ch_lpt.GetEntries(ss && "sr16")},
+       {ch_lpt.GetEntries(ss && ee && "sr17"), ch_lpt.GetEntries(ss && mm && "sr17"), ch_lpt.GetEntries(ss && em && "sr17"), ch_lpt.GetEntries(ss && "sr17")},
+       {ch_lpt.GetEntries(ss && ee && "sr18"), ch_lpt.GetEntries(ss && mm && "sr18"), ch_lpt.GetEntries(ss && em && "sr18"), ch_lpt.GetEntries(ss && "sr18")},
+       {ch_lpt.GetEntries(ss && ee && "sr19"), ch_lpt.GetEntries(ss && mm && "sr19"), ch_lpt.GetEntries(ss && em && "sr19"), ch_lpt.GetEntries(ss && "sr19")},
+       {ch_lpt.GetEntries(ss && ee && "sr20"), ch_lpt.GetEntries(ss && mm && "sr20"), ch_lpt.GetEntries(ss && em && "sr20"), ch_lpt.GetEntries(ss && "sr20")},
+       {ch_lpt.GetEntries(ss && ee && "sr21"), ch_lpt.GetEntries(ss && mm && "sr21"), ch_lpt.GetEntries(ss && em && "sr21"), ch_lpt.GetEntries(ss && "sr21")},
+       {ch_lpt.GetEntries(ss && ee && "sr22"), ch_lpt.GetEntries(ss && mm && "sr22"), ch_lpt.GetEntries(ss && em && "sr22"), ch_lpt.GetEntries(ss && "sr22")},
+       {ch_lpt.GetEntries(ss && ee && "sr23"), ch_lpt.GetEntries(ss && mm && "sr23"), ch_lpt.GetEntries(ss && em && "sr23"), ch_lpt.GetEntries(ss && "sr23")},
+       {ch_lpt.GetEntries(ss && ee && "sr24"), ch_lpt.GetEntries(ss && mm && "sr24"), ch_lpt.GetEntries(ss && em && "sr24"), ch_lpt.GetEntries(ss && "sr24")},
+       {ch_lpt.GetEntries(ss && ee && "sr25"), ch_lpt.GetEntries(ss && mm && "sr25"), ch_lpt.GetEntries(ss && em && "sr25"), ch_lpt.GetEntries(ss && "sr25")},
+       {ch_lpt.GetEntries(ss && ee && "sr26"), ch_lpt.GetEntries(ss && mm && "sr26"), ch_lpt.GetEntries(ss && em && "sr26"), ch_lpt.GetEntries(ss && "sr26")},
+       {ch_lpt.GetEntries(ss && ee && "sr27"), ch_lpt.GetEntries(ss && mm && "sr27"), ch_lpt.GetEntries(ss && em && "sr27"), ch_lpt.GetEntries(ss && "sr27")},
+       {ch_lpt.GetEntries(ss && ee && "sr28"), ch_lpt.GetEntries(ss && mm && "sr28"), ch_lpt.GetEntries(ss && em && "sr28"), ch_lpt.GetEntries(ss && "sr28")}
     };
 
     CTable t_lpt;
@@ -170,7 +172,7 @@ void SSQuickYields()
     t_lpt.print();
 
     // very low pT
-    static const yield_t y_vpt[29] = 
+    const yield_t y_vpt[29] = 
     {
         {ch_vpt.GetEntries(ss && ee && "sr0" ), ch_vpt.GetEntries(ss && mm && "sr0" ), ch_vpt.GetEntries(ss && em && "sr0" ), ch_vpt.GetEntries(ss && "sr0" )},
         {ch_vpt.GetEntries(ss && ee && "sr1" ), ch_vpt.GetEntries(ss && mm && "sr1" ), ch_vpt.GetEntries(ss && em && "sr1" ), ch_vpt.GetEntries(ss && "sr1" )},

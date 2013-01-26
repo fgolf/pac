@@ -47,9 +47,9 @@ try
     int charge_option               = 0;
     unsigned int signal_region_num  = 0;
     float lumi                      = 1.0;
-    float l1_min_pt                 = 20.0;
+    float l1_min_pt                 = 5.0;
     float l1_max_pt                 = 10000000.0;
-    float l2_min_pt                 = 20.0;
+    float l2_min_pt                 = 5.0;
     float l2_max_pt                 = 10000000.0;
     float min_ht                    = 80.0;
     bool verbose                    = false;
