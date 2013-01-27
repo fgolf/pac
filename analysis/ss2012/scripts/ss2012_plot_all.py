@@ -267,6 +267,7 @@ def main():
 					overlay_hist(sr)
 					do_append = (sr != excl_signal_regions[0])
 					print_yield_table(sr, do_append)
+				#print_summary_table()
 			else:
 				print "making plots for all inclusive signal regions"
 				for sr in incl_signal_regions:

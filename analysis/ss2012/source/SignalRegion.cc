@@ -1193,7 +1193,6 @@ namespace ss
             }
             if (analysis_type==AnalysisType::vlow_pt && signal_region_type==SignalRegionType::inclusive)
             {
-                cout << s_VptInclSignalRegionInfos[i].name << endl;
                 if (string(s_VptInclSignalRegionInfos[i].name) == signal_region_name)
                 {
                   signal_region = static_cast<SignalRegion::value_type>(i);

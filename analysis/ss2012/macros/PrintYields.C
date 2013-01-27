@@ -848,7 +848,6 @@ void PrintSummaryYields
             yield_flip.title = "Flips";
         }
 
-        Yield yield_mc("total MC");
         vector<Yield> yields_bkgd;
         yields_bkgd.push_back(GetSSYield("wz"      , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
         yields_bkgd.push_back(GetSSYield("zz"      , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
@@ -870,27 +869,26 @@ void PrintSummaryYields
         yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
 
         // add the backtrounds to get the totol MC and total prediction
+        Yield yield_rare("Rare");
         for (size_t i = 0; i != yields_bkgd.size(); i++)
         {
-            yield_mc = AddUncertaintiesAbsolute(yield_mc, yields_bkgd.at(i));
+            yield_rare = AddUncertaintiesAbsolute(yield_rare, yields_bkgd.at(i));
         }
-        Yield yield_mc_pred = yield_mc;
-        yield_mc_pred.title = "MC Pred";
 
         // set systematic uncertainties
         SetSysUncertainties(yield_fake, 0.5);
         SetSysUncertainties(yield_flip, 0.2);
-        SetSysUncertainties(yield_mc  , 0.5);
+        SetSysUncertainties(yield_rare, 0.5);
 
         // total predition
-        Yield yield_pred    = yield_mc_pred;
-        yield_pred.title    = "pred";
+        Yield yield_pred    = yield_rare;
+        yield_pred.title    = "Pred";
         yield_pred += yield_fake;
         yield_pred += yield_flip;
 
         // collect all the yields
         vector<Yield> yields;
-        yields.push_back(yield_mc);
+        yields.push_back(yield_rare);
         yields.push_back(yield_fake);
         yields.push_back(yield_flip);
         yields.push_back(yield_pred);
@@ -905,11 +903,11 @@ void PrintSummaryYields
 			
 			// title
             string latex_name;
-            if      (y.title == "data"    ) {latex_name = "Event Yield";}
-            else if (y.title == "Fakes"   ) {latex_name = "Fake BG";    }
-            else if (y.title == "Flips"   ) {latex_name = "Flip BG";    }
-            else if (y.title == "MC Pred" ) {latex_name = "Rare MC";    }
-            else if (y.title == "pred"    ) {latex_name = "Total BG";   }
+            if      (y.title == "data" ) {latex_name = "Event Yield";}
+            else if (y.title == "Fakes") {latex_name = "Fake BG";    }
+            else if (y.title == "Flips") {latex_name = "Flip BG";    }
+            else if (y.title == "Rare" ) {latex_name = "Rare MC";    }
+            else if (y.title == "Pred" ) {latex_name = "Total BG";   }
 
 			// fill the table
             t_yields.setRowLabel(latex_name, i);

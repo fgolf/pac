@@ -19,7 +19,7 @@ void SSQuickYields(const std::string& srt_name = "inclusive")
     TChain ch_lpt("tree"); ch_lpt.Add("babies/lpt/data.root");
     TChain ch_vpt("tree"); ch_vpt.Add("babies/vpt/data.root");
 
-	ss::SignalRegionType::value_type srt = ss::GetSignalRegionTypeFromName(srt_name);
+	const ss::SignalRegionType::value_type srt = ss::GetSignalRegionTypeFromName(srt_name);
 
     // aliases
     ss::SetSignalRegionAliases(ch_hpt, ss::AnalysisType::high_pt);

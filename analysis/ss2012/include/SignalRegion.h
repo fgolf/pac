@@ -41,6 +41,11 @@ namespace ss
             sr26 = 26, // baseline + #jets>=2, #btags>=2, MET>120, HT>400
             sr27 = 27, // baseline + #jets>=4, #btags>=2, MET>120, HT[200-400]
             sr28 = 28, // baseline + #jets>=4, #btags>=2, MET>120, HT>400
+            //sr29 = 29, // not used 
+            //sr30 = 30, // SS top 1: baseline with MET>30 (only implemented for highpt) 
+            //sr31 = 31, // SS top 1: baseline with MET>30, ++ (only implemented for highpt) 
+            //sr32 = 32, // RPV 1: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for highpt)2
+            //sr33 = 33, // RPV 2: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for highpt)2
 
             // keep track of the size
             static_size

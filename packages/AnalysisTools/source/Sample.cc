@@ -451,7 +451,7 @@ namespace at
             // latex
             "WZZ", 
             // ntuple_path
-            "WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            "WZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
