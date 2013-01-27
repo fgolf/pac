@@ -227,7 +227,7 @@ namespace at
             // latex
             "$t\\overline{t}\\gamma$", 
             // ntuple_path
-            "TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            "TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -259,7 +259,7 @@ namespace at
             // latex
             "$t\\overline{t}WW$", 
             // ntuple_path
-            "TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            "TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
