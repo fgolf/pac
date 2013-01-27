@@ -656,21 +656,28 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         switch(m_analysis_type)
         {
             case AnalysisType::high_pt:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
             case AnalysisType::high_pt_eth:
-                mu_min_pt = 20;
-                el_min_pt = 20;
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::hcp:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
                 break;
             case AnalysisType::low_pt:
-                mu_min_pt = 10;
-                el_min_pt = 10;
+                mu_min_pt = 10.0;
+                el_min_pt = 10.0;
                 break;
             case AnalysisType::vlow_pt:
-                mu_min_pt = 5;
-                el_min_pt = 10;
+                mu_min_pt = 5.0;
+                el_min_pt = 10.0;
                 break;
             default:
-                mu_min_pt = 20;
-                el_min_pt = 20;
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
                 break;
         }
         const float min_pt = std::min(mu_min_pt, el_min_pt);
@@ -777,8 +784,8 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             int lt_idx                 = hyp_lt_index().at(ihyp);
             int ll_idx                 = hyp_ll_index().at(ihyp);
 
-            float lt_min_pt = abs(lt_id)==11 ? el_min_pt : mu_min_pt;
-            float ll_min_pt = abs(ll_id)==11 ? el_min_pt : mu_min_pt;
+            const float lt_min_pt = abs(lt_id)==11 ? el_min_pt : mu_min_pt;
+            const float ll_min_pt = abs(ll_id)==11 ? el_min_pt : mu_min_pt;
 
             // print for syncing
             if (m_sync_print)
