@@ -802,13 +802,33 @@ void PrintSummaryYields
 )
 {
     // table for output
-    CTable t_yields;
-    t_yields.useTitle();
-    t_yields.setTitle("summary table for SS 2012 yields and background predictions");
+    CTable t_yields_1;
+    t_yields_1.useTitle();
+    t_yields_1.setTitle("summary table for SS 2012 yields and background predictions (sr0-sr8)");
+
+    CTable t_yields_2;
+    t_yields_2.useTitle();
+    t_yields_2.setTitle("summary table for SS 2012 yields and background predictions (sr10-sr18)");
+
+    CTable t_yields_3;
+    t_yields_3.useTitle();
+    t_yields_3.setTitle("summary table for SS 2012 yields and background predictions (sr20-sr28)");
 
     // fill the columns
-    for (unsigned int signal_region_num = 0; signal_region_num != 9; signal_region_num++)
+    for (unsigned int signal_region_num = 0; signal_region_num != ss::SignalRegion::static_size; signal_region_num++)
     {
+		// no using these SRs
+		if (signal_region_num==9 or signal_region_num==19) {continue;} 
+
+		// which table are we using?
+		CTable* temp_ptr = NULL;
+		unsigned int column = signal_region_num;
+		if (signal_region_num <= 8)                             {temp_ptr = &t_yields_1;}
+		if (10 <= signal_region_num && signal_region_num <= 18) {temp_ptr = &t_yields_2; column -=10;}
+		if (20 <= signal_region_num && signal_region_num <= 28) {temp_ptr = &t_yields_3; column -=20;}
+		if (not temp_ptr) {continue;}
+		CTable& t_yields = *temp_ptr;
+
 		const string signal_region_name = Form("sr%d", signal_region_num);	
         Yield yield_data(GetSSYield  ("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
         Yield yield_sf  (GetSFYield  ("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
@@ -877,37 +897,51 @@ void PrintSummaryYields
         yields.push_back(yield_data);
 
         // print the table
-        t_yields.setColLabel(Form("sr%u", signal_region_num), signal_region_num);
+
+        t_yields.setColLabel(Form("sr%u", signal_region_num), column);
         for (size_t i = 0; i != yields.size(); i++)
         {
             const Yield& y = yields[i];
-            t_yields.setRowLabel(y.title, i);
+			
+			// title
+            string latex_name;
+            if      (y.title == "data"    ) {latex_name = "Event Yield";}
+            else if (y.title == "Fakes"   ) {latex_name = "Fake BG";    }
+            else if (y.title == "Flips"   ) {latex_name = "Flip BG";    }
+            else if (y.title == "MC Pred" ) {latex_name = "Rare MC";    }
+            else if (y.title == "pred"    ) {latex_name = "Total BG";   }
+
+			// fill the table
+            t_yields.setRowLabel(latex_name, i);
             if (y.title == "data")
             {
-                t_yields.setCell(static_cast<int>(y.ll), i, signal_region_num);
+                t_yields.setCell(static_cast<int>(y.ll), i, column);
             }
             else 
             {
                 if (print_latex)
                 {
-                    t_yields.setCell(Form("%1.2f $\\pm$ %1.2f", y.ll, y.dll), i, signal_region_num);
+                    t_yields.setCell(Form("%1.2f $\\pm$ %1.2f", y.ll, y.dll), i, column);
                 }
                 else
                 {
-                    t_yields.setCell(rt::pm(y.ll, y.dll, "1.2"), i, signal_region_num);
+                    t_yields.setCell(rt::pm(y.ll, y.dll, "1.2"), i, column);
                 }
             }
         }
-        //t_yields.saveTex("test.tex");
     } // loop over SRs
 
     // print the table
     if (print_latex)
     {
-        t_yields.printTex();
+        t_yields_1.printTex();
+        t_yields_2.printTex();
+        t_yields_3.printTex();
     }
     else
     {
-        t_yields.print();
+        t_yields_1.print();
+        t_yields_2.print();
+        t_yields_3.print();
     }
 }

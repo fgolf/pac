@@ -1349,7 +1349,7 @@ namespace ss
                     case SignalRegion::sr7 : return (baseline && njets>=4 && nbtags>=0 && ht>200 && met>120);
                     case SignalRegion::sr8 : return (baseline && njets>=4 && nbtags>=0 && ht>400 && met>120);
                     case SignalRegion::sr9 : return (false); // not used --> default is to pass
-                    case SignalRegion::sr10: return (baseline && nbtags>=1);
+                    case SignalRegion::sr10: return (baseline && nbtags==1);
                     case SignalRegion::sr11: return (baseline && njets>=2 && nbtags==1 && ht>200 && met>50 );
                     case SignalRegion::sr12: return (baseline && njets>=2 && nbtags==1 && ht>400 && met>50 );
                     case SignalRegion::sr13: return (baseline && njets>=4 && nbtags==1 && ht>200 && met>50 );
