@@ -7,53 +7,53 @@
 #include "TGraph.h"
 #include "TH2F.h"
 #include "rt/TDRStyle.h"
+#include "rt/RootTools.h"
+#include "SignalRegion.h"
+#include "AnalysisType.h"
 
 using namespace std;
 
-void CreateHtVsMetPlot(int nbtags = 2, bool high_pt = true, const std::string& suffix = "png")
+//void PrintSummaryYields
+void CreateHtVsMetPlot
+(
+    const std::string& output_path,
+    const std::string& signal_region_name, 
+    const std::string& analysis_type_name, 
+    const std::string& suffix = "png"
+)
 {
     // set TDR style
     rt::SetTDRStyle();
 
-    float lumi = 19.5; // fb^-1
-	const char* anal_type = (high_pt ? "hpt" : "lpt"); 
+    // lumi
+    const float lumi = 19.5; // fb^-1
+
+    //const ss::SignalRegionType::value_type srt = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    const ss::AnalysisType::value_type at      = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::AnalysisTypeInfo at_info         = ss::GetAnalysisTypeInfo(analysis_type_name);
+    const ss::SignalRegionInfo sr_info         = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, "inclusive");
 
     TChain e1("tree");
-    e1.Add(Form("babies/%s/data.root", anal_type));
+    e1.Add(Form("babies/%s/data.root", at_info.short_name.c_str()));
+    ss::SetSignalRegionAliases(e1, at);
 
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1200, 0, 1200, 350, 0, 350);
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_em = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1200, 0, 1200, 350, 0, 350);
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1200, 0, 1200, 350, 0, 350);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njge4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1200, 0, 1200, 350, 0, 350);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_em = new TH2F("h2_ht_vs_pfmet_baseline_njge4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1200, 0, 1200, 350, 0, 350);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njge4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1200, 0, 1200, 350, 0, 350);
-    //TH2F* h2_ht_vs_pfmet_baseline_njlt4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_mm", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
-    //TH2F* h2_ht_vs_pfmet_baseline_njlt4_em = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_em", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
-    //TH2F* h2_ht_vs_pfmet_baseline_njlt4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_ee", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
-    //TH2F* h2_ht_vs_pfmet_baseline_njge4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njge4_mm", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
-    //TH2F* h2_ht_vs_pfmet_baseline_njge4_em = new TH2F("h2_ht_vs_pfmet_baseline_njge4_em", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
-    //TH2F* h2_ht_vs_pfmet_baseline_njge4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njge4_ee", Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1000, 0, 1000, 250, 0, 250);
+    // book
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_em = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njge4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_em = new TH2F("h2_ht_vs_pfmet_baseline_njge4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njge4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
 
-    //TCut selection = Form("is_ss && njets>=2 && nbtags>=%d && is_good_lumi && lep1_p4.pt()>20 && lep2_p4.pt()> 20 && pfmet>30", nbtags);
-    TCut selection = Form("is_ss && njets>=2 && nbtags>=%d && is_good_lumi && pfmet>30", nbtags);
-	if (not high_pt)
-	{
-		selection = selection && TCut("(mm && (trig_mm_dmu8_m8_pfnopuht175 || trig_mm_dmu8_m8_pfht175)) || "
-								      "(em && (trig_em_mu8_el8_id_m8_pfnopuht175 || trig_em_mu8_el8_id_m8_pfht175)) || "
-									  "(ee && (trig_ee_del8_id_m8_pfnopuht175 || trig_ee_del8_id_m8_pfht175))"); 
-		selection = selection && TCut("ht > 200 && lep1_p4.pt()>10.0 && lep2_p4.pt()>10.0");
-	}
-	else
-	{
-		selection = selection && TCut("lep1_p4.pt()>20.0 && lep2_p4.pt()>20.0");
-	}
+    // slection
+    TCut selection = Form("is_ss && is_good_lumi && lep_pt && trig && %s", sr_info.name.c_str());
 
-    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_mm", selection && "dilep_type==1 && njets<4" , "goff");
-    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_em", selection && "dilep_type==2 && njets<4" , "goff");
-    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_ee", selection && "dilep_type==3 && njets<4" , "goff");
-    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njge4_mm", selection && "dilep_type==1 && njets>=4", "goff");
-    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njge4_em", selection && "dilep_type==2 && njets>=4", "goff");
-    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njge4_ee", selection && "dilep_type==3 && njets>=4", "goff");
+    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_mm", selection && "mm && njets<4" , "goff");
+    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_em", selection && "em && njets<4" , "goff");
+    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_ee", selection && "ee && njets<4" , "goff");
+    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njge4_mm", selection && "mm && njets>=4", "goff");
+    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njge4_em", selection && "em && njets>=4", "goff");
+    e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njge4_ee", selection && "ee && njets>=4", "goff");
 
     // set style
     h2_ht_vs_pfmet_baseline_njlt4_ee->SetMarkerColor(kBlack);
@@ -112,11 +112,12 @@ void CreateHtVsMetPlot(int nbtags = 2, bool high_pt = true, const std::string& s
     l1->Draw();
 
     // cut out region
-    const int n1=8;
+    const int n1 = 12;
+    const float ht_baseline = at==ss::AnalysisType::high_pt ? 80.0 : 250;
     float x1[n1], y1[n1];
     for (Int_t i=0;i<n1;i++)
     {
-        x1[i] = (high_pt ? 80.0 : 200); 
+        x1[i] = ht_baseline; 
         y1[i] = i*50;
     }
     TGraph* g1 = new TGraph(n1,x1,y1);
@@ -131,8 +132,8 @@ void CreateHtVsMetPlot(int nbtags = 2, bool high_pt = true, const std::string& s
     //for (Int_t i=0;i<n2;i++)
     //{
     //    x2[i] = i*100;
-	//	y2[i] = 30; 
-	//	cout << Form("x2 %f y2 %f", x2[i], y2[i]) << endl;
+    //  y2[i] = 30; 
+    //  cout << Form("x2 %f y2 %f", x2[i], y2[i]) << endl;
     //}
     //TGraph* g2 = new TGraph(n2,x2,y2);
     //g2->SetLineColor(kBlack);
@@ -154,6 +155,7 @@ void CreateHtVsMetPlot(int nbtags = 2, bool high_pt = true, const std::string& s
 
     if (!suffix.empty())
     {
-        c1->Print(Form("plots/moriond/HtVsMET_%s_nbtag%d.%s", anal_type, nbtags, suffix.c_str()));
+        const char* file = Form("plots/%s/%s/%s/HtVsMET_%s_%s.%s", output_path.c_str(), at_info.name.c_str(), "inclusive", at_info.short_name.c_str(), sr_info.name.c_str(), suffix.c_str()); 
+        c1->Print(file);
     }
 }
