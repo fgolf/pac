@@ -291,7 +291,7 @@ namespace at
             // latex
             "$t\\overline{t} \\rightarrow \\ell \\ell X$", 
             // ntuple_path
-            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            "TTJets_FullLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v2",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -307,7 +307,7 @@ namespace at
             // latex
             "$t\\overline{t}\\ \\rm{other}$", 
             // ntuple_path
-            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            "TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -323,7 +323,7 @@ namespace at
             // latex
             "$t\\overline{t} \\rightarrow \\ell (b \\rightarrow \\ell) X$", 
             // ntuple_path
-            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            "TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -339,7 +339,7 @@ namespace at
             // latex
             "$t\\overline{t} \\rightarrow \\ell (\\slashed b \\rightarrow \\ell) X$", 
             // ntuple_path
-            "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            "TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -876,7 +876,8 @@ namespace at
         SampleType::value_type sample_type = GetSampleInfo(sample).type;
         std::string prefix = GetNtuplePath(ntuple, sample_type);
 
-        // special case since T1tttt/SbottomTop are still 52X 
+        // special cases
+		// this is poor -- redo this...
         if ( (sample == Sample::t1tttt)         || 
              (sample == Sample::t1tttt_fastsim) || 
              (sample == Sample::sbottomtop)     || 
@@ -940,6 +941,26 @@ namespace at
         {
             path = rt::string_replace_all(path, ",", "/V05-03-20");
             path.append("/V05-03-20");
+        }
+        else if (sample == Sample::ttdil && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
+            path.append("/V05-03-20_slim/SingleOrDiLepton");
+        }
+        else if (sample == Sample::ttslb && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
+            path.append("/V05-03-20_slim/SingleOrDiLepton");
+        }
+        else if (sample == Sample::ttslo && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
+            path.append("/V05-03-20_slim/SingleOrDiLepton");
+        }
+        else if (sample == Sample::ttotr && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
+            path.append("/V05-03-20_slim/SingleOrDiLepton");
         }
         else if (sample != Sample::data && ntuple == NtupleType::cms2)
         {
