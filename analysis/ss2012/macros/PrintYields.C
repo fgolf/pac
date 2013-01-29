@@ -690,7 +690,8 @@ void PrintYieldsETH
 	// can be paramerized if needed (for now hard coded)
 	const int charge_option = 0; 
 
-	for (size_t sr_num = 0; sr_num != ss::SignalRegion::static_size; sr_num++)
+	//for (size_t sr_num = 0; sr_num != ss::SignalRegion::static_size; sr_num++)
+	for (size_t sr_num = 0; sr_num != 29; sr_num++)
 	{
 		const string signal_region_name       = Form("sr%lu", sr_num);
 		//const ss::SignalRegion::value_type sr = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);

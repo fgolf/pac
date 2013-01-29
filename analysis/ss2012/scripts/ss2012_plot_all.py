@@ -130,7 +130,8 @@ def make_hist(signal_region, sample):
 	cmd += " --nev %s"                            % int(options.nev)
 	cmd += " --nbtags %s"                         % int(options.nbtags)
 	cmd += " --njets %s"                          % int(options.njets)
-	cmd += " --fr_file %s"                        % "data/fake_rates/ssFR_data_standard_16Dec2012.root" 
+	#cmd += " --fr_file %s"                        % "data/fake_rates/ssFR_data_standard_16Dec2012.root" 
+	cmd += " --fr_file %s"                        % "data/fake_rates/ssFR_data_standard_d0cut.root" 
 	cmd += " --charge %d"                         % int(options.charge)
 	cmd += " --l1_min_pt %1.3f --l1_max_pt %1.3f" % (float(options.l1_min_pt), float(options.l1_max_pt))
 	cmd += " --l2_min_pt %1.3f --l2_max_pt %1.3f" % (float(options.l2_min_pt), float(options.l2_max_pt))

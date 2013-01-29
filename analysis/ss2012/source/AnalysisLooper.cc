@@ -644,11 +644,20 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
         }
 
-        // switch for high/low pt analysis
-        bool is_high_pt = (m_analysis_type == AnalysisType::high_pt || m_analysis_type == AnalysisType::high_pt_eth);
-
-        // gen level  
+        // event logic variables 
         // --------------------------------------------------------------------------------------------------------- //
+
+        // trigger options 
+        int trigger_option = -999999;
+        switch (m_analysis_type)
+        {
+            case AnalysisType::high_pt    : trigger_option = 0; break;
+            case AnalysisType::high_pt_eth: trigger_option = 0; break;
+            case AnalysisType::hcp        : trigger_option = 0; break;
+            case AnalysisType::low_pt     : trigger_option = 1; break;
+            case AnalysisType::vlow_pt    : trigger_option = 2; break;
+            case AnalysisType::static_size: break; // no default is intentional so that compiler issues a warning if you don't handle all the cases
+        }
 
         // lepton pT cut values
         float mu_min_pt = 0.0;
@@ -681,6 +690,9 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 break;
         }
         const float min_pt = std::min(mu_min_pt, el_min_pt);
+
+        // gen level  
+        // --------------------------------------------------------------------------------------------------------- //
 
         // gen jet info
         if (!evt_isRealData())
@@ -815,7 +827,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
 
             // check if hyp passes trigger
-            if (evt_isRealData() && !samesign::passesTrigger(hyp_type().at(ihyp), is_high_pt))
+            if (evt_isRealData() && !samesign::passesTrigger(hyp_type().at(ihyp), trigger_option))
             {
                 if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
                 continue;
@@ -953,11 +965,21 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             if (m_verbose) {std::cout << "good hyp index is : " << hyp_idx << std::endl;}
         }
 
-        // trigger info
+        // convenience trigger info
         switch(m_analysis_type)
         {
             case AnalysisType::high_pt:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                break;
             case AnalysisType::high_pt_eth:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                break;
             case AnalysisType::hcp:
                 m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
                 m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
@@ -965,84 +987,44 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
                 break;
             case AnalysisType::low_pt:
-            case AnalysisType::vlow_pt:
                 m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"    );
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v");
                 m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
                 m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+                break;
+            case AnalysisType::vlow_pt:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v");
                 break;
             default: {/*do nothing*/}
         }
 
         // individual triggers: mm
         m_evt.trig_mm_mu17_mu8                     = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v"                            );
-        m_evt.trig_mm_dmu14_m8_pfmet40             = passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET40_v"            );
-        m_evt.trig_mm_dmu14_m8_pfmet50             = passUnprescaledHLTTriggerPattern("HLT_DoubleMu14_Mass8_PFMET50_v"            );
-        m_evt.trig_mm_dmu8_m8_pfnopuht175          = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v"         );
-        m_evt.trig_mm_dmu8_m8_pfnopuht225          = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT225_v"         );
-        m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v");
-        m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht225 = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT225_v");
         m_evt.trig_mm_dmu8_m8_pfht175              = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v"             );
-        m_evt.trig_mm_dmu8_m8_pfht225              = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT225_v"             );
+        m_evt.trig_mm_dmu8_m8_pfnopuht175          = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v"         );
         m_evt.trig_mm_dreliso1p0mu5_m8_pfht175     = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v"    );
-        m_evt.trig_mm_dreliso1p0mu5_m8_pfht225     = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT225_v"    );
+        m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v");
 
-        // individual triggers: mm
+        // individual triggers: ee
         m_evt.trig_ee_el17_el8_id_iso        = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
         m_evt.trig_ee_del8_id_m8_pfnopuht175 = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v"                                    );
-        m_evt.trig_ee_del8_id_m8_pfnopuht225 = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v"                                    );
         m_evt.trig_ee_del8_id_m8_pfht175     = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"                                        );
-        m_evt.trig_ee_del8_id_m8_pfht225     = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"                                        );
-        m_evt.trig_ee_del14_id_m8_pfmet40    = passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"                                       );
-        m_evt.trig_ee_del14_id_m8_pfmet50    = passUnprescaledHLTTriggerPattern("HLT_DoubleEle14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"                                       );
 
         // individual triggers: em
         m_evt.trig_em_mu17_el8_id_iso                  = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v"       );
         m_evt.trig_em_mu8_el17_id_iso                  = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v"       );
-        m_evt.trig_em_mu14_el14_id_m8_pfmet40          = passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET40_v"           );
-        m_evt.trig_em_mu14_el14_id_m8_pfmet50          = passUnprescaledHLTTriggerPattern("HLT_Mu14_Ele14_CaloIdT_TrkIdVL_Mass8_PFMET50_v"           );
-        m_evt.trig_em_mu8_el8_id_m8_pfnopuht175        = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v"         );
-        m_evt.trig_em_mu8_el8_id_m8_pfnopuht225        = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v"         );
-        m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v");
-        m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht225 = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT225_v");
         m_evt.trig_em_mu8_el8_id_m8_pfht175            = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"             );
-        m_evt.trig_em_mu8_el8_id_m8_pfht225            = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"             );
+        m_evt.trig_em_mu8_el8_id_m8_pfnopuht175        = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v"         );
         m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175     = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v"    );
-        m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht225     = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT225_v"    );
+        m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v");
 
-        // combined: mm
-        m_evt.trig_mm_met = m_evt.trig_mm_dmu14_m8_pfmet40 || 
-                            m_evt.trig_mm_dmu14_m8_pfmet50;
-        m_evt.trig_mm_ht  = m_evt.trig_mm_dmu8_m8_pfnopuht175 ||
-                            m_evt.trig_mm_dmu8_m8_pfnopuht225 ||
-                            m_evt.trig_mm_dmu8_m8_pfht175     ||
-                            m_evt.trig_mm_dmu8_m8_pfht225;
-        m_evt.trig_mm_iso_ht  = m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 ||
-                                m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht225 ||
-                                m_evt.trig_mm_dreliso1p0mu5_m8_pfht175     ||
-                                m_evt.trig_mm_dreliso1p0mu5_m8_pfht225;
-
-        // combined: ee
-        m_evt.trig_ee_noiso_met = m_evt.trig_ee_del14_id_m8_pfmet40 || 
-                                  m_evt.trig_ee_del14_id_m8_pfmet50;
-        m_evt.trig_ee_noiso_ht  = m_evt.trig_ee_del8_id_m8_pfht175 ||
-                                  m_evt.trig_ee_del8_id_m8_pfht225 ||
-                                  m_evt.trig_ee_del8_id_m8_pfnopuht175 ||
-                                  m_evt.trig_ee_del8_id_m8_pfnopuht225;
-                                
-        // combined: em
-        m_evt.trig_em_met = m_evt.trig_em_mu14_el14_id_m8_pfmet40 || 
-                            m_evt.trig_em_mu14_el14_id_m8_pfmet50;
-        m_evt.trig_em_ht  = m_evt.trig_em_mu8_el8_id_m8_pfnopuht175 ||
-                            m_evt.trig_em_mu8_el8_id_m8_pfnopuht225 ||
-                            m_evt.trig_em_mu8_el8_id_m8_pfht175     ||
-                            m_evt.trig_em_mu8_el8_id_m8_pfht225;
-        m_evt.trig_em_iso_ht  = m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 ||
-                                m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht225 ||
-                                m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175     ||
-                                m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht225;
 
         // convenience
         switch (dilepton_type)
@@ -1200,9 +1182,9 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep1.cordetiso   = m_evt.lep1.detiso   - (log(m_evt.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep1.p4.pt()); // check that I have the correct formula 
         m_evt.lep1.cordetiso04 = m_evt.lep1.detiso04 - (log(m_evt.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep1.p4.pt()); // check that I have the correct formula 
         m_evt.lep1.corpfiso    = samesign::leptonIsolation(lep1_id, lep1_idx);
-        m_evt.lep1.corpfiso04  = -999999.0;   // this is not implemented yet 
-        m_evt.lep1.effarea     = samesign::EffectiveArea03(lep1_id, lep1_idx);  // is there a diffenece for different cone sizes? 
-        m_evt.lep1.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
+        m_evt.lep1.corpfiso04  = (lep1_is_el) ? samesign::electronIsolationPF2012_cone04(lep1_idx) : -999999.0;  
+        m_evt.lep1.effarea     = samesign::EffectiveArea03(lep1_id, lep1_idx); 
+        m_evt.lep1.effarea04   = samesign::EffectiveArea04(lep1_id, lep1_idx);
         m_evt.lep1.dbeta       = (lep1_is_mu) ? mus_isoR03_pf_PUPt().at(lep1_idx) : -99999.0;
         m_evt.lep1.dbeta04     = (lep1_is_mu) ? mus_isoR04_pf_PUPt().at(lep1_idx) : -99999.0;
         m_evt.lep1.is_fo       = lep1_fo;
@@ -1218,9 +1200,9 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep2.cordetiso   = m_evt.lep2.detiso   - (log(m_evt.lep2.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep2.p4.pt()); // check that I have the correct formula 
         m_evt.lep2.cordetiso04 = m_evt.lep2.detiso04 - (log(m_evt.lep2.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep2.p4.pt()); // check that I have the correct formula 
         m_evt.lep2.corpfiso    = samesign::leptonIsolation(lep2_id, lep2_idx);
-        m_evt.lep2.corpfiso04  = -999999.0;   // this is not implemented yet 
-        m_evt.lep2.effarea     = samesign::EffectiveArea03(lep2_id, lep2_idx);  // is there a diffenece for different cone sizes? 
-        m_evt.lep2.effarea04   = -999999.0;   // is there a diffenece for different cone sizes?
+        m_evt.lep2.corpfiso04  = (lep2_is_el) ? samesign::electronIsolationPF2012_cone04(lep2_idx) : -999999.0;  
+        m_evt.lep2.effarea     = samesign::EffectiveArea03(lep2_id, lep2_idx);
+        m_evt.lep2.effarea04   = samesign::EffectiveArea04(lep2_id, lep2_idx);
         m_evt.lep2.dbeta       = (lep2_is_mu) ? mus_isoR03_pf_PUPt().at(lep2_idx) : -99999.0;
         m_evt.lep2.dbeta04     = (lep2_is_mu) ? mus_isoR04_pf_PUPt().at(lep2_idx) : -99999.0;
         m_evt.lep2.is_fo       = lep2_fo; 
