@@ -23,7 +23,7 @@ try
     long number_of_events           = -1;
     std::string input_file          = "";
     std::string output_file         = "";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_16Dec2012.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_29Jan2013.root";
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string suffix              = "";
     std::string vtxreweight_file    = "";

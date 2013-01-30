@@ -81,32 +81,8 @@ void CountElectronNumDen(TH1* h_num, TH1* h_den, const std::string& title)
 
 void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 {
-	//rt::TH1Container hc("plots/fake_rates/muons_920pb/muons_920pb.root");
-    //std::string path = "plots/fake_rates/muons_920pb";
-	//float lumi = 0.920;
-
-	//rt::TH1Container hc("plots/fake_rates/muons_5p1/muons_5p1.root");
-    //std::string path = "plots/fake_rates/muons_5p1";
-	//float lumi = 5.1;
-
-	//rt::TH1Container hc("plots/fake_rates/muons_2012ABr/muons_2012ABr.root");
-    //std::string path = "plots/fake_rates/muons_2012ABr";
-	//float lumi = 5.2;
-
-	//rt::TH1Container hc("plots/fake_rates/muons_2012Cv2/muons_2012Cv2.root");
-    //std::string path = "plots/fake_rates/muons_2012Cv2";
-	//float lumi = 3.0;
-
-	//rt::TH1Container hc("plots/fake_rates/muons_8p8fb/muons_8p8fb.root");
-    //std::string path = "plots/fake_rates/muons_8p8fb";
-	//float lumi = 8.8;
-
-	//rt::TH1Container hc("data/fake_rates/ssFR_data_standard_24Sep2012.root");
-    //std::string path = "plots/fake_rates/muons_10p45fb";
-	//float lumi = 10.5;
-
-	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_16Dec2012.root");
-    std::string path = "plots/fake_rates/muons_19p5fb";
+	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_29Jan2013.root");
+    std::string path = "plots/fake_rates/muons_19p5fb_updated_effarea";
 	float lumi = 19.5;
 
 	//rt::TH1Container hc("plots/fake_rates/qcd/qcd_pt35.root");
@@ -245,7 +221,7 @@ void PrintMuonFakeRatePlotsETH(const std::string& suffix = "png")
     Style_t s50 = 22;
     Style_t s70 = 24;
 
-    hc.SetMarkerSize(1.1);
+    hc.SetMarkerSize(1.8);
 
     // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
     p["p_mufr_vs_nvtxs"] = rt::TH1Overlay(Form("%s;number of vertices;TL ratio", title.c_str()), "sb::off lg::top");
@@ -299,21 +275,13 @@ void PrintMuonFakeRatePlotsETH(const std::string& suffix = "png")
 
 void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 {
-	//rt::TH1Container hc("data/fake_rates/ssFR_data_standard_24Sep2012.root");
-    //std::string path = "plots/fake_rates/electrons_10p45fb";
-	//float lumi = 10.5;
-
-	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_16Dec2012.root");
-    std::string path = "plots/fake_rates/electrons_19p5fb";
+	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_29Jan2013.root");
+    std::string path = "plots/fake_rates/electrons_19p5fb_updated_effarea";
 	float lumi = 19.5;
 
 	//rt::TH1Container hc("plots/fake_rates/qcd/qcd_pt35.root");
     //std::string path = "plots/fake_rates/qcd";
 	//float lumi = 15.9;
-
-	//rt::TH1Container hc("plots/fake_rates/eth/fakerate_eth.root");
-    //std::string path = "plots/fake_rates/compare_eth";
-	//float lumi = 10.5;
 
 	// set style
 	rt::SetTDRStyle();
@@ -334,7 +302,7 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
     Style_t s40 = 22;
     Style_t s60 = 24;
 
-    hc.SetMarkerSize(1.1);
+    hc.SetMarkerSize(1.8);
 
     // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
 	std::map<std::string, rt::TH1Overlay> p;

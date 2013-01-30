@@ -1,6 +1,7 @@
 #include "FakeRateBaby.h"
 #include "FakeRateBabyLooper.h"
 #include "mcSelections.h"
+#include "electronSelections.h"
 #include "rt/RootTools.h"
 #include <iostream>
 #include <algorithm>
@@ -56,13 +57,14 @@ float pfiso03_corr()
     return pfiso03() - ((log(pt()) * evt_nvtxs())/(75 * pt())); 
 }
 
-float pfiso03_rho()
+float pfiso03_corr_rho()
 {
     using namespace frb;
-    return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*el_effarea())))/pt();
+    const float eff_area = fastJetEffArea03_v2(eta()); 
+    return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*eff_area)))/pt();
 }
 
-float pfiso03_dB()
+float pfiso03_corr_dB()
 {
     using namespace frb;
     return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (0.5f*pfpupt03())))/pt();
@@ -299,15 +301,15 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // ----------------------------------------------------------------------------------------------------------------------------//
         
         // which dataset
-        bool is_data  = (m_sample==fr::Sample::data);
-        bool is_qcd   = (m_sample==fr::Sample::qcd);
-        bool is_ttbar = (m_sample==fr::Sample::ttbar);
-        bool is_mu    = (m_lepton=="mu") ? abs(id())==13 : false;
-        bool is_el    = (m_lepton=="el") ? abs(id())==11 : false;
+        const bool is_data  = fr::GetSampleInfo(m_sample).type == fr::SampleType::data;
+        const bool is_qcd   = (m_sample==fr::Sample::qcd);
+        const bool is_ttbar = (m_sample==fr::Sample::ttbar);
+        const bool is_mu    = (m_lepton=="mu") ? abs(id())==13 : false;
+        const bool is_el    = (m_lepton=="el") ? abs(id())==11 : false;
 
         // qcd muon cuts (for the different qcd samples)
-        bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
-        bool qcd_mu_high = rt::string_contains(current_file_name, "MuEnrichedPt_15") && pt() >= 16.0; 
+        const bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
+        const bool qcd_mu_high = rt::string_contains(current_file_name, "MuEnrichedPt_15") && pt() >= 16.0; 
         if (is_mu && is_qcd && not (qcd_mu_low || qcd_mu_high))
         {
             return 0;
@@ -415,12 +417,12 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         if (is_mu)
         {
             num_lep_cut = num_mu_ssV5_noIso();
-            num_lep_cut &= (d0() < 0.05);
+            //num_lep_cut &= (fabs(d0()) < 0.005);
         }
         else if(is_el)
         {
             num_lep_cut = num_el_ssV7_noIso();
-            num_lep_cut &= (d0() < 0.10);
+            //num_lep_cut &= (fabs(d0()) < 0.010);
         }
 
         // denominator cut

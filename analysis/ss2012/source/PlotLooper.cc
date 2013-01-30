@@ -767,11 +767,11 @@ int PlotLooper::operator()(long event)
         }
 
         // d0 requirement
-        //if (abs(lep1_d0()) > (abs(lep1_pdgid())==11 ? 0.01 : 0.005))
+        //if ((is_ss() || is_os()) && abs(lep1_d0()) > (abs(lep1_pdgid())==11 ? 0.01 : 0.005))
         //{
         //  return 0;
         //}
-        //if (abs(lep2_d0()) > (abs(lep2_pdgid())==11 ? 0.01 : 0.005))
+        //if ((is_ss() || is_os()) && abs(lep2_d0()) > (abs(lep2_pdgid())==11 ? 0.01 : 0.005))
         //{
         //  return 0;
         //}
@@ -815,36 +815,43 @@ int PlotLooper::operator()(long event)
         if (is_real_data())
         {
             bool passes_trigger = true;
-            if (m_analysis_type == AnalysisType::high_pt or m_analysis_type == AnalysisType::hcp or m_analysis_type == AnalysisType::high_pt_eth)
+            switch (hyp_type)
             {
-                switch (hyp_type)
-                {
-                    case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
-                    case DileptonHypType::EMU : passes_trigger = trig_em(); break;
-                    case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
-                    default: passes_trigger = false; break;
-                };
-            }
-            else if (m_analysis_type == AnalysisType::low_pt)
-            {
-                switch (hyp_type)
-                {
-                    case DileptonHypType::MUMU: passes_trigger = (trig_mm_dmu8_m8_pfnopuht175()       || trig_mm_dmu8_m8_pfht175()      ); break;
-                    case DileptonHypType::EMU : passes_trigger = (trig_em_mu8_el8_id_m8_pfnopuht175() || trig_em_mu8_el8_id_m8_pfht175()); break;
-                    case DileptonHypType::EE  : passes_trigger = (trig_ee_del8_id_m8_pfnopuht175()    || trig_ee_del8_id_m8_pfht175()   ); break;
-                    default: passes_trigger = false; break;
-                };
-            }
-            else if (m_analysis_type == AnalysisType::vlow_pt)
-            {
-                switch (hyp_type)
-                {
-                    case DileptonHypType::MUMU: passes_trigger = (trig_mm_dreliso1p0mu5_m8_pfnopuht175()     || trig_mm_dreliso1p0mu5_m8_pfht175()    ); break;
-                    case DileptonHypType::EMU : passes_trigger = (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175() || trig_em_riso1p0mu5_el8_id_m8_pfht175()); break;
-                    case DileptonHypType::EE  : passes_trigger = (trig_ee_del8_id_m8_pfnopuht175()           || trig_ee_del8_id_m8_pfht175()          ); break;
-                    default: passes_trigger = false; break;
-                };
-            }
+                case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
+                case DileptonHypType::EMU : passes_trigger = trig_em(); break;
+                case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
+                default: passes_trigger = false; break;
+            };
+            //if (m_analysis_type == AnalysisType::high_pt or m_analysis_type == AnalysisType::hcp or m_analysis_type == AnalysisType::high_pt_eth)
+            //{
+            //    switch (hyp_type)
+            //    {
+            //        case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
+            //        case DileptonHypType::EMU : passes_trigger = trig_em(); break;
+            //        case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
+            //        default: passes_trigger = false; break;
+            //    };
+            //}
+            //else if (m_analysis_type == AnalysisType::low_pt)
+            //{
+            //    switch (hyp_type)
+            //    {
+            //        case DileptonHypType::MUMU: passes_trigger = (trig_mm_dmu8_m8_pfnopuht175()       || trig_mm_dmu8_m8_pfht175()      ); break;
+            //        case DileptonHypType::EMU : passes_trigger = (trig_em_mu8_el8_id_m8_pfnopuht175() || trig_em_mu8_el8_id_m8_pfht175()); break;
+            //        case DileptonHypType::EE  : passes_trigger = (trig_ee_del8_id_m8_pfnopuht175()    || trig_ee_del8_id_m8_pfht175()   ); break;
+            //        default: passes_trigger = false; break;
+            //    };
+            //}
+            //else if (m_analysis_type == AnalysisType::vlow_pt)
+            //{
+            //    switch (hyp_type)
+            //    {
+            //        case DileptonHypType::MUMU: passes_trigger = (trig_mm_dreliso1p0mu5_m8_pfnopuht175()     || trig_mm_dreliso1p0mu5_m8_pfht175()    ); break;
+            //        case DileptonHypType::EMU : passes_trigger = (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175() || trig_em_riso1p0mu5_el8_id_m8_pfht175()); break;
+            //        case DileptonHypType::EE  : passes_trigger = (trig_ee_del8_id_m8_pfnopuht175()           || trig_ee_del8_id_m8_pfht175()          ); break;
+            //        default: passes_trigger = false; break;
+            //    };
+            //}
 
             // return if fails trigger
             if (not passes_trigger)
