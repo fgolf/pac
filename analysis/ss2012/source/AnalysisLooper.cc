@@ -605,8 +605,8 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //    cout << "\n-----------------------------------------" << endl; 
         //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
         //}
-        //const int evt = evt_event();
-        //if (!(evt==543295632 || evt==285613115))  
+        //const long evt = evt_event();
+        //if (!(evt_event()==130999919))  
         //{
         //    return 0;
         //}
