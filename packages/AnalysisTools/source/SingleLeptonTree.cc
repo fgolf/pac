@@ -62,6 +62,8 @@ void SingleLeptonTree::FillCommon (int id, int idx)
             d0err = cord0.second;
             dzerr = cordz.second;
         }
+		ip3d    = cms2.els_ip3d().at(idx);;
+		ip3derr = cms2.els_ip3derr().at(idx);;
 
         if (!cms2.evt_isRealData()) {
             mcp4      = cms2.els_mc_p4().at(idx);
@@ -147,6 +149,8 @@ void SingleLeptonTree::FillCommon (int id, int idx)
             d0err = cord0.second;
             dzerr = cordz.second;
         }
+		ip3d    = cms2.mus_ip3d().at(idx);;
+		ip3derr = cms2.mus_ip3derr().at(idx);;
 
         if (!cms2.evt_isRealData()) {
             mcp4      = cms2.mus_mc_p4().at(idx);
@@ -221,7 +225,9 @@ void SingleLeptonTree::Reset()
     pdgid        = -999999;
     type         = -999999;
     d0           = -999999.;
+    d0err        = -999999.;
     dz           = -999999.;
+    dzerr        = -999999.;
     mt           = -999999.;
     corpfiso     = -999999.;
     pfiso        = -999999.;
@@ -307,7 +313,11 @@ void SingleLeptonTree::SetBranches(TTree &tree)
     tree.Branch(Form("%spdgid"        , prefix_.c_str()) , &pdgid          , "pdgid/I"        );
     tree.Branch(Form("%stype"         , prefix_.c_str()) , &type           , "type/I"         );
     tree.Branch(Form("%sd0"           , prefix_.c_str()) , &d0             , "d0/F"           );
+    tree.Branch(Form("%sd0err"        , prefix_.c_str()) , &d0err          , "d0err/F"        );
     tree.Branch(Form("%sdz"           , prefix_.c_str()) , &dz             , "dz/F"           );
+    tree.Branch(Form("%sip3d"         , prefix_.c_str()) , &ip3d           , "ip3d/F"         );
+    tree.Branch(Form("%sip3derr"      , prefix_.c_str()) , &ip3derr        , "ip3derr/F"      );
+    tree.Branch(Form("%sdzerr"        , prefix_.c_str()) , &dzerr          , "dzerr/F"        );
     tree.Branch(Form("%smt"           , prefix_.c_str()) , &mt             , "mt/F"           );
     tree.Branch(Form("%scorpfiso"     , prefix_.c_str()) , &corpfiso       , "corpfiso/F"     );
     tree.Branch(Form("%spfiso"        , prefix_.c_str()) , &pfiso          , "pfiso/F"        );
