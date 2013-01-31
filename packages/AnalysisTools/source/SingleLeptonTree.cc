@@ -59,6 +59,8 @@ void SingleLeptonTree::FillCommon (int id, int idx)
             std::pair<float, float> cordz = gsftrks_dz_pv(gsfidx, vtxidx);
             d0 = cord0.first;
             dz = cordz.first;
+            d0err = cord0.second;
+            dzerr = cordz.second;
         }
 
         if (!cms2.evt_isRealData()) {
@@ -142,6 +144,8 @@ void SingleLeptonTree::FillCommon (int id, int idx)
             std::pair<float, float> cordz = trks_dz_pv(trkidx, vtxidx);
             d0 = cord0.first;
             dz = cordz.first;
+            d0err = cord0.second;
+            dzerr = cordz.second;
         }
 
         if (!cms2.evt_isRealData()) {

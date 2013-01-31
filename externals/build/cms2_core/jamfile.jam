@@ -44,4 +44,3 @@ lib cms2_core
     <include>$(CMS2_CORE)/CORE/jetsmear
     <include>$(CMS2_CORE)/CORE/jetcorr
   ;
-

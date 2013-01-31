@@ -44,30 +44,36 @@ struct event_info_t
 
 struct SortByEventInfo
 {
+    //  bool operator () (const event_info_t& lhs, const event_info_t& rhs) const 
+    //  { 
+    //      if      (lhs.channel == "ee" && rhs.channel == "mm") {return true; }
+    //      else if (lhs.channel == "ee" && rhs.channel == "em") {return true; }
+    //      else if (lhs.channel == "mm" && rhs.channel == "ee") {return false;}
+    //      else if (lhs.channel == "mm" && rhs.channel == "em") {return true; }
+    //      else if (lhs.channel == "em" && rhs.channel == "ee") {return false;}
+    //      else if (lhs.channel == "em" && rhs.channel == "mm") {return true; }
+    //      else if (lhs.channel == rhs.channel)
+    //      {
+    //          if      (lhs.run <  rhs.run) {return true;}
+    //          else if (lhs.run >  rhs.run) {return false;}
+    //          else if (lhs.run == rhs.run) 
+    //          {
+    //              if      (lhs.ls <  rhs.ls) {return true;}
+    //              else if (lhs.ls >  rhs.ls) {return false;}
+    //              else if (lhs.ls == rhs.ls) 
+    //              {
+    //                  if      (lhs.evt <  rhs.evt) {return true;}
+    //                  else if (lhs.evt >=  rhs.evt) {return false;}
+    //              }
+    //          }
+    //      }
+    //      return false;
     bool operator () (const event_info_t& lhs, const event_info_t& rhs) const 
-    { 
-        if      (lhs.channel == "ee" && rhs.channel == "mm") {return true; }
-        else if (lhs.channel == "ee" && rhs.channel == "em") {return true; }
-        else if (lhs.channel == "mm" && rhs.channel == "ee") {return false;}
-        else if (lhs.channel == "mm" && rhs.channel == "em") {return true; }
-        else if (lhs.channel == "em" && rhs.channel == "ee") {return false;}
-        else if (lhs.channel == "em" && rhs.channel == "mm") {return true; }
-        else if (lhs.channel == rhs.channel)
-        {
-            if      (lhs.run <  rhs.run) {return true;}
-            else if (lhs.run >  rhs.run) {return false;}
-            else if (lhs.run == rhs.run) 
-            {
-                if      (lhs.ls <  rhs.ls) {return true;}
-                else if (lhs.ls >  rhs.ls) {return false;}
-                else if (lhs.ls == rhs.ls) 
-                {
-                    if      (lhs.evt <  rhs.evt) {return true;}
-                    else if (lhs.evt >=  rhs.evt) {return false;}
-                }
-            }
-        }
-        return false;
+    {
+        if (lhs.channel != rhs.channel) {return lhs.channel < rhs.channel;}
+        else if (lhs.run != rhs.run)     {return lhs.run < rhs.run;}
+        else if (lhs.ls != rhs.ls)       {return lhs.ls < rhs.ls;}
+        else                             {return lhs.evt < rhs.evt;}
     }
 };
 
@@ -109,9 +115,9 @@ CTable EventLists
         if (is_os() && dilep_type()==1)           {continue;}  // don't care about mm/OS events
 
         // local variables
-        string channel = at::GetDileptonHypTypeName(dilep_type());
-        string l1_flav = abs(lep1_pdgid()==11) ? "el" : "mu";
-        string l2_flav = abs(lep2_pdgid()==11) ? "el" : "mu";
+        const string channel = at::GetDileptonHypTypeName(dilep_type());
+        const string l1_flav = (abs(lep1_pdgid())==11 ? "el" : "mu");
+        const string l2_flav = (abs(lep2_pdgid())==11 ? "el" : "mu");
 
         // store the event info
         const event_info_t event_info =
@@ -187,16 +193,16 @@ CTable EventLists
         const event_info_t& event = events.at(i);
 
         size_t col = 0;
-        list.setCell(event.run    , row, col++);
-        list.setCell(event.ls     , row, col++);
-        list.setCell(event.evt    , row, col++);
+        list.setCell(event.run                     , row, col++);
+        list.setCell(event.ls                      , row, col++);
+        list.setCell(event.evt                     , row, col++);
         list.setCell(event.channel                 , row, col++);
         list.setCell(event.l1_flav                 , row, col++);
         list.setCell(Form("%4.2f"  , event.l1_pt)  , row, col++);
         list.setCell(Form("%4.2f"  , event.l1_eta) , row, col++);
         list.setCell(Form("%4.2f"  , event.l1_phi) , row, col++);
         list.setCell(Form("%1u"    , event.l1_id)  , row, col++);
-        list.setCell(Form("%4.3f"  , event.l1_iso) , row, col++);
+        list.setCell(Form("%4.2f"  , event.l1_iso) , row, col++);
         list.setCell(Form("%4.2f"  , event.l1_d0)  , row, col++);
         list.setCell(Form("%4.2f"  , event.l1_dz)  , row, col++);
         list.setCell(event.l2_flav                 , row, col++);

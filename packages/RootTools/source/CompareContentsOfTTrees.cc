@@ -36,7 +36,7 @@ namespace rt
     };
 
     // compare the contents of two trees 
-    void CompareContentOfTTrees
+    void CompareContentsOfTTrees
     (
         TTree* const tree1, 
         TTree* const tree2, 
@@ -54,7 +54,7 @@ namespace rt
         TList* alias_list1 = tree1->GetListOfAliases();
         TList* alias_list2 = tree2->GetListOfAliases();
 
-        cout << "rt::CompareContentOfTTrees:" << endl;
+        cout << "rt::CompareContentsOfTTrees:" << endl;
         cout << tree1_label << ": " << tree1->GetName() << "\t# entries:  " << tree1->GetEntries() << endl;
         cout << tree1_label << " has " << array1->GetEntries() << " branches" << endl; 
         if (alias_list1) {cout << tree1_label << " has " << alias_list1->GetEntries() << " aliases" << endl;}
@@ -75,7 +75,7 @@ namespace rt
                 {
                     tree1_branches.push_back(BranchInfo(alias_name, be));
                 }
-                else
+                else if (b)
                 {
                     tree1_branches.push_back(BranchInfo(alias_name, b));
                 }
@@ -288,6 +288,7 @@ namespace rt
         // print output 
         if (!output_folder.empty())
         {
+            rt::mkdir(output_folder, /*force=*/true);
             rt::Print(p_intersection, output_folder + "/intersection"  , suffix);
             rt::Print(p_tree1       , output_folder + "/" + tree1_label, suffix);
             rt::Print(p_tree2       , output_folder + "/" + tree2_label, suffix);
@@ -298,7 +299,7 @@ namespace rt
     }
 
     // compare the contents of two trees 
-    void CompareContentOfTTrees
+    void CompareContentsOfTTrees
     (
         const std::string& tree1_file, 
         const std::string& tree2_file, 
@@ -341,7 +342,7 @@ namespace rt
             return;
         }
 
-        CompareContentOfTTrees(tree1, tree2, output_folder, tree1_label, tree2_label, selection, option, num_entries, suffix);
+        CompareContentsOfTTrees(tree1, tree2, output_folder, tree1_label, tree2_label, selection, option, num_entries, suffix);
     }
 
 } // namespace rt

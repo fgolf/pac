@@ -80,7 +80,7 @@
 #pragma link C++ fucntion rt::MakeEfficienyPlot;
 #pragma link C++ fucntion rt::PrintFakeRateTable;
 #pragma link C++ fucntion rt::PrintFilesFromTChain;
-#pragma link C++ fucntion rt::CompareContentOfTTrees;
+#pragma link C++ fucntion rt::CompareContentsOfTTrees;
 #pragma link C++ fucntion rt::MergeTChain;
 #pragma link C++ fucntion rt::pm;
 #pragma link C++ fucntion rt::Print;

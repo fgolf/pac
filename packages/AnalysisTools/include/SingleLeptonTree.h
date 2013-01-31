@@ -41,7 +41,11 @@ public:
     int pdgid;
     int type;
     float d0;
+    float d0err;
     float dz;
+    float dzerr;
+    float ip3d;
+    float ip3derr;
     float mt;
     float corpfiso;
     float pfiso;

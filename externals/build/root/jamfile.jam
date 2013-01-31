@@ -5,6 +5,10 @@ project ROOT
     <include>$(ROOT_PATH)/include
   ;
 
+# static verison of root (not working yet)
+# lib libRoot : : <name>Root <search>$(ROOT_PATH)/lib <link>static ;
+
+# dynamic libs
 lib libm          : : <name>m  <link>shared ;
 lib libdl         : : <name>dl <link>shared ;
 lib libCore       : : <name>Core       <search>$(ROOT_PATH)/lib  <use>libCint <link>shared ;

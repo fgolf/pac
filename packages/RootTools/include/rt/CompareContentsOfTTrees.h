@@ -7,7 +7,7 @@
 namespace rt
 {
     // compare the contents of two trees 
-    void CompareContentOfTTrees
+    void CompareContentsOfTTrees
     (
         TTree* const tree1, 
         TTree* const tree2, 
@@ -20,7 +20,7 @@ namespace rt
         const std::string& suffix = "png"
     );
 
-    void CompareContentOfTTrees
+    void CompareContentsOfTTrees
     (
         const std::string& tree1_file, 
         const std::string& tree2_file, 
