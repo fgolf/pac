@@ -2,6 +2,8 @@
 #include <stdexcept> 
 #include <cmath> 
 
+using std::abs;
+
 namespace at 
 {
 

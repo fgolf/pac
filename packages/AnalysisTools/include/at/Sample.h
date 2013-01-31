@@ -29,6 +29,7 @@ namespace at
             ttjets,
             ttdil,
             ttotr,
+            ttslq,
             ttslb,
             ttslo,
             zz,

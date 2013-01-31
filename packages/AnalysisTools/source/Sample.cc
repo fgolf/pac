@@ -317,6 +317,22 @@ namespace at
         },
         {
             // name
+            "ttslq", 
+            // title
+            "t#bar{t} #rightarrow l(q #rightarrow l)X", 
+            // latex
+            "$t\\overline{t} \\rightarrow \\ell (q \\rightarrow \\ell) X$", 
+            // ntuple_path
+            "TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::ttslq,
+            // color
+            kBlue
+        },
+        {
+            // name
             "ttslb", 
             // title
             "t#bar{t} #rightarrow l(b #rightarrow l)X", 
@@ -943,6 +959,11 @@ namespace at
             path.append("/V05-03-20");
         }
         else if (sample == Sample::ttdil && ntuple == NtupleType::cms2)
+        {
+            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
+            path.append("/V05-03-20_slim/SingleOrDiLepton");
+        }
+        else if (sample == Sample::ttslq && ntuple == NtupleType::cms2)
         {
             path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
             path.append("/V05-03-20_slim/SingleOrDiLepton");
