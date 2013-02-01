@@ -38,7 +38,11 @@ namespace ssb {
 	const int &lep1_pdgid() { return samesignbtag.lep1_pdgid(); }
 	const int &lep1_type() { return samesignbtag.lep1_type(); }
 	const float &lep1_d0() { return samesignbtag.lep1_d0(); }
+	const float &lep1_d0err() { return samesignbtag.lep1_d0err(); }
 	const float &lep1_dz() { return samesignbtag.lep1_dz(); }
+	const float &lep1_ip3d() { return samesignbtag.lep1_ip3d(); }
+	const float &lep1_ip3derr() { return samesignbtag.lep1_ip3derr(); }
+	const float &lep1_dzerr() { return samesignbtag.lep1_dzerr(); }
 	const float &lep1_mt() { return samesignbtag.lep1_mt(); }
 	const float &lep1_corpfiso() { return samesignbtag.lep1_corpfiso(); }
 	const float &lep1_pfiso() { return samesignbtag.lep1_pfiso(); }
@@ -120,7 +124,11 @@ namespace ssb {
 	const int &lep2_pdgid() { return samesignbtag.lep2_pdgid(); }
 	const int &lep2_type() { return samesignbtag.lep2_type(); }
 	const float &lep2_d0() { return samesignbtag.lep2_d0(); }
+	const float &lep2_d0err() { return samesignbtag.lep2_d0err(); }
 	const float &lep2_dz() { return samesignbtag.lep2_dz(); }
+	const float &lep2_ip3d() { return samesignbtag.lep2_ip3d(); }
+	const float &lep2_ip3derr() { return samesignbtag.lep2_ip3derr(); }
+	const float &lep2_dzerr() { return samesignbtag.lep2_dzerr(); }
 	const float &lep2_mt() { return samesignbtag.lep2_mt(); }
 	const float &lep2_corpfiso() { return samesignbtag.lep2_corpfiso(); }
 	const float &lep2_pfiso() { return samesignbtag.lep2_pfiso(); }

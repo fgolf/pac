@@ -128,9 +128,21 @@ protected:
 	float	lep1_d0_;
 	TBranch *lep1_d0_branch;
 	bool lep1_d0_isLoaded;
+	float	lep1_d0err_;
+	TBranch *lep1_d0err_branch;
+	bool lep1_d0err_isLoaded;
 	float	lep1_dz_;
 	TBranch *lep1_dz_branch;
 	bool lep1_dz_isLoaded;
+	float	lep1_ip3d_;
+	TBranch *lep1_ip3d_branch;
+	bool lep1_ip3d_isLoaded;
+	float	lep1_ip3derr_;
+	TBranch *lep1_ip3derr_branch;
+	bool lep1_ip3derr_isLoaded;
+	float	lep1_dzerr_;
+	TBranch *lep1_dzerr_branch;
+	bool lep1_dzerr_isLoaded;
 	float	lep1_mt_;
 	TBranch *lep1_mt_branch;
 	bool lep1_mt_isLoaded;
@@ -374,9 +386,21 @@ protected:
 	float	lep2_d0_;
 	TBranch *lep2_d0_branch;
 	bool lep2_d0_isLoaded;
+	float	lep2_d0err_;
+	TBranch *lep2_d0err_branch;
+	bool lep2_d0err_isLoaded;
 	float	lep2_dz_;
 	TBranch *lep2_dz_branch;
 	bool lep2_dz_isLoaded;
+	float	lep2_ip3d_;
+	TBranch *lep2_ip3d_branch;
+	bool lep2_ip3d_isLoaded;
+	float	lep2_ip3derr_;
+	TBranch *lep2_ip3derr_branch;
+	bool lep2_ip3derr_isLoaded;
+	float	lep2_dzerr_;
+	TBranch *lep2_dzerr_branch;
+	bool lep2_dzerr_isLoaded;
 	float	lep2_mt_;
 	TBranch *lep2_mt_branch;
 	bool lep2_mt_isLoaded;
@@ -1375,10 +1399,30 @@ void Init(TTree *tree) {
 		lep1_d0_branch = tree->GetBranch("lep1_d0");
 		if (lep1_d0_branch) {lep1_d0_branch->SetAddress(&lep1_d0_);}
 	}
+	lep1_d0err_branch = 0;
+	if (tree->GetBranch("lep1_d0err") != 0) {
+		lep1_d0err_branch = tree->GetBranch("lep1_d0err");
+		if (lep1_d0err_branch) {lep1_d0err_branch->SetAddress(&lep1_d0err_);}
+	}
 	lep1_dz_branch = 0;
 	if (tree->GetBranch("lep1_dz") != 0) {
 		lep1_dz_branch = tree->GetBranch("lep1_dz");
 		if (lep1_dz_branch) {lep1_dz_branch->SetAddress(&lep1_dz_);}
+	}
+	lep1_ip3d_branch = 0;
+	if (tree->GetBranch("lep1_ip3d") != 0) {
+		lep1_ip3d_branch = tree->GetBranch("lep1_ip3d");
+		if (lep1_ip3d_branch) {lep1_ip3d_branch->SetAddress(&lep1_ip3d_);}
+	}
+	lep1_ip3derr_branch = 0;
+	if (tree->GetBranch("lep1_ip3derr") != 0) {
+		lep1_ip3derr_branch = tree->GetBranch("lep1_ip3derr");
+		if (lep1_ip3derr_branch) {lep1_ip3derr_branch->SetAddress(&lep1_ip3derr_);}
+	}
+	lep1_dzerr_branch = 0;
+	if (tree->GetBranch("lep1_dzerr") != 0) {
+		lep1_dzerr_branch = tree->GetBranch("lep1_dzerr");
+		if (lep1_dzerr_branch) {lep1_dzerr_branch->SetAddress(&lep1_dzerr_);}
 	}
 	lep1_mt_branch = 0;
 	if (tree->GetBranch("lep1_mt") != 0) {
@@ -1745,10 +1789,30 @@ void Init(TTree *tree) {
 		lep2_d0_branch = tree->GetBranch("lep2_d0");
 		if (lep2_d0_branch) {lep2_d0_branch->SetAddress(&lep2_d0_);}
 	}
+	lep2_d0err_branch = 0;
+	if (tree->GetBranch("lep2_d0err") != 0) {
+		lep2_d0err_branch = tree->GetBranch("lep2_d0err");
+		if (lep2_d0err_branch) {lep2_d0err_branch->SetAddress(&lep2_d0err_);}
+	}
 	lep2_dz_branch = 0;
 	if (tree->GetBranch("lep2_dz") != 0) {
 		lep2_dz_branch = tree->GetBranch("lep2_dz");
 		if (lep2_dz_branch) {lep2_dz_branch->SetAddress(&lep2_dz_);}
+	}
+	lep2_ip3d_branch = 0;
+	if (tree->GetBranch("lep2_ip3d") != 0) {
+		lep2_ip3d_branch = tree->GetBranch("lep2_ip3d");
+		if (lep2_ip3d_branch) {lep2_ip3d_branch->SetAddress(&lep2_ip3d_);}
+	}
+	lep2_ip3derr_branch = 0;
+	if (tree->GetBranch("lep2_ip3derr") != 0) {
+		lep2_ip3derr_branch = tree->GetBranch("lep2_ip3derr");
+		if (lep2_ip3derr_branch) {lep2_ip3derr_branch->SetAddress(&lep2_ip3derr_);}
+	}
+	lep2_dzerr_branch = 0;
+	if (tree->GetBranch("lep2_dzerr") != 0) {
+		lep2_dzerr_branch = tree->GetBranch("lep2_dzerr");
+		if (lep2_dzerr_branch) {lep2_dzerr_branch->SetAddress(&lep2_dzerr_);}
 	}
 	lep2_mt_branch = 0;
 	if (tree->GetBranch("lep2_mt") != 0) {
@@ -2743,7 +2807,11 @@ void GetEntry(unsigned int idx)
 		lep1_pdgid_isLoaded = false;
 		lep1_type_isLoaded = false;
 		lep1_d0_isLoaded = false;
+		lep1_d0err_isLoaded = false;
 		lep1_dz_isLoaded = false;
+		lep1_ip3d_isLoaded = false;
+		lep1_ip3derr_isLoaded = false;
+		lep1_dzerr_isLoaded = false;
 		lep1_mt_isLoaded = false;
 		lep1_corpfiso_isLoaded = false;
 		lep1_pfiso_isLoaded = false;
@@ -2825,7 +2893,11 @@ void GetEntry(unsigned int idx)
 		lep2_pdgid_isLoaded = false;
 		lep2_type_isLoaded = false;
 		lep2_d0_isLoaded = false;
+		lep2_d0err_isLoaded = false;
 		lep2_dz_isLoaded = false;
+		lep2_ip3d_isLoaded = false;
+		lep2_ip3derr_isLoaded = false;
+		lep2_dzerr_isLoaded = false;
 		lep2_mt_isLoaded = false;
 		lep2_corpfiso_isLoaded = false;
 		lep2_pfiso_isLoaded = false;
@@ -3083,7 +3155,11 @@ void LoadAllBranches()
 	if (lep1_pdgid_branch != 0) lep1_pdgid();
 	if (lep1_type_branch != 0) lep1_type();
 	if (lep1_d0_branch != 0) lep1_d0();
+	if (lep1_d0err_branch != 0) lep1_d0err();
 	if (lep1_dz_branch != 0) lep1_dz();
+	if (lep1_ip3d_branch != 0) lep1_ip3d();
+	if (lep1_ip3derr_branch != 0) lep1_ip3derr();
+	if (lep1_dzerr_branch != 0) lep1_dzerr();
 	if (lep1_mt_branch != 0) lep1_mt();
 	if (lep1_corpfiso_branch != 0) lep1_corpfiso();
 	if (lep1_pfiso_branch != 0) lep1_pfiso();
@@ -3165,7 +3241,11 @@ void LoadAllBranches()
 	if (lep2_pdgid_branch != 0) lep2_pdgid();
 	if (lep2_type_branch != 0) lep2_type();
 	if (lep2_d0_branch != 0) lep2_d0();
+	if (lep2_d0err_branch != 0) lep2_d0err();
 	if (lep2_dz_branch != 0) lep2_dz();
+	if (lep2_ip3d_branch != 0) lep2_ip3d();
+	if (lep2_ip3derr_branch != 0) lep2_ip3derr();
+	if (lep2_dzerr_branch != 0) lep2_dzerr();
 	if (lep2_mt_branch != 0) lep2_mt();
 	if (lep2_corpfiso_branch != 0) lep2_corpfiso();
 	if (lep2_pfiso_branch != 0) lep2_pfiso();
@@ -3864,6 +3944,19 @@ void LoadAllBranches()
 		}
 		return lep1_d0_;
 	}
+	float &lep1_d0err()
+	{
+		if (not lep1_d0err_isLoaded) {
+			if (lep1_d0err_branch != 0) {
+				lep1_d0err_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_d0err_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_d0err_isLoaded = true;
+		}
+		return lep1_d0err_;
+	}
 	float &lep1_dz()
 	{
 		if (not lep1_dz_isLoaded) {
@@ -3876,6 +3969,45 @@ void LoadAllBranches()
 			lep1_dz_isLoaded = true;
 		}
 		return lep1_dz_;
+	}
+	float &lep1_ip3d()
+	{
+		if (not lep1_ip3d_isLoaded) {
+			if (lep1_ip3d_branch != 0) {
+				lep1_ip3d_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_ip3d_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_ip3d_isLoaded = true;
+		}
+		return lep1_ip3d_;
+	}
+	float &lep1_ip3derr()
+	{
+		if (not lep1_ip3derr_isLoaded) {
+			if (lep1_ip3derr_branch != 0) {
+				lep1_ip3derr_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_ip3derr_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_ip3derr_isLoaded = true;
+		}
+		return lep1_ip3derr_;
+	}
+	float &lep1_dzerr()
+	{
+		if (not lep1_dzerr_isLoaded) {
+			if (lep1_dzerr_branch != 0) {
+				lep1_dzerr_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_dzerr_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_dzerr_isLoaded = true;
+		}
+		return lep1_dzerr_;
 	}
 	float &lep1_mt()
 	{
@@ -4930,6 +5062,19 @@ void LoadAllBranches()
 		}
 		return lep2_d0_;
 	}
+	float &lep2_d0err()
+	{
+		if (not lep2_d0err_isLoaded) {
+			if (lep2_d0err_branch != 0) {
+				lep2_d0err_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_d0err_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_d0err_isLoaded = true;
+		}
+		return lep2_d0err_;
+	}
 	float &lep2_dz()
 	{
 		if (not lep2_dz_isLoaded) {
@@ -4942,6 +5087,45 @@ void LoadAllBranches()
 			lep2_dz_isLoaded = true;
 		}
 		return lep2_dz_;
+	}
+	float &lep2_ip3d()
+	{
+		if (not lep2_ip3d_isLoaded) {
+			if (lep2_ip3d_branch != 0) {
+				lep2_ip3d_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_ip3d_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_ip3d_isLoaded = true;
+		}
+		return lep2_ip3d_;
+	}
+	float &lep2_ip3derr()
+	{
+		if (not lep2_ip3derr_isLoaded) {
+			if (lep2_ip3derr_branch != 0) {
+				lep2_ip3derr_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_ip3derr_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_ip3derr_isLoaded = true;
+		}
+		return lep2_ip3derr_;
+	}
+	float &lep2_dzerr()
+	{
+		if (not lep2_dzerr_isLoaded) {
+			if (lep2_dzerr_branch != 0) {
+				lep2_dzerr_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_dzerr_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_dzerr_isLoaded = true;
+		}
+		return lep2_dzerr_;
 	}
 	float &lep2_mt()
 	{
@@ -7803,7 +7987,11 @@ namespace ssb {
 	const int &lep1_pdgid();
 	const int &lep1_type();
 	const float &lep1_d0();
+	const float &lep1_d0err();
 	const float &lep1_dz();
+	const float &lep1_ip3d();
+	const float &lep1_ip3derr();
+	const float &lep1_dzerr();
 	const float &lep1_mt();
 	const float &lep1_corpfiso();
 	const float &lep1_pfiso();
@@ -7885,7 +8073,11 @@ namespace ssb {
 	const int &lep2_pdgid();
 	const int &lep2_type();
 	const float &lep2_d0();
+	const float &lep2_d0err();
 	const float &lep2_dz();
+	const float &lep2_ip3d();
+	const float &lep2_ip3derr();
+	const float &lep2_dzerr();
 	const float &lep2_mt();
 	const float &lep2_corpfiso();
 	const float &lep2_pfiso();
