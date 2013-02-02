@@ -40,7 +40,7 @@ input_files="${input_files},${input_path}/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.r
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_highpt_19p47 $input_files
+#merge data_highpt_19p47 $input_files
 
 # low pt 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/v17_lowpt
@@ -57,7 +57,7 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_lowpt_19p47 $input_files
+#merge data_lowpt_19p47 $input_files
 
 # very low pt 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/v17_vlowpt

@@ -31,36 +31,38 @@ void SSQuickYields(const std::string& srt_name = "inclusive")
     const TCut ee = "ee";
     const TCut mm = "mm";
     const TCut em = "em";
+
+	const bool is_incl = (srt == ss::SignalRegionType::inclusive);
     
-    const TCut sr0  = srt == ss::SignalRegionType::inclusive ? "sr0"  : "ex_sr0" ;
-    const TCut sr1  = srt == ss::SignalRegionType::inclusive ? "sr1"  : "ex_sr1" ;
-    const TCut sr2  = srt == ss::SignalRegionType::inclusive ? "sr2"  : "ex_sr2" ;
-    const TCut sr3  = srt == ss::SignalRegionType::inclusive ? "sr3"  : "ex_sr3" ;
-    const TCut sr4  = srt == ss::SignalRegionType::inclusive ? "sr4"  : "ex_sr4" ;
-    const TCut sr5  = srt == ss::SignalRegionType::inclusive ? "sr5"  : "ex_sr5" ;
-    const TCut sr6  = srt == ss::SignalRegionType::inclusive ? "sr6"  : "ex_sr6" ;
-    const TCut sr7  = srt == ss::SignalRegionType::inclusive ? "sr7"  : "ex_sr7" ;
-    const TCut sr8  = srt == ss::SignalRegionType::inclusive ? "sr8"  : "ex_sr8" ;
-    const TCut sr9  = srt == ss::SignalRegionType::inclusive ? "sr9"  : "ex_sr9" ;
-    const TCut sr10 = srt == ss::SignalRegionType::inclusive ? "sr10" : "ex_sr10";
-    const TCut sr11 = srt == ss::SignalRegionType::inclusive ? "sr11" : "ex_sr11";
-    const TCut sr12 = srt == ss::SignalRegionType::inclusive ? "sr12" : "ex_sr12";
-    const TCut sr13 = srt == ss::SignalRegionType::inclusive ? "sr13" : "ex_sr13";
-    const TCut sr14 = srt == ss::SignalRegionType::inclusive ? "sr14" : "ex_sr14";
-    const TCut sr15 = srt == ss::SignalRegionType::inclusive ? "sr15" : "ex_sr15";
-    const TCut sr16 = srt == ss::SignalRegionType::inclusive ? "sr16" : "ex_sr16";
-    const TCut sr17 = srt == ss::SignalRegionType::inclusive ? "sr17" : "ex_sr17";
-    const TCut sr18 = srt == ss::SignalRegionType::inclusive ? "sr18" : "ex_sr18";
-    const TCut sr19 = srt == ss::SignalRegionType::inclusive ? "sr19" : "ex_sr19";
-    const TCut sr20 = srt == ss::SignalRegionType::inclusive ? "sr20" : "ex_sr20";
-    const TCut sr21 = srt == ss::SignalRegionType::inclusive ? "sr21" : "ex_sr21";
-    const TCut sr22 = srt == ss::SignalRegionType::inclusive ? "sr22" : "ex_sr22";
-    const TCut sr23 = srt == ss::SignalRegionType::inclusive ? "sr23" : "ex_sr23";
-    const TCut sr24 = srt == ss::SignalRegionType::inclusive ? "sr24" : "ex_sr24";
-    const TCut sr25 = srt == ss::SignalRegionType::inclusive ? "sr25" : "ex_sr25";
-    const TCut sr26 = srt == ss::SignalRegionType::inclusive ? "sr26" : "ex_sr26";
-    const TCut sr27 = srt == ss::SignalRegionType::inclusive ? "sr27" : "ex_sr27";
-    const TCut sr28 = srt == ss::SignalRegionType::inclusive ? "sr28" : "ex_sr28";
+    const TCut sr0  = (is_incl ? "sr0"  : "ex_sr0" );
+    const TCut sr1  = (is_incl ? "sr1"  : "ex_sr1" );
+    const TCut sr2  = (is_incl ? "sr2"  : "ex_sr2" );
+    const TCut sr3  = (is_incl ? "sr3"  : "ex_sr3" );
+    const TCut sr4  = (is_incl ? "sr4"  : "ex_sr4" );
+    const TCut sr5  = (is_incl ? "sr5"  : "ex_sr5" );
+    const TCut sr6  = (is_incl ? "sr6"  : "ex_sr6" );
+    const TCut sr7  = (is_incl ? "sr7"  : "ex_sr7" );
+    const TCut sr8  = (is_incl ? "sr8"  : "ex_sr8" );
+    const TCut sr9  = (is_incl ? "sr9"  : "ex_sr9" );
+    const TCut sr10 = (is_incl ? "sr10" : "ex_sr10");
+    const TCut sr11 = (is_incl ? "sr11" : "ex_sr11");
+    const TCut sr12 = (is_incl ? "sr12" : "ex_sr12");
+    const TCut sr13 = (is_incl ? "sr13" : "ex_sr13");
+    const TCut sr14 = (is_incl ? "sr14" : "ex_sr14");
+    const TCut sr15 = (is_incl ? "sr15" : "ex_sr15");
+    const TCut sr16 = (is_incl ? "sr16" : "ex_sr16");
+    const TCut sr17 = (is_incl ? "sr17" : "ex_sr17");
+    const TCut sr18 = (is_incl ? "sr18" : "ex_sr18");
+    const TCut sr19 = (is_incl ? "sr19" : "ex_sr19");
+    const TCut sr20 = (is_incl ? "sr20" : "ex_sr20");
+    const TCut sr21 = (is_incl ? "sr21" : "ex_sr21");
+    const TCut sr22 = (is_incl ? "sr22" : "ex_sr22");
+    const TCut sr23 = (is_incl ? "sr23" : "ex_sr23");
+    const TCut sr24 = (is_incl ? "sr24" : "ex_sr24");
+    const TCut sr25 = (is_incl ? "sr25" : "ex_sr25");
+    const TCut sr26 = (is_incl ? "sr26" : "ex_sr26");
+    const TCut sr27 = (is_incl ? "sr27" : "ex_sr27");
+    const TCut sr28 = (is_incl ? "sr28" : "ex_sr28");
     
     // high pT
     const yield_t y_hpt[29] = 
