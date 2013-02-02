@@ -44,30 +44,6 @@ struct event_info_t
 
 struct SortByEventInfo
 {
-    //  bool operator () (const event_info_t& lhs, const event_info_t& rhs) const 
-    //  { 
-    //      if      (lhs.channel == "ee" && rhs.channel == "mm") {return true; }
-    //      else if (lhs.channel == "ee" && rhs.channel == "em") {return true; }
-    //      else if (lhs.channel == "mm" && rhs.channel == "ee") {return false;}
-    //      else if (lhs.channel == "mm" && rhs.channel == "em") {return true; }
-    //      else if (lhs.channel == "em" && rhs.channel == "ee") {return false;}
-    //      else if (lhs.channel == "em" && rhs.channel == "mm") {return true; }
-    //      else if (lhs.channel == rhs.channel)
-    //      {
-    //          if      (lhs.run <  rhs.run) {return true;}
-    //          else if (lhs.run >  rhs.run) {return false;}
-    //          else if (lhs.run == rhs.run) 
-    //          {
-    //              if      (lhs.ls <  rhs.ls) {return true;}
-    //              else if (lhs.ls >  rhs.ls) {return false;}
-    //              else if (lhs.ls == rhs.ls) 
-    //              {
-    //                  if      (lhs.evt <  rhs.evt) {return true;}
-    //                  else if (lhs.evt >=  rhs.evt) {return false;}
-    //              }
-    //          }
-    //      }
-    //      return false;
     bool operator () (const event_info_t& lhs, const event_info_t& rhs) const 
     {
         if (lhs.channel != rhs.channel) {return lhs.channel < rhs.channel;}

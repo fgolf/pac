@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-tag="29Jan2013"
+tag="29Jan2013_d0cut"
 run_list=json/final_19p47fb_cms2.txt
 nev=-1
 

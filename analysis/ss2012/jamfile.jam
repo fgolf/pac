@@ -293,26 +293,6 @@ exe ss2012_quick_check
   : # usage-requirements
   ;
 
-# quick and dirty cms2 looper
-#exe test_static
-#  : # sources
-#    ./source/test_static.cc
-#    #ss2012_tools_static
-#    # dependent packages
-#    /ROOT//libRoot/<link>static
-#    #/MiniFWLite//libMiniFWLite/<link>shared
-#    #/AnalysisTools//AnalysisTools/<link>static
-#    #/RootTools//RootTools/<link>static
-#    #/boost//program_options/<link>static
-#    #/SimpleTable//SimpleTable/<link>static
-#  : # requirements
-#    <include>./include
-#    <include>./source
-#  : # default-build
-#  : # usage-requirements
-#  ;
-
-
 # install libs/exes
 default-install ss2012_tools/<link>shared ;
 default-install ss2012_analysis ;
@@ -327,4 +307,3 @@ default-install ss2012_create_fakerate ;
 default-install ss2012_create_fakerate_eth ;
 default-install ss2012_closure_test ;
 default-install test_frb ;
-#default-install test_static ;

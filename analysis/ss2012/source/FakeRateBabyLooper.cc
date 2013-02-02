@@ -299,13 +299,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         // FO selection cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
-        
+
         // which dataset
-        const bool is_data  = fr::GetSampleInfo(m_sample).type == fr::SampleType::data;
+        const bool is_data  = (fr::GetSampleInfo(m_sample).type == fr::SampleType::data);
         const bool is_qcd   = (m_sample==fr::Sample::qcd);
         const bool is_ttbar = (m_sample==fr::Sample::ttbar);
-        const bool is_mu    = (m_lepton=="mu") ? abs(id())==13 : false;
-        const bool is_el    = (m_lepton=="el") ? abs(id())==11 : false;
+        const bool is_mu    = ((m_lepton=="mu") ? abs(id())==13 : false);
+        const bool is_el    = ((m_lepton=="el") ? abs(id())==11 : false);
 
         // qcd muon cuts (for the different qcd samples)
         const bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
@@ -363,9 +363,9 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // trigger cuts
-        bool trig_cut       = is_data ? false : true;
-        bool trig_cut_noiso = is_data ? false : true;  // electron non-isolated triggers
-        bool trig_cut_iso   = is_data ? false : true;  // muon isolated triggers
+        bool trig_cut       = (is_data ? false : true);
+        bool trig_cut_noiso = (is_data ? false : true);  // electron non-isolated triggers
+        bool trig_cut_iso   = (is_data ? false : true);  // muon isolated triggers
         if (is_data && is_mu)
         {
             // trigger without isolation
@@ -381,12 +381,12 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         else if(is_data && is_el)
         {
             // triggers with isolation
-            trig_cut =  (pt() > 17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar() > 1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar() > 1 ||
-                                       ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
-            trig_cut |= (pt() > 8  && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
+            trig_cut = ((pt()>17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 1 ||
+                        ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 1  || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 1 ))
+                        || (pt()>8 && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1)));
 
             // triggers without isolation
-            trig_cut_noiso = (pt() > 8  && (ele8_CaloIdT_TrkIdVL_Jet30_vstar() > 1 || ele8_CaloIdT_TrkIdVL_vstar() > 1));
+            trig_cut_noiso = (pt() > 8 && (ele8_CaloIdT_TrkIdVL_Jet30_vstar()>1 || ele8_CaloIdT_TrkIdVL_vstar()>1));
         }
 
         // no additional FO's in event
@@ -417,12 +417,12 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         if (is_mu)
         {
             num_lep_cut = num_mu_ssV5_noIso();
-            //num_lep_cut &= (fabs(d0()) < 0.005);
+            //num_lep_cut = (num_mu_ssV5_noIso() && (fabs(d0()) < 0.005));
         }
         else if(is_el)
         {
             num_lep_cut = num_el_ssV7_noIso();
-            //num_lep_cut &= (fabs(d0()) < 0.010);
+            //num_lep_cut = (num_el_ssV7_noIso() && (fabs(d0()) < 0.010));
         }
 
         // denominator cut
@@ -442,8 +442,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // passes selection (no isolaiton)
         bool num_lep_sel_notrig     = (nFOcut && num_lep_cut && not_fromw);
         bool fo_lep_sel_notrig      = (nFOcut && fo_lep_cut && not_fromw);
-        bool num_lep_sel            = (trig_cut && num_lep_sel_notrig);
-        bool fo_lep_sel             = (trig_cut && fo_lep_sel_notrig);
+        bool num_lep_sel            = (trig_cut && num_lep_sel_notrig); 
+        bool fo_lep_sel             = (trig_cut && fo_lep_sel_notrig); 
         bool num_lep_sel_trig_noiso = (trig_cut_noiso && num_lep_sel_notrig);
         bool fo_lep_sel_trig_noiso  = (trig_cut_noiso && fo_lep_sel_notrig);
         bool num_lep_sel_trig_iso   = (trig_cut_iso && num_lep_sel_notrig);
@@ -457,20 +457,23 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // vertex reweight for ttbar
-        float evt_weight = weight();
+        float evt_weight = (weight() * m_lumi);
         //float evt_weight = 1.0; 
+
+        // isolation
+        float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area
+        //float iso = ((m_lepton == "mu") ? cpfiso03_db() : cpfiso03_rho());  // old effective area
 
         // muons
         // ----------------------------------------------------------------------------------------------------------------------------//
-       
+
         // Fill Fake Rates 
         if (m_lepton == "mu")
         {
             // numerator
             if (num_lep_sel)
             {
-                if (cpfiso03_db()<0.1)
-                //if (pfiso03()<0.1)
+                if (iso < 0.1)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -485,8 +488,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // denominator
             if (fo_lep_sel)
             {
-                if (cpfiso03_db()<0.4)
-                //if (pfiso03()<0.4)
+                if (iso < 0.4)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -501,8 +503,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // numerator (with iso)
             if (num_lep_sel_trig_iso)
             {
-                if (cpfiso03_db()<0.1)
-                //if (pfiso03()<0.1)
+                if (iso < 0.1)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_num40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -517,8 +518,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // denominator (with iso)
             if (fo_lep_sel_trig_iso)
             {
-                if (cpfiso03_db()<0.4)
-                //if (pfiso03()<0.4)
+                if (iso < 0.4)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -531,20 +531,18 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                 }
             }
         }
-        
+
 
         // Electrons
         // ----------------------------------------------------------------------------------------------------------------------------//
-       
+
         // Fill Fake Rates 
         if (m_lepton == "el")
         {
             // numerator
             if (num_lep_sel)
             {
-
-                if (cpfiso03_rho()<0.09)
-                //if (pfiso03()<0.09)
+                if (iso < 0.09)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -559,8 +557,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // denominator 
             if (fo_lep_sel)
             {
-                if (cpfiso03_rho()<0.6)
-                //if (pfiso03()<0.6)
+                if (iso < 0.6)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -575,8 +572,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             if (num_lep_sel_trig_noiso)
             {
 
-                if (cpfiso03_rho()<0.09)
-                //if (pfiso03()<0.09)
+                if (iso < 0.09)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_num20c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_num40c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -591,8 +587,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // denominator 
             if (fo_lep_sel_trig_noiso)
             {
-                if (cpfiso03_rho()<0.6)
-                //if (pfiso03()<0.6)
+                if (iso < 0.6)
                 {
                     if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_fo40c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 

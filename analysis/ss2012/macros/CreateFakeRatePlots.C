@@ -82,7 +82,7 @@ void CountElectronNumDen(TH1* h_num, TH1* h_den, const std::string& title)
 void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 {
 	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_29Jan2013.root");
-    std::string path = "plots/fake_rates/muons_19p5fb_updated_effarea";
+    std::string path = "plots/fake_rates/29Jan2013";
 	float lumi = 19.5;
 
 	//rt::TH1Container hc("plots/fake_rates/qcd/qcd_pt35.root");
@@ -94,6 +94,7 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 	// set style
 	rt::SetTDRStyle();
 	gStyle->SetTitleBorderSize(0);
+    hc.SetMarkerSize(1.8);
 
 	//std::string title = Form("QCD derived FR, #sqrt{s} = 8 TeV", lumi);
 	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
@@ -276,7 +277,7 @@ void PrintMuonFakeRatePlotsETH(const std::string& suffix = "png")
 void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 {
 	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_29Jan2013.root");
-    std::string path = "plots/fake_rates/electrons_19p5fb_updated_effarea";
+    std::string path = "plots/fake_rates/29Jan2013";
 	float lumi = 19.5;
 
 	//rt::TH1Container hc("plots/fake_rates/qcd/qcd_pt35.root");
