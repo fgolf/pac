@@ -1,0 +1,46 @@
+# jamfile for the FakeRateStudy 
+# -------------------------------------------------------------------- #
+
+exe fr2012_plots
+  : # sources
+    ./source/fr2012_plots.cc
+    ./source/FakeRateLooper2012.cc
+    # dependent packages
+    /ROOT
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /FakeRateBabyTools//FakeRateBabyTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe fr2012_trig_study
+  : # sources
+    ./source/fr2012_trig_study.cc
+    ./source/FakeRateTrigStudy.cc
+    # dependent packages
+    /ROOT
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /FakeRateBabyTools//FakeRateBabyTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+# install libs/exes
+default-install fr2012_plots ;
+default-install fr2012_trig_study ;
