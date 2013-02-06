@@ -3,7 +3,6 @@
 #include "AnalysisType.h"
 #include "CTable.h"
 
-
 struct yield_t
 {
     int ee;

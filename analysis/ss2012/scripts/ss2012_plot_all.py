@@ -60,22 +60,24 @@ excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
 
 parser = OptionParser()
 
+default_fr_file = "data/fake_rates/ssFR_data_standard_29Jan2013_d0cut.root"
+
 # parameter options
-parser.add_option("--nev"       , dest="nev"       , default=-1                                                 , help="The number of events to run (-1 for all)"                 )
-parser.add_option("--lumi"      , dest="lumi"      , default=1.0                                                , help="luminosity in fb^-1"                                      )
-parser.add_option("--suffix"    , dest="suffix"    , default="all"                                              , help="The suffix for the histograms (eps, png, pdf, all)"       )
-parser.add_option("--out_name"  , dest="out_name"  , default="test"                                             , help="name for all the directories associated with these yields")
-parser.add_option("--anal_type" , dest="anal_type" , default="high_pt"                                          , help="analysis type"                                            )
-parser.add_option("--nbtags"    , dest="nbtags"    , default=0                                                  , help="# btags"                                                  )
-parser.add_option("--njets"     , dest="njets"     , default=2                                                  , help="# jets"                                                   )
-parser.add_option("--l1_min_pt" , dest="l1_min_pt" , default=5.0                                                , help="minimum pT on leading lepton"                             )
-parser.add_option("--l1_max_pt" , dest="l1_max_pt" , default=100000.0                                           , help="maximum pT on leading lepton"                             )
-parser.add_option("--l2_min_pt" , dest="l2_min_pt" , default=5.0                                                , help="minimum pT on trailing lepton"                            )
-parser.add_option("--l2_max_pt" , dest="l2_max_pt" , default=100000.0                                           , help="maximum pT on trailing lepton"                            )
-parser.add_option("--min_ht"    , dest="min_ht"    , default=80.0                                               , help="minimum HT"                                               )
-parser.add_option("--charge"    , dest="charge"    , default=0                                                  , help="charge of leptons (1 for +, -1 for -, 0)"                 )
-parser.add_option("--sr"        , dest="sr"        , default=0                                                  , help="signal region"                                            )
-parser.add_option("--fr_file"   , dest="fr_file"   , default="data/fake_rates/ssFR_data_standard_29Jan2013.root", help="signal region"                                            )
+parser.add_option("--nev"       , dest="nev"       , default=-1             , help="The number of events to run (-1 for all)"                 )
+parser.add_option("--lumi"      , dest="lumi"      , default=1.0            , help="luminosity in fb^-1"                                      )
+parser.add_option("--suffix"    , dest="suffix"    , default="all"          , help="The suffix for the histograms (eps, png, pdf, all)"       )
+parser.add_option("--out_name"  , dest="out_name"  , default="test"         , help="name for all the directories associated with these yields")
+parser.add_option("--anal_type" , dest="anal_type" , default="high_pt"      , help="analysis type"                                            )
+parser.add_option("--nbtags"    , dest="nbtags"    , default=0              , help="# btags"                                                  )
+parser.add_option("--njets"     , dest="njets"     , default=2              , help="# jets"                                                   )
+parser.add_option("--l1_min_pt" , dest="l1_min_pt" , default=5.0            , help="minimum pT on leading lepton"                             )
+parser.add_option("--l1_max_pt" , dest="l1_max_pt" , default=100000.0       , help="maximum pT on leading lepton"                             )
+parser.add_option("--l2_min_pt" , dest="l2_min_pt" , default=5.0            , help="minimum pT on trailing lepton"                            )
+parser.add_option("--l2_max_pt" , dest="l2_max_pt" , default=100000.0       , help="maximum pT on trailing lepton"                            )
+parser.add_option("--min_ht"    , dest="min_ht"    , default=80.0           , help="minimum HT"                                               )
+parser.add_option("--charge"    , dest="charge"    , default=0              , help="charge of leptons (1 for +, -1 for -, 0)"                 )
+parser.add_option("--sr"        , dest="sr"        , default=0              , help="signal region"                                            )
+parser.add_option("--fr_file"   , dest="fr_file"   , default=default_fr_file, help="signal region"                                            )
 
 # boolean options
 parser.add_option("--test"   , action="store_true" , dest="test"   , default=False, help="test script -- print commands but do nothing")

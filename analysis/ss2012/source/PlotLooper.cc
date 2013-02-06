@@ -268,6 +268,7 @@ void PlotLooper::EndJob()
         if (rt::Integral(hc["h_yield_ll"]) < (weight * 0.5)) {hc["h_yield_ll"]->SetBinError(2, weight);}
 
         // yields in a signal used for overlaying
+        cout << "wieght = " << weight << endl;
         if (hc["h_yield_ss"]->GetBinContent(2) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(2, weight);}
         if (hc["h_yield_ss"]->GetBinContent(3) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(3, weight);}
         if (hc["h_yield_ss"]->GetBinContent(4) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(4, weight);}
@@ -825,37 +826,6 @@ int PlotLooper::operator()(long event)
                 case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
                 default: passes_trigger = false; break;
             };
-            //if (m_analysis_type == AnalysisType::high_pt or m_analysis_type == AnalysisType::hcp or m_analysis_type == AnalysisType::high_pt_eth)
-            //{
-            //    switch (hyp_type)
-            //    {
-            //        case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
-            //        case DileptonHypType::EMU : passes_trigger = trig_em(); break;
-            //        case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
-            //        default: passes_trigger = false; break;
-            //    };
-            //}
-            //else if (m_analysis_type == AnalysisType::low_pt)
-            //{
-            //    switch (hyp_type)
-            //    {
-            //        case DileptonHypType::MUMU: passes_trigger = (trig_mm_dmu8_m8_pfnopuht175()       || trig_mm_dmu8_m8_pfht175()      ); break;
-            //        case DileptonHypType::EMU : passes_trigger = (trig_em_mu8_el8_id_m8_pfnopuht175() || trig_em_mu8_el8_id_m8_pfht175()); break;
-            //        case DileptonHypType::EE  : passes_trigger = (trig_ee_del8_id_m8_pfnopuht175()    || trig_ee_del8_id_m8_pfht175()   ); break;
-            //        default: passes_trigger = false; break;
-            //    };
-            //}
-            //else if (m_analysis_type == AnalysisType::vlow_pt)
-            //{
-            //    switch (hyp_type)
-            //    {
-            //        case DileptonHypType::MUMU: passes_trigger = (trig_mm_dreliso1p0mu5_m8_pfnopuht175()     || trig_mm_dreliso1p0mu5_m8_pfht175()    ); break;
-            //        case DileptonHypType::EMU : passes_trigger = (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175() || trig_em_riso1p0mu5_el8_id_m8_pfht175()); break;
-            //        case DileptonHypType::EE  : passes_trigger = (trig_ee_del8_id_m8_pfnopuht175()           || trig_ee_del8_id_m8_pfht175()          ); break;
-            //        default: passes_trigger = false; break;
-            //    };
-            //}
-
             // return if fails trigger
             if (not passes_trigger)
             {
@@ -949,52 +919,55 @@ int PlotLooper::operator()(long event)
         // Weight Factors
         // ----------------------------------------------------------------------------------------------------------------------------//
 
+        // no scale factors
+        float evt_weight = is_real_data() ? 1.0 : m_lumi * scale1fb();
+
         // scale
-        float vtxw = 1.0;
-        if (m_do_vtx_reweight)
-        {
-            vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
-        }
-        m_lumi = is_real_data() ? 1.0 : m_lumi;
-        //float evt_weight = m_lumi * scale1fb() * vtxw;
-        float evt_weight = m_lumi * vtxw;
+        //float vtxw = 1.0;
+        //if (m_do_vtx_reweight)
+        //{
+        //    vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
+        //}
+        //m_lumi = is_real_data() ? 1.0 : m_lumi;
+        ////float evt_weight = m_lumi * scale1fb() * vtxw;
+        //float evt_weight = m_lumi * vtxw;
 
-        // T1tttt is not scaled properly (need make this automatic) 
-        if (m_sample == at::Sample::t1tttt || m_sample == at::Sample::t1tttt_fastsim)
-        {
-            if (rt::is_equal(sparm0(), 900.0f)) {evt_weight *= (0.060276 *1000)/10000.0;}
-            if (rt::is_equal(sparm0(), 950.0f)) {evt_weight *= (0.0381246*1000)/10000.0;}
-        }
-        // SBottomTop is not scaled properl (need make this automatic)
-        else if (m_sample == at::Sample::sbottomtop)
-        {
-            //evt_weight /= scale1fb();
-            if (rt::is_equal(sparm0(), 460.0f)) {evt_weight *= (0.152*1000)/10000.0;}
-            if (rt::is_equal(sparm0(), 380.0f)) {evt_weight *= (0.506*1000)/10000.0;}
-        }
-        else
-        {
-            evt_weight *= scale1fb();
-        }
+        //// T1tttt is not scaled properly (need make this automatic) 
+        //if (m_sample == at::Sample::t1tttt || m_sample == at::Sample::t1tttt_fastsim)
+        //{
+        //    if (rt::is_equal(sparm0(), 900.0f)) {evt_weight *= (0.060276 *1000)/10000.0;}
+        //    if (rt::is_equal(sparm0(), 950.0f)) {evt_weight *= (0.0381246*1000)/10000.0;}
+        //}
+        //// SBottomTop is not scaled properl (need make this automatic)
+        //else if (m_sample == at::Sample::sbottomtop)
+        //{
+        //    //evt_weight /= scale1fb();
+        //    if (rt::is_equal(sparm0(), 460.0f)) {evt_weight *= (0.152*1000)/10000.0;}
+        //    if (rt::is_equal(sparm0(), 380.0f)) {evt_weight *= (0.506*1000)/10000.0;}
+        //}
+        //else
+        //{
+        //    evt_weight *= scale1fb();
+        //}
 
-        // apply scale factors
-        if (m_do_scale_factors && !is_real_data())
-        {
-            evt_weight *= sf_lepeff();
-            // evt_weight *= sf_dileptrig();  // applying trigger cut now on MC
-            evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger with scale factor 
-            if (m_nbtags>=2)
-            {
-                if (m_signal_region == SignalRegion::sr7)
-                {
-                    evt_weight *= (nbtags() >= 3 ? sf_nbtag3() : 1.0);
-                }
-                else
-                {
-                    evt_weight *= (nbtags() >= 2 ? sf_nbtag() : 1.0);
-                }
-            }
-        }
+        //// apply scale factors
+        //if (m_do_scale_factors && !is_real_data())
+        //{
+        //    evt_weight *= sf_lepeff();
+        //    // evt_weight *= sf_dileptrig();  // applying trigger cut now on MC
+        //    evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger with scale factor 
+        //    if (m_nbtags>=2)
+        //    {
+        //        if (m_signal_region == SignalRegion::sr7)
+        //        {
+        //            evt_weight *= (nbtags() >= 3 ? sf_nbtag3() : 1.0);
+        //        }
+        //        else
+        //        {
+        //            evt_weight *= (nbtags() >= 2 ? sf_nbtag() : 1.0);
+        //        }
+        //    }
+        //}
 
         // Fill hists
         // ------------------------------------------------------------------------------------//
