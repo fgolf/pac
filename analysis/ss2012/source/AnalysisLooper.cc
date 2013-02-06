@@ -243,15 +243,15 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     // convenience
     const LorentzVector& lt_p4 = hyp_lt_p4().at(ihyp);
     const LorentzVector& ll_p4 = hyp_ll_p4().at(ihyp);
-    int lt_id                  = hyp_lt_id().at(ihyp);
-    int ll_id                  = hyp_ll_id().at(ihyp);
-    int lt_idx                 = hyp_lt_index().at(ihyp);
-    int ll_idx                 = hyp_ll_index().at(ihyp);
-    bool lt_passes_id          = samesign::isGoodLepton(lt_id, lt_idx, use_el_eta);
-    bool ll_passes_id          = samesign::isGoodLepton(ll_id, ll_idx, use_el_eta);
-    float lt_iso               = samesign::leptonIsolation(lt_id, lt_idx);
-    float ll_iso               = samesign::leptonIsolation(ll_id, ll_idx);
-    float inv_mass             = (lt_p4 + ll_p4).M();
+    const int lt_id            = hyp_lt_id().at(ihyp);
+    const int ll_id            = hyp_ll_id().at(ihyp);
+    const int lt_idx           = hyp_lt_index().at(ihyp);
+    const int ll_idx           = hyp_ll_index().at(ihyp);
+    const bool lt_passes_id    = samesign::isGoodLepton(lt_id, lt_idx, use_el_eta);
+    const bool ll_passes_id    = samesign::isGoodLepton(ll_id, ll_idx, use_el_eta);
+    const float lt_iso         = samesign::leptonIsolation(lt_id, lt_idx);
+    const float ll_iso         = samesign::leptonIsolation(ll_id, ll_idx);
+    const float inv_mass       = (lt_p4 + ll_p4).M();
 
     // channel names
     const size_t n_channel_names = 4; 
@@ -261,9 +261,11 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     int num_btags = 0;
     float ht = 0.;
     float met = evt_pfmet_type1cor();
+    vector<LorentzVector> jets_p4;
     if (not jet_corrector)
     {
         num_jets  = samesign::nJets(ihyp, jet_type                       , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+        jets_p4   = samesign::getJets(ihyp, jet_type                     , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
         num_btags = samesign::nBtaggedJets(ihyp, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
         ht        = samesign::sumJetPt(ihyp, jet_type                    , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, jet_met_scale);
         met       = evt_pfmet_type1cor();
@@ -271,6 +273,7 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     else
     {
         num_jets  = samesign::nJets(ihyp, jet_corrector, jet_type                       , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+        jets_p4   = samesign::getJets(ihyp, jet_corrector, jet_type                     , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
         num_btags = samesign::nBtaggedJets(ihyp, jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
         ht        = samesign::sumJetPt(ihyp, jet_corrector, jet_type                    , /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, jet_met_scale);
         met       = met_corrector->getCorrectedMET().first;
@@ -339,6 +342,7 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     //  cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx, true);
     //  //cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
     //}
+    PrintJetInfo(Form("passing jets for hyp %d", ihyp), jets_p4);
 }
 
 // construct:
@@ -583,36 +587,19 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
     try
     {
         // select specific events
-        //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
-        //if (!(evt_run() == 1 && evt_lumiBlock() == 15021 && evt_event() == 4505298))
-        //if (!(evt_event() ==  2413713))
-        //if (!(evt_event() ==  781701827)) // fails extra Z --> probably an Z --> ee event
-        //if (!(evt_event() ==  72925705))  // fails gamma*
-        //if (!(evt_event() ==  1766536290))  // fails gamma*
-        //if (!(evt_event() ==  113167649))  // fails gamma*
-        //if (!(evt_event()==663249061 || evt_event()==27490600 || evt_event()==131247937)) 
-        //if (!(evt_event()==131247937)) 
-        //if (!(evt_event()==95183650)) 
-        //if (!(evt_event()==1314345008)) 
-        //if (!(evt_event()==373153872)) 
-        //if (!(evt_event()==114032777)) 
-        //if (!(evt_event() ==  373153872))  // fails gamma*
-        //if (!(evt_event() == 799539819))  
+        //if (m_sync_print)
         //{
-        //    return 0;
-        //}
-        //{
-        //    cout << "\n-----------------------------------------" << endl; 
-        //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
-        //}
-        //const long evt = evt_event();
-        //if (!(evt_event()==130999919))  
-        //{
-        //    return 0;
-        //}
-        //if (m_verbose)
-        //{
-        //  cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
+        //    //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
+        //    //if (!(evt_run() == 1 && evt_lumiBlock() == 15021 && evt_event() == 4505298))
+        //    //const long evt = evt_event();
+        //    //if (!(evt==103094326))  
+        //    //{
+        //    //    return 0;
+        //    //}
+        //    //else 
+        //    //{
+        //    //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
+        //    //}
         //}
 
         // Reset Tree Variables

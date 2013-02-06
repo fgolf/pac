@@ -28,48 +28,48 @@ bool SelectSameSign(long event)
     for (unsigned int ihyp = 0; ihyp < cms2.hyp_p4().size(); ihyp++)
     {
         // eta < 2.5
-        if (fabs(cms2.hyp_lt_p4().at(ihyp).eta()) > 2.5)
+        if (fabs(cms2.hyp_lt_p4().at(ihyp).eta()) > 2.4)
         {
             continue;
         }
-        if (fabs(cms2.hyp_ll_p4().at(ihyp).eta()) > 2.5)
+        if (fabs(cms2.hyp_ll_p4().at(ihyp).eta()) > 2.4)
         {
             continue;
         }
 
-        int lt_id   = cms2.hyp_lt_id().at(ihyp);
-        int lt_idx  = cms2.hyp_lt_index().at(ihyp);
-        float lt_pt = cms2.hyp_lt_p4().at(ihyp).pt();
-        int ll_id   = cms2.hyp_ll_id().at(ihyp);
-        int ll_idx  = cms2.hyp_ll_index().at(ihyp);
-        float ll_pt = cms2.hyp_ll_p4().at(ihyp).pt();
+        const int lt_id   = cms2.hyp_lt_id().at(ihyp);
+        const int lt_idx  = cms2.hyp_lt_index().at(ihyp);
+        const float lt_pt = cms2.hyp_lt_p4().at(ihyp).pt();
+        const int ll_id   = cms2.hyp_ll_id().at(ihyp);
+        const int ll_idx  = cms2.hyp_ll_index().at(ihyp);
+        const float ll_pt = cms2.hyp_ll_p4().at(ihyp).pt();
 
         // require 5/10 GeV muons/electrons 
-        float mu_minpt = 5.0;
-        float el_minpt = 10.0;
-        float l1_pt = max(lt_pt, ll_pt);
-        float l2_pt = min(lt_pt, ll_pt);
-        //unsigned int l1_id = lt_pt > ll_pt ? abs(lt_id) : abs(ll_id);
-        unsigned int l2_id = lt_pt > ll_pt ? abs(ll_id) : abs(lt_id);
-        float minpt = l2_id == 13 ? mu_minpt : el_minpt; 
+        const float mu_minpt = 5.0;
+        const float el_minpt = 10.0;
+        const float l1_pt = max(lt_pt, ll_pt);
+        const float l2_pt = min(lt_pt, ll_pt);
+        const unsigned int l1_id = lt_pt > ll_pt ? abs(lt_id) : abs(ll_id);
+        const unsigned int l2_id = lt_pt > ll_pt ? abs(ll_id) : abs(lt_id);
+        const float minpt1 = l1_id == 13 ? mu_minpt : el_minpt; 
+        const float minpt2 = l2_id == 13 ? mu_minpt : el_minpt; 
 
-        if (l1_pt < minpt || l2_pt < minpt)
-        //if (min(ll_pt, lt_pt) < 10)
+        if (l1_pt < minpt1 || l2_pt < minpt2)
         {
             continue;
         }
 
         // jet type
-        //JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
+        const JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
 
         // require 2 jets
         //int njets = jet_pf_corrector  ? samesign::nJets(ihyp, jet_pf_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/10.0, /*pt2>*/10.0) : 
         //                                samesign::nJets(ihyp, jet_type,                   /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/10.0, /*pt2>*/10.0);
-        //int njets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, /*pt1>*/10.0, /*pt2>*/10.0);
-        //if (njets < 2)
-        //{
-        //    continue;
-        //}
+        int njets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_minpt, el_minpt);
+        if (njets < 2)
+        {
+            continue;
+        }
 
         // need at least one good vertex
         int nGoodVertices = numberOfGoodVertices();
@@ -82,7 +82,11 @@ bool SelectSameSign(long event)
         if ((lt_id * ll_id) > 0)
         {
             // keep if FO/FO
-            if (!samesign::isDenominatorLepton(lt_id, lt_idx) || !samesign::isDenominatorLepton(ll_id, ll_idx))
+            if (evt_isRealData() && (!samesign::isDenominatorLepton(lt_id, lt_idx) || !samesign::isDenominatorLepton(ll_id, ll_idx)))
+            {
+                continue;
+            }
+            else if (not evt_isRealData() && not samesign::isNumeratorHypothesis(ihyp))
             {
                 continue;
             }

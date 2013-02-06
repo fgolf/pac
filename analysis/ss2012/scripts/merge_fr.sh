@@ -10,7 +10,7 @@ function merge
 }
 # data
 
-tag=FakeRate21Jan2013v2
+tag=FakeRate21Jan2013v3
 input_path=/hadoop/cms/store/user/rwkelley/babies/fr/$tag
 output_path=/nfs-7/userdata/rwkelley/babies/fr/${tag}
 
