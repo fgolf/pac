@@ -1485,17 +1485,37 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         }
 
         // jet/bjet info 
+        vector<bool> jet_flags;
+        vector<bool> bjet_flags;
         if (not m_jet_corrector)
         {
             m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             m_evt.vjets_p4  = samesign::getJets(hyp_idx, jet_type,                            /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vbtags    = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            bjet_flags      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            jet_flags       = samesign::getJetFlags(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
         }
         else
         {
             m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             m_evt.vjets_p4  = samesign::getJets(hyp_idx, m_jet_corrector, jet_type,                            /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vbtags    = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            bjet_flags      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            jet_flags       = samesign::getJetFlags(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/40.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+        }
+
+        //cout << jet_flags.size() << "\t" << bjet_flags.size() << endl;
+        // jet btag flag and mc flavor matching
+        for (size_t jidx = 0; jidx != jet_flags.size(); jidx++)
+        {
+            // jets
+            if (not jet_flags.at(jidx)) {continue;}
+            m_evt.vjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
+            m_evt.vjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
+
+            // btags
+            m_evt.vjets_btagged.push_back(bjet_flags.at(jidx));
+            if (not bjet_flags.at(jidx)) {continue;}
+            m_evt.vbjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
+            m_evt.vbjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
         }
 
         //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
@@ -1533,7 +1553,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         for (size_t i = 0; i != temp_jets_p4.size(); i++)
         {
             //temp_jets_p4.at(i) *= evt_isRealData() ? pfjets_corL1FastL2L3residual().at(i) : pfjets_corL1FastL2L3().at(i);
-            if (not m_evt.vbtags.at(i))
+            if (not bjet_flags.at(i))
             {
                 temp_jets_nontagged_p4.push_back(temp_jets_p4.at(i));
             }

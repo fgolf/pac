@@ -135,7 +135,9 @@ void SameSignTree::Reset()
 
     vgenb_p4.clear();
     vjets_p4.clear();
-    vjets_mcflavor.clear();
+    vjets_btagged.clear();
+    vjets_mcflavor_phys.clear();
+    vjets_mcflavor_algo.clear();
     vgenjets_p4.clear();
     vjets_nearjet_p4.clear();
     vjets_mc3id.clear();
@@ -143,9 +145,9 @@ void SameSignTree::Reset()
     vjets_mc3p4.clear();
     vbjets_p4.clear();
     vbjets_nearjet_p4.clear();
-    vbtags.clear();
     vbjets_nearjet_dr.clear();
-    vbjets_mcflavor.clear();
+    vbjets_mcflavor_phys.clear();
+    vbjets_mcflavor_algo.clear();
     vbjets_mc3id.clear();
     vbjets_momid.clear();
     vbjets_mc3p4.clear();
@@ -266,17 +268,19 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("bjets_dr12"                               , &bjets_dr12                               , "bjets_dr12/F"                               ); 
     tree.Branch("vgenb_p4"                                 , "vecLorentzVector"                        , &vgenb_p4                                    ); 
     tree.Branch("vjets_p4"                                 , "vecLorentzVector"                        , &vjets_p4                                    ); 
-    tree.Branch("vjets_mcflavor"                           , "veci"                                    , &vjets_mcflavor                              ); 
+    tree.Branch("vjets_btagged"                            , "std::vector<bool>"                       , &vjets_btagged                               ); 
+    tree.Branch("vjets_mcflavor_phys"                      , "veci"                                    , &vjets_mcflavor_phys                         ); 
+    tree.Branch("vjets_mcflavor_algo"                      , "veci"                                    , &vjets_mcflavor_algo                         ); 
     tree.Branch("vjets_mc3p4"                              , "vecLorentzVector"                        , &vjets_mc3p4                                 ); 
     tree.Branch("vgenjets_p4"                              , "vecLorentzVector"                        , &vgenjets_p4                                 ); 
     tree.Branch("vjets_mc3id"                              , "veci"                                    , &vjets_mc3id                                 ); 
     tree.Branch("vjets_momid"                              , "veci"                                    , &vjets_momid                                 ); 
     tree.Branch("vjets_nearjet_p4"                         , "vecLorentzVector"                        , &vjets_nearjet_p4                            ); 
     tree.Branch("vbjets_p4"                                , "vecLorentzVector"                        , &vbjets_p4                                   ); 
-    tree.Branch("vbjets_mcflavor"                          , "veci"                                    , &vbjets_mcflavor                             ); 
+    tree.Branch("vbjets_mcflavor_phys"                     , "veci"                                    , &vbjets_mcflavor_phys                        ); 
+    tree.Branch("vbjets_mcflavor_algo"                     , "veci"                                    , &vbjets_mcflavor_algo                        ); 
     tree.Branch("vbjets_mc3p4"                             , "vecLorentzVector"                        , &vbjets_mc3p4                                ); 
     tree.Branch("vbjets_nearjet_p4"                        , "vecLorentzVector"                        , &vbjets_nearjet_p4                           ); 
-    tree.Branch("vbtags"                                   , "std::vector<bool>"                       , &vbtags                                      ); 
     tree.Branch("vbjets_nearjet_dr"                        , "vecd"                                    , &vbjets_nearjet_dr                           ); 
     tree.Branch("vbjets_mc3id"                             , "veci"                                    , &vbjets_mc3id                                ); 
     tree.Branch("vbjets_momid"                             , "veci"                                    , &vbjets_momid                                ); 

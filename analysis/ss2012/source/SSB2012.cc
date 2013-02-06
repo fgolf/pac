@@ -320,17 +320,19 @@ namespace ssb {
 	const float &bjets_dr12() { return samesignbtag.bjets_dr12(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenb_p4() { return samesignbtag.vgenb_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4() { return samesignbtag.vjets_p4(); }
-	const vector<int> &vjets_mcflavor() { return samesignbtag.vjets_mcflavor(); }
+	const vector<bool> &vjets_btagged() { return samesignbtag.vjets_btagged(); }
+	const vector<int> &vjets_mcflavor_phys() { return samesignbtag.vjets_mcflavor_phys(); }
+	const vector<int> &vjets_mcflavor_algo() { return samesignbtag.vjets_mcflavor_algo(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4() { return samesignbtag.vjets_mc3p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4() { return samesignbtag.vgenjets_p4(); }
 	const vector<int> &vjets_mc3id() { return samesignbtag.vjets_mc3id(); }
 	const vector<int> &vjets_momid() { return samesignbtag.vjets_momid(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4() { return samesignbtag.vjets_nearjet_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4() { return samesignbtag.vbjets_p4(); }
-	const vector<int> &vbjets_mcflavor() { return samesignbtag.vbjets_mcflavor(); }
+	const vector<int> &vbjets_mcflavor_phys() { return samesignbtag.vbjets_mcflavor_phys(); }
+	const vector<int> &vbjets_mcflavor_algo() { return samesignbtag.vbjets_mcflavor_algo(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4() { return samesignbtag.vbjets_mc3p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4() { return samesignbtag.vbjets_nearjet_p4(); }
-	const vector<bool> &vbtags() { return samesignbtag.vbtags(); }
 	const vector<float> &vbjets_nearjet_dr() { return samesignbtag.vbjets_nearjet_dr(); }
 	const vector<int> &vbjets_mc3id() { return samesignbtag.vbjets_mc3id(); }
 	const vector<int> &vbjets_momid() { return samesignbtag.vbjets_momid(); }

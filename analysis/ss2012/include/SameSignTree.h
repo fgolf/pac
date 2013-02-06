@@ -213,9 +213,11 @@ public:
     vecLorentzVector vjets_mc3p4;
     vecLorentzVector vgenjets_p4;
     vecLorentzVector vjets_nearjet_p4;
+    std::vector<bool> vjets_btagged;
     float jets_dr12;
     vecd vjets_nearjet_dr;
-    veci vjets_mcflavor;
+    veci vjets_mcflavor_phys;
+    veci vjets_mcflavor_algo;
     vecd vbjets_disc;
     veci vjets_momid;
     veci vjets_mc3id;
@@ -226,9 +228,9 @@ public:
     vecLorentzVector vbjets_p4;
     vecLorentzVector vbjets_mc3p4;
     vecLorentzVector vbjets_nearjet_p4;
-    std::vector<bool> vbtags;
     vecd vbjets_nearjet_dr;
-    veci vbjets_mcflavor;
+    veci vbjets_mcflavor_phys;
+    veci vbjets_mcflavor_algo;
     veci vbjets_mc3id;
     veci vbjets_momid;
     float bjets_dr12;

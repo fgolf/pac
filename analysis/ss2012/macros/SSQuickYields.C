@@ -27,7 +27,7 @@ void SSQuickYields(const std::string& srt_name = "inclusive")
     ss::SetSignalRegionAliases(ch_vpt, ss::AnalysisType::vlow_pt);
     
     // selection
-    const TCut ss = "is_ss && trig && lep_pt";
+    const TCut ss = "is_ss && trig && lep_pt && lep_d0";
     const TCut ee = "ee";
     const TCut mm = "mm";
     const TCut em = "em";

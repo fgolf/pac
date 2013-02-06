@@ -974,9 +974,15 @@ protected:
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vjets_p4_;
 	TBranch *vjets_p4_branch;
 	bool vjets_p4_isLoaded;
-	vector<int> *vjets_mcflavor_;
-	TBranch *vjets_mcflavor_branch;
-	bool vjets_mcflavor_isLoaded;
+	vector<bool> *vjets_btagged_;
+	TBranch *vjets_btagged_branch;
+	bool vjets_btagged_isLoaded;
+	vector<int> *vjets_mcflavor_phys_;
+	TBranch *vjets_mcflavor_phys_branch;
+	bool vjets_mcflavor_phys_isLoaded;
+	vector<int> *vjets_mcflavor_algo_;
+	TBranch *vjets_mcflavor_algo_branch;
+	bool vjets_mcflavor_algo_isLoaded;
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vjets_mc3p4_;
 	TBranch *vjets_mc3p4_branch;
 	bool vjets_mc3p4_isLoaded;
@@ -995,18 +1001,18 @@ protected:
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vbjets_p4_;
 	TBranch *vbjets_p4_branch;
 	bool vbjets_p4_isLoaded;
-	vector<int> *vbjets_mcflavor_;
-	TBranch *vbjets_mcflavor_branch;
-	bool vbjets_mcflavor_isLoaded;
+	vector<int> *vbjets_mcflavor_phys_;
+	TBranch *vbjets_mcflavor_phys_branch;
+	bool vbjets_mcflavor_phys_isLoaded;
+	vector<int> *vbjets_mcflavor_algo_;
+	TBranch *vbjets_mcflavor_algo_branch;
+	bool vbjets_mcflavor_algo_isLoaded;
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vbjets_mc3p4_;
 	TBranch *vbjets_mc3p4_branch;
 	bool vbjets_mc3p4_isLoaded;
 	vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > *vbjets_nearjet_p4_;
 	TBranch *vbjets_nearjet_p4_branch;
 	bool vbjets_nearjet_p4_isLoaded;
-	vector<bool> *vbtags_;
-	TBranch *vbtags_branch;
-	bool vbtags_isLoaded;
 	vector<float> *vbjets_nearjet_dr_;
 	TBranch *vbjets_nearjet_dr_branch;
 	bool vbjets_nearjet_dr_isLoaded;
@@ -2689,10 +2695,20 @@ void Init(TTree *tree) {
 		bjets_dr12_branch = tree->GetBranch("bjets_dr12");
 		if (bjets_dr12_branch) {bjets_dr12_branch->SetAddress(&bjets_dr12_);}
 	}
-	vjets_mcflavor_branch = 0;
-	if (tree->GetBranch("vjets_mcflavor") != 0) {
-		vjets_mcflavor_branch = tree->GetBranch("vjets_mcflavor");
-		if (vjets_mcflavor_branch) {vjets_mcflavor_branch->SetAddress(&vjets_mcflavor_);}
+	vjets_btagged_branch = 0;
+	if (tree->GetBranch("vjets_btagged") != 0) {
+		vjets_btagged_branch = tree->GetBranch("vjets_btagged");
+		if (vjets_btagged_branch) {vjets_btagged_branch->SetAddress(&vjets_btagged_);}
+	}
+	vjets_mcflavor_phys_branch = 0;
+	if (tree->GetBranch("vjets_mcflavor_phys") != 0) {
+		vjets_mcflavor_phys_branch = tree->GetBranch("vjets_mcflavor_phys");
+		if (vjets_mcflavor_phys_branch) {vjets_mcflavor_phys_branch->SetAddress(&vjets_mcflavor_phys_);}
+	}
+	vjets_mcflavor_algo_branch = 0;
+	if (tree->GetBranch("vjets_mcflavor_algo") != 0) {
+		vjets_mcflavor_algo_branch = tree->GetBranch("vjets_mcflavor_algo");
+		if (vjets_mcflavor_algo_branch) {vjets_mcflavor_algo_branch->SetAddress(&vjets_mcflavor_algo_);}
 	}
 	vjets_mc3id_branch = 0;
 	if (tree->GetBranch("vjets_mc3id") != 0) {
@@ -2704,15 +2720,15 @@ void Init(TTree *tree) {
 		vjets_momid_branch = tree->GetBranch("vjets_momid");
 		if (vjets_momid_branch) {vjets_momid_branch->SetAddress(&vjets_momid_);}
 	}
-	vbjets_mcflavor_branch = 0;
-	if (tree->GetBranch("vbjets_mcflavor") != 0) {
-		vbjets_mcflavor_branch = tree->GetBranch("vbjets_mcflavor");
-		if (vbjets_mcflavor_branch) {vbjets_mcflavor_branch->SetAddress(&vbjets_mcflavor_);}
+	vbjets_mcflavor_phys_branch = 0;
+	if (tree->GetBranch("vbjets_mcflavor_phys") != 0) {
+		vbjets_mcflavor_phys_branch = tree->GetBranch("vbjets_mcflavor_phys");
+		if (vbjets_mcflavor_phys_branch) {vbjets_mcflavor_phys_branch->SetAddress(&vbjets_mcflavor_phys_);}
 	}
-	vbtags_branch = 0;
-	if (tree->GetBranch("vbtags") != 0) {
-		vbtags_branch = tree->GetBranch("vbtags");
-		if (vbtags_branch) {vbtags_branch->SetAddress(&vbtags_);}
+	vbjets_mcflavor_algo_branch = 0;
+	if (tree->GetBranch("vbjets_mcflavor_algo") != 0) {
+		vbjets_mcflavor_algo_branch = tree->GetBranch("vbjets_mcflavor_algo");
+		if (vbjets_mcflavor_algo_branch) {vbjets_mcflavor_algo_branch->SetAddress(&vbjets_mcflavor_algo_);}
 	}
 	vbjets_nearjet_dr_branch = 0;
 	if (tree->GetBranch("vbjets_nearjet_dr") != 0) {
@@ -3089,17 +3105,19 @@ void GetEntry(unsigned int idx)
 		bjets_dr12_isLoaded = false;
 		vgenb_p4_isLoaded = false;
 		vjets_p4_isLoaded = false;
-		vjets_mcflavor_isLoaded = false;
+		vjets_btagged_isLoaded = false;
+		vjets_mcflavor_phys_isLoaded = false;
+		vjets_mcflavor_algo_isLoaded = false;
 		vjets_mc3p4_isLoaded = false;
 		vgenjets_p4_isLoaded = false;
 		vjets_mc3id_isLoaded = false;
 		vjets_momid_isLoaded = false;
 		vjets_nearjet_p4_isLoaded = false;
 		vbjets_p4_isLoaded = false;
-		vbjets_mcflavor_isLoaded = false;
+		vbjets_mcflavor_phys_isLoaded = false;
+		vbjets_mcflavor_algo_isLoaded = false;
 		vbjets_mc3p4_isLoaded = false;
 		vbjets_nearjet_p4_isLoaded = false;
-		vbtags_isLoaded = false;
 		vbjets_nearjet_dr_isLoaded = false;
 		vbjets_mc3id_isLoaded = false;
 		vbjets_momid_isLoaded = false;
@@ -3437,17 +3455,19 @@ void LoadAllBranches()
 	if (bjets_dr12_branch != 0) bjets_dr12();
 	if (vgenb_p4_branch != 0) vgenb_p4();
 	if (vjets_p4_branch != 0) vjets_p4();
-	if (vjets_mcflavor_branch != 0) vjets_mcflavor();
+	if (vjets_btagged_branch != 0) vjets_btagged();
+	if (vjets_mcflavor_phys_branch != 0) vjets_mcflavor_phys();
+	if (vjets_mcflavor_algo_branch != 0) vjets_mcflavor_algo();
 	if (vjets_mc3p4_branch != 0) vjets_mc3p4();
 	if (vgenjets_p4_branch != 0) vgenjets_p4();
 	if (vjets_mc3id_branch != 0) vjets_mc3id();
 	if (vjets_momid_branch != 0) vjets_momid();
 	if (vjets_nearjet_p4_branch != 0) vjets_nearjet_p4();
 	if (vbjets_p4_branch != 0) vbjets_p4();
-	if (vbjets_mcflavor_branch != 0) vbjets_mcflavor();
+	if (vbjets_mcflavor_phys_branch != 0) vbjets_mcflavor_phys();
+	if (vbjets_mcflavor_algo_branch != 0) vbjets_mcflavor_algo();
 	if (vbjets_mc3p4_branch != 0) vbjets_mc3p4();
 	if (vbjets_nearjet_p4_branch != 0) vbjets_nearjet_p4();
-	if (vbtags_branch != 0) vbtags();
 	if (vbjets_nearjet_dr_branch != 0) vbjets_nearjet_dr();
 	if (vbjets_mc3id_branch != 0) vbjets_mc3id();
 	if (vbjets_momid_branch != 0) vbjets_momid();
@@ -7610,18 +7630,44 @@ void LoadAllBranches()
 		}
 		return *vjets_p4_;
 	}
-	const vector<int> &vjets_mcflavor()
+	const vector<bool> &vjets_btagged()
 	{
-		if (not vjets_mcflavor_isLoaded) {
-			if (vjets_mcflavor_branch != 0) {
-				vjets_mcflavor_branch->GetEntry(index);
+		if (not vjets_btagged_isLoaded) {
+			if (vjets_btagged_branch != 0) {
+				vjets_btagged_branch->GetEntry(index);
 			} else { 
-				printf("branch vjets_mcflavor_branch does not exist!\n");
+				printf("branch vjets_btagged_branch does not exist!\n");
 				exit(1);
 			}
-			vjets_mcflavor_isLoaded = true;
+			vjets_btagged_isLoaded = true;
 		}
-		return *vjets_mcflavor_;
+		return *vjets_btagged_;
+	}
+	const vector<int> &vjets_mcflavor_phys()
+	{
+		if (not vjets_mcflavor_phys_isLoaded) {
+			if (vjets_mcflavor_phys_branch != 0) {
+				vjets_mcflavor_phys_branch->GetEntry(index);
+			} else { 
+				printf("branch vjets_mcflavor_phys_branch does not exist!\n");
+				exit(1);
+			}
+			vjets_mcflavor_phys_isLoaded = true;
+		}
+		return *vjets_mcflavor_phys_;
+	}
+	const vector<int> &vjets_mcflavor_algo()
+	{
+		if (not vjets_mcflavor_algo_isLoaded) {
+			if (vjets_mcflavor_algo_branch != 0) {
+				vjets_mcflavor_algo_branch->GetEntry(index);
+			} else { 
+				printf("branch vjets_mcflavor_algo_branch does not exist!\n");
+				exit(1);
+			}
+			vjets_mcflavor_algo_isLoaded = true;
+		}
+		return *vjets_mcflavor_algo_;
 	}
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4()
 	{
@@ -7701,18 +7747,31 @@ void LoadAllBranches()
 		}
 		return *vbjets_p4_;
 	}
-	const vector<int> &vbjets_mcflavor()
+	const vector<int> &vbjets_mcflavor_phys()
 	{
-		if (not vbjets_mcflavor_isLoaded) {
-			if (vbjets_mcflavor_branch != 0) {
-				vbjets_mcflavor_branch->GetEntry(index);
+		if (not vbjets_mcflavor_phys_isLoaded) {
+			if (vbjets_mcflavor_phys_branch != 0) {
+				vbjets_mcflavor_phys_branch->GetEntry(index);
 			} else { 
-				printf("branch vbjets_mcflavor_branch does not exist!\n");
+				printf("branch vbjets_mcflavor_phys_branch does not exist!\n");
 				exit(1);
 			}
-			vbjets_mcflavor_isLoaded = true;
+			vbjets_mcflavor_phys_isLoaded = true;
 		}
-		return *vbjets_mcflavor_;
+		return *vbjets_mcflavor_phys_;
+	}
+	const vector<int> &vbjets_mcflavor_algo()
+	{
+		if (not vbjets_mcflavor_algo_isLoaded) {
+			if (vbjets_mcflavor_algo_branch != 0) {
+				vbjets_mcflavor_algo_branch->GetEntry(index);
+			} else { 
+				printf("branch vbjets_mcflavor_algo_branch does not exist!\n");
+				exit(1);
+			}
+			vbjets_mcflavor_algo_isLoaded = true;
+		}
+		return *vbjets_mcflavor_algo_;
 	}
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4()
 	{
@@ -7739,19 +7798,6 @@ void LoadAllBranches()
 			vbjets_nearjet_p4_isLoaded = true;
 		}
 		return *vbjets_nearjet_p4_;
-	}
-	const vector<bool> &vbtags()
-	{
-		if (not vbtags_isLoaded) {
-			if (vbtags_branch != 0) {
-				vbtags_branch->GetEntry(index);
-			} else { 
-				printf("branch vbtags_branch does not exist!\n");
-				exit(1);
-			}
-			vbtags_isLoaded = true;
-		}
-		return *vbtags_;
 	}
 	const vector<float> &vbjets_nearjet_dr()
 	{
@@ -8269,17 +8315,19 @@ namespace ssb {
 	const float &bjets_dr12();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenb_p4();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4();
-	const vector<int> &vjets_mcflavor();
+	const vector<bool> &vjets_btagged();
+	const vector<int> &vjets_mcflavor_phys();
+	const vector<int> &vjets_mcflavor_algo();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4();
 	const vector<int> &vjets_mc3id();
 	const vector<int> &vjets_momid();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4();
-	const vector<int> &vbjets_mcflavor();
+	const vector<int> &vbjets_mcflavor_phys();
+	const vector<int> &vbjets_mcflavor_algo();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4();
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4();
-	const vector<bool> &vbtags();
 	const vector<float> &vbjets_nearjet_dr();
 	const vector<int> &vbjets_mc3id();
 	const vector<int> &vbjets_momid();

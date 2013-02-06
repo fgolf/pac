@@ -1,7 +1,7 @@
 #!/bin/bash 
 
-tag="29Jan2013_d0cut"
-run_list=json/final_19p47fb_cms2.txt
+tag="29Jan2013"
+run_list=json/final_19p49fb_cms2.txt
 nev=-1
 
 ss2012_create_fakerate.exe --nev $nev --sample data_el --channel el --root_file_name electrons_${tag}.root --run_list $run_list

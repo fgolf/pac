@@ -58,7 +58,7 @@ float pfiso03_corr()
 float pfiso03_rho()
 {
     using namespace frb;
-    return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*el_effarea())))/pt();
+    return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*el_effarea03())))/pt();
 }
 
 float pfiso03_dB()
@@ -241,7 +241,7 @@ int FakeRateBabyLooperETH::operator()(long event, const std::string& current_fil
         
         // which dataset
         bool is_data  = fr::GetSampleInfo(m_sample).type == fr::SampleType::data;
-        bool is_ttbar = m_sample == fr::Sample::ttbar;
+        //bool is_ttbar = m_sample == fr::Sample::ttbar;
         bool is_qcd   = m_sample == fr::Sample::qcd;
         bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
         bool is_el = (m_lepton=="el") ? abs(id())==11 : false;

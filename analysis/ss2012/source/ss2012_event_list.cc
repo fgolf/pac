@@ -47,9 +47,9 @@ struct SortByEventInfo
     bool operator () (const event_info_t& lhs, const event_info_t& rhs) const 
     {
         if (lhs.channel != rhs.channel) {return lhs.channel < rhs.channel;}
-        else if (lhs.run != rhs.run)     {return lhs.run < rhs.run;}
-        else if (lhs.ls != rhs.ls)       {return lhs.ls < rhs.ls;}
-        else                             {return lhs.evt < rhs.evt;}
+        else if (lhs.run != rhs.run)    {return lhs.run < rhs.run;}
+        else if (lhs.ls != rhs.ls)      {return lhs.ls < rhs.ls;}
+        else                            {return lhs.evt < rhs.evt;}
     }
 };
 

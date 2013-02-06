@@ -682,7 +682,6 @@ int PlotLooper::operator()(long event)
         // which analysis type
         //bool is_high_pt = (m_analysis_type==ss::AnalysisType::high_pt);
 
-        //  //if (evt()==946339219)
         //  if (
         //        evt()==136681113  ||
         //        evt()==420345732  ||
@@ -697,32 +696,34 @@ int PlotLooper::operator()(long event)
         //        evt()==621112830  ||
         //        evt()==178599734
         //       )
-        //  {
-        //      string channel;
-        //      switch (hyp_type)
-        //      {
-        //          case DileptonHypType::MUMU : channel = "MuMu"; break;
-        //          case DileptonHypType::EMU  : channel = "EMu" ; break;
-        //          case DileptonHypType::EE   : channel = "EE"  ; break;
-        //          default                    : channel = "none"; 
-        //      }
-        //      channel.append(":");
-        //      //fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
-        //        cout << "hyp_type = " << hyp_type << "\t" << channel << endl;
-        //      cout << Form("%6u | %3u | %12u | %s | %d | %4.3f | %2.3f | %2.3f | %4.3f | %d | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %u | %u",
-        //             run(), ls(), evt(),
-        //             channel.c_str(),
-        //             lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta(), lep1_p4().phi(), lep1_corpfiso(),
-        //             lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta(), lep2_p4().phi(), lep2_corpfiso(),
-        //             pfmet(),
-        //             ht(),
-        //             njets(),
-        //             nbtags()) << endl;
-        //  }
-        //    else
+        //DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
+        //if (evt()==221637477)
+        //{
+        //    string channel;
+        //    switch (hyp_type)
         //    {
-        //        return 0;
+        //        case DileptonHypType::MUMU : channel = "MuMu"; break;
+        //        case DileptonHypType::EMU  : channel = "EMu" ; break;
+        //        case DileptonHypType::EE   : channel = "EE"  ; break;
+        //        default                    : channel = "none"; 
         //    }
+        //    channel.append(":");
+        //    //fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
+        //      cout << "hyp_type = " << hyp_type << "\t" << channel << endl;
+        //    cout << Form("%6u | %3u | %12u | %s | %d | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %d | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %4.3f | %u | %u",
+        //           run(), ls(), evt(),
+        //           channel.c_str(),
+        //           lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta(), lep1_p4().phi(), lep1_corpfiso(), lep1_d0(),
+        //           lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta(), lep2_p4().phi(), lep2_corpfiso(), lep2_d0(),
+        //           pfmet(),
+        //           ht(),
+        //           njets(),
+        //           nbtags()) << endl;
+        //}
+        //else
+        //{
+        //    return 0;
+        //}
 
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
@@ -769,11 +770,13 @@ int PlotLooper::operator()(long event)
         // d0 requirement
         //if ((is_ss() || is_os()) && abs(lep1_d0()) > (abs(lep1_pdgid())==11 ? 0.01 : 0.005))
         //{
-        //  return 0;
+        //    if (m_verbose) {cout << "lep1 failing minimum d0 cut" << endl;}
+        //    return 0;
         //}
         //if ((is_ss() || is_os()) && abs(lep2_d0()) > (abs(lep2_pdgid())==11 ? 0.01 : 0.005))
         //{
-        //  return 0;
+        //    if (m_verbose) {cout << "lep1 failing minimum d0 cut" << endl;}
+        //    return 0;
         //}
 
         // ioslation
@@ -864,18 +867,21 @@ int PlotLooper::operator()(long event)
         // two jet events
         if (njets() < static_cast<int>(m_njets))
         {
+            if (m_verbose) {cout << "faling # jets cut" << endl;}
             return 0;
         }
 
         // two btagged jets
         if (nbtags() < static_cast<int>(m_nbtags))
         {
+            if (m_verbose) {cout << "faling # btags cut" << endl;}
             return 0;
         }
 
         // passes signal region
         if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type))
         {
+            if (m_verbose) {cout << "faling signal region cut" << endl;}
             return 0;
         }
 

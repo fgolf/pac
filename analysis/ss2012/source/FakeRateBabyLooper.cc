@@ -60,15 +60,31 @@ float pfiso03_corr()
 float pfiso03_corr_rho()
 {
     using namespace frb;
-    const float eff_area = fastJetEffArea03_v2(eta()); 
+    const float eff_area = fastJetEffArea03_v2(sceta()); 
     return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*eff_area)))/pt();
 }
 
-float pfiso03_corr_dB()
+float pfiso03_corr_db()
 {
     using namespace frb;
     return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (0.5f*pfpupt03())))/pt();
 }
+
+float cpfiso03_rho_truncated()
+{
+    using namespace frb;
+    //const float eff_area = fastJetEffArea03_v2(sceta()); 
+    //return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*eff_area)))/max(20.0f, pt());
+    return (cpfiso03_rho()*pt())/max(20.0f, pt());
+}
+
+float cpfiso03_db_truncated()
+{
+    using namespace frb;
+    //return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (0.5f*pfpupt03())))/pt();
+    return (cpfiso03_db()*pt())/max(20.0f, pt());
+}
+
 
 // end job
 void FakeRateBabyLooper::EndJob()
@@ -461,8 +477,9 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         //float evt_weight = 1.0; 
 
         // isolation
-        float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area
-        //float iso = ((m_lepton == "mu") ? cpfiso03_db() : cpfiso03_rho());  // old effective area
+        //float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area
+        float iso = ((m_lepton == "mu") ? cpfiso03_db() : cpfiso03_rho());  // old effective area
+        //float iso = ((m_lepton == "mu") ? cpfiso03_db_truncated() : cpfiso03_rho_truncated()); // new effective area
 
         // muons
         // ----------------------------------------------------------------------------------------------------------------------------//
