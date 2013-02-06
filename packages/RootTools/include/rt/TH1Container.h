@@ -88,6 +88,7 @@ class TH1Container
         void SetMarkerSize(Size_t size = 1);
         void SetMarkerStyle(Style_t style = 1);
         void SetOption(const std::string& option = "");
+        void SetDrawOption(const std::string& option = "");
         void SetStats(bool stats = true);
         
         // write all histograms to a root file

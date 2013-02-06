@@ -482,6 +482,15 @@ void TH1Container::SetOption(const std::string& option)
 }
 
 
+void TH1Container::SetDrawOption(const std::string& option)
+{
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    {
+        iter->second->SetDrawOption(option.c_str());
+    }
+}
+
+
 void TH1Container::SetStats(bool stats)
 {
     for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
@@ -504,6 +513,7 @@ void TH1Container::Write(TFile* root_file, const std::string& root_file_dir) con
 
 void TH1Container::Print(const std::string& dir_name, const std::string& suffix, const std::string& option, bool logy) const
 {
+    rt::mkdir(dir_name, /*force=*/true);
     rt::Print(m_pimpl->hist_map, dir_name, suffix, option, logy);
 }
 

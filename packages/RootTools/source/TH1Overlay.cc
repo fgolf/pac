@@ -380,6 +380,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         //hist->SetBarWidth(hist->GetBarWidth());
         hist->SetLineWidth(1);
         hist->SetOption(hist->GetOption());
+        hist->SetDrawOption(hist->GetDrawOption());
         hist->SetFillStyle(1001);  // hard coded until i determine how to do this better
     }
     else
@@ -392,6 +393,7 @@ void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_
         hist->SetMarkerStyle(style);
         //hist->SetBarWidth(hist->GetBarWidth());
         hist->SetOption(hist->GetOption());
+        hist->SetDrawOption(hist->GetDrawOption());
         hist->SetMarkerSize(hist->GetMarkerSize());
     }
     if (is_norm)

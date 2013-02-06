@@ -95,12 +95,12 @@ namespace rt
             // constructs
             TH1Overlay();
             TH1Overlay
-                (
-                    const std::string& title, 
-                    StatBoxPlacement::value_type sb_place = StatBoxPlacement::StatBoxPlacementDefault,
-                    LegendPlacement::value_type leg_place = LegendPlacement::LegendPlacementDefault,
-                    DrawType::value_type DrawType = DrawType::DrawTypeDefault
-                );
+            (
+                const std::string& title, 
+                StatBoxPlacement::value_type sb_place = StatBoxPlacement::StatBoxPlacementDefault,
+                LegendPlacement::value_type leg_place = LegendPlacement::LegendPlacementDefault,
+                DrawType::value_type DrawType = DrawType::DrawTypeDefault
+            );
             TH1Overlay(const std::string& title, const std::string& option);
             ~TH1Overlay();
             TH1Overlay(const TH1Overlay& rhs);
