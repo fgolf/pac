@@ -161,7 +161,7 @@ namespace fr
     // fails at compile time if it does
 #define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
 #define STATIC_ASSERT(expr) typedef char static_assert[(expr) ? 1 : -1]
-    STATIC_ASSERT(ARRAY_SIZE(s_SampleInfos) == Sample::static_size);
+    STATIC_ASSERT(ARRAY_SIZE(s_SampleInfos) == fr::Sample::static_size);
 
     // wrapper function to get the SampleInfo
     Sample::value_type GetSampleFromName(const std::string& sample_name)
