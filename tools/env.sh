@@ -25,4 +25,3 @@ export PAC=$project_dir
 PATH=$project_dir/bin:$PATH
 LD_LIBRARY_PATH=$project_dir/lib:$LD_LIBRARY_PATH
 DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
-

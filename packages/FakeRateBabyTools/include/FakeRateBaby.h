@@ -41,6 +41,9 @@ protected:
 	int	pu_nPUvertices_;
 	TBranch *pu_nPUvertices_branch;
 	bool pu_nPUvertices_isLoaded;
+	float	pu_nPUtrueint_;
+	TBranch *pu_nPUtrueint_branch;
+	bool pu_nPUtrueint_isLoaded;
 	int	evt_nvtxs_;
 	TBranch *evt_nvtxs_branch;
 	bool evt_nvtxs_isLoaded;
@@ -56,6 +59,12 @@ protected:
 	int	nmus_;
 	TBranch *nmus_branch;
 	bool nmus_isLoaded;
+	int	nvetoels_;
+	TBranch *nvetoels_branch;
+	bool nvetoels_isLoaded;
+	int	nvetomus_;
+	TBranch *nvetomus_branch;
+	bool nvetomus_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lp4_;
 	TBranch *lp4_branch;
 	bool lp4_isLoaded;
@@ -173,6 +182,9 @@ protected:
 	float	cpfiso03_rho_;
 	TBranch *cpfiso03_rho_branch;
 	bool cpfiso03_rho_isLoaded;
+	float	cpfiso04_rho_;
+	TBranch *cpfiso04_rho_branch;
+	bool cpfiso04_rho_isLoaded;
 	float	cpfiso03_db_;
 	TBranch *cpfiso03_db_branch;
 	bool cpfiso03_db_isLoaded;
@@ -200,9 +212,12 @@ protected:
 	bool	el_id_vbtf90_;
 	TBranch *el_id_vbtf90_branch;
 	bool el_id_vbtf90_isLoaded;
-	float	el_effarea_;
-	TBranch *el_effarea_branch;
-	bool el_effarea_isLoaded;
+	float	el_effarea03_;
+	TBranch *el_effarea03_branch;
+	bool el_effarea03_isLoaded;
+	float	el_effarea04_;
+	TBranch *el_effarea04_branch;
+	bool el_effarea04_isLoaded;
 	float	mu_effarea03_;
 	TBranch *mu_effarea03_branch;
 	bool mu_effarea03_isLoaded;
@@ -1088,6 +1103,11 @@ void Init(TTree *tree) {
 		pu_nPUvertices_branch = tree->GetBranch("pu_nPUvertices");
 		if (pu_nPUvertices_branch) {pu_nPUvertices_branch->SetAddress(&pu_nPUvertices_);}
 	}
+	pu_nPUtrueint_branch = 0;
+	if (tree->GetBranch("pu_nPUtrueint") != 0) {
+		pu_nPUtrueint_branch = tree->GetBranch("pu_nPUtrueint");
+		if (pu_nPUtrueint_branch) {pu_nPUtrueint_branch->SetAddress(&pu_nPUtrueint_);}
+	}
 	evt_nvtxs_branch = 0;
 	if (tree->GetBranch("evt_nvtxs") != 0) {
 		evt_nvtxs_branch = tree->GetBranch("evt_nvtxs");
@@ -1112,6 +1132,16 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("nmus") != 0) {
 		nmus_branch = tree->GetBranch("nmus");
 		if (nmus_branch) {nmus_branch->SetAddress(&nmus_);}
+	}
+	nvetoels_branch = 0;
+	if (tree->GetBranch("nvetoels") != 0) {
+		nvetoels_branch = tree->GetBranch("nvetoels");
+		if (nvetoels_branch) {nvetoels_branch->SetAddress(&nvetoels_);}
+	}
+	nvetomus_branch = 0;
+	if (tree->GetBranch("nvetomus") != 0) {
+		nvetomus_branch = tree->GetBranch("nvetomus");
+		if (nvetomus_branch) {nvetomus_branch->SetAddress(&nvetomus_);}
 	}
 	foel_id_branch = 0;
 	if (tree->GetBranch("foel_id") != 0) {
@@ -1288,6 +1318,11 @@ void Init(TTree *tree) {
 		cpfiso03_rho_branch = tree->GetBranch("cpfiso03_rho");
 		if (cpfiso03_rho_branch) {cpfiso03_rho_branch->SetAddress(&cpfiso03_rho_);}
 	}
+	cpfiso04_rho_branch = 0;
+	if (tree->GetBranch("cpfiso04_rho") != 0) {
+		cpfiso04_rho_branch = tree->GetBranch("cpfiso04_rho");
+		if (cpfiso04_rho_branch) {cpfiso04_rho_branch->SetAddress(&cpfiso04_rho_);}
+	}
 	cpfiso03_db_branch = 0;
 	if (tree->GetBranch("cpfiso03_db") != 0) {
 		cpfiso03_db_branch = tree->GetBranch("cpfiso03_db");
@@ -1333,10 +1368,15 @@ void Init(TTree *tree) {
 		el_id_vbtf90_branch = tree->GetBranch("el_id_vbtf90");
 		if (el_id_vbtf90_branch) {el_id_vbtf90_branch->SetAddress(&el_id_vbtf90_);}
 	}
-	el_effarea_branch = 0;
-	if (tree->GetBranch("el_effarea") != 0) {
-		el_effarea_branch = tree->GetBranch("el_effarea");
-		if (el_effarea_branch) {el_effarea_branch->SetAddress(&el_effarea_);}
+	el_effarea03_branch = 0;
+	if (tree->GetBranch("el_effarea03") != 0) {
+		el_effarea03_branch = tree->GetBranch("el_effarea03");
+		if (el_effarea03_branch) {el_effarea03_branch->SetAddress(&el_effarea03_);}
+	}
+	el_effarea04_branch = 0;
+	if (tree->GetBranch("el_effarea04") != 0) {
+		el_effarea04_branch = tree->GetBranch("el_effarea04");
+		if (el_effarea04_branch) {el_effarea04_branch->SetAddress(&el_effarea04_);}
 	}
 	mu_effarea03_branch = 0;
 	if (tree->GetBranch("mu_effarea03") != 0) {
@@ -2722,11 +2762,14 @@ void GetEntry(unsigned int idx)
 		dataset_isLoaded = false;
 		filename_isLoaded = false;
 		pu_nPUvertices_isLoaded = false;
+		pu_nPUtrueint_isLoaded = false;
 		evt_nvtxs_isLoaded = false;
 		nFOels_isLoaded = false;
 		nFOmus_isLoaded = false;
 		ngsfs_isLoaded = false;
 		nmus_isLoaded = false;
+		nvetoels_isLoaded = false;
+		nvetomus_isLoaded = false;
 		lp4_isLoaded = false;
 		mc3p4_isLoaded = false;
 		foel_p4_isLoaded = false;
@@ -2766,6 +2809,7 @@ void GetEntry(unsigned int idx)
 		pfpupt03_isLoaded = false;
 		pfpupt04_isLoaded = false;
 		cpfiso03_rho_isLoaded = false;
+		cpfiso04_rho_isLoaded = false;
 		cpfiso03_db_isLoaded = false;
 		id_isLoaded = false;
 		closestMuon_isLoaded = false;
@@ -2775,7 +2819,8 @@ void GetEntry(unsigned int idx)
 		el_id_smurfV5_isLoaded = false;
 		el_id_vbtf80_isLoaded = false;
 		el_id_vbtf90_isLoaded = false;
-		el_effarea_isLoaded = false;
+		el_effarea03_isLoaded = false;
+		el_effarea04_isLoaded = false;
 		mu_effarea03_isLoaded = false;
 		mu_nh_effarea03_isLoaded = false;
 		mu_em_effarea03_isLoaded = false;
@@ -3063,11 +3108,14 @@ void LoadAllBranches()
 	if (dataset_branch != 0) dataset();
 	if (filename_branch != 0) filename();
 	if (pu_nPUvertices_branch != 0) pu_nPUvertices();
+	if (pu_nPUtrueint_branch != 0) pu_nPUtrueint();
 	if (evt_nvtxs_branch != 0) evt_nvtxs();
 	if (nFOels_branch != 0) nFOels();
 	if (nFOmus_branch != 0) nFOmus();
 	if (ngsfs_branch != 0) ngsfs();
 	if (nmus_branch != 0) nmus();
+	if (nvetoels_branch != 0) nvetoels();
+	if (nvetomus_branch != 0) nvetomus();
 	if (lp4_branch != 0) lp4();
 	if (mc3p4_branch != 0) mc3p4();
 	if (foel_p4_branch != 0) foel_p4();
@@ -3107,6 +3155,7 @@ void LoadAllBranches()
 	if (pfpupt03_branch != 0) pfpupt03();
 	if (pfpupt04_branch != 0) pfpupt04();
 	if (cpfiso03_rho_branch != 0) cpfiso03_rho();
+	if (cpfiso04_rho_branch != 0) cpfiso04_rho();
 	if (cpfiso03_db_branch != 0) cpfiso03_db();
 	if (id_branch != 0) id();
 	if (closestMuon_branch != 0) closestMuon();
@@ -3116,7 +3165,8 @@ void LoadAllBranches()
 	if (el_id_smurfV5_branch != 0) el_id_smurfV5();
 	if (el_id_vbtf80_branch != 0) el_id_vbtf80();
 	if (el_id_vbtf90_branch != 0) el_id_vbtf90();
-	if (el_effarea_branch != 0) el_effarea();
+	if (el_effarea03_branch != 0) el_effarea03();
+	if (el_effarea04_branch != 0) el_effarea04();
 	if (mu_effarea03_branch != 0) mu_effarea03();
 	if (mu_nh_effarea03_branch != 0) mu_nh_effarea03();
 	if (mu_em_effarea03_branch != 0) mu_em_effarea03();
@@ -3497,6 +3547,19 @@ void LoadAllBranches()
 		}
 		return pu_nPUvertices_;
 	}
+	float &pu_nPUtrueint()
+	{
+		if (not pu_nPUtrueint_isLoaded) {
+			if (pu_nPUtrueint_branch != 0) {
+				pu_nPUtrueint_branch->GetEntry(index);
+			} else { 
+				printf("branch pu_nPUtrueint_branch does not exist!\n");
+				exit(1);
+			}
+			pu_nPUtrueint_isLoaded = true;
+		}
+		return pu_nPUtrueint_;
+	}
 	int &evt_nvtxs()
 	{
 		if (not evt_nvtxs_isLoaded) {
@@ -3561,6 +3624,32 @@ void LoadAllBranches()
 			nmus_isLoaded = true;
 		}
 		return nmus_;
+	}
+	int &nvetoels()
+	{
+		if (not nvetoels_isLoaded) {
+			if (nvetoels_branch != 0) {
+				nvetoels_branch->GetEntry(index);
+			} else { 
+				printf("branch nvetoels_branch does not exist!\n");
+				exit(1);
+			}
+			nvetoels_isLoaded = true;
+		}
+		return nvetoels_;
+	}
+	int &nvetomus()
+	{
+		if (not nvetomus_isLoaded) {
+			if (nvetomus_branch != 0) {
+				nvetomus_branch->GetEntry(index);
+			} else { 
+				printf("branch nvetomus_branch does not exist!\n");
+				exit(1);
+			}
+			nvetomus_isLoaded = true;
+		}
+		return nvetomus_;
 	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4()
 	{
@@ -4069,6 +4158,19 @@ void LoadAllBranches()
 		}
 		return cpfiso03_rho_;
 	}
+	float &cpfiso04_rho()
+	{
+		if (not cpfiso04_rho_isLoaded) {
+			if (cpfiso04_rho_branch != 0) {
+				cpfiso04_rho_branch->GetEntry(index);
+			} else { 
+				printf("branch cpfiso04_rho_branch does not exist!\n");
+				exit(1);
+			}
+			cpfiso04_rho_isLoaded = true;
+		}
+		return cpfiso04_rho_;
+	}
 	float &cpfiso03_db()
 	{
 		if (not cpfiso03_db_isLoaded) {
@@ -4186,18 +4288,31 @@ void LoadAllBranches()
 		}
 		return el_id_vbtf90_;
 	}
-	float &el_effarea()
+	float &el_effarea03()
 	{
-		if (not el_effarea_isLoaded) {
-			if (el_effarea_branch != 0) {
-				el_effarea_branch->GetEntry(index);
+		if (not el_effarea03_isLoaded) {
+			if (el_effarea03_branch != 0) {
+				el_effarea03_branch->GetEntry(index);
 			} else { 
-				printf("branch el_effarea_branch does not exist!\n");
+				printf("branch el_effarea03_branch does not exist!\n");
 				exit(1);
 			}
-			el_effarea_isLoaded = true;
+			el_effarea03_isLoaded = true;
 		}
-		return el_effarea_;
+		return el_effarea03_;
+	}
+	float &el_effarea04()
+	{
+		if (not el_effarea04_isLoaded) {
+			if (el_effarea04_branch != 0) {
+				el_effarea04_branch->GetEntry(index);
+			} else { 
+				printf("branch el_effarea04_branch does not exist!\n");
+				exit(1);
+			}
+			el_effarea04_isLoaded = true;
+		}
+		return el_effarea04_;
 	}
 	float &mu_effarea03()
 	{
@@ -7797,11 +7912,14 @@ namespace frb {
 	const TString &dataset();
 	const TString &filename();
 	const int &pu_nPUvertices();
+	const float &pu_nPUtrueint();
 	const int &evt_nvtxs();
 	const int &nFOels();
 	const int &nFOmus();
 	const int &ngsfs();
 	const int &nmus();
+	const int &nvetoels();
+	const int &nvetomus();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4();
@@ -7841,6 +7959,7 @@ namespace frb {
 	const float &pfpupt03();
 	const float &pfpupt04();
 	const float &cpfiso03_rho();
+	const float &cpfiso04_rho();
 	const float &cpfiso03_db();
 	const int &id();
 	const bool &closestMuon();
@@ -7850,7 +7969,8 @@ namespace frb {
 	const bool &el_id_smurfV5();
 	const bool &el_id_vbtf80();
 	const bool &el_id_vbtf90();
-	const float &el_effarea();
+	const float &el_effarea03();
+	const float &el_effarea04();
 	const float &mu_effarea03();
 	const float &mu_nh_effarea03();
 	const float &mu_em_effarea03();

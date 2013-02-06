@@ -9,11 +9,14 @@ namespace frb {
 	const TString &dataset() { return fake_rate_baby.dataset(); }
 	const TString &filename() { return fake_rate_baby.filename(); }
 	const int &pu_nPUvertices() { return fake_rate_baby.pu_nPUvertices(); }
+	const float &pu_nPUtrueint() { return fake_rate_baby.pu_nPUtrueint(); }
 	const int &evt_nvtxs() { return fake_rate_baby.evt_nvtxs(); }
 	const int &nFOels() { return fake_rate_baby.nFOels(); }
 	const int &nFOmus() { return fake_rate_baby.nFOmus(); }
 	const int &ngsfs() { return fake_rate_baby.ngsfs(); }
 	const int &nmus() { return fake_rate_baby.nmus(); }
+	const int &nvetoels() { return fake_rate_baby.nvetoels(); }
+	const int &nvetomus() { return fake_rate_baby.nvetomus(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4() { return fake_rate_baby.lp4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4() { return fake_rate_baby.mc3p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4() { return fake_rate_baby.foel_p4(); }
@@ -53,6 +56,7 @@ namespace frb {
 	const float &pfpupt03() { return fake_rate_baby.pfpupt03(); }
 	const float &pfpupt04() { return fake_rate_baby.pfpupt04(); }
 	const float &cpfiso03_rho() { return fake_rate_baby.cpfiso03_rho(); }
+	const float &cpfiso04_rho() { return fake_rate_baby.cpfiso04_rho(); }
 	const float &cpfiso03_db() { return fake_rate_baby.cpfiso03_db(); }
 	const int &id() { return fake_rate_baby.id(); }
 	const bool &closestMuon() { return fake_rate_baby.closestMuon(); }
@@ -62,7 +66,8 @@ namespace frb {
 	const bool &el_id_smurfV5() { return fake_rate_baby.el_id_smurfV5(); }
 	const bool &el_id_vbtf80() { return fake_rate_baby.el_id_vbtf80(); }
 	const bool &el_id_vbtf90() { return fake_rate_baby.el_id_vbtf90(); }
-	const float &el_effarea() { return fake_rate_baby.el_effarea(); }
+	const float &el_effarea03() { return fake_rate_baby.el_effarea03(); }
+	const float &el_effarea04() { return fake_rate_baby.el_effarea04(); }
 	const float &mu_effarea03() { return fake_rate_baby.mu_effarea03(); }
 	const float &mu_nh_effarea03() { return fake_rate_baby.mu_nh_effarea03(); }
 	const float &mu_em_effarea03() { return fake_rate_baby.mu_em_effarea03(); }
