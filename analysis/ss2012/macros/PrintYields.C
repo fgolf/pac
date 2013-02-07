@@ -770,7 +770,7 @@ void PrintYieldsETH
 
 		// print the table
 		const string sr_name = Form((sr_num < 10 ? "SR0%lu" : "SR%lu"), sr_num);
-
+        
 		if (sr_num == 0)
 		{
 			cout << "{" << endl;
@@ -779,6 +779,7 @@ void PrintYieldsETH
 		cout << Form("'f': %1.3f, 'fstat': %1.3f, 'fsyst': %1.3f,", yield_fake.ll   , yield_fake.dll   , yield_fake.sll   ) << endl;
 		cout << Form("'c': %1.3f, 'cstat': %1.3f, 'csyst': %1.3f,", yield_flip.ll   , yield_flip.dll   , yield_flip.sll   ) << endl;
 		cout << Form("'r': %1.3f, 'rstat': %1.3f, 'rsyst': %1.3f,", yield_mc_pred.ll, yield_mc_pred.dll, yield_mc_pred.sll) << endl;
+		cout << Form("'o': %u", static_cast<unsigned int>(yield_data.ll)) << endl;
 		if (sr_num == (ss::SignalRegion::static_size - 1))
 		{
 			cout << "}" << endl;

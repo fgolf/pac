@@ -118,7 +118,9 @@ try
     // overlay
     hc.SetMarkerSize(1.8);
     hc.SetDrawOption("hist");
-    rt::TH1Overlay overlay("# btagged-jets;# btags;Events", "lg::top sb::off");
+    hc["h_nbtags_sf_up"]->SetLineStyle(2);
+    hc["h_nbtags_sf_dn"]->SetLineStyle(2);
+    rt::TH1Overlay overlay("# btagged-jets;# btags;Events", "lg::top_right sb::off");
     overlay.Add(hc["h_nbtags"      ], "Raw"             , kBlack, 2, 20, 1);
     overlay.Add(hc["h_nbtags_sf"   ], "SF Applied"      , kRed  , 2, 22, 1);
     overlay.Add(hc["h_nbtags_sf_up"], "Uncertainty Up"  , kBlue , 2, 24, 2);

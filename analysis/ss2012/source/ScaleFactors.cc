@@ -12,7 +12,7 @@ float dileptonTagAndProbeScaleFactor(int hyp_idx)
 
 float tagAndProbeScaleFactor(int id, float pt, float eta)
 {
-    return 1.0; // decided to take one on Friday
+    return 1.0; // decided to take one
 }
 
 float dilepTriggerScaleFactor(const at::DileptonHypType::value_type& hyp_type)
