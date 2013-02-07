@@ -37,7 +37,7 @@ try
     std::string output_file         = "";
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_29Jan2013.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_29Jan2013_d0cut.root";
     std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
     std::string fake_rate_hist_name = "h_mufr40c";
     std::string sample_name         = "";
@@ -57,28 +57,28 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"          , "print this menu")
-        ("nev"           , po::value<long>(&number_of_events)           , "number of events to run on (-1 == all)"                                            )
-        ("lumi"          , po::value<double>(&luminosity)               , "luminosity of analysis (1 fb^-1 default -- ignored for data)"                      )
-        ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                                                 )
-        ("gen_only"      , po::value<bool>(&gen_only)                   , "only fill gen variables"                                                           )
-        ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                           )
-        ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from AnalysisType.h)"                                        )
-        ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, ...) (from at/Sample.h)"                          )
-        ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (default: <sample name>.root)"                      )
-        ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default is determined by the sample used)"                           )
-        ("fr"            , po::value<std::string>(&fake_rate_file_name) , "fake rate file name (default: data/fake_rates/ssFR_data_standard_16Dec2012.root)"  )
-        ("fl"            , po::value<std::string>(&flip_rate_file_name) , "flip rate file name (default: data/flip_rates/fliprate42X.root)"                   )
-        ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c)"                                     )  // to do for electrons
-        ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                              )
-        ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                        )
-        ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms (default is false)"                                              )
+        ("nev"           , po::value<long>(&number_of_events)           , "number of events to run on (-1 == all)"                                                )
+        ("lumi"          , po::value<double>(&luminosity)               , "luminosity of analysis (1 fb^-1 default -- ignored for data)"                          )
+        ("verbose"       , po::value<bool>(&verbose)                    , "output debug info"                                                                     )
+        ("gen_only"      , po::value<bool>(&gen_only)                   , "only fill gen variables"                                                               )
+        ("sample"        , po::value<std::string>(&sample_name)         , "name of input sample (from at/Sample.h)"                                               )
+        ("anal_type"     , po::value<std::string>(&analysis_type_name)  , "name of input sample (from AnalysisType.h)"                                            )
+        ("ntuple_type"   , po::value<std::string>(&ntuple_type_name)    , "ntuple type name (cms2, ss_skim, ...) (from at/Sample.h)"                              )
+        ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (default: <sample name>.root)"                          )
+        ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default is determined by the sample used)"                               )
+        ("fr"            , po::value<std::string>(&fake_rate_file_name) , "fake rate file name (default: data/fake_rates/ssFR_data_standard_29Jan2013_d0cut.root)")
+        ("fl"            , po::value<std::string>(&flip_rate_file_name) , "flip rate file name (default: data/flip_rates/fliprate42X.root)"                       )
+        ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c)"                                         )  // to do for electrons
+        ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                                  )
+        ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                            )
+        ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms (default is false)"                                                  )
+        ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync exercise"                                                               )
+        ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                           )
+        ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                            )
+        ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                        )
+        ("use_el_eta"    , po::value<bool>(&use_el_eta)                 , "use the |et->eta| to determine is electron is barrel or endcap"                        )
+        ("apply_jec_otf" , po::value<std::string>(&apply_jec_otf)       , "apply JEC on-the-fly using the specified global tag"                                   )
         //("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
-        ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync exercise"                                                           )
-        ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                       )
-        ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                        )
-        ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                    )
-        ("use_el_eta"    , po::value<bool>(&use_el_eta)                 , "use the |et->eta| to determine is electron is barrel or endcap"                    )
-        ("apply_jec_otf" , po::value<std::string>(&apply_jec_otf)       , "apply JEC on-the-fly using the specified global tag"                               )
         ;
 
     po::variables_map vm;

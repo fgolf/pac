@@ -103,7 +103,7 @@ Allowed options:
                         name>.root)
   --input arg           input ntuple (default is determined by the sample used)
   --fr arg              fake rate file name (default: 
-                        data/fake_rates/ssFR_data_standard_16Dec2012.root)
+                        data/fake_rates/ssFR_data_standard_29Jan2012_d0Cut.root)
   --fl arg              flip rate file name (default: 
                         data/flip_rates/fliprate42X.root)
   --fr_hist arg         fake rate histogram name (default: h_mufr40c)
