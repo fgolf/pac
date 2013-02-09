@@ -246,6 +246,36 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH2F("h_mu_fo20c_iso", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
         hc.Add(new TH2F("h_mu_fo40c_iso", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
         hc.Add(new TH2F("h_mu_fo60c_iso", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", mu_eta_bins.size()-1, mu_eta_bins.data(), mu_pt_bins.size()-1, mu_pt_bins.data()), "texte");
+
+        // MET distribution denominator
+        hc.Add(new TH1F("h_mu_fo20c_met", "h_mu_fo20c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_fo40c_met", "h_mu_fo40c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_fo60c_met", "h_mu_fo60c_met", 20, 0., 100.));
+
+        // MT distribution denominator, MET > 30 GeV
+        hc.Add(new TH1F("h_mu_fo20c_mt_met30gt", "h_mu_fo20c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_fo40c_mt_met30gt", "h_mu_fo40c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_fo60c_mt_met30gt", "h_mu_fo60c_mt_met30gt", 20, 0., 100.));
+
+        // MT distribution denominator, MET < 20 GeV
+        hc.Add(new TH1F("h_mu_fo20c_mt_met20lt", "h_mu_fo20c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_fo40c_mt_met20lt", "h_mu_fo40c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_fo60c_mt_met20lt", "h_mu_fo60c_mt_met20lt", 20, 0., 100.));
+
+        // MET distribution numerator
+        hc.Add(new TH1F("h_mu_num20c_met", "h_mu_num20c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_num40c_met", "h_mu_num40c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_num60c_met", "h_mu_num60c_met", 20, 0., 100.));
+
+        // MT distribution numerator
+        hc.Add(new TH1F("h_mu_num20c_mt_met30gt", "h_mu_num20c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_num40c_mt_met30gt", "h_mu_num40c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_num60c_mt_met30gt", "h_mu_num60c_mt_met30gt", 20, 0., 100.));
+
+        // MT distribution denominator, MET < 20 GeV
+        hc.Add(new TH1F("h_mu_num20c_mt_met20lt", "h_mu_num20c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_num40c_mt_met20lt", "h_mu_num40c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_mu_num60c_mt_met20lt", "h_mu_num60c_mt_met20lt", 20, 0., 100.));
     }
 
     // electrons
@@ -293,6 +323,36 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH2F("h_el_fo20c_noiso", "fo electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
         hc.Add(new TH2F("h_el_fo40c_noiso", "fo electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
         hc.Add(new TH2F("h_el_fo60c_noiso", "fo electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", el_eta_bins.size()-1, el_eta_bins.data(), el_pt_bins.size()-1, el_pt_bins.data()), "texte");
+
+        // MET distribution denominator
+        hc.Add(new TH1F("h_el_fo20c_met", "h_el_fo20c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_fo40c_met", "h_el_fo40c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_fo60c_met", "h_el_fo60c_met", 20, 0., 100.));
+
+        // MT distribution denominator, MET > 30
+        hc.Add(new TH1F("h_el_fo20c_mt_met30gt", "h_el_fo20c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_fo40c_mt_met30gt", "h_el_fo40c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_fo60c_mt_met30gt", "h_el_fo60c_mt_met30gt", 20, 0., 100.));
+
+        // MT distribution denominator, MET < 20 GeV
+        hc.Add(new TH1F("h_el_fo20c_mt_met20lt", "h_el_fo20c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_fo40c_mt_met20lt", "h_el_fo40c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_fo60c_mt_met20lt", "h_el_fo60c_mt_met20lt", 20, 0., 100.));
+
+        // MET distribution numerator
+        hc.Add(new TH1F("h_el_num20c_met", "h_el_num20c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_num40c_met", "h_el_num40c_met", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_num60c_met", "h_el_num60c_met", 20, 0., 100.));
+
+        // MT distribution numerator
+        hc.Add(new TH1F("h_el_num20c_mt_met30gt", "h_el_num20c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_num40c_mt_met30gt", "h_el_num40c_mt_met30gt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_num60c_mt_met30gt", "h_el_num60c_mt_met30gt", 20, 0., 100.));
+
+        // MT distribution denominator, MET < 20 GeV
+        hc.Add(new TH1F("h_el_num20c_mt_met20lt", "h_el_num20c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_num40c_mt_met20lt", "h_el_num40c_mt_met20lt", 20, 0., 100.));
+        hc.Add(new TH1F("h_el_num60c_mt_met20lt", "h_el_num60c_mt_met20lt", 20, 0., 100.));
     }
 
     hc.Sumw2();
@@ -322,6 +382,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         const bool is_ttbar = (m_sample==fr::Sample::ttbar);
         const bool is_mu    = ((m_lepton=="mu") ? abs(id())==13 : false);
         const bool is_el    = ((m_lepton=="el") ? abs(id())==11 : false);
+
+        if (!is_mu && !is_el) return 0;
 
         // qcd muon cuts (for the different qcd samples)
         const bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
@@ -359,13 +421,6 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             return 0;
         }
 
-        // no W (MET and m_T cuts)
-        if (pfmet()>20 || pfmt()>25)
-        {
-            if (m_verbose) {cout << "fails no W cut" << endl;}
-            return 0;
-        }
-
         // no resonance's (Z or upsilon)
         if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()<12)))
         {
@@ -385,8 +440,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         if (is_data && is_mu)
         {
             // trigger without isolation
-            trig_cut = ((pt() > 30 && (mu30_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
-                        (pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
+            trig_cut = ((pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
                         (pt() > 17 && (mu17_vstar()>1 || mu8_vstar()>1)) || 
                         (pt() > 8  && (mu8_vstar()>1)));
 
@@ -432,13 +486,11 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         bool num_lep_cut = false;
         if (is_mu)
         {
-            num_lep_cut = num_mu_ssV5_noIso();
-            //num_lep_cut = (num_mu_ssV5_noIso() && (fabs(d0()) < 0.005));
+            num_lep_cut = num_mu_ssV5_noIso() && (fabs(d0()) < 0.005);
         }
         else if(is_el)
         {
-            num_lep_cut = num_el_ssV7_noIso();
-            //num_lep_cut = (num_el_ssV7_noIso() && (fabs(d0()) < 0.010));
+            num_lep_cut = num_el_ssV7_noIso() && (fabs(d0()) < 0.01);
         }
 
         // denominator cut
@@ -468,18 +520,133 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // skip if not FO
         if (!fo_lep_sel_notrig)
         {
-            if (m_verbose) {cout << "fails FO ID cut" << endl;}
+            if (m_verbose) {cout << "fails FO ID cut" << endl;
+                cout << "is_el, fo_lep_cut: " << is_el << ", " << v3_el_ssV7() << endl;
+                cout << "is_mu, fo_lep_cut: " << is_mu << ", " << fo_mu_ssV5_noIso() << endl;}
             return 0;
         }
 
         // vertex reweight for ttbar
         float evt_weight = (weight() * m_lumi);
-        //float evt_weight = 1.0; 
+        // float evt_weight = 1.0; 
+        // if (m_sample==fr::Sample::wjets || m_sample==fr::Sample::dy)
+        // {
+        //     if (m_lepton == "mu") evt_weight *= 0.06*1.45;
+        //     if (m_lepton == "el") evt_weight *= 0.02*1.49;
+        // }
 
         // isolation
         //float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area
         float iso = ((m_lepton == "mu") ? cpfiso03_db() : cpfiso03_rho());  // old effective area
         //float iso = ((m_lepton == "mu") ? cpfiso03_db_truncated() : cpfiso03_rho_truncated()); // new effective area
+
+        // Fill some plots
+        if (m_lepton == "mu")
+        {
+            // numerator
+            if (num_lep_sel)
+            {
+                if (iso < 0.1)
+                {
+                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_met"], pfmet(), evt_weight); }
+                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_num40c_met"], pfmet(), evt_weight); }
+                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_num60c_met"], pfmet(), evt_weight); }
+
+                    if (pfmet() > 30)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_num40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_num60c_mt_met30gt"], pfmt(), evt_weight); }
+                    }
+
+                    if (pfmet() < 20)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_num40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                    }
+                }
+            }
+            if (fo_lep_sel)
+            {
+                if (iso < 0.4)
+                {
+                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_met"], pfmet(), evt_weight); }
+                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo40c_met"], pfmet(), evt_weight); }
+                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo60c_met"], pfmet(), evt_weight); }
+
+                    if (pfmet() > 30)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo60c_mt_met30gt"], pfmt(), evt_weight); }                        
+                    }
+
+                    if (pfmet() < 20)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                    }
+                }
+            }
+        }
+        if (m_lepton == "el")
+        {
+            // numerator
+            if (num_lep_sel)
+            {
+                if (iso < 0.09)
+                {
+                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_met"], pfmet(), evt_weight); }
+                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_met"], pfmet(), evt_weight); }
+                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_met"], pfmet(), evt_weight); }
+
+                    if (pfmet() > 30)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met30gt"], pfmt(), evt_weight); }
+                    }
+
+                    if (pfmet() < 20)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                    }
+                }
+            }
+            if (fo_lep_sel)
+            {
+                if (iso < 0.6)
+                {
+                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_fo20c_met"], pfmet(), evt_weight); }
+                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_fo40c_met"], pfmet(), evt_weight); }
+                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_fo60c_met"], pfmet(), evt_weight); }
+
+                    if (pfmet() > 30)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_fo20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_fo40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_fo60c_mt_met30gt"], pfmt(), evt_weight); }                        
+                    }
+                    if (pfmet() < 20)
+                    {
+                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                    }
+                }
+            }
+        }
+
+        // no W (MET and m_T cuts)
+        if (pfmet()>20 || pfmt()>25)
+        {
+            if (m_verbose) {cout << "fails no W cut" << endl;}
+            return 0;
+        }
 
         // muons
         // ----------------------------------------------------------------------------------------------------------------------------//
