@@ -71,10 +71,6 @@ bool passesETHdenomNoIso ()
 {
     using namespace frb;
     if (!num_mu_ssV5_noIso()) return false;
-    // if (fabs(d0PV_wwV1()) > 0.02) return false;
-    // if (mu_nchi2() > 10.) return false;
-    // if (mu_ecal_veto_dep() > 4) return false;
-    // if (mu_hcal_veto_dep() > 6) return false;
     return true;
 }
 
@@ -144,9 +140,9 @@ std::tr1::array<float, 9>  el_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.
 std::tr1::array<float, 5>  el_eta_bins = {{0.0, 1.0, 1.479, 2.0, 2.5}};
 std::tr1::array<float, 9>  mu_vtx_bins = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 std::tr1::array<float, 6>  mu_eta_bins = {{0.0, 0.5, 1.0, 1.5, 2.0, 2.5}};
-std::tr1::array<float, 10> mu_pt_bins  = {{5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
-//std::tr1::array<float, 7> mu_pt_bins   = {{20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
-//std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
+// std::tr1::array<float, 10> mu_pt_bins  = {{5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
+std::tr1::array<float, 7> mu_pt_bins   = {{20.0, 25.0, 30.0, 35.0, 40.0, 50.0, 60.0}};
+// std::tr1::array<float, 6> mu_pt_bins  = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
 std::tr1::array<float, 6> el_pt_bins  = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
 
 // book hists 
@@ -233,11 +229,6 @@ int FakeRateBabyLooperETH::operator()(long event, const std::string& current_fil
 
         // FO selection cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
-
-		if (run()>194076)
-		{
-			return 0;
-		}
         
         // which dataset
         bool is_data  = fr::GetSampleInfo(m_sample).type == fr::SampleType::data;
@@ -246,6 +237,8 @@ int FakeRateBabyLooperETH::operator()(long event, const std::string& current_fil
         bool is_mu = (m_lepton=="mu") ? abs(id())==13 : false;
         bool is_el = (m_lepton=="el") ? abs(id())==11 : false;
 
+        if (!is_mu && !is_el) return 0;
+        
         // qcd muon cuts (for the different qcd samples)
         bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
         bool qcd_mu_high = rt::string_contains(current_file_name, "MuEnrichedPt_15") && pt() >= 16.0; 
@@ -285,54 +278,28 @@ int FakeRateBabyLooperETH::operator()(long event, const std::string& current_fil
             return 0;
         }
 
-        // no additional loose leptons
-        // if (nFOmus() > 0 || nFOels() > 0)
-        // {
-        //     return 0;
-        // }
-        // if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()>12)))
-        // {
-        //     return 0;
-        // }
-        // else if (is_el && (76<mz_fo_gsf() && mz_fo_gsf()<106))
-        // {
-        //     return 0;
-        // }
+        // no additional loose leptons in the event
+        if (nvetomus() > 0 || nvetoels() > 0)
+        {
+            return 0;
+        }
 
         // trigger cuts
         bool trig_cut = false;
         if (is_data && is_mu)
         {
-            //trig_cut = ((pt() > 30 && (mu15_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1 || mu30_eta2p1_vstar() > 1)) || 
-            //            (pt() > 24 && (mu15_eta2p1_vstar() > 1 || mu24_eta2p1_vstar() > 1)) || 
-            //            (pt() > 15 && mu15_eta2p1_vstar() > 1) ||
-            //            (pt() > 8  && mu8_vstar() > 1));
-            trig_cut = (mu17_vstar()>0 || mu8_vstar()>0);
+            trig_cut = (mu17_vstar()>0);
         }
         else if(is_data && is_el)
         {
-            //trig_cut = ((pt() > 17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1   || 
-            //ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1 ||  ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1)) ||
-            //(pt() > 8  && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1  || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1)));
             trig_cut =  (pt() > 17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar() > 1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar() > 1 ||
                                        ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
             trig_cut |= (pt() > 8  && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()  > 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()  > 1 ));
         }
 
-        // no additional FO's in event
-        bool nFOcut = false;
-        if (is_mu)
-        {
-            nFOcut = (nFOmus() == 0);
-        }
-        else if(is_el)
-        {
-            nFOcut = (nFOels() == 0);
-        }
 
         // away jet cut
         bool jet30c_cut = (ptpfcL1Fj1res() > 30);
-        // bool jet50c_cut = (ptpfcL1Fj1res() > 50);
         bool jet50c_cut = (npfc50L1Fj1_eth() > 0);
         bool jet70c_cut = (ptpfcL1Fj1res() > 70);
 
@@ -359,8 +326,8 @@ int FakeRateBabyLooperETH::operator()(long event, const std::string& current_fil
         }
 
         // passes selection (no isolation)
-        bool num_lep_sel_notrig = (nFOcut && num_lep_cut);
-        bool fo_lep_sel_notrig  = (nFOcut && fo_lep_cut);
+        bool num_lep_sel_notrig = (num_lep_cut);
+        bool fo_lep_sel_notrig  = (fo_lep_cut);
         bool num_lep_sel        = (trig_cut && num_lep_sel_notrig);
         bool fo_lep_sel         = (trig_cut && fo_lep_sel_notrig);
 
