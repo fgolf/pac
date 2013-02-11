@@ -1495,14 +1495,20 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         {
             // jets
             if (not jet_flags.at(jidx)) {continue;}
-            m_evt.vjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
-            m_evt.vjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
+            if (evt_CMS2tag().at(0) == "V05-03-23")
+            {
+                m_evt.vjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
+                m_evt.vjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
+            }
 
             // btags
             m_evt.vjets_btagged.push_back(bjet_flags.at(jidx));
             if (not bjet_flags.at(jidx)) {continue;}
-            m_evt.vbjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
-            m_evt.vbjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
+            if (evt_CMS2tag().at(0) == "V05-03-23")
+            {
+                m_evt.vbjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
+                m_evt.vbjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
+            }
         }
 
         //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
