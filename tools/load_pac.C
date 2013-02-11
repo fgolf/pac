@@ -38,4 +38,7 @@
     // Ian's Simple table
     gSystem->AddIncludePath("-I$PAC/externals/source/SimpleTable");
     gSystem->Load(Form("%slibSimpleTable.so", pac_path.c_str()));
+
+    // load mini FW lite
+    gSystem->Load(Form("%slibMiniFWLite.so", pac_path.c_str()));
 }
