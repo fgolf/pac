@@ -23,5 +23,10 @@ fi
 # set the path and setup shared libraries
 export PAC=$project_dir
 PATH=$project_dir/bin:$PATH
-LD_LIBRARY_PATH=$project_dir/lib:$LD_LIBRARY_PATH
-DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
+if [ -d "$project_dir/lib" ] ; then
+    LD_LIBRARY_PATH=$project_dir/lib:$LD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
+else
+    LD_LIBRARY_PATH=$project_dir/bin/release:$LD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=$project_dir/bin/release:$DYLD_LIBRARY_PATH
+fi
