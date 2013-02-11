@@ -257,22 +257,22 @@ exe ss2012_create_fakerate_eth
   : # usage-requirements
   ;
 
-exe test_frb
-  : # sources
-    ./source/test_frb.cc
-    # dependent packages
-    /ROOT
-    /CMS2_FRB/<link>static
-    /FakeRateBabyTools//FakeRateBabyTools/<link>static
-    /MiniFWLite//libMiniFWLite/<link>shared
-    /RootTools//RootTools/<link>static
-    /AnalysisTools//AnalysisTools/<link>static
-  : # requirements
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
+# exe test_frb
+#   : # sources
+#     ./source/test_frb.cc
+#     # dependent packages
+#     /ROOT
+#     /CMS2_FRB/<link>static
+#     /FakeRateBabyTools//FakeRateBabyTools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /RootTools//RootTools/<link>static
+#     /AnalysisTools//AnalysisTools/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
 
 # quick and dirty cms2 looper
 exe ss2012_quick_check
@@ -322,5 +322,5 @@ default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
 default-install ss2012_create_fakerate_eth ;
 default-install ss2012_closure_test ;
-default-install test_frb ;
+#default-install test_frb ;
 default-install test_btagsf ;
