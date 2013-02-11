@@ -17,7 +17,7 @@ using namespace frb;
 // selection functions (to be moved to another file maybe)
 float pfiso03_rho()
 {
-    return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*el_effarea())))/pt();
+    return (ch_pfiso03() + max(0.0f, nh_pfiso03() + em_pfiso03() - (max(0.0f, rho())*el_effarea03())))/pt();
 }
 
 float pfiso03_db()
