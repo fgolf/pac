@@ -51,7 +51,8 @@ echo externals install complete
 # --------------------------------------------------------------- #
 
 # build the code
-make -j20
+#make -j20
+bjamr -j20
 if [ $? -eq 0 ]; then
     echo build successful
 else
