@@ -382,8 +382,15 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         const bool is_ttbar = (m_sample==fr::Sample::ttbar);
         const bool is_mu    = ((m_lepton=="mu") ? abs(id())==13 : false);
         const bool is_el    = ((m_lepton=="el") ? abs(id())==11 : false);
+        const bool is_wjets = (m_sample==fr::Sample::wjets);
+        const bool is_dy    = (m_sample==fr::Sample::dy);
 
         if (!is_mu && !is_el) return 0;
+
+        if (is_wjets || is_dy)
+        {
+            if (leptonIsFromW() < 1) return 0;
+        }
 
         // qcd muon cuts (for the different qcd samples)
         const bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
