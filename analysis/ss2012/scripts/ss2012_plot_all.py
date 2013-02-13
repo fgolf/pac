@@ -60,7 +60,7 @@ excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
 
 parser = OptionParser()
 
-default_fr_file = "data/fake_rates/ssFR_data_standard_29Jan2013_d0cut.root"
+default_fr_file = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root"
 
 # parameter options
 parser.add_option("--nev"       , dest="nev"       , default=-1             , help="The number of events to run (-1 for all)"                 )
