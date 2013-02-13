@@ -621,11 +621,29 @@ namespace at
         },
         {
             // name
+            "wgstar", 
+            // title
+            "W#gamma^{*} #rightarrow l#null", 
+            // latex 
+            "$W\\gamma^{*} \\rightarrow \\ell \\nu \\ell\\ell$",
+            // ntuple_path
+            "WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::wgstar,
+            // color
+            kBlue
+        },
+        {
+            // name
             "wmwmqq", 
             // title
-            "W^{-}W^{-}qq", 
+            "qqW^{-}W^{-}", 
             // latex
-            "$W^-W^-qq$", 
+            "qq$W^-W^-$", 
             // ntuple_path
             "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
@@ -639,15 +657,32 @@ namespace at
             // name
             "wpwpqq", 
             // titlej
-            "W^{+}W^{+}qq", 
+            "qqW^{+}W^{+}", 
             // latex
-            "$W^+W^+qq$", 
+            "$qqW^+W^+$", 
             // ntuple_path
             "WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // SampleType 
             SampleType::rare,
             // Sample
             Sample::wpwpqq,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "wwqq", 
+            // titlej
+            "qqW^{#pm}W^{#pm}", 
+            // latex
+            "$qqW^{\\pm}W^{\\pm}$", 
+            // ntuple_path
+            "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // SampleType 
+            SampleType::rare,
+            // Sample
+            Sample::wwqq,
             // color
             kBlue
         },

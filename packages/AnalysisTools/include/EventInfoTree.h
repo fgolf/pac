@@ -64,6 +64,7 @@ public:
     //
     float scale1fb;
     float xsec;
+    int nevts;
     float kfactor;
     float gen_met;
     float gen_met_phi;

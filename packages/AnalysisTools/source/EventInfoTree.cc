@@ -40,6 +40,7 @@ void EventInfoTree::FillCommon (Sample::value_type sample_, const std::string& r
     {
         scale1fb    = cms2.evt_scale1fb();
         xsec        = cms2.evt_xsec_incl();
+        nevts       = cms2.evt_nEvts();
         kfactor     = cms2.evt_kfactor();
         gen_met     = cms2.gen_met();
         gen_met_phi = cms2.gen_metPhi();
@@ -73,6 +74,7 @@ void EventInfoTree::Reset()
     pu_ntrueint    = -999999.0;
     scale1fb       = 1.;
     xsec           = -999999.0;
+    nevts          = -999999;
     kfactor        = -999999.0;
     gen_met        = -999999.0;
     gen_met_phi    = -999999.0;
@@ -104,6 +106,7 @@ void EventInfoTree::SetBranches(TTree &tree)
     tree.Branch(Form("%spu_ntrueint"    , prefix_.c_str()) , &pu_ntrueint    , "pu_ntrueint/F"    ); 
     tree.Branch(Form("%sscale1fb"       , prefix_.c_str()) , &scale1fb       , "scale1fb/F"       ); 
     tree.Branch(Form("%sxsec"           , prefix_.c_str()) , &xsec           , "xsec/F"           ); 
+    tree.Branch(Form("%snevts"          , prefix_.c_str()) , &nevts          , "nevts/i"          ); 
     tree.Branch(Form("%skfactor"        , prefix_.c_str()) , &kfactor        , "kfactor/F"        ); 
     tree.Branch(Form("%sgen_met"        , prefix_.c_str()) , &gen_met        , "gen_met/F"        ); 
     tree.Branch(Form("%sgen_met_phi"    , prefix_.c_str()) , &gen_met_phi    , "gen_met_phi/F"    ); 
