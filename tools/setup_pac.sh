@@ -19,9 +19,20 @@ echo
 # --------------------------------------------------------------- #
 
 echo Checking out cms2
-#tag=V05-02-28
-tag=HEAD
+tag=ss2012_V02-04-00
+#tag=HEAD
 pushd externals/build/cms2_core
+./checkout.sh $tag
+pushd
+echo
+
+# check out myBabyMaker (for fake rate babies) 
+# --------------------------------------------------------------- #
+
+echo Checking out myBabyMaker
+tag=FakeRate04Feb2013
+#tag=HEAD
+pushd externals/build/cms2_frb
 ./checkout.sh $tag
 pushd
 echo
@@ -52,10 +63,11 @@ echo externals install complete
 
 # build the code
 #make -j20
-bjamr -j20
+pushd $PAC/tools
+./build_all_bjam.sh
 if [ $? -eq 0 ]; then
     echo build successful
 else
     echo build failed
 fi
-
+popd
