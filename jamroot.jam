@@ -78,14 +78,16 @@ use-project /CMS2_FRB  : ./externals/build/cms2_frb ;
 # ----------------------------------------------------------------------#
 
 # ROOT tools
-use-project /RootTools : ./packages/RootTools ;
+path-constant ROOTTOOLS : ./packages/RootTools ;
+use-project /RootTools  : ./packages/RootTools ;
 
 # Frank's tools
 path-constant FGTOOLS : ./packages/FGTools ;
 use-project /FGTools  : ./packages/FGTools ;
 
 # Analysis tools
-use-project /AnalysisTools : ./packages/AnalysisTools ;
+path-constant ANALYSISTOOLS : ./packages/AnalysisTools ;
+use-project /AnalysisTools  : ./packages/AnalysisTools ;
 
 # FakeRate Baby tools
 use-project /FakeRateBabyTools : ./packages/FakeRateBabyTools ;
