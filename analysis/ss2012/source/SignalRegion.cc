@@ -1329,11 +1329,28 @@ namespace ss
         const int nbtags = ssb::nbtags();
         const float ht   = ssb::ht();
         const float met  = ssb::pfmet();
-        const float l1_d0 = fabs(ssb::lep1_d0()); 
-        const float l2_d0 = fabs(ssb::lep2_d0()); 
-        const float l1_id = abs(ssb::lep1_pdgid());
-        const float l2_id = abs(ssb::lep2_pdgid());
-        const bool lep_d0 = (ssb::is_ss() || ssb::is_os()) ? (l1_id==11 ? l1_d0<0.01 : l1_d0<0.005) && (l2_id==11 ? l2_d0<0.01 : l2_d0<0.005) : true;
+
+        // tightened d0 cut (should be done also in ssSelections)
+        bool lep_d0 = true;
+        //const float l1_id     = abs(ssb::lep1_pdgid());
+        //const float l2_id     = abs(ssb::lep2_pdgid());
+        //const float l1_d0     = fabs(ssb::lep1_d0()); 
+        //const float l2_d0     = fabs(ssb::lep2_d0()); 
+        //const float l1_d0_cut = (l1_id==11 ? 0.01 : 0.005);
+        //const float l2_d0_cut = (l2_id==11 ? 0.01 : 0.005);
+        //if (ssb::is_ss() || ssb::is_os())
+        //{
+        //    lep_d0 = ((l1_d0 < l1_d0_cut) && (l2_d0 < l2_d0_cut));
+        //}
+        //else if (ssb::is_sf())
+        //{
+        //    lep_d0 = (ssb::lep1_is_num() ? (l1_d0 < l1_d0_cut) : (l2_d0 < l2_d0_cut));
+        //}
+        //else
+        //{
+        //    lep_d0 = true;
+        //}
+
 
         // high pt
         if (anal_type==AnalysisType::high_pt_eth || anal_type==AnalysisType::high_pt)
@@ -1577,6 +1594,31 @@ namespace ss
     void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& at)
 	{
         
+        // kinematic variable aliases
+        tree.SetAlias("l1_id"  , "lep1_pdgid"                 ); 
+        tree.SetAlias("l1_num" , "lep1_is_num"                ); 
+        tree.SetAlias("l1_fo"  , "lep1_is_fo"                 ); 
+        tree.SetAlias("l1_pt"  , "lep1_p4.pt()"               ); 
+        tree.SetAlias("l1_eta" , "lep1_p4.eta()"              ); 
+        tree.SetAlias("l1_aeta", "fabs(lep1_p4.eta())"        ); 
+        tree.SetAlias("l1_d0"  , "fabs(lep1_d0)"              ); 
+        tree.SetAlias("l1_dz"  , "fabs(lep1_dz)"              ); 
+        tree.SetAlias("fr1"    , "lep1_wfr/(1.0-lep1_wfr)"    ); 
+        tree.SetAlias("fl1"    , "lep1_wflip/(1.0-lep1_wflip)"); 
+
+        tree.SetAlias("l2_id"  , "lep2_pdgid"                 ); 
+        tree.SetAlias("l2_num" , "lep2_is_num"                ); 
+        tree.SetAlias("l2_fo"  , "lep2_is_fo"                 ); 
+        tree.SetAlias("l2_pt"  , "lep2_p4.pt()"               ); 
+        tree.SetAlias("l2_eta" , "lep2_p4.eta()"              ); 
+        tree.SetAlias("l2_aeta", "fabs(lep2_p4.eta())"        ); 
+        tree.SetAlias("l2_d0"  , "fabs(lep2_d0)"              ); 
+        tree.SetAlias("fr2"    , "lep1_wfr/(1.0-lep2_wfr)"    ); 
+        tree.SetAlias("fl2"    , "lep2_wflip/(1.0-lep2_wflip)"); 
+        tree.SetAlias("l2_dz"  , "fabs(lep2_dz)"              ); 
+
+        tree.SetAlias("sfw", "l1_fo*fr1 + l2_fo*fr2");
+        tree.SetAlias("dfw", "fr1*fr2");
 
 		// lepton cuts
 		switch (at)
@@ -1600,7 +1642,9 @@ namespace ss
 				/*do nothing*/
 				break;
 		}
-	    tree.SetAlias("lep_d0", "(is_ss || is_os) ? ((abs(lep1_pdgid)==11 ? fabs(lep1_d0)<0.01 : fabs(lep1_d0)<0.005) && (abs(lep2_pdgid)==11 ? fabs(lep2_d0)<0.01 : fabs(lep2_d0)<0.005)) : 1");
+        tree.SetAlias("l1_d0_cut", "(l1_id==11 ? 0.01 : 0.005)"); 
+        tree.SetAlias("l2_d0_cut", "(l2_id==11 ? 0.01 : 0.005)"); 
+	    tree.SetAlias("lep_d0", "((is_ss || is_os) && (l1_d0<l1_d0_cut) && (l2_d0_cut)) || ((is_sf) && (l1_num ? l1_d0<l1_d0_cut : l2_d0<l2_d0_cut)");
 
 		// trigger
 		switch (at)
