@@ -307,7 +307,7 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     //printf("%11d %7.3f  %6.3f  %5.3f %11d %7.3f %6.3f  %5.3f %13.3f %5d %6d %11.3f \n", ll_id, ll_p4.pt(), ll_p4.eta(), ll_iso, lt_id, lt_p4.pt(), lt_p4.eta(), lt_iso, met, num_jets, num_btags, ht);
 
     if (samesign::isNumeratorHypothesis(ihyp), use_el_eta)
-    //if (samesign::isDenominatorHypothesis(ihyp))
+        //if (samesign::isDenominatorHypothesis(ihyp))
     {
         //cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
         cout << Form("%6u | %3u | %12u | %s | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %2.3f | %2.3f | %u | %4.3f | %4.3f | %4.3f | %u | %u",
@@ -360,12 +360,12 @@ SSAnalysisLooper::SSAnalysisLooper
     int njets,
     bool sparms,
     int jetMetScale,
-	bool use_el_eta,
+    bool use_el_eta,
     bool is_fast_sim,
     bool sync_print,
     bool verbose,
     const std::string apply_jec_otf
-)
+    )
     : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
     , m_analysis_type(analysis_type)
@@ -373,7 +373,7 @@ SSAnalysisLooper::SSAnalysisLooper
     , m_njets(njets)
     , m_jetMetScale(jetMetScale)
     , m_is_fast_sim(is_fast_sim)
-	, m_use_el_eta(use_el_eta)
+    , m_use_el_eta(use_el_eta)
     , m_sparms(sparms)
     , m_sync_print(sync_print)
     , m_verbose(verbose || sync_print)
@@ -533,9 +533,9 @@ void SSAnalysisLooper::BeginJob()
     if (m_sync_print)
     {
         cout << "Run | LS | Event | channel | dilep Mass | " 
-                "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
-                "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
-                "MET | HT | nJets | nbJets" << endl;
+            "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
+            "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
+            "MET | HT | nJets | nbJets" << endl;
     }
 }
 
@@ -548,20 +548,20 @@ void SSAnalysisLooper::EndJob()
     yield_table.setTitle("yields for SS Analysis 2012 (# btags >= 2)");
     yield_table.useTitle();
     yield_table.setTable() (                      "mm",          "em",          "ee",         "all")
-                           ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
-                           ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
-                           ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
-                           ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
+        ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
+        ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
+        ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
+        ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
     yield_table.print();
 
     CTable yield_table2;
     yield_table2.setTitle("yields for SS Analysis 2012 (no btags req)");
     yield_table2.useTitle();
     yield_table2.setTable() (                             "mm",                "em",                 "ee",                "all")
-                            ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
-                            ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
-                            ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
-                            ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
+        ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
+        ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
+        ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
+        ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
     yield_table2.print();
 
     // call base class end job
@@ -638,12 +638,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         int trigger_option = -999999;
         switch (m_analysis_type)
         {
-            case AnalysisType::high_pt    : trigger_option = 0; break;
-            case AnalysisType::high_pt_eth: trigger_option = 0; break;
-            case AnalysisType::hcp        : trigger_option = 0; break;
-            case AnalysisType::low_pt     : trigger_option = 1; break;
-            case AnalysisType::vlow_pt    : trigger_option = 2; break;
-            case AnalysisType::static_size: break; // no default is intentional so that compiler issues a warning if you don't handle all the cases
+        case AnalysisType::high_pt    : trigger_option = 0; break;
+        case AnalysisType::high_pt_eth: trigger_option = 0; break;
+        case AnalysisType::hcp        : trigger_option = 0; break;
+        case AnalysisType::low_pt     : trigger_option = 1; break;
+        case AnalysisType::vlow_pt    : trigger_option = 2; break;
+        case AnalysisType::static_size: break; // no default is intentional so that compiler issues a warning if you don't handle all the cases
         }
 
         // lepton pT cut values
@@ -651,30 +651,30 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         float el_min_pt = 0.0;
         switch(m_analysis_type)
         {
-            case AnalysisType::high_pt:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
-                break;
-            case AnalysisType::high_pt_eth:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
-                break;
-            case AnalysisType::hcp:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
-                break;
-            case AnalysisType::low_pt:
-                mu_min_pt = 10.0;
-                el_min_pt = 10.0;
-                break;
-            case AnalysisType::vlow_pt:
-                mu_min_pt = 5.0;
-                el_min_pt = 10.0;
-                break;
-            default:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
-                break;
+        case AnalysisType::high_pt:
+            mu_min_pt = 20.0;
+            el_min_pt = 20.0;
+            break;
+        case AnalysisType::high_pt_eth:
+            mu_min_pt = 20.0;
+            el_min_pt = 20.0;
+            break;
+        case AnalysisType::hcp:
+            mu_min_pt = 20.0;
+            el_min_pt = 20.0;
+            break;
+        case AnalysisType::low_pt:
+            mu_min_pt = 10.0;
+            el_min_pt = 10.0;
+            break;
+        case AnalysisType::vlow_pt:
+            mu_min_pt = 5.0;
+            el_min_pt = 10.0;
+            break;
+        default:
+            mu_min_pt = 20.0;
+            el_min_pt = 20.0;
+            break;
         }
         const float min_pt = std::min(mu_min_pt, el_min_pt);
 
@@ -955,41 +955,41 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // convenience trigger info
         switch(m_analysis_type)
         {
-            case AnalysisType::high_pt:
-                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-                break;
-            case AnalysisType::high_pt_eth:
-                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-                break;
-            case AnalysisType::hcp:
-                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-                break;
-            case AnalysisType::low_pt:
-                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v");
-                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
-                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
-                break;
-            case AnalysisType::vlow_pt:
-                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v");
-                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
-                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v") ||
-                                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v");
-                break;
-            default: {/*do nothing*/}
+        case AnalysisType::high_pt:
+            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+            break;
+        case AnalysisType::high_pt_eth:
+            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+            break;
+        case AnalysisType::hcp:
+            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+            break;
+        case AnalysisType::low_pt:
+            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
+                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v");
+            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+            break;
+        case AnalysisType::vlow_pt:
+            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
+                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v");
+            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v") ||
+                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v");
+            break;
+        default: {/*do nothing*/}
         }
 
         // individual triggers: mm
@@ -1016,24 +1016,24 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // convenience
         switch (dilepton_type)
         {
-            case DileptonHypType::MUMU: m_evt.trig_hpt = m_evt.trig_mm; break;
-            case DileptonHypType::EMU : m_evt.trig_hpt = m_evt.trig_em; break;
-            case DileptonHypType::EE  : m_evt.trig_hpt = m_evt.trig_ee; break;
-            default: {/*do nothing*/}
+        case DileptonHypType::MUMU: m_evt.trig_hpt = m_evt.trig_mm; break;
+        case DileptonHypType::EMU : m_evt.trig_hpt = m_evt.trig_em; break;
+        case DileptonHypType::EE  : m_evt.trig_hpt = m_evt.trig_ee; break;
+        default: {/*do nothing*/}
         };
         switch (dilepton_type)
         {
-            case DileptonHypType::MUMU: m_evt.trig_lpt = (m_evt.trig_mm_dmu8_m8_pfnopuht175 || m_evt.trig_mm_dmu8_m8_pfht175)             ; break;
-            case DileptonHypType::EMU : m_evt.trig_lpt = (m_evt.trig_em_mu8_el8_id_m8_pfnopuht175 || m_evt.trig_em_mu8_el8_id_m8_pfht175) ; break;
-            case DileptonHypType::EE  : m_evt.trig_lpt = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)       ; break;
-            default: {/*do nothing*/}
+        case DileptonHypType::MUMU: m_evt.trig_lpt = (m_evt.trig_mm_dmu8_m8_pfnopuht175 || m_evt.trig_mm_dmu8_m8_pfht175)             ; break;
+        case DileptonHypType::EMU : m_evt.trig_lpt = (m_evt.trig_em_mu8_el8_id_m8_pfnopuht175 || m_evt.trig_em_mu8_el8_id_m8_pfht175) ; break;
+        case DileptonHypType::EE  : m_evt.trig_lpt = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)       ; break;
+        default: {/*do nothing*/}
         };
         switch (dilepton_type)
         {
-            case DileptonHypType::MUMU: m_evt.trig_lpt_isomu = (m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 || m_evt.trig_mm_dreliso1p0mu5_m8_pfht175)         ; break;
-            case DileptonHypType::EMU : m_evt.trig_lpt_isomu = (m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 || m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175) ; break;
-            case DileptonHypType::EE  : m_evt.trig_lpt_isomu = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)                     ; break;
-            default: {/*do nothing*/}
+        case DileptonHypType::MUMU: m_evt.trig_lpt_isomu = (m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 || m_evt.trig_mm_dreliso1p0mu5_m8_pfht175)         ; break;
+        case DileptonHypType::EMU : m_evt.trig_lpt_isomu = (m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 || m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175) ; break;
+        case DileptonHypType::EE  : m_evt.trig_lpt_isomu = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)                     ; break;
+        default: {/*do nothing*/}
         };
 
         // event wieghts 
@@ -1051,13 +1051,13 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
         m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
 
-		// met filters
-		m_evt.met_filters = (m_evt.event_info.filt_csc       &&
-		                     m_evt.event_info.filt_hbhenew   &&
-							 m_evt.event_info.filt_hcallaser &&
-		                     m_evt.event_info.filt_ecaltp    &&
-							 m_evt.event_info.filt_trkfail   &&
-							 m_evt.event_info.filt_eebadsc);
+        // met filters
+        m_evt.met_filters = (m_evt.event_info.filt_csc       &&
+                             m_evt.event_info.filt_hbhenew   &&
+                             m_evt.event_info.filt_hcallaser &&
+                             m_evt.event_info.filt_ecaltp    &&
+                             m_evt.event_info.filt_trkfail   &&
+                             m_evt.event_info.filt_eebadsc);
 
         // fill analysis specific branches 
         m_evt.vtxw = vtxw;
@@ -1126,10 +1126,10 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // set lepton info (lep1 is higher pT lepton, lep2 is lower pT lepton)
         float lt_pt = hyp_lt_p4().at(hyp_idx).pt();
         float ll_pt = hyp_ll_p4().at(hyp_idx).pt();
-        bool lt_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_lt_id().at(hyp_idx), hyp_lt_index().at(hyp_idx), m_use_el_eta) : IsDenominator(best_hyp, /*is_lt=*/true, m_use_el_eta);
         bool lt_num = IsNumerator  (best_hyp, /*is_lt=*/true, m_use_el_eta);  
-        bool ll_fo  = (m_analysis_type == AnalysisType::high_pt_eth) ? passesETHfo(hyp_ll_id().at(hyp_idx), hyp_ll_index().at(hyp_idx), m_use_el_eta) : IsDenominator(best_hyp, /*is_lt=*/false, m_use_el_eta);  
+        bool lt_fo  = ((m_analysis_type == AnalysisType::high_pt_eth) ? (passesETHfo(hyp_lt_id().at(hyp_idx), hyp_lt_index().at(hyp_idx), m_use_el_eta) && !lt_num) : IsDenominator(best_hyp, /*is_lt=*/true, m_use_el_eta));
         bool ll_num = IsNumerator  (best_hyp, /*is_lt=*/false, m_use_el_eta);  
+        bool ll_fo  = ((m_analysis_type == AnalysisType::high_pt_eth) ? (passesETHfo(hyp_ll_id().at(hyp_idx), hyp_ll_index().at(hyp_idx), m_use_el_eta) && !ll_num) : IsDenominator(best_hyp, /*is_lt=*/false, m_use_el_eta));  
 
         int lep1_id;
         int lep1_idx;
