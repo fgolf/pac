@@ -18,6 +18,7 @@
 #include "TH3.h"
 #include "TProfile.h"
 #include "TDirectory.h"
+#include "TEfficiency.h"
 #include "Math/LorentzVector.h"
 
 // BOOST includes (not CINT friendly)
@@ -341,7 +342,9 @@ namespace rt
     std::pair<double, double> DivideWithError(const std::pair<double, double>& v1, const std::pair<double, double>& v2);
     std::pair<float, float>   DivideWithError(const std::pair<float, float>& v1  , const std::pair<float, float>& v2  );
 
-    // calculate the percent of integral 
+    // If num_passed passed of num_generated, what is upper limit on number of events passing?
+    float GetClopperPearsonUncertainty(const int num_passed, const int num_generated, const float level = 0.68, const bool use_upper = true);
+
     double CalcPercentOfIntegral(TH1* h, float low, float high, const std::string& option = "");
 
     // ostream for LorentzVector

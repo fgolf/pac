@@ -832,6 +832,22 @@ namespace rt
 	    return c;
 	}
 
+
+    // If num_passed passed of num_generated, what is upper limit on number of events passing?
+    float GetClopperPearsonUncertainty(const int num_passed, const int num_generated, const float level, const bool use_upper)
+    {
+        if (num_generated <= 0) 
+        {
+            throw std::domain_error("[GetMCUncertainty]: num_generated must be greater than zero"); 
+        }
+    
+        TEfficiency eff;
+        const float upper = eff.ClopperPearson(num_generated, num_passed, level, use_upper);
+        const float delta = upper - static_cast<float>(num_passed)/static_cast<float>(num_generated);
+        return delta * static_cast<float>(num_generated);
+    }
+
+
 	// create a chain from a comma serperated list (e.g. "file1,file2,...")
 	// NOTE: user is charge of deleting!
 	TChain* CreateTChainFromCommaSeperatedList
