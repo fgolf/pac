@@ -2,7 +2,7 @@
 
 verbose=0
 njets=2
-version=v6
+version=v1
 
 # make the output dirs
 
@@ -75,4 +75,28 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_vlowpt_19p49 $input_files
+#merge data_vlowpt_19p49 $input_files
+
+# high_pt_eth
+input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/V01-03-02/eth
+output_path=babies/V01-03-02/eth_njets${njets}_${version}/
+#input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012C-24Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/MuEG_Run2012D-PromptReco-v1_AOD/*.root"
+input_files="${input_path}/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root"
+input_files="${input_files},${input_path}/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+input_files="${input_files},${input_path}/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root"
+input_files="${input_files},${input_path}/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"
+input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
+input_files="${input_files},${input_path}/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root"
+merge data $input_files
+

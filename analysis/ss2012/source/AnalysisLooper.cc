@@ -1495,7 +1495,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         {
             // jets
             if (not jet_flags.at(jidx)) {continue;}
-            if (evt_CMS2tag().at(0) == "V05-03-23")
+            if (not evt_isRealData() && (evt_CMS2tag().at(0)=="V05-03-23" || evt_CMS2tag().at(0)=="V05-03-24"))
             {
                 m_evt.vjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
                 m_evt.vjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
@@ -1504,7 +1504,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             // btags
             m_evt.vjets_btagged.push_back(bjet_flags.at(jidx));
             if (not bjet_flags.at(jidx)) {continue;}
-            if (evt_CMS2tag().at(0) == "V05-03-23")
+            if (not evt_isRealData() && (evt_CMS2tag().at(0)=="V05-03-23" || evt_CMS2tag().at(0)=="V05-03-24"))
             {
                 m_evt.vbjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
                 m_evt.vbjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));

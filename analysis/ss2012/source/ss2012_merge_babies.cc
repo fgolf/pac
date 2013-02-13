@@ -21,13 +21,13 @@ struct simple_skim
         using namespace ssb;
         if (is_real_data())
         {
-            bool result = (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+            const bool result = (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
 			return result;
         }
         else
         {
             //bool result = (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
-            bool result = (dilep_type() < 4 && (is_ss()) && njets() >= m_njets);
+            const bool result = (dilep_type() < 4 && (is_ss() || is_sf() || is_df()) && njets() >= m_njets);
 			return result;
         }
     }
