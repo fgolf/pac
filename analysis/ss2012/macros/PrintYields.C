@@ -12,112 +12,6 @@ const float fake_sys_unc = 0.5;
 const float rare_sys_unc = 0.5;
 const float flip_sys_unc = 0.2;
 
-std::map<std::string, ss::Yield> GetYieldsMap
-(
-    const std::string& option,
-    const ss::SignalRegion::value_type signal_region, 
-    const ss::AnalysisType::value_type analysis_type, 
-    const ss::SignalRegionType::value_type signal_region_type, 
-    int charge_option = 0, 
-    const std::string& output_path = "test"
-)
-{
-    using namespace at;
-    std::map<std::string, ss::Yield> m;
-
-    // data
-    m["data"] = GetYield(option, Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-
-    // for display only
-    m["ttdil"  ] = GetYield(option, Sample::ttdil  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ttslb"  ] = GetYield(option, Sample::ttslb  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ttslo"  ] = GetYield(option, Sample::ttslo  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ttotr"  ] = GetYield(option, Sample::ttotr  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["t_schan"] = GetYield(option, Sample::t_schan, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["t_tchan"] = GetYield(option, Sample::t_tchan, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["t_tw"   ] = GetYield(option, Sample::t_tw   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["dy"     ] = GetYield(option, Sample::dy     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["wjets"  ] = GetYield(option, Sample::wjets  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ww"     ] = GetYield(option, Sample::ww     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-
-    // to include in prediction
-    // wgstar;
-    m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["wgstar"] += GetYield(option, Sample::wgstar2m, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["wgstar"] += GetYield(option, Sample::wgstar2t, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-
-    // wwqq;
-    m["wwqq"] += GetYield(option, Sample::wmwmqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["wwqq"] += GetYield(option, Sample::wpwpqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-                                
-    // the rest of the rare MC
-    m["wz"   ] = GetYield(option, Sample::wz   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["zz"   ] = GetYield(option, Sample::zz   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ttg"  ] = GetYield(option, Sample::ttg  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ttw"  ] = GetYield(option, Sample::ttw  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ttz"  ] = GetYield(option, Sample::ttz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["tbz"  ] = GetYield(option, Sample::tbz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ttww" ] = GetYield(option, Sample::ttww , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["wwg"  ] = GetYield(option, Sample::wwg  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["www"  ] = GetYield(option, Sample::www  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["wwz"  ] = GetYield(option, Sample::wwz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["wzz"  ] = GetYield(option, Sample::wzz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["zzz"  ] = GetYield(option, Sample::zzz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-    m["ww_ds"] = GetYield(option, Sample::ww_ds, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-
-    // want the total of the MC
-    ss::Yield yield_mc;
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttdil"  ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslb"  ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslo"  ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttotr"  ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_schan"]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tchan"]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tw"   ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["dy"     ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wjets"  ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww"     ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar" ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwqq"   ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wz"     ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zz"     ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttg"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttw"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttz"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["tbz"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttww"   ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwg"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["www"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwz"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wzz"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zzz"    ]); 
-    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww_ds"  ]); 
-    m["mc"] = yield_mc;
-
- 
-    // want the rare MC only for the prediction
-    ss::Yield yield_rare;
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar"]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwqq"  ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wz"    ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zz"    ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttg"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttw"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttz"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["tbz"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttww"  ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwg"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["www"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwz"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wzz"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zzz"   ]); 
-    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ww_ds" ]); 
-    m["rare"] = yield_rare;
- 
-    // done
-    return m;
-}
-
 // print the yields
 void PrintYields
 (
@@ -125,8 +19,8 @@ void PrintYields
     const std::string& signal_region_name, 
     const std::string& analysis_type_name, 
     const std::string& signal_region_type_name = "inclusive", 
-    int charge_option = 0, 
-    bool print_latex = false
+    const int charge_option = 0, 
+    const bool print_latex = false
 )
 {
     using namespace at;
@@ -137,9 +31,8 @@ void PrintYields
     const ss::SignalRegionInfo sr_info                        = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
 
     // get the yields
-    std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    std::map<std::string, ss::Yield> m_yield = GetYieldsMap(string("ss") , signal_region, analysis_type, signal_region_type, charge_option, output_path);
     std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, output_path);
-
     ss::Yield yield_data = m_yield["data"];
     ss::Yield yield_rare = m_yield["rare"];
     ss::Yield yield_mc   = m_yield["mc"  ];

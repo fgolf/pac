@@ -237,7 +237,7 @@ namespace ss
     	const ss::SignalRegion::value_type signal_region, 
     	const ss::AnalysisType::value_type analysis_type, 
     	const ss::SignalRegionType::value_type signal_region_type, 
-    	int charge_option, 
+    	const int charge_option, 
     	const std::string& output_path
     )
     {
@@ -273,7 +273,7 @@ namespace ss
     	const ss::SignalRegion::value_type signal_region, 
     	const ss::AnalysisType::value_type analysis_type, 
     	const ss::SignalRegionType::value_type signal_region_type, 
-    	int charge_option, 
+    	const int charge_option, 
     	const std::string& output_path
     )
     {
@@ -296,7 +296,7 @@ namespace ss
     	const ss::SignalRegion::value_type signal_region, 
     	const ss::AnalysisType::value_type analysis_type, 
     	const ss::SignalRegionType::value_type signal_region_type, 
-    	int charge_option, 
+    	const int charge_option, 
     	const std::string& output_path
     )
     {
@@ -319,7 +319,7 @@ namespace ss
     	const ss::SignalRegion::value_type signal_region, 
     	const ss::AnalysisType::value_type analysis_type, 
     	const ss::SignalRegionType::value_type signal_region_type, 
-    	int charge_option, 
+    	const int charge_option, 
     	const std::string& output_path
     )
     {
@@ -342,7 +342,7 @@ namespace ss
     	const ss::SignalRegion::value_type signal_region, 
     	const ss::AnalysisType::value_type analysis_type, 
     	const ss::SignalRegionType::value_type signal_region_type, 
-    	int charge_option, 
+    	const int charge_option, 
     	const std::string& output_path
     )
     {
@@ -365,7 +365,7 @@ namespace ss
     	const ss::SignalRegion::value_type signal_region, 
     	const ss::AnalysisType::value_type analysis_type, 
     	const ss::SignalRegionType::value_type signal_region_type, 
-    	int charge_option, 
+    	const int charge_option, 
     	const std::string& output_path
     )
     {
@@ -389,7 +389,7 @@ namespace ss
     	const ss::SignalRegion::value_type signal_region, 
     	const ss::AnalysisType::value_type analysis_type, 
     	const ss::SignalRegionType::value_type signal_region_type, 
-    	int charge_option, 
+    	const int charge_option, 
     	const std::string& output_path
     )
     {
@@ -411,7 +411,7 @@ namespace ss
         const ss::SignalRegion::value_type signal_region, 
         const ss::AnalysisType::value_type analysis_type, 
         const ss::SignalRegionType::value_type signal_region_type, 
-        int charge_option, 
+        const int charge_option, 
         const std::string& output_path
     )
     {

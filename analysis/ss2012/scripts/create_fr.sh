@@ -1,10 +1,31 @@
 #!/bin/bash 
 
-tag="08Feb2013_trunc"
-run_list=json/final_19p49fb_cms2.txt
+version=13Feb2013
 nev=-1
 
-ss2012_create_fakerate.exe --nev $nev --sample data_el --channel el --root_file_name electrons_${tag}.root --run_list $run_list
-ss2012_create_fakerate.exe --nev $nev --sample data_mu --channel mu --root_file_name muons_${tag}.root     --run_list $run_list
-mkdir -p data/fake_rates/
-hadd -f data/fake_rates/ssFR_data_standard_${tag}.root plots/fake_rates/muons_${tag}/muons_${tag}.root plots/fake_rates/electrons_${tag}/electrons_${tag}.root 
+# create output dir
+mkdir -p plots/fake_rates/${version}
+
+## run data
+#run_list=json/final_19p49fb_cms2.txt
+#ss2012_create_fakerate.exe --nev $nev --sample data --channel el --root_file_name electrons_data_${version}.root --run_list $run_list
+#ss2012_create_fakerate.exe --nev $nev --sample data --channel mu --root_file_name muons_data_${version}.root     --run_list $run_list
+#hadd -f plots/fake_rates/${version}/ssFR_data_standard_${version}.root plots/fake_rates/muons_data_${version}/muons_data_${version}.root plots/fake_rates/electrons_data_${version}/electrons_data_${version}.root 
+#
+## run DY
+#run_list=\"\"
+#ss2012_create_fakerate.exe --nev $nev --sample dy --channel el --root_file_name electrons_dy_${version}.root --run_list $run_list
+#ss2012_create_fakerate.exe --nev $nev --sample dy --channel mu --root_file_name muons_dy_${version}.root     --run_list $run_list
+#hadd -f plots/fake_rates/${version}/ssFR_dy_standard_${version}.root plots/fake_rates/muons_dy_${version}/muons_dy_${version}.root plots/fake_rates/electrons_dy_${version}/electrons_dy_${version}.root 
+#
+## run wjets
+#run_list=\"\"
+#ss2012_create_fakerate.exe --nev $nev --sample wjets --channel el --root_file_name electrons_wjets_${version}.root --run_list $run_list
+#ss2012_create_fakerate.exe --nev $nev --sample wjets --channel mu --root_file_name muons_wjets_${version}.root     --run_list $run_list
+#hadd -f plots/fake_rates/${version}/ssFR_wjets_standard_${version}.root plots/fake_rates/muons_wjets_${version}/muons_wjets_${version}.root plots/fake_rates/electrons_wjets_${version}/electrons_wjets_${version}.root 
+
+# combine the output
+ss2012_make_fr_from_hists --in_data plots/fake_rates/${version}/ssFR_data_standard_${version}.root \
+ --in_mc "plots/fake_rates/${version}/ssFR_wjets_standard_${version}.root,plots/fake_rates/${version}/ssFR_dy_standard_${version}.root" \
+ --output data/fake_rates/ssFR_data_ewkcor_${version}.root \
+ --ele_lumi 0.049 --mu_lumi 0.143 
