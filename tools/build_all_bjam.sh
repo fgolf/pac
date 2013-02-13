@@ -7,15 +7,17 @@ function run_bjam
     pushd $dir
     bjam release -j20 $option
     if [ $? -eq 0 ]; then
-        echo "release build succeded"
+        echo "release build succeeded"
     else
         echo "release build failed"
+		exit 1
     fi
     bjam debug -j20 $option
     if [ $? -eq 0 ]; then
-        echo "debug build succeded"
+        echo "debug build succeeded"
     else
         echo "debug build failed"
+		exit 1
     fi
     popd
 }

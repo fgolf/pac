@@ -19,7 +19,7 @@ echo
 # --------------------------------------------------------------- #
 
 echo Checking out cms2
-tag=ss2012_V02-04-00
+tag=ss2012_V02-04-01
 #tag=HEAD
 pushd externals/build/cms2_core
 ./checkout.sh $tag
