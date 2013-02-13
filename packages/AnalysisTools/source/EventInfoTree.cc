@@ -43,8 +43,16 @@ void EventInfoTree::FillCommon (Sample::value_type sample_, const std::string& r
         kfactor     = cms2.evt_kfactor();
         gen_met     = cms2.gen_met();
         gen_met_phi = cms2.gen_metPhi();
-        pu_nvtxs    = cms2.puInfo_nPUvertices().at(1);
-        pu_ntrueint = cms2.puInfo_trueNumInteractions().at(1);
+        if (cms2.puInfo_nPUvertices().size()==3)
+        {
+            pu_nvtxs    = cms2.puInfo_nPUvertices().at(1);
+            pu_ntrueint = cms2.puInfo_trueNumInteractions().at(1);
+        }
+        else
+        {   
+            pu_nvtxs    = cms2.puInfo_nPUvertices().at(0);
+            pu_ntrueint = cms2.puInfo_trueNumInteractions().at(0);
+        }
     }
 }
 
