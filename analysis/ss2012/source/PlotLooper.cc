@@ -20,6 +20,7 @@
 #include "at/FlipRatePrediction.h"
 #include "SSB2012.h"
 #include "CTable.h"
+#include "TEfficiency.h"
 
 typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > vecLorentzVector;
 
@@ -77,6 +78,8 @@ PlotLooper::PlotLooper
     , m_sparm1(sparm1)
     , m_sparm2(sparm2)
     , m_sparm3(sparm3)
+    , m_scale1fb(-999999.0)
+    , m_nevts(-999999)
     , m_sf_flip(sf_flip)
     , m_fr_unc(fr_unc)
     , m_fl_unc(fl_unc)
@@ -106,8 +109,10 @@ PlotLooper::PlotLooper
     switch (m_analysis_type)
     {
         case AnalysisType::high_pt:
-            mufr_name = "h_mufr40c";
-            elfr_name = "h_elfr40c";
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_ewkcor";
+            //mufr_name = "h_mufr40c";
+            //elfr_name = "h_elfr40c";
             break;
         case AnalysisType::high_pt_eth:
             mufr_name = "h_mufr50c";
@@ -246,6 +251,7 @@ void SetPredictionAndUncertainty
         SetMCPredictionAndUncertainty(hc, hist_stem, mc_title, mc_sys_unc);
     }
 }
+
 
 // end job
 void PlotLooper::EndJob()
@@ -679,6 +685,8 @@ int PlotLooper::operator()(long event)
 
         // scale 1b (set before cuts) 
         m_scale1fb = scale1fb();
+        //m_nevts    = nevts();       
+        m_nevts    = -999999; 
 
         // which analysis type
         //bool is_high_pt = (m_analysis_type==ss::AnalysisType::high_pt);
@@ -975,6 +983,8 @@ int PlotLooper::operator()(long event)
         // name and title suffixes
         string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
         string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
+        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        //const bool true_ss_event = true; 
 
         // SS
         if (is_ss())
@@ -1009,10 +1019,13 @@ int PlotLooper::operator()(long event)
         // SF 
         if (is_sf())
         {
-            const LorentzVector& p4 = lep1_is_fo() ? lep1_p4()    : lep2_p4();
-            int id                  = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
-            if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
-            if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
+            const LorentzVector& p4  = lep1_is_fo() ? lep1_p4()    : lep2_p4();
+            const int id             = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
+            if (is_real_data() || (!is_real_data() && true_ss_event))
+            {
+                if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
+                if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
+            }
         }
 
         // DF 
@@ -1020,11 +1033,13 @@ int PlotLooper::operator()(long event)
         {
             const LorentzVector& l1_p4 = lep1_p4();
             const LorentzVector& l2_p4 = lep2_p4();
-            int l1_id                  = lep1_pdgid();
-            int l2_id                  = lep2_pdgid();
-
-            at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
-            at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
+            const int l1_id            = lep1_pdgid();
+            const int l2_id            = lep2_pdgid();
+            if (is_real_data() || (!is_real_data() && true_ss_event))
+            {
+                at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
+                at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
+            }
         }
 
         // OS
@@ -1051,6 +1066,13 @@ int PlotLooper::operator()(long event)
                 rt::Fill2D(hc["h_os_pt1_vs_eta1_mm"], fabs(l1_p4.eta()), l1_p4.pt(), weight);
                 rt::Fill2D(hc["h_os_pt2_vs_eta2_mm"], fabs(l2_p4.eta()), l2_p4.pt(), weight);
             }
+        }
+
+        // dont't fill hists for MC if they are not truth matched (SS or DF only)
+        if ((not is_real_data()) && (not true_ss_event) && (is_sf() || is_df()))
+        {
+            if (m_verbose) {cout << "leptons failing truth matching (MC only)" << endl;}
+            return 0;
         }
 
         // fake rate and flip factor for kinematic plots

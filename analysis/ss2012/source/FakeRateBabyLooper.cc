@@ -493,11 +493,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         bool num_lep_cut = false;
         if (is_mu)
         {
-            num_lep_cut = num_mu_ssV5_noIso() && (fabs(d0()) < 0.005);
+            //num_lep_cut = num_mu_ssV5_noIso();
+            num_lep_cut = (num_mu_ssV5_noIso() && (fabs(d0()) < 0.005));
         }
         else if(is_el)
         {
-            num_lep_cut = num_el_ssV7_noIso() && (fabs(d0()) < 0.01);
+            //num_lep_cut = num_el_ssV7_noIso();
+            num_lep_cut = (num_el_ssV7_noIso() && (fabs(d0()) < 0.010));
         }
 
         // denominator cut
@@ -536,11 +538,6 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // vertex reweight for ttbar
         float evt_weight = (weight() * m_lumi);
         // float evt_weight = 1.0; 
-        // if (m_sample==fr::Sample::wjets || m_sample==fr::Sample::dy)
-        // {
-        //     if (m_lepton == "mu") evt_weight *= 0.06*1.45;
-        //     if (m_lepton == "el") evt_weight *= 0.02*1.49;
-        // }
 
         // isolation
         //float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area
@@ -548,6 +545,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         //float iso = ((m_lepton == "mu") ? cpfiso03_db_truncated() : cpfiso03_rho_truncated()); // new effective area
 
         // Fill some plots
+        // -------------------------------------------------------------------------------------- //
+
         if (m_lepton == "mu")
         {
             // numerator

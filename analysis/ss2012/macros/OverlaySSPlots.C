@@ -55,6 +55,8 @@ rt::TH1Overlay CreateOverlay
     TH1* h_fake  = hc_data[Form("h_%s_fake", hist_stem.c_str())];
     TH1* h_flip  = hc_data[Form("h_%s_flip", hist_stem.c_str())];
     TH1* h_rare  = hc_rare[Form("h_%s_ss"  , hist_stem.c_str())];
+    TH1* h_spil  = hc_rare[Form("h_%s_fake", hist_stem.c_str())];
+    h_fake->Add(h_spil, -1.0);
     TH1* h_pred = GetTotalPredHist(h_fake, h_flip, h_rare);
     h_data->SetMarkerSize(marker_size);
 

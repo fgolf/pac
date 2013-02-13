@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-tag="29Jan2013"
+tag="08Feb2013_trunc"
 run_list=json/final_19p49fb_cms2.txt
 nev=-1
 

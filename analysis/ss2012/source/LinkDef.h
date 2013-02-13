@@ -24,6 +24,7 @@
 // classes or structs
 #pragma link C++ struct ss::SignalRegion+;
 #pragma link C++ struct ss::AnalysisType+;
+#pragma link C++ struct ss::Yield+;
 
 // functions
 #pragma link C++ function ss::GetSignalRegionFromName;
@@ -35,5 +36,21 @@
 #pragma link C++ function ss::GetAnalysisTypeFromName;
 #pragma link C++ function ss::GetAnalysisTypeInfo;
 #pragma link C++ function ss::SetAnalysisTypeAliases;
+
+#pragma link C++ function operator-;
+#pragma link C++ function operator+;
+#pragma link C++ function operator*;
+#pragma link C++ function ss::SetErrorsToBogus;
+#pragma link C++ function ss::SetSysUncertainties;
+#pragma link C++ function ss::DetermineError;
+#pragma link C++ function ss::AddUncertaintiesAbsolute;
+#pragma link C++ function ss::GetSampleHists;
+#pragma link C++ function ss::GetSSYield;
+#pragma link C++ function ss::GetDFYield;
+#pragma link C++ function ss::GetSFYield;
+#pragma link C++ function ss::GetFakeYield;
+#pragma link C++ function ss::GetFlipYield;
+#pragma link C++ function ss::GetYield;
+#pragma link C++ function ss::GetYieldsMap;
 
 #endif // __CINT__

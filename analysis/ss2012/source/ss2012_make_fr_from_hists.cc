@@ -36,7 +36,7 @@ FakeScalingStruct GetPromptSF (TH1* h_data, TH1* h_mc, double cut_lower, double 
     if (verbose)
     {
         cout << endl;
-        printf(Form("Calculating SF in mass window [%4.2f,%4.2f]...\n\n", cut_lower, cut_upper));
+        printf("Calculating SF in mass window [%4.2f,%4.2f]...\n\n", cut_lower, cut_upper);
         printf("data yield: %4.2f\n", y_data);
         printf("MC yield: %4.2f\n", y_mc);
         cout << "--------------------------------" << endl;
@@ -127,8 +127,6 @@ try
     {
         cout << "[ss2012_make_fr_from_hists]: no output file given.  printing to stdout" << endl;
     }
-    ostream* out_ptr = output_file.empty() ? &cout : new fstream(output_file.c_str(), fstream::out);
-    ostream& out = *out_ptr;
 
     // call sumw2() for all histograms
     TH1::SetDefaultSumw2();

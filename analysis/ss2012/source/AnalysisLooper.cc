@@ -472,12 +472,16 @@ SSAnalysisLooper::SSAnalysisLooper
     switch (m_analysis_type)
     {
     case AnalysisType::high_pt:
-        mufr_name = "h_mufr40c";
-        elfr_name = "h_elfr40c";
+        mufr_name = "h_mufr40c_ewkcor";
+        elfr_name = "h_elfr40c_ewkcor";
         break;
     case AnalysisType::low_pt:
-        mufr_name = "h_mufr40c";
-        elfr_name = "h_elfr40c_noiso";
+        mufr_name = "h_mufr40c_ewkcor";
+        elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
+        break;
+    case AnalysisType::vlow_pt:
+        mufr_name = "h_mufr40c_iso";    // need to update with ewk correction
+        elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
         break;
     case AnalysisType::high_pt_eth:
         mufr_name = "h_mufr50c";

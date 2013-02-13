@@ -1,571 +1,167 @@
 #include "rt/RootTools.h"
 #include "at/Sample.h"
 #include "SignalRegion.h"
+#include "SSYields.h"
 #include "CTable.h"
 
 using namespace std;
+using namespace ss;
 
-// a simple yield struct
+// systematic uncertainties
+const float fake_sys_unc = 0.5;
+const float rare_sys_unc = 0.5;
+const float flip_sys_unc = 0.2;
 
-struct Yield
-{
-    Yield() 
-        : title("")
-        , ee  (0.0)
-        , dee (0.0)
-        , see (0.0)
-        , mm  (0.0)
-        , dmm (0.0)
-        , smm (0.0)
-        , em  (0.0)
-        , dem (0.0)
-        , sem (0.0)
-        , ll  (0.0)
-        , dll (0.0)
-        , sll (0.0)
-    {}
-
-    Yield(const std::string& title_) 
-        : title(title_)
-        , ee  (0.0)
-        , dee (0.0)
-        , see (0.0)
-        , mm  (0.0)
-        , dmm (0.0)
-        , smm (0.0)
-        , em  (0.0)
-        , dem (0.0)
-        , sem (0.0)
-        , ll  (0.0)
-        , dll (0.0)
-        , sll (0.0)
-    {}
-
-    Yield
-    (
-        const std::string& title_, 
-        const std::pair<float, float> ee_, 
-        const std::pair<float, float> mm_, 
-        const std::pair<float, float> em_, 
-        const std::pair<float, float> ll_ 
-    )
-        : title(title_)
-        , ee  (ee_.first)
-        , dee (ee_.second)
-        , see (0.0)
-        , mm  (mm_.first)
-        , dmm (mm_.second)
-        , smm (0.0)
-        , em  (em_.first)
-        , dem (em_.second)
-        , sem (0.0)
-        , ll (ll_.first)
-        , dll(ll_.second)
-        , sll(0.0)
-    {}
-
-    Yield
-    (
-        const std::string& title_, 
-        float ee_, 
-        float dee_, 
-        float mm_, 
-        float dmm_, 
-        float em_, 
-        float dem_, 
-        float ll_,
-        float dll_ 
-    )
-        : title(title_)
-        , ee  (ee_)
-        , dee (dee_) 
-        , see (0.0)
-        , mm  (mm_)  
-        , dmm (dmm_) 
-        , smm (0.0)
-        , em  (em_)  
-        , dem (dem_) 
-        , sem (0.0)
-        , ll (ll_) 
-        , dll(dll_)
-        , sll(0.0)
-    {}
-
-    Yield
-    (
-        const std::string& title_, 
-        float ee_, 
-        float dee_, 
-        float see_, 
-        float mm_, 
-        float dmm_, 
-        float smm_, 
-        float em_, 
-        float dem_, 
-        float sem_, 
-        float ll_,
-        float dll_,
-        float sll_ 
-    )
-        : title(title_)
-        , ee  (ee_)
-        , dee (dee_) 
-        , see (see_)
-        , mm  (mm_)  
-        , dmm (dmm_) 
-        , smm (smm_)
-        , em  (em_)  
-        , dem (dem_) 
-        , sem (sem_)
-        , ll (ll_) 
-        , dll(dll_)
-        , sll(sll_)
-    {}
-
-    std::string title;
-    float ee;
-    float dee;
-    float see;
-    float mm;
-    float dmm;
-    float smm;
-    float em;
-    float dem;
-    float sem;
-    float ll;
-    float dll;
-    float sll;
-
-    // methods:
-    Yield& operator+=(const Yield& y);
-    Yield& operator-=(const Yield& y);
-
-    float tee() const {return (sqrt(see*see + dee*dee));}
-    float tmm() const {return (sqrt(smm*smm + dmm*dmm));}
-    float tem() const {return (sqrt(sem*sem + dem*dem));}
-    float tll() const {return (sqrt(sll*sll + dll*dll));}
-
-    std::string GetLatex(const std::string& latex = "", bool print_sys_err = false) const;
-    void Print(bool print_sys_err = false) const;
-};
-
-float DetermineError(float v1, float v2, float e1, float e2)
-{
-    // test for zero yield condition
-    if (rt::is_zero(v1) && rt::is_zero(v2))
-    {
-        return std::max(e1, e2);    
-    }
-    else if (rt::is_zero(v1) && not rt::is_zero(v2))
-    {
-        return e2;
-    }
-    else if (not rt::is_zero(v1) && rt::is_zero(v2))
-    {
-        return e1;
-    }
-    else
-    {
-        return sqrt(e1*e1 + e2*e2);
-    }
-}
-
-// non member methods
-Yield operator-(const Yield& y1, const Yield& y2)
-{
-    Yield result("total", y1.ee - y2.ee, DetermineError(y1.ee, y2.ee, y1.dee, y2.dee), DetermineError(y1.ee, y2.ee, y1.see, y2.see), 
-                          y1.mm - y2.mm, DetermineError(y1.mm, y2.mm, y1.dmm, y2.dmm), DetermineError(y1.mm, y2.mm, y1.smm, y2.smm), 
-                          y1.em - y2.em, DetermineError(y1.em, y2.em, y1.dem, y2.dem), DetermineError(y1.em, y2.em, y1.sem, y2.sem), 
-                          y1.ll - y2.ll, DetermineError(y1.ll, y2.ll, y1.dll, y2.dll), DetermineError(y1.ll, y2.ll, y1.sll, y2.sll));
-    return result; 
-}
-
-Yield operator+(const Yield& y1, const Yield& y2)
-{
-    Yield result("total", y1.ee + y2.ee, DetermineError(y1.ee, y2.ee, y1.dee, y2.dee), DetermineError(y1.ee, y2.ee, y1.see, y2.see), 
-                          y1.mm + y2.mm, DetermineError(y1.mm, y2.mm, y1.dmm, y2.dmm), DetermineError(y1.mm, y2.mm, y1.smm, y2.smm), 
-                          y1.em + y2.em, DetermineError(y1.em, y2.em, y1.dem, y2.dem), DetermineError(y1.em, y2.em, y1.sem, y2.sem), 
-                          y1.ll + y2.ll, DetermineError(y1.ll, y2.ll, y1.dll, y2.dll), DetermineError(y1.ll, y2.ll, y1.sll, y2.sll));
-    return result; 
-}
-
-// add the uncertainties not worrying about whether the value is zero
-Yield AddUncertaintiesAbsolute(const Yield& y1, const Yield& y2)
-{
-    Yield result(y1.title, y1.ee + y2.ee, sqrt(y1.dee*y1.dee + y2.dee*y2.dee), sqrt(y1.see*y1.see + y2.see*y2.see), 
-                           y1.mm + y2.mm, sqrt(y1.dmm*y1.dmm + y2.dmm*y2.dmm), sqrt(y1.smm*y1.smm + y2.smm*y2.smm), 
-                           y1.em + y2.em, sqrt(y1.dem*y1.dem + y2.dem*y2.dem), sqrt(y1.sem*y1.sem + y2.sem*y2.sem), 
-                           y1.ll + y2.ll, sqrt(y1.dll*y1.dll + y2.dll*y2.dll), sqrt(y1.sll*y1.sll + y2.sll*y2.sll));
-    return result; 
-}
-
-// members
-Yield& Yield::operator+=(const Yield& y)
-{
-    string title_temp = this->title;
-    Yield temp_yield = (*this) + y;
-    *this = temp_yield;
-    this->title = title_temp;
-    return *this; 
-}
-
-Yield& Yield::operator-=(const Yield& y)
-{
-    string title_temp = this->title;
-    Yield temp_yield = (*this) - y;
-    *this = temp_yield;
-    this->title = title_temp;
-    return *this; 
-}
-
-std::string Yield::GetLatex(const std::string& latex, bool print_sys_err) const
-{
-    string result;
-    if (rt::string_contains(title, "data"))
-    {
-        const char* format = "%35s & %5.0f & %5.0f & %5.0f & %5.0f";
-        result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, mm, em, ll);
-    }
-    else
-    {
-        if (print_sys_err)
-        {
-            const char* format = "%35s & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f";
-            result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, dee, see, mm, dmm, smm, em, dem, sem, ll, dll, sll);
-            if (rt::string_contains(title, "Flip"))
-            {
-                format = "%35s & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & - $\\pm$ - $\\pm$ - & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f $\\pm$ %5.2f";
-                result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, dee, see, em, dem, sem, ll, dll, sll);
-            }
-        }
-        else
-        {
-            const char* format = "%35s & %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f";
-            result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, tee(), mm, tmm(), em, tem(), ll, tll());
-            if (rt::string_contains(title, "Flip"))
-            {
-                format = "%35s & %5.2f $\\pm$ %5.2f & - $\\pm$ - & %5.2f $\\pm$ %5.2f & %5.2f $\\pm$ %5.2f";
-                result = Form(format, not latex.empty() ? latex.c_str() : title.c_str(), ee, tee(), mm, tmm(), em, tem(), ll, tll());
-            }
-        }
-
-    }
-    return result;
-}
-
-void Yield::Print(bool print_sys_err) const
-{
-    if (rt::string_contains(title, "data"))
-    {
-        const char* format = "%15s ee: %15.0f mm: %15.0f em: %15.0f ll: %15.0f";
-        cout << Form(format, title.c_str(), ee, mm, em, ll) << endl;
-    }
-    else
-    {
-        if (print_sys_err)
-        {
-            const char* format = "%15s ee: %2.2f +/- %2.2f +/- %2.2f mm: %2.2f +/- %2.2f +/- %2.2f em: %2.2f +/- %2.2f +/- %2.2f ll: %2.2f +/- %2.2f +/- %2.2f";
-            cout << Form(format, title.c_str(), ee, dee, see, mm, dmm, smm, em, dem, sem, ll, dll, sll) << endl;
-        }
-        else
-        {
-            const char* format = "%15s ee: %2.2f +/- %2.2f mm: %2.2f +/- %2.2f em: %2.2f +/- %2.2f ll: %2.2f +/- %2.2f";
-            cout << Form(format, title.c_str(), ee, dee, mm, dmm, em, dem, ll, dll) << endl;
-        }
-    }
-}
-
-void SetErrorsToBogus(Yield& y)
-{
-    y.dee = 999;
-    y.dmm = 999;
-    y.dem = 999;
-    y.dll = 999;
-}
-
-void SetSysUncertainties(Yield& y, float percent)
-{
-    y.see = y.ee * percent;
-    y.smm = y.mm * percent;
-    y.sem = y.em * percent;
-    y.sll = y.ll * percent;
-}
-
-
-Yield operator*(float scale, const Yield& y)
-{
-    Yield result("total", scale * y.ee, scale * y.dee, 
-                          scale * y.mm, scale * y.dmm, 
-                          scale * y.em, scale * y.dem, 
-                          scale * y.ll, scale * y.dll);
-    return result; 
-}
-
-
-// container getter 
-rt::TH1Container GetSampleHists
+std::map<std::string, ss::Yield> GetYieldsMap
 (
-	const std::string& sample_name, 
-	const std::string& signal_region_name, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name,  
-	int charge_option, 
-	const std::string& output_path
+    const std::string& option,
+    const ss::SignalRegion::value_type signal_region, 
+    const ss::AnalysisType::value_type analysis_type, 
+    const ss::SignalRegionType::value_type signal_region_type, 
+    int charge_option = 0, 
+    const std::string& output_path = "test"
 )
 {
-    // charge option (1 == ++, -1 == --)
-    std::string charge_stem = "";
-    switch (charge_option)
-    {
-        case  1: charge_stem = "_pp"; break;
-        case -1: charge_stem = "_mm"; break;
-        default: {/*do nothing*/}
-    }
+    using namespace at;
+    std::map<std::string, ss::Yield> m;
 
-    // hists  
-    rt::TH1Container hc(Form("plots/%s/%s/%s/%s/%s%s.root",
-							  output_path.c_str(),
-							  analysis_type_name.c_str(),
-							  signal_region_type_name.c_str(),
-							  signal_region_name.c_str(),
-							  sample_name.c_str(),
-							  charge_stem.c_str()));
-    return hc;
-}
+    // data
+    m["data"] = GetYield(option, Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
-// get the yields per sample
-Yield GetSSYield
-(
-	const std::string& sample_name, 
-	const std::string& signal_region_name, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name,  
-	int charge_option, 
-	const std::string& output_path
-)
-{
-    // hists  
-    rt::TH1Container hc = GetSampleHists(sample_name, signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    pair<double, double> ee = rt::IntegralAndError(hc["h_yield_ee"]);
-    pair<double, double> mm = rt::IntegralAndError(hc["h_yield_mm"]);
-    pair<double, double> em = rt::IntegralAndError(hc["h_yield_em"]);
-    pair<double, double> ll = rt::IntegralAndError(hc["h_yield_ll"]);
-    Yield yield(sample_name, ee, mm, em, ll);
+    // for display only
+    m["ttdil"  ] = GetYield(option, Sample::ttdil  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ttslb"  ] = GetYield(option, Sample::ttslb  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ttslo"  ] = GetYield(option, Sample::ttslo  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ttotr"  ] = GetYield(option, Sample::ttotr  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["t_schan"] = GetYield(option, Sample::t_schan, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["t_tchan"] = GetYield(option, Sample::t_tchan, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["t_tw"   ] = GetYield(option, Sample::t_tw   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["dy"     ] = GetYield(option, Sample::dy     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["wjets"  ] = GetYield(option, Sample::wjets  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ww"     ] = GetYield(option, Sample::ww     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
+    // to include in prediction
+    // wgstar;
+    m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["wgstar"] += GetYield(option, Sample::wgstar2m, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["wgstar"] += GetYield(option, Sample::wgstar2t, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+
+    // wwqq;
+    m["wwqq"] += GetYield(option, Sample::wmwmqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["wwqq"] += GetYield(option, Sample::wpwpqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+                                
+    // the rest of the rare MC
+    m["wz"   ] = GetYield(option, Sample::wz   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["zz"   ] = GetYield(option, Sample::zz   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ttg"  ] = GetYield(option, Sample::ttg  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ttw"  ] = GetYield(option, Sample::ttw  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ttz"  ] = GetYield(option, Sample::ttz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["tbz"  ] = GetYield(option, Sample::tbz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ttww" ] = GetYield(option, Sample::ttww , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["wwg"  ] = GetYield(option, Sample::wwg  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["www"  ] = GetYield(option, Sample::www  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["wwz"  ] = GetYield(option, Sample::wwz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["wzz"  ] = GetYield(option, Sample::wzz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["zzz"  ] = GetYield(option, Sample::zzz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    m["ww_ds"] = GetYield(option, Sample::ww_ds, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+
+    // want the total of the MC
+    ss::Yield yield_mc;
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttdil"  ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslb"  ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslo"  ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttotr"  ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_schan"]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tchan"]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tw"   ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["dy"     ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wjets"  ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww"     ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar" ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwqq"   ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wz"     ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zz"     ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttg"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttw"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttz"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["tbz"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttww"   ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwg"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["www"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwz"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wzz"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zzz"    ]); 
+    yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww_ds"  ]); 
+    m["mc"] = yield_mc;
+
+ 
+    // want the rare MC only for the prediction
+    ss::Yield yield_rare;
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar"]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwqq"  ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wz"    ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zz"    ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttg"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttw"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttz"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["tbz"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttww"  ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwg"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["www"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwz"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wzz"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zzz"   ]); 
+    yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ww_ds" ]); 
+    m["rare"] = yield_rare;
+ 
     // done
-    return yield;
+    return m;
 }
-
-// get the fake yields per sample
-Yield GetDFYield
-(
-	const std::string& sample_name, 
-	const std::string& signal_region_name, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name,  
-	int charge_option, 
-	const std::string& output_path
-)
-{
-    // hists  
-    rt::TH1Container hc = GetSampleHists(sample_name, signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    pair<double, double> mm(hc["h_df_pred"]->GetBinContent(1), hc["h_df_pred"]->GetBinError(1));
-    pair<double, double> ee(hc["h_df_pred"]->GetBinContent(2), hc["h_df_pred"]->GetBinError(2));
-    pair<double, double> em(hc["h_df_pred"]->GetBinContent(3), hc["h_df_pred"]->GetBinError(3));
-    pair<double, double> ll(hc["h_df_pred"]->GetBinContent(4), hc["h_df_pred"]->GetBinError(4));
-    Yield yield("DF", ee, mm, em, ll);
-
-    // done
-    return yield;
-}
-
-// get the fake yields per sample
-Yield GetSFYield
-(
-	const std::string& sample_name, 
-	const std::string& signal_region_name, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name,  
-	int charge_option, 
-	const std::string& output_path
-)
-{
-    // hists  
-    rt::TH1Container hc = GetSampleHists(sample_name, signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    pair<double, double> mm(hc["h_sf_pred"]->GetBinContent(1), hc["h_sf_pred"]->GetBinError(1));
-    pair<double, double> ee(hc["h_sf_pred"]->GetBinContent(2), hc["h_sf_pred"]->GetBinError(2));
-    pair<double, double> em(hc["h_sf_pred"]->GetBinContent(3), hc["h_sf_pred"]->GetBinError(3));
-    pair<double, double> ll(hc["h_sf_pred"]->GetBinContent(4), hc["h_sf_pred"]->GetBinError(4));
-    Yield yield("SF", ee, mm, em, ll);
-
-    // done
-    return yield;
-}
-
-// get the fake yields per sample
-Yield GetFakeYield
-(
-	const std::string& sample_name, 
-	const std::string& signal_region_name, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name,  
-	int charge_option, 
-	const std::string& output_path
-)
-{
-    // hists  
-    rt::TH1Container hc = GetSampleHists(sample_name, signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    pair<double, double> mm(hc["h_fake_pred"]->GetBinContent(1), hc["h_fake_pred"]->GetBinError(1));
-    pair<double, double> ee(hc["h_fake_pred"]->GetBinContent(2), hc["h_fake_pred"]->GetBinError(2));
-    pair<double, double> em(hc["h_fake_pred"]->GetBinContent(3), hc["h_fake_pred"]->GetBinError(3));
-    pair<double, double> ll(hc["h_fake_pred"]->GetBinContent(4), hc["h_fake_pred"]->GetBinError(4));
-    Yield yield("Fakes", ee, mm, em, ll);
-
-    // done
-    return yield;
-}
-
-// get the fake yields per sample
-Yield GetFlipYield
-(
-	const std::string& sample_name, 
-	const std::string& signal_region_name, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name,  
-	int charge_option, 
-	const std::string& output_path
-)
-{
-    // hists  
-    rt::TH1Container hc = GetSampleHists(sample_name, signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    pair<double, double> mm(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
-    pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(2), hc["h_flip_pred"]->GetBinError(2));
-    pair<double, double> em(hc["h_flip_pred"]->GetBinContent(3), hc["h_flip_pred"]->GetBinError(3));
-    pair<double, double> ll(hc["h_flip_pred"]->GetBinContent(4), hc["h_flip_pred"]->GetBinError(4));
-    Yield yield("Flips", ee, mm, em, ll);
-
-    // done
-    return yield;
-}
-
-// print the yields for an individual file
-// very crude (no systematic uncertainties)
-//void PrintSampleYield(const std::string& sample_name, unsigned int signal_region_num = 0, const std::string output_path = "test", int charge_option = 0)
-//{
-//    Yield y(GetSSYield(sample_name, signal_region_num, charge_option, output_path));
-//    y.Print();
-//}
 
 // print the yields
 void PrintYields
 (
-	const std::string& output_path, 
-	const std::string& signal_region_name, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name = "inclusive", 
-	int charge_option = 0, 
-	bool print_latex = false
+    const std::string& output_path, 
+    const std::string& signal_region_name, 
+    const std::string& analysis_type_name, 
+    const std::string& signal_region_type_name = "inclusive", 
+    int charge_option = 0, 
+    bool print_latex = false
 )
 {
-    Yield yield_data(GetSSYield("data"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    Yield yield_sf(GetSFYield("data"    , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    Yield yield_df(GetDFYield("data"    , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    Yield yield_fake(GetFakeYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    Yield yield_flip(GetFlipYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    if (analysis_type_name == "hcp" && (signal_region_name == "sr2" || signal_region_name == "sr9"))
-    {
-        yield_flip = 0.5*GetFlipYield("data", "sr1", analysis_type_name, signal_region_type_name, /*charge_option=*/0, output_path);
-        yield_flip.title = "Flips";
-    }
+    using namespace at;
 
-    // handle ++/-- charge flip case
-    if (analysis_type_name == "hcp" && (charge_option == 1 || charge_option == -1))
-    {
-        yield_flip = 0.5*GetFlipYield("data", signal_region_name, analysis_type_name, signal_region_type_name, /*charge_option=*/0, output_path);
-        yield_flip.title = "Flips";
-    }
+    const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    const ss::SignalRegion::value_type signal_region          = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
+    const ss::SignalRegionInfo sr_info                        = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
 
-    // The order matters for the formated tex table.
-    Yield yield_mc("Total MC");
+    // get the yields
+    std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
-    // for display only
-    vector<Yield> yields_bkgd;
-    yields_bkgd.push_back(GetSSYield("ttdil"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ttslb"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ttslo"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ttotr"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("t_schan", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("t_tchan", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("t_tw"   , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("dy"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("wjets"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ww"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    size_t display_index = yields_bkgd.size();
+    ss::Yield yield_data = m_yield["data"];
+    ss::Yield yield_rare = m_yield["rare"];
+    ss::Yield yield_mc   = m_yield["mc"  ];
+    ss::Yield yield_spil = m_fake ["rare"];
+    ss::Yield yield_sf   = ss::GetSFYield  (Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path); 
+    ss::Yield yield_df   = ss::GetDFYield  (Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path); 
+    ss::Yield yield_fake = ss::GetFakeYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    ss::Yield yield_flip = ss::GetFlipYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path); 
 
-    // to include in prediction
-    Yield yield_wgstar("wgstar");
-    yield_wgstar += GetSSYield("wgstar2e", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    yield_wgstar += GetSSYield("wgstar2m", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    yield_wgstar += GetSSYield("wgstar2t", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-
-    Yield yield_wwqq("wwqq");
-    yield_wwqq += GetSSYield("wmwmqq", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-    yield_wwqq += GetSSYield("wpwpqq", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-
-    yields_bkgd.push_back(yield_wgstar);
-    yields_bkgd.push_back(GetSSYield("wz"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("zz"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ttg" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ttw" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ttz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("tbz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("ttww", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("wwg" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("www" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("wwz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("wzz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(GetSSYield("zzz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    yields_bkgd.push_back(yield_wwqq);
-    yields_bkgd.push_back(GetSSYield("ww_ds", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-
-    // add the backtrounds to get the totol MC and total prediction
-    for (size_t i = 0; i != yields_bkgd.size(); i++)
-    {
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, yields_bkgd.at(i));
-    }
-    Yield yield_mc_pred("MC Pred");
-    for (size_t i = display_index; i != yields_bkgd.size(); i++)
-    {
-        yield_mc_pred = AddUncertaintiesAbsolute(yield_mc_pred, yields_bkgd.at(i));
-    }
+    // subtract the spillage from the rare MC
+    ss::Yield yield_cfake = (yield_fake - yield_spil);
 
     // set systematic uncertainties
-    SetSysUncertainties(yield_fake   , 0.5);
-    SetSysUncertainties(yield_flip   , 0.2);
-    SetSysUncertainties(yield_mc_pred, 0.5);
+    ss::SetSysUncertainties(yield_rare , rare_sys_unc);
+    ss::SetSysUncertainties(yield_cfake, fake_sys_unc);
+    ss::SetSysUncertainties(yield_flip , flip_sys_unc);
 
-    // total predition
-    Yield yield_pred    = yield_mc_pred;
-    yield_pred.title    = "pred";
-    yield_pred += yield_fake;
+    // total prediction
+    ss::Yield yield_pred = yield_rare;
+    yield_pred += yield_cfake;
     yield_pred += yield_flip;
 
-    // collect all the yields
-    vector<Yield> yields;
-    for (size_t i = 0; i != yields_bkgd.size(); i++)
-    {
-        yields.push_back(yields_bkgd[i]);
-    }
-    yields.push_back(yield_mc);
-    yields.push_back(yield_sf);
-    yields.push_back(yield_df);
-    yields.push_back(yield_fake);
-    yields.push_back(yield_flip);
-    yields.push_back(yield_mc_pred);
-    yields.push_back(yield_pred);
-    yields.push_back(yield_data);
-
-    // print the table
     if (print_latex)
     {
         // before table
@@ -575,52 +171,52 @@ void PrintYields
         string latex("\\begin{tabular}{l|cccc} \\hline\\hline\n"                   ); 
         latex.append("source & $ee$ & $\\mu\\mu$ & $e\\mu$ & $\\ell\\ell $ \\\\\n" ); 
         latex.append("\\hline\n"                                                   ); 
-
-        // loop over datasets
-        for (size_t i = 0; i != yields.size(); i++)
-        {
-            Yield& y = yields[i];
-
-            // handle title explicitly 
-            string latex_name = y.title;
-            if      (y.title == "SF"      ) {latex_name = "SF";                  }
-            else if (y.title == "DF"      ) {latex_name = "DF";                  }
-            else if (y.title == "Fakes"   ) {latex_name = "SF + DF";             }
-            else if (y.title == "Flips"   ) {latex_name = "Charge Flips";        }
-            else if (y.title == "Total MC") {latex_name = "Total MC";            }
-            else if (y.title == "MC Pred" ) {latex_name = "MC Pred";             }
-            else if (y.title == "pred"    ) {latex_name = "Total Pred";          }
-            else if (y.title == "wgstar"  ) {latex_name = "$W\\gamma^{*}$";      }
-            else if (y.title == "wwqq"    ) {latex_name = "$qqW^{\\pm}W^{\\pm}$";}
-            else
-            {
-                latex_name = at::IsSample(y.title) ? at::GetSampleInfo(y.title).latex : y.title;
-            }
-
-            if      (y.title == "Fakes"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            else if (y.title == "Flips"   ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            else if (y.title == "MC Pred" ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            else if (y.title == "pred"    ) {latex.append(y.GetLatex(latex_name, /*print_sys_err=*/true));} 
-            else                            {latex.append(y.GetLatex(latex_name));}
-            //latex.append(y.GetLatex(latex_name));
-            latex.append(" \\\\\n");
-
-            // add the line between sections
-            if (y.title == "ttotr"   ) {latex.append("\\hline\n"        );} 
-            if (y.title == "t_tw"    ) {latex.append("\\hline\n"        );} 
-            if (y.title == "ww"      ) {latex.append("\\hline\n"        );} 
-            if (y.title == "zz"      ) {latex.append("\\hline\n"        );} 
-            //if (y.title == "zzz"     ) {latex.append("\\hline\n"        );} 
-            if (y.title == "ww_ds"   ) {latex.append("\\hline\n"        );} 
-            if (y.title == "Total MC") {latex.append("\\hline\\hline\n" );} 
-            if (y.title == "DF"      ) {latex.append("\\hline\n"        );} 
-            if (y.title == "Fakes"   ) {latex.append("\\hline\\hline\n" );} 
-            if (y.title == "Flips"   ) {latex.append("\\hline\n"        );} 
-            if (y.title == "MC Pred" ) {latex.append("\\hline\\hline\n" );} 
-            if (y.title == "pred"    ) {latex.append("\\hline\\hline\n" );} 
-        }
-
-        // after table
+        latex.append(Form("%s \\\\\n", m_yield["ttdil"  ].GetLatex("ttdil"       , GetSampleInfo(Sample::ttdil  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttslb"  ].GetLatex("ttslb"       , GetSampleInfo(Sample::ttslb  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttslo"  ].GetLatex("ttslo"       , GetSampleInfo(Sample::ttslo  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttotr"  ].GetLatex("ttotr"       , GetSampleInfo(Sample::ttotr  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_yield["t_schan"].GetLatex("t_schan"     , GetSampleInfo(Sample::t_schan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["t_tchan"].GetLatex("t_tchan"     , GetSampleInfo(Sample::t_tchan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["t_tw"   ].GetLatex("t_tw"        , GetSampleInfo(Sample::t_tw   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_yield["dy"     ].GetLatex("dy"          , GetSampleInfo(Sample::dy     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wjets"  ].GetLatex("wjets"       , GetSampleInfo(Sample::wjets  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ww"     ].GetLatex("ww"          , GetSampleInfo(Sample::ww     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_yield["wgstar" ].GetLatex("wgstar"      , GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wz"     ].GetLatex("wz"          , GetSampleInfo(Sample::wz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["zz"     ].GetLatex("zz"          , GetSampleInfo(Sample::zz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_yield["ttg"    ].GetLatex("ttg"         , GetSampleInfo(Sample::ttg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttw"    ].GetLatex("ttw"         , GetSampleInfo(Sample::ttw    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttz"    ].GetLatex("ttz"         , GetSampleInfo(Sample::ttz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["tbz"    ].GetLatex("tbz"         , GetSampleInfo(Sample::tbz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttww"   ].GetLatex("ttww"        , GetSampleInfo(Sample::ttww   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wwg"    ].GetLatex("wwg"         , GetSampleInfo(Sample::wwg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["www"    ].GetLatex("www"         , GetSampleInfo(Sample::www    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wwz"    ].GetLatex("wwz"         , GetSampleInfo(Sample::wwz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wzz"    ].GetLatex("wzz"         , GetSampleInfo(Sample::wzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["zzz"    ].GetLatex("zzz"         , GetSampleInfo(Sample::zzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wwqq"   ].GetLatex("wwqq"        , GetSampleInfo(Sample::wwqq   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ww_ds"  ].GetLatex("ww_ds"       , GetSampleInfo(Sample::ww_ds  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_mc.GetLatex          ("mc"          , "Total MC"                          , /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_sf.GetLatex          ("sf"          , "SF"                                , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_df.GetLatex          ("df"          , "DF"                                , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_spil.GetLatex        ("sc"          , "SC"                                , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_fake.GetLatex        ("fake"        , "SF + DF"                           , /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_cfake.GetLatex       ("cfake"       , "SF + DF - SC"                      , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_flip.GetLatex        ("flip"        , "Charge Flips"                      , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_rare.GetLatex        ("pred"        , "MC Pred"                           , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_pred.GetLatex        ("total pred"  , "Total Pred"                        , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_data.GetLatex        ("data"        , "Data"                              , /*print_sys_error*/true ).c_str()));
         latex.append("\\hline\\hline\n" ); 
         latex.append("\\end{tabular}\n" ); 
         //latex.append("\\end{center}\n"  ); 
@@ -629,7 +225,7 @@ void PrintYields
     }
     else
     {
-		const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
+        // make the table
         CTable t_yields;
         t_yields.useTitle();
         t_yields.setTitle(Form("yields for SS 2012 %s (%s)", sr_info.name.c_str(), sr_info.title.c_str()));
@@ -637,172 +233,251 @@ void PrintYields
         t_yields.setColLabel("mm", 1);
         t_yields.setColLabel("em", 2);
         t_yields.setColLabel("ll", 3);
+        t_yields.setTable()
+        (                                                            "ee",                        "mm",                        "em",                       "ll")
+        (GetSampleInfo(Sample::ttdil  ).name, m_yield["ttdil"  ].ee_pm() , m_yield["ttdil"  ].mm_pm() , m_yield["ttdil"  ].em_pm() , m_yield["ttdil"  ].ll_pm())
+        (GetSampleInfo(Sample::ttslb  ).name, m_yield["ttslb"  ].ee_pm() , m_yield["ttslb"  ].mm_pm() , m_yield["ttslb"  ].em_pm() , m_yield["ttslb"  ].ll_pm())
+        (GetSampleInfo(Sample::ttslo  ).name, m_yield["ttslo"  ].ee_pm() , m_yield["ttslo"  ].mm_pm() , m_yield["ttslo"  ].em_pm() , m_yield["ttslo"  ].ll_pm())
+        (GetSampleInfo(Sample::ttotr  ).name, m_yield["ttotr"  ].ee_pm() , m_yield["ttotr"  ].mm_pm() , m_yield["ttotr"  ].em_pm() , m_yield["ttotr"  ].ll_pm())
+        (GetSampleInfo(Sample::t_schan).name, m_yield["t_schan"].ee_pm() , m_yield["t_schan"].mm_pm() , m_yield["t_schan"].em_pm() , m_yield["t_schan"].ll_pm())
+        (GetSampleInfo(Sample::t_tchan).name, m_yield["t_tchan"].ee_pm() , m_yield["t_tchan"].mm_pm() , m_yield["t_tchan"].em_pm() , m_yield["t_tchan"].ll_pm())
+        (GetSampleInfo(Sample::t_tw   ).name, m_yield["t_tw"   ].ee_pm() , m_yield["t_tw"   ].mm_pm() , m_yield["t_tw"   ].em_pm() , m_yield["t_tw"   ].ll_pm())
+        (GetSampleInfo(Sample::dy     ).name, m_yield["dy"     ].ee_pm() , m_yield["dy"     ].mm_pm() , m_yield["dy"     ].em_pm() , m_yield["dy"     ].ll_pm())
+        (GetSampleInfo(Sample::wjets  ).name, m_yield["wjets"  ].ee_pm() , m_yield["wjets"  ].mm_pm() , m_yield["wjets"  ].em_pm() , m_yield["wjets"  ].ll_pm())
+        (GetSampleInfo(Sample::ww     ).name, m_yield["ww"     ].ee_pm() , m_yield["ww"     ].mm_pm() , m_yield["ww"     ].em_pm() , m_yield["ww"     ].ll_pm())
+        (GetSampleInfo(Sample::wgstar ).name, m_yield["wgstar" ].ee_pm() , m_yield["wgstar" ].mm_pm() , m_yield["wgstar" ].em_pm() , m_yield["wgstar" ].ll_pm())
+        (GetSampleInfo(Sample::wz     ).name, m_yield["wz"     ].ee_pm() , m_yield["wz"     ].mm_pm() , m_yield["wz"     ].em_pm() , m_yield["wz"     ].ll_pm())
+        (GetSampleInfo(Sample::zz     ).name, m_yield["zz"     ].ee_pm() , m_yield["zz"     ].mm_pm() , m_yield["zz"     ].em_pm() , m_yield["zz"     ].ll_pm())
+        (GetSampleInfo(Sample::ttg    ).name, m_yield["ttg"    ].ee_pm() , m_yield["ttg"    ].mm_pm() , m_yield["ttg"    ].em_pm() , m_yield["ttg"    ].ll_pm())
+        (GetSampleInfo(Sample::ttw    ).name, m_yield["ttw"    ].ee_pm() , m_yield["ttw"    ].mm_pm() , m_yield["ttw"    ].em_pm() , m_yield["ttw"    ].ll_pm())
+        (GetSampleInfo(Sample::ttz    ).name, m_yield["ttz"    ].ee_pm() , m_yield["ttz"    ].mm_pm() , m_yield["ttz"    ].em_pm() , m_yield["ttz"    ].ll_pm())
+        (GetSampleInfo(Sample::tbz    ).name, m_yield["tbz"    ].ee_pm() , m_yield["tbz"    ].mm_pm() , m_yield["tbz"    ].em_pm() , m_yield["tbz"    ].ll_pm())
+        (GetSampleInfo(Sample::ttww   ).name, m_yield["ttww"   ].ee_pm() , m_yield["ttww"   ].mm_pm() , m_yield["ttww"   ].em_pm() , m_yield["ttww"   ].ll_pm())
+        (GetSampleInfo(Sample::wwg    ).name, m_yield["wwg"    ].ee_pm() , m_yield["wwg"    ].mm_pm() , m_yield["wwg"    ].em_pm() , m_yield["wwg"    ].ll_pm())
+        (GetSampleInfo(Sample::www    ).name, m_yield["www"    ].ee_pm() , m_yield["www"    ].mm_pm() , m_yield["www"    ].em_pm() , m_yield["www"    ].ll_pm())
+        (GetSampleInfo(Sample::wwz    ).name, m_yield["wwz"    ].ee_pm() , m_yield["wwz"    ].mm_pm() , m_yield["wwz"    ].em_pm() , m_yield["wwz"    ].ll_pm())
+        (GetSampleInfo(Sample::wzz    ).name, m_yield["wzz"    ].ee_pm() , m_yield["wzz"    ].mm_pm() , m_yield["wzz"    ].em_pm() , m_yield["wzz"    ].ll_pm())
+        (GetSampleInfo(Sample::zzz    ).name, m_yield["zzz"    ].ee_pm() , m_yield["zzz"    ].mm_pm() , m_yield["zzz"    ].em_pm() , m_yield["zzz"    ].ll_pm())
+        (GetSampleInfo(Sample::wwqq   ).name, m_yield["wwqq"   ].ee_pm() , m_yield["wwqq"   ].mm_pm() , m_yield["wwqq"   ].em_pm() , m_yield["wwqq"   ].ll_pm())
+        (GetSampleInfo(Sample::ww_ds  ).name, m_yield["ww_ds"  ].ee_pm() , m_yield["ww_ds"  ].mm_pm() , m_yield["ww_ds"  ].em_pm() , m_yield["ww_ds"  ].ll_pm())
+        ("Total MC"                         , yield_mc.ee_pm()           , yield_mc.mm_pm()           , yield_mc.em_pm()           , yield_mc.ll_pm()          ) 
+        ("SF"                               , yield_sf.ee_pm()           , yield_sf.mm_pm()           , yield_sf.em_pm()           , yield_sf.ll_pm()          ) 
+        ("DF"                               , yield_df.ee_pm()           , yield_df.mm_pm()           , yield_df.em_pm()           , yield_df.ll_pm()          ) 
+        ("PC"                               , yield_spil.ee_pm()         , yield_spil.mm_pm()         , yield_spil.em_pm()         , yield_spil.ll_pm()        ) 
+        ("SF + DF"                          , yield_fake.ee_pm()         , yield_fake.mm_pm()         , yield_fake.em_pm()         , yield_fake.ll_pm()        ) 
+        ("SF + DF - PC"                     , yield_cfake.ee_pm()        , yield_cfake.mm_pm()        , yield_cfake.em_pm()        , yield_cfake.ll_pm()       ) 
+        ("Charge Flips"                     , yield_flip.ee_pm()         , yield_flip.mm_pm()         , yield_flip.em_pm()         , yield_flip.ll_pm()        ) 
+        ("MC Pred"                          , yield_rare.ee_pm()         , yield_rare.mm_pm()         , yield_rare.em_pm()         , yield_rare.ll_pm()        ) 
+        ("Total Pred"                       , yield_pred.ee_pm()         , yield_pred.mm_pm()         , yield_pred.em_pm()         , yield_pred.ll_pm()        ) 
+        ("data"                             , (int)yield_data.ee         , (int)yield_data.mm         , (int)yield_data.em         , (int)yield_data.ll        );
 
-        for (size_t i = 0; i != yields.size(); i++)
-        {
-            const Yield& y = yields[i];
+        // print it
+        t_yields.print();
+    }
+}
 
-            // handle title explicitly 
-            string title = y.title;
-            if      (title == "SF"      ) {title = "SF";          }
-            else if (title == "DF"      ) {title = "DF";          }
-            else if (title == "Fakes"   ) {title = "SF + DF";     }
-            else if (title == "Flips"   ) {title = "Charge Flips";}
-            else if (title == "Total MC") {title = "Total MC";    }
-            else if (title == "pred"    ) {title = "Total Pred";  }
 
-            t_yields.setRowLabel(title, i);
-            if (y.title == "data")
-            {
-                t_yields.setCell(static_cast<int>(y.ee), i, 0);
-                t_yields.setCell(static_cast<int>(y.mm), i, 1);
-                t_yields.setCell(static_cast<int>(y.em), i, 2);
-                t_yields.setCell(static_cast<int>(y.ll), i, 3);
-            }
-            else if (y.title == "Flipts")
-            {
-                t_yields.setCell(static_cast<int>(y.ee), i, 0);
-                t_yields.setCell("NA"                  , i, 1);
-                t_yields.setCell(static_cast<int>(y.em), i, 2);
-                t_yields.setCell(static_cast<int>(y.ll), i, 3);
-            }
-            else 
-            {
-                t_yields.setCell(rt::pm(y.ee, y.dee, "1.2"), i, 0);
-                t_yields.setCell(rt::pm(y.mm, y.dmm, "1.2"), i, 1);
-                t_yields.setCell(rt::pm(y.em, y.dem, "1.2"), i, 2);
-                t_yields.setCell(rt::pm(y.ll, y.dll, "1.2"), i, 3);
-            }
-        }
+// print the rare MC sideband contamination 
+void PrintSidebandContamination
+(
+    const std::string& output_path, 
+    const std::string& signal_region_name, 
+    const std::string& analysis_type_name, 
+    const std::string& signal_region_type_name = "inclusive", 
+    int charge_option = 0, 
+    bool print_latex = false
+)
+{
+    using namespace at;
+
+    const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    const ss::SignalRegion::value_type signal_region          = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
+    const ss::SignalRegionInfo sr_info                        = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
+
+    // get the yields
+    std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    ss::Yield yield_mc   = m_fake["mc"  ];
+    ss::Yield yield_spil = m_fake["rare"];
+
+    if (print_latex)
+    {
+        // before table
+        //string latex("\\begin{table}[ht!]\n"                                       ); 
+        //latex.append("\\begin{center}\n"                                           ); 
+        //latex.append("\\begin{tabular}{l|cccc} \\hline\\hline\n"                   ); 
+        string latex("\\begin{tabular}{l|cccc} \\hline\\hline\n"                   ); 
+        latex.append("source & $ee$ & $\\mu\\mu$ & $e\\mu$ & $\\ell\\ell $ \\\\\n" ); 
+        latex.append("\\hline\n"                                                   ); 
+        latex.append(Form("%s \\\\\n", m_fake["ttdil"  ].GetLatex("ttdil"       , GetSampleInfo(Sample::ttdil  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttslb"  ].GetLatex("ttslb"       , GetSampleInfo(Sample::ttslb  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttslo"  ].GetLatex("ttslo"       , GetSampleInfo(Sample::ttslo  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttotr"  ].GetLatex("ttotr"       , GetSampleInfo(Sample::ttotr  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_fake["t_schan"].GetLatex("t_schan"     , GetSampleInfo(Sample::t_schan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["t_tchan"].GetLatex("t_tchan"     , GetSampleInfo(Sample::t_tchan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["t_tw"   ].GetLatex("t_tw"        , GetSampleInfo(Sample::t_tw   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_fake["dy"     ].GetLatex("dy"          , GetSampleInfo(Sample::dy     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wjets"  ].GetLatex("wjets"       , GetSampleInfo(Sample::wjets  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ww"     ].GetLatex("ww"          , GetSampleInfo(Sample::ww     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_fake["wgstar" ].GetLatex("wgstar"      , GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wz"     ].GetLatex("wz"          , GetSampleInfo(Sample::wz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["zz"     ].GetLatex("zz"          , GetSampleInfo(Sample::zz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");
+        latex.append(Form("%s \\\\\n", m_fake["ttg"    ].GetLatex("ttg"         , GetSampleInfo(Sample::ttg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttw"    ].GetLatex("ttw"         , GetSampleInfo(Sample::ttw    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttz"    ].GetLatex("ttz"         , GetSampleInfo(Sample::ttz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["tbz"    ].GetLatex("tbz"         , GetSampleInfo(Sample::tbz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttww"   ].GetLatex("ttww"        , GetSampleInfo(Sample::ttww   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wwg"    ].GetLatex("wwg"         , GetSampleInfo(Sample::wwg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["www"    ].GetLatex("www"         , GetSampleInfo(Sample::www    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wwz"    ].GetLatex("wwz"         , GetSampleInfo(Sample::wwz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wzz"    ].GetLatex("wzz"         , GetSampleInfo(Sample::wzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["zzz"    ].GetLatex("zzz"         , GetSampleInfo(Sample::zzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wwqq"   ].GetLatex("wwqq"        , GetSampleInfo(Sample::wwqq   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ww_ds"  ].GetLatex("ww_ds"       , GetSampleInfo(Sample::ww_ds  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\\hline\n");
+        latex.append(Form("%s \\\\\n", yield_mc.GetLatex          ("mc"          , "Total MC"                          , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_spil.GetLatex        ("pc"          , "Total rare MC"                     , /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\\hline\n" ); 
+        latex.append("\\end{tabular}\n" ); 
+        //latex.append("\\end{center}\n"  ); 
+        //latex.append("\\end{table}"     ); 
+        cout << latex << endl;
+    }
+    else
+    {
+        // make the table
+        CTable t_yields;
+        t_yields.useTitle();
+        t_yields.setTitle(Form("sideband contamination %s (%s)", sr_info.name.c_str(), sr_info.title.c_str()));
+        t_yields.setColLabel("ee", 0);
+        t_yields.setColLabel("mm", 1);
+        t_yields.setColLabel("em", 2);
+        t_yields.setColLabel("ll", 3);
+        t_yields.setTable()
+        (                                                           "ee",                       "mm",                       "em",                      "ll")
+        (GetSampleInfo(Sample::ttdil  ).name, m_fake["ttdil"  ].ee_pm() , m_fake["ttdil"  ].mm_pm() , m_fake["ttdil"  ].em_pm() , m_fake["ttdil"  ].ll_pm())
+        (GetSampleInfo(Sample::ttslb  ).name, m_fake["ttslb"  ].ee_pm() , m_fake["ttslb"  ].mm_pm() , m_fake["ttslb"  ].em_pm() , m_fake["ttslb"  ].ll_pm())
+        (GetSampleInfo(Sample::ttslo  ).name, m_fake["ttslo"  ].ee_pm() , m_fake["ttslo"  ].mm_pm() , m_fake["ttslo"  ].em_pm() , m_fake["ttslo"  ].ll_pm())
+        (GetSampleInfo(Sample::ttotr  ).name, m_fake["ttotr"  ].ee_pm() , m_fake["ttotr"  ].mm_pm() , m_fake["ttotr"  ].em_pm() , m_fake["ttotr"  ].ll_pm())
+        (GetSampleInfo(Sample::t_schan).name, m_fake["t_schan"].ee_pm() , m_fake["t_schan"].mm_pm() , m_fake["t_schan"].em_pm() , m_fake["t_schan"].ll_pm())
+        (GetSampleInfo(Sample::t_tchan).name, m_fake["t_tchan"].ee_pm() , m_fake["t_tchan"].mm_pm() , m_fake["t_tchan"].em_pm() , m_fake["t_tchan"].ll_pm())
+        (GetSampleInfo(Sample::t_tw   ).name, m_fake["t_tw"   ].ee_pm() , m_fake["t_tw"   ].mm_pm() , m_fake["t_tw"   ].em_pm() , m_fake["t_tw"   ].ll_pm())
+        (GetSampleInfo(Sample::dy     ).name, m_fake["dy"     ].ee_pm() , m_fake["dy"     ].mm_pm() , m_fake["dy"     ].em_pm() , m_fake["dy"     ].ll_pm())
+        (GetSampleInfo(Sample::wjets  ).name, m_fake["wjets"  ].ee_pm() , m_fake["wjets"  ].mm_pm() , m_fake["wjets"  ].em_pm() , m_fake["wjets"  ].ll_pm())
+        (GetSampleInfo(Sample::ww     ).name, m_fake["ww"     ].ee_pm() , m_fake["ww"     ].mm_pm() , m_fake["ww"     ].em_pm() , m_fake["ww"     ].ll_pm())
+        (GetSampleInfo(Sample::wgstar ).name, m_fake["wgstar" ].ee_pm() , m_fake["wgstar" ].mm_pm() , m_fake["wgstar" ].em_pm() , m_fake["wgstar" ].ll_pm())
+        (GetSampleInfo(Sample::wz     ).name, m_fake["wz"     ].ee_pm() , m_fake["wz"     ].mm_pm() , m_fake["wz"     ].em_pm() , m_fake["wz"     ].ll_pm())
+        (GetSampleInfo(Sample::zz     ).name, m_fake["zz"     ].ee_pm() , m_fake["zz"     ].mm_pm() , m_fake["zz"     ].em_pm() , m_fake["zz"     ].ll_pm())
+        (GetSampleInfo(Sample::ttg    ).name, m_fake["ttg"    ].ee_pm() , m_fake["ttg"    ].mm_pm() , m_fake["ttg"    ].em_pm() , m_fake["ttg"    ].ll_pm())
+        (GetSampleInfo(Sample::ttw    ).name, m_fake["ttw"    ].ee_pm() , m_fake["ttw"    ].mm_pm() , m_fake["ttw"    ].em_pm() , m_fake["ttw"    ].ll_pm())
+        (GetSampleInfo(Sample::ttz    ).name, m_fake["ttz"    ].ee_pm() , m_fake["ttz"    ].mm_pm() , m_fake["ttz"    ].em_pm() , m_fake["ttz"    ].ll_pm())
+        (GetSampleInfo(Sample::tbz    ).name, m_fake["tbz"    ].ee_pm() , m_fake["tbz"    ].mm_pm() , m_fake["tbz"    ].em_pm() , m_fake["tbz"    ].ll_pm())
+        (GetSampleInfo(Sample::ttww   ).name, m_fake["ttww"   ].ee_pm() , m_fake["ttww"   ].mm_pm() , m_fake["ttww"   ].em_pm() , m_fake["ttww"   ].ll_pm())
+        (GetSampleInfo(Sample::wwg    ).name, m_fake["wwg"    ].ee_pm() , m_fake["wwg"    ].mm_pm() , m_fake["wwg"    ].em_pm() , m_fake["wwg"    ].ll_pm())
+        (GetSampleInfo(Sample::www    ).name, m_fake["www"    ].ee_pm() , m_fake["www"    ].mm_pm() , m_fake["www"    ].em_pm() , m_fake["www"    ].ll_pm())
+        (GetSampleInfo(Sample::wwz    ).name, m_fake["wwz"    ].ee_pm() , m_fake["wwz"    ].mm_pm() , m_fake["wwz"    ].em_pm() , m_fake["wwz"    ].ll_pm())
+        (GetSampleInfo(Sample::wzz    ).name, m_fake["wzz"    ].ee_pm() , m_fake["wzz"    ].mm_pm() , m_fake["wzz"    ].em_pm() , m_fake["wzz"    ].ll_pm())
+        (GetSampleInfo(Sample::zzz    ).name, m_fake["zzz"    ].ee_pm() , m_fake["zzz"    ].mm_pm() , m_fake["zzz"    ].em_pm() , m_fake["zzz"    ].ll_pm())
+        (GetSampleInfo(Sample::wwqq   ).name, m_fake["wwqq"   ].ee_pm() , m_fake["wwqq"   ].mm_pm() , m_fake["wwqq"   ].em_pm() , m_fake["wwqq"   ].ll_pm())
+        (GetSampleInfo(Sample::ww_ds  ).name, m_fake["ww_ds"  ].ee_pm() , m_fake["ww_ds"  ].mm_pm() , m_fake["ww_ds"  ].em_pm() , m_fake["ww_ds"  ].ll_pm())
+        ("Total MC"                         , yield_mc.ee_pm()          , yield_mc.mm_pm()          , yield_mc.em_pm()          , yield_mc.ll_pm()         ) 
+        ("Total Rare MC"                    , yield_spil.ee_pm()        , yield_spil.mm_pm()        , yield_spil.em_pm()        , yield_spil.ll_pm()       ) ;
+
+
+        // print it
         t_yields.print();
     }
 }
 
 
 // print the yields
-void PrintYieldsETH
+void PrintETHCard
 (
-	const std::string& output_path, 
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name = "inclusive" 
+    const std::string& output_path, 
+    const std::string& analysis_type_name, 
+    const std::string& signal_region_type_name = "inclusive" 
 )
 {
-	// can be paramerized if needed (for now hard coded)
-	const int charge_option = 0; 
+    using namespace at;
 
-	//for (size_t sr_num = 0; sr_num != ss::SignalRegion::static_size; sr_num++)
-	for (size_t sr_num = 0; sr_num != 29; sr_num++)
-	{
-		const string signal_region_name       = Form("sr%lu", sr_num);
-		//const ss::SignalRegion::value_type sr = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
-		const ss::SignalRegionInfo sr_info    = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
+    const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    // can be paramerized if needed (for now hard coded)
+    const int charge_option = 0; 
+    
+    //for (size_t sr_num = 0; sr_num != ss::SignalRegion::static_size; sr_num++)
+    for (size_t sr_num = 0; sr_num != 29; sr_num++)
+    {
+        const string signal_region_name    = Form("sr%lu", sr_num);
+        const ss::SignalRegion::value_type signal_region = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name); 
+        const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
 
-		Yield yield_data(GetSSYield("data"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		Yield yield_sf(GetSFYield("data"    , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		Yield yield_df(GetDFYield("data"    , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		Yield yield_fake(GetFakeYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		Yield yield_flip(GetFlipYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
+        // get the yields
+        std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        ss::Yield yield_data = m_yield["data"];
+        ss::Yield yield_rare = m_yield["rare"];
+        ss::Yield yield_spil = m_fake ["rare"];
+        ss::Yield yield_fake = ss::GetFakeYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        ss::Yield yield_flip = ss::GetFlipYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path); 
 
-		// The order matters for the formated tex table.
-		Yield yield_mc("Total MC");
+        // subtract the spillage from the rare MC
+        ss::Yield yield_cfake = (yield_fake - yield_spil);
 
-		// for display only
-		vector<Yield> yields_bkgd;
-		yields_bkgd.push_back(GetSSYield("ttdil"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ttslb"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ttslo"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ttotr"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("t_schan", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("t_tchan", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("t_tw"   , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("dy"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("wjets"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ww"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		size_t display_index = yields_bkgd.size();
+        // set systematic uncertainties
+        ss::SetSysUncertainties(yield_rare , rare_sys_unc);
+        ss::SetSysUncertainties(yield_cfake, fake_sys_unc);
+        ss::SetSysUncertainties(yield_flip , flip_sys_unc);
 
-		// to include in prediction
-		Yield yield_wgstar("wgstar");
-		yield_wgstar += GetSSYield("wgstar2e", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-		yield_wgstar += GetSSYield("wgstar2m", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-		yield_wgstar += GetSSYield("wgstar2t", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
+        // total prediction
+        ss::Yield yield_pred = yield_rare;
+        yield_pred += yield_cfake;
+        yield_pred += yield_flip;
 
-		Yield yield_wwqq("wwqq");
-		yield_wwqq += GetSSYield("wmwmqq", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
-		yield_wwqq += GetSSYield("wpwpqq", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path);
+        // print the table
+        const string sr_name = Form((sr_num < 10 ? "SR0%lu" : "SR%lu"), sr_num);
 
-		yields_bkgd.push_back(yield_wgstar);
-		yields_bkgd.push_back(GetSSYield("wz"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("zz"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ttg" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ttw" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ttz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("tbz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("ttww", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("wwg" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("www" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("wwz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("wzz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(GetSSYield("zzz" , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-		yields_bkgd.push_back(yield_wwqq);
-		yields_bkgd.push_back(GetSSYield("ww_ds", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-
-		// add the backtrounds to get the totol MC and total prediction
-		for (size_t i = 0; i != yields_bkgd.size(); i++)
-		{
-			yield_mc = AddUncertaintiesAbsolute(yield_mc, yields_bkgd.at(i));
-		}
-		Yield yield_mc_pred("MC Pred");
-		for (size_t i = display_index; i != yields_bkgd.size(); i++)
-		{
-			yield_mc_pred = AddUncertaintiesAbsolute(yield_mc_pred, yields_bkgd.at(i));
-		}
-
-		// set systematic uncertainties
-		SetSysUncertainties(yield_fake   , 0.5);
-		SetSysUncertainties(yield_flip   , 0.2);
-		SetSysUncertainties(yield_mc_pred, 0.5);
-
-		// total predition
-		Yield yield_pred    = yield_mc_pred;
-		yield_pred.title    = "pred";
-		yield_pred += yield_fake;
-		yield_pred += yield_flip;
-
-		// print the table
-		const string sr_name = Form((sr_num < 10 ? "SR0%lu" : "SR%lu"), sr_num);
-        
-		if (sr_num == 0)
-		{
-			cout << "{" << endl;
-		}
-		cout << Form("'%s':{", sr_name.c_str()) << endl;
-		cout << Form("'f': %1.3f, 'fstat': %1.3f, 'fsyst': %1.3f,", yield_fake.ll   , yield_fake.dll   , yield_fake.sll   ) << endl;
-		cout << Form("'c': %1.3f, 'cstat': %1.3f, 'csyst': %1.3f,", yield_flip.ll   , yield_flip.dll   , yield_flip.sll   ) << endl;
-		cout << Form("'r': %1.3f, 'rstat': %1.3f, 'rsyst': %1.3f,", yield_mc_pred.ll, yield_mc_pred.dll, yield_mc_pred.sll) << endl;
-		cout << Form("'o': %u", static_cast<unsigned int>(yield_data.ll)) << endl;
-		if (sr_num == (ss::SignalRegion::static_size - 1))
-		{
-			cout << "}" << endl;
-			cout << "}" << endl;
-		}
-		else
-		{
-			cout << "}," << endl;
-		}
-	}
+        if (sr_num == 0)
+        {
+            cout << "{" << endl;
+        }
+        cout << Form("'%s':{", sr_name.c_str()) << endl;
+        cout << Form("'f': %1.3f, 'fstat': %1.3f, 'fsyst': %1.3f,", yield_cfake.ll, yield_cfake.dll, yield_cfake.sll) << endl;
+        cout << Form("'c': %1.3f, 'cstat': %1.3f, 'csyst': %1.3f,", yield_flip.ll , yield_flip.dll , yield_flip.sll ) << endl;
+        cout << Form("'r': %1.3f, 'rstat': %1.3f, 'rsyst': %1.3f,", yield_rare.ll , yield_rare.dll , yield_rare.sll ) << endl;
+        cout << Form("'o': %u", static_cast<unsigned int>(yield_data.ll)) << endl;
+        if (sr_num == (ss::SignalRegion::static_size - 1))
+        {
+            cout << "}" << endl;
+            cout << "}" << endl;
+        }
+        else
+        {
+            cout << "}," << endl;
+        }
+    }
 }
-
 
 // print the summary table 
 void PrintSummaryYields
 (
-	const std::string& output_path,
-	const std::string& analysis_type_name, 
-	const std::string& signal_region_type_name, 
-	int charge_option = 0, 
-	bool print_latex = false
+  const std::string& output_path,
+  const std::string& analysis_type_name, 
+  const std::string& signal_region_type_name, 
+  bool print_latex = false
 )
 {
+    using namespace at;
+
+    const int charge_option = 0;
+    const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+
     // table for output
     CTable t_yields_1;
     t_yields_1.useTitle();
@@ -819,115 +494,71 @@ void PrintSummaryYields
     // fill the columns
     for (unsigned int signal_region_num = 0; signal_region_num != ss::SignalRegion::static_size; signal_region_num++)
     {
-		// no using these SRs
-		if (signal_region_num==9 or signal_region_num==19) {continue;} 
+        // no using these SRs
+        if (signal_region_num==9 or signal_region_num==19) {continue;} 
 
-		// which table are we using?
-		CTable* temp_ptr = NULL;
-		unsigned int column = signal_region_num;
-		if (signal_region_num <= 8)                             {temp_ptr = &t_yields_1;}
-		if (10 <= signal_region_num && signal_region_num <= 18) {temp_ptr = &t_yields_2; column -=10;}
-		if (20 <= signal_region_num && signal_region_num <= 28) {temp_ptr = &t_yields_3; column -=20;}
-		if (not temp_ptr) {continue;}
-		CTable& t_yields = *temp_ptr;
+        // which table are we using?
+        CTable* temp_ptr = NULL;
+        unsigned int column = signal_region_num;
+        if (signal_region_num <= 8)                             {temp_ptr = &t_yields_1;}
+        if (10 <= signal_region_num && signal_region_num <= 18) {temp_ptr = &t_yields_2; column -=10;}
+        if (20 <= signal_region_num && signal_region_num <= 28) {temp_ptr = &t_yields_3; column -=20;}
+        if (not temp_ptr) {continue;}
+        CTable& t_yields = *temp_ptr;
 
-		const string signal_region_name = Form("sr%d", signal_region_num);	
-        Yield yield_data(GetSSYield  ("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        Yield yield_sf  (GetSFYield  ("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        Yield yield_df  (GetDFYield  ("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        Yield yield_fake(GetFakeYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        Yield yield_flip(GetFlipYield("data", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-    	if (analysis_type_name == "hcp" && (signal_region_name == "sr2" || signal_region_name == "sr9"))
-        {
-        	yield_flip = 0.5*GetFlipYield("data", "sr1", analysis_type_name, signal_region_type_name, /*charge_option=*/0, output_path);
-            yield_flip.title = "Flips";
-        }
+        // signal region info
+        const string signal_region_name = Form("sr%u", signal_region_num);
+        const ss::SignalRegion::value_type signal_region = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name); 
+        const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
 
-        // handle ++/-- charge flip case
-        if (analysis_type_name == "hcp" && (charge_option == 1 || charge_option == -1))
-        {
-            yield_flip = 0.5*GetFlipYield("data", signal_region_name, analysis_type_name, signal_region_type_name, /*charge_option=*/0, output_path);
-            yield_flip.title = "Flips";
-        }
+        // get the yields
+        std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        ss::Yield yield_data = m_yield["data"];
+        ss::Yield yield_rare = m_yield["rare"];
+        ss::Yield yield_spil = m_fake ["rare"];
+        ss::Yield yield_fake = ss::GetFakeYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        ss::Yield yield_flip = ss::GetFlipYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path); 
 
-        vector<Yield> yields_bkgd;
-        yields_bkgd.push_back(GetSSYield("wz"      , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("zz"      , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("ttg"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("ttw"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("ttww"    , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("ttz"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("tbz"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wwg"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("www"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wwz"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wzz"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("zzz"     , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wgstar2e", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wgstar2m", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wgstar2t", signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wmwmqq"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("wpwpqq"  , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-        yields_bkgd.push_back(GetSSYield("ww_ds"   , signal_region_name, analysis_type_name, signal_region_type_name, charge_option, output_path));
-
-        // add the backtrounds to get the totol MC and total prediction
-        Yield yield_rare("Rare");
-        for (size_t i = 0; i != yields_bkgd.size(); i++)
-        {
-            yield_rare = AddUncertaintiesAbsolute(yield_rare, yields_bkgd.at(i));
-        }
+        // subtract the spillage from the rare MC
+        ss::Yield yield_cfake = (yield_fake - yield_spil);
 
         // set systematic uncertainties
-        SetSysUncertainties(yield_fake, 0.5);
-        SetSysUncertainties(yield_flip, 0.2);
-        SetSysUncertainties(yield_rare, 0.5);
+        ss::SetSysUncertainties(yield_rare , rare_sys_unc);
+        ss::SetSysUncertainties(yield_cfake, fake_sys_unc);
+        ss::SetSysUncertainties(yield_flip , flip_sys_unc);
 
-        // total predition
-        Yield yield_pred    = yield_rare;
-        yield_pred.title    = "Pred";
-        yield_pred += yield_fake;
+        // total prediction
+        ss::Yield yield_pred = yield_rare;
+        yield_pred += yield_cfake;
         yield_pred += yield_flip;
 
-        // collect all the yields
-        vector<Yield> yields;
-        yields.push_back(yield_rare);
-        yields.push_back(yield_fake);
-        yields.push_back(yield_flip);
-        yields.push_back(yield_pred);
-        yields.push_back(yield_data);
-
         // print the table
-
+        int row = 0;
         t_yields.setColLabel(Form("sr%u", signal_region_num), column);
-        for (size_t i = 0; i != yields.size(); i++)
+        if (print_latex)
         {
-            const Yield& y = yields[i];
-			
-			// title
-            string latex_name;
-            if      (y.title == "data" ) {latex_name = "Event Yield";}
-            else if (y.title == "Fakes") {latex_name = "Fake BG";    }
-            else if (y.title == "Flips") {latex_name = "Flip BG";    }
-            else if (y.title == "Rare" ) {latex_name = "Rare MC";    }
-            else if (y.title == "Pred" ) {latex_name = "Total BG";   }
-
-			// fill the table
-            t_yields.setRowLabel(latex_name, i);
-            if (y.title == "data")
-            {
-                t_yields.setCell(static_cast<int>(y.ll), i, column);
-            }
-            else 
-            {
-                if (print_latex)
-                {
-                    t_yields.setCell(Form("%1.2f $\\pm$ %1.2f", y.ll, y.dll), i, column);
-                }
-                else
-                {
-                    t_yields.setCell(rt::pm(y.ll, y.dll, "1.2"), i, column);
-                }
-            }
+            //t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_cfake.ll, yield_cfake.dll, yield_cfake.sll), row, column);
+            //t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_flip.ll , yield_flip.dll , yield_flip.sll ), row, column);
+            //t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_rare.ll , yield_rare.dll , yield_rare.sll ), row, column);
+            //t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_pred.ll , yield_pred.dll , yield_pred.sll ), row, column);
+            t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_cfake.ll, yield_cfake.tll()), row, column);
+            t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_flip.ll , yield_flip.tll() ), row, column);
+            t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_rare.ll , yield_rare.tll() ), row, column);
+            t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_pred.ll , yield_pred.tll() ), row, column);
+            t_yields.setRowLabel("Event Yield", ++row); t_yields.setCell(static_cast<int>(yield_data.ll)                            , row, column);
+        }
+        else
+        {
+            //t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_cfake.ll, yield_cfake.dll, yield_cfake.sll), row, column);
+            //t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_flip.ll , yield_flip.dll , yield_flip.sll ), row, column);
+            //t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_rare.ll , yield_rare.dll , yield_rare.sll ), row, column);
+            //t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_pred.ll , yield_pred.dll , yield_pred.sll ), row, column);
+            t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_cfake.ll, yield_cfake.tll()), row, column);
+            t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_flip.ll , yield_flip.tll() ), row, column);
+            t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_rare.ll , yield_rare.tll() ), row, column);
+            t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_pred.ll , yield_pred.tll() ), row, column);
+            t_yields.setRowLabel("Event Yield", ++row); t_yields.setCell(static_cast<int>(yield_data.ll)                           , row, column);
         }
     } // loop over SRs
 
