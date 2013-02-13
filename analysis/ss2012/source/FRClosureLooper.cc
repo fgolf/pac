@@ -44,7 +44,7 @@ FRClosureLooper::FRClosureLooper
     int charge_option,
     float lumi,
     bool verbose
-)
+    )
     : at::AnalysisWithHist(root_file_name, false, "")
     , m_lumi(lumi)
     , m_verbose(verbose)
@@ -137,15 +137,15 @@ void FRClosureLooper::EndJob()
     // -----------------------------------------------------------------------------//
     at::FakeRatePrediction frp(h_mufr.get(), h_elfr.get());
     frp.ComputeAllFakePredictions
-    (
-        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
-        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
-        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
-        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
-        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"  ]),
-        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"  ]),
-        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"  ])
-    );
+        (
+            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
+            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
+            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
+            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
+            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"  ]),
+            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"  ]),
+            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"  ])
+            );
 
     // SF (raw)
     PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
@@ -207,15 +207,15 @@ void FRClosureLooper::EndJob()
     PredSummary pred = fake;
     
     // ratio of pred/obs
-	int obs_ee = static_cast<int>(yield_ss[0]);
-	int obs_mm = static_cast<int>(yield_ss[1]);
-	int obs_em = static_cast<int>(yield_ss[2]);
-	int obs_ll = static_cast<int>(yield_ss[3]);
+    int obs_ee = static_cast<int>(yield_ss[0]);
+    int obs_mm = static_cast<int>(yield_ss[1]);
+    int obs_em = static_cast<int>(yield_ss[2]);
+    int obs_ll = static_cast<int>(yield_ss[3]);
 
-	float obs_ee_error = yield_ss_error[0];
-	float obs_mm_error = yield_ss_error[1];
-	float obs_em_error = yield_ss_error[2];
-	float obs_ll_error = yield_ss_error[3];
+    float obs_ee_error = yield_ss_error[0];
+    float obs_mm_error = yield_ss_error[1];
+    float obs_em_error = yield_ss_error[2];
+    float obs_ll_error = yield_ss_error[3];
 
     float ee_ratio_value = pred.ee.value/obs_ee;
     float ee_ratio_error = ee_ratio_value * sqrt(pow(pred.ee.error/pred.ee.value, 2) + pow(obs_ee_error/obs_ee, 2));
@@ -242,13 +242,13 @@ void FRClosureLooper::EndJob()
     t_yields.setTitle(Form("closure test table (%s)", sr_info.title.c_str()));
     string f = "1.2";
     t_yields.setTable() (                       "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
-                        ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f), sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
-                        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),   				"NA",   				"NA",    sf.ll.str(f))
-                        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",    df.ll.str(f))
-                        //("Fakes"   ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   				"NA",   				"NA",  fake.ll.str(f))
-                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",  pred.ll.str(f))
-                        ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",          obs_ll)
-                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",        ll_ratio);
+        ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f), sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
+        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),   				"NA",   				"NA",    sf.ll.str(f))
+        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",    df.ll.str(f))
+        //("Fakes"   ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   				"NA",   				"NA",  fake.ll.str(f))
+        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",  pred.ll.str(f))
+        ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",          obs_ll)
+        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",        ll_ratio);
     t_yields.print();
 }
 
@@ -361,9 +361,9 @@ int FRClosureLooper::operator()(long event)
         // charge option (1 == ++, -1 == --)
         switch (m_charge_option)
         {
-            case  1: if (not is_pp()) return 0; break;
-            case -1: if (not is_mm()) return 0; break;
-            default: {/*do nothing*/}
+        case  1: if (not is_pp()) return 0; break;
+        case -1: if (not is_mm()) return 0; break;
+        default: {/*do nothing*/}
         }
 
         // check that it passes the trigger requirement
@@ -403,11 +403,11 @@ int FRClosureLooper::operator()(long event)
         // ttbar breakdown 
         switch (m_sample)
         {
-            case at::Sample::ttdil: if (ttbar_bkdn() != TTbarBreakDown::TTDIL) return 0; break; 
-            case at::Sample::ttotr: if (ttbar_bkdn() != TTbarBreakDown::TTOTR) return 0; break;
-            case at::Sample::ttslb: if (ttbar_bkdn() != TTbarBreakDown::TTSLB) return 0; break;
-            case at::Sample::ttslo: if (ttbar_bkdn() != TTbarBreakDown::TTSLO) return 0; break;
-            default: {/*do nothing*/}
+        case at::Sample::ttdil: if (ttbar_bkdn() != TTbarBreakDown::TTDIL) return 0; break; 
+        case at::Sample::ttotr: if (ttbar_bkdn() != TTbarBreakDown::TTOTR) return 0; break;
+        case at::Sample::ttslb: if (ttbar_bkdn() != TTbarBreakDown::TTSLB) return 0; break;
+        case at::Sample::ttslo: if (ttbar_bkdn() != TTbarBreakDown::TTSLO) return 0; break;
+        default: {/*do nothing*/}
         }
 
         // Weight Factors
@@ -450,22 +450,22 @@ int FRClosureLooper::operator()(long event)
         string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
 
         //bool mc3_matched  = is_real_data() ? true : (lep1_mc3id()!=-999 && lep2_mc3id()!=-999);
-		//bool direct_b_l1  = is_real_data() ? true : (mc3_matched && abs(lep1_mc3id())==5 && idIsBeauty(lep1_mc3_momid()) && lep1_is_fromw()<1);
-		//bool direct_b_l2  = is_real_data() ? true : (mc3_matched && abs(lep2_mc3id())==5 && idIsBeauty(lep2_mc3_momid()) && lep2_is_fromw()<1);
-		bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
-		bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
-		bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
-		bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
+        //bool direct_b_l1  = is_real_data() ? true : (mc3_matched && abs(lep1_mc3id())==5 && idIsBeauty(lep1_mc3_momid()) && lep1_is_fromw()<1);
+        //bool direct_b_l2  = is_real_data() ? true : (mc3_matched && abs(lep2_mc3id())==5 && idIsBeauty(lep2_mc3_momid()) && lep2_is_fromw()<1);
+        bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
+        bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
+        bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
+        bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
 
         // SS
         if (is_ss())
         {
-            if ((fromw_l1 && not_fromw_l2) || (not_fromw_l1 && fromw_l2))
-            {
-                //cout << lep1_mc3_momid() << "\t" << lep2_mc3_momid() << endl;
-                rt::Fill(hc["h_yield_ll"], 1, evt_weight);
-                rt::Fill(hc["h_yield"+hs], 1, evt_weight);
-            }
+            // if ((fromw_l1 && not_fromw_l2) || (not_fromw_l1 && fromw_l2))
+            // {
+            //cout << lep1_mc3_momid() << "\t" << lep2_mc3_momid() << endl;
+            rt::Fill(hc["h_yield_ll"], 1, evt_weight);
+            rt::Fill(hc["h_yield"+hs], 1, evt_weight);
+            // }
         }
 
         // SF 
@@ -473,7 +473,8 @@ int FRClosureLooper::operator()(long event)
         {
             const LorentzVector& p4 = lep1_is_fo() ? lep1_p4()    : lep2_p4();
             int id                  = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
-            if (!fromw_l1 || !fromw_l2)
+            if ((lep1_is_fo() && not_fromw_l1 && fromw_l2) || (lep2_is_fo() && fromw_l1 && not_fromw_l2))
+            // if ((lep1_is_fo() && not_fromw_l1) || (!lep1_is_fo() && not_fromw_l2))
             {
                 if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
                 if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
