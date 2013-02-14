@@ -36,7 +36,7 @@ public:
     bool passes_iso;
     bool is_num;
     bool is_fo;
-	int is_fromw;
+    int is_fromw;
     int charge;
     int pdgid;
     int type;
