@@ -104,16 +104,16 @@ void FRClosureLooper::BeginJob()
 
 ss::FakeRateBinInfo FRClosureLooper::GetFakeRateBinInfo()
 {
-    const std::size_t num_mu_eta_bins = h_mufr->GetNbinsX();
+    const std::size_t num_mu_eta_bins = h_mufr->GetNbinsX()-1;
     const float *mu_eta_bins = reinterpret_cast<const float*>(h_mufr->GetXaxis()->GetXbins()->GetArray());
 
-    const size_t num_mu_pt_bins = h_mufr->GetNbinsY();
+    const size_t num_mu_pt_bins = h_mufr->GetNbinsY()-1;
     const float *mu_pt_bins = reinterpret_cast<const float*>(h_mufr->GetYaxis()->GetXbins()->GetArray());   
 
-    const size_t num_el_eta_bins = h_elfr->GetNbinsX();
+    const size_t num_el_eta_bins = h_elfr->GetNbinsX()-1;
     const float *el_eta_bins = reinterpret_cast<const float*>(h_elfr->GetXaxis()->GetXbins()->GetArray());   
 
-    const size_t num_el_pt_bins = h_elfr->GetNbinsY();
+    const size_t num_el_pt_bins = h_elfr->GetNbinsY()-1;
     const float *el_pt_bins = reinterpret_cast<const float*>(h_elfr->GetYaxis()->GetXbins()->GetArray());
 
     ss::FakeRateBinInfo tmp;
