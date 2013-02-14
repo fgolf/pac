@@ -1325,10 +1325,10 @@ namespace ss
         }
 
         // convenience variables
-        const int njets  = ssb::njets();
-        const int nbtags = ssb::nbtags();
-        const float ht   = ssb::ht();
-        const float met  = ssb::pfmet();
+        const int njets   = ssb::njets();
+        const int nbtags  = ssb::nbtags();
+        const float ht    = ssb::ht();
+        const float met   = ssb::pfmet();
         const bool lep_d0 = true;
 
         // high pt
