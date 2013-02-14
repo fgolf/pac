@@ -739,11 +739,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             }
 
             // gen jets
-            m_evt.vgenb_p4       = efftools::getGenBjets(40.0, 2.4);
-            m_evt.vgenjets_p4    = efftools::getGenJets(40.0, 2.4);
-            m_evt.gen_nbtags     = m_evt.vgenb_p4.size();
-            m_evt.gen_njets      = m_evt.vgenjets_p4.size();
-            m_evt.gen_ht         = efftools::getGenHT(40.0, 2.4);
+            m_evt.vgenb_p4    = efftools::getGenBjets(40.0, 2.4);
+            m_evt.vgenjets_p4 = efftools::getGenJets(40.0, 2.4);
+            m_evt.gen_nbtags  = m_evt.vgenb_p4.size();
+            m_evt.gen_njets   = m_evt.vgenjets_p4.size();
+            m_evt.gen_ht      = efftools::getGenHT(40.0, 2.4);
+            m_evt.gen_nleps   = leptonGenpCount_lepTauDecays(m_evt.gen_nels, m_evt.gen_nmus, m_evt.gen_ntaus);
         }
         
 
