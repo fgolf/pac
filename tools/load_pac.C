@@ -29,16 +29,17 @@
     // Analysis Tools
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/include");
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/source");
-    gSystem->Load(Form("%slibAnalysisTools.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libAnalysisTools.so", pac_path.c_str()));
 
     // SS2012 Tools
     gSystem->AddIncludePath("-I$PAC/analysis/ss2012/include");
-    gSystem->Load(Form("%slibss2012_tools.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libss2012_tools.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libssb2012.so"     , pac_path.c_str()));
 
     // Ian's Simple table
     gSystem->AddIncludePath("-I$PAC/externals/source/SimpleTable");
-    gSystem->Load(Form("%slibSimpleTable.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
 
     // load mini FW lite
-    gSystem->Load(Form("%slibMiniFWLite.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libMiniFWLite.so", pac_path.c_str()));
 }
