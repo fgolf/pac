@@ -36,7 +36,7 @@ public:
         bool sparms = false,
         int jetMetScale = 0,
         bool is_fast_sim = false,
-		bool use_el_eta = false,
+        bool use_el_eta = false,
         bool sync_print = false,
         bool verbose = false,
         const std::string apply_jec_otf = ""
@@ -62,7 +62,7 @@ private:
     int  m_njets;
     int  m_jetMetScale;
     bool m_is_fast_sim;
-	bool m_use_el_eta;
+    bool m_use_el_eta;
     bool m_filter_bad_runs;
     bool m_sparms;
     bool m_sync_print;
