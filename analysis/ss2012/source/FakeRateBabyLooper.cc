@@ -212,40 +212,40 @@ void FakeRateBabyLooper::BookHists()
     if (m_lepton == "mu")
     {
         // numerator
-        hc.Add(new TH1F("h_mu_num20c_vs_nvtxs", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_num40c_vs_nvtxs", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_num60c_vs_nvtxs", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
+        hc.Add(new TH1F("h_mu_num20c_vs_nvtxs", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_num40c_vs_nvtxs", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_num60c_vs_nvtxs", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_mu_num20c", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_num40c", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_num60c", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
+        hc.Add(new TH2F("h_mu_num20c", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_num40c", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_num60c", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
 
         // denominator
-        hc.Add(new TH1F("h_mu_fo20c_vs_nvtxs", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_fo40c_vs_nvtxs", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_fo60c_vs_nvtxs", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
+        hc.Add(new TH1F("h_mu_fo20c_vs_nvtxs", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_fo40c_vs_nvtxs", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_fo60c_vs_nvtxs", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta));# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_mu_fo20c", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_fo40c", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_fo60c", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
+        hc.Add(new TH2F("h_mu_fo20c", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_fo40c", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_fo60c", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
 
         // numerator (iso)
-        hc.Add(new TH1F("h_mu_num20c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_num40c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_num60c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
+        hc.Add(new TH1F("h_mu_num20c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_num40c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_num60c_iso_vs_nvtxs", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_mu_num20c_iso", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_num40c_iso", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_num60c_iso", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
+        hc.Add(new TH2F("h_mu_num20c_iso", "num #mu (away jet p_{T} > 20, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_num40c_iso", "num #mu (away jet p_{T} > 40, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_num60c_iso", "num #mu (away jet p_{T} > 60, cpfiso03 < 0.1 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
 
         // denominator (iso)
-        hc.Add(new TH1F("h_mu_fo20c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_fo40c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
-        hc.Add(new TH1F("h_mu_fo60c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins, m_fr_bin_info.mu_vtx_bins), "texte");
+        hc.Add(new TH1F("h_mu_fo20c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_fo40c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_mu_fo60c_iso_vs_nvtxs", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);# vtxs", m_fr_bin_info.num_mu_vtx_bins(), m_fr_bin_info.mu_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_mu_fo20c_iso", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_fo40c_iso", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
-        hc.Add(new TH2F("h_mu_fo60c_iso", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins, m_fr_bin_info.mu_eta_bins, m_fr_bin_info.num_mu_pt_bins, m_fr_bin_info.mu_pt_bins), "texte");
+        hc.Add(new TH2F("h_mu_fo20c_iso", "fo #mu (away jet p_{T} > 20, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_fo40c_iso", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
+        hc.Add(new TH2F("h_mu_fo60c_iso", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
 
         // MET distribution denominator
         hc.Add(new TH1F("h_mu_fo20c_met", "h_mu_fo20c_met", nbins, min_val, max_val));
@@ -285,40 +285,40 @@ void FakeRateBabyLooper::BookHists()
     if (m_lepton == "el")
     {
         // numerator
-        hc.Add(new TH1F("h_el_num20c_vs_nvtxs", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_num40c_vs_nvtxs", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_num60c_vs_nvtxs", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
+        hc.Add(new TH1F("h_el_num20c_vs_nvtxs", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_num40c_vs_nvtxs", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_num60c_vs_nvtxs", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_el_num20c", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_num40c", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_num60c", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
+        hc.Add(new TH2F("h_el_num20c", "num electron (away jet p_{T} > 20, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_num40c", "num electron (away jet p_{T} > 40, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_num60c", "num electron (away jet p_{T} > 60, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
 
         // denominator
-        hc.Add(new TH1F("h_el_fo20c_vs_nvtxs", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_fo40c_vs_nvtxs", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_fo60c_vs_nvtxs", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
+        hc.Add(new TH1F("h_el_fo20c_vs_nvtxs", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_fo40c_vs_nvtxs", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_fo60c_vs_nvtxs", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_el_fo20c", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_fo40c", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_fo60c", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
+        hc.Add(new TH2F("h_el_fo20c", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_fo40c", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_fo60c", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
 
         // numerator (no iso)
-        hc.Add(new TH1F("h_el_num20c_noiso_vs_nvtxs", "num electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_num40c_noiso_vs_nvtxs", "num electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_num60c_noiso_vs_nvtxs", "num electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
+        hc.Add(new TH1F("h_el_num20c_noiso_vs_nvtxs", "num electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_num40c_noiso_vs_nvtxs", "num electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_num60c_noiso_vs_nvtxs", "num electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_el_num20c_noiso", "num electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_num40c_noiso", "num electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_num60c_noiso", "num electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
+        hc.Add(new TH2F("h_el_num20c_noiso", "num electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_num40c_noiso", "num electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_num60c_noiso", "num electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
 
         // denominator (no iso)
-        hc.Add(new TH1F("h_el_fo20c_noiso_vs_nvtxs", "fo electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_fo40c_noiso_vs_nvtxs", "fo electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
-        hc.Add(new TH1F("h_el_fo60c_noiso_vs_nvtxs", "fo electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins, m_fr_bin_info.el_vtx_bins), "texte");
+        hc.Add(new TH1F("h_el_fo20c_noiso_vs_nvtxs", "fo electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_fo40c_noiso_vs_nvtxs", "fo electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
+        hc.Add(new TH1F("h_el_fo60c_noiso_vs_nvtxs", "fo electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
 
-        hc.Add(new TH2F("h_el_fo20c_noiso", "fo electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_fo40c_noiso", "fo electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
-        hc.Add(new TH2F("h_el_fo60c_noiso", "fo electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins, m_fr_bin_info.el_eta_bins, m_fr_bin_info.num_el_pt_bins, m_fr_bin_info.el_pt_bins), "texte");
+        hc.Add(new TH2F("h_el_fo20c_noiso", "fo electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_fo40c_noiso", "fo electron (away jet p_{T} > 40, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+        hc.Add(new TH2F("h_el_fo60c_noiso", "fo electron (away jet p_{T} > 60, no iso, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
 
         // MET distribution denominator
         hc.Add(new TH1F("h_el_fo20c_met", "h_el_fo20c_met", nbins, min_val, max_val));
@@ -407,10 +407,10 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         };
 
         // pT cut
-        float min_mu_pt = m_fr_bin_info.mu_pt_bins[0];
-        float max_mu_pt = m_fr_bin_info.mu_pt_bins[m_fr_bin_info.num_mu_pt_bins];
-        float min_el_pt = m_fr_bin_info.el_pt_bins[0];
-        float max_el_pt = m_fr_bin_info.el_pt_bins[m_fr_bin_info.num_el_pt_bins];
+        float min_mu_pt = m_fr_bin_info.mu_pt_bins()[0];
+        float max_mu_pt = m_fr_bin_info.mu_pt_bins()[m_fr_bin_info.num_mu_pt_bins()];
+        float min_el_pt = m_fr_bin_info.el_pt_bins()[0];
+        float max_el_pt = m_fr_bin_info.el_pt_bins()[m_fr_bin_info.num_el_pt_bins()];
 
         if (is_mu && (pt()<min_mu_pt || pt()>max_mu_pt))
         {
