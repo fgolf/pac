@@ -189,7 +189,36 @@ PlotLooper::~PlotLooper()
 void PlotLooper::BeginJob()
 {
     // book the histograms
+    m_fr_bin_info = GetFakeRateBinInfo();
     BookHists();
+}
+
+ss::FakeRateBinInfo PlotLooper::GetFakeRateBinInfo()
+{
+    const std::size_t num_mu_eta_bins = h_mufr->GetNbinsX();
+    const float *mu_eta_bins = reinterpret_cast<const float*>(h_mufr->GetXaxis()->GetXbins()->GetArray());
+
+    const size_t num_mu_pt_bins = h_mufr->GetNbinsY();
+    const float *mu_pt_bins = reinterpret_cast<const float*>(h_mufr->GetYaxis()->GetXbins()->GetArray());   
+
+    const size_t num_el_eta_bins = h_elfr->GetNbinsX();
+    const float *el_eta_bins = reinterpret_cast<const float*>(h_elfr->GetXaxis()->GetXbins()->GetArray());   
+
+    const size_t num_el_pt_bins = h_elfr->GetNbinsY();
+    const float *el_pt_bins = reinterpret_cast<const float*>(h_elfr->GetYaxis()->GetXbins()->GetArray());
+
+    ss::FakeRateBinInfo tmp;
+    tmp.num_el_eta_bins = num_el_eta_bins;
+    std::copy(el_eta_bins, el_eta_bins+tmp.num_el_eta_bins, tmp.el_eta_bins);
+    tmp.num_el_pt_bins = num_el_pt_bins;
+    std::copy(el_pt_bins, el_pt_bins+tmp.num_el_pt_bins, tmp.el_pt_bins);
+    tmp.num_mu_eta_bins = num_mu_eta_bins;
+    std::copy(mu_eta_bins, mu_eta_bins+tmp.num_mu_eta_bins, tmp.mu_eta_bins);
+    tmp.num_mu_pt_bins = num_mu_pt_bins;
+    std::copy(mu_pt_bins, mu_pt_bins+tmp.num_mu_pt_bins, tmp.mu_pt_bins);
+
+
+    return tmp;
 }
 
 void SetFakePredictionAndUncertainty(rt::TH1Container& hc, const string& hist_stem, const string& title, float fr_sys_unc)
@@ -544,18 +573,8 @@ void PlotLooper::EndJob()
     }
 }
 
-// binning contants
-std::tr1::array<float, 5> el_eta_bins      = {{0.0, 1.0, 1.479, 2.0, 2.5}};
-std::tr1::array<float, 5> mu_eta_bins      = {{0.0, 1.0, 1.479, 2.0, 2.5}};
-std::tr1::array<float, 6> el_pt_bins       = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
-std::tr1::array<float, 6> mu_pt_bins       = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
-std::tr1::array<float, 18> lep_pt_bins     = {{0.0, 5.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0, 120.0, 130.0, 140.0, 160.0, 200.0}};
-//std::tr1::array<float, 9> mu_vtx_bins    = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
-//std::tr1::array<float, 9> el_vtx_bins    = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
 std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 2.1, 2.2, 2.4 }};
 std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45., 50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100. }};
-std::tr1::array<float, 13>  ht_bins        = {{ 0, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 1000 }};
-std::tr1::array<float, 6> met_bins         = {{ 0, 50, 100, 150, 200, 400 }};
 
 // book hists 
 void PlotLooper::BookHists()
@@ -581,11 +600,17 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_yield%s", ns.c_str()), Form("yields%s;yield;Events", ts.c_str()), 3, 0, 3));
 
             // SF plots
-            hc.Add(new TH2F(Form("h_sf_mufo_pt_vs_eta%s", ns.c_str()), Form("#mu FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)"     , ts.c_str()),mu_eta_bins.size()-1,mu_eta_bins.data(),mu_pt_bins.size()-1,mu_pt_bins.data()));
-            hc.Add(new TH2F(Form("h_sf_elfo_pt_vs_eta%s", ns.c_str()), Form("electron FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()),el_eta_bins.size()-1,el_eta_bins.data(),el_pt_bins.size()-1,el_pt_bins.data()));
+            hc.Add(new TH2F(Form("h_sf_mufo_pt_vs_eta%s", ns.c_str()), Form("#mu FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)"     , ts.c_str()),m_fr_bin_info.num_mu_eta_bins,m_fr_bin_info.mu_eta_bins,m_fr_bin_info.num_mu_pt_bins,m_fr_bin_info.mu_pt_bins));
+            hc.Add(new TH2F(Form("h_sf_elfo_pt_vs_eta%s", ns.c_str()), Form("electron FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()),m_fr_bin_info.num_el_eta_bins,m_fr_bin_info.el_eta_bins,m_fr_bin_info.num_el_pt_bins,m_fr_bin_info.el_pt_bins));
 
             // DF plots
-            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO (%s) (special binning)", ts.c_str()), 20, 0, 20, 20, 0, 20));
+            unsigned int xdim = 0;
+            unsigned int ydim = 0;
+            if (hyp_type == at::DileptonHypType::MUMU) {xdim=m_fr_bin_info.num_mu_eta_bins*m_fr_bin_info.num_mu_pt_bins; ydim=xdim;}
+            if (hyp_type == at::DileptonHypType::EE)   {xdim=m_fr_bin_info.num_el_eta_bins*m_fr_bin_info.num_el_pt_bins; ydim=xdim;}
+            if (hyp_type == at::DileptonHypType::EMU)  {xdim=m_fr_bin_info.num_mu_eta_bins*m_fr_bin_info.num_mu_pt_bins; ydim=m_fr_bin_info.num_el_eta_bins*m_fr_bin_info.num_el_pt_bins;}
+            if (hyp_type == at::DileptonHypType::ALL)  {xdim=std::max(m_fr_bin_info.num_mu_eta_bins*m_fr_bin_info.num_mu_pt_bins,m_fr_bin_info.num_el_eta_bins*m_fr_bin_info.num_el_pt_bins); ydim=xdim;}
+            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()), xdim, 0, xdim, ydim, 0, ydim));
         }
 
         // OS plots (for flip pred)
