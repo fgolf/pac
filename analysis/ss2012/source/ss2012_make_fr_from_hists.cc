@@ -78,10 +78,10 @@ try
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
-    if (verbose)
-    {
-        printf("scaling el,mu with lumi %4.2f, %4.2f.\n", ele_lumi, mu_lumi);
-    }
+    // if (verbose)
+    // {
+    //     printf("scaling el,mu with lumi %4.2f, %4.2f.\n", ele_lumi, mu_lumi);
+    // }
 
     if (vm.count("help")) 
     {
@@ -183,11 +183,11 @@ try
     TH2* h_data_mu_num40c = dynamic_cast<TH2*>(hc_data["h_mu_num40c"]);
     TH2* h_data_mu_fo40c  = dynamic_cast<TH2*>(hc_data["h_mu_fo40c"]);
 
-    if (verbose)
-    {
-    printf("bin 1,1 for data num is: %4.2f\n", h_data_mu_num40c->GetBinContent(1,1));
-    printf("bin 1,1 for data fo is: %4.2f\n", h_data_mu_fo40c->GetBinContent(1,1));
-    }
+    // if (verbose)
+    // {
+    //     printf("bin 1,1 for data num is: %4.2f\n", h_data_mu_num40c->GetBinContent(1,1));
+    //     printf("bin 1,1 for data fo is: %4.2f\n", h_data_mu_fo40c->GetBinContent(1,1));
+    // }
 
     // create an artificial histogram for scaling
     TH1* h_mu_scaling = dynamic_cast<TH2*>(h_data_mu_num40c->Clone("h_mu_scaling"));
@@ -200,10 +200,10 @@ try
         }
     }
 
-    if (verbose)
-    {
-        printf("bin 1,1 for scaling is: %4.2f\n", h_mu_scaling->GetBinContent(1,1));
-    }
+    // if (verbose)
+    // {
+    //     printf("bin 1,1 for scaling is: %4.2f\n", h_mu_scaling->GetBinContent(1,1));
+    // }
 
     TH2* h_mc_mu_num40c = dynamic_cast<TH2*>(hc_mc["h_mu_num40c"]);
     TH2* h_mc_mu_fo40c  = dynamic_cast<TH2*>(hc_mc["h_mu_fo40c"]);
@@ -211,20 +211,20 @@ try
     h_mc_mu_num40c->Scale(mu_lumi);
     h_mc_mu_fo40c->Scale(mu_lumi);
 
-    if (verbose)
-    {
-        printf("bin 1,1 for mc num is: %4.2f\n", h_mc_mu_num40c->GetBinContent(1,1));
-        printf("bin 1,1 for mc fo is: %4.2f\n", h_mc_mu_fo40c->GetBinContent(1,1));
-    }
+    // if (verbose)
+    // {
+    //     printf("bin 1,1 for mc num is: %4.2f\n", h_mc_mu_num40c->GetBinContent(1,1));
+    //     printf("bin 1,1 for mc fo is: %4.2f\n", h_mc_mu_fo40c->GetBinContent(1,1));
+    // }
 
     h_mc_mu_num40c->Multiply(h_mu_scaling);
     h_mc_mu_fo40c->Multiply(h_mu_scaling);
 
-    if (verbose)
-    {
-        printf("bin 1,1 for scaled mc num is: %4.2f\n", h_mc_mu_num40c->GetBinContent(1,1));
-        printf("bin 1,1 for scaled mc fo is: %4.2f\n", h_mc_mu_fo40c->GetBinContent(1,1));
-    }
+    // if (verbose)
+    // {
+    //     printf("bin 1,1 for scaled mc num is: %4.2f\n", h_mc_mu_num40c->GetBinContent(1,1));
+    //     printf("bin 1,1 for scaled mc fo is: %4.2f\n", h_mc_mu_fo40c->GetBinContent(1,1));
+    // }
 
     h_data_mu_num40c->Add(h_mc_mu_num40c, -1);
     h_data_mu_fo40c->Add(h_mc_mu_fo40c, -1);
