@@ -98,7 +98,36 @@ FRClosureLooper::~FRClosureLooper()
 // methods:
 void FRClosureLooper::BeginJob()
 {
+    m_fr_bin_info = GetFakeRateBinInfo();
     BookHists();
+}
+
+ss::FakeRateBinInfo FRClosureLooper::GetFakeRateBinInfo()
+{
+    const std::size_t num_mu_eta_bins = h_mufr->GetNbinsX();
+    const float *mu_eta_bins = reinterpret_cast<const float*>(h_mufr->GetXaxis()->GetXbins()->GetArray());
+
+    const size_t num_mu_pt_bins = h_mufr->GetNbinsY();
+    const float *mu_pt_bins = reinterpret_cast<const float*>(h_mufr->GetYaxis()->GetXbins()->GetArray());   
+
+    const size_t num_el_eta_bins = h_elfr->GetNbinsX();
+    const float *el_eta_bins = reinterpret_cast<const float*>(h_elfr->GetXaxis()->GetXbins()->GetArray());   
+
+    const size_t num_el_pt_bins = h_elfr->GetNbinsY();
+    const float *el_pt_bins = reinterpret_cast<const float*>(h_elfr->GetYaxis()->GetXbins()->GetArray());
+
+    ss::FakeRateBinInfo tmp;
+    tmp.num_el_eta_bins = num_el_eta_bins;
+    std::copy(el_eta_bins, el_eta_bins+tmp.num_el_eta_bins, tmp.el_eta_bins);
+    tmp.num_el_pt_bins = num_el_pt_bins;
+    std::copy(el_pt_bins, el_pt_bins+tmp.num_el_pt_bins, tmp.el_pt_bins);
+    tmp.num_mu_eta_bins = num_mu_eta_bins;
+    std::copy(mu_eta_bins, mu_eta_bins+tmp.num_mu_eta_bins, tmp.mu_eta_bins);
+    tmp.num_mu_pt_bins = num_mu_pt_bins;
+    std::copy(mu_pt_bins, mu_pt_bins+tmp.num_mu_pt_bins, tmp.mu_pt_bins);
+
+
+    return tmp;
 }
 
 // end job
@@ -245,24 +274,11 @@ void FRClosureLooper::EndJob()
         ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f), sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
         ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),   				"NA",   				"NA",    sf.ll.str(f))
         ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",    df.ll.str(f))
-        //("Fakes"   ,   fake.ee.str(f),   fake.mm.str(f),   fake.em.str(f),   				"NA",   				"NA",  fake.ll.str(f))
         ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",  pred.ll.str(f))
         ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",          obs_ll)
         ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",        ll_ratio);
     t_yields.print();
 }
-
-// binning contants
-std::tr1::array<float, 5> el_eta_bins      = {{0.0, 1.0, 1.479, 2.0, 2.5}};
-std::tr1::array<float, 5> mu_eta_bins      = {{0.0, 1.0, 1.479, 2.0, 2.5}};
-std::tr1::array<float, 6> el_pt_bins       = {{10.0, 15.0, 20.0, 25.0, 35.0, 55.0}};
-std::tr1::array<float, 6> mu_pt_bins       = {{ 5.0, 10.0, 15.0, 20.0, 25.0, 35.0}};
-std::tr1::array<float, 9> mu_vtx_bins      = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
-std::tr1::array<float, 9> el_vtx_bins      = {{ 0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0}};
-std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 2.1, 2.2, 2.4 }};
-std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45., 50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100. }};
-//std::tr1::array<float, 13>  ht_bins        = {{ 0, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 1000 }};
-//std::tr1::array<float, 6> met_bins         = {{ 0, 50, 100, 150, 200, 400 }};
 
 // book hists 
 void FRClosureLooper::BookHists()
@@ -278,7 +294,7 @@ void FRClosureLooper::BookHists()
         // basic yield plots
         for (size_t i = 0; i != at::DileptonHypType::static_size; i++)
         {
-            at::DileptonHypType::value_type hyp_type       = static_cast<at::DileptonHypType::value_type>(i);
+            at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(i);
 
             // name and title suffixes
             string ns = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
@@ -288,16 +304,18 @@ void FRClosureLooper::BookHists()
             hc.Add(new TH1F(Form("h_yield%s", ns.c_str()), Form("yields%s;yield;Events", ts.c_str()), 3, 0, 3));
 
             // SF plots
-            hc.Add(new TH2F(Form("h_sf_mufo_pt_vs_eta%s", ns.c_str()), Form("#mu FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)"     , ts.c_str()),mu_eta_bins.size()-1,mu_eta_bins.data(),mu_pt_bins.size()-1,mu_pt_bins.data()));
-            hc.Add(new TH2F(Form("h_sf_elfo_pt_vs_eta%s", ns.c_str()), Form("electron FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()),el_eta_bins.size()-1,el_eta_bins.data(),el_pt_bins.size()-1,el_pt_bins.data()));
+            hc.Add(new TH2F(Form("h_sf_mufo_pt_vs_eta%s", ns.c_str()), Form("#mu FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)"     , ts.c_str()),m_fr_bin_info.num_mu_eta_bins,m_fr_bin_info.mu_eta_bins,m_fr_bin_info.num_mu_pt_bins,m_fr_bin_info.mu_pt_bins));
+            hc.Add(new TH2F(Form("h_sf_elfo_pt_vs_eta%s", ns.c_str()), Form("electron FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()),m_fr_bin_info.num_el_eta_bins,m_fr_bin_info.el_eta_bins,m_fr_bin_info.num_el_pt_bins,m_fr_bin_info.el_pt_bins));
 
             // DF plots
-            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()), 20, 0, 20, 20, 0, 20));
+            unsigned int xdim = 0;
+            unsigned int ydim = 0;
+            if (hyp_type == at::DileptonHypType::MUMU) {xdim=m_fr_bin_info.num_mu_eta_bins*m_fr_bin_info.num_mu_pt_bins; ydim=xdim;}
+            if (hyp_type == at::DileptonHypType::EE)   {xdim=m_fr_bin_info.num_el_eta_bins*m_fr_bin_info.num_el_pt_bins; ydim=xdim;}
+            if (hyp_type == at::DileptonHypType::EMU)  {xdim=m_fr_bin_info.num_mu_eta_bins*m_fr_bin_info.num_mu_pt_bins; ydim=m_fr_bin_info.num_el_eta_bins*m_fr_bin_info.num_el_pt_bins;}
+            if (hyp_type == at::DileptonHypType::ALL)  {xdim=std::max(m_fr_bin_info.num_mu_eta_bins*m_fr_bin_info.num_mu_pt_bins,m_fr_bin_info.num_el_eta_bins*m_fr_bin_info.num_el_pt_bins); ydim=xdim;}
+            hc.Add(new TH2F(Form("h_df_fo_pt_vs_eta%s", ns.c_str()), Form("DF FO p_{T} vs |#eta|%s;|#eta|;p_{T} (GeV)", ts.c_str()), xdim, 0, xdim, ydim, 0, ydim));
         }
-
-        // OS plots (for flip pred)
-        hc.Add(new TH2F("h_os_fo_pt_vs_eta_ee", "OS FO (ee ) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)" , 136, 0, 136, 136, 0, 136)); 
-        hc.Add(new TH2F("h_os_fo_pt_vs_eta_em", "OS FO (e#mu) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
 
         return;
     }
@@ -337,6 +355,9 @@ int FRClosureLooper::operator()(long event)
             m_scale1fb = scale1fb();
         }
 
+        // require only one gen lepton at status 3
+        // if (gen_nleps() > 1) return 0;
+
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
@@ -345,7 +366,6 @@ int FRClosureLooper::operator()(long event)
         if (is_ss()) {charge_type = DileptonChargeType::SS;}
         if (is_sf()) {charge_type = DileptonChargeType::SF;}
         if (is_df()) {charge_type = DileptonChargeType::DF;}
-        //if (is_os()) {charge_type = DileptonChargeType::OS;}
         if (charge_type == DileptonChargeType::static_size)
         {
             return 0;
@@ -366,23 +386,7 @@ int FRClosureLooper::operator()(long event)
         default: {/*do nothing*/}
         }
 
-        // check that it passes the trigger requirement
-        //bool passes_trigger = false;
-        //switch (hyp_type)
-        //{
-        //    case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
-        //    case DileptonHypType::EMU : passes_trigger = trig_em(); break;
-        //    case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
-        //    default: passes_trigger = false; break;
-        //};
-        //if (not passes_trigger)
-        //{
-        //    //cout << "fails trigger" << endl;
-        //    return 0;
-        //}
-
         // two jet events
-        //if (njets() < static_cast<int>(m_njets))
         if (njets() < 2)
         {
             return 0;
@@ -414,33 +418,11 @@ int FRClosureLooper::operator()(long event)
         // ----------------------------------------------------------------------------------------------------------------------------//
 
         // scale
-        //float vtxw = 1.0;
-        //if (m_do_vtx_reweight)
-        //{
-        //    vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
-        //}
-        //m_lumi = is_real_data() ? 1.0 : m_lumi;
-        //float evt_weight = m_lumi * scale1fb() * vtxw;
-        float evt_weight = 1.0; 
-
-        // apply scale factors
-        //if (m_do_scale_factors && !is_real_data())
-        //{
-        //    evt_weight *= sf_lepeff();
-        //    // evt_weight *= sf_dileptrig();  // applying trigger cut now on MC
-        //    evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger cut now on MC
-        //    if (m_nbtags>=2)
-        //    {
-        //        if (m_signal_region == SignalRegion::sr7)
-        //        {
-        //            evt_weight *= (nbtags() >= 3 ? sf_nbtag3() : 1.0);
-        //        }
-        //        else
-        //        {
-        //            evt_weight *= (nbtags() >= 2 ? sf_nbtag() : 1.0);
-        //        }
-        //    }
-        //}
+        float evt_weight = 1.0;
+        if (m_do_vtx_reweight)
+        {
+           evt_weight = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
+        }
 
         // Fill hists
         // ------------------------------------------------------------------------------------//
@@ -460,12 +442,8 @@ int FRClosureLooper::operator()(long event)
         // SS
         if (is_ss())
         {
-            // if ((fromw_l1 && not_fromw_l2) || (not_fromw_l1 && fromw_l2))
-            // {
-            //cout << lep1_mc3_momid() << "\t" << lep2_mc3_momid() << endl;
             rt::Fill(hc["h_yield_ll"], 1, evt_weight);
             rt::Fill(hc["h_yield"+hs], 1, evt_weight);
-            // }
         }
 
         // SF 
@@ -474,7 +452,6 @@ int FRClosureLooper::operator()(long event)
             const LorentzVector& p4 = lep1_is_fo() ? lep1_p4()    : lep2_p4();
             int id                  = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
             if ((lep1_is_fo() && not_fromw_l1 && fromw_l2) || (lep2_is_fo() && fromw_l1 && not_fromw_l2))
-            // if ((lep1_is_fo() && not_fromw_l1) || (!lep1_is_fo() && not_fromw_l2))
             {
                 if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
                 if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
@@ -488,7 +465,7 @@ int FRClosureLooper::operator()(long event)
             const LorentzVector& l2_p4 = lep2_p4();
             int l1_id                  = lep1_pdgid();
             int l2_id                  = lep2_pdgid();
-            //if (!fromw_l1 && !fromw_l2)
+            if (not_fromw_l1 && not_fromw_l2)
             {
                 at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
                 at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
