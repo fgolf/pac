@@ -25,6 +25,7 @@ lib ss2012_tools
     ./source/SignalRegion.cc
     ./source/AnalysisType.cc
     ./source/TTbarBreakDown.cc
+    ./source/FakeRateType.cc
     ./source/SSYields.cc
     [ rootcint Dict
      : 
@@ -34,6 +35,7 @@ lib ss2012_tools
        <include>./source
        #<header>SignalRegion.h
        <header>AnalysisType.h
+       <header>FakeRateType.h
        <header>SSYields.h
        <linkdef>LinkDef.h
     ]
@@ -235,25 +237,7 @@ exe ss2012_create_fakerate
     ./source/FakeRateBabyLooper.cc
     # dependent packages
     /ROOT
-    /FakeRateBabyTools//FakeRateBabyTools/<link>static
-    /MiniFWLite//libMiniFWLite/<link>shared
-    /RootTools//RootTools/<link>static
-    /AnalysisTools//AnalysisTools/<link>static
-    /boost//program_options/<link>static
-    /boost//headers/<link>static
-  : # requirements
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
-
-exe ss2012_create_fakerate_eth
-  : # sources
-    ./source/ss2012_create_fakerate_eth.cc
-    ./source/FakeRateBabyLooperETH.cc
-    # dependent packages
-    /ROOT
+    ss2012_tools/<link>static
     /FakeRateBabyTools//FakeRateBabyTools/<link>static
     /MiniFWLite//libMiniFWLite/<link>shared
     /RootTools//RootTools/<link>static
@@ -285,6 +269,22 @@ exe ss2012_quick_check
   : # usage-requirements
   ;
 
+exe test_btagsf
+ : # sources
+   ./source/test_btagsf.cc
+   ss2012_tools/<link>static
+   # dependent packages
+   /ROOT
+   /MiniFWLite//libMiniFWLite/<link>shared
+   /RootTools//RootTools/<link>static
+   /AnalysisTools//AnalysisTools/<link>static
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
+
 exe ss2012_make_fr_from_hists
   : # sources
     ./source/ss2012_make_fr_from_hists.cc
@@ -305,22 +305,6 @@ exe ss2012_make_fr_from_hists
 
 # simple test
 # -------------------------------------------------------------- #
-
-exe test_btagsf
-  : # sources
-    ./source/test_btagsf.cc
-    ss2012_tools/<link>static
-    # dependent packages
-    /ROOT
-    /MiniFWLite//libMiniFWLite/<link>shared
-    /RootTools//RootTools/<link>static
-    /AnalysisTools//AnalysisTools/<link>static
-  : # requirements
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
 
 exe test_frb
   : # sources
@@ -352,7 +336,6 @@ default-install ss2012_outreach ;
 default-install ss2012_outreach_closure ;
 default-install ss2012_quick_check ;
 default-install ss2012_create_fakerate ;
-default-install ss2012_create_fakerate_eth ;
 default-install ss2012_make_fr_from_hists ;
 default-install ss2012_closure_test ;
 default-install test_frb ;
