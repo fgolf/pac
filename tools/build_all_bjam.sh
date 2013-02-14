@@ -1,18 +1,19 @@
 #!/bin/bash
 
+
 function run_bjam
 {
     local dir=$1
     local option=${2:-}
     pushd $dir
-    bjam release -j20 $option
+    bjam variant=release address-model=64 architecture=ia64 threading=multi -j20 $option
     if [ $? -eq 0 ]; then
         echo "release build succeeded"
     else
         echo "release build failed"
 		exit 1
     fi
-    bjam debug -j20 $option
+    bjam variant=debug address-model=64 architecture=ia64 threading=multi -j20 $option
     if [ $? -eq 0 ]; then
         echo "debug build succeeded"
     else
