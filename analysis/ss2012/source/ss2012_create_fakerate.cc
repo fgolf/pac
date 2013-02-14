@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
             ("suffix"        , po::value<std::string>(&suffix)         , "suffix to pring (png, eps, pdf).  empty for nonf" )
             ("charge"        , po::value<int>(&charge)                 , "-1: +ve, -1: -ve, 0: both"                        )
             ("verbose"       , po::value<bool>(&verbose)               , "verbosity"                                        )
-            ("tight_d0"      , po::value<bool>(&apply_tight_d0_cut)    , "apply tight d0 cut (default is true)"             )
+            ("tight_ip"      , po::value<bool>(&apply_tight_d0_cut)    , "apply tight d0 cut (default is true)"             )
             ("eth_binning"   , po::value<bool>(&use_eth_binning)       , "use eth binning for fake rate (default is false)" )
             ("fr_type"       , po::value<std::string>(&fr_type_name)   , "fake rate type name: hpt(default), eth, truncated")
             ;
