@@ -1329,28 +1329,7 @@ namespace ss
         const int nbtags = ssb::nbtags();
         const float ht   = ssb::ht();
         const float met  = ssb::pfmet();
-
-        // tightened d0 cut (should be done also in ssSelections)
-        bool lep_d0 = true;
-        //const float l1_id     = abs(ssb::lep1_pdgid());
-        //const float l2_id     = abs(ssb::lep2_pdgid());
-        //const float l1_d0     = fabs(ssb::lep1_d0()); 
-        //const float l2_d0     = fabs(ssb::lep2_d0()); 
-        //const float l1_d0_cut = (l1_id==11 ? 0.01 : 0.005);
-        //const float l2_d0_cut = (l2_id==11 ? 0.01 : 0.005);
-        //if (ssb::is_ss() || ssb::is_os())
-        //{
-        //    lep_d0 = ((l1_d0 < l1_d0_cut) && (l2_d0 < l2_d0_cut));
-        //}
-        //else if (ssb::is_sf())
-        //{
-        //    lep_d0 = (ssb::lep1_is_num() ? (l1_d0 < l1_d0_cut) : (l2_d0 < l2_d0_cut));
-        //}
-        //else
-        //{
-        //    lep_d0 = true;
-        //}
-
+        const bool lep_d0 = true;
 
         // high pt
         if (anal_type==AnalysisType::high_pt_eth || anal_type==AnalysisType::high_pt)
