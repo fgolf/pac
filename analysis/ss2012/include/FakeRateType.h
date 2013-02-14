@@ -2,6 +2,7 @@
 #define SS_FAKERATETYPE_H
 
 #include <string>
+#include <vector>
 
 class TTree;
 
@@ -28,23 +29,26 @@ namespace ss
 
     struct FakeRateBinInfo
     {
-        float* el_vtx_bins;
-        unsigned int num_el_vtx_bins;
+        std::vector<float> vel_vtx_bins;
+        std::vector<float> vel_eta_bins;
+        std::vector<float> vel_pt_bins;
+        std::vector<float> vmu_vtx_bins;
+        std::vector<float> vmu_eta_bins;
+        std::vector<float> vmu_pt_bins;
 
-        float* el_eta_bins;
-        unsigned int num_el_eta_bins;
+        size_t num_el_vtx_bins() {return vel_vtx_bins.size()-1;}
+        size_t num_el_eta_bins() {return vel_eta_bins.size()-1;}
+        size_t num_el_pt_bins () {return vel_pt_bins.size() -1;}
+        size_t num_mu_vtx_bins() {return vmu_vtx_bins.size()-1;}
+        size_t num_mu_eta_bins() {return vmu_eta_bins.size()-1;}
+        size_t num_mu_pt_bins () {return vmu_pt_bins.size() -1;}
 
-        float* el_pt_bins;
-        unsigned int num_el_pt_bins;
-
-        float* mu_vtx_bins;
-        unsigned int num_mu_vtx_bins;
-
-        float* mu_eta_bins;
-        unsigned int num_mu_eta_bins;
-
-        float* mu_pt_bins;
-        unsigned int num_mu_pt_bins;
+        float* el_vtx_bins() {return &vel_vtx_bins[0];}
+        float* el_eta_bins() {return &vel_eta_bins[0];}
+        float* el_pt_bins()  {return &vel_pt_bins[0] ;}
+        float* mu_vtx_bins() {return &vmu_vtx_bins[0];}
+        float* mu_eta_bins() {return &vmu_eta_bins[0];}
+        float* mu_pt_bins()  {return &vmu_pt_bins[0] ;}
     };
 
     // Get the FakeRateType from a string

@@ -95,29 +95,21 @@ namespace ss
             const float tmp_mu_eta_bins[] = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5};
             const float tmp_mu_pt_bins[]  = {20.0, 25.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 100.0};
 
-            fr_bin_info.num_el_vtx_bins = (sizeof(tmp_el_vtx_bins) / sizeof(tmp_el_vtx_bins[0])) - 1;
-            fr_bin_info.num_el_eta_bins = (sizeof(tmp_el_eta_bins) / sizeof(tmp_el_eta_bins[0])) - 1;
-            fr_bin_info.num_el_pt_bins  = (sizeof(tmp_el_pt_bins)  / sizeof(tmp_el_pt_bins[0]) ) - 1;
+            size_t tmp_num_el_vtx_bins = (sizeof(tmp_el_vtx_bins) / sizeof(tmp_el_vtx_bins[0]))-1;
+            size_t tmp_num_el_eta_bins = (sizeof(tmp_el_eta_bins) / sizeof(tmp_el_eta_bins[0]))-1;
+            size_t tmp_num_el_pt_bins  = (sizeof(tmp_el_pt_bins)  / sizeof(tmp_el_pt_bins[0]) )-1;
 
-            fr_bin_info.num_mu_vtx_bins = (sizeof(tmp_mu_vtx_bins) / sizeof(tmp_mu_vtx_bins[0])) - 1;
-            fr_bin_info.num_mu_eta_bins = (sizeof(tmp_mu_eta_bins) / sizeof(tmp_mu_eta_bins[0])) - 1;
-            fr_bin_info.num_mu_pt_bins  = (sizeof(tmp_mu_pt_bins)  / sizeof(tmp_mu_pt_bins[0]) ) - 1;
+            size_t tmp_num_mu_vtx_bins = (sizeof(tmp_mu_vtx_bins) / sizeof(tmp_mu_vtx_bins[0]))-1;
+            size_t tmp_num_mu_eta_bins = (sizeof(tmp_mu_eta_bins) / sizeof(tmp_mu_eta_bins[0]))-1;
+            size_t tmp_num_mu_pt_bins  = (sizeof(tmp_mu_pt_bins)  / sizeof(tmp_mu_pt_bins[0]) )-1;
 
-            fr_bin_info.el_vtx_bins = new float[fr_bin_info.num_el_vtx_bins+1];
-            fr_bin_info.el_eta_bins = new float[fr_bin_info.num_el_eta_bins+1];
-            fr_bin_info.el_pt_bins  = new float[fr_bin_info.num_el_pt_bins +1];
+            fr_bin_info.vel_vtx_bins.assign(tmp_el_vtx_bins, tmp_el_vtx_bins+tmp_num_el_vtx_bins);
+            fr_bin_info.vel_eta_bins.assign(tmp_el_eta_bins, tmp_el_eta_bins+tmp_num_el_eta_bins);
+            fr_bin_info.vel_pt_bins .assign(tmp_el_pt_bins , tmp_el_pt_bins +tmp_num_el_pt_bins );
 
-            fr_bin_info.mu_vtx_bins = new float[fr_bin_info.num_mu_vtx_bins+1];
-            fr_bin_info.mu_eta_bins = new float[fr_bin_info.num_mu_eta_bins+1];
-            fr_bin_info.mu_pt_bins  = new float[fr_bin_info.num_mu_pt_bins +1];
-
-            std::copy(tmp_el_vtx_bins ,tmp_el_vtx_bins + fr_bin_info.num_el_vtx_bins + 1 ,fr_bin_info.el_vtx_bins);
-            std::copy(tmp_el_eta_bins ,tmp_el_eta_bins + fr_bin_info.num_el_eta_bins + 1 ,fr_bin_info.el_eta_bins);
-            std::copy(tmp_el_pt_bins  ,tmp_el_pt_bins  + fr_bin_info.num_el_pt_bins  + 1 ,fr_bin_info.el_pt_bins);
-
-            std::copy(tmp_mu_vtx_bins ,tmp_mu_vtx_bins + fr_bin_info.num_mu_vtx_bins + 1 ,fr_bin_info.mu_vtx_bins);
-            std::copy(tmp_mu_eta_bins ,tmp_mu_eta_bins + fr_bin_info.num_mu_eta_bins + 1 ,fr_bin_info.mu_eta_bins);
-            std::copy(tmp_mu_pt_bins  ,tmp_mu_pt_bins  + fr_bin_info.num_mu_pt_bins  + 1 ,fr_bin_info.mu_pt_bins);
+            fr_bin_info.vmu_vtx_bins.assign(tmp_mu_vtx_bins, tmp_mu_vtx_bins+tmp_num_mu_vtx_bins);
+            fr_bin_info.vmu_eta_bins.assign(tmp_mu_eta_bins, tmp_mu_eta_bins+tmp_num_mu_eta_bins);
+            fr_bin_info.vmu_pt_bins .assign(tmp_mu_pt_bins , tmp_mu_pt_bins +tmp_num_mu_pt_bins );
         }
         else
         {
@@ -129,29 +121,21 @@ namespace ss
             const float tmp_mu_eta_bins[] = {0.0, 1.0, 1.479, 2.0, 2.5};
             const float tmp_mu_pt_bins[]  = {5.0, 10.0, 15.0, 20.0, 25.0, 35.0};
 
-            fr_bin_info.num_el_vtx_bins = (sizeof(tmp_el_vtx_bins) / sizeof(tmp_el_vtx_bins[0])) - 1;
-            fr_bin_info.num_el_eta_bins = (sizeof(tmp_el_eta_bins) / sizeof(tmp_el_eta_bins[0])) - 1;
-            fr_bin_info.num_el_pt_bins  = (sizeof(tmp_el_pt_bins)  / sizeof(tmp_el_pt_bins[0]) ) - 1;
+            size_t tmp_num_el_vtx_bins = (sizeof(tmp_el_vtx_bins) / sizeof(tmp_el_vtx_bins[0]))-1;
+            size_t tmp_num_el_eta_bins = (sizeof(tmp_el_eta_bins) / sizeof(tmp_el_eta_bins[0]))-1;
+            size_t tmp_num_el_pt_bins  = (sizeof(tmp_el_pt_bins)  / sizeof(tmp_el_pt_bins[0]) )-1;
 
-            fr_bin_info.num_mu_vtx_bins = (sizeof(tmp_mu_vtx_bins) / sizeof(tmp_mu_vtx_bins[0])) - 1;
-            fr_bin_info.num_mu_eta_bins = (sizeof(tmp_mu_eta_bins) / sizeof(tmp_mu_eta_bins[0])) - 1;
-            fr_bin_info.num_mu_pt_bins  = (sizeof(tmp_mu_pt_bins)  / sizeof(tmp_mu_pt_bins[0]) ) - 1;
+            size_t tmp_num_mu_vtx_bins = (sizeof(tmp_mu_vtx_bins) / sizeof(tmp_mu_vtx_bins[0]))-1;
+            size_t tmp_num_mu_eta_bins = (sizeof(tmp_mu_eta_bins) / sizeof(tmp_mu_eta_bins[0]))-1;
+            size_t tmp_num_mu_pt_bins  = (sizeof(tmp_mu_pt_bins)  / sizeof(tmp_mu_pt_bins[0]) )-1;
 
-            fr_bin_info.el_vtx_bins = new float[fr_bin_info.num_el_vtx_bins+1];
-            fr_bin_info.el_eta_bins = new float[fr_bin_info.num_el_eta_bins+1];
-            fr_bin_info.el_pt_bins  = new float[fr_bin_info.num_el_pt_bins +1];
+            fr_bin_info.vel_vtx_bins.assign(tmp_el_vtx_bins, tmp_el_vtx_bins+tmp_num_el_vtx_bins);
+            fr_bin_info.vel_eta_bins.assign(tmp_el_eta_bins, tmp_el_eta_bins+tmp_num_el_eta_bins);
+            fr_bin_info.vel_pt_bins .assign(tmp_el_pt_bins , tmp_el_pt_bins +tmp_num_el_pt_bins );
 
-            fr_bin_info.mu_vtx_bins = new float[fr_bin_info.num_mu_vtx_bins+1];
-            fr_bin_info.mu_eta_bins = new float[fr_bin_info.num_mu_eta_bins+1];
-            fr_bin_info.mu_pt_bins  = new float[fr_bin_info.num_mu_pt_bins +1];
-
-            std::copy(tmp_el_vtx_bins ,tmp_el_vtx_bins + fr_bin_info.num_el_vtx_bins + 1 ,fr_bin_info.el_vtx_bins);
-            std::copy(tmp_el_eta_bins ,tmp_el_eta_bins + fr_bin_info.num_el_eta_bins + 1 ,fr_bin_info.el_eta_bins);
-            std::copy(tmp_el_pt_bins  ,tmp_el_pt_bins  + fr_bin_info.num_el_pt_bins  + 1 ,fr_bin_info.el_pt_bins);
-
-            std::copy(tmp_mu_vtx_bins ,tmp_mu_vtx_bins + fr_bin_info.num_mu_vtx_bins + 1 ,fr_bin_info.mu_vtx_bins);
-            std::copy(tmp_mu_eta_bins ,tmp_mu_eta_bins + fr_bin_info.num_mu_eta_bins + 1 ,fr_bin_info.mu_eta_bins);
-            std::copy(tmp_mu_pt_bins  ,tmp_mu_pt_bins  + fr_bin_info.num_mu_pt_bins  + 1 ,fr_bin_info.mu_pt_bins);
+            fr_bin_info.vmu_vtx_bins.assign(tmp_mu_vtx_bins, tmp_mu_vtx_bins+tmp_num_mu_vtx_bins);
+            fr_bin_info.vmu_eta_bins.assign(tmp_mu_eta_bins, tmp_mu_eta_bins+tmp_num_mu_eta_bins);
+            fr_bin_info.vmu_pt_bins .assign(tmp_mu_pt_bins , tmp_mu_pt_bins +tmp_num_mu_pt_bins );
         }
 
         return fr_bin_info;
