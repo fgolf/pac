@@ -104,7 +104,7 @@ def make_hist(signal_region, sample):
 			raise Error("signal region %d not supported. exiting" % signal_region)
 
 	# start the command
-	cmd = "ss2012_plots.exe"	
+	cmd = "ss2012_plots"	
 
 	# luminosity
 	cmd += " --lumi %1.3f" % float(options.lumi)
