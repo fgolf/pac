@@ -484,8 +484,8 @@ SSAnalysisLooper::SSAnalysisLooper
         elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
         break;
     case AnalysisType::high_pt_eth:
-        mufr_name = "h_mufr50c";
-        elfr_name = "h_elfr50c";
+        mufr_name = "h_mufr40c";
+        elfr_name = "h_elfr40c";
         break;
     default:
         mufr_name = "h_mufr40c";

@@ -115,8 +115,8 @@ PlotLooper::PlotLooper
             //elfr_name = "h_elfr40c";
             break;
         case AnalysisType::high_pt_eth:
-            mufr_name = "h_mufr50c";
-            elfr_name = "h_elfr50c";
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
             break;
         case AnalysisType::low_pt:
             mufr_name = "h_mufr40c";

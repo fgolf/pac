@@ -105,8 +105,8 @@ int main(int argc, char* argv[])
 
         if (analysis_type == ss::AnalysisType::high_pt_eth)
         {
-            if (mufr_hist_name.empty()) mufr_hist_name = "h_mufr50c";
-            if (elfr_hist_name.empty()) elfr_hist_name = "h_elfr50c";        
+            if (mufr_hist_name.empty()) mufr_hist_name = "h_mufr40c";
+            if (elfr_hist_name.empty()) elfr_hist_name = "h_elfr40c";        
         } 
         else
         {
