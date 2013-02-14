@@ -48,6 +48,22 @@ FakeRateBabyLooper::~FakeRateBabyLooper()
 void FakeRateBabyLooper::BeginJob()
 {    
     m_fr_bin_info = ss::GetFakeRateBinInfo(m_use_eth_binning);
+    // pT cut
+    float min_mu_pt = m_fr_bin_info.mu_pt_bins()[0];
+    float max_mu_pt = m_fr_bin_info.mu_pt_bins()[m_fr_bin_info.num_mu_pt_bins()];
+
+    std::cout << "muon binning: ";
+    std::copy(m_fr_bin_info.vmu_pt_bins.begin(), m_fr_bin_info.vmu_pt_bins.end(), std::ostream_iterator<float>(std::cout, " "));
+    printf("\nmin,max muon pt cuts: %4.2f, %4.2f\n", min_mu_pt, max_mu_pt);
+
+    float min_el_pt = m_fr_bin_info.el_pt_bins()[0];
+    float max_el_pt = m_fr_bin_info.el_pt_bins()[m_fr_bin_info.num_el_pt_bins()];
+
+    std::cout << "eleectron binning: ";
+    std::copy(m_fr_bin_info.vel_pt_bins.begin(), m_fr_bin_info.vel_pt_bins.end(), std::ostream_iterator<float>(std::cout, " "));
+    printf("\nmin,max electron pt cuts: %4.2f, %4.2f\n", min_el_pt, max_el_pt);
+
+    // book histos
     BookHists();
 }
 
@@ -414,12 +430,12 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         if (is_mu && (pt()<min_mu_pt || pt()>max_mu_pt))
         {
-            if (m_verbose) {cout << "fails pt cut" << endl;}
+            if (m_verbose) {cout << "fails pt cut with pt " << pt() << endl;}
             return 0;
         }
         if (is_el && (pt()<min_el_pt || pt()>max_el_pt))
         {
-            if (m_verbose) {cout << "fails pt cut" << endl;}
+            if (m_verbose) {cout << "fails pt cut with pt " << pt() << endl;}
             return 0;
         }
 
@@ -433,9 +449,9 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // no resonance's (Z or upsilon), no extra leptons in event
         if (m_fr_type == ss::FakeRateType::eth)
         {
-            if (nvetomus>0 || nvetoels>0)
+            if (nvetomus()>0 || nvetoels()>0)
             {
-                if (m_verbose) {cout << "fails no veto lepton cut" << endl;}
+                if (m_verbose) {printf("fails no veto lepton cut.  found %d veto muons and %d veto electrons.\n", nvetomus(), nvetoels());}
                 return 0;
             }
         }
@@ -514,9 +530,9 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         if (m_fr_type == ss::FakeRateType::eth)
         {
-            jet20c_cut = is_data ? (ptpfcL1Fj1res() > 30) : (ptpfcL1Fj1() > 30); // actually a jet 30 cut
+            jet20c_cut = is_data ? (ptpfcL1Fj1res() > 30) : (ptpfcL1Fj1() > 30);         // actually a jet 30 cut
             jet40c_cut = is_data ? (npfc50L1Fj1res_eth() > 0) : (npfc50L1Fj1_eth() > 0); // actually a jet 50 cut
-            jet60c_cut = is_data ? (ptpfcL1Fj1res() > 70) : (ptpfcL1Fj1() > 70); // actually a jet 70 cut
+            jet60c_cut = is_data ? (ptpfcL1Fj1res() > 70) : (ptpfcL1Fj1() > 70);         // actually a jet 70 cut
         }
 
         if (is_ttbar)
@@ -568,7 +584,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // vertex reweight for ttbar
-        float evt_weight = (weight() * m_lumi);
+        float evt_weight = (is_data ? 1. : (weight() * m_lumi));
 
         // isolation
         float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area
@@ -580,7 +596,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         float num_el_iso_cut = 0.09;
         float den_el_iso_cut = ((m_fr_type == ss::FakeRateType::eth) ? 1.0 : 0.6);
-
+        
         // Fill some plots
         // -------------------------------------------------------------------------------------- //
 

@@ -104,24 +104,24 @@ void FRClosureLooper::BeginJob()
 
 ss::FakeRateBinInfo FRClosureLooper::GetFakeRateBinInfo()
 {
-    const std::size_t num_mu_eta_bins = h_mufr->GetNbinsX()-1;
-    const float *mu_eta_bins = reinterpret_cast<const float*>(h_mufr->GetXaxis()->GetXbins()->GetArray());
+    const size_t num_mu_eta_bins = h_mufr->GetNbinsX();
+    const float *mu_eta_bins = rt::ConvertDoubleArrayToFloatArray(h_mufr->GetXaxis()->GetXbins()->GetArray(), num_mu_eta_bins+1);
 
-    const size_t num_mu_pt_bins = h_mufr->GetNbinsY()-1;
-    const float *mu_pt_bins = reinterpret_cast<const float*>(h_mufr->GetYaxis()->GetXbins()->GetArray());   
+    const size_t num_mu_pt_bins = h_mufr->GetNbinsY();
+    const float *mu_pt_bins = rt::ConvertDoubleArrayToFloatArray(h_mufr->GetYaxis()->GetXbins()->GetArray(), num_mu_pt_bins+1);
 
-    const size_t num_el_eta_bins = h_elfr->GetNbinsX()-1;
-    const float *el_eta_bins = reinterpret_cast<const float*>(h_elfr->GetXaxis()->GetXbins()->GetArray());   
+    const size_t num_el_eta_bins = h_elfr->GetNbinsX();
+    const float *el_eta_bins = rt::ConvertDoubleArrayToFloatArray(h_elfr->GetXaxis()->GetXbins()->GetArray(), num_el_eta_bins+1);
 
-    const size_t num_el_pt_bins = h_elfr->GetNbinsY()-1;
-    const float *el_pt_bins = reinterpret_cast<const float*>(h_elfr->GetYaxis()->GetXbins()->GetArray());
+    const size_t num_el_pt_bins = h_elfr->GetNbinsY();
+    const float *el_pt_bins = rt::ConvertDoubleArrayToFloatArray(h_elfr->GetYaxis()->GetXbins()->GetArray(), num_el_pt_bins+1);
 
     ss::FakeRateBinInfo tmp;
-    tmp.vel_eta_bins.assign(el_eta_bins, el_eta_bins+num_el_eta_bins);
-    tmp.vel_pt_bins .assign(el_pt_bins , el_pt_bins +num_el_pt_bins );
+    tmp.vel_eta_bins.assign(el_eta_bins, el_eta_bins+num_el_eta_bins+1);
+    tmp.vel_pt_bins .assign(el_pt_bins , el_pt_bins +num_el_pt_bins+1 );
 
-    tmp.vmu_eta_bins.assign(mu_eta_bins, mu_eta_bins+num_mu_eta_bins);
-    tmp.vmu_pt_bins .assign(mu_pt_bins , mu_pt_bins +num_mu_pt_bins );
+    tmp.vmu_eta_bins.assign(mu_eta_bins, mu_eta_bins+num_mu_eta_bins+1);
+    tmp.vmu_pt_bins .assign(mu_pt_bins , mu_pt_bins +num_mu_pt_bins+1 );
 
     return tmp;
 }
