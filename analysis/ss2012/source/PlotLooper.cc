@@ -217,7 +217,6 @@ ss::FakeRateBinInfo PlotLooper::GetFakeRateBinInfo()
     tmp.num_mu_pt_bins = num_mu_pt_bins;
     std::copy(mu_pt_bins, mu_pt_bins+tmp.num_mu_pt_bins, tmp.mu_pt_bins);
 
-
     return tmp;
 }
 
