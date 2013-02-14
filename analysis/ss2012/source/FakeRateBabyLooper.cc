@@ -30,10 +30,10 @@ FakeRateBabyLooper::FakeRateBabyLooper
     , m_lepton(lepton)
     , m_fr_type(fr_type)
     , m_apply_tight_d0_cut(apply_tight_d0_cut)
-    , m_use_eth_binning(use_eth_binning)
-    , m_lumi(lumi)
     , m_charge(charge)
+    , m_lumi(lumi)
     , m_verbose(verbose)
+    , m_use_eth_binning(use_eth_binning)
 {
     // begin job
     BeginJob();

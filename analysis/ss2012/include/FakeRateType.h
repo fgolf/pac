@@ -28,22 +28,22 @@ namespace ss
 
     struct FakeRateBinInfo
     {
-        float el_vtx_bins[];
+        float* el_vtx_bins;
         unsigned int num_el_vtx_bins;
 
-        float el_eta_bins[];
+        float* el_eta_bins;
         unsigned int num_el_eta_bins;
 
-        float el_pt_bins[];
+        float* el_pt_bins;
         unsigned int num_el_pt_bins;
 
-        float mu_vtx_bins[];
+        float* mu_vtx_bins;
         unsigned int num_mu_vtx_bins;
 
-        float mu_eta_bins[];
+        float* mu_eta_bins;
         unsigned int num_mu_eta_bins;
 
-        float mu_pt_bins[];
+        float* mu_pt_bins;
         unsigned int num_mu_pt_bins;
     };
 
