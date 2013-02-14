@@ -218,11 +218,11 @@ ss::FakeRateBinInfo PlotLooper::GetFakeRateBinInfo()
     const float *el_pt_bins = ConvertDoubleArrayToFloatArray(h_elfr->GetYaxis()->GetXbins()->GetArray(), num_el_pt_bins+1);
 
     ss::FakeRateBinInfo tmp;
-    tmp.vel_eta_bins.assign(el_eta_bins, el_eta_bins+num_el_eta_bins);
-    tmp.vel_pt_bins .assign(el_pt_bins , el_pt_bins +num_el_pt_bins );
+    tmp.vel_eta_bins.assign(el_eta_bins, el_eta_bins+num_el_eta_bins+1);
+    tmp.vel_pt_bins .assign(el_pt_bins , el_pt_bins +num_el_pt_bins+1 );
 
-    tmp.vmu_eta_bins.assign(mu_eta_bins, mu_eta_bins+num_mu_eta_bins);
-    tmp.vmu_pt_bins .assign(mu_pt_bins , mu_pt_bins +num_mu_pt_bins );
+    tmp.vmu_eta_bins.assign(mu_eta_bins, mu_eta_bins+num_mu_eta_bins+1);
+    tmp.vmu_pt_bins .assign(mu_pt_bins , mu_pt_bins +num_mu_pt_bins+1 );
 
     return tmp;
 }
