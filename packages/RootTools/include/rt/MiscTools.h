@@ -444,6 +444,9 @@ namespace rt
     // character is not a space
     bool not_space(char c);
 
+    // get an array of floats from an array of doubles
+    float* ConvertDoubleArrayToFloatArray(const double *d, size_t n);
+
     // print the value/error with +/-
     std::string pm(double value, double error, const std::string& precision = "1.2");
     std::string pm(const std::pair<double, double>& value_pair, const std::string& precision = "1.2");
@@ -478,6 +481,9 @@ namespace rt
     // initialze container
     //template <typename Container, typename Type>
     //void init_container(const Container &c, const Type& t = Type());
+
+    // helper functions for low level c++ 
+    // -------------------------------------------------------------------------------------------------//
 
 #endif // ifdef __CINT__
 

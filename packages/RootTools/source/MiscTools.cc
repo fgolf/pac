@@ -1131,7 +1131,6 @@ namespace rt
         return TTreeDraw1D(tree, hist_ptr, varexp, TCut(selection.c_str()), option, nentries, firstentry);
     }
 
-
     // add root files (returns 0 if successful) -- lower case to match the utility name
     int hadd(const std::string& target, const std::vector<std::string>& sources)
     {
@@ -1431,6 +1430,17 @@ namespace rt
     bool not_space(char c)
     {
         return !is_space(c);
+    }
+
+    // get an array of floats from an array of doubles
+    float* ConvertDoubleArrayToFloatArray(const double *d, size_t n)
+    {
+        float* f = new float[n];
+        for (size_t i=0; i != n; ++i) 
+        {
+            f[i] = static_cast<float>(d[i]);
+        }
+        return f;
     }
 
     // set style
