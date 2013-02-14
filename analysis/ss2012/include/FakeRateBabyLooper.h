@@ -42,10 +42,10 @@ private:
     std::string m_lepton;
     ss::FakeRateType::value_type m_fr_type;
     bool m_apply_tight_d0_cut;
-    int m_charge;
-    float m_lumi;
-    bool m_verbose;
     bool m_use_eth_binning;
+    float m_lumi;
+    int m_charge;
+    bool m_verbose;
     ss::FakeRateBinInfo m_fr_bin_info;
 };
 
