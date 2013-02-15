@@ -26,7 +26,9 @@ PATH=$project_dir/bin:$PATH
 if [ -d "$project_dir/lib" ] ; then
     LD_LIBRARY_PATH=$project_dir/lib:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
+    PATH=$PATH:$PAC/bin
 else
     LD_LIBRARY_PATH=$project_dir/bin/release:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/release:$DYLD_LIBRARY_PATH
+    PATH=$PATH:$PAC/bin/release/
 fi
