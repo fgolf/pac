@@ -59,7 +59,7 @@ void FakeRateBabyLooper::BeginJob()
     float min_el_pt = m_fr_bin_info.el_pt_bins()[0];
     float max_el_pt = m_fr_bin_info.el_pt_bins()[m_fr_bin_info.num_el_pt_bins()];
 
-    std::cout << "eleectron binning: ";
+    std::cout << "electron binning: ";
     std::copy(m_fr_bin_info.vel_pt_bins.begin(), m_fr_bin_info.vel_pt_bins.end(), std::ostream_iterator<float>(std::cout, " "));
     printf("\nmin,max electron pt cuts: %4.2f, %4.2f\n", min_el_pt, max_el_pt);
 
