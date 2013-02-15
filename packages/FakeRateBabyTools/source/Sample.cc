@@ -98,7 +98,6 @@ namespace fr
             "/nfs-7/userdata/rwkelley/babies/fr/FakeRate05Feb2013/QCD_Pt-50to80_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
             "/nfs-7/userdata/rwkelley/babies/fr/FakeRate05Feb2013/QCD_Pt-80to120_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
             "/nfs-7/userdata/rwkelley/babies/fr/FakeRate05Feb2013/QCD_Pt-120to170_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
-            "/nfs-7/userdata/rwkelley/babies/fr/FakeRate05Feb2013/QCD_Pt-120to170_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
             "/nfs-7/userdata/rwkelley/babies/fr/FakeRate05Feb2013/QCD_Pt-5to15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
             "/nfs-7/userdata/rwkelley/babies/fr/FakeRate05Feb2013/QCD_Pt-15to30_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
             "/nfs-7/userdata/rwkelley/babies/fr/FakeRate05Feb2013/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
