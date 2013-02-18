@@ -20,10 +20,12 @@
         pac_path += "/bin/release/";
     }
     
+    gSystem->AddIncludePath("-D'__RTINT__'");
     gSystem->AddIncludePath("-I$PAC/packages/RootTools/include");
     gSystem->AddIncludePath("-I$PAC/packages/RootTools/source");
-    gSystem->("$BOOST_CURRENT/stage/lib/libboost_system.so");
-    gSystem->("$BOOST_CURRENT/stage/lib/libboost_filesystem.so");
+    gSystem->AddIncludePath("-I$BOOST_CURRENT/boost");
+    gSystem->Load("$BOOST_CURRENT/stage/lib/libboost_system.so");
+    gSystem->Load("$BOOST_CURRENT/stage/lib/libboost_filesystem.so");
     gSystem->Load(Form("%s/libRootTools.so", pac_path.c_str()));
 
     // Analysis Tools
