@@ -444,19 +444,24 @@ namespace ss
         m["wwqq"] += GetYield(option, Sample::wpwpqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
                                     
         // the rest of the rare MC
-        m["wz"   ] = GetYield(option, Sample::wz   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["zz"   ] = GetYield(option, Sample::zz   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttg"  ] = GetYield(option, Sample::ttg  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttw"  ] = GetYield(option, Sample::ttw  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttz"  ] = GetYield(option, Sample::ttz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["tbz"  ] = GetYield(option, Sample::tbz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttww" ] = GetYield(option, Sample::ttww , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wwg"  ] = GetYield(option, Sample::wwg  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["www"  ] = GetYield(option, Sample::www  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wwz"  ] = GetYield(option, Sample::wwz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wzz"  ] = GetYield(option, Sample::wzz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["zzz"  ] = GetYield(option, Sample::zzz  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ww_ds"] = GetYield(option, Sample::ww_ds, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wgstar2e"] = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wgstar2m"] = GetYield(option, Sample::wgstar2m, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wgstar2t"] = GetYield(option, Sample::wgstar2t, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wmwmqq"  ] = GetYield(option, Sample::wmwmqq  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wpwpqq"  ] = GetYield(option, Sample::wpwpqq  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wz"      ] = GetYield(option, Sample::wz      , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["zz"      ] = GetYield(option, Sample::zz      , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ttg"     ] = GetYield(option, Sample::ttg     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ttw"     ] = GetYield(option, Sample::ttw     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ttz"     ] = GetYield(option, Sample::ttz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["tbz"     ] = GetYield(option, Sample::tbz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ttww"    ] = GetYield(option, Sample::ttww    , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wwg"     ] = GetYield(option, Sample::wwg     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["www"     ] = GetYield(option, Sample::www     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wwz"     ] = GetYield(option, Sample::wwz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wzz"     ] = GetYield(option, Sample::wzz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["zzz"     ] = GetYield(option, Sample::zzz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ww_ds"   ] = GetYield(option, Sample::ww_ds   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
     
         // want the total of the MC
         ss::Yield yield_mc;

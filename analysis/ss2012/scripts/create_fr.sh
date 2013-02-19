@@ -24,6 +24,12 @@ ss2012_create_fakerate.exe --nev $nev --sample wjets --channel el --root_file_na
 ss2012_create_fakerate.exe --nev $nev --sample wjets --channel mu --root_file_name muons_wjets_${version}.root     --run_list $run_list
 hadd -f plots/fake_rates/${version}/ssFR_wjets_standard_${version}.root plots/fake_rates/muons_wjets_${version}/muons_wjets_${version}.root plots/fake_rates/electrons_wjets_${version}/electrons_wjets_${version}.root 
 
+# run qcd
+run_list=\"\"
+ss2012_create_fakerate.exe --nev $nev --sample qcd --channel el --root_file_name electrons_qcd_${version}.root --run_list $run_list
+ss2012_create_fakerate.exe --nev $nev --sample qcd --channel mu --root_file_name muons_qcd_${version}.root     --run_list $run_list
+hadd -f plots/fake_rates/${version}/ssFR_qcd_standard_${version}.root plots/fake_rates/muons_qcd_${version}/muons_qcd_${version}.root plots/fake_rates/electrons_qcd_${version}/electrons_qcd_${version}.root 
+
 # combine the output
 ss2012_make_fr_from_hists --in_data plots/fake_rates/${version}/ssFR_data_standard_${version}.root \
  --in_mc "plots/fake_rates/${version}/ssFR_wjets_standard_${version}.root,plots/fake_rates/${version}/ssFR_dy_standard_${version}.root" \

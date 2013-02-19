@@ -61,6 +61,8 @@ excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
 parser = OptionParser()
 
 default_fr_file = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root"
+#default_fl_file = "data/flip_rates/fakerate_42X.root"
+default_fl_file = "data/flip_rates/ssFL_data_standard_02182013.root"
 
 # parameter options
 parser.add_option("--nev"       , dest="nev"       , default=-1             , help="The number of events to run (-1 for all)"                 )
@@ -77,7 +79,8 @@ parser.add_option("--l2_max_pt" , dest="l2_max_pt" , default=100000.0       , he
 parser.add_option("--min_ht"    , dest="min_ht"    , default=80.0           , help="minimum HT"                                               )
 parser.add_option("--charge"    , dest="charge"    , default=0              , help="charge of leptons (1 for +, -1 for -, 0)"                 )
 parser.add_option("--sr"        , dest="sr"        , default=0              , help="signal region"                                            )
-parser.add_option("--fr_file"   , dest="fr_file"   , default=default_fr_file, help="signal region"                                            )
+parser.add_option("--fr_file"   , dest="fr_file"   , default=default_fr_file, help="fake rate file to use"                                    )
+parser.add_option("--fl_file"   , dest="fl_file"   , default=default_fl_file, help="flip rate file to use"                                    )
 
 # boolean options
 parser.add_option("--test"   , action="store_true" , dest="test"   , default=False, help="test script -- print commands but do nothing")
@@ -134,6 +137,7 @@ def make_hist(signal_region, sample):
 	cmd += " --nbtags %s"                         % int(options.nbtags)
 	cmd += " --njets %s"                          % int(options.njets)
 	cmd += " --fr_file %s"                        % str(options.fr_file)
+	cmd += " --fl_file %s"                        % str(options.fl_file)
 	cmd += " --charge %d"                         % int(options.charge)
 	cmd += " --l1_min_pt %1.3f --l1_max_pt %1.3f" % (float(options.l1_min_pt), float(options.l1_max_pt))
 	cmd += " --l2_min_pt %1.3f --l2_max_pt %1.3f" % (float(options.l2_min_pt), float(options.l2_max_pt))
@@ -151,7 +155,8 @@ def make_hist(signal_region, sample):
 		log_file_name = "%s_mm.log" % sampl#e
 	else:	
 		log_file_name = "%s.log" % sample
-	cmd += " > logs/%s" % log_file_name
+		if (not options.verbose):
+			cmd += " > logs/%s" % log_file_name
 
 	if (not options.no_hist):
 		if (options.verbose):

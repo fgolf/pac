@@ -89,7 +89,7 @@ namespace at
 
     Pred FlipRatePrediction::DoubleFlipPrediction(const TH2F* foHist)
     {
-        const unsigned int NETA_BINS = 8;
+        const unsigned int NETA_BINS = h_flip_rate->GetXaxis()->GetNbins();
         double pred_total       = 0.;
         double pred_error_total = 0.;
         const unsigned int MAX_XBIN = foHist->GetXaxis()->GetNbins()+1;
@@ -109,10 +109,10 @@ namespace at
 
                 double nFOs = foHist->GetBinContent(xbin, ybin);      // number of electrons from OS ee pairs for this eta, pt bin
                 double nFOsError = foHist->GetBinError(xbin, ybin);   // number error on number of electrons from OS ee pairs for this eta, pt bin
-                double FRvalue1 = h_flip_rate->GetBinContent(bin1);   // get value of fake rate 1 for this eta, pt bin
-                double FRerror1 = h_flip_rate->GetBinError(bin1);     // get error on fake rate 1 for this eta, pt bin
-                double FRvalue2 = h_flip_rate->GetBinContent(bin2);   // get value of fake rate 2 for this eta, pt bin
-                double FRerror2 = h_flip_rate->GetBinError(bin2);     // get error on fake rate 2 for this eta, pt bin
+                double FRvalue1 = h_flip_rate->GetBinContent(bin1);   // get value of flip rate 1 for this eta, pt bin
+                double FRerror1 = h_flip_rate->GetBinError(bin1);     // get error on flip rate 1 for this eta, pt bin
+                double FRvalue2 = h_flip_rate->GetBinContent(bin2);   // get value of flip rate 2 for this eta, pt bin
+                double FRerror2 = h_flip_rate->GetBinError(bin2);     // get error on flip rate 2 for this eta, pt bin
 
                 // ok, have all of the inputs, calculate prediction and error for this bin
                 // start with calculating fr/(1-fr) for this bin for each fake rate
@@ -174,6 +174,10 @@ namespace at
                     // sigma_FRprod = FRprod * (sigma_fr1/fr1 + sigma_fr2/fr2) = fr2 * sigma_fr1 + fr1 *sigma_fr2
                     double totalFRerror  = (fr2 * frError1 + fr1 * frError2);
                     pred_error = pred * sqrt(pow(totalFRerror/totalFRfactor, 2) + pow(nFOsError/nFOs, 2));
+                }
+                if (nFOs > 0)
+                {
+                    cout << Form("bin1 %i, bin2 %i, nfo %f, fl1 %f, fle1 %f, fl2 %f, fle2 %f", bin1, bin2, nFOs, fr1, frError1, fr2, frError2) << endl;
                 }
 
                 // now increment the total values

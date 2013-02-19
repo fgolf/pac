@@ -843,8 +843,8 @@ namespace rt
     
         TEfficiency eff;
         const float upper = eff.ClopperPearson(num_generated, num_passed, level, use_upper);
-        const float delta = upper - static_cast<float>(num_passed)/static_cast<float>(num_generated);
-        return delta * static_cast<float>(num_generated);
+        const float delta = upper - (static_cast<float>(num_passed)/static_cast<float>(num_generated));
+        return (delta * static_cast<float>(num_generated));
     }
 
 

@@ -77,7 +77,7 @@ private:
     float m_sparm2;
     float m_sparm3;
     float m_scale1fb;
-    float m_nevts;
+    int m_nevts;
     float m_sf_flip;
     float m_fr_unc;
     float m_fl_unc;

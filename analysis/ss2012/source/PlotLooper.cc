@@ -288,22 +288,37 @@ void PlotLooper::EndJob()
     {
         //hc.List();
     }
+    cout << "\nScale1fb = "           << m_scale1fb << endl;
+    cout << "Num Events Generated = " << m_nevts << endl;
 
     // set the error to the lumi*scale1fb if the yield < weight*0.5 
     if (m_sample != at::Sample::data)
     {
-        float weight = (m_lumi * m_scale1fb);
-        if (rt::Integral(hc["h_yield_mm"]) < (weight * 0.5)) {hc["h_yield_mm"]->SetBinError(2, weight);}
-        if (rt::Integral(hc["h_yield_ee"]) < (weight * 0.5)) {hc["h_yield_ee"]->SetBinError(2, weight);}
-        if (rt::Integral(hc["h_yield_em"]) < (weight * 0.5)) {hc["h_yield_em"]->SetBinError(2, weight);}
-        if (rt::Integral(hc["h_yield_ll"]) < (weight * 0.5)) {hc["h_yield_ll"]->SetBinError(2, weight);}
+        //float GetClopperPearsonUncertainty(const int num_passed, const int num_generated, const float level = 0.68, const bool use_upper = true);
+        const float weight = (m_lumi * m_scale1fb);
+        hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_mm"]->GetEntries(), m_nevts));
+        hc["h_yield_ee"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ee"]->GetEntries(), m_nevts));
+        hc["h_yield_em"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_em"]->GetEntries(), m_nevts));
+        hc["h_yield_ll"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ll"]->GetEntries(), m_nevts));
 
         // yields in a signal used for overlaying
-        cout << "wieght = " << weight << endl;
-        if (hc["h_yield_ss"]->GetBinContent(2) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(2, weight);}
-        if (hc["h_yield_ss"]->GetBinContent(3) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(3, weight);}
-        if (hc["h_yield_ss"]->GetBinContent(4) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(4, weight);}
-        if (hc["h_yield_ss"]->GetBinContent(5) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(5, weight);}
+        hc["h_yield_ss"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
+        hc["h_yield_ss"]->SetBinError(3, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
+        hc["h_yield_ss"]->SetBinError(4, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
+        hc["h_yield_ss"]->SetBinError(5, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
+
+        //float weight = (m_lumi * m_scale1fb);
+        //if (rt::Integral(hc["h_yield_mm"]) < (weight * 0.5)) {hc["h_yield_mm"]->SetBinError(2, weight);}
+        //if (rt::Integral(hc["h_yield_ee"]) < (weight * 0.5)) {hc["h_yield_ee"]->SetBinError(2, weight);}
+        //if (rt::Integral(hc["h_yield_em"]) < (weight * 0.5)) {hc["h_yield_em"]->SetBinError(2, weight);}
+        //if (rt::Integral(hc["h_yield_ll"]) < (weight * 0.5)) {hc["h_yield_ll"]->SetBinError(2, weight);}
+
+        //// yields in a signal used for overlaying
+        //cout << "wieght = " << weight << endl;
+        //if (hc["h_yield_ss"]->GetBinContent(2) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(2, weight);}
+        //if (hc["h_yield_ss"]->GetBinContent(3) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(3, weight);}
+        //if (hc["h_yield_ss"]->GetBinContent(4) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(4, weight);}
+        //if (hc["h_yield_ss"]->GetBinContent(5) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(5, weight);}
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll
@@ -569,8 +584,10 @@ void PlotLooper::EndJob()
     }
 }
 
-std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 2.1, 2.2, 2.4 }};
-std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45., 50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100. }};
+//const std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 2.1, 2.2, 2.4 }};
+//const std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45., 50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100. }};
+const std::tr1::array<float, 4> el_flip_eta_bins = {{0.0, 1.0, 2.0, 2.4}};
+const std::tr1::array<float, 7> el_flip_pt_bins  = {{0.0, 25.0, 50.0, 75.0, 100.0, 125.0, 150.0}};
 
 // book hists 
 void PlotLooper::BookHists()
@@ -610,7 +627,8 @@ void PlotLooper::BookHists()
         }
 
         // OS plots (for flip pred)
-        hc.Add(new TH2F("h_os_fo_pt_vs_eta_ee", "OS (ee ) (special binning)"                    , 136, 0, 136, 136, 0, 136)); 
+        int num_double_flip_bins = (el_flip_eta_bins.size()-1)*(el_flip_pt_bins.size()-1);
+        hc.Add(new TH2F("h_os_fo_pt_vs_eta_ee", "OS (ee ) (special binning)"                    , num_double_flip_bins, 0, num_double_flip_bins, num_double_flip_bins, 0, num_double_flip_bins)); 
         hc.Add(new TH2F("h_os_fo_pt_vs_eta_em", "OS (e#mu) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)"  , el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
 
         hc.Add(new TH2F("h_os_pt1_vs_eta1_mm", "OS (#mu#mu) #mu1 p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
@@ -706,8 +724,7 @@ int PlotLooper::operator()(long event)
 
         // scale 1b (set before cuts) 
         m_scale1fb = scale1fb();
-        //m_nevts    = nevts();       
-        m_nevts    = -999999; 
+        m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
 
         // which analysis type
         //bool is_high_pt = (m_analysis_type==ss::AnalysisType::high_pt);
