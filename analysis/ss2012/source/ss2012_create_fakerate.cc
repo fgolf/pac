@@ -59,6 +59,8 @@ int main(int argc, char* argv[])
 	float lumi		       = 1.0;
         int charge                     = 0;
         std::string fr_type_name       = "hpt";
+        float away_jet_pt              = -1.;
+        float away_jet_dphi            = -1.;
 
         namespace po = boost::program_options;
         po::options_description desc("Allowed options");
@@ -76,6 +78,8 @@ int main(int argc, char* argv[])
             ("tight_ip"      , po::value<bool>(&apply_tight_d0_cut)    , "apply tight d0 cut (default is true)"             )
             ("eth_binning"   , po::value<bool>(&use_eth_binning)       , "use eth binning for fake rate (default is false)" )
             ("fr_type"       , po::value<std::string>(&fr_type_name)   , "fake rate type name: hpt(default), eth, truncated")
+            ("jet_pt"        , po::value<float>(&away_jet_pt)          , "minimum away jet pt cut"                          )
+            ("jet_dphi"      , po::value<float>(&away_jet_dphi)        , "minimum away jet dphi cut"                        )
             ;
 
         po::variables_map vm;
@@ -133,7 +137,7 @@ int main(int argc, char* argv[])
         at::ScanChainWithFilename<FakeRateBaby>
             (
                 /*input chain ptr =*/chain.get(), 
-                FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix), 
+                FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix, away_jet_pt, away_jet_dphi), 
                 fake_rate_baby,
                 number_of_events,
                 good_run_list,

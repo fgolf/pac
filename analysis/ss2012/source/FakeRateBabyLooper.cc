@@ -23,7 +23,10 @@ FakeRateBabyLooper::FakeRateBabyLooper
     int charge, 
     bool verbose,
     bool print,
-    const std::string& suffix
+    const std::string& suffix,
+    float away_jet_pt,
+    float away_jet_dphi,
+    float mu_iso_denom
     )
     : at::AnalysisWithHist(root_file_name, print, suffix)
     , m_sample(sample)
@@ -34,6 +37,9 @@ FakeRateBabyLooper::FakeRateBabyLooper
     , m_lumi(lumi)
     , m_charge(charge)
     , m_verbose(verbose)
+    , m_away_jet_pt(away_jet_pt)
+    , m_away_jet_dphi(away_jet_dphi)
+    , m_mu_iso_denom(mu_iso_denom)
 {
     // begin job
     BeginJob();
@@ -62,6 +68,26 @@ void FakeRateBabyLooper::BeginJob()
     std::cout << "electron binning: ";
     std::copy(m_fr_bin_info.vel_pt_bins.begin(), m_fr_bin_info.vel_pt_bins.end(), std::ostream_iterator<float>(std::cout, " "));
     printf("\nmin,max electron pt cuts: %4.2f, %4.2f\n", min_el_pt, max_el_pt);
+
+    // figure out away jet pt
+    if (m_away_jet_pt < 0.)
+    {
+        if (m_fr_type == ss::FakeRateType::hpt || m_fr_type == ss::FakeRateType::truncated) m_away_jet_pt = 40.;
+        else if (m_fr_type == ss::FakeRateType::eth) m_away_jet_pt = 50.;
+    }
+
+    assert(not (m_away_jet_pt < 0.));
+    printf("minimum away jet pt cut: %4.2f GeV\n", m_away_jet_pt);
+
+    // figure out muon isolation extrapolation
+    if (m_mu_iso_denom < 0.)
+    {
+        if (m_fr_type == ss::FakeRateType::hpt || m_fr_type == ss::FakeRateType::truncated) m_mu_iso_denom = 0.4;
+        else if (m_fr_type == ss::FakeRateType::eth) m_mu_iso_denom = 1.0;
+    }
+
+    assert(not (m_mu_iso_denom < 0.));
+    printf("muon isolation extrapolation: %4.2f\n", m_mu_iso_denom);
 
     // book histos
     BookHists();
@@ -523,23 +549,30 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             }
         }
 
-        // away jet cut
-        bool jet20c_cut = is_data ? (ptpfcL1Fj1res() > 20) : (ptpfcL1Fj1() > 20);
-        bool jet40c_cut = is_data ? (ptpfcL1Fj1res() > 40) : (ptpfcL1Fj1() > 40);
-        bool jet60c_cut = is_data ? (ptpfcL1Fj1res() > 60) : (ptpfcL1Fj1() > 60);
+        // away jet cut        
+        bool jet_dwn_cut = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt-20.) : (ptpfcL1Fj1() > m_away_jet_pt-20.);
+        bool jet_cut     = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt)     : (ptpfcL1Fj1() > m_away_jet_pt);
+        bool jet_up_cut  = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt+20.) : (ptpfcL1Fj1() > m_away_jet_pt+20.);
 
-        if (m_fr_type == ss::FakeRateType::eth)
+        bool jet_dphi_cut = is_data ? (dphipfcL1Fj1res() > m_away_jet_dphi) : (dphipfcL1Fj1() > m_away_jet_dphi);
+
+        if (m_fr_type == ss::FakeRateType::eth && rt::is_equal(m_away_jet_pt, 50.f))
         {
-            jet20c_cut = is_data ? (ptpfcL1Fj1res() > 30) : (ptpfcL1Fj1() > 30);         // actually a jet 30 cut
-            jet40c_cut = is_data ? (npfc50L1Fj1res_eth() > 0) : (npfc50L1Fj1_eth() > 0); // actually a jet 50 cut
-            jet60c_cut = is_data ? (ptpfcL1Fj1res() > 70) : (ptpfcL1Fj1() > 70);         // actually a jet 70 cut
+            jet_cut = is_data ? (npfc50L1Fj1res_eth() > 0) : (npfc50L1Fj1_eth() > 0); // actually a jet 50 cut
         }
 
         if (is_ttbar)
         {
-            jet20c_cut = true;
-            jet40c_cut = true;
-            jet60c_cut = true;
+            jet_dwn_cut  = true;
+            jet_cut      = true;
+            jet_up_cut   = true;
+            jet_dphi_cut = true;
+        }
+
+        if (not jet_dphi_cut)
+        {
+            if (m_verbose) {cout << "fails jet dphi cut" << endl;}
+            return 0;
         }
 
         // numerator cut
@@ -592,7 +625,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // float iso = ((m_lepton == "mu") ? cpfiso03_db_truncated() : cpfiso03_rho_truncated()); // new effective area
 
         float num_mu_iso_cut = 0.1;
-        float den_mu_iso_cut = ((m_fr_type == ss::FakeRateType::eth) ? 1.0 : 0.4);
+        float den_mu_iso_cut = m_mu_iso_denom;
 
         float num_el_iso_cut = 0.09;
         float den_el_iso_cut = ((m_fr_type == ss::FakeRateType::eth) ? 1.0 : 0.6);
@@ -607,22 +640,22 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < num_mu_iso_cut)
                 {
-                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_met"], pfmet(), evt_weight); }
-                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_num40c_met"], pfmet(), evt_weight); }
-                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_num60c_met"], pfmet(), evt_weight); }
+                    if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_met"], pfmet(), evt_weight); }
+                    if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_num40c_met"], pfmet(), evt_weight); }
+                    if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_mu_num60c_met"], pfmet(), evt_weight); }
 
                     if (pfmet() > 30)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_num40c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_num60c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_num40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_mu_num60c_mt_met30gt"], pfmt(), evt_weight); }
                     }
 
                     if (pfmet() < 20)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_num40c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_num40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_mu_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
                     }
                 }
             }
@@ -630,22 +663,22 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < den_mu_iso_cut)
                 {
-                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_met"], pfmet(), evt_weight); }
-                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo40c_met"], pfmet(), evt_weight); }
-                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo60c_met"], pfmet(), evt_weight); }
+                    if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_met"], pfmet(), evt_weight); }
+                    if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_fo40c_met"], pfmet(), evt_weight); }
+                    if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_mu_fo60c_met"], pfmet(), evt_weight); }
 
                     if (pfmet() > 30)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo40c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo60c_mt_met30gt"], pfmt(), evt_weight); }                        
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_fo40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_mu_fo60c_mt_met30gt"], pfmt(), evt_weight); }                        
                     }
 
                     if (pfmet() < 20)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo40c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_mu_fo60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_fo40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_mu_fo60c_mt_met20lt"], pfmt(), evt_weight); }                        
                     }
                 }
             }
@@ -657,22 +690,22 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < num_el_iso_cut)
                 {
-                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_met"], pfmet(), evt_weight); }
-                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_met"], pfmet(), evt_weight); }
-                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_met"], pfmet(), evt_weight); }
+                    if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_met"], pfmet(), evt_weight); }
+                    if (jet_cut     && pt() > 20) { rt::Fill( hc["h_el_num40c_met"], pfmet(), evt_weight); }
+                    if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_el_num60c_met"], pfmet(), evt_weight); }
 
                     if (pfmet() > 30)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met30gt"], pfmt(), evt_weight); }
                     }
 
                     if (pfmet() < 20)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
                     }
                 }
             }
@@ -680,21 +713,21 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < den_el_iso_cut)
                 {
-                    if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_fo20c_met"], pfmet(), evt_weight); }
-                    if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_fo40c_met"], pfmet(), evt_weight); }
-                    if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_fo60c_met"], pfmet(), evt_weight); }
+                    if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_el_fo20c_met"], pfmet(), evt_weight); }
+                    if (jet_cut     && pt() > 20) { rt::Fill( hc["h_el_fo40c_met"], pfmet(), evt_weight); }
+                    if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_el_fo60c_met"], pfmet(), evt_weight); }
 
                     if (pfmet() > 30)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_fo20c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_fo40c_mt_met30gt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_fo60c_mt_met30gt"], pfmt(), evt_weight); }                        
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_el_fo20c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_el_fo40c_mt_met30gt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_el_fo60c_mt_met30gt"], pfmt(), evt_weight); }                        
                     }
                     if (pfmet() < 20)
                     {
-                        if (jet20c_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet40c_cut && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met20lt"], pfmt(), evt_weight); }
-                        if (jet60c_cut && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
+                        if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_el_num20c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_cut     && pt() > 20) { rt::Fill( hc["h_el_num40c_mt_met20lt"], pfmt(), evt_weight); }
+                        if (jet_up_cut  && pt() > 20) { rt::Fill( hc["h_el_num60c_mt_met20lt"], pfmt(), evt_weight); }                        
                     }
                 }
             }
@@ -718,13 +751,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < num_mu_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_num60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_mu_num60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_num20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_num40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_num60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_num20c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_mu_num40c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_num60c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -733,13 +766,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < den_mu_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -748,13 +781,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < num_mu_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_num40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_num60c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_num40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_mu_num60c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_num20c_iso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_num40c_iso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_num60c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_num20c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_mu_num40c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_num60c_iso"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -763,14 +796,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < den_mu_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_mu_fo40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_mu_fo60c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_fo40c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_mu_fo60c_iso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (m_verbose) {cout << "passing lepton" << endl;}
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_mu_fo20c_iso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_mu_fo40c_iso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_mu_fo60c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c_iso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c_iso"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
         }
@@ -787,13 +819,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < num_el_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_el_num60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_el_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_el_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_el_num60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_el_num20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_el_num40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_el_num60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_el_num20c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_el_num40c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_el_num60c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -802,13 +834,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < den_el_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_el_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_el_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_el_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_el_fo20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_el_fo40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_el_fo60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_el_fo20c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_el_fo40c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_el_fo60c"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -817,13 +849,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
                 if (iso < num_el_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_num20c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_num40c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_el_num60c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_el_num20c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_el_num40c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_el_num60c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_el_num20c_noiso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_el_num40c_noiso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_el_num60c_noiso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_el_num20c_noiso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_el_num40c_noiso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_el_num60c_noiso"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
 
@@ -832,13 +864,13 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             {
                 if (iso < den_el_iso_cut)
                 {
-                    if (jet20c_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet40c_cut && pt()>20) { rt::Fill( hc["h_el_fo40c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet60c_cut && pt()>20) { rt::Fill( hc["h_el_fo60c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_el_fo40c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_el_fo60c_noiso_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 
-                    if (jet20c_cut           ) { rt::Fill2D(hc["h_el_fo20c_noiso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet40c_cut           ) { rt::Fill2D(hc["h_el_fo40c_noiso"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet60c_cut           ) { rt::Fill2D(hc["h_el_fo60c_noiso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_el_fo20c_noiso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_cut               ) { rt::Fill2D(hc["h_el_fo40c_noiso"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_el_fo60c_noiso"], fabs(eta()), pt(), evt_weight); } 
                 }
             }
         }

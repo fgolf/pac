@@ -22,7 +22,10 @@ public:
         int charge = 0,
         bool verbose = false,
         bool print = false,
-        const std::string& suffix = "png"
+        const std::string& suffix = "png",
+        float away_jet_pt = -1.,
+        float away_jet_dphi = -1.,
+        float mu_iso_denom = -1.
         );
 
     // destroy:
@@ -47,6 +50,9 @@ private:
     int m_charge;
     bool m_verbose;
     ss::FakeRateBinInfo m_fr_bin_info;
+    float m_away_jet_pt;
+    float m_away_jet_dphi;
+    float m_mu_iso_denom;
 };
 
 #endif // SS_FAKERATEBABYLOOPER_HPP
