@@ -304,6 +304,16 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH1F("h_mu_fo40c_mt_met20lt", "h_mu_fo40c_mt_met20lt", nbins, min_val, max_val));
         hc.Add(new TH1F("h_mu_fo60c_mt_met20lt", "h_mu_fo60c_mt_met20lt", nbins, min_val, max_val));
 
+        // muon FO pt distribution
+        hc.Add(new TH1F("h_mu_fo20c_pt", "h_mu_fo20c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_mu_fo40c_pt", "h_mu_fo40c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_mu_fo60c_pt", "h_mu_fo60c_pt", 12, 0., 60.));
+
+        // muon FO eta distribution
+        hc.Add(new TH1F("h_mu_fo20c_eta", "h_mu_fo20c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_mu_fo40c_eta", "h_mu_fo40c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_mu_fo60c_eta", "h_mu_fo60c_eta", 10, -2.5, 2.5));
+
         // MET distribution numerator
         hc.Add(new TH1F("h_mu_num20c_met", "h_mu_num20c_met", nbins, min_val, max_val));
         hc.Add(new TH1F("h_mu_num40c_met", "h_mu_num40c_met", nbins, min_val, max_val));
@@ -318,6 +328,16 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH1F("h_mu_num20c_mt_met20lt", "h_mu_num20c_mt_met20lt", nbins, min_val, max_val));
         hc.Add(new TH1F("h_mu_num40c_mt_met20lt", "h_mu_num40c_mt_met20lt", nbins, min_val, max_val));
         hc.Add(new TH1F("h_mu_num60c_mt_met20lt", "h_mu_num60c_mt_met20lt", nbins, min_val, max_val));
+
+        // muon NUM pt distribution
+        hc.Add(new TH1F("h_mu_num20c_pt", "h_mu_num20c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_mu_num40c_pt", "h_mu_num40c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_mu_num60c_pt", "h_mu_num60c_pt", 12, 0., 60.));
+
+        // muon NUM eta distribution
+        hc.Add(new TH1F("h_mu_num20c_eta", "h_mu_num20c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_mu_num40c_eta", "h_mu_num40c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_mu_num60c_eta", "h_mu_num60c_eta", 10, -2.5, 2.5));
     }
 
     // electrons
@@ -377,6 +397,16 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH1F("h_el_fo40c_mt_met20lt", "h_el_fo40c_mt_met20lt", nbins, min_val, max_val));
         hc.Add(new TH1F("h_el_fo60c_mt_met20lt", "h_el_fo60c_mt_met20lt", nbins, min_val, max_val));
 
+        // electron FO pt distribution
+        hc.Add(new TH1F("h_el_fo20c_pt", "h_el_fo20c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_el_fo40c_pt", "h_el_fo40c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_el_fo60c_pt", "h_el_fo60c_pt", 12, 0., 60.));
+
+        // electron FO eta distribution
+        hc.Add(new TH1F("h_el_fo20c_eta", "h_el_fo20c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_el_fo40c_eta", "h_el_fo40c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_el_fo60c_eta", "h_el_fo60c_eta", 10, -2.5, 2.5));
+
         // MET distribution numerator
         hc.Add(new TH1F("h_el_num20c_met", "h_el_num20c_met", nbins, min_val, max_val));
         hc.Add(new TH1F("h_el_num40c_met", "h_el_num40c_met", nbins, min_val, max_val));
@@ -391,6 +421,16 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH1F("h_el_num20c_mt_met20lt", "h_el_num20c_mt_met20lt", nbins, min_val, max_val));
         hc.Add(new TH1F("h_el_num40c_mt_met20lt", "h_el_num40c_mt_met20lt", nbins, min_val, max_val));
         hc.Add(new TH1F("h_el_num60c_mt_met20lt", "h_el_num60c_mt_met20lt", nbins, min_val, max_val));
+
+        // electron NUM pt distribution
+        hc.Add(new TH1F("h_el_num20c_pt", "h_el_num20c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_el_num40c_pt", "h_el_num40c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_el_num60c_pt", "h_el_num60c_pt", 12, 0., 60.));
+
+        // electron NUM eta distribution
+        hc.Add(new TH1F("h_el_num20c_eta", "h_el_num20c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_el_num40c_eta", "h_el_num40c_eta", 10, -2.5, 2.5));
+        hc.Add(new TH1F("h_el_num60c_eta", "h_el_num60c_eta", 10, -2.5, 2.5));
     }
 
     hc.Sumw2();
@@ -472,41 +512,6 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             return 0;
         }
 
-        // no resonance's (Z or upsilon), no extra leptons in event
-        if (m_fr_type == ss::FakeRateType::eth)
-        {
-            if (nvetomus()>0 || nvetoels()>0)
-            {
-                if (m_verbose) {printf("fails no veto lepton cut.  found %d veto muons and %d veto electrons.\n", nvetomus(), nvetoels());}
-                return 0;
-            }
-        }
-        else
-        {
-            if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()<12)))
-            {
-                if (m_verbose) {cout << "fails no Z cut" << endl;}
-                return 0;
-            }
-            else if (is_el && (76<mz_fo_gsf() && mz_fo_gsf()<106))
-            {
-                if (m_verbose) {cout << "fails no Z cut" << endl;}
-                return 0;
-            }
-
-            // no additional FO's in event
-            if (is_mu && (nFOmus()>0))
-            {
-                if (m_verbose) {cout << "fails no addition muon FO cut" << endl;}
-                return 0;
-            }
-            else if(is_el && (nFOels()>0))
-            {
-                if (m_verbose) {cout << "fails no addition FO cut" << endl;}
-                return 0;
-            }
-        }
-
         // trigger cuts
         bool trig_cut       = (is_data ? false : true);
         bool trig_cut_noiso = (is_data ? false : true);  // electron non-isolated triggers
@@ -573,6 +578,41 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         {
             if (m_verbose) {cout << "fails jet dphi cut" << endl;}
             return 0;
+        }
+
+        // no resonance's (Z or upsilon), no extra leptons in event
+        if (m_fr_type == ss::FakeRateType::eth)
+        {
+            if (nvetomus()>0 || nvetoels()>0)
+            {
+                if (m_verbose) {printf("fails no veto lepton cut.  found %d veto muons and %d veto electrons.\n", nvetomus(), nvetoels());}
+                return 0;
+            }
+        }
+        else
+        {
+            if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()<12)))
+            {
+                if (m_verbose) {cout << "fails no Z cut" << endl;}
+                return 0;
+            }
+            else if (is_el && (76<mz_fo_gsf() && mz_fo_gsf()<106))
+            {
+                if (m_verbose) {cout << "fails no Z cut" << endl;}
+                return 0;
+            }
+
+            // no additional FO's in event
+            if (is_mu && (nFOmus()>0))
+            {
+                if (m_verbose) {cout << "fails no addition muon FO cut" << endl;}
+                return 0;
+            }
+            else if(is_el && (nFOels()>0))
+            {
+                if (m_verbose) {cout << "fails no addition FO cut" << endl;}
+                return 0;
+            }
         }
 
         // numerator cut
@@ -734,7 +774,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // no W (MET and m_T cuts)
-        if (pfmet()>20 || pfmt()>25)
+        float mt_cut = ((m_fr_type == ss::FakeRateType::eth) ? 25. : 20.);
+        if (pfmet()>20 || pfmt()>mt_cut)
         {
             if (m_verbose) {cout << "fails no W cut" << endl;}
             return 0;
@@ -757,7 +798,15 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
                     if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_num20c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet_cut               ) { rt::Fill2D(hc["h_mu_num40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_num60c"], fabs(eta()), pt(), evt_weight); } 
+                    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_num60c"], fabs(eta()), pt(), evt_weight); }
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_num20c_pt"], pt(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_mu_num40c_pt"], pt(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_mu_num60c_pt"], pt(), evt_weight); }
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_num20c_eta"], eta(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_mu_num40c_eta"], eta(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_mu_num60c_eta"], eta(), evt_weight); }
                 }
             }
 
@@ -773,6 +822,14 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                     if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_pt"], pt(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_pt"], pt(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_pt"], pt(), evt_weight); }
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_eta"], eta(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_eta"], eta(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_eta"], eta(), evt_weight); }
                 }
             }
 
@@ -826,6 +883,14 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                     if (jet_dwn_cut           ) { rt::Fill2D(hc["h_el_num20c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet_cut               ) { rt::Fill2D(hc["h_el_num40c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet_up_cut            ) { rt::Fill2D(hc["h_el_num60c"], fabs(eta()), pt(), evt_weight); } 
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_el_num20c_pt"], pt(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_el_num40c_pt"], pt(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_el_num60c_pt"], pt(), evt_weight); }
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_el_num20c_eta"], eta(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_el_num40c_eta"], eta(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_el_num60c_eta"], eta(), evt_weight); }
                 }
             }
 
@@ -841,6 +906,14 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                     if (jet_dwn_cut           ) { rt::Fill2D(hc["h_el_fo20c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet_cut               ) { rt::Fill2D(hc["h_el_fo40c"], fabs(eta()), pt(), evt_weight); } 
                     if (jet_up_cut            ) { rt::Fill2D(hc["h_el_fo60c"], fabs(eta()), pt(), evt_weight); } 
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_el_fo20c_pt"], pt(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_el_fo40c_pt"], pt(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_el_fo60c_pt"], pt(), evt_weight); }
+
+                    if (jet_dwn_cut ) { rt::Fill( hc["h_el_fo20c_eta"], eta(), evt_weight); }
+                    if (jet_cut     ) { rt::Fill( hc["h_el_fo40c_eta"], eta(), evt_weight); }
+                    if (jet_up_cut  ) { rt::Fill( hc["h_el_fo60c_eta"], eta(), evt_weight); }
                 }
             }
 
