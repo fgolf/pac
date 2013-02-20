@@ -296,29 +296,16 @@ void PlotLooper::EndJob()
     {
         //float GetClopperPearsonUncertainty(const int num_passed, const int num_generated, const float level = 0.68, const bool use_upper = true);
         const float weight = (m_lumi * m_scale1fb);
-        hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_mm"]->GetEntries(), m_nevts));
-        hc["h_yield_ee"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ee"]->GetEntries(), m_nevts));
-        hc["h_yield_em"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_em"]->GetEntries(), m_nevts));
-        hc["h_yield_ll"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ll"]->GetEntries(), m_nevts));
+        hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_mm"]->GetEntries()), m_nevts));
+        hc["h_yield_ee"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ee"]->GetEntries()), m_nevts));
+        hc["h_yield_em"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_em"]->GetEntries()), m_nevts));
+        hc["h_yield_ll"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ll"]->GetEntries()), m_nevts));
 
         // yields in a signal used for overlaying
-        hc["h_yield_ss"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
-        hc["h_yield_ss"]->SetBinError(3, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
-        hc["h_yield_ss"]->SetBinError(4, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
-        hc["h_yield_ss"]->SetBinError(5, weight * rt::GetClopperPearsonUncertainty(hc["h_yield_ss"]->GetEntries(), m_nevts));
-
-        //float weight = (m_lumi * m_scale1fb);
-        //if (rt::Integral(hc["h_yield_mm"]) < (weight * 0.5)) {hc["h_yield_mm"]->SetBinError(2, weight);}
-        //if (rt::Integral(hc["h_yield_ee"]) < (weight * 0.5)) {hc["h_yield_ee"]->SetBinError(2, weight);}
-        //if (rt::Integral(hc["h_yield_em"]) < (weight * 0.5)) {hc["h_yield_em"]->SetBinError(2, weight);}
-        //if (rt::Integral(hc["h_yield_ll"]) < (weight * 0.5)) {hc["h_yield_ll"]->SetBinError(2, weight);}
-
-        //// yields in a signal used for overlaying
-        //cout << "wieght = " << weight << endl;
-        //if (hc["h_yield_ss"]->GetBinContent(2) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(2, weight);}
-        //if (hc["h_yield_ss"]->GetBinContent(3) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(3, weight);}
-        //if (hc["h_yield_ss"]->GetBinContent(4) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(4, weight);}
-        //if (hc["h_yield_ss"]->GetBinContent(5) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(5, weight);}
+        hc["h_yield_ss"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+        hc["h_yield_ss"]->SetBinError(3, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+        hc["h_yield_ss"]->SetBinError(4, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+        hc["h_yield_ss"]->SetBinError(5, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll

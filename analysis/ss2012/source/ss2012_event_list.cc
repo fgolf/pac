@@ -375,7 +375,7 @@ try
             CTable sf_lists = EventLists (chain, at, sr, srt, at::DileptonChargeType::SF);
             out << "printing SF events:\n" << sf_lists << endl;
         }
-        if (charge_option == "all" or charge_option =="ds")
+        if (charge_option == "all" or charge_option =="df")
         {
             CTable df_lists = EventLists (chain, at, sr, srt, at::DileptonChargeType::DF);
             out << "printing DF events:\n" << df_lists << endl;

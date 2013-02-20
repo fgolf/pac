@@ -61,7 +61,6 @@ excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
 parser = OptionParser()
 
 default_fr_file = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root"
-#default_fl_file = "data/flip_rates/fakerate_42X.root"
 default_fl_file = "data/flip_rates/ssFL_data_standard_02182013.root"
 
 # parameter options
