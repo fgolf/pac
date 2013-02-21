@@ -52,6 +52,7 @@ try
     int jetMetScale                 = 0;
     bool isFastSim                  = false;
     std::string apply_jec_otf       = "";
+    double jet_pt_cut               = -1;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -78,6 +79,7 @@ try
         ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                        )
         ("use_el_eta"    , po::value<bool>(&use_el_eta)                 , "use the |et->eta| to determine is electron is barrel or endcap"                        )
         ("apply_jec_otf" , po::value<std::string>(&apply_jec_otf)       , "apply JEC on-the-fly using the specified global tag"                                   )
+        ("jet_pt_cut"    , po::value<double>(&jet_pt_cut)               , "jet pt threshold"                                                                      )
         //("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
         ;
 
@@ -247,7 +249,8 @@ try
             isFastSim,
             sync_print,
             verbose,
-            apply_jec_otf
+            apply_jec_otf,
+            jet_pt_cut
         ),
         cms2,
         number_of_events,

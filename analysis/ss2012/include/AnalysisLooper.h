@@ -39,7 +39,8 @@ public:
         bool use_el_eta = false,
         bool sync_print = false,
         bool verbose = false,
-        const std::string apply_jec_otf = ""
+        const std::string apply_jec_otf = "",
+        double jet_pt_cut = -1
         );
 
     // destroy:
@@ -60,13 +61,14 @@ private:
     ss::AnalysisType::value_type m_analysis_type;
     double m_lumi;
     int  m_njets;
+    bool m_sparms;
     int  m_jetMetScale;
     bool m_is_fast_sim;
     bool m_use_el_eta;
     bool m_filter_bad_runs;
-    bool m_sparms;
     bool m_sync_print;
     bool m_verbose;
+    double m_jet_pt_cut;
     int m_hyp_count;
 
     // fake rate hists

@@ -15,7 +15,8 @@ namespace ss
             low_pt,
             vlow_pt,
             high_pt_eth,
-			hcp,
+            hcp,
+            higgsino,
             static_size
         };
     };

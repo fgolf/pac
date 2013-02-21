@@ -56,6 +56,16 @@ ss::AnalysisTypeInfo s_AnalysisTypeInfos[] =
         // latex title
         "HCP"
     },
+    {
+        // name
+        "higgsino", 
+        // short name
+        "higgsino", 
+        // ROOT title
+        "SS Higgsino",
+        // latex title
+        "SS Higgsino"
+    },
 };
 
 // check that the AnalysisTypeInfoArray is the same size as the enum
