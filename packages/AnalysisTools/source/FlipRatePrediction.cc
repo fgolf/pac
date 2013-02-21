@@ -175,10 +175,6 @@ namespace at
                     double totalFRerror  = (fr2 * frError1 + fr1 * frError2);
                     pred_error = pred * sqrt(pow(totalFRerror/totalFRfactor, 2) + pow(nFOsError/nFOs, 2));
                 }
-                if (nFOs > 0)
-                {
-                    cout << Form("bin1 %i, bin2 %i, nfo %f, fl1 %f, fle1 %f, fl2 %f, fle2 %f", bin1, bin2, nFOs, fr1, frError1, fr2, frError2) << endl;
-                }
 
                 // now increment the total values
                 pred_total += pred;

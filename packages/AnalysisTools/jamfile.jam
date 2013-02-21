@@ -12,16 +12,20 @@ lib AnalysisTools
     ./source/DorkyEventIdentifier.cc
     ./source/DileptonHypType.cc
     ./source/DileptonChargeType.cc
+    ./source/YieldType.cc
     ./source/VtxReweight.cc
     ./source/PrintIdIsoInfo.cc
     ./source/GoodRun.cc
     ./source/Sample.cc
     ./source/DileptonTree.cc
+    ./source/MCBtagCount.cc
     ./source/SingleLeptonTree.cc
     ./source/EventInfoTree.cc
     ./source/CMS2Wrapper.cc
     ./source/FakeRatePrediction.cc
     ./source/FlipRatePrediction.cc
+    ./source/FakeRateBinInfo.cc
+    ./source/FlipRateBinInfo.cc
     ./source/PredSummary.cc
     [ rootcint Dict
         : # requirements
@@ -31,6 +35,9 @@ lib AnalysisTools
           <header>at/Sample.h
           <header>at/DileptonHypType.h
           <header>at/DileptonChargeType.h
+          <header>at/FakeRateBinInfo.h
+          <header>at/FlipRateBinInfo.h
+          <header>at/YieldType.h
           <linkdef>LinkDef.h
     ]
     # dependent packages

@@ -20,6 +20,7 @@
 #pragma link C++ enum at::NtupleType::value_type;
 #pragma link C++ enum at::DileptonHypType::value_type;
 #pragma link C++ enum at::DileptonChargeType::value_type;
+#pragma link C++ enum at::YieldType::value_type;
 
 // templated classes
 
@@ -29,6 +30,9 @@
 #pragma link C++ struct at::SampleType;
 #pragma link C++ struct at::DileptonHypType;
 #pragma link C++ struct at::DileptonChargeType;
+#pragma link C++ struct at::FakeRateBinInfo;
+#pragma link C++ struct at::FlipRateBinInfo;
+#pragma link C++ struct at::YieldType+;
 
 // functions
 #pragma link C++ function at::GetSampleInfo;
