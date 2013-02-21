@@ -38,7 +38,7 @@ try
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
     std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root";
-    std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02182013.root";
+    std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02212013.root";
     std::string fake_rate_hist_name = "h_mufr40c_ewkcor";
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";
@@ -68,7 +68,7 @@ try
         ("output"        , po::value<std::string>(&output_file)         , "output ROOT file for baby tree (default: <sample name>.root)"                          )
         ("input"         , po::value<std::string>(&input_file)          , "input ntuple (default is determined by the sample used)"                               )
         ("fr"            , po::value<std::string>(&fake_rate_file_name) , "fake rate file name (default: data/fake_rates/ssFR_data_ewkcor_13Feb2013)"             )
-        ("fl"            , po::value<std::string>(&flip_rate_file_name) , "flip rate file name (default: data/flip_rates/ssFL_data_standard_02182013)"            )
+        ("fl"            , po::value<std::string>(&flip_rate_file_name) , "flip rate file name (default: data/flip_rates/ssFL_data_standard_02212013)"            )
         ("fr_hist"       , po::value<std::string>(&fake_rate_hist_name) , "fake rate histogram name (default: h_mufr40c_ewkcor)"                                  )  // to do for electrons
         ("vtx_file"      , po::value<std::string>(&vtxreweight_file)    , "ROOT file for the vertex reweight (ignored for data)"                                  )
         ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                            )

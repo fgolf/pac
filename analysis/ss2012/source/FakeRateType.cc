@@ -82,9 +82,9 @@ namespace ss
         return GetFakeRateTypeInfo(analysis_type); 
     }
 
-    FakeRateBinInfo GetFakeRateBinInfo(bool use_eth_binning)
+    at::FakeRateBinInfo GetFakeRateBinInfo(bool use_eth_binning)
     {
-        FakeRateBinInfo fr_bin_info;
+        at::FakeRateBinInfo fr_bin_info;
         if (use_eth_binning)
         {
             const float tmp_mu_vtx_bins[] = {5.0, 7.0, 9.0, 11.0, 13.0, 15.0, 17.0, 19.0, 21.0, 23.0, 25.0};

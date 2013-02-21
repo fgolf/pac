@@ -102,7 +102,7 @@ void FRClosureLooper::BeginJob()
     BookHists();
 }
 
-ss::FakeRateBinInfo FRClosureLooper::GetFakeRateBinInfo()
+at::FakeRateBinInfo FRClosureLooper::GetFakeRateBinInfo()
 {
     const size_t num_mu_eta_bins = h_mufr->GetNbinsX();
     const float *mu_eta_bins = rt::ConvertDoubleArrayToFloatArray(h_mufr->GetXaxis()->GetXbins()->GetArray(), num_mu_eta_bins+1);
@@ -116,7 +116,7 @@ ss::FakeRateBinInfo FRClosureLooper::GetFakeRateBinInfo()
     const size_t num_el_pt_bins = h_elfr->GetNbinsY();
     const float *el_pt_bins = rt::ConvertDoubleArrayToFloatArray(h_elfr->GetYaxis()->GetXbins()->GetArray(), num_el_pt_bins+1);
 
-    ss::FakeRateBinInfo tmp;
+    at::FakeRateBinInfo tmp;
     tmp.vel_eta_bins.assign(el_eta_bins, el_eta_bins+num_el_eta_bins+1);
     tmp.vel_pt_bins .assign(el_pt_bins , el_pt_bins +num_el_pt_bins+1 );
 
@@ -266,13 +266,13 @@ void FRClosureLooper::EndJob()
     t_yields.useTitle();
     t_yields.setTitle(Form("closure test table (%s)", sr_info.title.c_str()));
     string f = "1.2";
-    t_yields.setTable() (                       "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
-        ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f), sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
-        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),   				"NA",   				"NA",    sf.ll.str(f))
-        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",    df.ll.str(f))
-        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",  pred.ll.str(f))
-        ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",          obs_ll)
-        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",        ll_ratio);
+    t_yields.setTable() (                        "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
+                        ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f),  sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
+                        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),   				"NA",   				"NA",     sf.ll.str(f))
+                        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",     df.ll.str(f))
+                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",   pred.ll.str(f))
+                        ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",           obs_ll)
+                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",         ll_ratio);
     t_yields.print();
 }
 

@@ -62,6 +62,9 @@ protected:
 	float	xsec_;
 	TBranch *xsec_branch;
 	bool xsec_isLoaded;
+	unsigned int	nevts_;
+	TBranch *nevts_branch;
+	bool nevts_isLoaded;
 	float	kfactor_;
 	TBranch *kfactor_branch;
 	bool kfactor_isLoaded;
@@ -848,6 +851,18 @@ protected:
 	float	sparm3_;
 	TBranch *sparm3_branch;
 	bool sparm3_isLoaded;
+	TString *sparm0_name_;
+	TBranch *sparm0_name_branch;
+	bool sparm0_name_isLoaded;
+	TString *sparm1_name_;
+	TBranch *sparm1_name_branch;
+	bool sparm1_name_isLoaded;
+	TString *sparm2_name_;
+	TBranch *sparm2_name_branch;
+	bool sparm2_name_isLoaded;
+	TString *sparm3_name_;
+	TBranch *sparm3_name_branch;
+	bool sparm3_name_isLoaded;
 	bool	is_pp_;
 	TBranch *is_pp_branch;
 	bool is_pp_isLoaded;
@@ -893,6 +908,18 @@ protected:
 	int	gen_njets_;
 	TBranch *gen_njets_branch;
 	bool gen_njets_isLoaded;
+	int	gen_nleps_;
+	TBranch *gen_nleps_branch;
+	bool gen_nleps_isLoaded;
+	int	gen_nmus_;
+	TBranch *gen_nmus_branch;
+	bool gen_nmus_isLoaded;
+	int	gen_nels_;
+	TBranch *gen_nels_branch;
+	bool gen_nels_isLoaded;
+	int	gen_ntaus_;
+	TBranch *gen_ntaus_branch;
+	bool gen_ntaus_isLoaded;
 	float	gen_ht_;
 	TBranch *gen_ht_branch;
 	bool gen_ht_isLoaded;
@@ -1299,6 +1326,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("xsec") != 0) {
 		xsec_branch = tree->GetBranch("xsec");
 		if (xsec_branch) {xsec_branch->SetAddress(&xsec_);}
+	}
+	nevts_branch = 0;
+	if (tree->GetBranch("nevts") != 0) {
+		nevts_branch = tree->GetBranch("nevts");
+		if (nevts_branch) {nevts_branch->SetAddress(&nevts_);}
 	}
 	kfactor_branch = 0;
 	if (tree->GetBranch("kfactor") != 0) {
@@ -2525,6 +2557,26 @@ void Init(TTree *tree) {
 		sparm3_branch = tree->GetBranch("sparm3");
 		if (sparm3_branch) {sparm3_branch->SetAddress(&sparm3_);}
 	}
+	sparm0_name_branch = 0;
+	if (tree->GetBranch("sparm0_name") != 0) {
+		sparm0_name_branch = tree->GetBranch("sparm0_name");
+		if (sparm0_name_branch) {sparm0_name_branch->SetAddress(&sparm0_name_);}
+	}
+	sparm1_name_branch = 0;
+	if (tree->GetBranch("sparm1_name") != 0) {
+		sparm1_name_branch = tree->GetBranch("sparm1_name");
+		if (sparm1_name_branch) {sparm1_name_branch->SetAddress(&sparm1_name_);}
+	}
+	sparm2_name_branch = 0;
+	if (tree->GetBranch("sparm2_name") != 0) {
+		sparm2_name_branch = tree->GetBranch("sparm2_name");
+		if (sparm2_name_branch) {sparm2_name_branch->SetAddress(&sparm2_name_);}
+	}
+	sparm3_name_branch = 0;
+	if (tree->GetBranch("sparm3_name") != 0) {
+		sparm3_name_branch = tree->GetBranch("sparm3_name");
+		if (sparm3_name_branch) {sparm3_name_branch->SetAddress(&sparm3_name_);}
+	}
 	is_pp_branch = 0;
 	if (tree->GetBranch("is_pp") != 0) {
 		is_pp_branch = tree->GetBranch("is_pp");
@@ -2599,6 +2651,26 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("gen_njets") != 0) {
 		gen_njets_branch = tree->GetBranch("gen_njets");
 		if (gen_njets_branch) {gen_njets_branch->SetAddress(&gen_njets_);}
+	}
+	gen_nleps_branch = 0;
+	if (tree->GetBranch("gen_nleps") != 0) {
+		gen_nleps_branch = tree->GetBranch("gen_nleps");
+		if (gen_nleps_branch) {gen_nleps_branch->SetAddress(&gen_nleps_);}
+	}
+	gen_nmus_branch = 0;
+	if (tree->GetBranch("gen_nmus") != 0) {
+		gen_nmus_branch = tree->GetBranch("gen_nmus");
+		if (gen_nmus_branch) {gen_nmus_branch->SetAddress(&gen_nmus_);}
+	}
+	gen_nels_branch = 0;
+	if (tree->GetBranch("gen_nels") != 0) {
+		gen_nels_branch = tree->GetBranch("gen_nels");
+		if (gen_nels_branch) {gen_nels_branch->SetAddress(&gen_nels_);}
+	}
+	gen_ntaus_branch = 0;
+	if (tree->GetBranch("gen_ntaus") != 0) {
+		gen_ntaus_branch = tree->GetBranch("gen_ntaus");
+		if (gen_ntaus_branch) {gen_ntaus_branch->SetAddress(&gen_ntaus_);}
 	}
 	gen_ht_branch = 0;
 	if (tree->GetBranch("gen_ht") != 0) {
@@ -2801,6 +2873,7 @@ void GetEntry(unsigned int idx)
 		pu_ntrueint_isLoaded = false;
 		scale1fb_isLoaded = false;
 		xsec_isLoaded = false;
+		nevts_isLoaded = false;
 		kfactor_isLoaded = false;
 		gen_met_isLoaded = false;
 		gen_met_phi_isLoaded = false;
@@ -3063,6 +3136,10 @@ void GetEntry(unsigned int idx)
 		sparm1_isLoaded = false;
 		sparm2_isLoaded = false;
 		sparm3_isLoaded = false;
+		sparm0_name_isLoaded = false;
+		sparm1_name_isLoaded = false;
+		sparm2_name_isLoaded = false;
+		sparm3_name_isLoaded = false;
 		is_pp_isLoaded = false;
 		is_mm_isLoaded = false;
 		is_sf_isLoaded = false;
@@ -3078,6 +3155,10 @@ void GetEntry(unsigned int idx)
 		is_gen_mm_isLoaded = false;
 		gen_nbtags_isLoaded = false;
 		gen_njets_isLoaded = false;
+		gen_nleps_isLoaded = false;
+		gen_nmus_isLoaded = false;
+		gen_nels_isLoaded = false;
+		gen_ntaus_isLoaded = false;
 		gen_ht_isLoaded = false;
 		lep1_nearbjet_p4_isLoaded = false;
 		lep1_nearjet_p4_isLoaded = false;
@@ -3151,6 +3232,7 @@ void LoadAllBranches()
 	if (pu_ntrueint_branch != 0) pu_ntrueint();
 	if (scale1fb_branch != 0) scale1fb();
 	if (xsec_branch != 0) xsec();
+	if (nevts_branch != 0) nevts();
 	if (kfactor_branch != 0) kfactor();
 	if (gen_met_branch != 0) gen_met();
 	if (gen_met_phi_branch != 0) gen_met_phi();
@@ -3413,6 +3495,10 @@ void LoadAllBranches()
 	if (sparm1_branch != 0) sparm1();
 	if (sparm2_branch != 0) sparm2();
 	if (sparm3_branch != 0) sparm3();
+	if (sparm0_name_branch != 0) sparm0_name();
+	if (sparm1_name_branch != 0) sparm1_name();
+	if (sparm2_name_branch != 0) sparm2_name();
+	if (sparm3_name_branch != 0) sparm3_name();
 	if (is_pp_branch != 0) is_pp();
 	if (is_mm_branch != 0) is_mm();
 	if (is_sf_branch != 0) is_sf();
@@ -3428,6 +3514,10 @@ void LoadAllBranches()
 	if (is_gen_mm_branch != 0) is_gen_mm();
 	if (gen_nbtags_branch != 0) gen_nbtags();
 	if (gen_njets_branch != 0) gen_njets();
+	if (gen_nleps_branch != 0) gen_nleps();
+	if (gen_nmus_branch != 0) gen_nmus();
+	if (gen_nels_branch != 0) gen_nels();
+	if (gen_ntaus_branch != 0) gen_ntaus();
 	if (gen_ht_branch != 0) gen_ht();
 	if (lep1_nearbjet_p4_branch != 0) lep1_nearbjet_p4();
 	if (lep1_nearjet_p4_branch != 0) lep1_nearjet_p4();
@@ -3677,6 +3767,19 @@ void LoadAllBranches()
 			xsec_isLoaded = true;
 		}
 		return xsec_;
+	}
+	unsigned int &nevts()
+	{
+		if (not nevts_isLoaded) {
+			if (nevts_branch != 0) {
+				nevts_branch->GetEntry(index);
+			} else { 
+				printf("branch nevts_branch does not exist!\n");
+				exit(1);
+			}
+			nevts_isLoaded = true;
+		}
+		return nevts_;
 	}
 	float &kfactor()
 	{
@@ -7084,6 +7187,58 @@ void LoadAllBranches()
 		}
 		return sparm3_;
 	}
+	TString &sparm0_name()
+	{
+		if (not sparm0_name_isLoaded) {
+			if (sparm0_name_branch != 0) {
+				sparm0_name_branch->GetEntry(index);
+			} else { 
+				printf("branch sparm0_name_branch does not exist!\n");
+				exit(1);
+			}
+			sparm0_name_isLoaded = true;
+		}
+		return *sparm0_name_;
+	}
+	TString &sparm1_name()
+	{
+		if (not sparm1_name_isLoaded) {
+			if (sparm1_name_branch != 0) {
+				sparm1_name_branch->GetEntry(index);
+			} else { 
+				printf("branch sparm1_name_branch does not exist!\n");
+				exit(1);
+			}
+			sparm1_name_isLoaded = true;
+		}
+		return *sparm1_name_;
+	}
+	TString &sparm2_name()
+	{
+		if (not sparm2_name_isLoaded) {
+			if (sparm2_name_branch != 0) {
+				sparm2_name_branch->GetEntry(index);
+			} else { 
+				printf("branch sparm2_name_branch does not exist!\n");
+				exit(1);
+			}
+			sparm2_name_isLoaded = true;
+		}
+		return *sparm2_name_;
+	}
+	TString &sparm3_name()
+	{
+		if (not sparm3_name_isLoaded) {
+			if (sparm3_name_branch != 0) {
+				sparm3_name_branch->GetEntry(index);
+			} else { 
+				printf("branch sparm3_name_branch does not exist!\n");
+				exit(1);
+			}
+			sparm3_name_isLoaded = true;
+		}
+		return *sparm3_name_;
+	}
 	bool &	is_pp()
 	{
 		if (not is_pp_isLoaded) {
@@ -7278,6 +7433,58 @@ void LoadAllBranches()
 			gen_njets_isLoaded = true;
 		}
 		return gen_njets_;
+	}
+	int &gen_nleps()
+	{
+		if (not gen_nleps_isLoaded) {
+			if (gen_nleps_branch != 0) {
+				gen_nleps_branch->GetEntry(index);
+			} else { 
+				printf("branch gen_nleps_branch does not exist!\n");
+				exit(1);
+			}
+			gen_nleps_isLoaded = true;
+		}
+		return gen_nleps_;
+	}
+	int &gen_nmus()
+	{
+		if (not gen_nmus_isLoaded) {
+			if (gen_nmus_branch != 0) {
+				gen_nmus_branch->GetEntry(index);
+			} else { 
+				printf("branch gen_nmus_branch does not exist!\n");
+				exit(1);
+			}
+			gen_nmus_isLoaded = true;
+		}
+		return gen_nmus_;
+	}
+	int &gen_nels()
+	{
+		if (not gen_nels_isLoaded) {
+			if (gen_nels_branch != 0) {
+				gen_nels_branch->GetEntry(index);
+			} else { 
+				printf("branch gen_nels_branch does not exist!\n");
+				exit(1);
+			}
+			gen_nels_isLoaded = true;
+		}
+		return gen_nels_;
+	}
+	int &gen_ntaus()
+	{
+		if (not gen_ntaus_isLoaded) {
+			if (gen_ntaus_branch != 0) {
+				gen_ntaus_branch->GetEntry(index);
+			} else { 
+				printf("branch gen_ntaus_branch does not exist!\n");
+				exit(1);
+			}
+			gen_ntaus_isLoaded = true;
+		}
+		return gen_ntaus_;
 	}
 	float &gen_ht()
 	{
@@ -8011,6 +8218,7 @@ namespace ssb {
 	const float &pu_ntrueint();
 	const float &scale1fb();
 	const float &xsec();
+	const unsigned int &nevts();
 	const float &kfactor();
 	const float &gen_met();
 	const float &gen_met_phi();
@@ -8273,6 +8481,10 @@ namespace ssb {
 	const float &sparm1();
 	const float &sparm2();
 	const float &sparm3();
+	const TString &sparm0_name();
+	const TString &sparm1_name();
+	const TString &sparm2_name();
+	const TString &sparm3_name();
 	const bool &is_pp();
 	const bool &is_mm();
 	const bool &is_sf();
@@ -8288,6 +8500,10 @@ namespace ssb {
 	const bool &is_gen_mm();
 	const int &gen_nbtags();
 	const int &gen_njets();
+	const int &gen_nleps();
+	const int &gen_nmus();
+	const int &gen_nels();
+	const int &gen_ntaus();
 	const float &gen_ht();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearbjet_p4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4();

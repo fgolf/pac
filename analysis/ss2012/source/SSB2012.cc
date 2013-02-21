@@ -16,6 +16,7 @@ namespace ssb {
 	const float &pu_ntrueint() { return samesignbtag.pu_ntrueint(); }
 	const float &scale1fb() { return samesignbtag.scale1fb(); }
 	const float &xsec() { return samesignbtag.xsec(); }
+	const unsigned int &nevts() { return samesignbtag.nevts(); }
 	const float &kfactor() { return samesignbtag.kfactor(); }
 	const float &gen_met() { return samesignbtag.gen_met(); }
 	const float &gen_met_phi() { return samesignbtag.gen_met_phi(); }
@@ -278,6 +279,10 @@ namespace ssb {
 	const float &sparm1() { return samesignbtag.sparm1(); }
 	const float &sparm2() { return samesignbtag.sparm2(); }
 	const float &sparm3() { return samesignbtag.sparm3(); }
+	const TString &sparm0_name() { return samesignbtag.sparm0_name(); }
+	const TString &sparm1_name() { return samesignbtag.sparm1_name(); }
+	const TString &sparm2_name() { return samesignbtag.sparm2_name(); }
+	const TString &sparm3_name() { return samesignbtag.sparm3_name(); }
 	const bool &is_pp() { return samesignbtag.is_pp(); }
 	const bool &is_mm() { return samesignbtag.is_mm(); }
 	const bool &is_sf() { return samesignbtag.is_sf(); }
@@ -293,6 +298,10 @@ namespace ssb {
 	const bool &is_gen_mm() { return samesignbtag.is_gen_mm(); }
 	const int &gen_nbtags() { return samesignbtag.gen_nbtags(); }
 	const int &gen_njets() { return samesignbtag.gen_njets(); }
+	const int &gen_nleps() { return samesignbtag.gen_nleps(); }
+	const int &gen_nmus() { return samesignbtag.gen_nmus(); }
+	const int &gen_nels() { return samesignbtag.gen_nels(); }
+	const int &gen_ntaus() { return samesignbtag.gen_ntaus(); }
 	const float &gen_ht() { return samesignbtag.gen_ht(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearbjet_p4() { return samesignbtag.lep1_nearbjet_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4() { return samesignbtag.lep1_nearjet_p4(); }

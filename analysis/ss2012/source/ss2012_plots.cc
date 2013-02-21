@@ -24,8 +24,7 @@ int main(int argc, char* argv[])
         std::string input_file          = "";
         std::string output_file         = "";
         std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root";
-        //std::string flip_rate_file_name = "data/flip_rates/fliprate42X.root";
-        std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02182013.root";
+        std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02212013.root";
         std::string suffix              = "";
         std::string vtxreweight_file    = "";
         std::string sample_name         = "";
@@ -39,7 +38,7 @@ int main(int argc, char* argv[])
         float sparm1                    = -999;
         float sparm2                    = -999;
         float sparm3                    = -999;
-        float sf_flip                   = 0.84;
+        float sf_flip                   = 1.32;
         float fake_sys_unc              = 0.5;
         float flip_sys_unc              = 0.2;
         float mc_sys_unc                = 0.5;
@@ -60,8 +59,8 @@ int main(int argc, char* argv[])
         desc.add_options()
             ("help"     , "print this menu")
             ("nev"      , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                     )
-            ("output"   , po::value<std::string>(&output_file)        , "name of output root file (optional)"                        )
-            ("input"    , po::value<std::string>(&input_file)         , "name of input root file (optional)"                         )
+            ("output"   , po::value<std::string>(&output_file)        , "name of output root file"                                   )
+            ("input"    , po::value<std::string>(&input_file)         , "name of input root file"                                    )
             ("sample"   , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                    )
             ("anal_type", po::value<std::string>(&analysis_type_name) , "name of analysis type (from AnalysisType.h)"                )
             ("fr_file"  , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                        )
@@ -79,7 +78,7 @@ int main(int argc, char* argv[])
             ("sparm1"   , po::value<float>(&sparm1)                   , "sparm1 value is required"                                   )
             ("sparm2"   , po::value<float>(&sparm2)                   , "sparm2 value is required"                                   )
             ("sparm3"   , po::value<float>(&sparm3)                   , "sparm3 value is required"                                   )
-            ("sf_flip"  , po::value<float>(&sf_flip)                  , "scale factor for flips (default is 0.8)"                    )
+            ("sf_flip"  , po::value<float>(&sf_flip)                  , "scale factor for flips (default is 0.84)"                   )
             ("fr_unc"   , po::value<float>(&fake_sys_unc)             , "systematic uncertainty for fake prediction (default is 0.5)")
             ("fl_unc"   , po::value<float>(&flip_sys_unc)             , "systematic uncertainty for flip prediction (default is 0.2)")
             ("mc_unc"   , po::value<float>(&mc_sys_unc)               , "systematic uncertainty for MC prediction (default is 0.5)"  )

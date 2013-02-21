@@ -27,6 +27,7 @@ lib ss2012_tools
     ./source/TTbarBreakDown.cc
     ./source/FakeRateType.cc
     ./source/SSYields.cc
+    ./source/SignalBinInfo.cc
     [ rootcint Dict
      : 
        <include>./include
@@ -36,6 +37,7 @@ lib ss2012_tools
        #<header>SignalRegion.h
        <header>AnalysisType.h
        <header>FakeRateType.h
+       <header>SignalBinInfo.h
        <header>SSYields.h
        <linkdef>LinkDef.h
     ]
@@ -82,6 +84,26 @@ exe ss2012_plots
   : # sources
     ./source/ss2012_plots.cc
     ./source/PlotLooper.cc
+    # dependent packages
+    /ROOT
+    ss2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe ss2012_interp_hists
+  : # sources
+    ./source/ss2012_interp_hists.cc
+    ./source/InterpLooper.cc
     # dependent packages
     /ROOT
     ss2012_tools/<link>static
@@ -329,6 +351,7 @@ exe test_frb
 default-install ss2012_tools/<link>shared ;
 default-install ss2012_analysis ;
 default-install ss2012_plots ;
+default-install ss2012_interp_hists ;
 default-install ss2012_event_list ;
 default-install ss2012_skim ;
 default-install ss2012_merge_babies ;

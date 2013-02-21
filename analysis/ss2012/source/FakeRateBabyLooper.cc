@@ -54,6 +54,7 @@ FakeRateBabyLooper::~FakeRateBabyLooper()
 void FakeRateBabyLooper::BeginJob()
 {    
     m_fr_bin_info = ss::GetFakeRateBinInfo(m_use_eth_binning);
+
     // pT cut
     float min_mu_pt = m_fr_bin_info.mu_pt_bins()[0];
     float max_mu_pt = m_fr_bin_info.mu_pt_bins()[m_fr_bin_info.num_mu_pt_bins()];

@@ -74,6 +74,7 @@ public:
     int njets;
     int njets20;
     int njets30;
+    int nbtags_reweighted;
     int nbtags;
     int nbtags20;
     int nbtags30;
@@ -116,6 +117,8 @@ public:
     int njets_up;
     int nbtags_dn;
     int nbtags_up;
+    int nbtags_reweighted_dn;
+    int nbtags_reweighted_up;
     float ht_dn;
     float ht_up;
     int njets20_dn;
@@ -142,6 +145,10 @@ public:
     float sparm1;
     float sparm2;
     float sparm3;
+    TString sparm0_name;
+    TString sparm1_name;
+    TString sparm2_name;
+    TString sparm3_name;
 
     //
     // hyp level info

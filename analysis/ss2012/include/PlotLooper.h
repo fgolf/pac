@@ -4,6 +4,8 @@
 #include "at/AnalysisWithHist.h"
 #include "at/Sample.h"
 #include "at/DileptonHypType.h"
+#include "at/FakeRateBinInfo.h"
+#include "at/FlipRateBinInfo.h"
 #include "SignalRegion.h"
 #include "AnalysisType.h"
 #include <string>
@@ -91,7 +93,8 @@ private:
     ss::SignalRegion::value_type m_signal_region;
     ss::AnalysisType::value_type m_analysis_type;
     ss::SignalRegionType::value_type m_signal_region_type;
-    ss::FakeRateBinInfo m_fr_bin_info;
+    at::FakeRateBinInfo m_fr_bin_info;
+    at::FlipRateBinInfo m_fl_bin_info;
 
     // fake/flip rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;
@@ -107,10 +110,11 @@ private:
     // methods
     float GetFakeRateValue(int lep_id, float pt, float eta) const;
     float GetFakeRateError(int lep_id, float pt, float eta) const;
+    at::FakeRateBinInfo GetFakeRateBinInfo() const;
 
     float GetFlipRateValue(int lep_id, float pt, float eta) const; 
     float GetFlipRateError(int lep_id, float pt, float eta) const; 
-    ss::FakeRateBinInfo GetFakeRateBinInfo();
+    at::FlipRateBinInfo GetFlipRateBinInfo() const;
 };
 
 #endif // PLOTLOOPER_HPP

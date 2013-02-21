@@ -111,8 +111,6 @@ PlotLooper::PlotLooper
         case AnalysisType::high_pt:
             mufr_name = "h_mufr40c_ewkcor";
             elfr_name = "h_elfr40c_ewkcor";
-            //mufr_name = "h_mufr40c";
-            //elfr_name = "h_elfr40c";
             break;
         case AnalysisType::high_pt_eth:
             mufr_name = "h_mufr40c";
@@ -190,31 +188,8 @@ void PlotLooper::BeginJob()
 {
     // book the histograms
     m_fr_bin_info = GetFakeRateBinInfo();
+    m_fl_bin_info = GetFlipRateBinInfo();
     BookHists();
-}
-
-ss::FakeRateBinInfo PlotLooper::GetFakeRateBinInfo()
-{
-    const size_t num_mu_eta_bins = h_mufr->GetNbinsX();
-    const float *mu_eta_bins = rt::ConvertDoubleArrayToFloatArray(h_mufr->GetXaxis()->GetXbins()->GetArray(), num_mu_eta_bins+1);
-
-    const size_t num_mu_pt_bins = h_mufr->GetNbinsY();
-    const float *mu_pt_bins = rt::ConvertDoubleArrayToFloatArray(h_mufr->GetYaxis()->GetXbins()->GetArray(), num_mu_pt_bins+1);
-
-    const size_t num_el_eta_bins = h_elfr->GetNbinsX();
-    const float *el_eta_bins = rt::ConvertDoubleArrayToFloatArray(h_elfr->GetXaxis()->GetXbins()->GetArray(), num_el_eta_bins+1);
-
-    const size_t num_el_pt_bins = h_elfr->GetNbinsY();
-    const float *el_pt_bins = rt::ConvertDoubleArrayToFloatArray(h_elfr->GetYaxis()->GetXbins()->GetArray(), num_el_pt_bins+1);
-
-    ss::FakeRateBinInfo tmp;
-    tmp.vel_eta_bins.assign(el_eta_bins, el_eta_bins+num_el_eta_bins+1);
-    tmp.vel_pt_bins .assign(el_pt_bins , el_pt_bins +num_el_pt_bins+1 );
-
-    tmp.vmu_eta_bins.assign(mu_eta_bins, mu_eta_bins+num_mu_eta_bins+1);
-    tmp.vmu_pt_bins .assign(mu_pt_bins , mu_pt_bins +num_mu_pt_bins+1 );
-
-    return tmp;
 }
 
 void SetFakePredictionAndUncertainty(rt::TH1Container& hc, const string& hist_stem, const string& title, float fr_sys_unc)
@@ -294,7 +269,6 @@ void PlotLooper::EndJob()
     // set the error to the lumi*scale1fb if the yield < weight*0.5 
     if (m_sample != at::Sample::data)
     {
-        //float GetClopperPearsonUncertainty(const int num_passed, const int num_generated, const float level = 0.68, const bool use_upper = true);
         const float weight = (m_lumi * m_scale1fb);
         hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_mm"]->GetEntries()), m_nevts));
         hc["h_yield_ee"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ee"]->GetEntries()), m_nevts));
@@ -527,30 +501,6 @@ void PlotLooper::EndJob()
 
 
     // print raw yields
-    //Pred y_sf_ee(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_ee"]));
-    //Pred y_sf_em(rt::AddWithError(rt::EntriesAndError(hc["h_sf_elfo_pt_vs_eta_em"]), rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_em"])));
-    //Pred y_sf_mm(rt::EntriesAndError(hc["h_sf_mufo_pt_vs_eta_mm"]));
-    //Pred y_df_ee(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_ee"]));
-    //Pred y_df_em(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_mm"]));
-    //Pred y_df_mm(rt::EntriesAndError(hc["h_df_fo_pt_vs_eta_em"]));
-    //Pred y_os_ee(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_ee"]));
-    //Pred y_os_em(rt::EntriesAndError(hc["h_os_fo_pt_vs_eta_em"]));
-    //Pred y_os_mm(rt::EntriesAndError(hc["h_os_pt1_vs_eta1_mm"]));
-
-    //PredSummary y_sf(y_sf_ee, y_sf_mm, y_sf_em);
-    //PredSummary y_df(y_df_ee, y_df_mm, y_df_em);
-    //PredSummary y_os(y_os_ee, y_os_mm, y_os_em);
-
-    //CTable t_counts;
-    //t_counts.useTitle();
-    //t_counts.setTitle("counts table");
-    //t_counts.setTable() (               "mm",          "ee",          "em",          "ll")
-    //                    ("SF", y_sf.mm.value, y_sf.ee.value, y_sf.em.value, y_sf.ll.value)
-    //                    ("DF", y_df.mm.value, y_df.ee.value, y_df.em.value, y_df.ll.value)
-    //                    ("OS", y_os.mm.value, y_os.ee.value, y_os.em.value, y_os.ll.value)
-    //                    ("SS",    yield_ss[0],  yield_ss[1],   yield_ss[2],   yield_ss[3]);
-    //cout << endl;
-    //t_counts.print();
     CTable t_counts;
     t_counts.setTitle("counts for SS Analysis 2012");
     t_counts.useTitle();
@@ -571,11 +521,6 @@ void PlotLooper::EndJob()
     }
 }
 
-//const std::tr1::array<float, 9> el_flip_eta_bins = {{ 0.0, 0.5, 1.0, 1.479, 1.8, 2.0, 2.1, 2.2, 2.4 }};
-//const std::tr1::array<float, 18> el_flip_pt_bins = {{ 10., 20., 25., 30., 35., 40., 45., 50., 55., 60., 65., 70., 75., 80., 85., 90., 95., 100. }};
-const std::tr1::array<float, 4> el_flip_eta_bins = {{0.0, 1.0, 2.0, 2.4}};
-const std::tr1::array<float, 7> el_flip_pt_bins  = {{0.0, 25.0, 50.0, 75.0, 100.0, 125.0, 150.0}};
-
 // book hists 
 void PlotLooper::BookHists()
 {
@@ -585,7 +530,7 @@ void PlotLooper::BookHists()
         rt::TH1Container& hc = m_hist_container;
         TH1::SetDefaultSumw2(true);
 
-        hc.Add(new TH1F("h_lumi", "integrated lumi used for these plots", 10000, 0, 100));
+        hc.Add(new TH1F("h_lumi", "integrated lumi used for these plots (/fb)", 10000, 0, 100));
 
         // basic yield plots
         for (size_t i = 0; i != at::DileptonHypType::static_size; i++)
@@ -614,12 +559,12 @@ void PlotLooper::BookHists()
         }
 
         // OS plots (for flip pred)
-        int num_double_flip_bins = (el_flip_eta_bins.size()-1)*(el_flip_pt_bins.size()-1);
+        int num_double_flip_bins = (m_fl_bin_info.num_pt_bins()*m_fl_bin_info.num_eta_bins());
         hc.Add(new TH2F("h_os_fo_pt_vs_eta_ee", "OS (ee ) (special binning)"                    , num_double_flip_bins, 0, num_double_flip_bins, num_double_flip_bins, 0, num_double_flip_bins)); 
-        hc.Add(new TH2F("h_os_fo_pt_vs_eta_em", "OS (e#mu) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)"  , el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
+        hc.Add(new TH2F("h_os_fo_pt_vs_eta_em", "OS (e#mu) p_{T} vs |#eta|;|#eta|;p_{T} (GeV)"  , m_fl_bin_info.num_eta_bins(),m_fl_bin_info.eta_bins(),m_fl_bin_info.num_pt_bins(),m_fl_bin_info.pt_bins()));
 
-        hc.Add(new TH2F("h_os_pt1_vs_eta1_mm", "OS (#mu#mu) #mu1 p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
-        hc.Add(new TH2F("h_os_pt2_vs_eta2_mm", "OS (#mu#mu) #mu2 p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", el_flip_eta_bins.size()-1,el_flip_eta_bins.data(),el_flip_pt_bins.size()-1,el_flip_pt_bins.data()));
+        hc.Add(new TH2F("h_os_pt1_vs_eta1_mm", "OS (#mu#mu) #mu1 p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", m_fl_bin_info.num_eta_bins(),m_fl_bin_info.eta_bins(),m_fl_bin_info.num_pt_bins(),m_fl_bin_info.pt_bins()));
+        hc.Add(new TH2F("h_os_pt2_vs_eta2_mm", "OS (#mu#mu) #mu2 p_{T} vs |#eta|;|#eta|;p_{T} (GeV)", m_fl_bin_info.num_eta_bins(),m_fl_bin_info.eta_bins(),m_fl_bin_info.num_pt_bins(),m_fl_bin_info.pt_bins()));
 
         // kinematic plots
         for (size_t i = 0; i != at::DileptonChargeType::static_size; i++)
@@ -712,6 +657,7 @@ int PlotLooper::operator()(long event)
         // scale 1b (set before cuts) 
         m_scale1fb = scale1fb();
         m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
+        hc["h_lumi"]->Fill(m_lumi);
 
         // which analysis type
         //bool is_high_pt = (m_analysis_type==ss::AnalysisType::high_pt);
@@ -1353,3 +1299,43 @@ float PlotLooper::GetFlipRateError(int lep_id, float pt, float eta) const
     int eta_bin  = h_flip->GetXaxis()->FindBin(fabs(eta));
     return h_flip->GetBinError(eta_bin, pt_bin);
 }
+
+at::FakeRateBinInfo PlotLooper::GetFakeRateBinInfo() const
+{
+    const size_t num_mu_eta_bins = h_mufr->GetNbinsX();
+    const float *mu_eta_bins = rt::ConvertDoubleArrayToFloatArray(h_mufr->GetXaxis()->GetXbins()->GetArray(), num_mu_eta_bins+1);
+
+    const size_t num_mu_pt_bins = h_mufr->GetNbinsY();
+    const float *mu_pt_bins = rt::ConvertDoubleArrayToFloatArray(h_mufr->GetYaxis()->GetXbins()->GetArray(), num_mu_pt_bins+1);
+
+    const size_t num_el_eta_bins = h_elfr->GetNbinsX();
+    const float *el_eta_bins = rt::ConvertDoubleArrayToFloatArray(h_elfr->GetXaxis()->GetXbins()->GetArray(), num_el_eta_bins+1);
+
+    const size_t num_el_pt_bins = h_elfr->GetNbinsY();
+    const float *el_pt_bins = rt::ConvertDoubleArrayToFloatArray(h_elfr->GetYaxis()->GetXbins()->GetArray(), num_el_pt_bins+1);
+
+    at::FakeRateBinInfo tmp;
+    tmp.vel_eta_bins.assign(el_eta_bins, el_eta_bins+num_el_eta_bins+1);
+    tmp.vel_pt_bins .assign(el_pt_bins , el_pt_bins +num_el_pt_bins+1 );
+
+    tmp.vmu_eta_bins.assign(mu_eta_bins, mu_eta_bins+num_mu_eta_bins+1);
+    tmp.vmu_pt_bins .assign(mu_pt_bins , mu_pt_bins +num_mu_pt_bins+1 );
+
+    return tmp;
+}
+
+at::FlipRateBinInfo PlotLooper::GetFlipRateBinInfo() const
+{
+    const size_t num_eta_bins = h_flip->GetNbinsX();
+    const float *eta_bins = rt::ConvertDoubleArrayToFloatArray(h_flip->GetXaxis()->GetXbins()->GetArray(), num_eta_bins+1);
+
+    const size_t num_pt_bins = h_flip->GetNbinsY();
+    const float *pt_bins = rt::ConvertDoubleArrayToFloatArray(h_flip->GetYaxis()->GetXbins()->GetArray(), num_pt_bins+1);
+
+    at::FlipRateBinInfo tmp;
+    tmp.v_eta_bins.assign(eta_bins, eta_bins+num_eta_bins+1);
+    tmp.v_pt_bins .assign(pt_bins , pt_bins +num_pt_bins+1 );
+
+    return tmp;
+}
+

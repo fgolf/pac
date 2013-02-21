@@ -26,6 +26,7 @@
 #include "at/VtxReweight.h"
 #include "at/GoodRun.h"
 #include "at/PrintIdIsoInfo.h"
+#include "at/MCBtagCount.h"
 #include "rt/RootTools.h"
 #include "CTable.h"
 #include "GenParticleStruct.h"
@@ -698,9 +699,17 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // gen level  
         // --------------------------------------------------------------------------------------------------------- //
 
-        // gen jet info
-        if (!evt_isRealData())
+        if (not evt_isRealData())
         {
+            // sparms parameters
+            if (m_sparms) 
+            {
+                const size_t n_sparms = sparm_values().size();
+                if (n_sparms > 0) {m_evt.sparm0 = sparm_values().at(0); m_evt.sparm0_name = static_cast<TString>(sparm_names().at(0));}
+                if (n_sparms > 1) {m_evt.sparm1 = sparm_values().at(1); m_evt.sparm1_name = static_cast<TString>(sparm_names().at(1));}
+                if (n_sparms > 2) {m_evt.sparm2 = sparm_values().at(2); m_evt.sparm2_name = static_cast<TString>(sparm_names().at(2));}
+                if (n_sparms > 3) {m_evt.sparm3 = sparm_values().at(3); m_evt.sparm3_name = static_cast<TString>(sparm_names().at(3));}
+            }
 
             // lepton variables
             std::pair<GenParticleStruct, GenParticleStruct> best_gen_hyp = efftools::getGenHyp(min_pt, min_pt, DileptonChargeType::static_size);
@@ -939,7 +948,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // all: 0, mm: 1, em: 2, ee: 3
         DileptonHypType::value_type dilepton_type = hyp_p4().empty() ? DileptonHypType::static_size : hyp_typeToHypType(hyp_type().at(hyp_idx));
 
-        // don't write events to the tree that don't pass hypothesis
+        // write events to the tree for book keeping
         if (event_type == DileptonChargeType::static_size)
         {
             if (m_verbose) {std::cout << "fails good event type requirement" << std::endl;}
@@ -973,47 +982,47 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // convenience trigger info
         switch(m_analysis_type)
         {
-        case AnalysisType::high_pt:
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            break;
-        case AnalysisType::high_pt_eth:
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            break;
-        case AnalysisType::hcp:
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            break;
-        case AnalysisType::low_pt:
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v");
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
-            break;
-        case AnalysisType::vlow_pt:
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v");
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v") ||
-                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v");
-            break;
-        case AnalysisType::higgsino:
-            m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
-            m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
-                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-            break;
-        default: {/*do nothing*/}
+            case AnalysisType::high_pt:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                break;
+            case AnalysisType::high_pt_eth:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                break;
+            case AnalysisType::hcp:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                break;
+            case AnalysisType::low_pt:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleMu8_Mass8_PFHT175_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+                break;
+            case AnalysisType::vlow_pt:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleRelIso1p0Mu5_Mass8_PFHT175_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_DoubleEle8_CaloIdT_TrkIdVL_Mass8_PFHT175_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFHT175_v") ||
+                                passUnprescaledHLTTriggerPattern("HLT_RelIso1p0Mu5_Ele8_CaloIdT_TrkIdVL_Mass8_PFNoPUHT175_v");
+                break;
+            case AnalysisType::higgsino:
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
+                    passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                break;
+            default: {/*do nothing*/}
         }
 
         // individual triggers: mm
@@ -1040,24 +1049,24 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // convenience
         switch (dilepton_type)
         {
-        case DileptonHypType::MUMU: m_evt.trig_hpt = m_evt.trig_mm; break;
-        case DileptonHypType::EMU : m_evt.trig_hpt = m_evt.trig_em; break;
-        case DileptonHypType::EE  : m_evt.trig_hpt = m_evt.trig_ee; break;
-        default: {/*do nothing*/}
+            case DileptonHypType::MUMU: m_evt.trig_hpt = m_evt.trig_mm; break;
+            case DileptonHypType::EMU : m_evt.trig_hpt = m_evt.trig_em; break;
+            case DileptonHypType::EE  : m_evt.trig_hpt = m_evt.trig_ee; break;
+            default: {/*do nothing*/}
         };
         switch (dilepton_type)
         {
-        case DileptonHypType::MUMU: m_evt.trig_lpt = (m_evt.trig_mm_dmu8_m8_pfnopuht175 || m_evt.trig_mm_dmu8_m8_pfht175)             ; break;
-        case DileptonHypType::EMU : m_evt.trig_lpt = (m_evt.trig_em_mu8_el8_id_m8_pfnopuht175 || m_evt.trig_em_mu8_el8_id_m8_pfht175) ; break;
-        case DileptonHypType::EE  : m_evt.trig_lpt = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)       ; break;
-        default: {/*do nothing*/}
+            case DileptonHypType::MUMU: m_evt.trig_lpt = (m_evt.trig_mm_dmu8_m8_pfnopuht175 || m_evt.trig_mm_dmu8_m8_pfht175)             ; break;
+            case DileptonHypType::EMU : m_evt.trig_lpt = (m_evt.trig_em_mu8_el8_id_m8_pfnopuht175 || m_evt.trig_em_mu8_el8_id_m8_pfht175) ; break;
+            case DileptonHypType::EE  : m_evt.trig_lpt = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)       ; break;
+            default: {/*do nothing*/}
         };
         switch (dilepton_type)
         {
-        case DileptonHypType::MUMU: m_evt.trig_lpt_isomu = (m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 || m_evt.trig_mm_dreliso1p0mu5_m8_pfht175)         ; break;
-        case DileptonHypType::EMU : m_evt.trig_lpt_isomu = (m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 || m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175) ; break;
-        case DileptonHypType::EE  : m_evt.trig_lpt_isomu = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)                     ; break;
-        default: {/*do nothing*/}
+            case DileptonHypType::MUMU: m_evt.trig_lpt_isomu = (m_evt.trig_mm_dreliso1p0mu5_m8_pfnopuht175 || m_evt.trig_mm_dreliso1p0mu5_m8_pfht175)         ; break;
+            case DileptonHypType::EMU : m_evt.trig_lpt_isomu = (m_evt.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 || m_evt.trig_em_riso1p0mu5_el8_id_m8_pfht175) ; break;
+            case DileptonHypType::EE  : m_evt.trig_lpt_isomu = (m_evt.trig_ee_del8_id_m8_pfnopuht175 || m_evt.trig_ee_del8_id_m8_pfht175)                     ; break;
+            default: {/*do nothing*/}
         };
 
         // event wieghts 
@@ -1086,16 +1095,6 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // fill analysis specific branches 
         m_evt.vtxw = vtxw;
 
-        // sparms parameters
-        if (m_sparms) 
-        {
-            int n_sparms = sparm_values().size();
-            if (n_sparms > 0) m_evt.sparm0 = sparm_values().at(0);
-            if (n_sparms > 1) m_evt.sparm1 = sparm_values().at(1);
-            if (n_sparms > 2) m_evt.sparm2 = sparm_values().at(2);
-            if (n_sparms > 3) m_evt.sparm3 = sparm_values().at(3);
-        }
-
         // event level info
         if (not m_jet_corrector)
         {
@@ -1120,26 +1119,26 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         if (not m_jet_corrector)
         {
             m_evt.ht           = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht20         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht30         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.ht20         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.ht30         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.njets        = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets20      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets30      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.njets20      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.njets30      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
         }
         else
         {
             m_evt.ht           = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht20         = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht30         = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.ht20         = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.ht30         = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.njets        = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets20      = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets30      = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.njets20      = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.njets30      = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
         }
 
         m_evt.no_extrag    = (not samesign::makesExtraGammaStar(hyp_idx));
@@ -1232,24 +1231,24 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             if (not m_jet_corrector || not m_met_corrector)
             {
                 m_evt.ht_up       = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
                 m_evt.njets_up    = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.njets20_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.njets30_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets20_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets30_up  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
                 m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
 
                 m_evt.ht_dn       = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                 m_evt.njets_dn    = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.njets20_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.njets30_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets20_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets30_dn  = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                 m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
 
                 // MET
                 ROOT::Math::XYVector cmet_up;
@@ -1283,24 +1282,24 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             else
             {
                 m_evt.ht_up       = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht20_up     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.ht30_up     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
                 m_evt.njets_up    = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.njets20_up  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.njets30_up  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets20_up  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.njets30_up  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
                 m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags20_up = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                m_evt.nbtags30_up = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
 
                 m_evt.ht_dn       = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht20_dn     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.ht30_dn     = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                 m_evt.njets_dn    = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.njets20_dn  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.njets30_dn  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets20_dn  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.njets30_dn  = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                 m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags20_dn = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                m_evt.nbtags30_dn = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
 
                 // MET
                 ROOT::Math::XYVector cmet_up;
@@ -1404,9 +1403,6 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.is_sf   = (event_type==DileptonChargeType::SF);
         m_evt.is_df   = (event_type==DileptonChargeType::DF);
         m_evt.is_os   = (event_type==DileptonChargeType::OS);
-        //m_evt.ee      = (dilepton_type==DileptonHypType::EE);
-        //m_evt.mm      = (dilepton_type==DileptonHypType::MUMU);
-        //m_evt.em      = (dilepton_type==DileptonHypType::EMU);
         m_evt.em_mufo = m_evt.em && ((lep1_fo && lep1_is_mu) || (lep2_fo && lep2_is_mu));  
         m_evt.em_elfo = m_evt.em && ((lep1_fo && lep1_is_el) || (lep2_fo && lep2_is_el));
         m_evt.is_pp   = hyp_lt_charge().at(hyp_idx)>0 && hyp_ll_charge().at(hyp_idx)>0; 
@@ -1534,6 +1530,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 m_evt.vbjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
             }
         }
+
+        // calculate the "reweighted" MC btag yields
+        m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::base);
+        m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::up  );
+        m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::down);
 
         //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
         //SetBtagDiscriminator(m_evt.vjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);

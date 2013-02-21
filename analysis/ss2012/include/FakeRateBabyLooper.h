@@ -2,6 +2,7 @@
 #define SS_FAKERATEBABYLOOPER_H
 
 #include "FakeRateType.h"
+#include "at/FakeRateBinInfo.h"
 #include "at/AnalysisWithHist.h"
 #include "fr/Sample.h"
 #include <string>
@@ -49,7 +50,7 @@ private:
     float m_lumi;
     int m_charge;
     bool m_verbose;
-    ss::FakeRateBinInfo m_fr_bin_info;
+    at::FakeRateBinInfo m_fr_bin_info;
     float m_away_jet_pt;
     float m_away_jet_dphi;
     float m_mu_iso_denom;

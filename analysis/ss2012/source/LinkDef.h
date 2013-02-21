@@ -25,6 +25,7 @@
 #pragma link C++ struct ss::SignalRegion+;
 #pragma link C++ struct ss::AnalysisType+;
 #pragma link C++ struct ss::Yield+;
+#pragma link C++ struct ss::SignalBinInfo+;
 
 // functions
 #pragma link C++ function ss::GetSignalRegionFromName;

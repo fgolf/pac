@@ -57,6 +57,9 @@ void SameSignTree::Reset()
     njets_up                                 = -999999;
     nbtags_dn                                = -999999;
     nbtags_up                                = -999999;
+    nbtags_reweighted                        = -999999;
+    nbtags_reweighted_dn                     = -999999;
+    nbtags_reweighted_up                     = -999999;
     ht_dn                                    = -999999.;
     ht_up                                    = -999999.;
     njets20_dn                               = -999999;
@@ -77,6 +80,10 @@ void SameSignTree::Reset()
     sparm1                                   = -999999.0;
     sparm2                                   = -999999.0;
     sparm3                                   = -999999.0;
+    sparm0_name                              = "";
+    sparm1_name                              = "";
+    sparm2_name                              = "";
+    sparm3_name                              = "";
     is_pp                                    = false;
     is_mm                                    = false;
     is_ss                                    = false;
@@ -215,6 +222,9 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("njets30_up"                               , &njets30_up                               , "njets30_up/I"                               ); 
     tree.Branch("nbtags30_dn"                              , &nbtags30_dn                              , "nbtags30_dn/I"                              ); 
     tree.Branch("nbtags30_up"                              , &nbtags30_up                              , "nbtags30_up/I"                              ); 
+    tree.Branch("nbtags_reweighted"                        , &nbtags_reweighted                        , "nbtags_reweighted/I"                        ); 
+    tree.Branch("nbtags_reweighted_dn"                     , &nbtags_reweighted_dn                     , "nbtags_reweighted_dn/I"                     ); 
+    tree.Branch("nbtags_reweighted_up"                     , &nbtags_reweighted_up                     , "nbtags_reweighted_up/I"                     ); 
     tree.Branch("ht30_dn"                                  , &ht30_dn                                  , "ht30_dn/F"                                  ); 
     tree.Branch("ht30_up"                                  , &ht30_up                                  , "ht30_up/F"                                  ); 
     tree.Branch("pfmet_dn"                                 , &pfmet_dn                                 , "pfmet_dn/F"                                 ); 
@@ -227,6 +237,10 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("sparm1"                                   , &sparm1                                   , "sparm1/F"                                   ); 
     tree.Branch("sparm2"                                   , &sparm2                                   , "sparm2/F"                                   ); 
     tree.Branch("sparm3"                                   , &sparm3                                   , "sparm3/F"                                   ); 
+    tree.Branch("sparm0_name"                              , "TString"                                 , &sparm0_name                                 ); 
+    tree.Branch("sparm1_name"                              , "TString"                                 , &sparm1_name                                 ); 
+    tree.Branch("sparm2_name"                              , "TString"                                 , &sparm2_name                                 ); 
+    tree.Branch("sparm3_name"                              , "TString"                                 , &sparm3_name                                 ); 
     tree.Branch("is_pp"                                    , &is_pp                                    , "is_pp/O"                                    ); 
     tree.Branch("is_mm"                                    , &is_mm                                    , "is_mm/O"                                    ); 
     tree.Branch("is_sf"                                    , &is_sf                                    , "is_sf/O"                                    ); 
@@ -235,9 +249,6 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("no_extrag"                                , &no_extrag                                , "no_extrag/O"                                ); 
     tree.Branch("clean"                                    , &clean                                    , "clean/O"                                    ); 
     tree.Branch("presel"                                   , &presel                                   , "presel/O"                                   ); 
-    //tree.Branch("ee"                                       , &ee                                       , "ee/O"                                       ); 
-    //tree.Branch("mm"                                       , &mm                                       , "mm/O"                                       ); 
-    //tree.Branch("em"                                       , &em                                       , "em/O"                                       ); 
     tree.Branch("em_mufo"                                  , &em_mufo                                  , "em_mufo/O"                                  ); 
     tree.Branch("em_elfo"                                  , &em_elfo                                  , "em_elfo/O"                                  ); 
     tree.Branch("hyp_good_vtx"                             , &hyp_good_vtx                             , "hyp_good_vtx/O"                             ); 

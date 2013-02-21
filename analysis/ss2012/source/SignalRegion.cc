@@ -1290,7 +1290,8 @@ namespace ss
     (
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type& anal_type,
-        const SignalRegionType::value_type& signal_region_type
+        const SignalRegionType::value_type& signal_region_type,
+        const at::YieldType::value_type& yield_type
     )
     {
         // lepton pt cuts
@@ -1324,12 +1325,39 @@ namespace ss
                 return false;
         }
 
-        // convenience variables
-        const int njets   = ssb::njets();
-        const int nbtags  = ssb::nbtags();
-        const float ht    = ssb::ht();
-        const float met   = ssb::pfmet();
+        // kinematic variables that define the signal region
         const bool lep_d0 = true;
+        int njets   = ssb::njets();
+        int nbtags  = ssb::nbtags();
+        float ht    = ssb::ht();
+        float met   = ssb::pfmet();
+        switch(yield_type)
+        {
+            case at::YieldType::up:
+                njets  = ssb::njets_up();
+                nbtags = ssb::nbtags_up();
+                ht     = ssb::ht_up();
+                met    = ssb::pfmet_up();
+                break;
+            case at::YieldType::down:
+                njets  = ssb::njets_dn();
+                nbtags = ssb::nbtags_dn();
+                ht     = ssb::ht_dn();
+                met    = ssb::pfmet_dn();
+                break;
+            case at::YieldType::base:
+                njets  = ssb::njets();
+                nbtags = ssb::nbtags();
+                ht     = ssb::ht();
+                met    = ssb::pfmet();
+                break;
+            default:
+                njets  = ssb::njets();
+                nbtags = ssb::nbtags();
+                ht     = ssb::ht();
+                met    = ssb::pfmet();
+                break;
+        }
 
         // high pt
         if (anal_type==AnalysisType::high_pt_eth || anal_type==AnalysisType::high_pt)
@@ -1340,14 +1368,14 @@ namespace ss
                 switch (signal_region)
                 {
                     case SignalRegion::sr0 : return (baseline);
-                    case SignalRegion::sr1 : return (baseline && nbtags>=0&& njets>=2 && ht>200 && met>50 );
-                    case SignalRegion::sr2 : return (baseline && nbtags>=0&& njets>=2 && ht>400 && met>50 );
-                    case SignalRegion::sr3 : return (baseline && nbtags>=0&& njets>=4 && ht>200 && met>50 );
-                    case SignalRegion::sr4 : return (baseline && nbtags>=0&& njets>=4 && ht>400 && met>50 );
-                    case SignalRegion::sr5 : return (baseline && nbtags>=0&& njets>=2 && ht>200 && met>120);
-                    case SignalRegion::sr6 : return (baseline && nbtags>=0&& njets>=2 && ht>400 && met>120);
-                    case SignalRegion::sr7 : return (baseline && nbtags>=0&& njets>=4 && ht>200 && met>120);
-                    case SignalRegion::sr8 : return (baseline && nbtags>=0&& njets>=4 && ht>400 && met>120);
+                    case SignalRegion::sr1 : return (baseline && nbtags>=0 && njets>=2 && ht>200 && met>50 );
+                    case SignalRegion::sr2 : return (baseline && nbtags>=0 && njets>=2 && ht>400 && met>50 );
+                    case SignalRegion::sr3 : return (baseline && nbtags>=0 && njets>=4 && ht>200 && met>50 );
+                    case SignalRegion::sr4 : return (baseline && nbtags>=0 && njets>=4 && ht>400 && met>50 );
+                    case SignalRegion::sr5 : return (baseline && nbtags>=0 && njets>=2 && ht>200 && met>120);
+                    case SignalRegion::sr6 : return (baseline && nbtags>=0 && njets>=2 && ht>400 && met>120);
+                    case SignalRegion::sr7 : return (baseline && nbtags>=0 && njets>=4 && ht>200 && met>120);
+                    case SignalRegion::sr8 : return (baseline && nbtags>=0 && njets>=4 && ht>400 && met>120);
                     case SignalRegion::sr9 : return (false); // not used --> default is to fail
                     case SignalRegion::sr10: return (baseline && nbtags==1);
                     case SignalRegion::sr11: return (baseline && nbtags==1 && njets>=2 && ht>200 && met>50 );
@@ -1570,7 +1598,7 @@ namespace ss
     }
 
     // set aliases for TTree
-    void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& at)
+    void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type)
 	{
         
         // kinematic variable aliases
@@ -1600,7 +1628,7 @@ namespace ss
         tree.SetAlias("dfw", "fr1*fr2");
 
 		// lepton cuts
-		switch (at)
+		switch (anal_type)
 		{
 			case AnalysisType::high_pt:
 				tree.SetAlias("lep_pt", "lep1_p4.pt()>20 && lep2_p4.pt()>20");
@@ -1617,6 +1645,9 @@ namespace ss
 			case AnalysisType::vlow_pt:
 	            tree.SetAlias("lep_pt", "(abs(lep1_pdgid)==11 ? lep1_p4.pt()>10 : lep1_p4.pt()>5) && (abs(lep2_pdgid)==11 ? lep2_p4.pt()>10 : lep2_p4.pt()>5)");
 				break;
+			case AnalysisType::higgsino:
+				tree.SetAlias("lep_pt", "lep1_p4.pt()>10 && lep2_p4.pt()>10");
+				break;
 			case AnalysisType::static_size:
 				/*do nothing*/
 				break;
@@ -1626,12 +1657,15 @@ namespace ss
 	    tree.SetAlias("lep_d0", "((is_ss || is_os) && (l1_d0<l1_d0_cut) && (l2_d0_cut)) || ((is_sf) && (l1_num ? l1_d0<l1_d0_cut : l2_d0<l2_d0_cut)");
 
 		// trigger
-		switch (at)
+		switch (anal_type)
 		{
 			case AnalysisType::high_pt:
 		        tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
 				break;
 			case AnalysisType::high_pt_eth:
+		        tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
+				break;
+			case AnalysisType::higgsino:
 		        tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
 				break;
 			case AnalysisType::hcp:
@@ -1653,7 +1687,7 @@ namespace ss
 		}
 
 		// inclusive
-		switch (at)
+		switch (anal_type)
 		{
 			case AnalysisType::high_pt:
 			case AnalysisType::high_pt_eth:
@@ -1750,13 +1784,44 @@ namespace ss
 				tree.SetAlias("sr27", "0==1"                                                     ); 
 				tree.SetAlias("sr28", "0==1"                                                     ); 
 				break;
+			case AnalysisType::higgsino:
+				tree.SetAlias("sr0" , "0=1" ); 
+				tree.SetAlias("sr1" , "0=1" ); 
+				tree.SetAlias("sr2" , "0=1" ); 
+				tree.SetAlias("sr3" , "0=1" ); 
+				tree.SetAlias("sr4" , "0=1" ); 
+				tree.SetAlias("sr5" , "0=1" ); 
+				tree.SetAlias("sr6" , "0=1" ); 
+				tree.SetAlias("sr7" , "0=1" ); 
+				tree.SetAlias("sr8" , "0=1" ); 
+				tree.SetAlias("sr9" , "0=1" ); 
+				tree.SetAlias("sr10", "0==1"); 
+				tree.SetAlias("sr11", "0==1"); 
+				tree.SetAlias("sr12", "0==1"); 
+				tree.SetAlias("sr13", "0==1"); 
+				tree.SetAlias("sr14", "0==1"); 
+				tree.SetAlias("sr15", "0==1"); 
+				tree.SetAlias("sr16", "0==1"); 
+				tree.SetAlias("sr17", "0==1"); 
+				tree.SetAlias("sr18", "0==1"); 
+				tree.SetAlias("sr19", "0==1"); 
+				tree.SetAlias("sr20", "0==1"); 
+				tree.SetAlias("sr21", "0==1"); 
+				tree.SetAlias("sr22", "0==1"); 
+				tree.SetAlias("sr23", "0==1"); 
+				tree.SetAlias("sr24", "0==1"); 
+				tree.SetAlias("sr25", "0==1"); 
+				tree.SetAlias("sr26", "0==1"); 
+				tree.SetAlias("sr27", "0==1"); 
+				tree.SetAlias("sr28", "0==1"); 
+				break;
 			case AnalysisType::static_size:
 				/*do nothing*/
 				break;
 		}
 
 		// exclusive
-		switch (at)
+		switch (anal_type)
 		{
 			case AnalysisType::high_pt:
 			case AnalysisType::high_pt_eth:
@@ -1862,15 +1927,46 @@ namespace ss
 				tree.SetAlias("ex_sr27", "0==1"                                                              ); 
 				tree.SetAlias("ex_sr28", "0==1"                                                              ); 
 				break;
+			case AnalysisType::higgsino:
+				tree.SetAlias("ex_sr0" , "0=1" ); 
+				tree.SetAlias("ex_sr1" , "0=1" ); 
+				tree.SetAlias("ex_sr2" , "0=1" ); 
+				tree.SetAlias("ex_sr3" , "0=1" ); 
+				tree.SetAlias("ex_sr4" , "0=1" ); 
+				tree.SetAlias("ex_sr5" , "0=1" ); 
+				tree.SetAlias("ex_sr6" , "0=1" ); 
+				tree.SetAlias("ex_sr7" , "0=1" ); 
+				tree.SetAlias("ex_sr8" , "0=1" ); 
+				tree.SetAlias("ex_sr9" , "0=1" ); 
+				tree.SetAlias("ex_sr10", "0==1"); 
+				tree.SetAlias("ex_sr11", "0==1"); 
+				tree.SetAlias("ex_sr12", "0==1"); 
+				tree.SetAlias("ex_sr13", "0==1"); 
+				tree.SetAlias("ex_sr14", "0==1"); 
+				tree.SetAlias("ex_sr15", "0==1"); 
+				tree.SetAlias("ex_sr16", "0==1"); 
+				tree.SetAlias("ex_sr17", "0==1"); 
+				tree.SetAlias("ex_sr18", "0==1"); 
+				tree.SetAlias("ex_sr19", "0==1"); 
+				tree.SetAlias("ex_sr20", "0==1"); 
+				tree.SetAlias("ex_sr21", "0==1"); 
+				tree.SetAlias("ex_sr22", "0==1"); 
+				tree.SetAlias("ex_sr23", "0==1"); 
+				tree.SetAlias("ex_sr24", "0==1"); 
+				tree.SetAlias("ex_sr25", "0==1"); 
+				tree.SetAlias("ex_sr26", "0==1"); 
+				tree.SetAlias("ex_sr27", "0==1"); 
+				tree.SetAlias("ex_sr28", "0==1"); 
+				break;
 			case AnalysisType::static_size:
 				/*do nothing*/
 				break;
 		}
 	}
 
-    void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& at)
+    void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type)
     {
-        SetSignalRegionAliases(*tree, at);
+        SetSignalRegionAliases(*tree, anal_type);
     }
 
     // Get the name of the SignalRegionTyp
