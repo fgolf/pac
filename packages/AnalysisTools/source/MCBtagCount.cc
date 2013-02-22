@@ -1,5 +1,7 @@
 #include "at/MCBtagCount.h"
 #include "rt/is_equal.h"
+#include <cmath> 
+#include <stdexcept> 
 
 // ROOT
 #include "Math/LorentzVector.h"
@@ -7,6 +9,8 @@
 
 // typdefs
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
+
+using namespace std;
 
 namespace at
 {
@@ -145,6 +149,12 @@ namespace at
         const at::YieldType::value_type yield_type
     )
     {
+        // check inputs
+        if ((vjets_p4.size() + vjets_btagged.size() + vjets_mcflavor.size()) != (3*vjets_mcflavor.size()))
+        {
+            throw std::invalid_argument("[MCBtagCount]: ERROR - all three vectors must be the same size");
+        }
+
         // uncertainty type
         int unc_type = 0;
         switch (yield_type)

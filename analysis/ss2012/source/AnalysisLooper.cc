@@ -474,26 +474,26 @@ SSAnalysisLooper::SSAnalysisLooper
     string elfr_name = "";
     switch (m_analysis_type)
     {
-    case AnalysisType::high_pt:
-        mufr_name = "h_mufr40c_ewkcor";
-        elfr_name = "h_elfr40c_ewkcor";
-        break;
-    case AnalysisType::low_pt:
-        mufr_name = "h_mufr40c_ewkcor";
-        elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
-        break;
-    case AnalysisType::vlow_pt:
-        mufr_name = "h_mufr40c_iso";    // need to update with ewk correction
-        elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
-        break;
-    case AnalysisType::high_pt_eth:
-        mufr_name = "h_mufr40c";
-        elfr_name = "h_elfr40c";
-        break;
-    default:
-        mufr_name = "h_mufr40c";
-        elfr_name = "h_elfr40c";
-        break;
+        case AnalysisType::high_pt:
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_ewkcor";
+            break;
+        case AnalysisType::low_pt:
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
+            break;
+        case AnalysisType::vlow_pt:
+            mufr_name = "h_mufr40c_iso";    // need to update with ewk correction
+            elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
+            break;
+        case AnalysisType::high_pt_eth:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+        default:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
     }
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
@@ -505,12 +505,14 @@ SSAnalysisLooper::SSAnalysisLooper
     cout << "using mu FR hist : " << h_mufr->GetName() << endl;
     cout << "using el FR hist : " << h_elfr->GetName() << endl;
 
-    // set the fake rate histograms
+    // set the flip rate histograms
     std::auto_ptr<TFile> flip_rate_file(rt::OpenRootFile(flip_rate_file_name));
     cout << "using FL file : " << flip_rate_file->GetName() << endl;
     h_flip.reset(dynamic_cast<TH2F*>(flip_rate_file->Get("flipRate")->Clone()));
     if (not h_flip) {throw std::runtime_error("ERROR: SSAnalysisLooper: flipRate doesn't exist");}
     h_flip->SetDirectory(0);
+
+    cout << "using mu FL hist : " << h_flip->GetName() << endl;
 
     // get jet pt cut
     if (m_jet_pt_cut < 0.)
@@ -562,20 +564,20 @@ void SSAnalysisLooper::EndJob()
     yield_table.setTitle("yields for SS Analysis 2012 (# btags >= 2)");
     yield_table.useTitle();
     yield_table.setTable() (                      "mm",          "em",          "ee",         "all")
-        ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
-        ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
-        ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
-        ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
+                           ("count ss" , m_count_ss[0], m_count_ss[1], m_count_ss[2], m_count_ss[3]) 
+                           ("count sf" , m_count_sf[0], m_count_sf[1], m_count_sf[2], m_count_sf[3]) 
+                           ("count df" , m_count_df[0], m_count_df[1], m_count_df[2], m_count_df[3])
+                           ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
     yield_table.print();
 
     CTable yield_table2;
     yield_table2.setTitle("yields for SS Analysis 2012 (no btags req)");
     yield_table2.useTitle();
     yield_table2.setTable() (                             "mm",                "em",                 "ee",                "all")
-        ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
-        ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
-        ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
-        ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
+                            ("count ss" , m_count_nobtag_ss[0], m_count_nobtag_ss[1], m_count_nobtag_ss[2], m_count_nobtag_ss[3]) 
+                            ("count sf" , m_count_nobtag_sf[0], m_count_nobtag_sf[1], m_count_nobtag_sf[2], m_count_nobtag_sf[3]) 
+                            ("count df" , m_count_nobtag_df[0], m_count_nobtag_df[1], m_count_nobtag_df[2], m_count_nobtag_df[3])
+                            ("count os" , m_count_nobtag_os[0], m_count_nobtag_os[1], m_count_nobtag_os[2], m_count_nobtag_os[3]); 
     yield_table2.print();
 
     // call base class end job
@@ -605,11 +607,11 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //{
         //    //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
         //    //if (!(evt_run() == 1 && evt_lumiBlock() == 15021 && evt_event() == 4505298))
-        //    //const long evt = evt_event();
-        //    //if (!(evt==103094326))  
-        //    //{
-        //    //    return 0;
-        //    //}
+        //const long evt = evt_event();
+        //if (!(evt==502989016))  
+        //{
+        //    return 0;
+        //}
         //    //else 
         //    //{
         //    //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
@@ -652,13 +654,13 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         int trigger_option = -999999;
         switch (m_analysis_type)
         {
-        case AnalysisType::high_pt    : trigger_option = 0; break;
-        case AnalysisType::high_pt_eth: trigger_option = 0; break;
-        case AnalysisType::hcp        : trigger_option = 0; break;
-        case AnalysisType::low_pt     : trigger_option = 1; break;
-        case AnalysisType::vlow_pt    : trigger_option = 2; break;
-        case AnalysisType::higgsino   : trigger_option = 0; break;
-        case AnalysisType::static_size: break; // no default is intentional so that compiler issues a warning if you don't handle all the cases
+            case AnalysisType::high_pt    : trigger_option = 0; break;
+            case AnalysisType::high_pt_eth: trigger_option = 0; break;
+            case AnalysisType::hcp        : trigger_option = 0; break;
+            case AnalysisType::low_pt     : trigger_option = 1; break;
+            case AnalysisType::vlow_pt    : trigger_option = 2; break;
+            case AnalysisType::higgsino   : trigger_option = 0; break;
+            case AnalysisType::static_size: break; // no default is intentional so that compiler issues a warning if you don't handle all the cases
         }
 
         // lepton pT cut values
@@ -666,33 +668,33 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         float el_min_pt = 0.0;
         switch(m_analysis_type)
         {
-        case AnalysisType::high_pt:
-            mu_min_pt = 20.0;
-            el_min_pt = 20.0;
-            break;
-        case AnalysisType::high_pt_eth:
-            mu_min_pt = 20.0;
-            el_min_pt = 20.0;
-            break;
-        case AnalysisType::hcp:
-            mu_min_pt = 20.0;
-            el_min_pt = 20.0;
-            break;
-        case AnalysisType::low_pt:
-            mu_min_pt = 10.0;
-            el_min_pt = 10.0;
-            break;
-        case AnalysisType::vlow_pt:
-            mu_min_pt = 5.0;
-            el_min_pt = 10.0;
-            break;
-        case AnalysisType::higgsino:
-            mu_min_pt = 10.;
-            el_min_pt = 10.;
-        default:
-            mu_min_pt = 20.0;
-            el_min_pt = 20.0;
-            break;
+            case AnalysisType::high_pt:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::high_pt_eth:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::hcp:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::low_pt:
+                mu_min_pt = 10.0;
+                el_min_pt = 10.0;
+                break;
+            case AnalysisType::vlow_pt:
+                mu_min_pt = 5.0;
+                el_min_pt = 10.0;
+                break;
+            case AnalysisType::higgsino:
+                mu_min_pt = 10.;
+                el_min_pt = 10.;
+            default:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
         }
         const float min_pt = std::min(mu_min_pt, el_min_pt);
 
@@ -863,7 +865,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 
             // check if event passes num_jet cut (hard coded to 2)
             int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-            if (num_jets < 2)
+            if (evt_isRealData() && num_jets < 2)
             {
                 if (m_verbose) {std::cout << "fails # jets >= " << 2 << " requirement with " << num_jets << " jets" << std::endl;}
                 continue;

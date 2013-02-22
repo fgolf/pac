@@ -3,9 +3,6 @@
 #imports 
 import os ;
 
-# see if CMSSW is set
-local cmssw = [ os.environ CMSSW_BASE ] ;
- 
 # static version
 lib RootTools
     : # sources
@@ -100,8 +97,5 @@ exe merge_tchain
 # install
 # -----------------------------------------------------#
 
-if (!cmssw)
-{
-  default-install merge_tchain ;
-  default-install RootTools : <link>shared ;
-}
+default-install merge_tchain ;
+default-install RootTools : <link>shared ;

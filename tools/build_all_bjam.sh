@@ -33,3 +33,7 @@ run_bjam $PAC/packages/FGTools
 run_bjam $PAC/packages/cms2 
 run_bjam $PAC/analysis/ss2012
 run_bjam $PAC/analysis/FakeRateStudy2011 
+
+echo \n########################################
+echo           Build Successful
+echo ##########################################

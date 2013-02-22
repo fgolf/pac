@@ -6,6 +6,13 @@ import ./tools/rootcint ;
 import type ;
 import os ;
 
+# is CMSSW set
+local cmssw = [ os.environ CMSSW_BASE ] ;
+if $(cmssw) != "" 
+{
+  ECHO "CMSSW is set: " $(cmssw) "\n" ;
+}
+
 # register .C files for ROOT macros
 type.register-suffixes C : CPP ; 
 
@@ -16,13 +23,35 @@ type.change-generated-target-suffix SHARED_LIB : <target-os>darwin : so ;
 path-constant PAC : ./ ;
 
 # build directory
-path-constant build-dir   : ./bin/temp ;
+if $(cmssw) != ""
+{
+  path-constant build-dir : ./bin/cmssw/temp ;
+}
+else
+{
+  path-constant build-dir : ./bin/temp ;
+}
 
 # install exe directory
-path-constant install-dir : ./bin ;
+
+if $(cmssw) != ""
+{
+  path-constant install-dir : ./bin/cmssw ;
+}
+else
+{
+  path-constant install-dir : ./bin ;
+}
 
 # install lib directory
-path-constant install-lib : ./lib ;
+if $(cmssw) != ""
+{
+  path-constant install-lib : ./lib/cmssw ;
+}
+else
+{
+  path-constant install-lib : ./lib ;
+}
 
 # define the project
 project pac

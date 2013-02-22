@@ -348,18 +348,20 @@ exe test_frb
 # install libs/exes
 # -------------------------------------------------------------- #
 
-default-install ss2012_tools/<link>shared ;
-default-install ss2012_analysis ;
-default-install ss2012_plots ;
-default-install ss2012_interp_hists ;
-default-install ss2012_event_list ;
-default-install ss2012_skim ;
-default-install ss2012_merge_babies ;
-default-install ss2012_outreach ;
-default-install ss2012_outreach_closure ;
-default-install ss2012_quick_check ;
-default-install ss2012_create_fakerate ;
-default-install ss2012_make_fr_from_hists ;
-default-install ss2012_closure_test ;
-default-install test_frb ;
-default-install test_btagsf ;
+if (!cmssw)
+{
+  default-install ss2012_tools/<link>shared ;
+  default-install ss2012_analysis ;
+  default-install ss2012_plots ;
+  default-install ss2012_event_list ;
+  default-install ss2012_skim ;
+  default-install ss2012_merge_babies ;
+  default-install ss2012_outreach ;
+  default-install ss2012_outreach_closure ;
+  default-install ss2012_quick_check ;
+  default-install ss2012_create_fakerate ;
+  default-install ss2012_make_fr_from_hists ;
+  default-install ss2012_closure_test ;
+  default-install test_frb ;
+  default-install test_btagsf ;
+}

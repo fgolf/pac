@@ -172,9 +172,9 @@ double efficiency(int flavor, double jetpt, int uncertainty, int uncertaintyLigh
 
 double scalefactor(int flavor, double jetpt, int uncertainty, int uncertaintyLight)
 {
-    float ptmin[] = {30, 40, 50, 60, 70, 80, 100, 120, 160, 210, 260, 320, 400, 500.600};
+    float ptmin[] = {30, 40, 50, 60, 70, 80, 100, 120, 160, 210, 260, 320, 400, 500,600};
     int binnumber=0;
-    for (int i=0;i<sizeof(ptmin)/sizeof(int)-1;i++){
+    for (size_t i=0;i<sizeof(ptmin)/sizeof(int)-1;i++){
         if(jetpt>ptmin[i] && jetpt<ptmin[i+1]) {
             binnumber=i;
             break;

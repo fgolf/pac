@@ -8,8 +8,8 @@ namespace at
     struct FlipRateBinInfo
     {
         // methods:
-        size_t num_eta_bins() {return v_eta_bins.size()-1;}
-        size_t num_pt_bins () {return v_pt_bins.size() -1;}
+        std::size_t num_eta_bins() {return v_eta_bins.size()-1;}
+        std::size_t num_pt_bins () {return v_pt_bins.size() -1;}
 
         const float* const eta_bins() {return &v_eta_bins[0];}
         const float* const pt_bins()  {return &v_pt_bins[0] ;}
