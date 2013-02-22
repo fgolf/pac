@@ -3,6 +3,17 @@
     std::string pac_path = gSystem->Getenv("PAC");
     pac_path += "/lib";
 
+    // cmsssw
+    const bool cmssw = (TString(gSystem->Getenv("CMSSW_BASE")).Length() > 0);
+
+    // set debug if debug ROOT build
+    TString rootsys = gSystem->Getenv("ROOTSYS");
+    if (rootsys.Contains("debug"))
+    {
+        gSystem->SetAclicMode(TSystem::kDebug);
+    }
+    const bool is_debug = (gSystem->GetAclicMode()==TSystem::kDebug);
+
     if (lib_path.empty())
     {
         std::cout << "LD_LIBRARY_PATH is empty.  Exiting." << std::endl;
@@ -14,23 +25,30 @@
         return 2;
     }
 
-    if (lib_path.find(pac_path) == std::string::npos)
+    //if (lib_path.find(pac_path.c_str()) == std::string::npos)
+    std::string pac_path = gSystem->Getenv("PAC");
+    if (cmssw)
     {
-        pac_path = gSystem->Getenv("PAC");
-        pac_path += "/bin/release/";
+        pac_path += (is_debug ? "/bin/cmssw/debug" : "/bin/cmssw/release");
+    }
+    else 
+    {
+        pac_path += (is_debug ? "/bin/debug" : "/bin/release");
     }
     
+    // RootTools
     gSystem->AddIncludePath("-D'__RTINT__'");
     gSystem->AddIncludePath("-I$PAC/packages/RootTools/include");
     gSystem->AddIncludePath("-I$PAC/packages/RootTools/source");
     gSystem->AddIncludePath("-I$BOOST_CURRENT/boost");
-    gSystem->Load("$BOOST_CURRENT/stage/lib/libboost_system.so");
-    gSystem->Load("$BOOST_CURRENT/stage/lib/libboost_filesystem.so");
-    gSystem->Load(Form("%s/libRootTools.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libboost_system.so"    , pac_path.c_str()));
+    gSystem->Load(Form("%s/libboost_filesystem.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libRootTools.so"       , pac_path.c_str()));
 
-    // Analysis Tools
+    // AnalysisTools
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/include");
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/source");
+    gSystem->Load(Form("%s/libcms2_core.so", pac_path.c_str()));
     gSystem->Load(Form("%s/libAnalysisTools.so", pac_path.c_str()));
 
     // SS2012 Tools
@@ -43,5 +61,8 @@
     gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
 
     // load mini FW lite
-    gSystem->Load(Form("%s/libMiniFWLite.so", pac_path.c_str()));
+    if (!cmssw)
+    {
+        gSystem->Load(Form("%s/libMiniFWLite.so", pac_path.c_str()));
+    }
 }

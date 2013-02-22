@@ -34,6 +34,7 @@ run_bjam $PAC/packages/cms2
 run_bjam $PAC/analysis/ss2012
 run_bjam $PAC/analysis/FakeRateStudy2011 
 
-echo \n########################################
+echo ""
+echo -e ########################################
 echo           Build Successful
-echo ##########################################
+echo -e ##########################################
