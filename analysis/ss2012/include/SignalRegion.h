@@ -13,8 +13,8 @@ namespace ss
         enum value_type
         {
             // inclusive
-            sr0  = 0,  // baseline:  #jets>=2, if HT<500 then MET>30, HT>80/250 (high/low pT analysis)
-            sr1  = 1,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT[200-400]
+            sr0  = 0,  // baseline:  #jets>=2, if HT<500 then MET>30, HT>80/250 (high/low pT analysis),          lep_pt > 20/10, #jets>=2 (higgsino)
+            sr1  = 1,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT[200-400]                    ,          baseline + #nbtags==0    (higgsino)
             sr2  = 2,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT>400
             sr3  = 3,  // baseline + #jets>=4, #btags>=0, MET[50-120], HT[200-400]
             sr4  = 4,  // baseline + #jets>=4, #btags>=0, MET[50-120], HT>400
