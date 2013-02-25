@@ -62,6 +62,9 @@ class TH1Container
 
         // load all the histograms from a root file
         void Load(const std::string& file_name, const std::string& root_file_dir = "");
+
+        // clear all the histograms
+        void Clear();
         
         // list all the hist in the container
         void List() const;

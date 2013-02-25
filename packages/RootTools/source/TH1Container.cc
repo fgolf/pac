@@ -116,7 +116,6 @@ TH1Container TH1Container::operator+(const TH1Container& rhs)
     return temp;
 }
 
-
 TH1Container& TH1Container::operator+=(const TH1Container& rhs)
 {
     TH1Container temp = this->operator+(rhs);
@@ -270,6 +269,12 @@ TH1* TH1Container::operator [] (const TString& hist_name) const
 bool TH1Container::Contains(const std::string& hist_name) const
 {
     return m_pimpl->hist_map.find(hist_name) != m_pimpl->hist_map.end();
+}
+
+void TH1Container::Clear()
+{
+    m_pimpl->hist_map.clear();
+    return;
 }
 
 void TH1Container::Load(const std::string& file_name, const std::string& root_file_dir)
