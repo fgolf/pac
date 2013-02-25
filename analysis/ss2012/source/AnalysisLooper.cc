@@ -33,6 +33,7 @@
 #include "EfficiencyModelTools.h"
 #include "ScaleFactors.h"
 #include "TTbarBreakDown.h"
+#include "SignalBinInfo.h"
 
 // ROOT
 #include "Math/LorentzVector.h"
@@ -367,8 +368,8 @@ SSAnalysisLooper::SSAnalysisLooper
     bool verbose,
     const std::string apply_jec_otf,
     double jet_pt_cut
-    )
-    : AnalysisWithTree(root_file_name, "tree", "baby tree for SS2012 analysis")
+)
+    : AnalysisWithTreeAndHist(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
     , m_analysis_type(analysis_type)
     , m_lumi(luminosity)
@@ -512,7 +513,7 @@ SSAnalysisLooper::SSAnalysisLooper
     if (not h_flip) {throw std::runtime_error("ERROR: SSAnalysisLooper: flipRate doesn't exist");}
     h_flip->SetDirectory(0);
 
-    cout << "using mu FL hist : " << h_flip->GetName() << endl;
+    cout << "using FL hist : " << h_flip->GetName() << endl;
 
     // get jet pt cut
     if (m_jet_pt_cut < 0.)
@@ -542,6 +543,9 @@ int SSAnalysisLooper::operator() (long event, const std::string& filename)
 // members:
 void SSAnalysisLooper::BeginJob()
 {
+    // initialize hists
+    BookHists();
+
     // initialize branches
     m_evt.Reset();
     m_evt.SetBranches(*m_tree);
@@ -552,6 +556,19 @@ void SSAnalysisLooper::BeginJob()
             "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
             "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
             "MET | HT | nJets | nbJets" << endl;
+    }
+}
+
+void SSAnalysisLooper::BookHists()
+{
+    rt::TH1Container& hc = m_hist_container;
+
+    // generated event count hist
+    if (m_sparms)
+    {
+        ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(m_sample);
+        const std::string title = Form("# of Generated Events - %s", ss::GetSignalBinHistLabel(m_sample).c_str());
+        hc.Add(new TH2F("h_gen_count", title.c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     }
 }
 
@@ -581,7 +598,7 @@ void SSAnalysisLooper::EndJob()
     yield_table2.print();
 
     // call base class end job
-    AnalysisWithTree::EndJob();
+    AnalysisWithTreeAndHist::EndJob();
 }
 
 int SSAnalysisLooper::SetJetCorrector(std::vector<std::string> &list_of_filenames)
@@ -600,6 +617,9 @@ int SSAnalysisLooper::SetJetCorrector(std::vector<std::string> &list_of_filename
 
 int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 {
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
     try
     {
         // select specific events
@@ -617,6 +637,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         //    //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
         //    //}
         //}
+
 
         // Reset Tree Variables
         // --------------------------------------------------------------------------------------------------------- //
@@ -711,6 +732,10 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                 if (n_sparms > 1) {m_evt.sparm1 = sparm_values().at(1); m_evt.sparm1_name = static_cast<TString>(sparm_names().at(1));}
                 if (n_sparms > 2) {m_evt.sparm2 = sparm_values().at(2); m_evt.sparm2_name = static_cast<TString>(sparm_names().at(2));}
                 if (n_sparms > 3) {m_evt.sparm3 = sparm_values().at(3); m_evt.sparm3_name = static_cast<TString>(sparm_names().at(3));}
+
+                // fill the generated event count
+                // --------------------------------------------------------------------------------------------------------- //
+                hc["h_gen_count"]->Fill(m_evt.sparm0, m_evt.sparm1);
             }
 
             // lepton variables
@@ -1534,9 +1559,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         }
 
         // calculate the "reweighted" MC btag yields
-        m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::base);
-        m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::up  );
-        m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::down);
+        if (not evt_isRealData())
+        {
+            m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::base);
+            m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::up  );
+            m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::down);
+        }
 
         //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
         //SetBtagDiscriminator(m_evt.vjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);

@@ -52,7 +52,7 @@ namespace at
     {
         rt::TH1Container& h = m_hist_container;
 
-        h.Add(new TH1D("h_count","# of events", 3, -0.5, 2.5));
+        h.Add(new TH1F("h_count","# of events", 3, -0.5, 2.5));
     }
 
 } // namespace at

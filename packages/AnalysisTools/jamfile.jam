@@ -8,6 +8,7 @@ lib AnalysisTools
     ./source/AnalysisBase.cc
     ./source/AnalysisWithHist.cc
     ./source/AnalysisWithTree.cc
+    ./source/AnalysisWithTreeAndHist.cc
     ./source/LorentzVectorObject.cc
     ./source/DorkyEventIdentifier.cc
     ./source/DileptonHypType.cc

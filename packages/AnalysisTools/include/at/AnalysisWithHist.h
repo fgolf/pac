@@ -15,7 +15,7 @@ namespace at
             AnalysisWithHist
             (
                  const std::string& root_file_name, 
-                 bool print = false,
+                 const bool print = false,
                  const std::string& suffix = "png"
             );
 

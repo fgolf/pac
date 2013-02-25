@@ -1,7 +1,7 @@
 #ifndef SSANALYSISLOOPER_H 
 #define SSANALYSISLOOPER_H
 
-#include "at/AnalysisWithTree.h"
+#include "at/AnalysisWithTreeAndHist.h"
 #include "Math/LorentzVector.h"
 #include <tr1/array>
 #include <tr1/memory>
@@ -17,7 +17,7 @@ class MetCorrector;
 // typdefs
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 
-class SSAnalysisLooper : public at::AnalysisWithTree
+class SSAnalysisLooper : public at::AnalysisWithTreeAndHist
 {
 public:
     // construct:
@@ -41,7 +41,7 @@ public:
         bool verbose = false,
         const std::string apply_jec_otf = "",
         double jet_pt_cut = -1
-        );
+    );
 
     // destroy:
     ~SSAnalysisLooper();
@@ -52,6 +52,7 @@ public:
     // members:
     virtual void BeginJob();
     virtual void EndJob();
+    virtual void BookHists();
     int Analyze(long event, const std::string& filename);
     int SetJetCorrector(std::vector<std::string> &list_of_filenames);
 

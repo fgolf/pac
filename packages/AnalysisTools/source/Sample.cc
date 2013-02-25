@@ -527,11 +527,13 @@ namespace at
             // name
             "sbottomtop", 
             // title
-            "#tilde{b}t", 
+            "#tilde{b}#tilde{b}* #rightarrow t#bar{t}W^{#pm}W^{#mp}#tilde{#chi}^{0}#tilde{#chi}^{0}",
             // latex 
-            "$\\tilde{b}t$", 
+            "\\tilde{b}\\tilde{b}^* \\rightarrow t\\bar{t}W^{\\pm}W^{\\mp}\\tilde{\\chi^0}\\tilde{\\chi^0}",
             // ntuple_path
-            "SbottomTopv6_macneill_8TeV",
+            // this is out of date, corrently we go straight from edm --> baby
+            // https://twiki.cern.ch/twiki/bin/viewauth/CMS/SMST6ttWWMadgraph8TeV 
+            "SbottomTopv6_macneill_8TeV",  
             // SampleType 
             SampleType::susy,
             // Sample

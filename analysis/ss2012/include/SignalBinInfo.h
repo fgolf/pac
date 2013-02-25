@@ -45,6 +45,9 @@ namespace ss
     // return the binning info for a specific signal sample 
     SignalBinInfo GetSignalBinInfo(const at::Sample::value_type sample);
 
+    // return a string for the axis labels for a ROOT hist 
+    std::string GetSignalBinHistLabel(const at::Sample::value_type sample);
+
 } // namespace ss
 
 #endif // SS_SIGNALBININFO_H
