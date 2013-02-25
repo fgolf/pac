@@ -61,7 +61,7 @@ namespace at
             wz2l,
             zz2l,
             ttpowheg,
-			qcd,
+            qcd,
             qcd_mu15,
             static_size
         };
@@ -120,7 +120,7 @@ namespace at
     (
         const Sample::value_type& sample, 
         const NtupleType::value_type& ntuple = NtupleType::cms2
-    ); 
+        ); 
 
     // function to filter samples by process
     bool FilterByProcess(const Sample::value_type& sample);
