@@ -1369,12 +1369,12 @@ namespace ss
         if (analysis_type==AnalysisType::low_pt      && signal_region_type==SignalRegionType::inclusive) {return s_LptInclSignalRegionInfos[signal_region];}
         if (analysis_type==AnalysisType::vlow_pt     && signal_region_type==SignalRegionType::inclusive) {return s_VptInclSignalRegionInfos[signal_region];}
         if (analysis_type==AnalysisType::hcp         && signal_region_type==SignalRegionType::inclusive) {return s_HcpInclSignalRegionInfos[signal_region];}
-        if (analysis_type==AnalysisType::higgsino    && signal_region_type==SignalRegionType::inclusive) {return s_HcpInclSignalRegionInfos[signal_region];}
+        if (analysis_type==AnalysisType::higgsino    && signal_region_type==SignalRegionType::inclusive) {return s_HiggsinoInclSignalRegionInfos[signal_region];}
         if (analysis_type==AnalysisType::high_pt     && signal_region_type==SignalRegionType::exclusive) {return s_HptExclSignalRegionInfos[signal_region];}
         if (analysis_type==AnalysisType::low_pt      && signal_region_type==SignalRegionType::exclusive) {return s_LptExclSignalRegionInfos[signal_region];}
         if (analysis_type==AnalysisType::vlow_pt     && signal_region_type==SignalRegionType::exclusive) {return s_VptExclSignalRegionInfos[signal_region];}
         if (analysis_type==AnalysisType::hcp         && signal_region_type==SignalRegionType::exclusive) {return s_HcpExclSignalRegionInfos[signal_region];}
-        if (analysis_type==AnalysisType::higgsino    && signal_region_type==SignalRegionType::exclusive) {return s_HcpExclSignalRegionInfos[signal_region];}
+        if (analysis_type==AnalysisType::higgsino    && signal_region_type==SignalRegionType::exclusive) {return s_HiggsinoExclSignalRegionInfos[signal_region];}
 
         // if we get here, then the arguments were out of bounds
         throw std::domain_error("ERROR: ss::GetSignalRegionInfo(): arguments out of bounds!");
