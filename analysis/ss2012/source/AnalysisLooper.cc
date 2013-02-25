@@ -516,10 +516,10 @@ SSAnalysisLooper::SSAnalysisLooper
     cout << "using FL hist : " << h_flip->GetName() << endl;
 
     // get jet pt cut
-    if (m_jet_pt_cut < 0.)
+    if (m_jet_pt_cut < 0.0f)
     {
-        if (m_analysis_type == ss::AnalysisType::higgsino) m_jet_pt_cut = 20.;
-        else m_jet_pt_cut = 40.;
+        if (m_analysis_type == ss::AnalysisType::higgsino) m_jet_pt_cut = 20.0f;
+        else m_jet_pt_cut = 40.0f;
     }
 
     // begin job
