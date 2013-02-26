@@ -712,6 +712,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             case AnalysisType::higgsino:
                 mu_min_pt = 10.;
                 el_min_pt = 10.;
+                break;
             default:
                 mu_min_pt = 20.0;
                 el_min_pt = 20.0;
