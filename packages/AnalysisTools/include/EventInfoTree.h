@@ -54,10 +54,11 @@ public:
     bool filt_csc;
     bool filt_hbhe;
     bool filt_hcallaser;
+    bool filt_ecallaser;
     bool filt_ecaltp;
     bool filt_trkfail;
     bool filt_eebadsc;
-    bool filt_hbhenew;
+    bool passes_metfilters;
 
     //
     // some gen event level info
