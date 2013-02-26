@@ -1407,6 +1407,7 @@ namespace ss
         const unsigned int id2 = abs(ssb::lep2_pdgid());
         const float pt1 = ssb::lep1_p4().pt();
         const float pt2 = ssb::lep2_p4().pt();
+
         switch(anal_type)
         {
         case AnalysisType::high_pt:
@@ -1430,8 +1431,9 @@ namespace ss
             if (pt2 < (id2==11 ? 10.0 : 5.0)) return false;
             break;
         case AnalysisType::higgsino:
-            if (max(pt1,pt2) < 20.0) return false;
-            if (min(pt1,pt2) < 10.0) return false;
+            if (std::max(pt1,pt2) < 20.0) return false;
+            if (std::min(pt1,pt2) < 10.0) return false;
+            break;
         default:
             return false;
         }
