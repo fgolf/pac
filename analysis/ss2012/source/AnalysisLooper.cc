@@ -491,6 +491,10 @@ SSAnalysisLooper::SSAnalysisLooper
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c";
             break;
+        case AnalysisType::higgsino:
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_ewkcor";
+            break;
         default:
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c";
