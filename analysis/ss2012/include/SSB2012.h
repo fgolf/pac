@@ -89,6 +89,9 @@ protected:
 	bool	filt_hcallaser_;
 	TBranch *filt_hcallaser_branch;
 	bool filt_hcallaser_isLoaded;
+	bool	filt_ecallaser_;
+	TBranch *filt_ecallaser_branch;
+	bool filt_ecallaser_isLoaded;
 	bool	filt_ecaltp_;
 	TBranch *filt_ecaltp_branch;
 	bool filt_ecaltp_isLoaded;
@@ -98,9 +101,9 @@ protected:
 	bool	filt_eebadsc_;
 	TBranch *filt_eebadsc_branch;
 	bool filt_eebadsc_isLoaded;
-	bool	filt_hbhenew_;
-	TBranch *filt_hbhenew_branch;
-	bool filt_hbhenew_isLoaded;
+	bool	passes_metfilters_;
+	TBranch *passes_metfilters_branch;
+	bool passes_metfilters_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_p4_;
 	TBranch *lep1_p4_branch;
 	bool lep1_p4_isLoaded;
@@ -764,9 +767,6 @@ protected:
 	bool	trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_;
 	TBranch *trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch;
 	bool trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_isLoaded;
-	bool	met_filters_;
-	TBranch *met_filters_branch;
-	bool met_filters_isLoaded;
 	int	njets_dn_;
 	TBranch *njets_dn_branch;
 	bool njets_dn_isLoaded;
@@ -815,6 +815,15 @@ protected:
 	int	nbtags30_up_;
 	TBranch *nbtags30_up_branch;
 	bool nbtags30_up_isLoaded;
+	int	nbtags_reweighted_;
+	TBranch *nbtags_reweighted_branch;
+	bool nbtags_reweighted_isLoaded;
+	int	nbtags_reweighted_dn_;
+	TBranch *nbtags_reweighted_dn_branch;
+	bool nbtags_reweighted_dn_isLoaded;
+	int	nbtags_reweighted_up_;
+	TBranch *nbtags_reweighted_up_branch;
+	bool nbtags_reweighted_up_isLoaded;
 	float	ht30_dn_;
 	TBranch *ht30_dn_branch;
 	bool ht30_dn_isLoaded;
@@ -1372,6 +1381,11 @@ void Init(TTree *tree) {
 		filt_hcallaser_branch = tree->GetBranch("filt_hcallaser");
 		if (filt_hcallaser_branch) {filt_hcallaser_branch->SetAddress(&filt_hcallaser_);}
 	}
+	filt_ecallaser_branch = 0;
+	if (tree->GetBranch("filt_ecallaser") != 0) {
+		filt_ecallaser_branch = tree->GetBranch("filt_ecallaser");
+		if (filt_ecallaser_branch) {filt_ecallaser_branch->SetAddress(&filt_ecallaser_);}
+	}
 	filt_ecaltp_branch = 0;
 	if (tree->GetBranch("filt_ecaltp") != 0) {
 		filt_ecaltp_branch = tree->GetBranch("filt_ecaltp");
@@ -1387,10 +1401,10 @@ void Init(TTree *tree) {
 		filt_eebadsc_branch = tree->GetBranch("filt_eebadsc");
 		if (filt_eebadsc_branch) {filt_eebadsc_branch->SetAddress(&filt_eebadsc_);}
 	}
-	filt_hbhenew_branch = 0;
-	if (tree->GetBranch("filt_hbhenew") != 0) {
-		filt_hbhenew_branch = tree->GetBranch("filt_hbhenew");
-		if (filt_hbhenew_branch) {filt_hbhenew_branch->SetAddress(&filt_hbhenew_);}
+	passes_metfilters_branch = 0;
+	if (tree->GetBranch("passes_metfilters") != 0) {
+		passes_metfilters_branch = tree->GetBranch("passes_metfilters");
+		if (passes_metfilters_branch) {passes_metfilters_branch->SetAddress(&passes_metfilters_);}
 	}
 	lep1_passes_id_branch = 0;
 	if (tree->GetBranch("lep1_passes_id") != 0) {
@@ -2412,11 +2426,6 @@ void Init(TTree *tree) {
 		trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch = tree->GetBranch("trig_em_riso1p0mu5_el8_id_m8_pfnopuht175");
 		if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch) {trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch->SetAddress(&trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_);}
 	}
-	met_filters_branch = 0;
-	if (tree->GetBranch("met_filters") != 0) {
-		met_filters_branch = tree->GetBranch("met_filters");
-		if (met_filters_branch) {met_filters_branch->SetAddress(&met_filters_);}
-	}
 	njets_dn_branch = 0;
 	if (tree->GetBranch("njets_dn") != 0) {
 		njets_dn_branch = tree->GetBranch("njets_dn");
@@ -2496,6 +2505,21 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("nbtags30_up") != 0) {
 		nbtags30_up_branch = tree->GetBranch("nbtags30_up");
 		if (nbtags30_up_branch) {nbtags30_up_branch->SetAddress(&nbtags30_up_);}
+	}
+	nbtags_reweighted_branch = 0;
+	if (tree->GetBranch("nbtags_reweighted") != 0) {
+		nbtags_reweighted_branch = tree->GetBranch("nbtags_reweighted");
+		if (nbtags_reweighted_branch) {nbtags_reweighted_branch->SetAddress(&nbtags_reweighted_);}
+	}
+	nbtags_reweighted_dn_branch = 0;
+	if (tree->GetBranch("nbtags_reweighted_dn") != 0) {
+		nbtags_reweighted_dn_branch = tree->GetBranch("nbtags_reweighted_dn");
+		if (nbtags_reweighted_dn_branch) {nbtags_reweighted_dn_branch->SetAddress(&nbtags_reweighted_dn_);}
+	}
+	nbtags_reweighted_up_branch = 0;
+	if (tree->GetBranch("nbtags_reweighted_up") != 0) {
+		nbtags_reweighted_up_branch = tree->GetBranch("nbtags_reweighted_up");
+		if (nbtags_reweighted_up_branch) {nbtags_reweighted_up_branch->SetAddress(&nbtags_reweighted_up_);}
 	}
 	ht30_dn_branch = 0;
 	if (tree->GetBranch("ht30_dn") != 0) {
@@ -2882,10 +2906,11 @@ void GetEntry(unsigned int idx)
 		filt_csc_isLoaded = false;
 		filt_hbhe_isLoaded = false;
 		filt_hcallaser_isLoaded = false;
+		filt_ecallaser_isLoaded = false;
 		filt_ecaltp_isLoaded = false;
 		filt_trkfail_isLoaded = false;
 		filt_eebadsc_isLoaded = false;
-		filt_hbhenew_isLoaded = false;
+		passes_metfilters_isLoaded = false;
 		lep1_p4_isLoaded = false;
 		lep1_passes_id_isLoaded = false;
 		lep1_passes_iso_isLoaded = false;
@@ -3107,7 +3132,6 @@ void GetEntry(unsigned int idx)
 		trig_em_mu8_el8_id_m8_pfnopuht175_isLoaded = false;
 		trig_em_riso1p0mu5_el8_id_m8_pfht175_isLoaded = false;
 		trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_isLoaded = false;
-		met_filters_isLoaded = false;
 		njets_dn_isLoaded = false;
 		njets_up_isLoaded = false;
 		nbtags_dn_isLoaded = false;
@@ -3124,6 +3148,9 @@ void GetEntry(unsigned int idx)
 		njets30_up_isLoaded = false;
 		nbtags30_dn_isLoaded = false;
 		nbtags30_up_isLoaded = false;
+		nbtags_reweighted_isLoaded = false;
+		nbtags_reweighted_dn_isLoaded = false;
+		nbtags_reweighted_up_isLoaded = false;
 		ht30_dn_isLoaded = false;
 		ht30_up_isLoaded = false;
 		pfmet_dn_isLoaded = false;
@@ -3241,10 +3268,11 @@ void LoadAllBranches()
 	if (filt_csc_branch != 0) filt_csc();
 	if (filt_hbhe_branch != 0) filt_hbhe();
 	if (filt_hcallaser_branch != 0) filt_hcallaser();
+	if (filt_ecallaser_branch != 0) filt_ecallaser();
 	if (filt_ecaltp_branch != 0) filt_ecaltp();
 	if (filt_trkfail_branch != 0) filt_trkfail();
 	if (filt_eebadsc_branch != 0) filt_eebadsc();
-	if (filt_hbhenew_branch != 0) filt_hbhenew();
+	if (passes_metfilters_branch != 0) passes_metfilters();
 	if (lep1_p4_branch != 0) lep1_p4();
 	if (lep1_passes_id_branch != 0) lep1_passes_id();
 	if (lep1_passes_iso_branch != 0) lep1_passes_iso();
@@ -3466,7 +3494,6 @@ void LoadAllBranches()
 	if (trig_em_mu8_el8_id_m8_pfnopuht175_branch != 0) trig_em_mu8_el8_id_m8_pfnopuht175();
 	if (trig_em_riso1p0mu5_el8_id_m8_pfht175_branch != 0) trig_em_riso1p0mu5_el8_id_m8_pfht175();
 	if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch != 0) trig_em_riso1p0mu5_el8_id_m8_pfnopuht175();
-	if (met_filters_branch != 0) met_filters();
 	if (njets_dn_branch != 0) njets_dn();
 	if (njets_up_branch != 0) njets_up();
 	if (nbtags_dn_branch != 0) nbtags_dn();
@@ -3483,6 +3510,9 @@ void LoadAllBranches()
 	if (njets30_up_branch != 0) njets30_up();
 	if (nbtags30_dn_branch != 0) nbtags30_dn();
 	if (nbtags30_up_branch != 0) nbtags30_up();
+	if (nbtags_reweighted_branch != 0) nbtags_reweighted();
+	if (nbtags_reweighted_dn_branch != 0) nbtags_reweighted_dn();
+	if (nbtags_reweighted_up_branch != 0) nbtags_reweighted_up();
 	if (ht30_dn_branch != 0) ht30_dn();
 	if (ht30_up_branch != 0) ht30_up();
 	if (pfmet_dn_branch != 0) pfmet_dn();
@@ -3885,6 +3915,19 @@ void LoadAllBranches()
 		}
 		return filt_hcallaser_;
 	}
+	bool &	filt_ecallaser()
+	{
+		if (not filt_ecallaser_isLoaded) {
+			if (filt_ecallaser_branch != 0) {
+				filt_ecallaser_branch->GetEntry(index);
+			} else { 
+				printf("branch filt_ecallaser_branch does not exist!\n");
+				exit(1);
+			}
+			filt_ecallaser_isLoaded = true;
+		}
+		return filt_ecallaser_;
+	}
 	bool &	filt_ecaltp()
 	{
 		if (not filt_ecaltp_isLoaded) {
@@ -3924,18 +3967,18 @@ void LoadAllBranches()
 		}
 		return filt_eebadsc_;
 	}
-	bool &	filt_hbhenew()
+	bool &	passes_metfilters()
 	{
-		if (not filt_hbhenew_isLoaded) {
-			if (filt_hbhenew_branch != 0) {
-				filt_hbhenew_branch->GetEntry(index);
+		if (not passes_metfilters_isLoaded) {
+			if (passes_metfilters_branch != 0) {
+				passes_metfilters_branch->GetEntry(index);
 			} else { 
-				printf("branch filt_hbhenew_branch does not exist!\n");
+				printf("branch passes_metfilters_branch does not exist!\n");
 				exit(1);
 			}
-			filt_hbhenew_isLoaded = true;
+			passes_metfilters_isLoaded = true;
 		}
-		return filt_hbhenew_;
+		return passes_metfilters_;
 	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4()
 	{
@@ -6810,19 +6853,6 @@ void LoadAllBranches()
 		}
 		return trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_;
 	}
-	bool &	met_filters()
-	{
-		if (not met_filters_isLoaded) {
-			if (met_filters_branch != 0) {
-				met_filters_branch->GetEntry(index);
-			} else { 
-				printf("branch met_filters_branch does not exist!\n");
-				exit(1);
-			}
-			met_filters_isLoaded = true;
-		}
-		return met_filters_;
-	}
 	int &njets_dn()
 	{
 		if (not njets_dn_isLoaded) {
@@ -7030,6 +7060,45 @@ void LoadAllBranches()
 			nbtags30_up_isLoaded = true;
 		}
 		return nbtags30_up_;
+	}
+	int &nbtags_reweighted()
+	{
+		if (not nbtags_reweighted_isLoaded) {
+			if (nbtags_reweighted_branch != 0) {
+				nbtags_reweighted_branch->GetEntry(index);
+			} else { 
+				printf("branch nbtags_reweighted_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags_reweighted_isLoaded = true;
+		}
+		return nbtags_reweighted_;
+	}
+	int &nbtags_reweighted_dn()
+	{
+		if (not nbtags_reweighted_dn_isLoaded) {
+			if (nbtags_reweighted_dn_branch != 0) {
+				nbtags_reweighted_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch nbtags_reweighted_dn_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags_reweighted_dn_isLoaded = true;
+		}
+		return nbtags_reweighted_dn_;
+	}
+	int &nbtags_reweighted_up()
+	{
+		if (not nbtags_reweighted_up_isLoaded) {
+			if (nbtags_reweighted_up_branch != 0) {
+				nbtags_reweighted_up_branch->GetEntry(index);
+			} else { 
+				printf("branch nbtags_reweighted_up_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags_reweighted_up_isLoaded = true;
+		}
+		return nbtags_reweighted_up_;
 	}
 	float &ht30_dn()
 	{
@@ -8227,10 +8296,11 @@ namespace ssb {
 	const bool &filt_csc();
 	const bool &filt_hbhe();
 	const bool &filt_hcallaser();
+	const bool &filt_ecallaser();
 	const bool &filt_ecaltp();
 	const bool &filt_trkfail();
 	const bool &filt_eebadsc();
-	const bool &filt_hbhenew();
+	const bool &passes_metfilters();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
 	const bool &lep1_passes_id();
 	const bool &lep1_passes_iso();
@@ -8452,7 +8522,6 @@ namespace ssb {
 	const bool &trig_em_mu8_el8_id_m8_pfnopuht175();
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfht175();
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175();
-	const bool &met_filters();
 	const int &njets_dn();
 	const int &njets_up();
 	const int &nbtags_dn();
@@ -8469,6 +8538,9 @@ namespace ssb {
 	const int &njets30_up();
 	const int &nbtags30_dn();
 	const int &nbtags30_up();
+	const int &nbtags_reweighted();
+	const int &nbtags_reweighted_dn();
+	const int &nbtags_reweighted_up();
 	const float &ht30_dn();
 	const float &ht30_up();
 	const float &pfmet_dn();
