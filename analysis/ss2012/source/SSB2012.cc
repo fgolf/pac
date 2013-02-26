@@ -25,10 +25,11 @@ namespace ssb {
 	const bool &filt_csc() { return samesignbtag.filt_csc(); }
 	const bool &filt_hbhe() { return samesignbtag.filt_hbhe(); }
 	const bool &filt_hcallaser() { return samesignbtag.filt_hcallaser(); }
+	const bool &filt_ecallaser() { return samesignbtag.filt_ecallaser(); }
 	const bool &filt_ecaltp() { return samesignbtag.filt_ecaltp(); }
 	const bool &filt_trkfail() { return samesignbtag.filt_trkfail(); }
 	const bool &filt_eebadsc() { return samesignbtag.filt_eebadsc(); }
-	const bool &filt_hbhenew() { return samesignbtag.filt_hbhenew(); }
+	const bool &passes_metfilters() { return samesignbtag.passes_metfilters(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4() { return samesignbtag.lep1_p4(); }
 	const bool &lep1_passes_id() { return samesignbtag.lep1_passes_id(); }
 	const bool &lep1_passes_iso() { return samesignbtag.lep1_passes_iso(); }
@@ -250,7 +251,6 @@ namespace ssb {
 	const bool &trig_em_mu8_el8_id_m8_pfnopuht175() { return samesignbtag.trig_em_mu8_el8_id_m8_pfnopuht175(); }
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfht175() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfht175(); }
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175(); }
-	const bool &met_filters() { return samesignbtag.met_filters(); }
 	const int &njets_dn() { return samesignbtag.njets_dn(); }
 	const int &njets_up() { return samesignbtag.njets_up(); }
 	const int &nbtags_dn() { return samesignbtag.nbtags_dn(); }
@@ -267,6 +267,9 @@ namespace ssb {
 	const int &njets30_up() { return samesignbtag.njets30_up(); }
 	const int &nbtags30_dn() { return samesignbtag.nbtags30_dn(); }
 	const int &nbtags30_up() { return samesignbtag.nbtags30_up(); }
+	const int &nbtags_reweighted() { return samesignbtag.nbtags_reweighted(); }
+	const int &nbtags_reweighted_dn() { return samesignbtag.nbtags_reweighted_dn(); }
+	const int &nbtags_reweighted_up() { return samesignbtag.nbtags_reweighted_up(); }
 	const float &ht30_dn() { return samesignbtag.ht30_dn(); }
 	const float &ht30_up() { return samesignbtag.ht30_up(); }
 	const float &pfmet_dn() { return samesignbtag.pfmet_dn(); }

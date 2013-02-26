@@ -1111,14 +1111,6 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
         m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
 
-        // met filters
-        m_evt.met_filters = (m_evt.event_info.filt_csc       &&
-                             m_evt.event_info.filt_hbhenew   &&
-                             m_evt.event_info.filt_hcallaser &&
-                             m_evt.event_info.filt_ecaltp    &&
-                             m_evt.event_info.filt_trkfail   &&
-                             m_evt.event_info.filt_eebadsc);
-
         // fill analysis specific branches 
         m_evt.vtxw = vtxw;
 
