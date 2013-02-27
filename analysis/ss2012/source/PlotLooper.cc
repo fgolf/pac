@@ -117,12 +117,12 @@ PlotLooper::PlotLooper
             elfr_name = "h_elfr40c";
             break;
         case AnalysisType::low_pt:
-            mufr_name = "h_mufr40c";
-            elfr_name = "h_elfr40c_noiso";
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";
-            elfr_name = "h_elfr40c_noiso";
+            mufr_name = "h_mufr40c_iso";  // needs to be fixed
+            elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::higgsino:
             mufr_name = "h_mufr40c_ewkcor";
@@ -270,7 +270,7 @@ void PlotLooper::EndJob()
     cout << "\nScale1fb = "           << m_scale1fb << endl;
     cout << "Num Events Generated = " << m_nevts << endl;
 
-    // set the error to the lumi*scale1fb if the yield < weight*0.5 
+    // set the error to the lumi * scale1fb * ClopperPearsonUncertainty
     if (m_sample != at::Sample::data)
     {
         const float weight = (m_lumi * m_scale1fb);
@@ -355,6 +355,28 @@ void PlotLooper::EndJob()
     hc["h_fake_pred"]->SetBinContent(2, fake.ee.value);
     hc["h_fake_pred"]->SetBinContent(3, fake.em.value);
     hc["h_fake_pred"]->SetBinContent(4, fake.ll.value);
+    if (m_sample != at::Sample::data)
+    {
+        // if this is MC, then we are using it for signal contamination
+        // 1. apply 50% uncertainty since this is MC 
+        // 2. manually select error to maxed out at 100%
+        fake.mm.error = (fake.mm.error < fake.mm.value ? sqrt(fake.mm.error*fake.mm.error + 0.25*fake.mm.value*fake.mm.value) : fake.mm.value);
+        fake.ee.error = (fake.ee.error < fake.ee.value ? sqrt(fake.ee.error*fake.ee.error + 0.25*fake.ee.value*fake.ee.value) : fake.ee.value);
+        fake.em.error = (fake.em.error < fake.em.value ? sqrt(fake.em.error*fake.em.error + 0.25*fake.em.value*fake.em.value) : fake.em.value);
+        fake.ll.error = (fake.ll.error < fake.ll.value ? sqrt(fake.ll.error*fake.ll.error + 0.25*fake.ll.value*fake.ll.value) : fake.ll.value);
+        //fake.mm.error = sqrt(fake.mm.error*fake.mm.error + 0.25*fake.mm.value*fake.mm.value);
+        //fake.ee.error = sqrt(fake.ee.error*fake.ee.error + 0.25*fake.ee.value*fake.ee.value);
+        //fake.em.error = sqrt(fake.em.error*fake.em.error + 0.25*fake.em.value*fake.em.value);
+        //fake.ll.error = sqrt(fake.ll.error*fake.ll.error + 0.25*fake.ll.value*fake.ll.value);
+        //fake.mm.error = fake.mm.value;
+        //fake.ee.error = fake.ee.value;
+        //fake.em.error = fake.em.value;
+        //fake.ll.error = fake.ll.value;
+        //cout << fake.mm.value << "\t" << fake.mm.error << endl;
+        //cout << fake.ee.value << "\t" << fake.ee.error << endl;
+        //cout << fake.em.value << "\t" << fake.em.error << endl;
+        //cout << fake.ll.value << "\t" << fake.ll.error << endl;
+    }
     hc["h_fake_pred"]->SetBinError(1, fake.mm.error);
     hc["h_fake_pred"]->SetBinError(2, fake.ee.error);
     hc["h_fake_pred"]->SetBinError(3, fake.em.error);
@@ -719,6 +741,15 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
+        // only keep MC matched events (MC only)
+        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
+        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc)
+        {
+            if (m_verbose) {cout << "failing MC truth matching" << endl;}
+            return 0;
+        }
+
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
         if (is_ss()) {charge_type = DileptonChargeType::SS;}
@@ -958,8 +989,7 @@ int PlotLooper::operator()(long event)
         // name and title suffixes
         string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
         string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
-        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
-        //const bool true_ss_event = true; 
+
 
         // SS
         if (is_ss())
