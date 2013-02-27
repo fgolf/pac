@@ -57,8 +57,28 @@ lib AnalysisTools
     <include>./source 
   ;
 
+exe add_cms2_branches
+  : # sources
+    ./source/AddCMS2Branches.cc
+    # dependent packages
+    /ROOT
+    /CMS2//cms2_header/<link>static
+    /CMS2_CORE//cms2_core/<link>static
+    /RootTools//RootTools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /boost//headers/<link>static
+    /boost//program_options/<link>static
+  : # requirements 
+    <include>./include
+    <include>./source 
+  : # default-build
+  : # usage-requirements
+    <include>./include
+    <include>./source 
+  ;
 
 # install
 # -----------------------------------------------------#
 
-#default-install AnalysisTools/<link>shared ;
+#default-install /AnalysisTools//add_cms2_branches ;
+#default-install /AnalysisTools//AnalysisTools/<link>shared ;
