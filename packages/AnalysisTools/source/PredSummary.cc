@@ -127,7 +127,7 @@ namespace at
         : ee(ee_)
         , mm(mm_)
         , em(em_)
-        , ll(ee + mm + em)
+        , ll(ee_ + mm_ + em_)
         , em_mufo(0.0, 0.0)
         , em_elfo(0.0, 0.0)
     {
@@ -137,7 +137,7 @@ namespace at
         : ee(ee_)
         , mm(mm_)
         , em(em_ + me_)
-        , ll(ee + mm + em)
+        , ll(ee_ + mm_ + em_ + me_)
         , em_mufo(me_)
         , em_elfo(em_)
     {

@@ -72,37 +72,39 @@ int QuickAnalysis::operator() (long event)
 
 	try
 	{
-		// electron loop
-		for (size_t idx = 0; idx != els_p4().size(); idx++)
-		{
-			const LorentzVector& el_p4 = els_p4().at(idx);	
+        cout << "evt_ww_rho_vor(): " << evt_ww_rho_vor() << endl;
 
-			// pt > 20 && |eta| < 2.4
-			if (el_p4.pt() < 20.0 || fabs(el_p4.eta()) > 2.4)
-			{
-				continue;
-			}
+		//// electron loop
+		//for (size_t idx = 0; idx != els_p4().size(); idx++)
+		//{
+		//	const LorentzVector& el_p4 = els_p4().at(idx);	
 
-            float iso_orig = electronIsoValuePF2012_FastJetEffArea(idx);
-            float iso_fix  = electronIsoValuePF2012_FastJetEffArea_v2(idx);
+		//	// pt > 20 && |eta| < 2.4
+		//	if (el_p4.pt() < 20.0 || fabs(el_p4.eta()) > 2.4)
+		//	{
+		//		continue;
+		//	}
 
-			// if passes ID with no missing hits relaxed
-			//if (isGoodLepton1MHitCut(idx) && not samesign::isGoodLepton(11, idx))
-			if (isGoodLeptonRelaxHitCut(idx) && els_exp_innerlayers().at(idx) >= 1)
-            {
-                rt::Fill(hc["h_iso_nomhitcut_orig"], iso_orig);
-                rt::Fill(hc["h_iso_nomhitcut_fix" ], iso_fix );
-                rt::Fill(hc["h_iso_nomhitcut_diff"], iso_orig - iso_fix);
-            }
+        //    float iso_orig = electronIsoValuePF2012_FastJetEffArea(idx);
+        //    float iso_fix  = electronIsoValuePF2012_FastJetEffArea_v2(idx);
 
-			// if passes full ID 
-			if (samesign::isGoodLepton(11, idx))
-            {
-                rt::Fill(hc["h_iso_fullid_orig"], iso_orig);
-                rt::Fill(hc["h_iso_fullid_fix" ], iso_fix );
-                rt::Fill(hc["h_iso_fullid_diff"], iso_orig - iso_fix);
-            }
-		}
+		//	// if passes ID with no missing hits relaxed
+		//	//if (isGoodLepton1MHitCut(idx) && not samesign::isGoodLepton(11, idx))
+		//	if (isGoodLeptonRelaxHitCut(idx) && els_exp_innerlayers().at(idx) >= 1)
+        //    {
+        //        rt::Fill(hc["h_iso_nomhitcut_orig"], iso_orig);
+        //        rt::Fill(hc["h_iso_nomhitcut_fix" ], iso_fix );
+        //        rt::Fill(hc["h_iso_nomhitcut_diff"], iso_orig - iso_fix);
+        //    }
+
+		//	// if passes full ID 
+		//	if (samesign::isGoodLepton(11, idx))
+        //    {
+        //        rt::Fill(hc["h_iso_fullid_orig"], iso_orig);
+        //        rt::Fill(hc["h_iso_fullid_fix" ], iso_fix );
+        //        rt::Fill(hc["h_iso_fullid_diff"], iso_orig - iso_fix);
+        //    }
+		//}
 	}
     catch (std::exception& e)
     {
@@ -121,8 +123,8 @@ int main()
 	TChain chain("Events");
 	//chain.Add("/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13/SingleOrDiLepton/merged_ntuple_1.root");
 	//chain.Add("/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13/SingleOrDiLepton/merged_ntuple_2.root");
-	//chain.Add("/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13/SingleOrDiLepton/merged_ntuple_3.root");
-	chain.Add("~/Data/dy_cms2.root");
+	chain.Add("/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24/SingleMu_Run2012A-13Jul2012-v1_AOD//merged_ntuple_74.root");
+	//chain.Add("~/Data/dy_cms2.root");
 	rt::PrintFilesFromTChain(chain);
 
 	//ScanChainCMS2(&chain, ScanChainTestAnalysis, 100);

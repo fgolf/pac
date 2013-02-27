@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
         long number_of_events           = -1;
         std::string input_file          = "";
         std::string output_file         = "";
-        std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root";
+        std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_26Feb2013.root";
         std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02212013.root";
         std::string suffix              = "";
         std::string vtxreweight_file    = "";
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
         float sparm1                    = -999;
         float sparm2                    = -999;
         float sparm3                    = -999;
-        float sf_flip                   = 1.32;
+        float sf_flip                   = 1.39;
         float fake_sys_unc              = 0.5;
         float flip_sys_unc              = 0.2;
         float mc_sys_unc                = 0.5;

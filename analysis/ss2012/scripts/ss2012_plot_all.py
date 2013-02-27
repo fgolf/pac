@@ -60,7 +60,7 @@ excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
 
 parser = OptionParser()
 
-default_fr_file = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root"
+default_fr_file = "data/fake_rates/ssFR_data_ewkcor_26Feb2013.root"
 default_fl_file = "data/flip_rates/ssFL_data_standard_02212013.root"
 
 # parameter options
@@ -82,11 +82,12 @@ parser.add_option("--fr_file"   , dest="fr_file"   , default=default_fr_file, he
 parser.add_option("--fl_file"   , dest="fl_file"   , default=default_fl_file, help="flip rate file to use"                                    )
 
 # boolean options
-parser.add_option("--test"   , action="store_true" , dest="test"   , default=False, help="test script -- print commands but do nothing")
-parser.add_option("--excl"   , action="store_true" , dest="excl"   , default=False, help="use exclusive SR"                            )
-parser.add_option("--incl"   , action="store_false", dest="excl"   , default=False, help="use incl SR (default)"                       )
-parser.add_option("--no_hist", action="store_true" , dest="no_hist", default=False, help="do not create histograms, do everything else")
-parser.add_option("--verbose", action="store_true" , dest="verbose", default=False, help="verbose print out"                           )
+parser.add_option("--test"       , action="store_true"  , dest="test"       , default=False , help="test script -- print commands but do nothing"   )
+parser.add_option("--excl"       , action="store_true"  , dest="excl"       , default=False , help="use exclusive SR"                               )
+parser.add_option("--incl"       , action="store_false" , dest="excl"       , default=False , help="use incl SR (default)"                          )
+parser.add_option("--no_hist"    , action="store_true"  , dest="no_hist"    , default=False , help="do not create histograms, do everything else"   )
+parser.add_option("--do_caption" , action="store_true"  , dest="do_caption" , default=False , help="create the caption for the SR above the tabular")
+parser.add_option("--verbose"    , action="store_true"  , dest="verbose"    , default=False , help="verbose print out"                              )
 
 (options, args) = parser.parse_args()
 
@@ -220,8 +221,8 @@ def print_yield_table(signal_region, do_append):
 	# tex file
 	tex_name  = "%s/sr%d.tex" % (table_path, signal_region)
 
-	cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, true); >& %s\" " \
-		% (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), tex_name)
+	cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, true, %d); >& %s\" " \
+		% (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), int(options.do_caption), tex_name)
 	if (options.verbose):
 		print cmd
 	if (not options.test):

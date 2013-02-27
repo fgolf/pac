@@ -27,6 +27,7 @@
 
     //if (lib_path.find(pac_path.c_str()) == std::string::npos)
     std::string pac_path = gSystem->Getenv("PAC");
+    //cout << pac_path << endl;
     if (cmssw)
     {
         pac_path += (is_debug ? "/bin/cmssw/debug" : "/bin/cmssw/release");
@@ -48,7 +49,7 @@
     // AnalysisTools
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/include");
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/source");
-    gSystem->Load(Form("%s/libcms2_core.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libcms2_core.so"    , pac_path.c_str()));
     gSystem->Load(Form("%s/libAnalysisTools.so", pac_path.c_str()));
 
     // SS2012 Tools

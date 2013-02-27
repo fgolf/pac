@@ -47,6 +47,27 @@ FakeScalingStruct GetPromptSF (TH1* h_data, TH1* h_mc, double cut_lower, double 
     return FakeScalingStruct(sf, unc_stat, unc_syst);
 }
 
+void SetScalingHistValues(TH2* h_scale, const FakeScalingStruct& fake_scale)
+{
+    for (int xidx = 0; xidx < h_scale->GetNbinsX()+1; xidx++)
+    {
+        for (int yidx = 0; yidx < h_scale->GetNbinsY()+1; yidx++)
+        {
+            h_scale->SetBinContent(xidx, yidx, fake_scale.sf);
+            h_scale->SetBinError(xidx, yidx, sqrt(pow(fake_scale.unc_stat,2) + pow(fake_scale.unc_syst,2)));
+        }
+    }
+    return;
+}
+
+TH2* ApplyScalingHist(TH2* h_unscaled, TH2* h_scale_factor, float lumi_scale)
+{
+    TH2* h_scaled = dynamic_cast<TH2*>(h_unscaled->Clone(Form("%s_scaled", h_unscaled->GetName())));
+    h_scaled->Scale(lumi_scale);
+    h_scaled->Multiply(h_scale_factor);
+    return h_scaled;
+}
+
 int main(int argc, char* argv[])
 try
 {
@@ -57,20 +78,24 @@ try
     std::string data_input_file         = "";
     std::string mc_input_files          = "";
     std::string output_file             = "";
-    double ele_lumi                     = 1.;
-    double mu_lumi                      = 1.;
+    double ele_lumi                     = 1.0;
+    double mu_lumi                      = 1.0;
+    double ele_noiso_lumi               = 1.0;
+    double mu_iso_lumi                  = 1.0;
     bool verbose                        = false;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"   , "print this menu")
-        ("in_data" , po::value<std::string>(&data_input_file) , "name of input data root file"                            )
-        ("in_mc"   , po::value<std::string>(&mc_input_files)  , "name of input MC root file"                              )
-        ("output"  , po::value<std::string>(&output_file)     , "output file name for lists (blank means print to screen)")
-        ("ele_lumi", po::value<double>(&ele_lumi)             , "luminosity collected on electron utility triggers"       )
-        ("mu_lumi" , po::value<double>(&mu_lumi)              , "luminosity collected on muon utility triggers"           )
-        ("verbose" , po::value<bool>(&verbose)                , "print the event lists (default is false)"                )
+        ("in_data"       , po::value<std::string>(&data_input_file) , "name of input data root file"                                       )
+        ("in_mc"         , po::value<std::string>(&mc_input_files)  , "name of input MC root file"                                         )
+        ("output"        , po::value<std::string>(&output_file)     , "output file name for lists (blank means print to screen)"           )
+        ("ele_lumi"      , po::value<double>(&ele_lumi)             , "luminosity collected on electron utility triggers"                  )
+        ("mu_lumi"       , po::value<double>(&mu_lumi)              , "luminosity collected on muon utility triggers"                      )
+        ("ele_noiso_lumi", po::value<double>(&ele_noiso_lumi)       , "luminosity collected on electron utility triggers with no isolation")
+        ("mu_iso_lumi"   , po::value<double>(&mu_iso_lumi)          , "luminosity collected on muon utility triggers with isolation"       )
+        ("verbose"       , po::value<bool>(&verbose)                , "print the event lists (default is false)"                           )
 
         ;
 
@@ -128,120 +153,134 @@ try
         cout << "[ss2012_make_fr_from_hists]: no output file given.  printing to stdout" << endl;
     }
 
+    // check mc files
+    if (v_mc_input_files.empty())
+    {
+        cout << "[ss2012_make_fr_from_hists]: no mc files given.  exiting" << endl;
+        return 0;
+    }
+
     // call sumw2() for all histograms
     TH1::SetDefaultSumw2();
 
     // get the data histograms
     rt::TH1Container hc_data(data_input_file);
-    rt::TH1Container hc_mc(v_mc_input_files[0]);
-    for (unsigned int index = 1; index < v_mc_input_files.size(); index++)
+    rt::TH1Container hc_mc(v_mc_input_files.front());
+    for (size_t index = 1; index < v_mc_input_files.size(); index++)
     {
         hc_mc += rt::TH1Container(v_mc_input_files[index]);
     }
 
     // get data/MC scale factors
+    const float mt_cut_min = 60.1f;
+    const float mt_cut_max = 99.9f;
     TH1* h_data_el_num40c_mt_met30gt = dynamic_cast<TH1*>(hc_data["h_el_num40c_mt_met30gt"]);
-    TH1* h_mc_el_num40c_mt_met30gt   = dynamic_cast<TH1*>(hc_mc["h_el_num40c_mt_met30gt"]);
+    TH1* h_mc_el_num40c_mt_met30gt   = dynamic_cast<TH1*>(hc_mc  ["h_el_num40c_mt_met30gt"]);
     h_mc_el_num40c_mt_met30gt->Scale(ele_lumi);
-    FakeScalingStruct el_sf = GetPromptSF(h_data_el_num40c_mt_met30gt, h_mc_el_num40c_mt_met30gt, 60.1, 99.9, verbose);    
+    FakeScalingStruct el_sf = GetPromptSF(h_data_el_num40c_mt_met30gt, h_mc_el_num40c_mt_met30gt, mt_cut_min, mt_cut_max, verbose);    
 
     TH1* h_data_mu_num40c_mt_met30gt = dynamic_cast<TH1*>(hc_data["h_mu_num40c_mt_met30gt"]);
-    TH1* h_mc_mu_num40c_mt_met30gt   = dynamic_cast<TH1*>(hc_mc["h_mu_num40c_mt_met30gt"]);
+    TH1* h_mc_mu_num40c_mt_met30gt   = dynamic_cast<TH1*>(hc_mc  ["h_mu_num40c_mt_met30gt"]);
     h_mc_mu_num40c_mt_met30gt->Scale(mu_lumi);
-    FakeScalingStruct mu_sf = GetPromptSF(h_data_mu_num40c_mt_met30gt, h_mc_mu_num40c_mt_met30gt, 60.1, 99.9, verbose);
+    FakeScalingStruct mu_sf = GetPromptSF(h_data_mu_num40c_mt_met30gt, h_mc_mu_num40c_mt_met30gt, mt_cut_min, mt_cut_max, verbose);
+
+    TH1* h_data_el_noiso_num40c_mt_met30gt = dynamic_cast<TH1*>(hc_data["h_el_noiso_num40c_mt_met30gt"]);
+    TH1* h_mc_el_noiso_num40c_mt_met30gt   = dynamic_cast<TH1*>(hc_mc  ["h_el_noiso_num40c_mt_met30gt"]);
+    h_mc_el_noiso_num40c_mt_met30gt->Scale(ele_noiso_lumi);
+    FakeScalingStruct el_noiso_sf = GetPromptSF(h_data_el_noiso_num40c_mt_met30gt, h_mc_el_noiso_num40c_mt_met30gt, mt_cut_min, mt_cut_max, verbose);    
+
+    TH1* h_data_mu_iso_num40c_mt_met30gt = dynamic_cast<TH1*>(hc_data["h_mu_iso_num40c_mt_met30gt"]);
+    TH1* h_mc_mu_iso_num40c_mt_met30gt   = dynamic_cast<TH1*>(hc_mc  ["h_mu_iso_num40c_mt_met30gt"]);
+    h_mc_mu_iso_num40c_mt_met30gt->Scale(mu_iso_lumi);
+    FakeScalingStruct mu_iso_sf = GetPromptSF(h_data_mu_iso_num40c_mt_met30gt, h_mc_mu_iso_num40c_mt_met30gt, mt_cut_min, mt_cut_max, verbose);
 
     // correct electron fake rate
-    TH2* h_data_el_num40c = dynamic_cast<TH2*>(hc_data["h_el_num40c"]);
-    TH2* h_data_el_fo40c  = dynamic_cast<TH2*>(hc_data["h_el_fo40c"]);
+    // ----------------------------------------------------------------------------------------------------- //
+
+    TH2* h_data_el_num40c       = dynamic_cast<TH2*>(hc_data["h_el_num40c"      ]->Clone("h_data_el_num40c"      ));
+    TH2* h_data_el_fo40c        = dynamic_cast<TH2*>(hc_data["h_el_fo40c"       ]->Clone("h_data_el_fo40c"       ));
+    TH2* h_data_el_noiso_num40c = dynamic_cast<TH2*>(hc_data["h_el_num40c_noiso"]->Clone("h_data_el_num40c_noiso"));
+    TH2* h_data_el_noiso_fo40c  = dynamic_cast<TH2*>(hc_data["h_el_fo40c_noiso" ]->Clone("h_data_el_fo40c_noiso" ));
 
     // create an artificial histogram for scaling
-    TH1* h_ele_scaling = dynamic_cast<TH2*>(h_data_el_num40c->Clone("h_ele_scaling"));
-    for (int xidx = 0; xidx < h_ele_scaling->GetNbinsX()+1; xidx++)
-    {
-        for (int yidx = 0; yidx < h_ele_scaling->GetNbinsY()+1; yidx++)
-        {
-            h_ele_scaling->SetBinContent(xidx, yidx, el_sf.sf);
-            h_ele_scaling->SetBinError(xidx, yidx, sqrt(pow(el_sf.unc_stat,2) + pow(el_sf.unc_syst,2)));
-        }
-    }
+    TH2* h_ele_scaling = dynamic_cast<TH2*>(h_data_el_num40c->Clone("h_ele_scaling"));
+    SetScalingHistValues(h_ele_scaling, el_sf);
+    TH2* h_mc_el_num40c = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_el_num40c"]), h_ele_scaling, ele_lumi);
+    TH2* h_mc_el_fo40c  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_el_fo40c" ]), h_ele_scaling, ele_lumi);
 
-    TH2* h_mc_el_num40c = dynamic_cast<TH2*>(hc_mc["h_el_num40c"]);
-    h_mc_el_num40c->Scale(ele_lumi);
-    h_mc_el_num40c->Multiply(h_ele_scaling);
-    TH2* h_mc_el_fo40c  = dynamic_cast<TH2*>(hc_mc["h_el_fo40c"]);
-    h_mc_el_fo40c->Scale(ele_lumi);
-    h_mc_el_fo40c->Multiply(h_ele_scaling);
+    TH2* h_ele_noiso_scaling = dynamic_cast<TH2*>(h_data_el_noiso_num40c->Clone("h_ele_noiso_scaling"));
+    SetScalingHistValues(h_ele_noiso_scaling, el_noiso_sf);
+    TH2* h_mc_el_noiso_num40c = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_el_num40c_noiso"]), h_ele_noiso_scaling, ele_noiso_lumi);
+    TH2* h_mc_el_noiso_fo40c  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_el_fo40c_noiso" ]), h_ele_noiso_scaling, ele_noiso_lumi);
 
+    // subtract contamination
     h_data_el_num40c->Add(h_mc_el_num40c, -1);
     h_data_el_fo40c->Add(h_mc_el_fo40c, -1);
+    h_data_el_noiso_num40c->Add(h_mc_el_noiso_num40c, -1);
+    h_data_el_noiso_fo40c->Add(h_mc_el_noiso_fo40c, -1);
 
-    TH2* h_elfr40c_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_el_num40c, h_data_el_fo40c, "h_elfr40c_ewkcor", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination");
-    TH1* h_elfr40c_vs_pt_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_el_num40c, h_data_el_fo40c, "y", "h_elfr40c_vs_pt_ewkcor", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination");
-    TH1* h_elfr40c_vs_eta_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_el_num40c, h_data_el_fo40c, "x", "h_elfr40c_vs_eta_ewkcor", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination", 20., 9999.);
+    // create fake rates and projections
+    TH2* h_elfr40c_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_el_num40c        , h_data_el_fo40c, "h_elfr40c_ewkcor" , "electron FR cpfiso03 #rho * A_{eff} (0.09 , 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination");
+    TH1* h_elfr40c_vs_pt_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_el_num40c, h_data_el_fo40c, "y", "h_elfr40c_vs_pt_ewkcor" , "electron FR cpfiso03 #rho * A_{eff} (0.09 , 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination");
+    TH1* h_elfr40c_vs_eta_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_el_num40c, h_data_el_fo40c, "x", "h_elfr40c_vs_eta_ewkcor", "electron FR cpfiso03 #rho * A_{eff} (0.09 , 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination", 20.0f , 9999.0f);
+
+    TH2* h_elfr40c_noiso_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_el_noiso_num40c        , h_data_el_noiso_fo40c, "h_elfr40c_noiso_ewkcor" , "electron FR cpfiso03 #rho * A_{eff} (0.09 , 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination");
+    TH1* h_elfr40c_vs_pt_noiso_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_el_noiso_num40c, h_data_el_noiso_fo40c, "y", "h_elfr40c_noiso_vs_pt_ewkcor" , "electron FR cpfiso03 #rho * A_{eff} (0.09 , 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination");
+    TH1* h_elfr40c_vs_eta_noiso_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_el_noiso_num40c, h_data_el_noiso_fo40c, "x", "h_elfr40c_noiso_vs_eta_ewkcor", "electron FR cpfiso03 #rho * A_{eff} (0.09 , 0.6) (away jet p_{T} > 40), corrected for prompt EWK contamination", 10.0f , 9999.0f);
 
     // correct muon fake rate
+    // ----------------------------------------------------------------------------------------------------- //
+
     TH2* h_data_mu_num40c = dynamic_cast<TH2*>(hc_data["h_mu_num40c"]);
     TH2* h_data_mu_fo40c  = dynamic_cast<TH2*>(hc_data["h_mu_fo40c"]);
-
-    // if (verbose)
-    // {
-    //     printf("bin 1,1 for data num is: %4.2f\n", h_data_mu_num40c->GetBinContent(1,1));
-    //     printf("bin 1,1 for data fo is: %4.2f\n", h_data_mu_fo40c->GetBinContent(1,1));
-    // }
+    TH2* h_data_mu_iso_num40c = dynamic_cast<TH2*>(hc_data["h_mu_num40c_iso"]);
+    TH2* h_data_mu_iso_fo40c  = dynamic_cast<TH2*>(hc_data["h_mu_fo40c_iso"]);
 
     // create an artificial histogram for scaling
-    TH1* h_mu_scaling = dynamic_cast<TH2*>(h_data_mu_num40c->Clone("h_mu_scaling"));
-    for (int xidx = 0; xidx < h_mu_scaling->GetNbinsX()+1; xidx++)
-    {
-        for (int yidx = 0; yidx < h_mu_scaling->GetNbinsY()+1; yidx++)
-        {
-            h_mu_scaling->SetBinContent(xidx, yidx, mu_sf.sf);
-            h_mu_scaling->SetBinError(xidx, yidx, sqrt(pow(mu_sf.unc_stat,2) + pow(mu_sf.unc_syst,2)));
-        }
-    }
+    TH2* h_mu_scaling = dynamic_cast<TH2*>(h_data_mu_num40c->Clone("h_mu_scaling"));
+    SetScalingHistValues(h_mu_scaling, mu_sf);
+    TH2* h_mc_mu_num40c = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_mu_num40c"]), h_mu_scaling, mu_lumi);
+    TH2* h_mc_mu_fo40c  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_mu_fo40c" ]), h_mu_scaling, mu_lumi);
 
-    // if (verbose)
-    // {
-    //     printf("bin 1,1 for scaling is: %4.2f\n", h_mu_scaling->GetBinContent(1,1));
-    // }
+    TH2* h_mu_iso_scaling = dynamic_cast<TH2*>(h_data_mu_iso_num40c->Clone("h_mu_iso_scaling"));
+    SetScalingHistValues(h_mu_iso_scaling, mu_iso_sf);
+    TH2* h_mc_mu_iso_num40c = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_mu_num40c_iso"]), h_mu_iso_scaling, mu_iso_lumi);
+    TH2* h_mc_mu_iso_fo40c  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc["h_mu_fo40c_iso" ]), h_mu_iso_scaling, mu_iso_lumi);
 
-    TH2* h_mc_mu_num40c = dynamic_cast<TH2*>(hc_mc["h_mu_num40c"]);
-    TH2* h_mc_mu_fo40c  = dynamic_cast<TH2*>(hc_mc["h_mu_fo40c"]);
-
-    h_mc_mu_num40c->Scale(mu_lumi);
-    h_mc_mu_fo40c->Scale(mu_lumi);
-
-    // if (verbose)
-    // {
-    //     printf("bin 1,1 for mc num is: %4.2f\n", h_mc_mu_num40c->GetBinContent(1,1));
-    //     printf("bin 1,1 for mc fo is: %4.2f\n", h_mc_mu_fo40c->GetBinContent(1,1));
-    // }
-
-    h_mc_mu_num40c->Multiply(h_mu_scaling);
-    h_mc_mu_fo40c->Multiply(h_mu_scaling);
-
-    // if (verbose)
-    // {
-    //     printf("bin 1,1 for scaled mc num is: %4.2f\n", h_mc_mu_num40c->GetBinContent(1,1));
-    //     printf("bin 1,1 for scaled mc fo is: %4.2f\n", h_mc_mu_fo40c->GetBinContent(1,1));
-    // }
-
+    // subtract contamination
     h_data_mu_num40c->Add(h_mc_mu_num40c, -1);
     h_data_mu_fo40c->Add(h_mc_mu_fo40c, -1);
+    h_data_mu_iso_num40c->Add(h_mc_mu_iso_num40c, -1);
+    h_data_mu_iso_fo40c->Add(h_mc_mu_iso_fo40c, -1);
 
+    // create fake rates and projections
     TH2* h_mufr40c_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_mu_num40c, h_data_mu_fo40c, "h_mufr40c_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
     TH1* h_mufr40c_vs_pt_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_mu_num40c, h_data_mu_fo40c, "y", "h_mufr40c_vs_pt_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
     TH1* h_mufr40c_vs_eta_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_mu_num40c, h_data_mu_fo40c, "x", "h_mufr40c_vs_eta_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination",20., 9999.);
+    TH2* h_mufr40c_iso_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_mu_iso_num40c, h_data_mu_iso_fo40c, "h_mufr40c_iso_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
+    TH1* h_mufr40c_vs_pt_iso_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_mu_iso_num40c, h_data_mu_iso_fo40c, "y", "h_mufr40c_iso_vs_pt_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
+    TH1* h_mufr40c_vs_eta_iso_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_mu_iso_num40c, h_data_mu_iso_fo40c, "x", "h_mufr40c_iso_vs_eta_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination",20., 9999.);
+    
+    // save output 
+    // ----------------------------------------------------------------------------------------------------- //
 
     rt::TH1Container hc_new(hc_data);
-    hc_new.Add(*h_elfr40c_ewkcor);
-    hc_new.Add(*h_elfr40c_vs_pt_ewkcor);
-    hc_new.Add(*h_elfr40c_vs_eta_ewkcor);
-    hc_new.Add(*h_mufr40c_ewkcor);
-    hc_new.Add(*h_mufr40c_vs_pt_ewkcor);
-    hc_new.Add(*h_mufr40c_vs_eta_ewkcor);
-    hc_new.Add(*h_ele_scaling);
-    hc_new.Add(*h_mu_scaling);
+    hc_new.Add(h_elfr40c_ewkcor);
+    hc_new.Add(h_elfr40c_vs_pt_ewkcor);
+    hc_new.Add(h_elfr40c_vs_eta_ewkcor);
+    hc_new.Add(h_mufr40c_ewkcor);
+    hc_new.Add(h_mufr40c_vs_pt_ewkcor);
+    hc_new.Add(h_mufr40c_vs_eta_ewkcor);
+    hc_new.Add(h_ele_scaling);
+    hc_new.Add(h_mu_scaling);
+    hc_new.Add(h_elfr40c_noiso_ewkcor);
+    hc_new.Add(h_elfr40c_vs_pt_noiso_ewkcor);
+    hc_new.Add(h_elfr40c_vs_eta_noiso_ewkcor);
+    hc_new.Add(h_mufr40c_iso_ewkcor);
+    hc_new.Add(h_mufr40c_vs_pt_iso_ewkcor);
+    hc_new.Add(h_mufr40c_vs_eta_iso_ewkcor);
+    hc_new.Add(h_ele_noiso_scaling);
+    hc_new.Add(h_mu_iso_scaling);
 
     hc_new.Write(output_file,"","RECREATE");
 

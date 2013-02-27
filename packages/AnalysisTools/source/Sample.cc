@@ -858,9 +858,9 @@ namespace at
             // ntuple_path
             "QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3",
             // SampleType 
-            SampleType::susy,
+            SampleType::bkgd,
             // Sample
-            Sample::lm9,
+            Sample::qcd_mu15,
             // color
             kBlue
         }
