@@ -371,20 +371,20 @@ namespace rt
 
     // calculate the Delta Phi between two 4 vectors 
     double DeltaPhi(const LorentzVector& p1, const LorentzVector& p2)
-	{
-		return ROOT::Math::VectorUtil::DeltaPhi(p1, p2); 
+    {
+        return ROOT::Math::VectorUtil::DeltaPhi(p1, p2); 
     }
 
     // calculate the Delta Phi between two 4 vectors 
     double DeltaEta(const LorentzVector& p1, const LorentzVector& p2)
-	{
+    {
         return fabs(p1.Eta()-p2.Eta());
     }
 
     // calculate the DeltaR between two 4 vectors
     double DeltaR(const LorentzVector& p1, const LorentzVector& p2)
     {
-		return ROOT::Math::VectorUtil::DeltaR(p1, p2); 
+        return ROOT::Math::VectorUtil::DeltaR(p1, p2); 
         //float deta = p1.Eta()-p2.Eta();
         //float dphi = DeltaPhi(p1.Phi(), p2.Phi());
         //return sqrt(dphi*dphi + deta*deta);
@@ -803,37 +803,37 @@ namespace rt
         return result;
     }
 
-	// make a chain from a path
-	TChain* MakeTChain(const std::string& glob, const std::string& treename, TChain* chain_in, bool verbose)
-	{
-	    std::string cmd = "ls ";
-	    cmd += glob;
-	    FILE *f = popen(cmd.c_str(), "r");
-	    if (!f) {
-	        perror("Opening pipe");
-	        return 0;
-	    }
-	    TChain *c = chain_in == 0 ? new TChain(treename.c_str()) : chain_in;
-	    int s;
-	    do {
-	        char fname[1024];
-	        s = fscanf(f, " %1024s\n", fname);
-	        if (s != 1) {
-	            if (s != EOF)
-	                perror("scanning file list");
-	        } else {
-	            if (verbose)
-	                printf("Adding %s\n", fname);
-	            c->Add(fname);
-	        }
-	    } while (s == 1);
-	    if (pclose(f) == -1) 
-	        perror("Closing pipe");
-	    return c;
-	}
+    // make a chain from a path
+    TChain* MakeTChain(const std::string& glob, const std::string& treename, TChain* chain_in, bool verbose)
+    {
+        std::string cmd = "ls ";
+        cmd += glob;
+        FILE *f = popen(cmd.c_str(), "r");
+        if (!f) {
+            perror("Opening pipe");
+            return 0;
+        }
+        TChain *c = chain_in == 0 ? new TChain(treename.c_str()) : chain_in;
+        int s;
+        do {
+            char fname[1024];
+            s = fscanf(f, " %1024s\n", fname);
+            if (s != 1) {
+                if (s != EOF)
+                    perror("scanning file list");
+            } else {
+                if (verbose)
+                    printf("Adding %s\n", fname);
+                c->Add(fname);
+            }
+        } while (s == 1);
+        if (pclose(f) == -1) 
+            perror("Closing pipe");
+        return c;
+    }
 
 
-    // If num_passed passed of num_generated, what is upper limit on number of events passing?
+    // Calculate the uncertainty on the generated yields
     float GetClopperPearsonUncertainty(const int num_passed, const int num_generated, const float level, const bool use_upper)
     {
         if (num_generated <= 0) 
@@ -848,35 +848,35 @@ namespace rt
     }
 
 
-	// create a chain from a comma serperated list (e.g. "file1,file2,...")
-	// NOTE: user is charge of deleting!
-	TChain* CreateTChainFromCommaSeperatedList
-	(
-	    const std::string& str, 
-	    const std::string& treename, 
-	    const std::string& prefix
-	)
-	{
-	    using namespace std;
-	    TChain* chain = NULL;
-	    vector<string> files = string_split(str, ",");    
-	    for (size_t i = 0; i != files.size(); i++)
-	    {
-	        std::string full_path = prefix+files.at(i);
-	        if (i == 0)
-	            chain = MakeTChain(full_path.c_str(), treename.c_str());
-	        else
-	            chain = MakeTChain(full_path.c_str(), treename.c_str(), chain);
-	    }
+    // create a chain from a comma serperated list (e.g. "file1,file2,...")
+    // NOTE: user is charge of deleting!
+    TChain* CreateTChainFromCommaSeperatedList
+    (
+        const std::string& str, 
+        const std::string& treename, 
+        const std::string& prefix
+    )
+    {
+        using namespace std;
+        TChain* chain = NULL;
+        vector<string> files = string_split(str, ",");    
+        for (size_t i = 0; i != files.size(); i++)
+        {
+            std::string full_path = prefix+files.at(i);
+            if (i == 0)
+                chain = MakeTChain(full_path.c_str(), treename.c_str());
+            else
+                chain = MakeTChain(full_path.c_str(), treename.c_str(), chain);
+        }
 
         // check the chain
         if (!chain)
         {
             throw std::runtime_error("ERROR RT::CreateTChainFromCommaSeperatedList -- chain is NULL");
         }
-	
-	    return chain;
-	}
+    
+        return chain;
+    }
 
     // create a Projection from 2D hist 
     TH1* MakeProjectionPlot
@@ -1031,7 +1031,7 @@ namespace rt
             throw runtime_error("rt::MakeEfficiencyPlot2D: one of the Histograms are NULL or not castable to a TH2*");
         }
         return MakeEfficiencyPlot2D(num_hist_temp, den_hist_temp, name, title);
-	}
+    }
 
     TH2* MakeEfficiencyPlot2D(TH2* num_hist, TH2* den_hist, const std::string& name, const std::string& title)
     {
@@ -1140,12 +1140,12 @@ namespace rt
             mkdir(dirname(target));
         }
 
-	    // test if its has valid root files -- if not, then quit
-	    if(sources.empty())
-	    {
-	        cout << "ERROR: rt::hadd() No sources to process.  Exiting..." << endl;
-	        return 1;
-	    }
+        // test if its has valid root files -- if not, then quit
+        if(sources.empty())
+        {
+            cout << "ERROR: rt::hadd() No sources to process.  Exiting..." << endl;
+            return 1;
+        }
 
         // build merger
         TFileMerger file_merger;
@@ -1186,11 +1186,11 @@ namespace rt
     // get an environment variable
     std::string getenv(const std::string& name)
     {
-		if (name.empty())
-		{
+        if (name.empty())
+        {
             std::cerr << "WARNING: rt::genenv: input is NULL.  Did you forget to set the env var?" << std::endl;
             return "";
-		}
+        }
 
         // need the :: to access getenv in global namespace (from cstdlib)
         string result(::getenv(name.c_str()));
@@ -1337,10 +1337,10 @@ namespace rt
     string mkdir_from_filename(const std::string& file_name, bool force)
     {
         string path = rt::dirname(file_name);
-		if (path.empty())
-		{
-			return file_name;
-		}
+        if (path.empty())
+        {
+            return file_name;
+        }
         if (!rt::exists(path))
         {
             if(!rt::mkdir(path, force))
