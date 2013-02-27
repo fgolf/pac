@@ -27,6 +27,7 @@
 #include "at/GoodRun.h"
 #include "at/PrintIdIsoInfo.h"
 #include "at/MCBtagCount.h"
+#include "at/CMS2Tag.h"
 #include "rt/RootTools.h"
 #include "CTable.h"
 #include "GenParticleStruct.h"
@@ -481,11 +482,11 @@ SSAnalysisLooper::SSAnalysisLooper
             break;
         case AnalysisType::low_pt:
             mufr_name = "h_mufr40c_ewkcor";
-            elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
+            elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::vlow_pt:
             mufr_name = "h_mufr40c_iso";    // need to update with ewk correction
-            elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
+            elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::high_pt_eth:
             mufr_name = "h_mufr40c";
@@ -895,7 +896,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 
             // check if event passes num_jet cut (hard coded to 2)
             int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-            if (evt_isRealData() && num_jets < 2)
+            if (evt_isRealData() && num_jets < m_njets)
             {
                 if (m_verbose) {std::cout << "fails # jets >= " << 2 << " requirement with " << num_jets << " jets" << std::endl;}
                 continue;
@@ -1370,7 +1371,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             bool pass_njets_cut = (m_evt.njets_up >= m_njets || m_evt.njets_dn >= m_njets || m_evt.njets >= m_njets);
             if (not pass_njets_cut)
             {
-                if (m_verbose) {std::cout << "fails # jets >= 2 cut" << std::endl;}
+                if (m_verbose) {std::cout << "fails # jets >= " << m_njets << " cut" << std::endl;}
                 return 0;
             }
         }
@@ -1535,11 +1536,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
 
         //cout << jet_flags.size() << "\t" << bjet_flags.size() << endl;
         // jet btag flag and mc flavor matching
+        const CMS2Tag cms2_tag = at::GetCMS2Tag();
         for (size_t jidx = 0; jidx != jet_flags.size(); jidx++)
         {
             // jets
             if (not jet_flags.at(jidx)) {continue;}
-            if (not evt_isRealData() && (evt_CMS2tag().at(0)=="V05-03-23" || evt_CMS2tag().at(0)=="V05-03-24"))
+            if (not evt_isRealData() && (cms2_tag.version > 23))
             {
                 m_evt.vjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
                 m_evt.vjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
@@ -1548,7 +1550,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             // btags
             m_evt.vjets_btagged.push_back(bjet_flags.at(jidx));
             if (not bjet_flags.at(jidx)) {continue;}
-            if (not evt_isRealData() && (evt_CMS2tag().at(0)=="V05-03-23" || evt_CMS2tag().at(0)=="V05-03-24"))
+            if (not evt_isRealData() && (cms2_tag.version > 23))
             {
                 m_evt.vbjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
                 m_evt.vbjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
@@ -1556,7 +1558,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         }
 
         // calculate the "reweighted" MC btag yields
-        if (not evt_isRealData())
+        if (not evt_isRealData() && (cms2_tag.version > 23))
         {
             m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::base);
             m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::up  );

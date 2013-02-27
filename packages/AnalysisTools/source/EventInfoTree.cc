@@ -1,6 +1,7 @@
 #include "EventInfoTree.h"
 #include "CORE/eventSelections.h"
 #include "CMS2.h"
+#include "at/CMS2Tag.h"
 
 using namespace at;
 
@@ -28,14 +29,26 @@ void EventInfoTree::FillCommon (Sample::value_type sample_, const std::string& r
     pfmet_phi         = cms2.evt_pfmetPhi_type1cor();
     dataset           = cms2.evt_dataset().at(0);
     filename          = root_file_name;
-	filt_csc          = passCSCBeamHaloFilter();
+    filt_csc          = passCSCBeamHaloFilter();
     filt_hbhe         = passHBHEFilter();
     filt_hcallaser    = passHCALLaserFilter();
-    filt_ecallaser    = passECALLaserFilter();
     filt_ecaltp       = passECALDeadCellFilter();
     filt_trkfail      = passTrackingFailureFilter();
     filt_eebadsc      = passeeBadScFilter();
-    passes_metfilters = passMETFilters();
+    if (at::GetCMS2Tag().version >= 23)
+    {
+        filt_ecallaser    = passECALLaserFilter();
+        passes_metfilters = passMETFilters();
+    }
+    else
+    {
+        passes_metfilters = passCSCBeamHaloFilter() &&
+                            passHBHEFilter() &&
+                            passHCALLaserFilter() &&
+                            passECALDeadCellFilter() &&
+                            passTrackingFailureFilter() &&
+                            passeeBadScFilter();
+    }
 
     if (!cms2.evt_isRealData()) 
     {

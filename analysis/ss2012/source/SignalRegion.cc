@@ -1249,7 +1249,7 @@ namespace ss
         const std::string& signal_region_name,
         const std::string& analysis_type_name,
         const std::string& signal_region_type_name
-        )
+    )
     {
         using namespace std;
         const AnalysisType::value_type analysis_type          = GetAnalysisTypeFromName(analysis_type_name); 
@@ -1362,7 +1362,7 @@ namespace ss
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type analysis_type,
         const SignalRegionType::value_type& signal_region_type
-        )
+    )
     {
         if (analysis_type==AnalysisType::high_pt     && signal_region_type==SignalRegionType::inclusive) {return s_HptInclSignalRegionInfos[signal_region];}
         if (analysis_type==AnalysisType::high_pt_eth && signal_region_type==SignalRegionType::inclusive) {return s_HptInclSignalRegionInfos[signal_region];}
@@ -1385,7 +1385,7 @@ namespace ss
         const std::string& signal_region_name,
         const std::string& analysis_type_name,
         const std::string& signal_region_type_name
-        )
+    )
     {
         const AnalysisType::value_type analysis_type          = GetAnalysisTypeFromName(analysis_type_name); 
         const SignalRegionType::value_type signal_region_type = GetSignalRegionTypeFromName(signal_region_type_name); 
@@ -1407,35 +1407,33 @@ namespace ss
         const unsigned int id2 = abs(ssb::lep2_pdgid());
         const float pt1 = ssb::lep1_p4().pt();
         const float pt2 = ssb::lep2_p4().pt();
-
         switch(anal_type)
         {
-        case AnalysisType::high_pt:
-            if (pt1 < 20.0) return false;
-            if (pt2 < 20.0) return false;
-            break;
-        case AnalysisType::high_pt_eth:
-            if (pt1 < 20.0) return false;
-            if (pt2 < 20.0) return false;
-            break;
-        case AnalysisType::hcp:
-            if (pt1 < 20.0) return false;
-            if (pt2 < 20.0) return false;
-            break;
-        case AnalysisType::low_pt:
-            if (pt1 < 10.0) return false;
-            if (pt2 < 10.0) return false;
-            break;
-        case AnalysisType::vlow_pt:
-            if (pt1 < (id1==11 ? 10.0 : 5.0)) return false;
-            if (pt2 < (id2==11 ? 10.0 : 5.0)) return false;
-            break;
-        case AnalysisType::higgsino:
-            if (std::max(pt1,pt2) < 20.0) return false;
-            if (std::min(pt1,pt2) < 10.0) return false;
-            break;
-        default:
-            return false;
+            case AnalysisType::high_pt:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
+            case AnalysisType::high_pt_eth:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
+            case AnalysisType::hcp:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
+            case AnalysisType::low_pt:
+                if (pt1 < 10.0) return false;
+                if (pt2 < 10.0) return false;
+                break;
+            case AnalysisType::vlow_pt:
+                if (pt1 < (id1==11 ? 10.0 : 5.0)) return false;
+                if (pt2 < (id2==11 ? 10.0 : 5.0)) return false;
+                break;
+            case AnalysisType::higgsino:
+                if (max(pt1,pt2) < 20.0) return false;
+                if (min(pt1,pt2) < 10.0) return false;
+            default:
+                return false;
         }
 
         // kinematic variables that define the signal region
@@ -1446,107 +1444,108 @@ namespace ss
         float met   = ssb::pfmet();
         switch(yield_type)
         {
-        case at::YieldType::up:
-            njets  = ssb::njets_up();
-            nbtags = ssb::nbtags_up();
-            ht     = ssb::ht_up();
-            met    = ssb::pfmet_up();
-            break;
-        case at::YieldType::down:
-            njets  = ssb::njets_dn();
-            nbtags = ssb::nbtags_dn();
-            ht     = ssb::ht_dn();
-            met    = ssb::pfmet_dn();
-            break;
-        case at::YieldType::base:
-            njets  = ssb::njets();
-            nbtags = ssb::nbtags();
-            ht     = ssb::ht();
-            met    = ssb::pfmet();
-            break;
-        default:
-            njets  = ssb::njets();
-            nbtags = ssb::nbtags();
-            ht     = ssb::ht();
-            met    = ssb::pfmet();
-            break;
+            case at::YieldType::up:
+                njets  = ssb::njets_up();
+                nbtags = ssb::nbtags_up();
+                ht     = ssb::ht_up();
+                met    = ssb::pfmet_up();
+                break;
+            case at::YieldType::down:
+                njets  = ssb::njets_dn();
+                nbtags = ssb::nbtags_dn();
+                ht     = ssb::ht_dn();
+                met    = ssb::pfmet_dn();
+                break;
+            case at::YieldType::base:
+                njets  = ssb::njets();
+                nbtags = ssb::nbtags();
+                ht     = ssb::ht();
+                met    = ssb::pfmet();
+                break;
+            default:
+                njets  = ssb::njets();
+                nbtags = ssb::nbtags();
+                ht     = ssb::ht();
+                met    = ssb::pfmet();
+                break;
         }
 
         // high pt
         if (anal_type==AnalysisType::high_pt_eth || anal_type==AnalysisType::high_pt)
         {
+            const float met_cut = (ht < 500.0 ? 30.0 : 0.0); 
+            const bool baseline = (lep_d0 && njets>=2 && ht>=80.0 && met>met_cut);
+
             if (signal_region_type==SignalRegionType::inclusive)
             {
-                const bool baseline = (lep_d0 && njets>=2 && ht>=80.0 && (ht>500 ? met>30: true));
                 switch (signal_region)
                 {
-                case SignalRegion::sr0 : return (baseline);
-                case SignalRegion::sr1 : return (baseline && nbtags>=0 && njets>=2 && ht>200 && met>50 );
-                case SignalRegion::sr2 : return (baseline && nbtags>=0 && njets>=2 && ht>400 && met>50 );
-                case SignalRegion::sr3 : return (baseline && nbtags>=0 && njets>=4 && ht>200 && met>50 );
-                case SignalRegion::sr4 : return (baseline && nbtags>=0 && njets>=4 && ht>400 && met>50 );
-                case SignalRegion::sr5 : return (baseline && nbtags>=0 && njets>=2 && ht>200 && met>120);
-                case SignalRegion::sr6 : return (baseline && nbtags>=0 && njets>=2 && ht>400 && met>120);
-                case SignalRegion::sr7 : return (baseline && nbtags>=0 && njets>=4 && ht>200 && met>120);
-                case SignalRegion::sr8 : return (baseline && nbtags>=0 && njets>=4 && ht>400 && met>120);
-                case SignalRegion::sr9 : return (false); // not used --> default is to fail
-                case SignalRegion::sr10: return (baseline && nbtags==1);
-                case SignalRegion::sr11: return (baseline && nbtags==1 && njets>=2 && ht>200 && met>50 );
-                case SignalRegion::sr12: return (baseline && nbtags==1 && njets>=2 && ht>400 && met>50 );
-                case SignalRegion::sr13: return (baseline && nbtags==1 && njets>=4 && ht>200 && met>50 );
-                case SignalRegion::sr14: return (baseline && nbtags==1 && njets>=4 && ht>400 && met>50 );
-                case SignalRegion::sr15: return (baseline && nbtags==1 && njets>=2 && ht>200 && met>120);
-                case SignalRegion::sr16: return (baseline && nbtags==1 && njets>=2 && ht>400 && met>120);
-                case SignalRegion::sr17: return (baseline && nbtags==1 && njets>=4 && ht>200 && met>120);
-                case SignalRegion::sr18: return (baseline && nbtags==1 && njets>=4 && ht>400 && met>120);
-                case SignalRegion::sr19: return (false); // not used --> default is to fail
-                case SignalRegion::sr20: return (baseline && nbtags>=2);
-                case SignalRegion::sr21: return (baseline && nbtags>=2 && njets>=2 && ht>200 && met>50 );
-                case SignalRegion::sr22: return (baseline && nbtags>=2 && njets>=2 && ht>400 && met>50 );
-                case SignalRegion::sr23: return (baseline && nbtags>=2 && njets>=4 && ht>200 && met>50 );
-                case SignalRegion::sr24: return (baseline && nbtags>=2 && njets>=4 && ht>400 && met>50 );
-                case SignalRegion::sr25: return (baseline && nbtags>=2 && njets>=2 && ht>200 && met>120);
-                case SignalRegion::sr26: return (baseline && nbtags>=2 && njets>=2 && ht>400 && met>120);
-                case SignalRegion::sr27: return (baseline && nbtags>=2 && njets>=4 && ht>200 && met>120);
-                case SignalRegion::sr28: return (baseline && nbtags>=2 && njets>=4 && ht>400 && met>120);
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0 : return (baseline);
+                    case SignalRegion::sr1 : return (baseline && nbtags>=0 && njets>=2 && ht>200 && met>50 );
+                    case SignalRegion::sr2 : return (baseline && nbtags>=0 && njets>=2 && ht>400 && met>50 );
+                    case SignalRegion::sr3 : return (baseline && nbtags>=0 && njets>=4 && ht>200 && met>50 );
+                    case SignalRegion::sr4 : return (baseline && nbtags>=0 && njets>=4 && ht>400 && met>50 );
+                    case SignalRegion::sr5 : return (baseline && nbtags>=0 && njets>=2 && ht>200 && met>120);
+                    case SignalRegion::sr6 : return (baseline && nbtags>=0 && njets>=2 && ht>400 && met>120);
+                    case SignalRegion::sr7 : return (baseline && nbtags>=0 && njets>=4 && ht>200 && met>120);
+                    case SignalRegion::sr8 : return (baseline && nbtags>=0 && njets>=4 && ht>400 && met>120);
+                    case SignalRegion::sr9 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10: return (baseline && nbtags==1);
+                    case SignalRegion::sr11: return (baseline && nbtags==1 && njets>=2 && ht>200 && met>50 );
+                    case SignalRegion::sr12: return (baseline && nbtags==1 && njets>=2 && ht>400 && met>50 );
+                    case SignalRegion::sr13: return (baseline && nbtags==1 && njets>=4 && ht>200 && met>50 );
+                    case SignalRegion::sr14: return (baseline && nbtags==1 && njets>=4 && ht>400 && met>50 );
+                    case SignalRegion::sr15: return (baseline && nbtags==1 && njets>=2 && ht>200 && met>120);
+                    case SignalRegion::sr16: return (baseline && nbtags==1 && njets>=2 && ht>400 && met>120);
+                    case SignalRegion::sr17: return (baseline && nbtags==1 && njets>=4 && ht>200 && met>120);
+                    case SignalRegion::sr18: return (baseline && nbtags==1 && njets>=4 && ht>400 && met>120);
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (baseline && nbtags>=2);
+                    case SignalRegion::sr21: return (baseline && nbtags>=2 && njets>=2 && ht>200 && met>50 );
+                    case SignalRegion::sr22: return (baseline && nbtags>=2 && njets>=2 && ht>400 && met>50 );
+                    case SignalRegion::sr23: return (baseline && nbtags>=2 && njets>=4 && ht>200 && met>50 );
+                    case SignalRegion::sr24: return (baseline && nbtags>=2 && njets>=4 && ht>400 && met>50 );
+                    case SignalRegion::sr25: return (baseline && nbtags>=2 && njets>=2 && ht>200 && met>120);
+                    case SignalRegion::sr26: return (baseline && nbtags>=2 && njets>=2 && ht>400 && met>120);
+                    case SignalRegion::sr27: return (baseline && nbtags>=2 && njets>=4 && ht>200 && met>120);
+                    case SignalRegion::sr28: return (baseline && nbtags>=2 && njets>=4 && ht>400 && met>120);
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
             if (signal_region_type==SignalRegionType::exclusive)
             {
-                const bool baseline = (lep_d0 && njets>=2 && ht>80.0 && (ht>500 ? met>30: true));
                 switch (signal_region)
                 {
-                case SignalRegion::sr0 : return (baseline);
-                case SignalRegion::sr1 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr2 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr3 : return (baseline && nbtags>=0 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr4 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr5 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr6 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr7 : return (baseline && nbtags>=0 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr8 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr9 : return (false); // not used --> default is to fail
-                case SignalRegion::sr10: return (baseline && nbtags==1);
-                case SignalRegion::sr11: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr12: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr13: return (baseline && nbtags==1 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr14: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr15: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr16: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr17: return (baseline && nbtags==1 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr18: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr19: return (false); // not used --> default is to fail
-                case SignalRegion::sr20: return (baseline && nbtags>=2);
-                case SignalRegion::sr21: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr22: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr23: return (baseline && nbtags>=2 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr24: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr25: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr26: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr27: return (baseline && nbtags>=2 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr28: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0 : return (baseline);
+                    case SignalRegion::sr1 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr2 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr3 : return (baseline && nbtags>=0 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr4 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr5 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr6 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr7 : return (baseline && nbtags>=0 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr8 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr9 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10: return (baseline && nbtags==1);
+                    case SignalRegion::sr11: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr12: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr13: return (baseline && nbtags==1 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr14: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr15: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr16: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr17: return (baseline && nbtags==1 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr18: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (baseline && nbtags>=2);
+                    case SignalRegion::sr21: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr22: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr23: return (baseline && nbtags>=2 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr24: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr25: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr26: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr27: return (baseline && nbtags>=2 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr28: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
             return false;
@@ -1554,78 +1553,79 @@ namespace ss
         // low pt (or very low)
         if (anal_type==AnalysisType::low_pt || anal_type==AnalysisType::vlow_pt)
         {
+            const float met_cut = (ht < 500.0 ? 30.0 : 0.0); 
+            const bool baseline = (lep_d0 && njets>=2 && ht>=250.0 && met>met_cut);
+
             if (signal_region_type==SignalRegionType::inclusive)
             {
-                const bool baseline = (lep_d0 && njets>=2 && ht>=250.0 && (ht>500 ? met>30: true));
                 switch (signal_region)
                 {
-                case SignalRegion::sr0 : return (baseline);
-                case SignalRegion::sr1 : return (baseline && njets>=2 && nbtags>=0 && ht>250 && met>50 );
-                case SignalRegion::sr2 : return (baseline && njets>=2 && nbtags>=0 && ht>400 && met>50 );
-                case SignalRegion::sr3 : return (baseline && njets>=4 && nbtags>=0 && ht>250 && met>50 );
-                case SignalRegion::sr4 : return (baseline && njets>=4 && nbtags>=0 && ht>400 && met>50 );
-                case SignalRegion::sr5 : return (baseline && njets>=2 && nbtags>=0 && ht>250 && met>120);
-                case SignalRegion::sr6 : return (baseline && njets>=2 && nbtags>=0 && ht>400 && met>120);
-                case SignalRegion::sr7 : return (baseline && njets>=4 && nbtags>=0 && ht>250 && met>120);
-                case SignalRegion::sr8 : return (baseline && njets>=4 && nbtags>=0 && ht>400 && met>120);
-                case SignalRegion::sr9 : return (false); // not used --> default is to fail
-                case SignalRegion::sr10: return (baseline && nbtags>=1);
-                case SignalRegion::sr11: return (baseline && njets>=2 && nbtags==1 && ht>250 && met>50 );
-                case SignalRegion::sr12: return (baseline && njets>=2 && nbtags==1 && ht>400 && met>50 );
-                case SignalRegion::sr13: return (baseline && njets>=4 && nbtags==1 && ht>250 && met>50 );
-                case SignalRegion::sr14: return (baseline && njets>=4 && nbtags==1 && ht>400 && met>50 );
-                case SignalRegion::sr15: return (baseline && njets>=2 && nbtags==1 && ht>250 && met>120);
-                case SignalRegion::sr16: return (baseline && njets>=2 && nbtags==1 && ht>400 && met>120);
-                case SignalRegion::sr17: return (baseline && njets>=4 && nbtags==1 && ht>250 && met>120);
-                case SignalRegion::sr18: return (baseline && njets>=4 && nbtags==1 && ht>400 && met>120);
-                case SignalRegion::sr19: return (false); // not used --> default is to fail
-                case SignalRegion::sr20: return (baseline && nbtags>=2);
-                case SignalRegion::sr21: return (baseline && njets>=2 && nbtags>=2 && ht>250 && met>50 );
-                case SignalRegion::sr22: return (baseline && njets>=2 && nbtags>=2 && ht>400 && met>50 );
-                case SignalRegion::sr23: return (baseline && njets>=4 && nbtags>=2 && ht>250 && met>50 );
-                case SignalRegion::sr24: return (baseline && njets>=4 && nbtags>=2 && ht>400 && met>50 );
-                case SignalRegion::sr25: return (baseline && njets>=2 && nbtags>=2 && ht>250 && met>120);
-                case SignalRegion::sr26: return (baseline && njets>=2 && nbtags>=2 && ht>400 && met>120);
-                case SignalRegion::sr27: return (baseline && njets>=4 && nbtags>=2 && ht>250 && met>120);
-                case SignalRegion::sr28: return (baseline && njets>=4 && nbtags>=2 && ht>400 && met>120);
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0 : return (baseline);
+                    case SignalRegion::sr1 : return (baseline && njets>=2 && nbtags>=0 && ht>250 && met>50 );
+                    case SignalRegion::sr2 : return (baseline && njets>=2 && nbtags>=0 && ht>400 && met>50 );
+                    case SignalRegion::sr3 : return (baseline && njets>=4 && nbtags>=0 && ht>250 && met>50 );
+                    case SignalRegion::sr4 : return (baseline && njets>=4 && nbtags>=0 && ht>400 && met>50 );
+                    case SignalRegion::sr5 : return (baseline && njets>=2 && nbtags>=0 && ht>250 && met>120);
+                    case SignalRegion::sr6 : return (baseline && njets>=2 && nbtags>=0 && ht>400 && met>120);
+                    case SignalRegion::sr7 : return (baseline && njets>=4 && nbtags>=0 && ht>250 && met>120);
+                    case SignalRegion::sr8 : return (baseline && njets>=4 && nbtags>=0 && ht>400 && met>120);
+                    case SignalRegion::sr9 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10: return (baseline && nbtags>=1);
+                    case SignalRegion::sr11: return (baseline && njets>=2 && nbtags==1 && ht>250 && met>50 );
+                    case SignalRegion::sr12: return (baseline && njets>=2 && nbtags==1 && ht>400 && met>50 );
+                    case SignalRegion::sr13: return (baseline && njets>=4 && nbtags==1 && ht>250 && met>50 );
+                    case SignalRegion::sr14: return (baseline && njets>=4 && nbtags==1 && ht>400 && met>50 );
+                    case SignalRegion::sr15: return (baseline && njets>=2 && nbtags==1 && ht>250 && met>120);
+                    case SignalRegion::sr16: return (baseline && njets>=2 && nbtags==1 && ht>400 && met>120);
+                    case SignalRegion::sr17: return (baseline && njets>=4 && nbtags==1 && ht>250 && met>120);
+                    case SignalRegion::sr18: return (baseline && njets>=4 && nbtags==1 && ht>400 && met>120);
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (baseline && nbtags>=2);
+                    case SignalRegion::sr21: return (baseline && njets>=2 && nbtags>=2 && ht>250 && met>50 );
+                    case SignalRegion::sr22: return (baseline && njets>=2 && nbtags>=2 && ht>400 && met>50 );
+                    case SignalRegion::sr23: return (baseline && njets>=4 && nbtags>=2 && ht>250 && met>50 );
+                    case SignalRegion::sr24: return (baseline && njets>=4 && nbtags>=2 && ht>400 && met>50 );
+                    case SignalRegion::sr25: return (baseline && njets>=2 && nbtags>=2 && ht>250 && met>120);
+                    case SignalRegion::sr26: return (baseline && njets>=2 && nbtags>=2 && ht>400 && met>120);
+                    case SignalRegion::sr27: return (baseline && njets>=4 && nbtags>=2 && ht>250 && met>120);
+                    case SignalRegion::sr28: return (baseline && njets>=4 && nbtags>=2 && ht>400 && met>120);
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
             if (signal_region_type==SignalRegionType::exclusive)
             {
-                const bool baseline = (lep_d0 && njets>=2 && ht>=250.0 && (ht>500 ? met>30: true));
                 switch (signal_region)
                 {
-                case SignalRegion::sr0 : return (baseline);
-                case SignalRegion::sr1 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr2 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr3 : return (baseline && nbtags>=0 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr4 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr5 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr6 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr7 : return (baseline && nbtags>=0 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr8 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr9 : return (false); // not used --> default is to fail
-                case SignalRegion::sr10: return (baseline && nbtags==1);
-                case SignalRegion::sr11: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr12: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr13: return (baseline && nbtags==1 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr14: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr15: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr16: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr17: return (baseline && nbtags==1 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr18: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr19: return (false); // not used --> default is to fail
-                case SignalRegion::sr20: return (baseline && nbtags>=2);
-                case SignalRegion::sr21: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr22: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr23: return (baseline && nbtags>=2 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                case SignalRegion::sr24: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                case SignalRegion::sr25: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr26: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::sr27: return (baseline && nbtags>=2 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
-                case SignalRegion::sr28: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0 : return (baseline);
+                    case SignalRegion::sr1 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr2 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr3 : return (baseline && nbtags>=0 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr4 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr5 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr6 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr7 : return (baseline && nbtags>=0 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr8 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr9 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10: return (baseline && nbtags==1);
+                    case SignalRegion::sr11: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr12: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr13: return (baseline && nbtags==1 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr14: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr15: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr16: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr17: return (baseline && nbtags==1 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr18: return (baseline && nbtags==1 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (baseline && nbtags>=2);
+                    case SignalRegion::sr21: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr22: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr23: return (baseline && nbtags>=2 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr24: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr25: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr26: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr27: return (baseline && nbtags>=2 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr28: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
         }
@@ -1636,36 +1636,36 @@ namespace ss
             {
                 switch (signal_region)
                 {
-                case SignalRegion::sr0  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 0  );
-                case SignalRegion::sr1  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 30 );
-                case SignalRegion::sr2  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 30 && ssb::is_pp());
-                case SignalRegion::sr3  : return (nbtags >= 0 && njets>= 4 && ht > 200 && met > 120);
-                case SignalRegion::sr4  : return (nbtags >= 0 && njets>= 4 && ht > 200 && met > 50 );
-                case SignalRegion::sr5  : return (nbtags >= 0 && njets>= 4 && ht > 320 && met > 50 );
-                case SignalRegion::sr6  : return (nbtags >= 0 && njets>= 4 && ht > 320 && met > 120);
-                case SignalRegion::sr7  : return (nbtags >= 0 && njets>= 2 && ht > 200 && met > 50);
-                case SignalRegion::sr8  : return (nbtags >= 0 && njets>= 4 && ht > 320 && met > 0  );
-                case SignalRegion::sr9  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 30 && ssb::is_mm());
-                case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                case SignalRegion::sr28 : return (false); // not used --> default is to fail
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 0  );
+                    case SignalRegion::sr1  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 30 );
+                    case SignalRegion::sr2  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 30 && ssb::is_pp());
+                    case SignalRegion::sr3  : return (nbtags >= 0 && njets>= 4 && ht > 200 && met > 120);
+                    case SignalRegion::sr4  : return (nbtags >= 0 && njets>= 4 && ht > 200 && met > 50 );
+                    case SignalRegion::sr5  : return (nbtags >= 0 && njets>= 4 && ht > 320 && met > 50 );
+                    case SignalRegion::sr6  : return (nbtags >= 0 && njets>= 4 && ht > 320 && met > 120);
+                    case SignalRegion::sr7  : return (nbtags >= 0 && njets>= 2 && ht > 200 && met > 50);
+                    case SignalRegion::sr8  : return (nbtags >= 0 && njets>= 4 && ht > 320 && met > 0  );
+                    case SignalRegion::sr9  : return (nbtags >= 0 && njets>= 2 && ht > 80  && met > 30 && ssb::is_mm());
+                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 }
 
             }
@@ -1673,114 +1673,113 @@ namespace ss
             {
                 switch (signal_region)
                 {
-                case SignalRegion::sr0  : return (false); // not used --> default is to fail
-                case SignalRegion::sr1  : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (50 < met && met < 120));
-                case SignalRegion::sr2  : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (met > 120            ));
-                case SignalRegion::sr3  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (50 < met && met < 120));
-                case SignalRegion::sr4  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (met > 120            ));
-                case SignalRegion::sr5  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (0  < met && met < 50 ));
-                case SignalRegion::sr6  : return (false); // not used --> default is to fail
-                case SignalRegion::sr7  : return (false); // not used --> default is to fail
-                case SignalRegion::sr8  : return (false); // not used --> default is to fail
-                case SignalRegion::sr9  : return (false); // not used --> default is to fail
-                case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                case SignalRegion::sr28 : return (false); // not used --> default is to fail
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr1  : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (50 < met && met < 120));
+                    case SignalRegion::sr2  : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (met > 120            ));
+                    case SignalRegion::sr3  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (50 < met && met < 120));
+                    case SignalRegion::sr4  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (met > 120            ));
+                    case SignalRegion::sr5  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (0  < met && met < 50 ));
+                    case SignalRegion::sr6  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr7  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr8  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr9  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 }
             }
             return false;
         }
         if (anal_type==AnalysisType::higgsino)
         {
+            const bool baseline = (lep_d0 && njets>=2);
             if (signal_region_type==SignalRegionType::inclusive)
             {
-                const bool baseline = (lep_d0 && njets>=2);
                 switch (signal_region)
                 {
-                case SignalRegion::sr0  : return (baseline);
-                case SignalRegion::sr1  : return (baseline && nbtags == 0);
-                case SignalRegion::sr2  : return (false); // not used --> default is to fail
-                case SignalRegion::sr3  : return (false); // not used --> default is to fail
-                case SignalRegion::sr4  : return (false); // not used --> default is to fail
-                case SignalRegion::sr5  : return (false); // not used --> default is to fail
-                case SignalRegion::sr6  : return (false); // not used --> default is to fail
-                case SignalRegion::sr7  : return (false); // not used --> default is to fail
-                case SignalRegion::sr8  : return (false); // not used --> default is to fail
-                case SignalRegion::sr9  : return (false); // not used --> default is to fail
-                case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                case SignalRegion::sr28 : return (false); // not used --> default is to fail
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0  : return (baseline);
+                    case SignalRegion::sr1  : return (baseline && nbtags == 0);
+                    case SignalRegion::sr2  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr3  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr4  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr5  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr6  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr7  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr8  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr9  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
             if (signal_region_type==SignalRegionType::exclusive)
             {
-                const bool baseline = (lep_d0 && njets>=2);
                 switch (signal_region)
                 {
-                case SignalRegion::sr0  : return (false); // not used --> default is to fail
-                case SignalRegion::sr1  : return (baseline);
-                case SignalRegion::sr2  : return (false); // not used --> default is to fail
-                case SignalRegion::sr3  : return (false); // not used --> default is to fail
-                case SignalRegion::sr4  : return (false); // not used --> default is to fail
-                case SignalRegion::sr5  : return (false); // not used --> default is to fail
-                case SignalRegion::sr6  : return (false); // not used --> default is to fail
-                case SignalRegion::sr7  : return (false); // not used --> default is to fail
-                case SignalRegion::sr8  : return (false); // not used --> default is to fail
-                case SignalRegion::sr9  : return (false); // not used --> default is to fail
-                case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                case SignalRegion::sr28 : return (false); // not used --> default is to fail
-                case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
+                    case SignalRegion::sr0  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr1  : return (baseline);
+                    case SignalRegion::sr2  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr3  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr4  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr5  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr6  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr7  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr8  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr9  : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
             return false;

@@ -48,7 +48,7 @@ try
     bool sparms                     = false;
     bool use_el_eta                 = true;
     //bool switchSigns                = false;
-    int num_jets                    = 0;
+    int num_jets                    = 2;
     int jetMetScale                 = 0;
     bool isFastSim                  = false;
     std::string apply_jec_otf       = "";
@@ -74,7 +74,7 @@ try
         ("run_list"      , po::value<std::string>(&good_run_list)       , "Good Run list (no default)"                                                            )
         ("sparms"        , po::value<bool>(&sparms)                     , "unpack the sparms (default is false)"                                                  )
         ("sync_print"    , po::value<bool>(&sync_print)                 , "print for sync exercise"                                                               )
-        ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select"                                                           )
+        ("njets"         , po::value<int>(&num_jets)                    , "minimum # of jets to select (default is 2)"                                            )
         ("jetMetScale"   , po::value<int>(&jetMetScale)                 , "+1 to scale jets up, -1 to scale jets down"                                            )
         ("isFastSim"     , po::value<bool>(&isFastSim)                  , "use FastSim btag scale factors"                                                        )
         ("use_el_eta"    , po::value<bool>(&use_el_eta)                 , "use the |et->eta| to determine is electron is barrel or endcap"                        )
