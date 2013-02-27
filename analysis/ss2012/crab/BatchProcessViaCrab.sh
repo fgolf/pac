@@ -5,7 +5,6 @@
 # to submit a looper job
 #
 
-
 if [ ! $# -eq 6 ]; then
     echo "
 USAGE: ./BatchProcessViaCrab.sh PSET TASK ARGS
@@ -29,6 +28,9 @@ CRABCFG=crab_${TASK}.cfg
 WRAPPER=wrapper_${TASK}.sh
 INPUTS=input.tgz
 WORKING_DIR="/nfs-7/userdata/${USER}/babies/cms2_V05-03-23_ss2012_V02-05-01"
+
+# move the inputs.tgz to local dir
+mv job_inputs/${INPUTS} .
 
 JOBFLAGS="events_per_job          = 10000
 total_number_of_events  = -1"
