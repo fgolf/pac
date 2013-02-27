@@ -3,7 +3,7 @@ sys.path.append( os.getenv("CMSSW_BASE") + "/src/CMS2/NtupleMaker/test" )
 from CMS2.NtupleMaker.RecoConfiguration2012_cfg import *
 
 # Global Tag
-process.GlobalTag.globaltag = "START59_V9A::All"
+process.GlobalTag.globaltag = "START52_V9A::All"
 
 # Output
 process.out = cms.OutputModule(
@@ -41,6 +41,9 @@ process.eventMaker.CMS2tag = cms.string("V05-03-23")
 # list of sparm parameters, be sure it is the same size as the number of parameter in the files
 process.sParmMaker.vsparms = cms.untracked.vstring("msbottom","mchargino","mlsp")
 process.cms2WithEverything.replace(process.eventmakers, process.eventmakerswsparm) #adds the sparm producer in to the sequence
+
+# to prevent crash when merging files
+process.options.fileMode = cms.untracked.string('NOMERGE')
 
 # input
 process.maxEvents.input = 1

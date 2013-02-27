@@ -33,7 +33,7 @@ WORKING_DIR="/nfs-7/userdata/${USER}/babies/cms2_V05-03-23_ss2012_V02-05-01"
 JOBFLAGS="events_per_job          = 10000
 total_number_of_events  = -1"
 if [ ${DSET} == "/SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph/Summer12-START52_V9_FSIM/USER" ]; then
-JOBFLAGS="lumis_per_job           = 100
+JOBFLAGS="lumis_per_job           = 10
 total_number_of_lumis   = -1"
 fi
 
@@ -96,19 +96,6 @@ JobIndex=\$1
 echo "[wrapper] JobIndex = " \${JobIndex}
 
 #
-# run CMSSW
-#
-
-cmsRun -j \$RUNTIME_AREA/crab_fjr_\$JobIndex.xml -p pset.py
-
-# 
-# run the "post processing" to insert dummy values for the branches
-# (TODO: maybe make this more meaningful later)
-#
-
-root -b -q -l "AddCMS2Branches.C+(\"ntuple.root\", \"ntuple_postprocessed.root\", -999999, -999999.0, 1.0, 1.0)"
-
-#
 # library path
 #
 LD_LIBRARY_PATH=\${LD_LIBRARY_PATH}:\$PWD
@@ -116,11 +103,34 @@ echo "[wrapper]: LD_LIBRARY_PATH"
 echo "\${LD_LIBRARY_PATH}"
 
 #
+# run CMSSW
+#
+
+cmsRun -j \$RUNTIME_AREA/crab_fjr_\$JobIndex.xml -p pset.py
+
+echo "[wrapper] testing file"
+echo ./sweepRoot -o Events ntuple.root
+if [ \$(./sweepRoot -o Events ntuple.root 2>&1 | grep SUMMARY | awk '{print \$2}') == 0 ]; 
+then 
+    echo "[wrapper] ntuple.root file is good!"
+else
+    echo "[wrapper] ntuple.root is considered bad by sweepRoot..."
+    exit 1
+fi
+
+# 
+# run the "post processing" to insert dummy values for the branches
+# (TODO: maybe make this more meaningful later)
+#
+
+./add_cms2_branches --input ntuple.root --output ntuple_post.root --xsec -999999.0 --num_events -999999 --kfactor 1.0 --filter_eff 1.0
+
+#
 # run looper
 #
 
 # run my looper.....
-cmd="./ss2012_analysis --input ntuple_postprocessed.root --output ${OUTFILE} ${ARGS}"
+cmd="./ss2012_analysis --input ntuple_post.root --output ${OUTFILE} ${ARGS}"
 echo "[wrapper]: \${cmd}" 
 eval \${cmd}
 
@@ -131,6 +141,21 @@ eval \${cmd}
 ls ${OUTFILE}
 if [ \$? -ne 0 ]; then 
     echo "[wrapper]: ${OUTFILE} is missing" 
+    exit 1
+fi
+
+#
+# sweepRoot
+#
+
+echo "[wrapper] testing file"
+echo ./sweepRoot -o tree ${OUTFILE}
+if [ \$(./sweepRoot -o tree ${OUTFILE} 2>&1 | grep SUMMARY | awk '{print \$2}') == 0 ]; 
+then 
+    echo "[wrapper] ${OUTFILE} file is good!"
+else
+    echo "[wrapper] ${OUTFILE} is considered bad by sweepRoot..."
+    rm ${OUTFILE}
     exit 1
 fi
 

@@ -1,9 +1,9 @@
 import sys, os
-sys.path.append( os.getenv("CMSSW_BASE") + "/src/CMS2/NtupleMaker/test" )
+sys.path.append(os.getenv("CMSSW_BASE") + "/src/CMS2/NtupleMaker/test")
 from CMS2.NtupleMaker.RecoConfiguration2012_cfg import *
 
 # Global Tag
-process.GlobalTag.globaltag = "START53_V7A::All"
+process.GlobalTag.globaltag = "START52_V9A::All"
 
 # Output
 process.out = cms.OutputModule(
