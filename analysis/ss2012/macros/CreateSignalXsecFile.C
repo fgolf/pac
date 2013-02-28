@@ -45,7 +45,7 @@ void CreateSignalXsecFile()
     // --------------------------------------------------------------------------------- //
     // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
     bin_info = ss::GetSignalBinInfo(at::Sample::t1tttt);
-    hc.Add(new TH1F("h_xsec_t1tttt", "Cross Section T1tttt;m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    hc.Add(new TH1F("h_xsec_t1tttt", "Cross Section T1tttt;m_{#tilde{g}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
     SetBinContent(hc["h_xsec_t1tttt"] , 200  , 1010.1      , 15.3749 ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 205  , 888.038     , 15.3143 ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 210  , 782.82      , 15.247  ); 
