@@ -8,6 +8,8 @@ namespace ss
     struct SignalBinInfo
     {
         // construct:
+        SignalBinInfo();
+
         SignalBinInfo
         (
             const unsigned int x_num_bins,

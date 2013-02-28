@@ -744,11 +744,11 @@ int PlotLooper::operator()(long event)
         // only keep MC matched events (MC only)
         const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
-        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc)
-        {
-            if (m_verbose) {cout << "failing MC truth matching" << endl;}
-            return 0;
-        }
+        //if ((not is_real_data()) && (not true_ss_event) && is_rare_mc)
+        //{
+        //    if (m_verbose) {cout << "failing MC truth matching" << endl;}
+        //    //return 0;
+        //}
 
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
@@ -1073,12 +1073,12 @@ int PlotLooper::operator()(long event)
             }
         }
 
-        // dont't fill hists for MC if they are not truth matched (SS or DF only)
-        if ((not is_real_data()) && (not true_ss_event) && (is_sf() || is_df()))
-        {
-            if (m_verbose) {cout << "leptons failing truth matching (MC only)" << endl;}
-            return 0;
-        }
+        //// dont't fill hists for MC if they are not truth matched (SS or DF only)
+        //if ((not is_real_data()) && (not true_ss_event) && (is_sf() || is_df()))
+        //{
+        //    if (m_verbose) {cout << "leptons failing truth matching (MC only)" << endl;}
+        //    //return 0;
+        //}
 
         // fake rate and flip factor for kinematic plots
         float fr1 = 0.0;

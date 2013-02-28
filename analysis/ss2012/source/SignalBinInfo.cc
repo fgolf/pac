@@ -7,6 +7,17 @@ using namespace at;
 namespace ss
 {
     // construct:
+    SignalBinInfo::SignalBinInfo()
+        : nbinsx(100)
+        , xmin(0)
+        , xmax(1000)
+        , xwidth((xmax-xmin)/static_cast<float>(nbinsx))
+        , nbinsy(100)
+        , ymin(0)
+        , ymax(1000)
+        , ywidth((ymax-ymin)/static_cast<float>(nbinsy))
+    {}
+
     SignalBinInfo::SignalBinInfo
     (
         const unsigned int x_num_bins,
