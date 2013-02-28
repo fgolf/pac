@@ -1432,6 +1432,7 @@ namespace ss
             case AnalysisType::higgsino:
                 if (max(pt1,pt2) < 20.0) return false;
                 if (min(pt1,pt2) < 10.0) return false;
+                break;
             default:
                 return false;
         }
