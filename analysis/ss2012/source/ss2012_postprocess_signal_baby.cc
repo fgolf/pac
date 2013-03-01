@@ -120,7 +120,7 @@ try
     vector<string> vfile_names = rt::ls(input_file);
     for (size_t i = 0; i != vfile_names.size(); i++)
     {
-        cout << vfile_names.at(i) << endl;
+        //cout << vfile_names.at(i) << endl;
         TH2F* h_temp = rt::GetHistFromRootFile<TH2F>(vfile_names.at(i), "h_gen_count");
         h_gen_count.Add(h_temp);
         delete h_temp;
@@ -130,24 +130,19 @@ try
     // -------------------------------------------------------------------------------------------------//
 
     TH1F* h_xsec = rt::GetHistFromRootFile<TH1F>(xsec_file, Form("h_xsec_%s", sample_name.c_str()));
-    cout << Form("nx %d, x- %f, x+ %f, ny %d, y- %f, y+ %f", bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax) << endl;
+    h_xsec->SetName("h_xsec");
+    //cout << Form("nx %d, x- %f, x+ %f, ny %d, y- %f, y+ %f", bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax) << endl;
 
     TH2F h_scale1fb("h_scale1fb", Form("# Scale to 1 fb^{-1} - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
     for (int xbin = 1; xbin != h_scale1fb.GetNbinsX()+1; xbin++)
     {
-        const float x        = h_scale1fb.GetXaxis()->GetBinLowEdge(xbin);
         const float xsec     = h_xsec->GetBinContent(xbin);
         const float xsec_err = h_xsec->GetBinError(xbin);
-        cout << x << "\t" <<  rt::pm(xsec, xsec_err, "1.5") << "\t" << endl;
-        
         for (int ybin = 1; ybin != h_scale1fb.GetNbinsY()+1; ybin++)
         {
-            const float y             = h_scale1fb.GetYaxis()->GetBinLowEdge(ybin);
-            const float num_gen       = static_cast<float>(h_gen_count.GetBinContent(xbin, ybin));
-            const float scale1fb      = (num_gen > 0 ? (xsec * 1000.0f)/num_gen : -999999.0f);
-            const float scale1fb_err  = (num_gen > 0 ? (xsec_err * 1000.0f)/num_gen : 0.0f);
-            cout << "y = " << y << "; num gen = " << num_gen << "; scale1fb =" << rt::pm(scale1fb, scale1fb_err, "1.5") << endl; 
-             
+            const float num_gen      = static_cast<float>(h_gen_count.GetBinContent(xbin, ybin));
+            const float scale1fb     = (num_gen > 0 ? (xsec * 1000.0f)/num_gen : 0.0f);
+            const float scale1fb_err = (num_gen > 0 ? (xsec_err * 1000.0f)/num_gen : 0.0f);
             h_scale1fb.SetBinContent(xbin, ybin, scale1fb    );
             h_scale1fb.SetBinError  (xbin, ybin, scale1fb_err);
         }
@@ -170,7 +165,7 @@ try
     // clone it
     TFile output(output_file.c_str(), "RECREATE");
     TTree* clone = chain.CloneTree(-1, "fast");
-    clone->SetDirectory(&output);  // output is in charge of deleting now
+    clone->SetDirectory(&output);  // "output" object is in charge of deleting now
 
     // add the cross section
     // -------------------------------------------------------------------------------------------------//
