@@ -325,6 +325,27 @@ exe ss2012_make_fr_from_hists
   : # usage-requirements
   ;
 
+exe ss2012_fr_closure
+  : # sources
+    ./source/ss2012_fr_closure.cc
+    ./source/FRClosureBabyLooper.cc
+    # dependent packages
+    /ROOT
+    ss2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /FGTools//FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
 # simple test
 # -------------------------------------------------------------- #
 
@@ -362,3 +383,4 @@ default-install ss2012_make_fr_from_hists ;
 default-install ss2012_closure_test ;
 default-install test_frb ;
 default-install test_btagsf ;
+default-install ss2012_fr_closure ;
