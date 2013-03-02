@@ -24,10 +24,8 @@ lib FGTools
 		./source/tools.cc
 		./source/vtxreweight.cc
     # dependent packages
-    /CMS2
-    /CMS2_CORE
-    /AnalysisTools
     /ROOT
+    /AnalysisTools//AnalysisTools
   : # requirements
     <include>$(FGTOOLS)/include
   : # default-build
