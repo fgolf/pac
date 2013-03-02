@@ -140,7 +140,7 @@ void OverlaySSPlots
     
 	// set style
 	rt::SetTDRStyle();
-    gStyle->SetHatchesSpacing(1.00);
+        gStyle->SetHatchesSpacing(1.00);
 
     // title
 	string charge_title = "";
