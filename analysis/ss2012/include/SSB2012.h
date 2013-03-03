@@ -116,6 +116,9 @@ protected:
 	bool	lep1_is_num_;
 	TBranch *lep1_is_num_branch;
 	bool lep1_is_num_isLoaded;
+	bool	lep1_is_den_;
+	TBranch *lep1_is_den_branch;
+	bool lep1_is_den_isLoaded;
 	bool	lep1_is_fo_;
 	TBranch *lep1_is_fo_branch;
 	bool lep1_is_fo_isLoaded;
@@ -374,6 +377,9 @@ protected:
 	bool	lep2_is_num_;
 	TBranch *lep2_is_num_branch;
 	bool lep2_is_num_isLoaded;
+	bool	lep2_is_den_;
+	TBranch *lep2_is_den_branch;
+	bool lep2_is_den_isLoaded;
 	bool	lep2_is_fo_;
 	TBranch *lep2_is_fo_branch;
 	bool lep2_is_fo_isLoaded;
@@ -1421,6 +1427,11 @@ void Init(TTree *tree) {
 		lep1_is_num_branch = tree->GetBranch("lep1_is_num");
 		if (lep1_is_num_branch) {lep1_is_num_branch->SetAddress(&lep1_is_num_);}
 	}
+	lep1_is_den_branch = 0;
+	if (tree->GetBranch("lep1_is_den") != 0) {
+		lep1_is_den_branch = tree->GetBranch("lep1_is_den");
+		if (lep1_is_den_branch) {lep1_is_den_branch->SetAddress(&lep1_is_den_);}
+	}
 	lep1_is_fo_branch = 0;
 	if (tree->GetBranch("lep1_is_fo") != 0) {
 		lep1_is_fo_branch = tree->GetBranch("lep1_is_fo");
@@ -1810,6 +1821,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("lep2_is_num") != 0) {
 		lep2_is_num_branch = tree->GetBranch("lep2_is_num");
 		if (lep2_is_num_branch) {lep2_is_num_branch->SetAddress(&lep2_is_num_);}
+	}
+	lep2_is_den_branch = 0;
+	if (tree->GetBranch("lep2_is_den") != 0) {
+		lep2_is_den_branch = tree->GetBranch("lep2_is_den");
+		if (lep2_is_den_branch) {lep2_is_den_branch->SetAddress(&lep2_is_den_);}
 	}
 	lep2_is_fo_branch = 0;
 	if (tree->GetBranch("lep2_is_fo") != 0) {
@@ -2915,6 +2931,7 @@ void GetEntry(unsigned int idx)
 		lep1_passes_id_isLoaded = false;
 		lep1_passes_iso_isLoaded = false;
 		lep1_is_num_isLoaded = false;
+		lep1_is_den_isLoaded = false;
 		lep1_is_fo_isLoaded = false;
 		lep1_is_fromw_isLoaded = false;
 		lep1_charge_isLoaded = false;
@@ -3001,6 +3018,7 @@ void GetEntry(unsigned int idx)
 		lep2_passes_id_isLoaded = false;
 		lep2_passes_iso_isLoaded = false;
 		lep2_is_num_isLoaded = false;
+		lep2_is_den_isLoaded = false;
 		lep2_is_fo_isLoaded = false;
 		lep2_is_fromw_isLoaded = false;
 		lep2_charge_isLoaded = false;
@@ -3277,6 +3295,7 @@ void LoadAllBranches()
 	if (lep1_passes_id_branch != 0) lep1_passes_id();
 	if (lep1_passes_iso_branch != 0) lep1_passes_iso();
 	if (lep1_is_num_branch != 0) lep1_is_num();
+	if (lep1_is_den_branch != 0) lep1_is_den();
 	if (lep1_is_fo_branch != 0) lep1_is_fo();
 	if (lep1_is_fromw_branch != 0) lep1_is_fromw();
 	if (lep1_charge_branch != 0) lep1_charge();
@@ -3363,6 +3382,7 @@ void LoadAllBranches()
 	if (lep2_passes_id_branch != 0) lep2_passes_id();
 	if (lep2_passes_iso_branch != 0) lep2_passes_iso();
 	if (lep2_is_num_branch != 0) lep2_is_num();
+	if (lep2_is_den_branch != 0) lep2_is_den();
 	if (lep2_is_fo_branch != 0) lep2_is_fo();
 	if (lep2_is_fromw_branch != 0) lep2_is_fromw();
 	if (lep2_charge_branch != 0) lep2_charge();
@@ -4031,6 +4051,19 @@ void LoadAllBranches()
 			lep1_is_num_isLoaded = true;
 		}
 		return lep1_is_num_;
+	}
+	bool &	lep1_is_den()
+	{
+		if (not lep1_is_den_isLoaded) {
+			if (lep1_is_den_branch != 0) {
+				lep1_is_den_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_is_den_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_is_den_isLoaded = true;
+		}
+		return lep1_is_den_;
 	}
 	bool &	lep1_is_fo()
 	{
@@ -5149,6 +5182,19 @@ void LoadAllBranches()
 			lep2_is_num_isLoaded = true;
 		}
 		return lep2_is_num_;
+	}
+	bool &	lep2_is_den()
+	{
+		if (not lep2_is_den_isLoaded) {
+			if (lep2_is_den_branch != 0) {
+				lep2_is_den_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_is_den_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_is_den_isLoaded = true;
+		}
+		return lep2_is_den_;
 	}
 	bool &	lep2_is_fo()
 	{
@@ -8305,6 +8351,7 @@ namespace ssb {
 	const bool &lep1_passes_id();
 	const bool &lep1_passes_iso();
 	const bool &lep1_is_num();
+	const bool &lep1_is_den();
 	const bool &lep1_is_fo();
 	const int &lep1_is_fromw();
 	const int &lep1_charge();
@@ -8391,6 +8438,7 @@ namespace ssb {
 	const bool &lep2_passes_id();
 	const bool &lep2_passes_iso();
 	const bool &lep2_is_num();
+	const bool &lep2_is_den();
 	const bool &lep2_is_fo();
 	const int &lep2_is_fromw();
 	const int &lep2_charge();
