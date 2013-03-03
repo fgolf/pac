@@ -28,19 +28,18 @@ public:
         const ss::AnalysisType::value_type& analysis_type,
         const std::string& fake_rate_file_name,
         const std::string& flip_rate_file_name,
-        const std::string& fake_rate_hist_name = "h_mufr40c",
         const std::string& vtxreweight_file_name = "",
         const std::string& goodrun_file_name = "",
-        double luminosity = 1.0,
-        int njets = 0,
-        bool sparms = false,
-        int jetMetScale = 0,
-        bool is_fast_sim = false,
-        bool use_el_eta = false,
-        bool sync_print = false,
-        bool verbose = false,
+        const double luminosity = 1.0,
+        const int njets = 0,
+        const bool sparms = false,
+        const int jetMetScale = 0,
+        const bool is_fast_sim = false,
+        const bool use_el_eta = true,
+        const bool sync_print = false,
+        const bool verbose = false,
         const std::string apply_jec_otf = "",
-        double jet_pt_cut = -1
+        const double jet_pt_cut = -1
     );
 
     // destroy:
@@ -53,8 +52,8 @@ public:
     virtual void BeginJob();
     virtual void EndJob();
     virtual void BookHists();
-    int Analyze(long event, const std::string& filename);
-    int SetJetCorrector(std::vector<std::string> &list_of_filenames);
+    int Analyze(const long event, const std::string& filename);
+    int SetJetCorrector(std::vector<std::string>& list_of_filenames);
 
 private:
     // members:
@@ -98,8 +97,12 @@ private:
 
 private:
     // methods:
-    float GetFakeRateValue(int lep_id, int lep_idx) const;
-    float GetFlipRateValue(int lep_id, int lep_idx) const;
+    bool IsNumerator(const int lep_id, const int lep_idx);
+    bool IsDenominator(const int lep_id, const int lep_idx);
+    bool IsFO(const int lep_id, const int lep_idx);
+
+    float GetFakeRateValue(const int lep_id, const int lep_idx) const;
+    float GetFlipRateValue(const int lep_id, const int lep_idx) const;
 };
 
 #endif // SSANALYSISLOOPER_H 

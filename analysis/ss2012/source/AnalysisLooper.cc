@@ -102,66 +102,8 @@ bool HypInfo::operator < (const HypInfo& rhs) const
     return false;
 }
 
-// set then numerator bool
-bool IsNumerator(const HypInfo& hyp, bool is_lt, bool use_el_eta)
-{
-    if (hyp.charge_type == DileptonChargeType::static_size)
-    {
-        return false;
-    }
-    switch (hyp.charge_type)
-    {
-    case DileptonChargeType::DF: return false; break;
-    case DileptonChargeType::SS: return true; break;
-    case DileptonChargeType::SF: 
-    {
-        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.idx), cms2.hyp_lt_index().at(hyp.idx), use_el_eta);
-        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.idx), cms2.hyp_ll_index().at(hyp.idx), use_el_eta);
-        if (lt_num && !ll_num)
-        {
-            return is_lt ? true : false;
-        }
-        if (!lt_num && ll_num)
-        {
-            return is_lt ? false : true;
-        }
-        break;
-    }
-    default: return false;
-    }
-    return false;
-}
-
-bool IsDenominator(const HypInfo& hyp, bool is_lt, bool use_el_eta)
-{
-    if (hyp.charge_type == DileptonChargeType::static_size)
-    {
-        return false;
-    }
-    switch (hyp.charge_type)
-    {
-    case DileptonChargeType::DF: return true; break;
-    case DileptonChargeType::SS: return false; break;
-    case DileptonChargeType::SF: 
-    {
-        bool lt_num = samesign::isNumeratorLepton(cms2.hyp_lt_id().at(hyp.idx), cms2.hyp_lt_index().at(hyp.idx), use_el_eta);
-        bool ll_num = samesign::isNumeratorLepton(cms2.hyp_ll_id().at(hyp.idx), cms2.hyp_ll_index().at(hyp.idx), use_el_eta);
-        if (lt_num && !ll_num)
-        {
-            return is_lt ? false : true;
-        }
-        if (!lt_num && ll_num)
-        {
-            return is_lt ? true : false;
-        }
-        break;
-    }
-    default: return false;
-    }
-    return false;
-}
-
-bool passesETHfo(int lep_id, int lep_idx, bool use_el_eta)
+// check that it passes the ETH fake rate definition
+bool passesETHfo(const int lep_id, const int lep_idx, const bool use_el_eta)
 {
     if (abs(lep_id) == 13)
     {
@@ -180,6 +122,31 @@ bool passesETHfo(int lep_id, int lep_idx, bool use_el_eta)
     }
 
     return false;
+}
+
+// set then numerator bool
+bool SSAnalysisLooper::IsNumerator(const int lep_id, const int lep_idx)
+{
+    return samesign::isNumeratorLepton(lep_id, lep_idx, m_use_el_eta);
+}
+
+// set then denominator bool
+bool SSAnalysisLooper::IsDenominator(const int lep_id, const int lep_idx)
+{
+    if (m_analysis_type == AnalysisType::high_pt_eth) 
+    {
+        return passesETHfo(lep_id, lep_idx, m_use_el_eta);
+    }
+    else
+    {
+        return samesign::isDenominatorLepton(lep_id, lep_idx, m_use_el_eta);
+    }
+}
+
+// set then fake-able object bool
+bool SSAnalysisLooper::IsFO(const int lep_id, const int lep_idx)
+{
+    return IsDenominator(lep_id, lep_idx) && not IsNumerator(lep_id, lep_idx);
 }
 
 // use delta R to match
@@ -338,7 +305,6 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
                      "-") << endl;
     }
 
-    //if ((evt_run() == 190736  && evt_lumiBlock() == 144 && evt_event() == 148335250))
     //{
     //  cout << "ID lepton 1: "; PrintIdInfo(l1_id, l1_idx, true);
     //  //cout << "ID iso 1: "; PrintIsoInfo(l1_id, l1_idx);
@@ -356,19 +322,18 @@ SSAnalysisLooper::SSAnalysisLooper
     const AnalysisType::value_type& analysis_type,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
-    const std::string& fake_rate_hist_name,
     const std::string& vtxreweight_file_name,
     const std::string& goodrun_file_name,
-    double luminosity,
-    int njets,
-    bool sparms,
-    int jetMetScale,
-    bool is_fast_sim,
-    bool use_el_eta,
-    bool sync_print,
-    bool verbose,
+    const double luminosity,
+    const int njets,
+    const bool sparms,
+    const int jetMetScale,
+    const bool is_fast_sim,
+    const bool use_el_eta,
+    const bool sync_print,
+    const bool verbose,
     const std::string apply_jec_otf,
-    double jet_pt_cut
+    const double jet_pt_cut
 )
     : AnalysisWithTreeAndHist(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
@@ -379,6 +344,7 @@ SSAnalysisLooper::SSAnalysisLooper
     , m_jetMetScale(jetMetScale)
     , m_is_fast_sim(is_fast_sim)
     , m_use_el_eta(use_el_eta)
+    , m_filter_bad_runs(false)
     , m_sync_print(sync_print)
     , m_verbose(verbose || sync_print)
     , m_jet_pt_cut(jet_pt_cut) 
@@ -527,6 +493,8 @@ SSAnalysisLooper::SSAnalysisLooper
         else m_jet_pt_cut = 40.0f;
     }
 
+    cout << "using jet pT cut : " << m_jet_pt_cut << endl;
+
     // begin job
     BeginJob();
 }
@@ -558,9 +526,10 @@ void SSAnalysisLooper::BeginJob()
     if (m_sync_print)
     {
         cout << "Run | LS | Event | channel | dilep Mass | " 
-            "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
-            "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
-            "MET | HT | nJets | nbJets" << endl;
+                "Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | "
+                "Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | "
+                "MET | HT | nJets | nbJets" 
+             << endl;
     }
 }
 
@@ -603,6 +572,12 @@ void SSAnalysisLooper::EndJob()
     yield_table2.print();
 
     // call base class end job
+    rt::TH1Container& hc = m_hist_container;
+    if (m_verbose)
+    {
+        hc.List();
+    }
+    
     AnalysisWithTreeAndHist::EndJob();
 }
 
@@ -620,30 +595,13 @@ int SSAnalysisLooper::SetJetCorrector(std::vector<std::string> &list_of_filename
     return 0;
 }
 
-int SSAnalysisLooper::Analyze(long event, const std::string& filename)
+int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 {
     // convenience alias
     rt::TH1Container& hc = m_hist_container;
 
     try
     {
-        // select specific events
-        //if (m_sync_print)
-        //{
-        //    //if (!(evt_run() == 1 && evt_lumiBlock() == 5145 && evt_event() == 1542975))
-        //    //if (!(evt_run() == 1 && evt_lumiBlock() == 15021 && evt_event() == 4505298))
-        //const long evt = evt_event();
-        //if (!(evt==502989016))  
-        //{
-        //    return 0;
-        //}
-        //    //else 
-        //    //{
-        //    //    cout << Form("running on run %d, ls %d, event %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
-        //    //}
-        //}
-
-
         // Reset Tree Variables
         // --------------------------------------------------------------------------------------------------------- //
 
@@ -671,6 +629,50 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
                     m_evt.is_good_lumi = true;
                 }
             }
+        }
+
+        // fix for wgamma* -> lnu2e sample
+        // /WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM
+        // This had an unphysical peak in the m_3l distribtuon
+        if (m_sample == at::Sample::wgstar2e)
+        {
+            vector<LorentzVector> l_p4;
+            for (size_t i = 0; i != genps_p4().size(); i++)
+            {
+                const unsigned int id = abs(genps_id().at(i));
+                if (genps_status().at(i) != 3) {continue;}
+
+                if (id == 11)
+                {
+                    l_p4.push_back(genps_p4().at(i));
+                }
+                if (id == 13)
+                {
+                    l_p4.push_back(genps_p4().at(i));
+                }
+            }
+
+            // sort by pt
+            std::sort(l_p4.begin(), l_p4.end(), at::SortByPt<LorentzVector>());
+
+            // must have 3 generater level leptons
+            if (l_p4.size() < 3) 
+            {
+                return 0;
+            }
+
+            //const float m_3l = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
+            const float pt_max = l_p4.at(0).pt();
+            if (100.0 < pt_max && pt_max < 160.0) {return 0;}
+
+            const float m_01 = (l_p4[0] + l_p4[1]).mass();
+            if (62.0 < m_01 && m_01 < 72.0) {return 0;}
+
+            const float m_02 = (l_p4[0] + l_p4[2]).mass();
+            if (52.0 < m_02 && m_02 < 55.0) {return 0;}
+
+            const float m_12 = (l_p4[1] + l_p4[2]).mass();
+            if (7.2 < m_12 && m_12 < 8.2) {return 0;}
         }
 
         // event logic variables 
@@ -1172,12 +1174,19 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.presel       = (m_evt.no_extraz && m_evt.no_extrag && m_evt.clean && m_evt.hyp_good_vtx);
 
         // set lepton info (lep1 is higher pT lepton, lep2 is lower pT lepton)
+        int lt_id  = cms2.hyp_lt_id().at(hyp_idx);
+        int lt_idx = cms2.hyp_lt_index().at(hyp_idx); 
         float lt_pt = hyp_lt_p4().at(hyp_idx).pt();
+        int ll_id  = cms2.hyp_ll_id().at(hyp_idx);
+        int ll_idx = cms2.hyp_ll_index().at(hyp_idx); 
         float ll_pt = hyp_ll_p4().at(hyp_idx).pt();
-        bool lt_num = IsNumerator  (best_hyp, /*is_lt=*/true, m_use_el_eta);  
-        bool lt_fo  = ((m_analysis_type == AnalysisType::high_pt_eth) ? (passesETHfo(hyp_lt_id().at(hyp_idx), hyp_lt_index().at(hyp_idx), m_use_el_eta) && not lt_num) : IsDenominator(best_hyp, /*is_lt=*/true, m_use_el_eta));
-        bool ll_num = IsNumerator  (best_hyp, /*is_lt=*/false, m_use_el_eta);  
-        bool ll_fo  = ((m_analysis_type == AnalysisType::high_pt_eth) ? (passesETHfo(hyp_ll_id().at(hyp_idx), hyp_ll_index().at(hyp_idx), m_use_el_eta) && not ll_num) : IsDenominator(best_hyp, /*is_lt=*/false, m_use_el_eta));  
+
+        bool lt_num = IsNumerator(lt_id, lt_idx);  
+        bool lt_den = IsDenominator(lt_id, lt_idx);
+        bool lt_fo  = IsFO(lt_id, lt_idx);
+        bool ll_num = IsNumerator(ll_id, ll_idx);  
+        bool ll_den = IsDenominator(ll_id, ll_idx);
+        bool ll_fo  = IsFO(ll_id, ll_idx);
 
         int lep1_id;
         int lep1_idx;
@@ -1185,18 +1194,22 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         int lep2_idx;
         bool lep1_fo = false;
         bool lep1_num = false;
+        bool lep1_den = false;
         bool lep2_fo = false;
         bool lep2_num = false;
+        bool lep2_den = false;
         if (lt_pt > ll_pt)
         {
             lep1_id  = cms2.hyp_lt_id().at(hyp_idx);
             lep1_idx = cms2.hyp_lt_index().at(hyp_idx); 
             lep1_fo  = lt_fo;
             lep1_num = lt_num;
+            lep1_den = lt_den;
             lep2_id  = cms2.hyp_ll_id().at(hyp_idx);    
             lep2_idx = cms2.hyp_ll_index().at(hyp_idx); 
             lep2_fo  = ll_fo;
             lep2_num = ll_num;
+            lep2_den = ll_den;
         }
         else
         {
@@ -1204,10 +1217,12 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
             lep1_idx = cms2.hyp_ll_index().at(hyp_idx); 
             lep1_fo  = ll_fo;
             lep1_num = ll_num;
+            lep1_den = ll_den;
             lep2_id  = cms2.hyp_lt_id().at(hyp_idx);    
             lep2_idx = cms2.hyp_lt_index().at(hyp_idx); 
             lep2_fo  = lt_fo;
             lep2_num = lt_num;
+            lep2_den = lt_den;
         }
         bool lep1_is_mu = (abs(lep1_id)==13);
         bool lep1_is_el = (abs(lep1_id)==11);
@@ -1224,6 +1239,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep1.dbeta04     = (lep1_is_mu) ? mus_isoR04_pf_PUPt().at(lep1_idx) : -99999.0;
         m_evt.lep1.is_fo       = lep1_fo;
         m_evt.lep1.is_num      = lep1_num;
+        m_evt.lep1.is_den      = lep1_den;
         //m_evt.lep1.is_conv     = false; 
         m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, met, met_phi);
         m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, evt_pfmet(), evt_pfmetPhi());
@@ -1242,6 +1258,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
         m_evt.lep2.dbeta04     = (lep2_is_mu) ? mus_isoR04_pf_PUPt().at(lep2_idx) : -99999.0;
         m_evt.lep2.is_fo       = lep2_fo; 
         m_evt.lep2.is_num      = lep2_num;
+        m_evt.lep2.is_den      = lep2_den;
         //m_evt.lep2.is_conv     = false; 
         m_evt.lep2.mt          = rt::Mt(m_evt.lep2.p4, met, met_phi);
         m_evt.lep2.passes_id   = samesign::isGoodLepton(lep2_id, lep2_idx, m_use_el_eta);
@@ -1875,7 +1892,7 @@ int SSAnalysisLooper::Analyze(long event, const std::string& filename)
     return 0;
 }
 
-float SSAnalysisLooper::GetFakeRateValue(int lep_id, int lep_idx) const 
+float SSAnalysisLooper::GetFakeRateValue(const int lep_id, const int lep_idx) const 
 {
     using namespace tas;
 
@@ -1912,7 +1929,7 @@ float SSAnalysisLooper::GetFakeRateValue(int lep_id, int lep_idx) const
     return 0.0;
 }
 
-float SSAnalysisLooper::GetFlipRateValue(int lep_id, int lep_idx) const 
+float SSAnalysisLooper::GetFlipRateValue(const int lep_id, const int lep_idx) const 
 {
     using namespace tas;
 
