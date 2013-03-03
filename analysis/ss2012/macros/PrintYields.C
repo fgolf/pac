@@ -10,7 +10,7 @@ using namespace ss;
 // systematic uncertainties
 const float fake_sys_unc = 0.5;
 const float rare_sys_unc = 0.5;
-const float flip_sys_unc = 0.2;
+const float flip_sys_unc = 0.3;
 
 // print the yields
 void PrintYields
