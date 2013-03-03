@@ -1051,7 +1051,7 @@ namespace at
             {
                 vpath.at(i) = Form("%s/%s/merged/*.root", prefix.c_str(), vpath.at(i).c_str()); 
             }
-            else if (ntuple == NtupleType::cms2 && info.type == SampleType::data)
+            else if (ntuple == NtupleType::cms2 && info.type != SampleType::data)
             {
                 vpath.at(i) = Form("%s/%s/%s/*.root", prefix.c_str(), vpath.at(i).c_str(), info.tag.c_str()); 
             }
