@@ -1044,6 +1044,7 @@ namespace at
             }
         }
 
+        // build the list of files
         vector<string> vpath = rt::string_split(GetSampleInfo(sample).ntuple_path, ",");
         for (size_t i = 0; i != vpath.size(); i++)
         {
@@ -1061,13 +1062,14 @@ namespace at
             }
         }
 
+        // build the chain
+        TChain* chain = new TChain("Events");
         for (size_t i = 0; i != vpath.size(); i++)
         {
-            cout << vpath.at(i) << endl;
-            gSystem->Exec(Form("ls %s", vpath.at(i).c_str()));
+            //cout << vpath.at(i) << endl;
+            //gSystem->Exec(Form("ls %s", vpath.at(i).c_str()));
+            chain->Add(vpath.at(i).c_str());
         }
-
-        TChain* chain = new TChain("Events");
         return chain;
     }
 
@@ -1161,8 +1163,9 @@ namespace at
         for (size_t i = 0; i != Sample::static_size; i++)
         {
             const at::Sample::value_type sample = static_cast<at::Sample::value_type>(i);
-            TChain* c = at::GetSampleTChain(sample);
-            delete c;
+            TChain* chain = at::GetSampleTChain(sample);
+            rt::GetFilesFromTChain(chain);
+            delete chain;
         }
     }
 
