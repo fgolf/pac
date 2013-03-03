@@ -25,11 +25,10 @@ try
     long number_of_events           = -1;
     std::string input_file          = "";
     std::string output_file         = "";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_13Feb2013.root";
-    std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02182013.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_26Feb2013.root";
+    std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02222013.root";
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";
-    std::string good_run_list       = "";
     bool exclusive                  = true;
     bool do_scale_factors           = true;
     float sparm0                    = -999999.0;
@@ -38,7 +37,7 @@ try
     float sparm3                    = -999999.0;
     float sf_flip                   = 0.84;
     float fake_sys_unc              = 0.5;
-    float flip_sys_unc              = 0.2;
+    float flip_sys_unc              = 0.3;
     float mc_sys_unc                = 0.5;
     unsigned int signal_region_num  = 0;
     int yield_type_raw              = 0;
@@ -49,46 +48,77 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"      , "print this menu")
-        ("nev"       , po::value<long>(&number_of_events)          , "number of events to run on (-1 == all)"                     )
-        ("output"    , po::value<std::string>(&output_file)        , "name of output root file"                                   )
-        ("input"     , po::value<std::string>(&input_file)         , "name of input root file"                                    )
-        ("sample"    , po::value<std::string>(&sample_name)        , "name of input sample (from at/Sample.h)"                    )
-        ("anal_type" , po::value<std::string>(&analysis_type_name) , "name of analysis type (from AnalysisType.h)"                )
-        ("fr_file"   , po::value<std::string>(&fake_rate_file_name), "fake rate file name"                                        )
-        ("fl_file"   , po::value<std::string>(&flip_rate_file_name), "flip rate file name"                                        )
-        ("run_list"  , po::value<std::string>(&good_run_list)      , "Good Run list (no default)"                                 )
-        ("sr"        , po::value<unsigned int>(&signal_region_num) , "signal region number (default is 0)"                        )
-        ("do_sf"     , po::value<bool>(&do_scale_factors)          , "use the MC scale factors (default is true)"                 )
-        ("sparm0"    , po::value<float>(&sparm0)                   , "sparm0 value is required"                                   )
-        ("sparm1"    , po::value<float>(&sparm1)                   , "sparm1 value is required"                                   )
-        ("sparm2"    , po::value<float>(&sparm2)                   , "sparm2 value is required"                                   )
-        ("sparm3"    , po::value<float>(&sparm3)                   , "sparm3 value is required"                                   )
-        ("sf_flip"   , po::value<float>(&sf_flip)                  , "scale factor for flips (default is 0.84)"                   )
-        ("fr_unc"    , po::value<float>(&fake_sys_unc)             , "systematic uncertainty for fake prediction (default is 0.5)")
-        ("fl_unc"    , po::value<float>(&flip_sys_unc)             , "systematic uncertainty for flip prediction (default is 0.2)")
-        ("mc_unc"    , po::value<float>(&mc_sys_unc)               , "systematic uncertainty for MC prediction (default is 0.5)"  )
-        ("lumi"      , po::value<float>(&lumi)                     , "luminosity"                                                 )
-        ("excl"      , po::value<bool>(&exclusive)                 , "use exclusive signal region"                                )
-        ("yield_type", po::value<int>(&yield_type_raw)             , "yield type (0 == base, > 0 == up, < 0 == down)"             )
-        ("verbose"   , po::value<bool>(&verbose)                   , "verbosity"                                                  )
+        ("input"     , po::value<std::string>(&input_file)->required() , "REQUIRED: name of input root file"                                             )
+        ("sample"    , po::value<std::string>(&sample_name)->required(), "REQUIRED: name of input sample (from at/Sample.h)"                             )
+        ("output"    , po::value<std::string>(&output_file)            , "name of output root file"                                                      )
+        ("anal_type" , po::value<std::string>(&analysis_type_name)     , "name of analysis type (from AnalysisType.h)"                                   )
+        ("yield_type", po::value<int>(&yield_type_raw)                 , "yield type (0 == base (default), > 0 == up, < 0 == down)"                      )
+        ("fr_file"   , po::value<std::string>(&fake_rate_file_name)    , Form("fake rate file name (default: %s)", fake_rate_file_name.c_str())          )
+        ("fl_file"   , po::value<std::string>(&flip_rate_file_name)    , Form("flip rate file name (default: %s)", flip_rate_file_name.c_str())          )
+        ("nev"       , po::value<long>(&number_of_events)              , "number of events to run on (-1 == all)"                                        )
+        ("sr"        , po::value<unsigned int>(&signal_region_num)     , "signal region number (default is 0)"                                           )
+        ("do_sf"     , po::value<bool>(&do_scale_factors)              , "use the MC scale factors (default is true)"                                    )
+        ("sparm0"    , po::value<float>(&sparm0)                       , "sparm0 is required to be this value"                                           )
+        ("sparm1"    , po::value<float>(&sparm1)                       , "sparm1 is required to be this value"                                           )
+        ("sparm2"    , po::value<float>(&sparm2)                       , "sparm2 is required to be this value"                                           )
+        ("sparm3"    , po::value<float>(&sparm3)                       , "sparm3 is required to be this value"                                           )
+        ("sf_flip"   , po::value<float>(&sf_flip)                      , Form("scale factor for flips (default is %f)", sf_flip)                         )
+        ("fr_unc"    , po::value<float>(&fake_sys_unc)                 , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc))
+        ("fl_unc"    , po::value<float>(&flip_sys_unc)                 , Form("systematic uncertainty for flip prediction (default is %f)", fake_sys_unc))
+        ("mc_unc"    , po::value<float>(&mc_sys_unc)                   , Form("systematic uncertainty for MC prediction (default is %f)", fake_sys_unc)  )
+        ("lumi"      , po::value<float>(&lumi)                         , "luminosity"                                                                    )
+        ("excl"      , po::value<bool>(&exclusive)                     , "use exclusive signal region"                                                   )
+        ("verbose"   , po::value<bool>(&verbose)                       , "verbosity"                                                                     )
         ;
 
-    po::variables_map vm;
+    // parse it
     try
     {
+        po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, desc), vm);
-        po::notify(vm);
-        if (vm.count("help")) {
+
+        if (vm.count("help")) 
+        {
             cout << desc << "\n";
             return 1;
         }
+
+        po::notify(vm);
     }
-    catch(const std::exception& e)
+    catch (const std::exception& e)
     {
         cerr << e.what() << "\nexiting" << endl;
+        cout << desc << "\n";
         return 1;
     }
+    catch (...)
+    {
+        std::cerr << "Unknown error!" << "\n";
+        return false;
+    }
 
+    cout << "inputs:" << endl;
+    cout << "input_file          :\t" << input_file          << endl;
+    cout << "sample_name         :\t" << sample_name         << endl;
+    cout << "output_file         :\t" << output_file         << endl;
+    cout << "analysis_type_name  :\t" << analysis_type_name  << endl;
+    cout << "yield_type_raw      :\t" << yield_type_raw      << endl;
+    cout << "fake_rate_file_name :\t" << fake_rate_file_name << endl;
+    cout << "flip_rate_file_name :\t" << flip_rate_file_name << endl;
+    cout << "number_of_events    :\t" << number_of_events    << endl;
+    cout << "signal_region_num   :\t" << signal_region_num   << endl;
+    cout << "do_scale_factors    :\t" << do_scale_factors    << endl;
+    cout << "sparm0              :\t" << sparm0              << endl;
+    cout << "sparm1              :\t" << sparm1              << endl;
+    cout << "sparm2              :\t" << sparm2              << endl;
+    cout << "sparm3              :\t" << sparm3              << endl;
+    cout << "sf_flip             :\t" << sf_flip             << endl;
+    cout << "fake_sys_unc        :\t" << fake_sys_unc        << endl;
+    cout << "flip_sys_unc        :\t" << flip_sys_unc        << endl;
+    cout << "mc_sys_unc          :\t" << mc_sys_unc          << endl;
+    cout << "lumi                :\t" << lumi                << endl;
+    cout << "exclusive           :\t" << exclusive           << endl;
+    cout << "verbose             :\t" << verbose             << endl;
 
     // check that input file exists and is specified
     if (!input_file.empty())
@@ -117,52 +147,27 @@ try
     const string signal_region_name                       = Form("sr%d", signal_region_num);
     const SignalRegion::value_type signal_region          = GetSignalRegionFromName(signal_region_name, ati.name, signal_region_type_name);
 
+    // sample
+    at::Sample::value_type sample = at::GetSampleFromName(sample_name);
+    const bool is_data = (at::GetSampleInfo(sample).type == at::SampleType::data);
+
     // input
-    TChain* chain  = NULL;
-    at::Sample::value_type sample = at::Sample::static_size;
-    bool is_data = false; 
-    if (sample_name.empty())  // use input file
+    TChain chain("tree");
+    chain.Add(input_file.c_str());
+
+    // output
+    if (output_file.empty())
     {
-        if (input_file.empty())
-        {
-            cout << "[ss2012_interp_hists] ERROR: input file or sample not found -- specify one or the other" << endl; 
-            cout << desc << "\n";
-            return 1;
-        }
-        else
-        {
-            chain = new TChain("tree");
-            chain->Add(input_file.c_str());
-            if (output_file.empty())
-            {
-                output_file = "plots/interp/test.root";
-            }
-        }
+        output_file = Form("plots/interp/%s.root", sample_name.c_str());
     }
-    else // use the sample
-    {
-        cout << "processing "  << sample_name << endl;
-        sample  = at::GetSampleFromName(sample_name);
-        is_data = at::SampleIsData(sample);
-        if (input_file.empty())
-        {
-            const string short_name = ati.short_name.c_str();
-            input_file = Form("babies/%s/%s.root", short_name.c_str(), sample_name.c_str());
-        }
-        if (output_file.empty())
-        {
-            //const char* sr = GetSignalRegionInfo(signal_region, analysis_type, signal_region_type).name.c_str();
-            output_file = Form("plots/interp/%s.root", sample_name.c_str());
-        }
-        chain = new TChain("tree");
-        chain->Add(input_file.c_str());
-        cout << "running on input: " << input_file << endl;
-    }
+
+    cout << "processing "  << sample_name << endl;
+    cout << "running on input: " << input_file << endl;
 
     // scan the chain
     ScanChain
     (
-        chain,
+        &chain,
         InterpLooper
         (
             output_file,       
@@ -187,7 +192,7 @@ try
         ),
         samesignbtag,
         number_of_events,
-        good_run_list,
+        /*good run list =*/"",
         is_data,
         verbose
     );

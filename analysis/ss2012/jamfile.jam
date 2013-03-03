@@ -400,6 +400,7 @@ default-install ss2012_create_fakerate ;
 default-install ss2012_make_fr_from_hists ;
 default-install ss2012_closure_test ;
 default-install ss2012_postprocess_signal_baby ;
+default-install ss2012_interp_hists ;
 default-install ss2012_fr_closure ;
 default-install test_frb ;
 default-install test_btagsf ;
