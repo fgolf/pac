@@ -63,7 +63,7 @@ namespace ss
             case Sample::t1tttt:
                 // /SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z/StoreResults-PU_START52_V9_FastSim-v1/USER 
                 // m_gluino:  350-1200
-                // m_lsp: 0-800
+                // m_lsp: 0-850
                 return MakeSignalBinInfo(25.0f, 325.0f, 1225.0f, 25.0f, 0.0f, 875.f);
                 break;
             case Sample::sbottomtop:
