@@ -27,7 +27,6 @@
 
     //if (lib_path.find(pac_path.c_str()) == std::string::npos)
     std::string pac_path = gSystem->Getenv("PAC");
-    //cout << pac_path << endl;
     if (cmssw)
     {
         pac_path += (is_debug ? "/bin/cmssw/debug" : "/bin/cmssw/release");
@@ -36,6 +35,7 @@
     {
         pac_path += (is_debug ? "/bin/debug" : "/bin/release");
     }
+    cout << pac_path << endl;
     
     // RootTools
     gSystem->AddIncludePath("-D'__RTINT__'");

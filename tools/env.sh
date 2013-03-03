@@ -22,17 +22,24 @@ fi
 
 # set the path and setup shared libraries
 export PAC=$project_dir
+alias cdpac="cd $PAC"
+
 PATH=$project_dir/bin:$PATH
 if [ -d "$project_dir/lib" ] ; then
     LD_LIBRARY_PATH=$project_dir/lib:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin
-elif [ -z "$CMSSW_BASE" ] ; then
+elif [ ! -z $CMSSW_BASE ] ; then
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/release/$DYLD_LIBRARY_PATH
-    PATH=$PATH:$PAC/bin
+    LD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$LD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/debug/$DYLD_LIBRARY_PATH
+    PATH=$PATH:$PAC/bin/release
 else
+	echo CMSSW not set
     LD_LIBRARY_PATH=$project_dir/bin/release:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/release:$DYLD_LIBRARY_PATH
+    LD_LIBRARY_PATH=$project_dir/bin/debug:$LD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=$project_dir/bin/debug/$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin/release/
 fi
