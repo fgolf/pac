@@ -71,10 +71,6 @@ parser.add_option("--out_name"  , dest="out_name"  , default="test"         , he
 parser.add_option("--anal_type" , dest="anal_type" , default="high_pt"      , help="analysis type"                                            )
 parser.add_option("--nbtags"    , dest="nbtags"    , default=0              , help="# btags"                                                  )
 parser.add_option("--njets"     , dest="njets"     , default=2              , help="# jets"                                                   )
-parser.add_option("--l1_min_pt" , dest="l1_min_pt" , default=5.0            , help="minimum pT on leading lepton"                             )
-parser.add_option("--l1_max_pt" , dest="l1_max_pt" , default=100000.0       , help="maximum pT on leading lepton"                             )
-parser.add_option("--l2_min_pt" , dest="l2_min_pt" , default=5.0            , help="minimum pT on trailing lepton"                            )
-parser.add_option("--l2_max_pt" , dest="l2_max_pt" , default=100000.0       , help="maximum pT on trailing lepton"                            )
 parser.add_option("--min_ht"    , dest="min_ht"    , default=80.0           , help="minimum HT"                                               )
 parser.add_option("--charge"    , dest="charge"    , default=0              , help="charge of leptons (1 for +, -1 for -, 0)"                 )
 parser.add_option("--sr"        , dest="sr"        , default=0              , help="signal region"                                            )
@@ -139,8 +135,6 @@ def make_hist(signal_region, sample):
 	cmd += " --fr_file %s"                        % str(options.fr_file)
 	cmd += " --fl_file %s"                        % str(options.fl_file)
 	cmd += " --charge %d"                         % int(options.charge)
-	cmd += " --l1_min_pt %1.3f --l1_max_pt %1.3f" % (float(options.l1_min_pt), float(options.l1_max_pt))
-	cmd += " --l2_min_pt %1.3f --l2_max_pt %1.3f" % (float(options.l2_min_pt), float(options.l2_max_pt))
 	cmd += " --ht %1.3f"                          % float(options.min_ht)
 	cmd += " --anal_type %s"                      % options.anal_type 
 	if (options.excl):

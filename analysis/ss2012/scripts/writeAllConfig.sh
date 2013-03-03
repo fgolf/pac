@@ -165,7 +165,7 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 ./writeConfig.sh ttslq $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1/$TAG/SingleOrDiLepton $OUTPUT_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1
 ./writeConfig.sh ttotr $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_HadronicMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1/$TAG                  $OUTPUT_PATH/TTJets_HadronicMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1
 
-# QCD
+## QCD
 #TAG=V05-03-18_slim
 #CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 #./writeConfig.sh qcd $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/QCD_Pt-15to20_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2/$TAG/   $OUTPUT_PATH/QCD_Pt-15to20_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2
@@ -185,16 +185,17 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 
 # fast sim -- SM
 # depricated: creating babies directly from crab
+# ---------------------------------------------------------#
 
-#GOODRUNLIST="\\\"\\\""
-#ATYPE=vlow_pt
-#NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Summer12_52X_MC
-#OUTPUT_PATH=babies/ss2012/$TAG/mc
-#OPTIONS="\"\\\"--isFastSim 1 --sparms 1\\\"\""
-#
-#TAG="V05-03-23_slim"
-#CAMPAIGN=_StoreResults-PU_START52_V9_FastSim
-#./writeConfig.sh t1tttt $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_${CAMPAIGN}-v1/$TAG/ $OUTPUT_PATH/SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_${CAMPAIGN}-v1
+RUNLIST="\\\"\\\""
+ATYPE=vlow_pt
+NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Summer12_52X_MC
+OUTPUT_PATH=babies/ss2012/$TAG/mc
+OPTIONS="\\\"--isFastSim 1 --sparms 1\\\""
+
+TAG="V05-03-23_slim"
+CAMPAIGN=StoreResults-PU_START52_V9_FastSim
+./writeConfig.sh t1tttt $ATYPE $RUNLIST "$OPTIONS" $NTUPLE_PATH/SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_${CAMPAIGN}-v1/$TAG/ $OUTPUT_PATH/SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_${CAMPAIGN}-v1
 
 mkdir -p mc
 mv *.cmd mc/.
