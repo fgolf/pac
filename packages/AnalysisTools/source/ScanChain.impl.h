@@ -28,9 +28,9 @@ namespace at
         const std::string& goodrun_file_name,
         bool fast,
         bool verbose,
-        int evt_run = -1,
-        int evt_lumi = -1,
-        int evt_event = -1
+        int evt_run,
+        int evt_lumi,
+        int evt_event
     )
     {
         using namespace std;
