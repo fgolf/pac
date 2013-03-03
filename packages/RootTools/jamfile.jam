@@ -21,6 +21,7 @@ lib RootTools
       /ROOT
       /boost//headers          
       /boost//filesystem
+      /boost//regex
     : # requirements 
       <include>./include
       <include>./source 
@@ -68,6 +69,7 @@ lib RootTools
       /ROOT
       /boost//headers          
       /boost//filesystem
+      /boost//regex
     : # requirements 
       <define>__RTINT__
       <include>./include

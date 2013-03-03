@@ -316,6 +316,10 @@ namespace rt
     double Integral(TH2* h, const std::string& option = "");
     double Integral(TH2* h, float xlow, float xhigh, float ylow, float yhigh, const std::string& option = "");
 
+    // get the bin content with float values
+    double GetBinContent1D(TH1* h, const float x);
+    double GetBinContent2D(TH2* h, const float x, const float y);
+
     // inflate the bin error by percentage of the bin value (used for systematic uncertainties)
     void SetSystematicUncertainty(TH1* h, float sys_unc);
 
@@ -388,6 +392,9 @@ namespace rt
 
     // get a vector of strings for all the files in path 
     std::vector<std::string> get_list_of_files(const std::string &path, bool show_hidden_files = false);
+
+    // simple ls function
+    std::vector<std::string> ls(const std::string& mask);
 
     // get a vector of strings for all the files in path 
     std::vector<std::string> get_list_of_files_from_castor(const std::string &path);

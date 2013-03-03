@@ -30,6 +30,7 @@
 #define BOOST_FILESYSTEM_NO_DEPRECATED //  we don't want to use any deprecated features
 #include "boost/filesystem.hpp"
 #include "boost/shared_ptr.hpp"
+#include "boost/regex.hpp" 
 #include "boost/lexical_cast.hpp"
 #include "boost/algorithm/string.hpp"
 
@@ -169,6 +170,29 @@ namespace rt
             h->SetBinError(i, error);
         }
         return;
+    }
+
+    // calculate the integral 1D hist
+    double GetBinContent1D(TH1* hist_ptr, const float x)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::GetBinContent1D() -- hist pointer is NULL!");
+        }
+        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        return hist_ptr->GetBinContent(bin);
+    }
+
+    // calculate the integral 1D hist
+    double GetBinContent2D(TH2* hist_ptr, const float x, const float y)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::GetBinContent1D() -- hist pointer is NULL!");
+        }
+        int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        return hist_ptr->GetBinContent(xbin, ybin);
     }
 
     // calculate the integral and error
@@ -1250,6 +1274,50 @@ namespace rt
             }
         }
         return result;
+    }
+
+    // helper function for below
+    std::string to_regex_copy(std::string mask)
+    {
+        std::string rv = boost::regex_replace(boost::regex_replace(boost::regex_replace(mask, boost::regex( "\\." ), "\\\\."), boost::regex("\\?"), "\\."), boost::regex("\\*"), "\\.*");
+        return rv ;
+    }
+
+    // simple ls function
+    vector<string> ls(const string& pcszMask)
+    {
+        namespace fs = boost::filesystem;
+        boost::filesystem::path path;
+        boost::regex mask;
+        if (fs::is_directory(pcszMask))
+        {
+            path = pcszMask;
+            mask = ".*" ;
+        }
+        else
+        {
+            path = fs::path(pcszMask).remove_filename();
+            mask = to_regex_copy(fs::path(pcszMask).filename().string());
+        }
+
+        std::vector<std::string> rv;
+        try
+        {
+            for (fs::directory_iterator dir_itr(path), dir_end; dir_itr != dir_end; ++dir_itr)
+            {
+                string file_name = dir_itr->path().filename().string();
+                if (boost::regex_match(file_name, mask))
+                {
+                    rv.push_back(dir_itr->path().string());
+                }
+            }
+        }
+        catch(...)
+        {
+            // do nothing
+        }
+
+        return rv;
     }
 
     // Get a vector of the filenames in a directory from CASTOR
