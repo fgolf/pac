@@ -22,7 +22,10 @@ namespace at
         long num_events = -1, 
         const std::string& goodrun_file_name = "",
         bool fast = true,
-        bool verbose = false
+        bool verbose = false,
+        int evt_run = -1,
+        int evt_lumi = -1,
+        int evt_event = -1
      );
 
     // Peform an analysis on a chain.
@@ -36,7 +39,10 @@ namespace at
         long num_events = -1, 
         const std::string& goodrun_file_name = "",
         bool fast = true,
-        bool verbose = false
+        bool verbose = false,
+        int evt_run = -1,
+        int evt_lumi = -1,
+        int evt_event = -1
      );
 
 } // namespace at

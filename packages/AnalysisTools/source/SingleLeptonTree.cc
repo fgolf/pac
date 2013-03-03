@@ -30,6 +30,7 @@ SingleLeptonTree::SingleLeptonTree (const std::string &prefix)
 //      bool passes_id;
 //      bool passes_iso;
 //      bool is_num;
+//      bool is_den;
 //      bool is_fo;
 //      float corpfiso, cordetiso, corpfiso04, cordetiso04;
 //      float effarea, effarea04;
@@ -219,6 +220,7 @@ void SingleLeptonTree::Reset()
     passes_id    = false;
     passes_iso   = false;
     is_num       = false;
+    is_den       = false;
     is_fo        = false;
     is_fromw     = -999999;
     charge       = -999999;
@@ -307,6 +309,7 @@ void SingleLeptonTree::SetBranches(TTree &tree)
     tree.Branch(Form("%spasses_id"    , prefix_.c_str()) , &passes_id      , "passes_id/O"    );
     tree.Branch(Form("%spasses_iso"   , prefix_.c_str()) , &passes_iso     , "passes_iso/O"   );
     tree.Branch(Form("%sis_num"       , prefix_.c_str()) , &is_num         , "is_num/O"       );
+    tree.Branch(Form("%sis_den"       , prefix_.c_str()) , &is_den         , "is_den/O"       );
     tree.Branch(Form("%sis_fo"        , prefix_.c_str()) , &is_fo          , "is_fo/O"        );
     tree.Branch(Form("%sis_fromw"     , prefix_.c_str()) , &is_fromw       , "is_fromw/I"     );
     tree.Branch(Form("%scharge"       , prefix_.c_str()) , &charge         , "charge/I"       );

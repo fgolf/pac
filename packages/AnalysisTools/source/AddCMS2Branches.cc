@@ -55,7 +55,7 @@ int AddCMS2Branches
     tree->SetBranchStatus("*"        , 0);
     tree->SetBranchStatus("*_CMS2.*" , 1);
 
-        // Removes the branches (if they exist) that we want to replace
+    // Removes the branches (if they exist) that we want to replace
     //-------------------------------------------------------------`
 
     SetBranchStatus(tree, "evt_xsec_excl", 0);

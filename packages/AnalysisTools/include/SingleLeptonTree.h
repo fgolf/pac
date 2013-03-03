@@ -35,6 +35,7 @@ public:
     bool passes_id;
     bool passes_iso;
     bool is_num;
+    bool is_den;
     bool is_fo;
     int is_fromw;
     int charge;

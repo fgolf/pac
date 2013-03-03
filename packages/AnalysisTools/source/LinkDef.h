@@ -41,5 +41,6 @@
 #pragma link C++ function at::GetNtuplePath;
 #pragma link C++ function at::GetNtuplePath;
 #pragma link C++ function at::GetNtupleTypeFromName;
+#pragma link C++ function at::test_paths;
 
 #endif // __CINT__

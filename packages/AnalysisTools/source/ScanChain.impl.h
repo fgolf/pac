@@ -27,7 +27,10 @@ namespace at
         long num_events,
         const std::string& goodrun_file_name,
         bool fast,
-        bool verbose
+        bool verbose,
+        int evt_run = -1,
+        int evt_lumi = -1,
+        int evt_event = -1
     )
     {
         using namespace std;
@@ -129,6 +132,41 @@ namespace at
                 unsigned int ls  = LumiBlock(ntuple_class);
                 unsigned int evt = Event(ntuple_class);
 
+                // check run/ls/evt
+                if (evt_event >= 0)
+                {
+                    if (evt==static_cast<unsigned int>(evt_event))
+                    {
+                        if (verbose) {cout << "selected event:\t" << evt << endl;}
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                if (evt_lumi >= 0)
+                {
+                    if (ls==static_cast<unsigned int>(evt_lumi))
+                    {
+                        if (verbose) {cout << "selected lumi:\t" << ls << endl;}
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                if (evt_run >= 0)
+                {
+                    if (ls==static_cast<unsigned int>(evt_run))
+                    {
+                        if (verbose) {cout << "selected run:\t" << run << endl;}
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
                 // filter out events
                 if (IsRealData(ntuple_class))
                 {
@@ -210,7 +248,10 @@ namespace at
         long num_events,
         const std::string& goodrun_file_name,
         bool fast,
-        bool verbose
+        bool verbose,
+        int evt_run,
+        int evt_lumi,
+        int evt_event
     )
     {
         using namespace std;
@@ -311,6 +352,41 @@ namespace at
                 unsigned int run = Run(ntuple_class);
                 unsigned int ls  = LumiBlock(ntuple_class);
                 unsigned int evt = Event(ntuple_class);
+
+                // check run/ls/evt
+                if (evt_event >= 0)
+                {
+                    if (evt==static_cast<unsigned int>(evt_event))
+                    {
+                        if (verbose) {cout << "selected event:\t" << evt << endl;}
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                if (evt_lumi >= 0)
+                {
+                    if (ls==static_cast<unsigned int>(evt_lumi))
+                    {
+                        if (verbose) {cout << "selected lumi:\t" << ls << endl;}
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                if (evt_run >= 0)
+                {
+                    if (ls==static_cast<unsigned int>(evt_run))
+                    {
+                        if (verbose) {cout << "selected run:\t" << run << endl;}
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
 
                 // filter out events
                 if (IsRealData(ntuple_class))

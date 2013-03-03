@@ -5,6 +5,7 @@
 #include <iostream>
 #include "TChain.h"
 #include "TColor.h"
+#include "TSystem.h"
 
 //#include "CORE/mcSelections.h"
 #include "rt/MiscTools.h"
@@ -37,6 +38,8 @@ namespace at
             "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
             "MuEG_Run2012C-24Aug2012-v1_AOD,"
             "MuEG_Run2012C-PromptReco-v2_AOD",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::data,
             // Sample
@@ -57,6 +60,8 @@ namespace at
             "DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD,"
             "DoubleElectron_Run2012C-24Aug2012-v1_AOD,"
             "DoubleElectron_Run2012C-PromptReco-v2_AOD",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::data,
             // Sample
@@ -77,6 +82,8 @@ namespace at
             "DoubleMu_Run2012A-recover-06Aug2012-v1_AOD,"
             "DoubleMu_Run2012C-24Aug2012-v1_AOD,"
             "DoubleMu_Run2012C-PromptReco-v2_AOD",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::data,
             // Sample
@@ -97,6 +104,8 @@ namespace at
             "MuEG_Run2012A-recover-06Aug2012-v1_AOD,"
             "MuEG_Run2012C-24Aug2012-v1_AOD,"
             "MuEG_Run2012C-PromptReco-v2_AOD",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::data,
             // Sample
@@ -107,12 +116,14 @@ namespace at
         {
             // name
             "dy", 
-            // title,
+            // title
             "DY #rightarrow ll", 
             // latex
             "$DY \\rightarrow \\ell \\ell$", 
             // ntuple_path
             "DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -123,12 +134,14 @@ namespace at
         {
             // name
             "wjets", 
-            // title,
+            // title
             "W+jets #rightarrow l#nu", 
             // latex
             "$W+jets \\rightarrow \\ell \\nu$", 
             // ntuple_path
             "WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-13_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -139,13 +152,15 @@ namespace at
         {
             // name
             "t_tw", 
-            // title,
+            // title
             "tW", 
             // latex
             "tW", 
             // ntuple_path
             "T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
             "Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -156,13 +171,15 @@ namespace at
         {
             // name
             "t_schan", 
-            // title,
+            // title
             "t, s-channel", 
             // latex
             "t, s-channel", 
             // ntuple_path
             "T_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
             "Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -173,13 +190,15 @@ namespace at
         {
             // name
             "t_tchan", 
-            // title,
+            // title
             "t, t-channel", 
             // latex
             "t, t-channel", 
             // ntuple_path
             "T_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
             "Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -196,6 +215,8 @@ namespace at
             "$t\\overline{t}W$", 
             // ntuple_path
             "TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -212,6 +233,8 @@ namespace at
             "$t\\overline{t}Z$", 
             // ntuple_path
             "TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -228,6 +251,8 @@ namespace at
             "$t\\overline{t}\\gamma$", 
             // ntuple_path
             "TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -244,6 +269,8 @@ namespace at
             "$tbZ (Z \\rightarrow \\ell \\ell)$", 
             // ntuple_path
             "TBZToLL_4F_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7C-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -260,6 +287,8 @@ namespace at
             "$t\\overline{t}WW$", 
             // ntuple_path
             "TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -276,6 +305,8 @@ namespace at
             "$t\\overline{t}+jets$", 
             // ntuple_path
             "TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -292,6 +323,8 @@ namespace at
             "$t\\overline{t} \\rightarrow \\ell \\ell X$", 
             // ntuple_path
             "TTJets_FullLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v2",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -308,6 +341,8 @@ namespace at
             "$t\\overline{t}\\ \\rm{other}$", 
             // ntuple_path
             "TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -324,6 +359,8 @@ namespace at
             "$t\\overline{t} \\rightarrow \\ell (q \\rightarrow \\ell) X$", 
             // ntuple_path
             "TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -340,6 +377,8 @@ namespace at
             "$t\\overline{t} \\rightarrow \\ell (b \\rightarrow \\ell) X$", 
             // ntuple_path
             "TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -356,6 +395,8 @@ namespace at
             "$t\\overline{t} \\rightarrow \\ell (\\slashed b \\rightarrow \\ell) X$", 
             // ntuple_path
             "TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -372,6 +413,8 @@ namespace at
             "ZZ", 
             // ntuple_path
             "ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -388,6 +431,8 @@ namespace at
             "WZ",
             // ntuple_path
             "WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -404,6 +449,8 @@ namespace at
             "WW", 
             // ntuple_path
             "WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -420,6 +467,8 @@ namespace at
             "$WW\\gamma$", 
             // ntuple_path
             "WWGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -436,6 +485,8 @@ namespace at
             "WWW", 
             // ntuple_path
             "WWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -452,6 +503,8 @@ namespace at
             "WWZ", 
             // ntuple_path
             "WWZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -468,6 +521,8 @@ namespace at
             "WZZ", 
             // ntuple_path
             "WZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -484,6 +539,8 @@ namespace at
             "ZZZ", 
             // ntuple_path
             "ZZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-24",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -500,6 +557,8 @@ namespace at
             "T1tttt", 
             // ntuple_path
             "SMS-T1ttttProtoScan_Mgluino-350to1200_mLSP-0to400_8TeV-Pythia6Z_StoreResults-PU_START52_V5_FullSim-v1", 
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -516,6 +575,8 @@ namespace at
             "T1tttt", 
             // ntuple_path
             "SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -534,6 +595,8 @@ namespace at
             // this is out of date, corrently we go straight from edm --> baby
             // https://twiki.cern.ch/twiki/bin/viewauth/CMS/SMST6ttWWMadgraph8TeV 
             "SbottomTopv6_macneill_8TeV",  
+            // tag
+            "V05-02-28",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -550,6 +613,8 @@ namespace at
             "$t\\tidle{g}\\tilde{b}$", 
             // ntuple_path
             "GluinoSbottom_cgeorge_8Tev",
+            // tag
+            "V05-02-28",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -566,6 +631,8 @@ namespace at
             "$t\\tidle{g}\\tilde{t}$", 
             // ntuple_path
             "GluinoStop_cgeorge_8Tev",
+            // tag
+            "V05-02-28",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -582,6 +649,8 @@ namespace at
             "$W\\gamma^{*} \\rightarrow \\ell \\nu ee$", 
             // ntuple_path
             "WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -598,6 +667,8 @@ namespace at
             "$W\\gamma^{*} \\rightarrow \\ell \\nu \\mu\\mu$", 
             // ntuple_path
             "WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -614,6 +685,8 @@ namespace at
             "$W\\gamma^{*} \\rightarrow \\ell \\nu \\tau\\tau$",
             // ntuple_path
             "WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -632,6 +705,8 @@ namespace at
             "WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
             "WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1,"
             "WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -648,6 +723,8 @@ namespace at
             "qq$W^-W^-$", 
             // ntuple_path
             "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -664,6 +741,8 @@ namespace at
             "$qqW^+W^+$", 
             // ntuple_path
             "WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -681,6 +760,8 @@ namespace at
             // ntuple_path
             "WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1,"
             "WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -697,6 +778,8 @@ namespace at
             "WW(DPS)", 
             // ntuple_path
             "WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::rare,
             // Sample
@@ -713,6 +796,8 @@ namespace at
             "SUSY LM6",
             // ntuple_path
             "SUSY_LM6_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-13_slim",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -729,6 +814,8 @@ namespace at
             "SUSY LM9", 
             // ntuple_path
             "SUSY_LM9_sftsht_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-13_slim",
             // SampleType 
             SampleType::susy,
             // Sample
@@ -739,12 +826,14 @@ namespace at
         {
             // name
             "dy4jets", 
-            // title,
+            // title
             "DY #rightarrow ll + 4j", 
             // latex
             "$DY \\rightarrow \\ell \\ell$ + 4j", 
             // ntuple_path
             "DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -755,12 +844,14 @@ namespace at
         {
             // name
             "w3jets", 
-            // title,
+            // title
             "W #rightarrow l#nu + 3j", 
             // latex
             "$W \\rightarrow \\ell \\ny$ + 3j", 
             // ntuple_path
             "W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-25_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -771,12 +862,14 @@ namespace at
         {
             // name
             "w4jets", 
-            // title,
+            // title
             "W #rightarrow l#nu + 4j", 
             // latex
             "$W \\rightarrow \\ell \\ny$ + 4j", 
             // ntuple_path
             "W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-25_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -787,12 +880,14 @@ namespace at
         {
             // name
             "wz2l", 
-            // title,
+            // title
             "WZ #rightarrow 2l", 
             // latex
             "$WZ \\rightarrow 2\\ell", 
             // ntuple_path
             "WZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -803,12 +898,14 @@ namespace at
         {
             // name
             "zz2l", 
-            // title,
+            // title
             "ZZ #rightarrow 2l", 
             // latex
             "$ZZ \\rightarrow 2\\ell", 
             // ntuple_path
             "ZZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-23_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -825,6 +922,8 @@ namespace at
             "$t\\overline{t}+jets$", 
             // ntuple_path
             "TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v2",
+            // tag
+            "V05-03-23",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -841,6 +940,8 @@ namespace at
             "QCD", 
             // ntuple_path
             "QCD_Pt-*to*_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-18_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -857,6 +958,8 @@ namespace at
             "QCD (\\mu15 enriched)", 
             // ntuple_path
             "QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3",
+            // tag
+            "V05-03-18_slim",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -925,112 +1028,47 @@ namespace at
     TChain* GetSampleTChain(const Sample::value_type& sample, const NtupleType::value_type& ntuple)
     {
         using namespace std;
-        string path = GetSampleInfo(sample).ntuple_path;
-        SampleType::value_type sample_type = GetSampleInfo(sample).type;
-        std::string prefix = GetNtuplePath(ntuple, sample_type);
+        SampleInfo info = GetSampleInfo(sample);
+        std::string prefix = GetNtuplePath(ntuple, info.type);
 
         // special cases
-		// this is poor -- redo this...
-        if ( (sample == Sample::t1tttt)         || 
-             (sample == Sample::t1tttt_fastsim) || 
-             (sample == Sample::sbottomtop)     || 
-             (sample == Sample::glusbottom)     || 
+        if ( 
+             (sample == Sample::sbottomtop) || 
+             (sample == Sample::glusbottom) || 
              (sample == Sample::glustop)
             )
         {
             if (ntuple == NtupleType::cms2)
             {
                 prefix = "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
-                path = rt::string_replace_all(path, ",", "/V05-02-28,");	
-                path.append("/V05-02-28");
             }
-            else if (ntuple == NtupleType::ss_skim)
+        }
+
+        vector<string> vpath = rt::string_split(GetSampleInfo(sample).ntuple_path, ",");
+        for (size_t i = 0; i != vpath.size(); i++)
+        {
+            if (ntuple == NtupleType::cms2 && info.type == SampleType::data)
             {
-                prefix = "/nfs-7/userdata/rwkelley/skims/ss2012/52X/";
-                path = rt::string_replace_all(path, ",", "/V05-02-28,");
-                path.append("/V05-02-28");
+                vpath.at(i) = Form("%s/%s/merged/*.root", prefix.c_str(), vpath.at(i).c_str()); 
+            }
+            else if (ntuple == NtupleType::cms2 && info.type == SampleType::data)
+            {
+                vpath.at(i) = Form("%s/%s/%s/*.root", prefix.c_str(), vpath.at(i).c_str(), info.tag.c_str()); 
+            }
+            else
+            {
+                vpath.at(i) = Form("%s/%s/*.root", prefix.c_str(), vpath.at(i).c_str()); 
             }
         }
-		//else if (sample == Sample::qcd_mu15)
-        //{
-        //    if (ntuple == NtupleType::cms2)
-        //    {
-        //        prefix = "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
-        //        path = rt::string_replace_all(path, ",", "/V05-02-27,");	
-        //        path.append("/V05-02-27");
-        //    }
-        //}
-		else if (sample == Sample::data && ntuple == NtupleType::cms2)
-		{
-			path = rt::string_replace_all(path, ",", "/merged,");	
-            path.append("/merged");
-        }
-        else if (sample == Sample::qcd && ntuple == NtupleType::cms2)
+
+        for (size_t i = 0; i != vpath.size(); i++)
         {
-            path = rt::string_replace_all(path, ",", "/V05-03-18_slim,");
-            path.append("/V05-03-18_slim");
-        }
-        else if (sample == Sample::ttw && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-21_slim,");
-            path.append("/V05-03-21_slim");
-        }
-        else if (sample == Sample::ttjets && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-18_slim,");
-            path.append("/V05-03-18_slim");
-        }
-        else if (sample == Sample::dy && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-18_slim,");
-            path.append("/V05-03-18_slim");        
-        }
-        else if (sample == Sample::ttw && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-21_slim,");
-            path.append("/V05-03-21_slim");
-        }
-        else if (sample == Sample::tbz && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-20");
-            path.append("/V05-03-20");
-        }
-        else if (sample == Sample::ttdil && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
-            path.append("/V05-03-20_slim/SingleOrDiLepton");
-        }
-        else if (sample == Sample::ttslq && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
-            path.append("/V05-03-20_slim/SingleOrDiLepton");
-        }
-        else if (sample == Sample::ttslb && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
-            path.append("/V05-03-20_slim/SingleOrDiLepton");
-        }
-        else if (sample == Sample::ttslo && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
-            path.append("/V05-03-20_slim/SingleOrDiLepton");
-        }
-        else if (sample == Sample::ttotr && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-20_slim/SingleOrDiLepton");
-            path.append("/V05-03-20_slim/SingleOrDiLepton");
-        }
-        else if (sample != Sample::data && ntuple == NtupleType::cms2)
-        {
-            path = rt::string_replace_all(path, ",", "/V05-03-13_slim,");
-            path.append("/V05-03-13_slim");
+            cout << vpath.at(i) << endl;
+            gSystem->Exec(Form("ls %s", vpath.at(i).c_str()));
         }
 
-        // append *.root at the end
-        path = rt::string_replace_all(path, ",", "/*.root,");
-        path.append("/*.root");
-
-        return rt::CreateTChainFromCommaSeperatedList(path, "Events", prefix);
+        TChain* chain = new TChain("Events");
+        return chain;
     }
 
     // function to filter samples by process
@@ -1072,21 +1110,20 @@ namespace at
         {
             switch (ntuple) 
             {
-            case NtupleType::cms2:         return "/hadoop/cms/store/user/yanjuntu/CMSSW_5_3_2_patch4_V05-03-13/";
-            case NtupleType::ss_skim:      return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
-            case NtupleType::trilepz_skim: return "/hadoop/cms/store/user/imacneill/TTZ_8TeV_LooseTrilepSkim/gsfglobaliso/";
-            default: {/*do nothing*/}
+                case NtupleType::cms2:         return "/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24/";
+                case NtupleType::trilepz_skim: return "/hadoop/cms/store/user/imacneill/TTZ_8TeV_LooseTrilepSkim/gsfglobaliso/";
+                default: {/*do nothing*/}
             };
         }
         else
         {
             switch (ntuple) 
             {
-            case NtupleType::cms2:         return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
-            case NtupleType::ss_skim:      return "/nfs-7/userdata/rwkelley/skims/ss2012/53X/v1/";
-            case NtupleType::trilepz_skim: return "/hadoop/cms/store/user/imacneill/TTZ_8TeV_LooseTrilepSkim/gsfglobaliso/";
-            default: {/*do nothing*/}
+                case NtupleType::cms2:         return "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/";
+                case NtupleType::trilepz_skim: return "/hadoop/cms/store/user/imacneill/TTZ_8TeV_LooseTrilepSkim/gsfglobaliso/";
+                default: {/*do nothing*/}
             };
+
         }
         
         return "";
@@ -1107,7 +1144,6 @@ namespace at
     NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name)
     {
         if (ntuple_type_name == "cms2"   )      return NtupleType::cms2;
-        if (ntuple_type_name == "ss_skim")      return NtupleType::ss_skim;
         if (ntuple_type_name == "trilepz_skim") return NtupleType::trilepz_skim;
 
         // throw string is not valid 
@@ -1117,6 +1153,17 @@ namespace at
     std::string GetNtuplePath(const std::string& ntuple_type_name, const std::string& sample_type_name)
     {
         return GetNtuplePath(GetNtupleTypeFromName(ntuple_type_name), GetSampleTypeFromName(sample_type_name));
+    }
+
+    // function to test the cms2 ntuple paths
+    void test_paths()
+    {
+        for (size_t i = 0; i != Sample::static_size; i++)
+        {
+            const at::Sample::value_type sample = static_cast<at::Sample::value_type>(i);
+            TChain* c = at::GetSampleTChain(sample);
+            delete c;
+        }
     }
 
 

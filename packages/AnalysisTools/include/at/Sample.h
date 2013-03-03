@@ -87,6 +87,7 @@ namespace at
         std::string title;           // ROOT TLatex title
         std::string latex;           // real latex title
         std::string ntuple_path;     // logical name for path
+        std::string tag;             // cms2 tag
         SampleType::value_type type; // classification
         Sample::value_type process;  // redundant process enum
         Color_t color; 
@@ -98,7 +99,6 @@ namespace at
         enum value_type
         {
             cms2,
-            ss_skim,
             trilepz_skim,
             static_size
         };
@@ -120,7 +120,7 @@ namespace at
     (
         const Sample::value_type& sample, 
         const NtupleType::value_type& ntuple = NtupleType::cms2
-        ); 
+    ); 
 
     // function to filter samples by process
     bool FilterByProcess(const Sample::value_type& sample);
@@ -135,6 +135,9 @@ namespace at
     std::string GetNtuplePath(const std::string& ntuple_type_name, const std::string& sample_type_name);
     std::string GetNtuplePath(const NtupleType::value_type& ntuple, const SampleType::value_type sample_type);
     NtupleType::value_type GetNtupleTypeFromName(const std::string& ntuple_type_name);
+
+    // function to test the cms2 ntuple paths
+    void test_paths();
 
 } // namespace at
 
