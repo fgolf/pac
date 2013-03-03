@@ -43,7 +43,8 @@ JOBFLAGS="events_per_job          = 10000
 total_number_of_events  = -1"
 if [ ${DSET} == "/SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph/Summer12-START52_V9_FSIM/USER" ]; then
 JOBFLAGS="total_number_of_jobs    = 5000
-total_number_of_lumis   = -1"
+total_number_of_lumis   = -1
+lumis_per_job           = 3"
 fi
 
 

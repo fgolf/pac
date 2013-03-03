@@ -35,10 +35,8 @@ process.luminosityMaker.isData                   = process.eventMaker.isData
 from CMS2.NtupleMaker.SlimCms2_cff import slimcms2
 process.out.outputCommands.extend(slimcms2)
 process.eventMaker.datasetName                   = cms.string("/SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z/StoreResults-PU_START52_V9_FastSim-v1/USER")
-process.eventMaker.CMS2tag                       = cms.string("V05-03-23")
-process.sParmMaker.vsparms = cms.untracked.vstring(
-"mgluino",
-"mlsp"
-) # list of sparm parameters, be sure it is the same size as the number of parameter in the files
+process.eventMaker.CMS2tag                       = cms.string("V05-03-27")
+process.sParmMaker.vsparms = cms.untracked.vstring("mgluino","mlsp") # list of sparm parameters, be sure it is the same size as the number of parameter in the files
+
 process.cms2WithEverything.replace( process.eventmakers, process.eventmakerswsparm ) #adds the sparm producer in to the sequence
 process.cms2WithEverything.remove( process.cms2HBHENoiseFilterResultProducer ) #need to remove this produce for fastsim

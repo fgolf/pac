@@ -36,7 +36,7 @@ process.luminosityMaker.isData = process.eventMaker.isData
 from CMS2.NtupleMaker.SlimCms2_cff import slimcms2
 process.out.outputCommands.extend(slimcms2)
 process.eventMaker.datasetName = cms.string("/SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph/Summer12-START52_V9_FSIM/USER")
-process.eventMaker.CMS2tag = cms.string("V05-03-23")
+process.eventMaker.CMS2tag = cms.string("V05-03-27")
 
 # list of sparm parameters, be sure it is the same size as the number of parameter in the files
 process.sParmMaker.vsparms = cms.untracked.vstring("msbottom","mchargino","mlsp")
@@ -46,7 +46,7 @@ process.cms2WithEverything.replace(process.eventmakers, process.eventmakerswspar
 process.options.fileMode = cms.untracked.string('NOMERGE')
 
 # input
-process.maxEvents.input = 1
+process.maxEvents.input = -1
 process.source.fileNames = [
 	'file:/home/users/rwkelley/Data/edm/SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph_Summer12-START52_V9_FSIM_AODSIM_UFLPrivate_9196.root'
 ]
