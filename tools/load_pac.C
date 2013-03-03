@@ -35,7 +35,7 @@
     {
         pac_path += (is_debug ? "/bin/debug" : "/bin/release");
     }
-    cout << pac_path << endl;
+    //cout << pac_path << endl;
     
     // RootTools
     gSystem->AddIncludePath("-D'__RTINT__'");

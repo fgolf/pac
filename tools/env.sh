@@ -36,7 +36,6 @@ elif [ ! -z $CMSSW_BASE ] ; then
     DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/debug/$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin/release
 else
-	echo CMSSW not set
     LD_LIBRARY_PATH=$project_dir/bin/release:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/release:$DYLD_LIBRARY_PATH
     LD_LIBRARY_PATH=$project_dir/bin/debug:$LD_LIBRARY_PATH
