@@ -5,10 +5,14 @@
 #include "at/Sample.h"
 #include "at/ScanChain.h"
 #include "at/AnalysisWithHist.h"
+#include "at/Predicates.h"
 #include <stdexcept>
 #include "CMS2Wrapper.h"
 #include "ssSelections.h"
 #include "electronSelections.h"
+
+// BOOST
+#include <boost/program_options.hpp>
 
 using namespace at;
 using namespace std;
@@ -32,47 +36,88 @@ QuickAnalysis::QuickAnalysis(const std::string& file_name)
 
 void QuickAnalysis::EndJob()
 {
+	//TH1Container& hc = m_hist_container;
+    //hc.Print("plots/
 }
 
 void QuickAnalysis::BookHists()
 {
 	TH1Container& hc = m_hist_container;
-	hc.Add(new TH1F("h_iso_fullid_orig"   , "electron iso (full ID, orig);iso"                       , 100, 0, 5));
-	hc.Add(new TH1F("h_iso_fullid_fix"    , "electron iso (full ID, after fix);iso"                  , 100, 0, 5));
-	hc.Add(new TH1F("h_iso_nomhitcut_orig", "electron iso (# missing hit #geq 1, orig);iso"          , 100, 0, 5));
-	hc.Add(new TH1F("h_iso_nomhitcut_fix" , "electron iso (# missing hit #geq 1, after_fix);iso"     , 100, 0, 5));
-
-	hc.Add(new TH1F("h_iso_fullid_diff"   , "electron iso diff (full ID - after fix);iso"            , 100, -0.1, 0.5));
-	hc.Add(new TH1F("h_iso_nomhitcut_diff", "electron iso diff (# missing hit #geq 1, after_fix);iso", 100, -0.1, 0.5));
+	hc.Add(new TH1F("h_m3lep"    , "m_{3l};m_{3l}"      , 200, 0, 200));
+	hc.Add(new TH1F("h_m3lep_fix", "m_{3l} (fix);m_{3l}", 200, 0, 200));
 }
 
-// relax the 0 hit cut on the electron ID 
-static const cuts_t electronSelection_ssV7_noIso_relaxmhit = //(electronSelection_ssV7_noIso & ~(1ll<<ELENOTCONV_HITPATTERN_0MHITS));
-                       electronSelectionFO_SS_baselineV2    |
-                       (1ll<<ELEID_WP2012_MEDIUM_NOISO)     |
-                       //(0ll<<ELENOTCONV_HITPATTERN_0MHITS)  |
-                       (1ll<<ELE_NOT_TRANSITION)            |
-                       (1ll<<ELECHARGE_NOTFLIP3AGREE);
-
-bool isGoodLeptonRelaxHitCut(int idx)
-{
-	// electrons
-	if (!pass_electronSelection(idx, electronSelection_ssV7_noIso_relaxmhit, false, false))
-		return false;
-	if ((cms2.els_fiduciality().at(idx) & (1<<ISEB)) == (1<<ISEB))
-		return (cms2.els_hOverE().at(idx) < 0.10);
-	else
-		return (cms2.els_hOverE().at(idx) < 0.075);
-}
+//// relax the 0 hit cut on the electron ID 
+//static const cuts_t electronSelection_ssV7_noIso_relaxmhit = //(electronSelection_ssV7_noIso & ~(1ll<<ELENOTCONV_HITPATTERN_0MHITS));
+//                       electronSelectionFO_SS_baselineV2    |
+//                       (1ll<<ELEID_WP2012_MEDIUM_NOISO)     |
+//                       //(0ll<<ELENOTCONV_HITPATTERN_0MHITS)  |
+//                       (1ll<<ELE_NOT_TRANSITION)            |
+//                       (1ll<<ELECHARGE_NOTFLIP3AGREE);
+//
+//bool isGoodLeptonRelaxHitCut(int idx)
+//{
+//	// electrons
+//	if (!pass_electronSelection(idx, electronSelection_ssV7_noIso_relaxmhit, false, false))
+//		return false;
+//	if ((cms2.els_fiduciality().at(idx) & (1<<ISEB)) == (1<<ISEB))
+//		return (cms2.els_hOverE().at(idx) < 0.10);
+//	else
+//		return (cms2.els_hOverE().at(idx) < 0.075);
+//}
 
 
 int QuickAnalysis::operator() (long event)
 {
-	TH1Container& hc = m_hist_container;
+	rt::TH1Container& hc = m_hist_container;
+
+    using namespace tas;
 
 	try
 	{
-        cout << "evt_ww_rho_vor(): " << evt_ww_rho_vor() << endl;
+        vector<LorentzVector> l_p4;
+        for (size_t i = 0; i != genps_p4().size(); i++)
+        {
+            const unsigned int id = abs(genps_id().at(i));
+            if (genps_status().at(i) != 3) {continue;}
+
+            if (id == 11)
+            {
+                l_p4.push_back(genps_p4().at(i));
+            }
+            if (id == 13)
+            {
+                l_p4.push_back(genps_p4().at(i));
+            }
+        }
+
+        // sort by pt
+        std::sort(l_p4.begin(), l_p4.end(), at::SortByPt<LorentzVector>());
+
+        // must have 3 generater level leptons
+        if (l_p4.size() < 3) 
+        {
+            return 0;
+        }
+
+        const float m_3l = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
+        rt::Fill(hc["h_m3lep"], m_3l);
+
+        const float pt_max = l_p4.at(0).pt();
+        if (100.0 < pt_max && pt_max < 160.0) {return 0;}
+
+        const float m_01 = (l_p4[0] + l_p4[1]).mass();
+        if (62.0 < m_01 && m_01 < 72.0) {return 0;}
+
+        const float m_02 = (l_p4[0] + l_p4[2]).mass();
+        if (52.0 < m_02 && m_02 < 55.0) {return 0;}
+
+        const float m_12 = (l_p4[1] + l_p4[2]).mass();
+        if (7.2 < m_12 && m_12 < 8.2) {return 0;}
+
+        rt::Fill(hc["h_m3lep_fix"], m_3l);
+
+        //cout << "evt_ww_rho_vor(): " << evt_ww_rho_vor() << endl;
 
 		//// electron loop
 		//for (size_t idx = 0; idx != els_p4().size(); idx++)
@@ -118,16 +163,66 @@ int QuickAnalysis::operator() (long event)
     return 0;
 }
 
-int main()
+int main(int argc, char* argv[])
+try
 {
+    std::string output_file         = "";
+    std::string input_file          = "";
+    int number_of_events            = -1;
+
+    namespace po = boost::program_options;
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help"  , "print this menu")
+        ("output", po::value<std::string>(&output_file)->required(), "REQUIRED: output ROOT file for baby tree (default: <sample name>.root)")
+        ("input" , po::value<std::string>(&input_file)->required() , "REQUIRED: input ntuple (default is determined by the sample used)"     )
+        ("nev"   , po::value<int>(&number_of_events)               , "number of events to run on (-1 == all)"                                )
+        ;
+
+    // parse it
+    try
+    {
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+
+        if (vm.count("help")) 
+        {
+            cout << desc << "\n";
+            return 1;
+        }
+
+        po::notify(vm);
+    }
+    catch (const std::exception& e)
+    {
+        cerr << e.what() << "\nexiting" << endl;
+        cout << desc << "\n";
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error!" << "\n";
+        return false;
+    }
+
+    cout << "inputs:" << endl;
+    cout << "number_of_events   :\t" << number_of_events    << endl;
+    cout << "input_file         :\t" << input_file          << endl;
+    cout << "output_file        :\t" << output_file         << endl;
+
+    // do it
+
 	TChain chain("Events");
-	//chain.Add("/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13/SingleOrDiLepton/merged_ntuple_1.root");
-	//chain.Add("/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-13/SingleOrDiLepton/merged_ntuple_2.root");
-	chain.Add("/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24/SingleMu_Run2012A-13Jul2012-v1_AOD//merged_ntuple_74.root");
-	//chain.Add("~/Data/dy_cms2.root");
+    chain.Add(input_file.c_str());
 	rt::PrintFilesFromTChain(chain);
 
-	//ScanChainCMS2(&chain, ScanChainTestAnalysis, 100);
-	ScanChain(&chain, QuickAnalysis("plots/quick_analysis/iso_plots_v2.root"), cms2, 100000, "", true, false);
+	ScanChain(&chain, QuickAnalysis(output_file), cms2, number_of_events, "", true, false);
 	return 0;
 }
+catch (std::exception& e)
+{
+    cerr << "[ss2012_anlaysis] Error: failed..." << endl;
+    cerr << e.what() << endl;
+    return 1;
+}
+

@@ -88,42 +88,51 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"   , "print this menu")
-        ("in_data"       , po::value<std::string>(&data_input_file) , "name of input data root file"                                       )
-        ("in_mc"         , po::value<std::string>(&mc_input_files)  , "name of input MC root file"                                         )
-        ("output"        , po::value<std::string>(&output_file)     , "output file name for lists (blank means print to screen)"           )
-        ("ele_lumi"      , po::value<double>(&ele_lumi)             , "luminosity collected on electron utility triggers"                  )
-        ("mu_lumi"       , po::value<double>(&mu_lumi)              , "luminosity collected on muon utility triggers"                      )
-        ("ele_noiso_lumi", po::value<double>(&ele_noiso_lumi)       , "luminosity collected on electron utility triggers with no isolation")
-        ("mu_iso_lumi"   , po::value<double>(&mu_iso_lumi)          , "luminosity collected on muon utility triggers with isolation"       )
-        ("verbose"       , po::value<bool>(&verbose)                , "print the event lists (default is false)"                           )
-
+        ("in_data"       , po::value<std::string>(&data_input_file)->required() , "REQUIRED: name of input data root file"                             )
+        ("in_mc"         , po::value<std::string>(&mc_input_files)->required()  , "REQUIRED: name of input MC root file"                               )
+        ("output"        , po::value<std::string>(&output_file)->required()     , "REQUIRED: output file name for lists (blank means print to screen)" )
+        ("ele_lumi"      , po::value<double>(&ele_lumi)                         , "luminosity collected on electron utility triggers"                  )
+        ("mu_lumi"       , po::value<double>(&mu_lumi)                          , "luminosity collected on muon utility triggers"                      )
+        ("ele_noiso_lumi", po::value<double>(&ele_noiso_lumi)                   , "luminosity collected on electron utility triggers with no isolation")
+        ("mu_iso_lumi"   , po::value<double>(&mu_iso_lumi)                      , "luminosity collected on muon utility triggers with isolation"       )
+        ("verbose"       , po::value<bool>(&verbose)                            , "print the event lists (default is false)"                           )
         ;
 
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-
-    // if (verbose)
-    // {
-    //     printf("scaling el,mu with lumi %4.2f, %4.2f.\n", ele_lumi, mu_lumi);
-    // }
-
-    if (vm.count("help")) 
+    // parse it
+    try
     {
-        cout << desc << "\n";
-        return 1;
-    }
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
 
-    // check that the data input file exists and is specified
-    if (!data_input_file.empty())
-    { 
-        if (!rt::exists(data_input_file))
+        if (vm.count("help")) 
         {
-            cout << "[ss2012_make_fr_from_hists]: data input file " << data_input_file << " not found" << endl;
             cout << desc << "\n";
             return 1;
         }
+
+        po::notify(vm);
     }
+    catch (const std::exception& e)
+    {
+        cerr << e.what() << "\nexiting" << endl;
+        cout << desc << "\n";
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error!" << "\n";
+        return false;
+    }
+
+    cout << "inputs:" << endl;
+    cout << "data_input_file :\t" << data_input_file << endl;
+    cout << "mc_input_files  :\t" << mc_input_files  << endl;
+    cout << "output_file     :\t" << output_file     << endl;
+    cout << "ele_lumi        :\t" << ele_lumi        << endl;
+    cout << "mu_lumi         :\t" << mu_lumi         << endl;
+    cout << "ele_noiso_lumi  :\t" << ele_noiso_lumi  << endl;
+    cout << "mu_iso_lumi     :\t" << mu_iso_lumi     << endl;
+    cout << "verbose         :\t" << verbose         << endl;
 
     // check that the MC input files exist and are specified
     std::vector<std::string> v_mc_input_files = rt::string_split(mc_input_files, ",");
@@ -231,8 +240,8 @@ try
     // correct muon fake rate
     // ----------------------------------------------------------------------------------------------------- //
 
-    TH2* h_data_mu_num40c = dynamic_cast<TH2*>(hc_data["h_mu_num40c"]);
-    TH2* h_data_mu_fo40c  = dynamic_cast<TH2*>(hc_data["h_mu_fo40c"]);
+    TH2* h_data_mu_num40c     = dynamic_cast<TH2*>(hc_data["h_mu_num40c"]);
+    TH2* h_data_mu_fo40c      = dynamic_cast<TH2*>(hc_data["h_mu_fo40c"]);
     TH2* h_data_mu_iso_num40c = dynamic_cast<TH2*>(hc_data["h_mu_num40c_iso"]);
     TH2* h_data_mu_iso_fo40c  = dynamic_cast<TH2*>(hc_data["h_mu_fo40c_iso"]);
 
@@ -257,9 +266,10 @@ try
     TH2* h_mufr40c_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_mu_num40c, h_data_mu_fo40c, "h_mufr40c_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
     TH1* h_mufr40c_vs_pt_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_mu_num40c, h_data_mu_fo40c, "y", "h_mufr40c_vs_pt_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
     TH1* h_mufr40c_vs_eta_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_mu_num40c, h_data_mu_fo40c, "x", "h_mufr40c_vs_eta_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination",20., 9999.);
+
     TH2* h_mufr40c_iso_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_mu_iso_num40c, h_data_mu_iso_fo40c, "h_mufr40c_iso_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
     TH1* h_mufr40c_vs_pt_iso_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_mu_iso_num40c, h_data_mu_iso_fo40c, "y", "h_mufr40c_iso_vs_pt_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination");
-    TH1* h_mufr40c_vs_eta_iso_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_mu_iso_num40c, h_data_mu_iso_fo40c, "x", "h_mufr40c_iso_vs_eta_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination",20., 9999.);
+    TH1* h_mufr40c_vs_eta_iso_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_mu_iso_num40c, h_data_mu_iso_fo40c, "x", "h_mufr40c_iso_vs_eta_ewkcor", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, corrected for prompt EWK contamination",5.0f, 9999.);
     
     // save output 
     // ----------------------------------------------------------------------------------------------------- //

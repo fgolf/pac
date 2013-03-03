@@ -58,11 +58,11 @@ try
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
-        ("help"        , "print this menu")
-        ("input"      , po::value<std::string>(&input_file)->required()  , "REQUIRED: input ntuple file (or files in a comma sperareted list)")
-        ("output"     , po::value<std::string>(&output_file)->required() , "REQUIRED: output ntuple file"                                     )
-        ("sample"     , po::value<std::string>(&sample_name)->required() , "REQUIRED: sample to post process (at/Sample.h)"                   )
-        ("xsec"       , po::value<std::string>(&xsec_file)               , "cross section file path (data/xsec/susy_xsec.root)"               )
+        ("help"  , "print this menu")
+        ("input" , po::value<std::string>(&input_file)->required()  , "REQUIRED: input ntuple file (or files in a comma sperareted list)")
+        ("output", po::value<std::string>(&output_file)->required() , "REQUIRED: output ntuple file"                                     )
+        ("sample", po::value<std::string>(&sample_name)->required() , "REQUIRED: sample to post process (at/Sample.h)"                   )
+        ("xsec"  , po::value<std::string>(&xsec_file)               , "cross section file path (data/xsec/susy_xsec.root)"               )
         ;
 
     // parse it
@@ -95,6 +95,7 @@ try
     cout << "Post processing with the follwing inputs:" << endl;
     cout << "input_file  :\t" << input_file  << endl;
     cout << "output_file :\t" << output_file << endl;
+    cout << "sample_name :\t" << sample_name << endl;
     cout << "xsec_file   :\t" << xsec_file   << endl;
 
     // check the sample to post process
@@ -233,7 +234,7 @@ try
 }
 catch (std::exception& e)
 {
-    cerr << "ss2012_analysis failed..." << endl;
+    cerr << "[ss2012_postprocess_signal_baby] failed..." << endl;
     cerr << e.what() << endl;
     return 1;
 }

@@ -57,10 +57,10 @@ PlotLooper::PlotLooper
     float fl_unc,
     float mc_unc,
     float lumi,
-    float l1_min_pt,
-    float l1_max_pt,
-    float l2_min_pt,
-    float l2_max_pt,
+    //float l1_min_pt,
+    //float l1_max_pt,
+    //float l2_min_pt,
+    //float l2_max_pt,
     float min_ht,
     bool verbose
 )
@@ -79,15 +79,16 @@ PlotLooper::PlotLooper
     , m_sparm2(sparm2)
     , m_sparm3(sparm3)
     , m_scale1fb(-999999.0)
+    , m_xsec(-999999.0)
     , m_nevts(-999999)
     , m_sf_flip(sf_flip)
     , m_fr_unc(fr_unc)
     , m_fl_unc(fl_unc)
     , m_mc_unc(mc_unc)
-    , m_l1_min_pt(l1_min_pt)
-    , m_l1_max_pt(l1_max_pt)
-    , m_l2_min_pt(l2_min_pt)
-    , m_l2_max_pt(l2_max_pt)
+    //, m_l1_min_pt(l1_min_pt)
+    //, m_l1_max_pt(l1_max_pt)
+    //, m_l2_min_pt(l2_min_pt)
+    //, m_l2_max_pt(l2_max_pt)
     , m_min_ht(min_ht)
     , m_sample(sample)
     , m_signal_region(signal_region)
@@ -268,7 +269,8 @@ void PlotLooper::EndJob()
         //hc.List();
     }
     cout << "\nScale1fb = "           << m_scale1fb << endl;
-    cout << "Num Events Generated = " << m_nevts << endl;
+    cout << "Cross Section = "        << m_xsec     << endl;
+    cout << "Num Events Generated = " << m_nevts    << endl;
 
     // set the error to the lumi * scale1fb * ClopperPearsonUncertainty
     if (m_sample != at::Sample::data)
@@ -287,12 +289,21 @@ void PlotLooper::EndJob()
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll
-    std::tr1::array<float, 4> yield_ss;
-    yield_ss[0] = rt::Integral(hc["h_yield_mm"]);
-    yield_ss[1] = rt::Integral(hc["h_yield_ee"]);
-    yield_ss[2] = rt::Integral(hc["h_yield_em"]);
-    yield_ss[3] = rt::Integral(hc["h_yield_ll"]);
+    //std::tr1::array<float, 4> yield_ss;
+    //yield_ss[0] = rt::Integral(hc["h_yield_mm"]);
+    //yield_ss[1] = rt::Integral(hc["h_yield_ee"]);
+    //yield_ss[2] = rt::Integral(hc["h_yield_em"]);
+    //yield_ss[3] = rt::Integral(hc["h_yield_ll"]);
 
+    PredSummary yield;
+    yield.mm.value = rt::IntegralAndError(hc["h_yield_mm"]).first;
+    yield.ee.value = rt::IntegralAndError(hc["h_yield_ee"]).first;
+    yield.em.value = rt::IntegralAndError(hc["h_yield_em"]).first;
+    yield.ll.value = rt::IntegralAndError(hc["h_yield_ll"]).first;
+    yield.mm.error = rt::IntegralAndError(hc["h_yield_mm"]).second;
+    yield.ee.error = rt::IntegralAndError(hc["h_yield_ee"]).second;
+    yield.em.error = rt::IntegralAndError(hc["h_yield_em"]).second;
+    yield.ll.error = rt::IntegralAndError(hc["h_yield_ll"]).second;
 
     // Fake predictions
     // -----------------------------------------------------------------------------//
@@ -364,18 +375,6 @@ void PlotLooper::EndJob()
         fake.ee.error = (fake.ee.error < fake.ee.value ? sqrt(fake.ee.error*fake.ee.error + 0.25*fake.ee.value*fake.ee.value) : fake.ee.value);
         fake.em.error = (fake.em.error < fake.em.value ? sqrt(fake.em.error*fake.em.error + 0.25*fake.em.value*fake.em.value) : fake.em.value);
         fake.ll.error = (fake.ll.error < fake.ll.value ? sqrt(fake.ll.error*fake.ll.error + 0.25*fake.ll.value*fake.ll.value) : fake.ll.value);
-        //fake.mm.error = sqrt(fake.mm.error*fake.mm.error + 0.25*fake.mm.value*fake.mm.value);
-        //fake.ee.error = sqrt(fake.ee.error*fake.ee.error + 0.25*fake.ee.value*fake.ee.value);
-        //fake.em.error = sqrt(fake.em.error*fake.em.error + 0.25*fake.em.value*fake.em.value);
-        //fake.ll.error = sqrt(fake.ll.error*fake.ll.error + 0.25*fake.ll.value*fake.ll.value);
-        //fake.mm.error = fake.mm.value;
-        //fake.ee.error = fake.ee.value;
-        //fake.em.error = fake.em.value;
-        //fake.ll.error = fake.ll.value;
-        //cout << fake.mm.value << "\t" << fake.mm.error << endl;
-        //cout << fake.ee.value << "\t" << fake.ee.error << endl;
-        //cout << fake.em.value << "\t" << fake.em.error << endl;
-        //cout << fake.ll.value << "\t" << fake.ll.error << endl;
     }
     hc["h_fake_pred"]->SetBinError(1, fake.mm.error);
     hc["h_fake_pred"]->SetBinError(2, fake.ee.error);
@@ -497,6 +496,7 @@ void PlotLooper::EndJob()
     // print the output
     // -----------------------------------------------------------------------------//
 
+
     CTable t_yields;
     t_yields.useTitle();
     t_yields.setTitle("yields table");
@@ -507,7 +507,8 @@ void PlotLooper::EndJob()
                         ("DF"     ,     df.mm.str(f),     df.ee.str(f),     df.em.str(f),     df.ll.str(f))
                         ("Fakes"  ,   fake.mm.str(f),   fake.ee.str(f),   fake.em.str(f),   fake.ll.str(f))
                         ("Flips"  ,             "NA",   flip.ee.str(f),   flip.em.str(f),   flip.ll.str(f))
-                        ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
+                        ("yield"  ,  yield.mm.str(f),  yield.ee.str(f),  yield.em.str(f),  yield.ll.str(f));
+                        //("yield"  ,   yield.mm.value,   yield.ee.value,   yield.em.value,   yield.ll.value)
     cout << endl;
     t_yields.print();
 
@@ -682,6 +683,7 @@ int PlotLooper::operator()(long event)
 
         // scale 1b (set before cuts) 
         m_scale1fb = scale1fb();
+        m_xsec     = xsec();
         m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
         hc["h_lumi"]->Fill(m_lumi);
 
@@ -744,11 +746,11 @@ int PlotLooper::operator()(long event)
         // only keep MC matched events (MC only)
         const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
-        //if ((not is_real_data()) && (not true_ss_event) && is_rare_mc)
-        //{
-        //    if (m_verbose) {cout << "failing MC truth matching" << endl;}
-        //    //return 0;
-        //}
+        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc)
+        {
+            if (m_verbose) {cout << "failing MC truth matching" << endl;}
+            return 0;
+        }
 
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
@@ -771,16 +773,60 @@ int PlotLooper::operator()(long event)
         }
 
         // lepton PT requirement
-        if (lep2_p4().pt() < m_l2_min_pt || lep2_p4().pt() > m_l2_max_pt)
+        float mu_min_pt = 0.0;
+        float el_min_pt = 0.0;
+        switch(m_analysis_type)
         {
-            if (m_verbose) {cout << "failing minimum/maximum lep2 pT" << endl;}
+            case AnalysisType::high_pt:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::high_pt_eth:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::hcp:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::low_pt:
+                mu_min_pt = 10.0;
+                el_min_pt = 10.0;
+                break;
+            case AnalysisType::vlow_pt:
+                mu_min_pt = 5.0;
+                el_min_pt = 10.0;
+                break;
+            case AnalysisType::higgsino:
+                mu_min_pt = 10.;
+                el_min_pt = 10.;
+                break;
+            default:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+        }
+        if (lep1_p4().pt() < (abs(lep1_pdgid()==11) ? el_min_pt : mu_min_pt))
+        {
+            if (m_verbose) {cout << "failing minimum lep1 pT" << endl;}
             return 0;
         }
-        if (lep1_p4().pt() < m_l1_min_pt || lep1_p4().pt() > m_l1_max_pt)
+        if (lep2_p4().pt() < (abs(lep2_pdgid()==11) ? el_min_pt : mu_min_pt))
         {
-            if (m_verbose) {cout << "failing minimum/maximum lep1 pT" << endl;}
+            if (m_verbose) {cout << "failing minimum lep2 pT" << endl;}
             return 0;
         }
+
+        //if (lep2_p4().pt() < m_l2_min_pt || lep2_p4().pt() > m_l2_max_pt)
+        //{
+        //    if (m_verbose) {cout << "failing minimum/maximum lep2 pT" << endl;}
+        //    return 0;
+        //}
+        //if (lep1_p4().pt() < m_l1_min_pt || lep1_p4().pt() > m_l1_max_pt)
+        //{
+        //    if (m_verbose) {cout << "failing minimum/maximum lep1 pT" << endl;}
+        //    return 0;
+        //}
 
         // d0 requirement
         //if ((is_ss() || is_os()) && abs(lep1_d0()) > (abs(lep1_pdgid())==11 ? 0.01 : 0.005))

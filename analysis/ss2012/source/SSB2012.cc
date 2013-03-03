@@ -34,6 +34,7 @@ namespace ssb {
 	const bool &lep1_passes_id() { return samesignbtag.lep1_passes_id(); }
 	const bool &lep1_passes_iso() { return samesignbtag.lep1_passes_iso(); }
 	const bool &lep1_is_num() { return samesignbtag.lep1_is_num(); }
+	const bool &lep1_is_den() { return samesignbtag.lep1_is_den(); }
 	const bool &lep1_is_fo() { return samesignbtag.lep1_is_fo(); }
 	const int &lep1_is_fromw() { return samesignbtag.lep1_is_fromw(); }
 	const int &lep1_charge() { return samesignbtag.lep1_charge(); }
@@ -120,6 +121,7 @@ namespace ssb {
 	const bool &lep2_passes_id() { return samesignbtag.lep2_passes_id(); }
 	const bool &lep2_passes_iso() { return samesignbtag.lep2_passes_iso(); }
 	const bool &lep2_is_num() { return samesignbtag.lep2_is_num(); }
+	const bool &lep2_is_den() { return samesignbtag.lep2_is_den(); }
 	const bool &lep2_is_fo() { return samesignbtag.lep2_is_fo(); }
 	const int &lep2_is_fromw() { return samesignbtag.lep2_is_fromw(); }
 	const int &lep2_charge() { return samesignbtag.lep2_charge(); }

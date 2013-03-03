@@ -31,7 +31,7 @@ namespace ss
         , xmin(x_min)
         , xmax(x_max)
         , xwidth((x_max-x_min)/static_cast<float>(x_num_bins))
-        , nbinsy(x_num_bins)
+        , nbinsy(y_num_bins)
         , ymin(y_min)
         , ymax(y_max)
         , ywidth((y_max-y_min)/static_cast<float>(y_num_bins))
@@ -62,15 +62,15 @@ namespace ss
         {
             case Sample::t1tttt:
                 // /SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z/StoreResults-PU_START52_V9_FastSim-v1/USER 
-                //m0:  350-1200
-                //m12: 0-800
-                return MakeSignalBinInfo(25.0f, 325.0f, 1225.0f, 25.0f, 0.0f, 850.f);
+                // m_gluino:  350-1200
+                // m_lsp: 0-800
+                return MakeSignalBinInfo(25.0f, 325.0f, 1225.0f, 25.0f, 0.0f, 875.f);
                 break;
             case Sample::sbottomtop:
                 // /SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph/Summer12-START52_V9_FSIM/USER
-                //m0:  325-700
-                //m12: 150-625 
-                //mlsp: 50
+                // m_sbottom:  325-700
+                // m_chargino: 150-625 
+                // m_lsp: 50
                 // sbottom mass in [325, 700] GeV with 25 GeV step
                 // chargino mass in [150, msbottom -175] GeV with 25 GeV step
                 // neutralino mass is fixed to 50 GeV
