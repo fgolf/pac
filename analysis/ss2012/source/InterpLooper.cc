@@ -29,9 +29,6 @@ using namespace std;
 using namespace at;
 using namespace ss;
 
-// event list
-fstream fout;
-
 // construct:
 InterpLooper::InterpLooper
 (
@@ -43,6 +40,7 @@ InterpLooper::InterpLooper
     at::YieldType::value_type yield_type,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
+    const std::string& den_hist_file_name,
     bool do_scale_factors,
     float sparm0,
     float sparm1,
@@ -131,6 +129,13 @@ InterpLooper::InterpLooper
     m_fr_bin_info = GetFakeRateBinInfo();
     m_fl_bin_info = GetFlipRateBinInfo();
 
+    // denominator hist
+    //std::auto_ptr<TFile> den_hist_file(rt::OpenRootFile(den_hist_file_name));
+    //cout << "using den hist file : " << den_hist_file->GetName() << endl;
+    //h_den.reset(dynamic_cast<TH2F*>(den_hist_file->Get("h_gen_count")->Clone("h_den")));
+    //if (not h_den) {throw std::runtime_error("ERROR: InterpLooper: h_den doesn't exist");}
+    //h_den->SetDirectory(0);
+
     // begin job
     BeginJob();
 }
@@ -147,67 +152,6 @@ void InterpLooper::BeginJob()
     BookHists();
 }
 
-//void SetFakePredictionAndUncertainty(rt::TH1Container& hc, const string& hist_stem, const string& title, float fr_sys_unc)
-//{
-//    const string sf_name = Form("h_%s_sf"  , hist_stem.c_str());
-//    const string df_name = Form("h_%s_df"  , hist_stem.c_str());
-//    const string fk_name = Form("h_%s_fake", hist_stem.c_str());
-//
-//    // fakes 
-//    hc.Add(dynamic_cast<TH1*>(hc[sf_name]->Clone(fk_name.c_str()))); 
-//    hc[fk_name]->Add(hc[df_name], -1.0);
-//    hc[fk_name]->SetTitle(title.c_str());
-//    rt::SetSystematicUncertainty(hc[fk_name], fr_sys_unc);
-//}
-//
-//void SetFlipPredictionAndUncertainty(rt::TH1Container& hc, const string& hist_stem, const string& title, float fl_sys_unc, float fl_scale_factor = 1.0)
-//{
-//    const string os_name = Form("h_%s_os"  , hist_stem.c_str());
-//    const string fl_name = Form("h_%s_flip", hist_stem.c_str());
-//
-//    // fakes 
-//    hc.Add(dynamic_cast<TH1*>(hc[os_name]->Clone(fl_name.c_str()))); 
-//    hc[fl_name]->Scale(fl_scale_factor);
-//    hc[fl_name]->SetTitle(title.c_str());
-//    rt::SetSystematicUncertainty(hc[fl_name], fl_sys_unc);
-//}
-//
-//void SetMCPredictionAndUncertainty(rt::TH1Container& hc, const string& hist_stem, const string& title, float mc_sys_unc)
-//{
-//    const string ss_name = Form("h_%s_ss"  , hist_stem.c_str());
-//
-//    // fakes 
-//    hc[ss_name]->SetTitle(title.c_str());
-//    rt::SetSystematicUncertainty(hc[ss_name], mc_sys_unc);
-//}
-//
-//void SetPredictionAndUncertainty
-//(
-//    const at::Sample::value_type sample,
-//    rt::TH1Container& hc, 
-//    const std::string& hist_stem, 
-//    const std::string& title, 
-//    float fr_sys_unc, 
-//    float fl_sys_unc, 
-//    float mc_sys_unc, 
-//    float fl_scale_factor
-//)
-//{
-//    string fake_title = rt::string_replace_all(title, "(X)", "(fake)");
-//    string flip_title = rt::string_replace_all(title, "(X)", "(flip)");
-//    string mc_title   = rt::string_replace_all(title, "(X)", "(MC)"  );
-//    fake_title = rt::string_replace_all(title, "(X,", "(fake,");
-//    flip_title = rt::string_replace_all(title, "(X,", "(flip,");
-//    mc_title   = rt::string_replace_all(title, "(X,", "(MC,"  );
-//    SetFakePredictionAndUncertainty(hc, hist_stem, fake_title, fr_sys_unc);
-//    SetFlipPredictionAndUncertainty(hc, hist_stem, flip_title, fl_sys_unc, fl_scale_factor);
-//    if (sample != at::Sample::data)
-//    {
-//        SetMCPredictionAndUncertainty(hc, hist_stem, mc_title, mc_sys_unc);
-//    }
-//}
-
-
 // end job
 void InterpLooper::EndJob()
 {
@@ -218,242 +162,12 @@ void InterpLooper::EndJob()
     {
         hc.List();
     }
-    cout << "\nScale1fb = "           << m_scale1fb << endl;
-    cout << "Num Events Generated = " << m_nevts << endl;
 
-//    // set the error to the lumi*scale1fb if the yield < weight*0.5 
-//    if (m_sample != at::Sample::data)
-//    {
-//        const float weight = (m_lumi * m_scale1fb);
-//        hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_mm"]->GetEntries()), m_nevts));
-//        hc["h_yield_ee"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ee"]->GetEntries()), m_nevts));
-//        hc["h_yield_em"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_em"]->GetEntries()), m_nevts));
-//        hc["h_yield_ll"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ll"]->GetEntries()), m_nevts));
-//
-//        // yields in a signal used for overlaying
-//        hc["h_yield_ss"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
-//        hc["h_yield_ss"]->SetBinError(3, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
-//        hc["h_yield_ss"]->SetBinError(4, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
-//        hc["h_yield_ss"]->SetBinError(5, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
-//    }
-//
-//    // 0 ee, 1 mm, 2 em, 3 ll
-//    std::tr1::array<float, 4> yield_ss;
-//    yield_ss[0] = rt::Integral(hc["h_yield_mm"]);
-//    yield_ss[1] = rt::Integral(hc["h_yield_ee"]);
-//    yield_ss[2] = rt::Integral(hc["h_yield_em"]);
-//    yield_ss[3] = rt::Integral(hc["h_yield_ll"]);
-//
-//
-//    // Fake predictions
-//    // -----------------------------------------------------------------------------//
-//    at::FakeRatePrediction frp(h_mufr.get(), h_elfr.get());
-//    frp.ComputeAllFakePredictions
-//    (
-//        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
-//        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
-//        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
-//        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
-//        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"  ]),
-//        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"  ]),
-//        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"  ])
-//    );
-//
-//    // SF (raw)
-//    PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
-//    hc.Add(new TH1F("h_sf_pred_raw", "SF prediction, raw", 6, 0, 6));
-//    hc["h_sf_pred_raw"]->SetBinContent(1, sf_raw.mm.value);
-//    hc["h_sf_pred_raw"]->SetBinContent(2, sf_raw.ee.value);
-//    hc["h_sf_pred_raw"]->SetBinContent(3, sf_raw.em.value);
-//    hc["h_sf_pred_raw"]->SetBinContent(4, sf_raw.ll.value);
-//    hc["h_sf_pred_raw"]->SetBinContent(5, sf_raw.em_mufo.value);
-//    hc["h_sf_pred_raw"]->SetBinContent(6, sf_raw.em_elfo.value);
-//    hc["h_sf_pred_raw"]->SetBinError(1, sf_raw.mm.error);
-//    hc["h_sf_pred_raw"]->SetBinError(2, sf_raw.ee.error);
-//    hc["h_sf_pred_raw"]->SetBinError(3, sf_raw.em.error);
-//    hc["h_sf_pred_raw"]->SetBinError(4, sf_raw.ll.error);
-//    hc["h_sf_pred_raw"]->SetBinError(5, sf_raw.em_mufo.error);
-//    hc["h_sf_pred_raw"]->SetBinError(6, sf_raw.em_elfo.error);
-//
-//    // DF
-//    PredSummary df = frp.GetDoubleFakePrediction();
-//    hc.Add(new TH1F("h_df_pred", "DF prediction", 4, 0, 4));
-//    hc["h_df_pred"]->SetBinContent(1, df.mm.value);
-//    hc["h_df_pred"]->SetBinContent(2, df.ee.value);
-//    hc["h_df_pred"]->SetBinContent(3, df.em.value);
-//    hc["h_df_pred"]->SetBinContent(4, df.ll.value);
-//    hc["h_df_pred"]->SetBinError(1, df.mm.error);
-//    hc["h_df_pred"]->SetBinError(2, df.ee.error);
-//    hc["h_df_pred"]->SetBinError(3, df.em.error);
-//    hc["h_df_pred"]->SetBinError(4, df.ll.error);
-//
-//    // SF 
-//    PredSummary sf = frp.GetSingleFakePrediction();
-//    hc.Add(new TH1F("h_sf_pred", "SF prediction", 4, 0, 4));
-//    hc["h_sf_pred"]->SetBinContent(1, sf.mm.value);
-//    hc["h_sf_pred"]->SetBinContent(2, sf.ee.value);
-//    hc["h_sf_pred"]->SetBinContent(3, sf.em.value);
-//    hc["h_sf_pred"]->SetBinContent(4, sf.ll.value);
-//    hc["h_sf_pred"]->SetBinError(1, sf.mm.error);
-//    hc["h_sf_pred"]->SetBinError(2, sf.ee.error);
-//    hc["h_sf_pred"]->SetBinError(3, sf.em.error);
-//    hc["h_sf_pred"]->SetBinError(4, sf.ll.error);
-//
-//    // Fakes 
-//    PredSummary fake = frp.GetFakePrediction();
-//    hc.Add(new TH1F("h_fake_pred", "fake prediction", 4, 0, 4));
-//    hc["h_fake_pred"]->SetBinContent(1, fake.mm.value);
-//    hc["h_fake_pred"]->SetBinContent(2, fake.ee.value);
-//    hc["h_fake_pred"]->SetBinContent(3, fake.em.value);
-//    hc["h_fake_pred"]->SetBinContent(4, fake.ll.value);
-//    hc["h_fake_pred"]->SetBinError(1, fake.mm.error);
-//    hc["h_fake_pred"]->SetBinError(2, fake.ee.error);
-//    hc["h_fake_pred"]->SetBinError(3, fake.em.error);
-//    hc["h_fake_pred"]->SetBinError(4, fake.ll.error);
-//
-//    // Flip predictions
-//    // -----------------------------------------------------------------------------//
-//
-//    FlipRatePrediction flp(h_flip.get(), m_lumi);
-//    flp.ComputeAllFlipPredictions
-//    (
-//        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_ee"]),
-//        static_cast<TH2F*>(hc["h_os_fo_pt_vs_eta_em"])
-//    );
-//
-//    // Flip 
-//    PredSummary flip = flp.GetFlipPrediction(m_sf_flip);
-//    hc.Add(new TH1F("h_flip_pred", "flip prediction", 4, 0, 4));
-//    hc["h_flip_pred"]->SetBinContent(1, flip.mm.value);
-//    hc["h_flip_pred"]->SetBinContent(2, flip.ee.value);
-//    hc["h_flip_pred"]->SetBinContent(3, flip.em.value);
-//    hc["h_flip_pred"]->SetBinContent(4, flip.ll.value);
-//    hc["h_flip_pred"]->SetBinError(1, flip.mm.error);
-//    hc["h_flip_pred"]->SetBinError(2, flip.ee.error);
-//    hc["h_flip_pred"]->SetBinError(3, flip.em.error);
-//    hc["h_flip_pred"]->SetBinError(4, flip.ll.error);
-//
-//    // SS kinematic plots (prediction and systematic uncertainty)
-//    // -----------------------------------------------------------------------------//
-//
-//    // This is an approximation.
-//    // This does not have the full fake and flip rate errors' propogated properly.
-//    // This is a small effect and is ignored in the plots since they cannot be seen easily 
-//    // with the naked eye.
-//    SetPredictionAndUncertainty(m_sample, hc, "nvtxs"         ,"# vtxs (X); #vtxs;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "dilep_mass"    ,"Dilepton Mass (X); M_{ll} (GeV);Events"                               , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj0","Dilepton Mass (X, # jets=0); M_{ll} (GeV);Events"                     , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj1","Dilepton Mass (X, # jets=1); M_{ll} (GeV);Events"                     , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj2","Dilepton Mass (X, # jets#geq2); M_{ll} (GeV);Events"                  , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "pt1"           ,"Higher p_{T} lepton (X);p_{T} (GeV);Events"                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "pt2"           ,"Lower p_{T} lepton (X);p_{T} (GeV);Events"                            , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "pt1_el"        ,"Higher p_{T} electron (X);p_{T} (GeV);Events"                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "pt2_el"        ,"Lower p_{T} electron (X);p_{T} (GeV);Events"                          , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "pt1_mu"        ,"Higher p_{T} electron (X);p_{T} (GeV);Events"                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "pt2_mu"        ,"Lower p_{T} electron (X);p_{T} (GeV);Events"                          , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "ht"            ,"H_{T};H_{T} (GeV) (X);Events"                                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "mt"            ,"m_{T};m_{T} (GeV) (X);Events"                                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "met"           ,"MET;E_{T}^{miss} (GeV) (X);Events"                                    , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "nbtags"        ,"# btags;# btags (X);Events"                                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "njets"         ,"# jets (X);# jets;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "lepdphi"       ,"#Delta#Phi(lep1,lep2) (X);Delta#Phi(lep1,lep2);Events"                , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "lepdeta"       ,"#Delta#eta(lep1,lep2) (X);Delta#eta(lep1,lep2);Events"                , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "lepdr"         ,"#DeltaR(lep1,lep2) (X);#DeltaR(lep1,lep2);Events"                     , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "drlepb"        ,"#DeltaR(lep,btag) (X);#DeltaR(lep,btag);Events"                       , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "btagdr"        ,"#DeltaR(btag1,btag2) (X);#DeltaR(btag1,btag2);Events"                 , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "drjetb"        ,"#DeltaR(btag,jet) (X);#DeltaR(btag,jet);Events"                       , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "ptjetlep"      ,"p_{T}^{jet}/p)_{T}^{lep} - 1 (X);p_{T}^{jet}/p)_{T}^{lep} - 1;Events" , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "drlep3rdlep"   ,"#DeltaR(lep, 3rd lep) (X);#DeltaR(lep,lep3);Events"                   , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    SetPredictionAndUncertainty(m_sample, hc, "ml3l"          ,"M(lep, 3rd lep) (X);M(l,3l);Events"                                   , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//
-//    for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
-//    {
-//        at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(i);
-//
-//        // name and title suffixes
-//        string hn = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
-//        string ht = Form(" (%s)",  GetDileptonHypTypeTitle(hyp_type).c_str());
-//
-//        SetPredictionAndUncertainty(m_sample, hc, "dilep_mass"+hn, Form("Dilepton Mass (X, %s); M_{ll} (GeV);Events"    ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "pt1"       +hn, Form("Higher p_{T} lepton (X, %s);p_{T} (GeV);Events",ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "pt2"       +hn, Form("Lower p_{T} lepton (X, %s);p_{T} (GeV);Events" ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "ht"        +hn, Form("H_{T};H_{T} (GeV) (X, %s);Events"              ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "mt"        +hn, Form("m_{T};m_{T} (GeV) (X, %s);Events"              ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "met"       +hn, Form("MET;E_{T}^{miss} (GeV) (X, %s);Events"         ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "nbtags"    +hn, Form("# btags;# btags (X, %s);Events"                ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "njets"     +hn, Form("# jets (X, %s);# jets;Events"                  ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//
-//        // plots for avi
-//        SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj0"+hn,Form("Dilepton Mass (X, %s, # jets=0); M_{ll} (GeV);Events"   ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj1"+hn,Form("Dilepton Mass (X, %s, # jets=1); M_{ll} (GeV);Events"   ,ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//        SetPredictionAndUncertainty(m_sample, hc, "dilep_mass_nj2"+hn,Form("Dilepton Mass (X, %s, # jets#geq2); M_{ll} (GeV);Events",ht.c_str()), m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-//    }
-//
-//    // yield handled seperately
-//    // this uses the full Fake and Flip rate production from above
-//
-//    // fakes 
-//    hc.Add(dynamic_cast<TH1*>(hc["h_yield_sf"]->Clone("h_yield_fake"))); 
-//    hc["h_yield_fake"]->SetTitle("fake prediction (with sys unc)");
-//    hc["h_yield_fake"]->SetBinContent(1, fake.mm.value);
-//    hc["h_yield_fake"]->SetBinContent(2, fake.ee.value);
-//    hc["h_yield_fake"]->SetBinContent(3, fake.em.value);
-//    hc["h_yield_fake"]->SetBinContent(4, fake.ll.value);
-//    hc["h_yield_fake"]->SetBinError  (1, sqrt(m_fr_unc*m_fr_unc*fake.mm.value*fake.mm.value + fake.mm.error*fake.mm.error));
-//    hc["h_yield_fake"]->SetBinError  (2, sqrt(m_fr_unc*m_fr_unc*fake.ee.value*fake.ee.value + fake.ee.error*fake.ee.error));
-//    hc["h_yield_fake"]->SetBinError  (3, sqrt(m_fr_unc*m_fr_unc*fake.em.value*fake.em.value + fake.em.error*fake.em.error));
-//    hc["h_yield_fake"]->SetBinError  (4, sqrt(m_fr_unc*m_fr_unc*fake.ll.value*fake.ll.value + fake.ll.error*fake.ll.error));
-//
-//    // flips
-//    hc.Add(dynamic_cast<TH1*>(hc["h_yield_os"]->Clone("h_yield_flip"))); 
-//    hc["h_yield_flip"]->SetTitle("flip prediction (with sys unc)");
-//    hc["h_yield_flip"]->SetBinContent(1, flip.mm.value);
-//    hc["h_yield_flip"]->SetBinContent(2, flip.ee.value);
-//    hc["h_yield_flip"]->SetBinContent(3, flip.em.value);
-//    hc["h_yield_flip"]->SetBinContent(4, flip.ll.value);
-//    hc["h_yield_flip"]->SetBinError  (1, sqrt(m_fl_unc*m_fl_unc*flip.mm.value*flip.mm.value + flip.mm.error*flip.mm.error));
-//    hc["h_yield_flip"]->SetBinError  (2, sqrt(m_fl_unc*m_fl_unc*flip.ee.value*flip.ee.value + flip.ee.error*flip.ee.error));
-//    hc["h_yield_flip"]->SetBinError  (3, sqrt(m_fl_unc*m_fl_unc*flip.em.value*flip.em.value + flip.em.error*flip.em.error));
-//    hc["h_yield_flip"]->SetBinError  (4, sqrt(m_fl_unc*m_fl_unc*flip.ll.value*flip.ll.value + flip.ll.error*flip.ll.error));
-//
-//    // mc (fold in the systematic uncertainty)
-//    if (m_sample != at::Sample::data)
-//    {
-//        SetMCPredictionAndUncertainty(hc, "yield", "yield (MC);yield;Events", m_mc_unc);
-//    }
-//
-//
-//    // print the output
-//    // -----------------------------------------------------------------------------//
-//
-//    CTable t_yields;
-//    t_yields.useTitle();
-//    t_yields.setTitle("yields table");
-//    string f = "1.3";
-//    t_yields.setTable() (                      "mm",            "ee",            "em",                "ll")
-//                        ("SF raw" , sf_raw.mm.str(f), sf_raw.ee.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
-//                        ("SF"     ,     sf.mm.str(f),     sf.ee.str(f),     sf.em.str(f),     sf.ll.str(f))
-//                        ("DF"     ,     df.mm.str(f),     df.ee.str(f),     df.em.str(f),     df.ll.str(f))
-//                        ("Fakes"  ,   fake.mm.str(f),   fake.ee.str(f),   fake.em.str(f),   fake.ll.str(f))
-//                        ("Flips"  ,             "NA",   flip.ee.str(f),   flip.em.str(f),   flip.ll.str(f))
-//                        ("yield"  ,      yield_ss[0],      yield_ss[1],      yield_ss[2],      yield_ss[3]);
-//    cout << endl;
-//    t_yields.print();
-//
-//    // print the output
-//    CTable t_em_breakdown;
-//    t_em_breakdown.useTitle();
-//    t_em_breakdown.setTitle("SF breakdown table");
-//    t_em_breakdown.setTable() (                                       "pred")
-//                              ("SF raw ee"           , sf_raw.ee.str(f)     )
-//                              ("SF raw mm"           , sf_raw.mm.str(f)     )
-//                              ("SF raw em"           , sf_raw.em.str(f)     )
-//                              ("SF raw em (mu fake)" , sf_raw.em_mufo.str(f))
-//                              ("SF raw em (el fake)" , sf_raw.em_elfo.str(f))
-//                              ("SF raw ll"           , sf_raw.ll.str(f)     );
-//    cout << endl;
-//    t_em_breakdown.print();
+    // Get the systematic uncertainty
+    SetTotalSystematic();
 
+    // Calcluate Efficiency
+    CalculateEfficiency();
 
     // print raw yields
     CTable t_counts;
@@ -466,14 +180,6 @@ void InterpLooper::EndJob()
                            ("count os" , m_count_os[0], m_count_os[1], m_count_os[2], m_count_os[3]); 
     cout << endl;
     t_counts.print();
-
-    // close the event list file
-    if (fout.is_open())
-    {
-        fout.close();   
-
-        // sort it
-    }
 }
 
 // book hists 
@@ -485,6 +191,10 @@ void InterpLooper::BookHists()
         rt::TH1Container& hc = m_hist_container;
         TH1::SetDefaultSumw2(true);
 
+        // add denominator count
+        //hc.Add(dynamic_cast<TH2F*>(h_den->Clone()));
+
+        // integrated liminositry
         hc.Add(new TH1F("h_lumi", "integrated lumi used for these plots", 10000, 0, 100));
 
         // Prefix comes from the sample and it is passed to the scanning function
@@ -495,20 +205,20 @@ void InterpLooper::BookHists()
         SignalBinInfo bin_info = GetSignalBinInfo(m_sample);
         hc.Add(new TH2F("h_den"                , "h_den"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_den_unweighted"     , "h_den_unweighted"     , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_den_total_weighted" , "h_den_total_weighted" , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_num"                , "h_num"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_jup"                , "h_jup"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_jdown"              , "h_jdown"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_bup"                , "h_bup"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_bdown"              , "h_bdown"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_sf"                 , "h_sf"                 , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_df"                 , "h_df"                 , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_fakes"              , "h_fakes"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));    
         hc.Add(new TH2F("h_eff"                , "h_eff"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_syst"               , "h_syst"               , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_syst_jec"           , "h_syst_jec"           , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_syst_btag"          , "h_syst_btag"          , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_jup"                , "h_jup"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_jdown"              , "h_jdown"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_bup"                , "h_bup"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_exp"                , "h_exp"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_obs"                , "h_obs"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_sf"                 , "h_sf"                 , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_df"                 , "h_df"                 , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_fakes"              , "h_fakes"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));    
 
         return;
     }
@@ -535,7 +245,7 @@ int InterpLooper::operator()(long event)
 
         // scale 1b (set before cuts) 
         m_scale1fb = scale1fb();
-        m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
+        m_nevts    = nevts();
 
         // print susy point for the event
         if (m_verbose)
@@ -581,9 +291,61 @@ int InterpLooper::operator()(long event)
                 mlsp = -999999.0;
         }
 
+        // Weight Factors
+        // ----------------------------------------------------------------------------------------------------------------------------//
+
+        // no scale factors
+        //const float evt_weight = (is_real_data() ? 1.0 : m_lumi * scale1fb());
+        float evt_weight = 1.0; 
+
+        // scale
+        float vtxw = 1.0;
+        //if (m_do_vtx_reweight)
+        //{
+        //    vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
+        //}
+        evt_weight *= vtxw;
+
+        // apply scale factors
+        //if (m_do_scale_factors && not is_real_data())
+        //{
+        //    // lepton efficiencies
+        //    evt_weight *= sf_lepeff();
+
+        //    // trigger scale factor
+        //    at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(dilep_type());
+        //    evt_weight *= dilepTriggerScaleFactor(hyp_type);  
+
+        //    // mc btag scale factors (deprecated)
+        //    if (ssb::nbtags()>=2)
+        //    {
+        //        if (m_signal_region == SignalRegion::sr7)
+        //        {
+        //            evt_weight *= (ssb::nbtags() >= 3 ? ssb::sf_nbtag3() : 1.0);
+        //        }
+        //        else
+        //        {
+        //            evt_weight *= (ssb::nbtags() >= 2 ? ssb::sf_nbtag() : 1.0);
+        //        }
+        //    }
+        //}
+
+        // fill denominator (event vounts)
+        // ---------------------------------------------------------------------------------------------------------------------------- //
+
+        rt::Fill2D(hc["h_den"           ], m0, m12, evt_weight);
+        rt::Fill2D(hc["h_den_unweighted"], m0, m12, 1.0   );
 
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
+
+        // only keep MC matched events (MC only)
+        const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0));
+        if (not true_ss_event)
+        {
+            if (m_verbose) {cout << "failing MC truth matching" << endl;}
+            return 0;
+        }
 
         // selected sparms 
 
@@ -646,86 +408,39 @@ int InterpLooper::operator()(long event)
             if(is_os()) m_count_os[3] += 1.0;
         }
 
-        // Weight Factors
-        // ----------------------------------------------------------------------------------------------------------------------------//
-
-        // no scale factors
-        //const float evt_weight = (is_real_data() ? 1.0 : m_lumi * scale1fb());
-        float weight = 1.0; 
-
-        // scale
-        //float vtxw = 1.0;
-        //if (m_do_vtx_reweight)
-        //{
-        //    vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
-        //}
-        //m_lumi = is_real_data() ? 1.0 : m_lumi;
-        ////float evt_weight = m_lumi * scale1fb() * vtxw;
-        //float evt_weight = m_lumi * vtxw;
-
-        //// T1tttt is not scaled properly (need make this automatic) 
-        //if (m_sample == at::Sample::t1tttt || m_sample == at::Sample::t1tttt_fastsim)
-        //{
-        //    if (rt::is_equal(sparm0(), 900.0f)) {evt_weight *= (0.060276 *1000)/10000.0;}
-        //    if (rt::is_equal(sparm0(), 950.0f)) {evt_weight *= (0.0381246*1000)/10000.0;}
-        //}
-        //// SBottomTop is not scaled properl (need make this automatic)
-        //else if (m_sample == at::Sample::sbottomtop)
-        //{
-        //    //evt_weight /= scale1fb();
-        //    if (rt::is_equal(sparm0(), 460.0f)) {evt_weight *= (0.152*1000)/10000.0;}
-        //    if (rt::is_equal(sparm0(), 380.0f)) {evt_weight *= (0.506*1000)/10000.0;}
-        //}
-        //else
-        //{
-        //    evt_weight *= scale1fb();
-        //}
-
-        //// apply scale factors
-        //if (m_do_scale_factors && !is_real_data())
-        //{
-        //    evt_weight *= sf_lepeff();
-        //    // evt_weight *= sf_dileptrig();  // applying trigger cut now on MC
-        //    evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger with scale factor 
-        //    if (m_nbtags>=2)
-        //    {
-        //        if (m_signal_region == SignalRegion::sr7)
-        //        {
-        //            evt_weight *= (nbtags() >= 3 ? sf_nbtag3() : 1.0);
-        //        }
-        //        else
-        //        {
-        //            evt_weight *= (nbtags() >= 2 ? sf_nbtag() : 1.0);
-        //        }
-        //    }
-        //}
-
         // Fill hists
         // ------------------------------------------------------------------------------------//
 
-        // fill denominator
-        rt::Fill2D(hc["h_den"           ], m0, m12, weight);
-        rt::Fill2D(hc["h_den_unweighted"], m0, m12, 1.0   );
-
         if (is_ss()) 
         {
+            // unscaled numerator counts
             if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::base))
             {
-                rt::Fill2D(hc["h_num"], m0, m12, weight);
-                //rt::Fill2D(hc["h_bup"], m0, m12, weight * sf_unc_nbtag());
-                rt::Fill2D(hc["h_bup"], m0, m12, weight);
+                rt::Fill2D(hc["h_num"], m0, m12, evt_weight);
             }
 
-            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::up))
+            // JEC scale up/scale down
+            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::up))
             {
                 const float new_btag_sf = 1.0; //GetBtagScaleFactor(nbtags_up(), signal_region);
-                rt::Fill2D(hc["h_jup"], m0, m12, weight * new_btag_sf);
+                rt::Fill2D(hc["h_jup"], m0, m12, evt_weight * new_btag_sf);
             }
 
-            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::down))
+            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::down))
             {
                 const float new_btag_sf = 1.0; //GetBtagScaleFactor(nbtags_dn(), signal_region);
-                rt::Fill2D(hc["h_jdown"], m0, m12, weight * new_btag_sf);
+                rt::Fill2D(hc["h_jdown"], m0, m12, evt_weight * new_btag_sf);
+            }
+
+            // Btag scale up/down
+            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::up))
+            {
+                rt::Fill2D(hc["h_bup"], m0, m12, evt_weight);
+            }
+
+            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::down))
+            {
+                rt::Fill2D(hc["h_bdown"], m0, m12, evt_weight);
             }
 
         }
@@ -736,7 +451,7 @@ int InterpLooper::operator()(long event)
                 const float fr1 = lep1_is_fo() * GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
                 const float fr2 = lep2_is_fo() * GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
                 const float sf_weight = fr1/(1.0 - fr1) + fr2/(1.0 - fr2); 
-                rt::Fill2D(hc["h_sf"], m0, m12, weight * sf_weight);
+                rt::Fill2D(hc["h_sf"], m0, m12, evt_weight * sf_weight);
             }
         }
         else if (is_df())
@@ -746,7 +461,7 @@ int InterpLooper::operator()(long event)
                 const float fr1 = GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
                 const float fr2 = GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
                 const float df_weight = fr1/(1.0 - fr1) * fr2/(1.0 - fr2); 
-                rt::Fill2D(hc["h_df"], m0, m12, weight * df_weight);
+                rt::Fill2D(hc["h_df"], m0, m12, evt_weight * df_weight);
             }
         }
 
@@ -910,8 +625,166 @@ at::FlipRateBinInfo InterpLooper::GetFlipRateBinInfo() const
     return tmp;
 }
 
-//float GetBtagScaleFactor(int nbjets, enum SignalRegion signal_region)
-//{    
-//    return btagEventWeight(std::min(nbjets,4), 200., 200., 200., 200., true);
-//}
+void InterpLooper::SetJESSystematic()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    unsigned int nbinsx = hc["h_num"]->GetNbinsX()+1;
+    unsigned int nbinsy = hc["h_num"]->GetNbinsY()+1;
+    for (unsigned int ix = 1; ix < nbinsx; ix++) 
+    {
+        for (unsigned int iy = 1; iy < nbinsy; iy++) 
+        {
+            const float num      = hc["h_num"  ]->GetBinContent(ix, iy);
+            const float num_up   = hc["h_jup"  ]->GetBinContent(ix, iy);
+            const float num_down = hc["h_jdown"]->GetBinContent(ix, iy);            
+            const float den      = hc["h_den"  ]->GetBinContent(ix, iy);
+
+            float jec_syst = 0.0f;
+            if (den > 0 && num > 0) 
+            {
+                const float up   = fabs(num-num_up) / num;
+                const float down = fabs(num-num_down) / num;
+                jec_syst = std::max(up, down);              
+            }
+            hc["h_syst_jec"]->SetBinContent(ix, iy, jec_syst);
+        }
+    }
+    return;
+}
+
+// NOT SURE if this is right -- ask FG
+void InterpLooper::SetBtagSystematic()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    unsigned int nbinsx = hc["h_num"]->GetNbinsX()+1;
+    unsigned int nbinsy = hc["h_num"]->GetNbinsY()+1;
+    for (unsigned int ix = 1; ix < nbinsx; ix++)
+    {
+        for (unsigned int iy = 1; iy < nbinsy; iy++)
+        {
+            const float num      = hc["h_num"  ]->GetBinContent(ix, iy);
+            const float num_up   = hc["h_bup"  ]->GetBinContent(ix, iy);
+            const float num_down = hc["h_bdown"]->GetBinContent(ix, iy);            
+            const float den      = hc["h_den"  ]->GetBinContent(ix, iy);
+
+            float btag_syst = 0.0f;
+            if (den > 0 && num > 0) 
+            {
+                const float up   = fabs(num-num_up) / num;
+                const float down = fabs(num-num_down) / num;
+                btag_syst = std::max(up, down);              
+            }
+            hc["h_syst_btag"]->SetBinContent(ix, iy, btag_syst);
+        }
+    }
+    return;
+}
+
+void InterpLooper::SetTotalSystematic()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    SetJESSystematic();
+    SetBtagSystematic();
+
+    // taken as constant
+    const double lumi = 0.045;
+    const double lep  = 0.11;
+    const double pdf  = 0.02;
+
+    unsigned int nbinsx = hc["h_num"]->GetNbinsX()+1;
+    unsigned int nbinsy = hc["h_num"]->GetNbinsY()+1;
+    for (unsigned int ix = 1; ix < nbinsx; ix++)
+    {
+        for (unsigned int iy = 1; iy < nbinsy; iy++)
+        {
+            const float jes_syst  = hc["h_syst_jec" ]->GetBinContent(ix, iy);
+            const float btag_syst = hc["h_syst_btag"]->GetBinContent(ix, iy);
+            const float syst = std::sqrt(pow(lumi, 2) + pow(lep, 2) + pow(pdf, 2) + pow(jes_syst, 2) + pow(btag_syst, 2));
+            hc["h_syst"]->SetBinContent(ix, iy, syst);
+
+            if (m_verbose) {cout << "jes, btag, total: " << jes_syst << ", " << btag_syst << ", " << syst << endl;}
+        }
+    }
+    return;
+}
+
+void InterpLooper::SetTotalSignalContamination()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    // Total signal contamination from fakes
+    // total fakes = SF - DF
+    hc["h_fakes"]->Add(hc["h_sf"], hc["h_df"], 1.0, -1.0);
+    return;
+}
+
+void InterpLooper::CalculateEfficiency()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    // get signal contamination
+    SetTotalSignalContamination();
+
+    unsigned int nbinsx = hc["h_den_unweighted"]->GetNbinsX()+1;
+    unsigned int nbinsy = hc["h_den_unweighted"]->GetNbinsY()+1;
+    for (unsigned int ix = 1; ix < nbinsx; ix++)
+    {
+        for (unsigned int iy = 1; iy < nbinsy; iy++)
+        {
+            const float num   = hc["h_num"           ]->GetBinContent(ix, iy);
+            const float fakes = hc["h_fakes"         ]->GetBinContent(ix ,iy);
+            const float den   = hc["h_den_unweighted"]->GetBinContent(ix ,iy);
+
+            if (den > 0.0) 
+            {
+                float eff = 0.0;
+                if (num >= 0.0)
+                {
+                    eff = (num - fakes) / den;  // central value of eps*A*BR
+                }
+                hc["h_eff"]->SetBinContent(ix, iy, eff);
+            }
+            else
+            {
+                hc["h_eff"]->SetBinContent(ix, iy, 0.0);
+            }
+        }
+    }
+    return;
+}
+
+void makeTextFile::getUpperLimits (enum SignalRegion signal_region) {
+
+    unsigned int sid = (unsigned int)signal_region;
+    if (signal_region == HIGH_M0)
+        sid = (unsigned int)LOW_M0;
+    else if (signal_region == LOW_M0)
+        sid = (unsigned int)HIGH_M0;
+    sid++;
+    
+    unsigned int nbinsx = hsyst->GetNbinsX()+1;
+    unsigned int nbinsy = hsyst->GetNbinsY()+1;
+    for (unsigned int ix = 1; ix < nbinsx; ix++) {
+        for (unsigned int iy = 1; iy < nbinsy; iy++) {
+            
+            float syst = hsyst->GetBinContent(ix, iy);
+
+            float exp = getLimitSSb(sid, syst, false);
+            float obs = getLimitSSb(sid, syst, true);
+
+            hexp->SetBinContent(ix, iy, exp);
+            hobs->SetBinContent(ix, iy, obs);
+        }
+    }
+    
+    return;    
+}
 

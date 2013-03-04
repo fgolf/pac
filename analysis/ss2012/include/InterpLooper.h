@@ -30,6 +30,7 @@ public:
         at::YieldType::value_type yield_type = at::YieldType::base,
         const std::string& fake_rate_file_name = "",
         const std::string& flip_rate_file_name = "",
+        const std::string& den_hist_file_name = "",
         bool do_scale_factors = true,
         float sparm0 = -999999.0,
         float sparm1 = -999999.0,
@@ -37,7 +38,7 @@ public:
         float sparm3 = -999999.0,
         float sf_flip = 1.0,
         float fr_unc = 0.5,
-        float fl_unc = 0.2,
+        float fl_unc = 0.3,
         float mc_unc = 0.5,
         float lumi = 1.0,
         bool verbose = false
@@ -83,6 +84,9 @@ private:
     std::tr1::shared_ptr<TH2F> h_elfr;
     std::tr1::shared_ptr<TH2F> h_flip;
 
+    // den
+    std::tr1::shared_ptr<TH2F> h_den;
+
     // quick count check
     std::tr1::array<float, 4> m_count_ss;
     std::tr1::array<float, 4> m_count_sf;
@@ -97,6 +101,14 @@ private:
     float GetFlipRateValue(int lep_id, float pt, float eta) const; 
     float GetFlipRateError(int lep_id, float pt, float eta) const; 
     at::FlipRateBinInfo GetFlipRateBinInfo() const;
+
+    // systematics
+    void SetJESSystematic();
+    void SetBtagSystematic();
+    void SetTotalSystematic();
+    void SetTotalSignalContamination();
+    void CalculateEfficiency();
+    
 };
 
 #endif // PLOTLOOPER_HPP

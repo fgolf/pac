@@ -27,6 +27,7 @@ try
     std::string output_file         = "";
     std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_26Feb2013.root";
     std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02222013.root";
+    std::string den_hist_file_name  = "";
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";
     bool exclusive                  = true;
@@ -35,7 +36,7 @@ try
     float sparm1                    = -999999.0;
     float sparm2                    = -999999.0;
     float sparm3                    = -999999.0;
-    float sf_flip                   = 0.84;
+    float sf_flip                   = 1.39;
     float fake_sys_unc              = 0.5;
     float flip_sys_unc              = 0.3;
     float mc_sys_unc                = 0.5;
@@ -55,6 +56,7 @@ try
         ("yield_type", po::value<int>(&yield_type_raw)                 , "yield type (0 == base (default), > 0 == up, < 0 == down)"                      )
         ("fr_file"   , po::value<std::string>(&fake_rate_file_name)    , Form("fake rate file name (default: %s)", fake_rate_file_name.c_str())          )
         ("fl_file"   , po::value<std::string>(&flip_rate_file_name)    , Form("flip rate file name (default: %s)", flip_rate_file_name.c_str())          )
+        ("den_file"  , po::value<std::string>(&den_hist_file_name)     , Form("den count file name (default: %s)", input_file.c_str())                   )
         ("nev"       , po::value<long>(&number_of_events)              , "number of events to run on (-1 == all)"                                        )
         ("sr"        , po::value<unsigned int>(&signal_region_num)     , "signal region number (default is 0)"                                           )
         ("do_sf"     , po::value<bool>(&do_scale_factors)              , "use the MC scale factors (default is true)"                                    )
@@ -96,6 +98,12 @@ try
         std::cerr << "Unknown error!" << "\n";
         return false;
     }
+    
+    // default is to use den hist in the baby file (h_gen_count)
+    if (den_hist_file_name.empty())
+    {
+        den_hist_file_name = input_file;
+    }
 
     cout << "inputs:" << endl;
     cout << "input_file          :\t" << input_file          << endl;
@@ -105,6 +113,7 @@ try
     cout << "yield_type_raw      :\t" << yield_type_raw      << endl;
     cout << "fake_rate_file_name :\t" << fake_rate_file_name << endl;
     cout << "flip_rate_file_name :\t" << flip_rate_file_name << endl;
+    cout << "den_hist_file_name  :\t" << den_hist_file_name  << endl;
     cout << "number_of_events    :\t" << number_of_events    << endl;
     cout << "signal_region_num   :\t" << signal_region_num   << endl;
     cout << "do_scale_factors    :\t" << do_scale_factors    << endl;
@@ -151,7 +160,7 @@ try
     at::Sample::value_type sample = at::GetSampleFromName(sample_name);
     const bool is_data = (at::GetSampleInfo(sample).type == at::SampleType::data);
 
-    // input
+    // input chain
     TChain chain("tree");
     chain.Add(input_file.c_str());
 
@@ -178,6 +187,7 @@ try
             yield_type,
             fake_rate_file_name,
             flip_rate_file_name,
+            den_hist_file_name,
             do_scale_factors,
             sparm0,
             sparm1,
