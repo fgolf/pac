@@ -377,7 +377,6 @@ int InterpLooper::operator()(long event)
             return 0;
         }
 
-
         // count events
         if (dilep_type()==DileptonHypType::MUMU)
         {
