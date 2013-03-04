@@ -760,30 +760,30 @@ void InterpLooper::CalculateEfficiency()
     return;
 }
 
-void makeTextFile::getUpperLimits (enum SignalRegion signal_region) {
-
-    unsigned int sid = (unsigned int)signal_region;
-    if (signal_region == HIGH_M0)
-        sid = (unsigned int)LOW_M0;
-    else if (signal_region == LOW_M0)
-        sid = (unsigned int)HIGH_M0;
-    sid++;
-    
-    unsigned int nbinsx = hsyst->GetNbinsX()+1;
-    unsigned int nbinsy = hsyst->GetNbinsY()+1;
-    for (unsigned int ix = 1; ix < nbinsx; ix++) {
-        for (unsigned int iy = 1; iy < nbinsy; iy++) {
-            
-            float syst = hsyst->GetBinContent(ix, iy);
-
-            float exp = getLimitSSb(sid, syst, false);
-            float obs = getLimitSSb(sid, syst, true);
-
-            hexp->SetBinContent(ix, iy, exp);
-            hobs->SetBinContent(ix, iy, obs);
-        }
-    }
-    
-    return;    
-}
+//void makeTextFile::getUpperLimits (enum SignalRegion signal_region) {
+//
+//    unsigned int sid = (unsigned int)signal_region;
+//    if (signal_region == HIGH_M0)
+//        sid = (unsigned int)LOW_M0;
+//    else if (signal_region == LOW_M0)
+//        sid = (unsigned int)HIGH_M0;
+//    sid++;
+//    
+//    unsigned int nbinsx = hsyst->GetNbinsX()+1;
+//    unsigned int nbinsy = hsyst->GetNbinsY()+1;
+//    for (unsigned int ix = 1; ix < nbinsx; ix++) {
+//        for (unsigned int iy = 1; iy < nbinsy; iy++) {
+//            
+//            float syst = hsyst->GetBinContent(ix, iy);
+//
+//            float exp = getLimitSSb(sid, syst, false);
+//            float obs = getLimitSSb(sid, syst, true);
+//
+//            hexp->SetBinContent(ix, iy, exp);
+//            hobs->SetBinContent(ix, iy, obs);
+//        }
+//    }
+//    
+//    return;    
+//}
 
