@@ -1,6 +1,6 @@
 #!/bin/bash
 
-default_args="--anal_type vlow_pt --fr ssFR_data_ewkcor_26Feb2013.root --fl ssFL_data_standard_02212013.root --sparms 1 --isFastSim 1 --njets 0"
+default_args="--anal_type vlow_pt --fr ssFR_data_ewkcor_26Feb2013.root --fl ssFL_data_standard_02222013.root --sparms 1 --isFastSim 1 --njets 0"
 
 # T1tttt
 ./BatchProcessViaCrab.sh \

@@ -133,14 +133,20 @@ fi
 # (TODO: maybe make this more meaningful later)
 #
 
-./add_cms2_branches --input "ntuple*.root" --output ntuple_post.root --xsec -999999.0 --num_events -999999 --kfactor 1.0 --filter_eff 1.0
+for f in \$(ls ntuple*.root); 
+do
+	post_file=\${f%.*}_post.root
+	cmd="./add_cms2_branches --input \$f --output \$post_file --xsec -999999.0 --num_events -999999 --kfactor 1.0 --filter_eff 1.0"
+	echo "[wrapper]: \${cmd}" 
+	eval \${cmd}
+done
 
 #
 # run looper
 #
 
 # run my looper.....
-cmd="./ss2012_analysis --input ntuple_post.root --output ${OUTFILE} ${ARGS}"
+cmd="./ss2012_analysis --input \"ntuple*_post.root\" --output ${OUTFILE} ${ARGS}"
 echo "[wrapper]: \${cmd}" 
 eval \${cmd}
 
