@@ -26,4 +26,4 @@ lib libMiniFWLite
     <include>$(MINIFWLITE_PATH)
   ;
 
-#default-install libMiniFWLite ;
+default-install libMiniFWLite : <link>shared ;

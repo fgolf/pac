@@ -11,7 +11,6 @@ lib cms2_frb
     ]
     # dependent packages
     /ROOT
-    /CMS2//cms2_header
     /CMS2_CORE//cms2_core
     /AnalysisTools//AnalysisTools
   : # requirements
@@ -24,4 +23,4 @@ lib cms2_frb
     <define>__NON_ROOT_BUILD__  
   ;
 
-#default-install cms2_frb/<link>shared ;
+default-install cms2_frb : <link>shared ;

@@ -74,4 +74,4 @@ exe fake_rate_study_2011
 # #install libs and exes
 #default-install create_fake_pred_2011 ;
 #default-install fake_rate_study_2011 ;
-default-install fake_rate_tools/<link>shared ;
+default-install fake_rate_tools : <link>shared ;

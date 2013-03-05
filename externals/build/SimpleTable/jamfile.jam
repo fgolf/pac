@@ -31,5 +31,5 @@ exe test_ctable
   : # usage-requirements
   ;
 
-default-install SimpleTable/<link>shared ;
+default-install SimpleTable : <link>shared ;
 default-install test_ctable ;

@@ -81,5 +81,5 @@ exe add_cms2_branches
 # install
 # -----------------------------------------------------#
 
-#default-install /AnalysisTools//add_cms2_branches ;
-#default-install /AnalysisTools//AnalysisTools/<link>shared ;
+default-install /AnalysisTools//add_cms2_branches ;
+default-install /AnalysisTools//AnalysisTools : <link>shared ;

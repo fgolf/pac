@@ -291,22 +291,6 @@ exe ss2012_quick_check
   : # usage-requirements
   ;
 
-exe test_btagsf
- : # sources
-   ./source/test_btagsf.cc
-   ss2012_tools/<link>static
-   # dependent packages
-   /ROOT
-   /MiniFWLite//libMiniFWLite/<link>shared
-   /RootTools//RootTools/<link>static
-   /AnalysisTools//AnalysisTools/<link>static
- : # requirements
-   <include>./include
-   <include>./source
- : # default-build
- : # usage-requirements
- ;
-
 exe ss2012_make_fr_from_hists
   : # sources
     ./source/ss2012_make_fr_from_hists.cc
@@ -372,7 +356,7 @@ exe test_frb
     ./source/test_frb.cc
     # dependent packages
     /ROOT
-    /CMS2_FRB/<link>static
+    /CMS2_FRB//cms2_frb/<link>static
     /FakeRateBabyTools//FakeRateBabyTools/<link>static
     /MiniFWLite//libMiniFWLite/<link>shared
     /RootTools//RootTools/<link>static
@@ -384,10 +368,26 @@ exe test_frb
   : # usage-requirements
   ;
 
+exe test_btagsf
+ : # sources
+   ./source/test_btagsf.cc
+   ss2012_tools/<link>static
+   # dependent packages
+   /ROOT
+   /MiniFWLite//libMiniFWLite/<link>shared
+   /RootTools//RootTools/<link>static
+   /AnalysisTools//AnalysisTools/<link>static
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
+
 # install libs/exes
 # -------------------------------------------------------------- #
 
-default-install ss2012_tools/<link>shared ;
+default-install ss2012_tools : <link>shared ;
 default-install ss2012_analysis ;
 default-install ss2012_plots ;
 default-install ss2012_event_list ;
