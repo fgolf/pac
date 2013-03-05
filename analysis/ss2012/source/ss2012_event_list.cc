@@ -56,6 +56,7 @@ struct SortByEventInfo
 CTable EventLists
 (
     TChain& chain,
+    const at::Sample::value_type& sample,
     const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
     const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive,
@@ -89,6 +90,11 @@ CTable EventLists
         if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
         if (is_real_data() && not is_good_lumi()) {continue;}
         if (is_os() && dilep_type()==1)           {continue;}  // don't care about mm/OS events
+
+        // MC matching
+        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool is_rare_mc    = (at::GetSampleInfo(sample).type == at::SampleType::rare);
+        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc) {continue;}
 
         // local variables
         const string channel = at::GetDileptonHypTypeName(dilep_type());
@@ -203,6 +209,7 @@ CTable EventLists
 CTable EventCounts
 (
     TChain& chain,
+    const at::Sample::value_type& sample,
     const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
     const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive
@@ -230,6 +237,11 @@ CTable EventCounts
         if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
         if (is_real_data() && not is_good_lumi()) {continue;}
         if (is_os() && dilep_type()==1)           {continue;}
+
+        // MC matching
+        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool is_rare_mc    = (at::GetSampleInfo(sample).type == at::SampleType::rare);
+        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc) {continue;}
 
         // fill counts
         if (is_ss()) 
@@ -361,28 +373,28 @@ try
         chain.Add(Form("babies/%s/%s.root", ss::GetAnalysisTypeInfo(at).short_name.c_str(), sample_info.name.c_str()));
     }
 
-    CTable counts   = EventCounts(chain, at, sr, srt);
+    CTable counts = EventCounts(chain, sample, at, sr, srt);
     out << "total yields:\n" << counts << endl; 
     if (print_list)
     {
         if (charge_option == "all" or charge_option =="ss")
         {
-            CTable ss_lists = EventLists (chain, at, sr, srt, at::DileptonChargeType::SS);
+            CTable ss_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::SS);
             out << "printing SS events:\n" << ss_lists << endl;
         }
         if (charge_option == "all" or charge_option =="sf")
         {
-            CTable sf_lists = EventLists (chain, at, sr, srt, at::DileptonChargeType::SF);
+            CTable sf_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::SF);
             out << "printing SF events:\n" << sf_lists << endl;
         }
         if (charge_option == "all" or charge_option =="df")
         {
-            CTable df_lists = EventLists (chain, at, sr, srt, at::DileptonChargeType::DF);
+            CTable df_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::DF);
             out << "printing DF events:\n" << df_lists << endl;
         }
         if (charge_option == "all" or charge_option =="os")
         {
-            CTable os_lists = EventLists (chain, at, sr, srt, at::DileptonChargeType::OS);
+            CTable os_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::OS);
             out << "printing OS events:\n" << os_lists << endl;
         }
     }

@@ -401,7 +401,7 @@ int InterpLooper::operator()(long event)
         }
         // count all 
         {
-            if(is_ss()) m_count_ss[3] += 1.0;
+            if(is_ss()) m_count_ss[3] += 1.0;ll /nfs-7/userdata/rwkelley/babies/ss2012/V02-05-04/
             if(is_sf()) m_count_sf[3] += 1.0;
             if(is_df()) m_count_df[3] += 1.0;
             if(is_os()) m_count_os[3] += 1.0;

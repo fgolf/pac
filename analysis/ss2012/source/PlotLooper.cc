@@ -500,8 +500,8 @@ void PlotLooper::EndJob()
     CTable t_yields;
     t_yields.useTitle();
     t_yields.setTitle("yields table");
-    string f = "1.3";
-    t_yields.setTable() (                      "mm",            "ee",            "em",                "ll")
+    string f = "1.4";
+    t_yields.setTable() (                       "mm",            "ee",            "em",               "ll")
                         ("SF raw" , sf_raw.mm.str(f), sf_raw.ee.str(f), sf_raw.em.str(f), sf_raw.ll.str(f))
                         ("SF"     ,     sf.mm.str(f),     sf.ee.str(f),     sf.em.str(f),     sf.ll.str(f))
                         ("DF"     ,     df.mm.str(f),     df.ee.str(f),     df.em.str(f),     df.ll.str(f))

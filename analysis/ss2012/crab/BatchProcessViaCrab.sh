@@ -133,7 +133,7 @@ fi
 # (TODO: maybe make this more meaningful later)
 #
 
-./add_cms2_branches --input ntuple.root --output ntuple_post.root --xsec -999999.0 --num_events -999999 --kfactor 1.0 --filter_eff 1.0
+./add_cms2_branches --input "ntuple*.root" --output ntuple_post.root --xsec -999999.0 --num_events -999999 --kfactor 1.0 --filter_eff 1.0
 
 #
 # run looper
