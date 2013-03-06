@@ -75,6 +75,8 @@ void SameSignTree::Reset()
     ht30_up                                  = -999999.;
     pfmet_dn                                 = -999999.;
     pfmet_up                                 = -999999.;
+    pfmet_phi_dn                             = -999999.;
+    pfmet_phi_up                             = -999999.;
     sparm0                                   = -999999.0;
     sparm1                                   = -999999.0;
     sparm2                                   = -999999.0;
@@ -89,9 +91,6 @@ void SameSignTree::Reset()
     is_sf                                    = false;
     is_df                                    = false;
     is_os                                    = false;
-    //ee                                       = false;
-    //mm                                       = false;
-    //em                                       = false;
     em_mufo                                  = false;
     em_elfo                                  = false;
     is_df                                    = false;

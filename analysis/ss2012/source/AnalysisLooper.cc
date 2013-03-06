@@ -1242,7 +1242,6 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         m_evt.lep1.is_den      = lep1_den;
         //m_evt.lep1.is_conv     = false; 
         m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, met, met_phi);
-        m_evt.lep1.mt          = rt::Mt(m_evt.lep1.p4, evt_pfmet(), evt_pfmetPhi());
         m_evt.lep1.passes_id   = samesign::isGoodLepton(lep1_id, lep1_idx, m_use_el_eta);
         m_evt.lep1.passes_iso  = samesign::isIsolatedLepton(lep1_id, lep1_idx);
         m_evt.lep1_wfr         = GetFakeRateValue(lep1_id, lep1_idx);
@@ -1316,10 +1315,10 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 }
                 cmet_up.SetXY(metx_up, mety_up);
                 cmet_dn.SetXY(metx_dn, mety_dn);
-                m_evt.pfmet_up = cmet_up.r(); 
-                //m_evt.pfmet_phi_up  = cmet_up.phi();
-                m_evt.pfmet_dn = cmet_dn.r(); 
-                //m_evt.pfmet_phidn = cmet_dn.phi();
+                m_evt.pfmet_up     = cmet_up.r(); 
+                m_evt.pfmet_phi_up = cmet_up.phi();
+                m_evt.pfmet_dn     = cmet_dn.r(); 
+                m_evt.pfmet_phi_dn = cmet_dn.phi();
             }
             else
             {
@@ -1367,10 +1366,10 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 }
                 cmet_up.SetXY(metx_up, mety_up);
                 cmet_dn.SetXY(metx_dn, mety_dn);
-                m_evt.pfmet_up = cmet_up.r(); 
-                //m_evt.pfmet_phi_up  = cmet_up.phi();
-                m_evt.pfmet_dn = cmet_dn.r(); 
-                //m_evt.pfmet_phidn = cmet_dn.phi();
+                m_evt.pfmet_up     = cmet_up.r();
+                m_evt.pfmet_phi_up = cmet_up.phi();
+                m_evt.pfmet_dn     = cmet_dn.r();
+                m_evt.pfmet_phi_dn = cmet_dn.phi();
             }
         }
 
@@ -1520,16 +1519,16 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             else if ( gen_bjets.size()==3) 
             {
                 m_evt.sf_unc_nbtag  = btagEventUncertainty (3, gen_bjets.at(0).pt(), gen_bjets.at(0).eta(), gen_bjets.at(1).pt(), gen_bjets.at(1).eta(),
-                                                            gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), 50., 0, m_is_fast_sim);
+                                                               gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), 50., 0, m_is_fast_sim);
                 m_evt.sf_unc_nbtag3 = btagEventUncertainty3(3, gen_bjets.at(0).pt(), gen_bjets.at(0).eta(), gen_bjets.at(1).pt(), gen_bjets.at(1).eta(),
-                                                            gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), 50., 0, m_is_fast_sim);
+                                                               gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), 50., 0, m_is_fast_sim);
             }
             else if ( gen_bjets.size()>3)
             {
                 m_evt.sf_unc_nbtag  = btagEventUncertainty (4, gen_bjets.at(0).pt(), gen_bjets.at(0).eta(), gen_bjets.at(1).pt(), gen_bjets.at(1).eta(),
                                                             gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), gen_bjets.at(3).pt(), gen_bjets.at(3).eta(), m_is_fast_sim);
                 m_evt.sf_unc_nbtag3 = btagEventUncertainty3(4, gen_bjets.at(0).pt(), gen_bjets.at(0).eta(), gen_bjets.at(1).pt(), gen_bjets.at(1).eta(),
-                                                            gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), gen_bjets.at(3).pt(), gen_bjets.at(3).eta(), m_is_fast_sim);
+                                                               gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), gen_bjets.at(3).pt(), gen_bjets.at(3).eta(), m_is_fast_sim);
             }
         }
 

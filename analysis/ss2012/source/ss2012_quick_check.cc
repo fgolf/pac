@@ -29,43 +29,40 @@ class QuickAnalysis : public AnalysisWithHist
 };
 
 QuickAnalysis::QuickAnalysis(const std::string& file_name)
-	: AnalysisWithHist(file_name)
+	: AnalysisWithHist(file_name, true, "png")
 {
 	BookHists();
 }
 
 void QuickAnalysis::EndJob()
 {
-	//TH1Container& hc = m_hist_container;
-    //hc.Print("plots/
 }
 
 void QuickAnalysis::BookHists()
 {
 	TH1Container& hc = m_hist_container;
-	hc.Add(new TH1F("h_m3lep"    , "m_{3l};m_{3l}"      , 200, 0, 200));
-	hc.Add(new TH1F("h_m3lep_fix", "m_{3l} (fix);m_{3l}", 200, 0, 200));
+	hc.Add(new TH1F("h_m3lep"    , "m_{3l};m_{3l}"           , 200, 0, 200));
+	hc.Add(new TH1F("h_m3lep_rej", "m_{3l} (rejected);m_{3l}", 200, 0, 200));
+	hc.Add(new TH1F("h_m3lep_acc", "m_{3l} (accepted);m_{3l}", 200, 0, 200));
+
+    hc.Add(new TH1F("h_pt_max_peak1_acc", "max pt in 81 < m_{3l} < 89; max p_{T} (GeV)", 60, 0, 300));
+    hc.Add(new TH1F("h_m01_peak1_acc"   , "m01 81 < m_{3l} < 89; m_{01} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m02_peak1_acc"   , "m02 81 < m_{3l} < 89; m_{02} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m12_peak1_acc"   , "m13 81 < m_{3l} < 89; m_{12} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_pt_max_peak1_rej", "max pt in 81 < m_{3l} < 89; max p_{T} (GeV)", 60, 0, 300));
+    hc.Add(new TH1F("h_m01_peak1_rej"   , "m01 81 < m_{3l} < 89; m_{01} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m02_peak1_rej"   , "m02 81 < m_{3l} < 89; m_{02} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m12_peak1_rej"   , "m13 81 < m_{3l} < 89; m_{12} (GeV)"         , 50, 0, 100));
+
+    hc.Add(new TH1F("h_pt_max_peak2_acc", "max pt in 68 < m_{3l} < 76; max p_{T} (GeV)", 60, 0, 300));
+    hc.Add(new TH1F("h_m01_peak2_acc"   , "m01 68 < m_{3l} < 76; m_{01} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m02_peak2_acc"   , "m02 68 < m_{3l} < 76; m_{02} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m12_peak2_acc"   , "m13 68 < m_{3l} < 76; m_{12} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_pt_max_peak2_rej", "max pt in 68 < m_{3l} < 76; max p_{T} (GeV)", 60, 0, 300));
+    hc.Add(new TH1F("h_m01_peak2_rej"   , "m01 68 < m_{3l} < 76; m_{01} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m02_peak2_rej"   , "m02 68 < m_{3l} < 76; m_{02} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_m12_peak2_rej"   , "m13 68 < m_{3l} < 76; m_{12} (GeV)"         , 50, 0, 100));
 }
-
-//// relax the 0 hit cut on the electron ID 
-//static const cuts_t electronSelection_ssV7_noIso_relaxmhit = //(electronSelection_ssV7_noIso & ~(1ll<<ELENOTCONV_HITPATTERN_0MHITS));
-//                       electronSelectionFO_SS_baselineV2    |
-//                       (1ll<<ELEID_WP2012_MEDIUM_NOISO)     |
-//                       //(0ll<<ELENOTCONV_HITPATTERN_0MHITS)  |
-//                       (1ll<<ELE_NOT_TRANSITION)            |
-//                       (1ll<<ELECHARGE_NOTFLIP3AGREE);
-//
-//bool isGoodLeptonRelaxHitCut(int idx)
-//{
-//	// electrons
-//	if (!pass_electronSelection(idx, electronSelection_ssV7_noIso_relaxmhit, false, false))
-//		return false;
-//	if ((cms2.els_fiduciality().at(idx) & (1<<ISEB)) == (1<<ISEB))
-//		return (cms2.els_hOverE().at(idx) < 0.10);
-//	else
-//		return (cms2.els_hOverE().at(idx) < 0.075);
-//}
-
 
 int QuickAnalysis::operator() (long event)
 {
@@ -104,52 +101,55 @@ int QuickAnalysis::operator() (long event)
         rt::Fill(hc["h_m3lep"], m_3l);
 
         const float pt_max = l_p4.at(0).pt();
-        if (100.0 < pt_max && pt_max < 160.0) {return 0;}
+        const float m01    = (l_p4[0] + l_p4[1]).mass();
+        const float m02    = (l_p4[0] + l_p4[2]).mass();
+        const float m12    = (l_p4[1] + l_p4[2]).mass();
 
-        const float m_01 = (l_p4[0] + l_p4[1]).mass();
-        if (62.0 < m_01 && m_01 < 72.0) {return 0;}
+        const bool pt_max_cut = (100.0 < pt_max && pt_max < 160.0);
+        const bool m01_cut    = (62.0 < m01 && m01 < 72.0);
+        const bool m02_cut    = (52.0 < m02 && m02 < 55.0);
+        const bool m12_cut    = (7.2 < m12 && m12 < 8.2);
+        const bool rejected   = (pt_max_cut && m01_cut && m02_cut && m12_cut);
 
-        const float m_02 = (l_p4[0] + l_p4[2]).mass();
-        if (52.0 < m_02 && m_02 < 55.0) {return 0;}
+        const bool peak1 = (85 < m_3l && m_3l < 83);
+        const bool peak2 = (72 < m_3l && m_3l < 78);
+        if (rejected)
+        {
+            rt::Fill(hc["h_m3lep_rej"], m_3l);
+            if (peak1)
+            {
+                rt::Fill(hc["h_pt_max_peak1_rej"], pt_max);
+                rt::Fill(hc["h_m01_peak1_rej"   ], m01   );
+                rt::Fill(hc["h_m02_peak1_rej"   ], m02   );
+                rt::Fill(hc["h_m12_peak1_rej"   ], m12   );
+            }
+            if (peak2)
+            {
+                rt::Fill(hc["h_pt_max_peak2_rej"], pt_max);
+                rt::Fill(hc["h_m01_peak2_rej"   ], m01   );
+                rt::Fill(hc["h_m02_peak2_rej"   ], m02   );
+                rt::Fill(hc["h_m12_peak2_rej"   ], m12   );
+            }
+        }
+        else
+        {
+            rt::Fill(hc["h_m3lep_acc"], m_3l);
+            if (peak1)
+            {
+                rt::Fill(hc["h_pt_max_peak1_acc"], pt_max);
+                rt::Fill(hc["h_m01_peak1_acc"   ], m01   );
+                rt::Fill(hc["h_m02_peak1_acc"   ], m02   );
+                rt::Fill(hc["h_m12_peak1_acc"   ], m12   );
+            }
+            if (peak2)
+            {
+                rt::Fill(hc["h_pt_max_peak2_acc"], pt_max);
+                rt::Fill(hc["h_m01_peak2_acc"   ], m01   );
+                rt::Fill(hc["h_m02_peak2_acc"   ], m02   );
+                rt::Fill(hc["h_m12_peak2_acc"   ], m12   );
+            }
+        }
 
-        const float m_12 = (l_p4[1] + l_p4[2]).mass();
-        if (7.2 < m_12 && m_12 < 8.2) {return 0;}
-
-        rt::Fill(hc["h_m3lep_fix"], m_3l);
-
-        //cout << "evt_ww_rho_vor(): " << evt_ww_rho_vor() << endl;
-
-		//// electron loop
-		//for (size_t idx = 0; idx != els_p4().size(); idx++)
-		//{
-		//	const LorentzVector& el_p4 = els_p4().at(idx);	
-
-		//	// pt > 20 && |eta| < 2.4
-		//	if (el_p4.pt() < 20.0 || fabs(el_p4.eta()) > 2.4)
-		//	{
-		//		continue;
-		//	}
-
-        //    float iso_orig = electronIsoValuePF2012_FastJetEffArea(idx);
-        //    float iso_fix  = electronIsoValuePF2012_FastJetEffArea_v2(idx);
-
-		//	// if passes ID with no missing hits relaxed
-		//	//if (isGoodLepton1MHitCut(idx) && not samesign::isGoodLepton(11, idx))
-		//	if (isGoodLeptonRelaxHitCut(idx) && els_exp_innerlayers().at(idx) >= 1)
-        //    {
-        //        rt::Fill(hc["h_iso_nomhitcut_orig"], iso_orig);
-        //        rt::Fill(hc["h_iso_nomhitcut_fix" ], iso_fix );
-        //        rt::Fill(hc["h_iso_nomhitcut_diff"], iso_orig - iso_fix);
-        //    }
-
-		//	// if passes full ID 
-		//	if (samesign::isGoodLepton(11, idx))
-        //    {
-        //        rt::Fill(hc["h_iso_fullid_orig"], iso_orig);
-        //        rt::Fill(hc["h_iso_fullid_fix" ], iso_fix );
-        //        rt::Fill(hc["h_iso_fullid_diff"], iso_orig - iso_fix);
-        //    }
-		//}
 	}
     catch (std::exception& e)
     {
