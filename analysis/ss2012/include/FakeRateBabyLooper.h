@@ -26,7 +26,8 @@ public:
         const std::string& suffix = "png",
         float away_jet_pt = -1.,
         float away_jet_dphi = -1.,
-        float mu_iso_denom = -1.
+        float mu_iso_denom = -1.,
+        bool btag_away_jet = false
         );
 
     // destroy:
@@ -54,6 +55,7 @@ private:
     float m_away_jet_pt;
     float m_away_jet_dphi;
     float m_mu_iso_denom;
+    bool m_btag_away_jet;
 };
 
 #endif // SS_FAKERATEBABYLOOPER_HPP

@@ -26,7 +26,8 @@ FakeRateBabyLooper::FakeRateBabyLooper
     const std::string& suffix,
     float away_jet_pt,
     float away_jet_dphi,
-    float mu_iso_denom
+    float mu_iso_denom,
+    bool btag_away_jet
     )
     : at::AnalysisWithHist(root_file_name, print, suffix)
     , m_sample(sample)
@@ -40,6 +41,7 @@ FakeRateBabyLooper::FakeRateBabyLooper
     , m_away_jet_pt(away_jet_pt)
     , m_away_jet_dphi(away_jet_dphi)
     , m_mu_iso_denom(mu_iso_denom)
+    , m_btag_away_jet(btag_away_jet)
 {
     // begin job
     BeginJob();
@@ -59,7 +61,7 @@ void FakeRateBabyLooper::BeginJob()
     float min_mu_pt = m_fr_bin_info.mu_pt_bins()[0];
     float max_mu_pt = m_fr_bin_info.mu_pt_bins()[m_fr_bin_info.num_mu_pt_bins()];
 
-    std::cout << "muon binning: ";
+    std::cout << "\nmuon binning: ";
     std::copy(m_fr_bin_info.vmu_pt_bins.begin(), m_fr_bin_info.vmu_pt_bins.end(), std::ostream_iterator<float>(std::cout, " "));
     printf("\nmin,max muon pt cuts: %4.2f, %4.2f\n", min_mu_pt, max_mu_pt);
 
@@ -89,6 +91,9 @@ void FakeRateBabyLooper::BeginJob()
 
     assert(not (m_mu_iso_denom < 0.));
     printf("muon isolation extrapolation: %4.2f\n", m_mu_iso_denom);
+
+    if (m_btag_away_jet)
+        printf("require away jet is b-tagged\n");
 
     // book histos
     BookHists();
@@ -655,10 +660,22 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             }
         }
 
-        // away jet cut        
-        bool jet_dwn_cut = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt-20.) : (ptpfcL1Fj1() > m_away_jet_pt-20.);
-        bool jet_cut     = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt)     : (ptpfcL1Fj1() > m_away_jet_pt);
-        bool jet_up_cut  = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt+20.) : (ptpfcL1Fj1() > m_away_jet_pt+20.);
+        // away jet cut
+        bool jet_dwn_cut = false;
+        bool jet_cut = false;
+        bool jet_up_cut = false;
+        if (m_btag_away_jet)
+        {
+            jet_dwn_cut = is_data ? (ptbtagpfcL1Fj1res() > m_away_jet_pt-20.) : (ptbtagpfcL1Fj1() > m_away_jet_pt-20.);
+            jet_cut     = is_data ? (ptbtagpfcL1Fj1res() > m_away_jet_pt)     : (ptbtagpfcL1Fj1() > m_away_jet_pt);
+            jet_up_cut  = is_data ? (ptbtagpfcL1Fj1res() > m_away_jet_pt+20.) : (ptbtagpfcL1Fj1() > m_away_jet_pt+20.);
+        }
+        else
+        {
+            jet_dwn_cut = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt-20.) : (ptpfcL1Fj1() > m_away_jet_pt-20.);
+            jet_cut     = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt)     : (ptpfcL1Fj1() > m_away_jet_pt);
+            jet_up_cut  = is_data ? (ptpfcL1Fj1res() > m_away_jet_pt+20.) : (ptpfcL1Fj1() > m_away_jet_pt+20.);
+        }
 
         bool jet_dphi_cut = is_data ? (dphipfcL1Fj1res() > m_away_jet_dphi) : (dphipfcL1Fj1() > m_away_jet_dphi);
 

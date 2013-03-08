@@ -61,6 +61,8 @@ int main(int argc, char* argv[])
         std::string fr_type_name       = "hpt";
         float away_jet_pt              = -1.;
         float away_jet_dphi            = -1.;
+        float mu_iso_denom             = 0.4;
+        bool btag_away_jet             = false;
 
         namespace po = boost::program_options;
         po::options_description desc("Allowed options");
@@ -80,6 +82,8 @@ int main(int argc, char* argv[])
             ("fr_type"       , po::value<std::string>(&fr_type_name)   , "fake rate type name: hpt(default), eth, truncated")
             ("jet_pt"        , po::value<float>(&away_jet_pt)          , "minimum away jet pt cut"                          )
             ("jet_dphi"      , po::value<float>(&away_jet_dphi)        , "minimum away jet dphi cut"                        )
+            ("mu_iso"        , po::value<float>(&mu_iso_denom)         , "muon isolation extrapolation"                     )
+            ("btag"          , po::value<bool>(&btag_away_jet)         , "b-tag away jet"                                   )
             ;
 
         po::variables_map vm;
@@ -137,7 +141,7 @@ int main(int argc, char* argv[])
         at::ScanChainWithFilename<FakeRateBaby>
             (
                 /*input chain ptr =*/chain.get(), 
-                FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix, away_jet_pt, away_jet_dphi), 
+                FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix, away_jet_pt, away_jet_dphi, mu_iso_denom, btag_away_jet), 
                 fake_rate_baby,
                 number_of_events,
                 good_run_list,
