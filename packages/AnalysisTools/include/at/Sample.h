@@ -63,6 +63,7 @@ namespace at
             ttpowheg,
             qcd,
             qcd_mu15,
+            tchiwh,
             static_size
         };
     };

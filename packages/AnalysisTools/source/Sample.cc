@@ -966,6 +966,24 @@ namespace at
             Sample::qcd_mu15,
             // color
             kBlue
+        },
+        {
+            // name
+            "tchiwh", 
+            // title
+            "tchiwh", 
+            // latex
+            "\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H", 
+            // ntuple_path
+            "TChiwh-test",
+            // tag
+            "V05-03-27",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::tchiwh,
+            // color
+            kBlue
         }
     };
 
