@@ -290,6 +290,8 @@ int InterpLooper::operator()(long event)
                 mchi = -999999.0;
                 mlsp = -999999.0;
         }
+           
+        const at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(dilep_type());
 
         // Weight Factors
         // ----------------------------------------------------------------------------------------------------------------------------//
@@ -307,28 +309,27 @@ int InterpLooper::operator()(long event)
         evt_weight *= vtxw;
 
         // apply scale factors
-        //if (m_do_scale_factors && not is_real_data())
-        //{
-        //    // lepton efficiencies
-        //    evt_weight *= sf_lepeff();
+        if (m_do_scale_factors && not is_real_data())
+        {
+            // lepton efficiencies
+            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4(), lep2_pdgid(), lep2_p4());
 
-        //    // trigger scale factor
-        //    at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(dilep_type());
-        //    evt_weight *= dilepTriggerScaleFactor(hyp_type);  
+            // trigger scale factor
+            evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
 
-        //    // mc btag scale factors (deprecated)
-        //    if (ssb::nbtags()>=2)
-        //    {
-        //        if (m_signal_region == SignalRegion::sr7)
-        //        {
-        //            evt_weight *= (ssb::nbtags() >= 3 ? ssb::sf_nbtag3() : 1.0);
-        //        }
-        //        else
-        //        {
-        //            evt_weight *= (ssb::nbtags() >= 2 ? ssb::sf_nbtag() : 1.0);
-        //        }
-        //    }
-        //}
+            // mc btag scale factors (deprecated)
+            //if (ssb::nbtags()>=2)
+            //{
+            //    if (m_signal_region == SignalRegion::sr7)
+            //    {
+            //        evt_weight *= (ssb::nbtags() >= 3 ? ssb::sf_nbtag3() : 1.0);
+            //    }
+            //    else
+            //    {
+            //        evt_weight *= (ssb::nbtags() >= 2 ? ssb::sf_nbtag() : 1.0);
+            //    }
+            //}
+        }
 
         // fill denominator (event vounts)
         // ---------------------------------------------------------------------------------------------------------------------------- //

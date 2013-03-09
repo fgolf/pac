@@ -1477,7 +1477,7 @@ namespace ss
             }
 
             // btag scale up/down
-            // this will overide the nbtags setup above
+            // this will overide the nbtags setting above
             switch(btag_yield_type)
             {
                 case at::YieldType::up:

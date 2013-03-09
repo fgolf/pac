@@ -464,6 +464,13 @@ namespace rt
     std::string pm_latex(const std::pair<double, double>& value_pair, const std::string& precision = "1.2");
     std::string pm_latex(const std::pair<float, float>& value_pair, const std::string& precision = "1.2");
 
+    // helper for low level objects 
+    // -------------------------------------------------------------------------------------------------//
+
+    // only works on compile time arrays (e.g. float bins[] = {1,2,3};)
+    template <int N> unsigned int find_bin(const float value, const float (&bins)[N]);
+    template <int N> unsigned int find_bin(const double value, const double (&bins)[N]);
+
     // helper functions for STL containters  (not in CINT)
     // -------------------------------------------------------------------------------------------------//
 

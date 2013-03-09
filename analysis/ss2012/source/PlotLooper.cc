@@ -687,52 +687,6 @@ int PlotLooper::operator()(long event)
         m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
         hc["h_lumi"]->Fill(m_lumi);
 
-        // which analysis type
-        //bool is_high_pt = (m_analysis_type==ss::AnalysisType::high_pt);
-
-        //  if (
-        //        evt()==136681113  ||
-        //        evt()==420345732  ||
-        //        evt()==232659600  ||
-        //        evt()==50299158   ||
-        //        evt()==1016031539 ||
-        //        evt()==582319467  ||
-        //        evt()==333466094  ||
-        //        evt()==421855042  ||
-        //        evt()==946339219  ||
-        //        evt()==979576990  ||
-        //        evt()==621112830  ||
-        //        evt()==178599734
-        //       )
-        //DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
-        //if (evt()==221637477)
-        //{
-        //    string channel;
-        //    switch (hyp_type)
-        //    {
-        //        case DileptonHypType::MUMU : channel = "MuMu"; break;
-        //        case DileptonHypType::EMU  : channel = "EMu" ; break;
-        //        case DileptonHypType::EE   : channel = "EE"  ; break;
-        //        default                    : channel = "none"; 
-        //    }
-        //    channel.append(":");
-        //    //fout << Form("%-6s %-7u %-5u %-15u %-2u %-2u %-6.3f %-6.3f", channel.c_str(), run(), ls(), evt(), njets(), nbtags(), ht(), pfmet()) << endl;
-        //      cout << "hyp_type = " << hyp_type << "\t" << channel << endl;
-        //    cout << Form("%6u | %3u | %12u | %s | %d | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %d | %4.3f | %2.3f | %2.3f | %4.3f | %4.3f | %4.3f | %4.3f | %u | %u",
-        //           run(), ls(), evt(),
-        //           channel.c_str(),
-        //           lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta(), lep1_p4().phi(), lep1_corpfiso(), lep1_d0(),
-        //           lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta(), lep2_p4().phi(), lep2_corpfiso(), lep2_d0(),
-        //           pfmet(),
-        //           ht(),
-        //           njets(),
-        //           nbtags()) << endl;
-        //}
-        //else
-        //{
-        //    return 0;
-        //}
-
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
@@ -765,7 +719,7 @@ int PlotLooper::operator()(long event)
         }
 
         // dilepton hyp type: 1 mm, 2 em, 3ee
-        DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
+        const DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
         if (hyp_type == DileptonHypType::static_size)
         {
             if (m_verbose) {cout << "failing valid hyp type" << endl;}
@@ -1010,24 +964,15 @@ int PlotLooper::operator()(long event)
         //    evt_weight *= scale1fb();
         //}
 
-        //// apply scale factors
-        //if (m_do_scale_factors && !is_real_data())
-        //{
-        //    evt_weight *= sf_lepeff();
-        //    // evt_weight *= sf_dileptrig();  // applying trigger cut now on MC
-        //    evt_weight *= dilepTriggerScaleFactor(hyp_type);  // applying trigger with scale factor 
-        //    if (m_nbtags>=2)
-        //    {
-        //        if (m_signal_region == SignalRegion::sr7)
-        //        {
-        //            evt_weight *= (nbtags() >= 3 ? sf_nbtag3() : 1.0);
-        //        }
-        //        else
-        //        {
-        //            evt_weight *= (nbtags() >= 2 ? sf_nbtag() : 1.0);
-        //        }
-        //    }
-        //}
+        // apply scale factors
+        if (m_do_scale_factors && not is_real_data())
+        {
+            // lepton efficiencies
+            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4(), lep2_pdgid(), lep2_p4());
+
+            // trigger scale factor
+            evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
+        }
 
         // Fill hists
         // ------------------------------------------------------------------------------------//

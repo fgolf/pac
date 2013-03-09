@@ -81,8 +81,8 @@ void CountElectronNumDen(TH1* h_num, TH1* h_den, const std::string& title)
 
 void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 {
-	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_29Jan2013.root");
-    std::string path = "plots/fake_rates/29Jan2013";
+	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
+    std::string path = "plots/fake_rates/26Feb2013";
 	float lumi = 19.5;
 
 	//rt::TH1Container hc("plots/fake_rates/qcd/qcd_pt35.root");
@@ -197,8 +197,8 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
 
 void PrintMuonFakeRatePlotsETH(const std::string& suffix = "png")
 {
-	rt::TH1Container hc("plots/fake_rates/eth/fakerate_eth.root");
-    std::string path = "plots/fake_rates/compare_eth";
+	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
+    std::string path = "plots/fake_rates/26Feb2013";
 	float lumi = 10.5;
 
 	std::map<std::string, rt::TH1Overlay> p;
@@ -276,8 +276,8 @@ void PrintMuonFakeRatePlotsETH(const std::string& suffix = "png")
 
 void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 {
-	rt::TH1Container hc("data/fake_rates/ssFR_data_standard_29Jan2013.root");
-    std::string path = "plots/fake_rates/29Jan2013";
+	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
+    std::string path = "plots/fake_rates/26Feb2013";
 	float lumi = 19.5;
 
 	//rt::TH1Container hc("plots/fake_rates/qcd/qcd_pt35.root");
@@ -390,8 +390,8 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 
 void PrintElectronFakeRatePlotsETH(const std::string& suffix = "png")
 {
-	rt::TH1Container hc("plots/fake_rates/eth/fakerate_eth.root");
-    std::string path = "plots/fake_rates/compare_eth";
+	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
+    std::string path = "plots/fake_rates/26Feb2013";
 	float lumi = 10.5;
 
 	std::map<std::string, rt::TH1Overlay> p;

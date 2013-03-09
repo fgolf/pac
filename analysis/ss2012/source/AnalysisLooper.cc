@@ -1468,14 +1468,14 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         if (!evt_isRealData())
         {
             // scale factor for trigger efficiency
-            m_evt.sf_dileptrig     = dilepTriggerScaleFactor(hyp_idx);
-            //m_evt.lep1.sf_trig   = triggerScaleFactor(TrigEffType::LeadDbl, lep1_id, m_evt.lep1.p4);  // this doesn't seem right
-            //m_evt.lep2.sf_trig   = triggerScaleFactor(TrigEffType::LeadDbl, lep2_id, m_evt.lep2.p4);  // this doesn't seem right
+            m_evt.sf_dileptrig   = DileptonTriggerScaleFactor(dilepton_type, m_analysis_type, m_evt.lep2.p4);
+            m_evt.lep1.sf_trig   = -999999; // not done 
+            m_evt.lep2.sf_trig   = -999999; // not done
 
             // scale factor for lepton reconstruction efficiency
-            m_evt.sf_lepeff      = dileptonTagAndProbeScaleFactor(hyp_idx);
-            m_evt.lep1.sf_lepeff = tagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), m_evt.lep1.p4.eta()); 
-            m_evt.lep2.sf_lepeff = tagAndProbeScaleFactor(lep2_id, m_evt.lep2.p4.pt(), m_evt.lep2.p4.eta());
+            m_evt.sf_lepeff      = DileptonTagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4, lep2_id, m_evt.lep2.p4);
+            m_evt.lep1.sf_lepeff = TagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), m_evt.lep1.p4.eta()); 
+            m_evt.lep2.sf_lepeff = TagAndProbeScaleFactor(lep2_id, m_evt.lep2.p4.pt(), m_evt.lep2.p4.eta());
 
             // scale factor for # btags 
             vector<LorentzVector> bjets;
@@ -1538,20 +1538,40 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
         // jet/bjet info 
         vector<bool> jet_flags;
+        vector<bool> jet_flags_up;
+        vector<bool> jet_flags_dn;
         vector<bool> bjet_flags;
+        vector<bool> bjet_flags_up;
+        vector<bool> bjet_flags_dn;
         if (not m_jet_corrector)
         {
-            m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vjets_p4  = samesign::getJets(hyp_idx, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            bjet_flags      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            jet_flags       = samesign::getJetFlags(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            m_evt.vbjets_p4    = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
+            m_evt.vjets_p4     = samesign::getJets(hyp_idx, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
+            bjet_flags         = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            jet_flags          = samesign::getJetFlags(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+            bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+            jet_flags_up       = samesign::getJetFlags(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+            jet_flags_dn       = samesign::getJetFlags(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+            m_evt.vbjets_p4_up = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+            m_evt.vbjets_p4_dn = samesign::getBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+            m_evt.vjets_p4_up  = samesign::getJets(hyp_idx, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+            m_evt.vjets_p4_dn  = samesign::getJets(hyp_idx, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
         }
         else
         {
-            m_evt.vbjets_p4 = samesign::getBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vjets_p4  = samesign::getJets(hyp_idx, m_jet_corrector, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            bjet_flags      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            jet_flags       = samesign::getJetFlags(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            m_evt.vbjets_p4    = samesign::getBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
+            m_evt.vjets_p4     = samesign::getJets(hyp_idx, m_jet_corrector, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
+            bjet_flags         = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            jet_flags          = samesign::getJetFlags(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+            bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+            bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+            jet_flags_up       = samesign::getJetFlags(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+            jet_flags_dn       = samesign::getJetFlags(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+            m_evt.vbjets_p4_up = samesign::getBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+            m_evt.vbjets_p4_dn = samesign::getBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM,     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+            m_evt.vjets_p4_up  = samesign::getJets(hyp_idx, m_jet_corrector, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+            m_evt.vjets_p4_dn  = samesign::getJets(hyp_idx, m_jet_corrector, jet_type,                            /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
         }
 
         //cout << jet_flags.size() << "\t" << bjet_flags.size() << endl;
@@ -1561,7 +1581,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         {
             // jets
             if (not jet_flags.at(jidx)) {continue;}
-            if (not evt_isRealData() && (cms2_tag.version > 23))
+            if (not evt_isRealData() && (cms2_tag.version > 21))
             {
                 m_evt.vjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
                 m_evt.vjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
@@ -1570,19 +1590,65 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             // btags
             m_evt.vjets_btagged.push_back(bjet_flags.at(jidx));
             if (not bjet_flags.at(jidx)) {continue;}
-            if (not evt_isRealData() && (cms2_tag.version > 23))
+            if (not evt_isRealData() && (cms2_tag.version > 21))
             {
                 m_evt.vbjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
                 m_evt.vbjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
             }
         }
 
-        // calculate the "reweighted" MC btag yields
-        if (not evt_isRealData() && (cms2_tag.version > 23))
+        // jet btag flag amd mc flavor matching (JES +/-)
+        for (size_t jidx = 0; jidx != jet_flags_up.size(); jidx++)
         {
-            m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::base);
-            m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::up  );
-            m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, at::YieldType::down);
+            // jets
+            if (not jet_flags_up.at(jidx)) {continue;}
+            if (not evt_isRealData() && (cms2_tag.version > 21))
+            {
+                m_evt.vjets_mcflavor_phys_up.push_back(pfjets_mcflavorPhys().at(jidx));
+                m_evt.vjets_mcflavor_algo_up.push_back(pfjets_mcflavorAlgo().at(jidx));
+            }
+
+            // btags
+            m_evt.vjets_btagged_up.push_back(bjet_flags_up.at(jidx));
+            if (not bjet_flags_up.at(jidx)) {continue;}
+            if (not evt_isRealData() && (cms2_tag.version > 21))
+            {
+                m_evt.vbjets_mcflavor_phys_up.push_back(pfjets_mcflavorPhys().at(jidx));
+                m_evt.vbjets_mcflavor_algo_up.push_back(pfjets_mcflavorAlgo().at(jidx));
+            }
+        }
+
+        for (size_t jidx = 0; jidx != jet_flags_dn.size(); jidx++)
+        {
+            // jets
+            if (not jet_flags_dn.at(jidx)) {continue;}
+            if (not evt_isRealData() && (cms2_tag.version > 21))
+            {
+                m_evt.vjets_mcflavor_phys_dn.push_back(pfjets_mcflavorPhys().at(jidx));
+                m_evt.vjets_mcflavor_algo_dn.push_back(pfjets_mcflavorAlgo().at(jidx));
+            }
+
+            // btags
+            m_evt.vjets_btagged_dn.push_back(bjet_flags_dn.at(jidx));
+            if (not bjet_flags_dn.at(jidx)) {continue;}
+            if (not evt_isRealData() && (cms2_tag.version > 21))
+            {
+                m_evt.vbjets_mcflavor_phys_dn.push_back(pfjets_mcflavorPhys().at(jidx));
+                m_evt.vbjets_mcflavor_algo_dn.push_back(pfjets_mcflavorAlgo().at(jidx));
+            }
+        }
+
+        // calculate the "reweighted" MC btag yields
+        if (not evt_isRealData() && (cms2_tag.version > 21))
+        {
+            // # btags reweighted
+            m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base);
+            m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  );
+            m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down);
+
+            // # btags reweighted and JES +/-
+            m_evt.nbtags_reweighted_jec_up = at::MCBtagCount(m_evt.vjets_p4_up, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base);
+            m_evt.nbtags_reweighted_jec_dn = at::MCBtagCount(m_evt.vjets_p4_dn, m_evt.vjets_btagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base);
         }
 
         //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);

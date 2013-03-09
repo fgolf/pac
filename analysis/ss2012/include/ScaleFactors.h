@@ -3,26 +3,31 @@
 
 #include "Math/LorentzVector.h"
 #include "at/DileptonHypType.h"
+#include "AnalysisType.h"
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 
-float dileptonTagAndProbeScaleFactor(int hyp_idx);
-float tagAndProbeScaleFactor(int id, float pt, float eta);
+// Trigger
+float DileptonTriggerScaleFactor
+(
+    const at::DileptonHypType::value_type& hyp_type,
+    const ss::AnalysisType::value_type& anal_type,
+    const LorentzVector& trailing_p4
+);
 
-struct TrigEffType
-{
-	enum value_type
-	{
-		DzDbl,
-		LeadDbl,
-		Sgl,
-		TrailDbl,
-		static_size
-	};
-};
+// Lepton ID and isolatoin efficiency (full event -- CMS2)
+float DileptonTagAndProbeScaleFactor(const int hyp_idx);
 
-float dilepTriggerScaleFactor(const at::DileptonHypType::value_type& hyp_type);
-float dilepTriggerScaleFactor(int hyp_idx);
-float triggerScaleFactor(const TrigEffType::value_type& trig_eff_type, int id, const LorentzVector &p4);
+// Lepton ID and isolatoin efficiency (full event -- general)
+float DileptonTagAndProbeScaleFactor
+(
+    const int l1_id, 
+    const LorentzVector& l1_p4, 
+    const int l2_id, 
+    const LorentzVector& l2_p4
+);
+
+// Lepton ID and isolatoin efficiency (lepton)
+float TagAndProbeScaleFactor(int id, float pt, float eta);
 
 #endif

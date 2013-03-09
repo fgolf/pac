@@ -118,6 +118,8 @@ public:
     int nbtags_up;
     int nbtags_reweighted_dn;
     int nbtags_reweighted_up;
+    int nbtags_reweighted_jec_up;
+    int nbtags_reweighted_jec_dn;
     float ht_dn;
     float ht_up;
     int njets20_dn;
@@ -219,14 +221,22 @@ public:
     // jet info
     //
     vecLorentzVector vjets_p4;
+    vecLorentzVector vjets_p4_up;
+    vecLorentzVector vjets_p4_dn;
     vecLorentzVector vjets_mc3p4;
     vecLorentzVector vgenjets_p4;
     vecLorentzVector vjets_nearjet_p4;
     std::vector<bool> vjets_btagged;
+    std::vector<bool> vjets_btagged_up;
+    std::vector<bool> vjets_btagged_dn;
     float jets_dr12;
     vecd vjets_nearjet_dr;
     veci vjets_mcflavor_phys;
     veci vjets_mcflavor_algo;
+    veci vjets_mcflavor_phys_up;
+    veci vjets_mcflavor_algo_up;
+    veci vjets_mcflavor_phys_dn;
+    veci vjets_mcflavor_algo_dn;
     vecd vbjets_disc;
     veci vjets_momid;
     veci vjets_mc3id;
@@ -235,11 +245,17 @@ public:
     // bjet info
     //
     vecLorentzVector vbjets_p4;
+    vecLorentzVector vbjets_p4_up;
+    vecLorentzVector vbjets_p4_dn;
     vecLorentzVector vbjets_mc3p4;
     vecLorentzVector vbjets_nearjet_p4;
     vecd vbjets_nearjet_dr;
     veci vbjets_mcflavor_phys;
     veci vbjets_mcflavor_algo;
+    veci vbjets_mcflavor_phys_up;
+    veci vbjets_mcflavor_algo_up;
+    veci vbjets_mcflavor_phys_dn;
+    veci vbjets_mcflavor_algo_dn;
     veci vbjets_mc3id;
     veci vbjets_momid;
     float bjets_dr12;

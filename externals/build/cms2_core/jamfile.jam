@@ -44,3 +44,5 @@ lib cms2_core
     <include>$(CMS2_CORE)/CORE/jetsmear
     <include>$(CMS2_CORE)/CORE/jetcorr
   ;
+
+default-install /CMS2_CORE//cms2_core : <link>shared ;
