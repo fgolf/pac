@@ -1452,25 +1452,25 @@ namespace ss
             {
                 case at::YieldType::up:
                     njets  = ssb::njets_up();
-                    nbtags = ssb::nbtags_up();
+                    nbtags = ssb::nbtags_reweighted_jec_up();
                     ht     = ssb::ht_up();
                     met    = ssb::pfmet_up();
                     break;
                 case at::YieldType::down:
                     njets  = ssb::njets_dn();
-                    nbtags = ssb::nbtags_dn();
+                    nbtags = ssb::nbtags_reweighted_jec_dn();
                     ht     = ssb::ht_dn();
                     met    = ssb::pfmet_dn();
                     break;
                 case at::YieldType::base:
                     njets  = ssb::njets();
-                    nbtags = ssb::nbtags();
+                    nbtags = ssb::nbtags_reweighted();
                     ht     = ssb::ht();
                     met    = ssb::pfmet();
                     break;
                 default:
                     njets  = ssb::njets();
-                    nbtags = ssb::nbtags();
+                    nbtags = ssb::nbtags_reweighted();
                     ht     = ssb::ht();
                     met    = ssb::pfmet();
                     break;
@@ -1487,10 +1487,10 @@ namespace ss
                     nbtags = ssb::nbtags_reweighted_dn();
                     break;
                 case at::YieldType::base:
-                    {/*do nothing*/}
+                    nbtags = ssb::nbtags_reweighted();
                     break;
                 default:
-                    {/*do nothing*/}
+                    nbtags = ssb::nbtags_reweighted();
                     break;
             }
         }

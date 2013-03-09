@@ -272,6 +272,8 @@ namespace ssb {
 	const int &nbtags_reweighted() { return samesignbtag.nbtags_reweighted(); }
 	const int &nbtags_reweighted_dn() { return samesignbtag.nbtags_reweighted_dn(); }
 	const int &nbtags_reweighted_up() { return samesignbtag.nbtags_reweighted_up(); }
+	const int &nbtags_reweighted_jec_dn() { return samesignbtag.nbtags_reweighted_jec_dn(); }
+	const int &nbtags_reweighted_jec_up() { return samesignbtag.nbtags_reweighted_jec_up(); }
 	const float &ht30_dn() { return samesignbtag.ht30_dn(); }
 	const float &ht30_up() { return samesignbtag.ht30_up(); }
 	const float &pfmet_dn() { return samesignbtag.pfmet_dn(); }
@@ -334,17 +336,31 @@ namespace ssb {
 	const float &bjets_dr12() { return samesignbtag.bjets_dr12(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenb_p4() { return samesignbtag.vgenb_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4() { return samesignbtag.vjets_p4(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4_up() { return samesignbtag.vjets_p4_up(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4_dn() { return samesignbtag.vjets_p4_dn(); }
 	const vector<bool> &vjets_btagged() { return samesignbtag.vjets_btagged(); }
+	const vector<bool> &vjets_btagged_up() { return samesignbtag.vjets_btagged_up(); }
+	const vector<bool> &vjets_btagged_dn() { return samesignbtag.vjets_btagged_dn(); }
 	const vector<int> &vjets_mcflavor_phys() { return samesignbtag.vjets_mcflavor_phys(); }
 	const vector<int> &vjets_mcflavor_algo() { return samesignbtag.vjets_mcflavor_algo(); }
+	const vector<int> &vjets_mcflavor_phys_up() { return samesignbtag.vjets_mcflavor_phys_up(); }
+	const vector<int> &vjets_mcflavor_algo_up() { return samesignbtag.vjets_mcflavor_algo_up(); }
+	const vector<int> &vjets_mcflavor_phys_dn() { return samesignbtag.vjets_mcflavor_phys_dn(); }
+	const vector<int> &vjets_mcflavor_algo_dn() { return samesignbtag.vjets_mcflavor_algo_dn(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4() { return samesignbtag.vjets_mc3p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4() { return samesignbtag.vgenjets_p4(); }
 	const vector<int> &vjets_mc3id() { return samesignbtag.vjets_mc3id(); }
 	const vector<int> &vjets_momid() { return samesignbtag.vjets_momid(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4() { return samesignbtag.vjets_nearjet_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4() { return samesignbtag.vbjets_p4(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4_up() { return samesignbtag.vbjets_p4_up(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4_dn() { return samesignbtag.vbjets_p4_dn(); }
 	const vector<int> &vbjets_mcflavor_phys() { return samesignbtag.vbjets_mcflavor_phys(); }
 	const vector<int> &vbjets_mcflavor_algo() { return samesignbtag.vbjets_mcflavor_algo(); }
+	const vector<int> &vbjets_mcflavor_phys_up() { return samesignbtag.vbjets_mcflavor_phys_up(); }
+	const vector<int> &vbjets_mcflavor_algo_up() { return samesignbtag.vbjets_mcflavor_algo_up(); }
+	const vector<int> &vbjets_mcflavor_phys_dn() { return samesignbtag.vbjets_mcflavor_phys_dn(); }
+	const vector<int> &vbjets_mcflavor_algo_dn() { return samesignbtag.vbjets_mcflavor_algo_dn(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4() { return samesignbtag.vbjets_mc3p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4() { return samesignbtag.vbjets_nearjet_p4(); }
 	const vector<float> &vbjets_nearjet_dr() { return samesignbtag.vbjets_nearjet_dr(); }

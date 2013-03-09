@@ -316,19 +316,6 @@ int InterpLooper::operator()(long event)
 
             // trigger scale factor
             evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
-
-            // mc btag scale factors (deprecated)
-            //if (ssb::nbtags()>=2)
-            //{
-            //    if (m_signal_region == SignalRegion::sr7)
-            //    {
-            //        evt_weight *= (ssb::nbtags() >= 3 ? ssb::sf_nbtag3() : 1.0);
-            //    }
-            //    else
-            //    {
-            //        evt_weight *= (ssb::nbtags() >= 2 ? ssb::sf_nbtag() : 1.0);
-            //    }
-            //}
         }
 
         // fill denominator (event vounts)
@@ -422,14 +409,12 @@ int InterpLooper::operator()(long event)
             // JEC scale up/scale down
             if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::up))
             {
-                const float new_btag_sf = 1.0; //GetBtagScaleFactor(nbtags_up(), signal_region);
-                rt::Fill2D(hc["h_jup"], m0, m12, evt_weight * new_btag_sf);
+                rt::Fill2D(hc["h_jup"], m0, m12, evt_weight);
             }
 
             if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::down))
             {
-                const float new_btag_sf = 1.0; //GetBtagScaleFactor(nbtags_dn(), signal_region);
-                rt::Fill2D(hc["h_jdown"], m0, m12, evt_weight * new_btag_sf);
+                rt::Fill2D(hc["h_jdown"], m0, m12, evt_weight);
             }
 
             // Btag scale up/down
