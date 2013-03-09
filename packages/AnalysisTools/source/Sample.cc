@@ -588,15 +588,15 @@ namespace at
             // name
             "sbottomtop", 
             // title
-            "#tilde{b}#tilde{b}* #rightarrow t#bar{t}W^{#pm}W^{#mp}#tilde{#chi}^{0}#tilde{#chi}^{0}",
+            "#tilde{b}#tilde{b}* #rightarrow t#bar{t}W^{+}W^{-}#tilde{#chi}^{0}#tilde{#chi}^{0}",
             // latex 
-            "\\tilde{b}\\tilde{b}^* \\rightarrow t\\bar{t}W^{\\pm}W^{\\mp}\\tilde{\\chi^0}\\tilde{\\chi^0}",
+            "\\tilde{b}\\tilde{b}^* \\rightarrow t\\bar{t}W^{+}W^{-}\\tilde{\\chi^0}\\tilde{\\chi^0}",
             // ntuple_path
             // this is out of date, corrently we go straight from edm --> baby
             // https://twiki.cern.ch/twiki/bin/viewauth/CMS/SMST6ttWWMadgraph8TeV 
-            "SbottomTopv6_macneill_8TeV",  
+            "SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph_Summer12-START52_V9_FSIM",  
             // tag
-            "V05-02-28",
+            "V05-03-27",
             // SampleType 
             SampleType::susy,
             // Sample
