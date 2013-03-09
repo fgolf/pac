@@ -10,6 +10,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
+#include "TDirectory.h"
 #include "rt/MiscTools.h"
 
  using namespace std;
@@ -112,9 +113,8 @@ int AddCMS2Branches
     clone->Write(); 
     output_file.Close();
     input_file.Close();
-    return 0;
-
     std::cout << "Post Processed file is complete: " << output_file_name << std::endl; 
+    return 0;
 }
 
 int main(int argc, char* argv[])

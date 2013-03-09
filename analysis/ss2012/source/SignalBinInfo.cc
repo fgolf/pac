@@ -94,7 +94,7 @@ namespace ss
             case Sample::sbottomtop: return title + ";m_{#tilde{b}} (GeV); m_{#tilde{#chi}^{#pm}} (GeV)"; break;
             default:                 return title + ";m_{0} (GeV); m_{12} (GeV)"                        ; break;
         }
+        return title;
     }
-
 
 } // namespace ss

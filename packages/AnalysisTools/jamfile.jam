@@ -44,9 +44,9 @@ lib AnalysisTools
           <linkdef>LinkDef.h
     ]
     # dependent packages
+    /ROOT
     /CMS2//cms2_header
     /CMS2_CORE//cms2_core
-    /ROOT
     /RootTools//RootTools
     /boost//headers
     /boost//filesystem

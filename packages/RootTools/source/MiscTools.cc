@@ -24,6 +24,7 @@
 #include "TFileMerger.h"
 #include "TBranch.h"
 #include "TBranchElement.h"
+#include "TDirectory.h"
 #include "TTree.h"
 
 // boost includes
