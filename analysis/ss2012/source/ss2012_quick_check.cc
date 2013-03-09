@@ -6,6 +6,7 @@
 #include "at/ScanChain.h"
 #include "at/AnalysisWithHist.h"
 #include "at/Predicates.h"
+#include "at/Status3EventIdentifier.h"
 #include <stdexcept>
 #include "CMS2Wrapper.h"
 #include "ssSelections.h"
@@ -29,7 +30,7 @@ class QuickAnalysis : public AnalysisWithHist
 };
 
 QuickAnalysis::QuickAnalysis(const std::string& file_name)
-	: AnalysisWithHist(file_name, true, "png")
+	: AnalysisWithHist(file_name, true, "eps")
 {
 	BookHists();
 }
@@ -41,37 +42,30 @@ void QuickAnalysis::EndJob()
 void QuickAnalysis::BookHists()
 {
 	TH1Container& hc = m_hist_container;
-	hc.Add(new TH1F("h_m3lep"    , "m_{3l};m_{3l}"           , 200, 0, 200));
-	hc.Add(new TH1F("h_m3lep_rej", "m_{3l} (rejected);m_{3l}", 200, 0, 200));
-	hc.Add(new TH1F("h_m3lep_acc", "m_{3l} (accepted);m_{3l}", 200, 0, 200));
+	hc.Add(new TH1F("h_m3lep"    , "m_{3l};m_{3l}"           , 160, 40, 200));
+	hc.Add(new TH1F("h_m3lep_rej", "m_{3l} (rejected);m_{3l}", 160, 40, 200));
+	hc.Add(new TH1F("h_m3lep_acc", "m_{3l} (accepted);m_{3l}", 160, 40, 200));
 
-    hc.Add(new TH1F("h_pt_max_peak1_acc", "max pt in 81 < m_{3l} < 89; max p_{T} (GeV)", 60, 0, 300));
-    hc.Add(new TH1F("h_m01_peak1_acc"   , "m01 81 < m_{3l} < 89; m_{01} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m02_peak1_acc"   , "m02 81 < m_{3l} < 89; m_{02} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m12_peak1_acc"   , "m13 81 < m_{3l} < 89; m_{12} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_pt_max_peak1_rej", "max pt in 81 < m_{3l} < 89; max p_{T} (GeV)", 60, 0, 300));
-    hc.Add(new TH1F("h_m01_peak1_rej"   , "m01 81 < m_{3l} < 89; m_{01} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m02_peak1_rej"   , "m02 81 < m_{3l} < 89; m_{02} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m12_peak1_rej"   , "m13 81 < m_{3l} < 89; m_{12} (GeV)"         , 50, 0, 100));
-
-    hc.Add(new TH1F("h_pt_max_peak2_acc", "max pt in 68 < m_{3l} < 76; max p_{T} (GeV)", 60, 0, 300));
-    hc.Add(new TH1F("h_m01_peak2_acc"   , "m01 68 < m_{3l} < 76; m_{01} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m02_peak2_acc"   , "m02 68 < m_{3l} < 76; m_{02} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m12_peak2_acc"   , "m13 68 < m_{3l} < 76; m_{12} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_pt_max_peak2_rej", "max pt in 68 < m_{3l} < 76; max p_{T} (GeV)", 60, 0, 300));
-    hc.Add(new TH1F("h_m01_peak2_rej"   , "m01 68 < m_{3l} < 76; m_{01} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m02_peak2_rej"   , "m02 68 < m_{3l} < 76; m_{02} (GeV)"         , 50, 0, 100));
-    hc.Add(new TH1F("h_m12_peak2_rej"   , "m13 68 < m_{3l} < 76; m_{12} (GeV)"         , 50, 0, 100));
+    hc.Add(new TH1F("h_pt_max", "max p_{T}; max p_{T} (GeV)",  60,   0,  300));
+    hc.Add(new TH1F("h_m01"   , "m_{01}; m_{01} (GeV)"      , 100,  60,   74));
+    hc.Add(new TH1F("h_m02"   , "m_{02}; m_{02} (GeV)"      ,  60,  49,   55));
+    hc.Add(new TH1F("h_m12"   , "m_{12}; m_{12} (GeV)"      ,  60, 7.2,  8.6));
 }
 
 int QuickAnalysis::operator() (long event)
 {
 	rt::TH1Container& hc = m_hist_container;
 
-    using namespace tas;
-
 	try
 	{
+        // check if MC duplicate
+        Status3EventIdentifier s3id(cms2);
+        if (is_duplicate(s3id))
+        {
+            cout << "is duplicate" << endl;
+            return 0;
+        }
+
         vector<LorentzVector> l_p4;
         for (size_t i = 0; i != genps_p4().size(); i++)
         {
@@ -86,18 +80,29 @@ int QuickAnalysis::operator() (long event)
             {
                 l_p4.push_back(genps_p4().at(i));
             }
+            if (id == 15)
+            {
+                l_p4.push_back(genps_p4().at(i));
+            }
         }
 
         // sort by pt
         std::sort(l_p4.begin(), l_p4.end(), at::SortByPt<LorentzVector>());
 
         // must have 3 generater level leptons
-        if (l_p4.size() < 3) 
+        if (l_p4.size()!=3) 
         {
+            cout << "NOT 3!!!!!!!!!!!" << Form("%d %d %d", evt_run(), evt_lumiBlock(), evt_event()) << endl;
             return 0;
         }
 
         const float m_3l = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
+
+        if (m_3l < 50)
+        {
+            return 0;
+        }
+
         rt::Fill(hc["h_m3lep"], m_3l);
 
         const float pt_max = l_p4.at(0).pt();
@@ -116,39 +121,15 @@ int QuickAnalysis::operator() (long event)
         if (rejected)
         {
             rt::Fill(hc["h_m3lep_rej"], m_3l);
-            if (peak1)
-            {
-                rt::Fill(hc["h_pt_max_peak1_rej"], pt_max);
-                rt::Fill(hc["h_m01_peak1_rej"   ], m01   );
-                rt::Fill(hc["h_m02_peak1_rej"   ], m02   );
-                rt::Fill(hc["h_m12_peak1_rej"   ], m12   );
-            }
-            if (peak2)
-            {
-                rt::Fill(hc["h_pt_max_peak2_rej"], pt_max);
-                rt::Fill(hc["h_m01_peak2_rej"   ], m01   );
-                rt::Fill(hc["h_m02_peak2_rej"   ], m02   );
-                rt::Fill(hc["h_m12_peak2_rej"   ], m12   );
-            }
         }
         else
         {
             rt::Fill(hc["h_m3lep_acc"], m_3l);
-            if (peak1)
-            {
-                rt::Fill(hc["h_pt_max_peak1_acc"], pt_max);
-                rt::Fill(hc["h_m01_peak1_acc"   ], m01   );
-                rt::Fill(hc["h_m02_peak1_acc"   ], m02   );
-                rt::Fill(hc["h_m12_peak1_acc"   ], m12   );
-            }
-            if (peak2)
-            {
-                rt::Fill(hc["h_pt_max_peak2_acc"], pt_max);
-                rt::Fill(hc["h_m01_peak2_acc"   ], m01   );
-                rt::Fill(hc["h_m02_peak2_acc"   ], m02   );
-                rt::Fill(hc["h_m12_peak2_acc"   ], m12   );
-            }
         }
+        if (m01_cut    && m02_cut && m12_cut) {rt::Fill(hc["h_pt_max"], pt_max);}
+        if (pt_max_cut && m02_cut && m12_cut) {rt::Fill(hc["h_m01"   ], m01   );}
+        if (pt_max_cut && m01_cut && m12_cut) {rt::Fill(hc["h_m02"   ], m02   );}
+        if (pt_max_cut && m01_cut && m02_cut) {rt::Fill(hc["h_m12"   ], m12   );}
 
 	}
     catch (std::exception& e)
@@ -216,7 +197,7 @@ try
     chain.Add(input_file.c_str());
 	rt::PrintFilesFromTChain(chain);
 
-	ScanChain(&chain, QuickAnalysis(output_file), cms2, number_of_events, "", true, false);
+	ScanChain(&chain, QuickAnalysis(output_file), cms2, number_of_events, /*run_list=*/"", true, false);
 	return 0;
 }
 catch (std::exception& e)

@@ -11,6 +11,7 @@ lib AnalysisTools
     ./source/AnalysisWithTreeAndHist.cc
     ./source/LorentzVectorObject.cc
     ./source/DorkyEventIdentifier.cc
+    ./source/Status3EventIdentifier.cc
     ./source/DileptonHypType.cc
     ./source/DileptonChargeType.cc
     ./source/YieldType.cc

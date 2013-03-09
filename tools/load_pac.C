@@ -46,6 +46,12 @@
     gSystem->Load(Form("%s/libboost_filesystem.so", pac_path.c_str()));
     gSystem->Load(Form("%s/libRootTools.so"       , pac_path.c_str()));
 
+    // CMS2
+    gSystem->AddIncludePath("-I$PAC/packages/cms2/05.03.23/header");
+    gSystem->AddIncludePath("-I$PAC/externals/source/cms2_core/HEAD/CORE");
+    gSystem->Load(Form("%s/libcms2_header.so"  , pac_path.c_str()));
+    gSystem->Load(Form("%s/libcms2_core.so"    , pac_path.c_str()));
+
     // AnalysisTools
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/include");
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/source");

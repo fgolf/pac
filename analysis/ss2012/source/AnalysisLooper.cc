@@ -661,18 +661,22 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 return 0;
             }
 
-            //const float m_3l = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
-            const float pt_max = l_p4.at(0).pt();
-            if (100.0 < pt_max && pt_max < 160.0) {return 0;}
+            //const float m_3l      = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
+            const float pt_max    = l_p4.at(0).pt();
+            const float m01       = (l_p4[0] + l_p4[1]).mass();
+            const float m02       = (l_p4[0] + l_p4[2]).mass();
+            const float m12       = (l_p4[1] + l_p4[2]).mass();
+            const bool pt_max_cut = (100.0 < pt_max && pt_max < 160.0);
+            const bool m01_cut    = (62.0 < m01 && m01 < 72.0);
+            const bool m02_cut    = (52.0 < m02 && m02 < 55.0);
+            const bool m12_cut    = (7.2 < m12 && m12 < 8.2);
+            const bool reject     = (pt_max_cut && m01_cut && m02_cut && m12_cut);
 
-            const float m_01 = (l_p4[0] + l_p4[1]).mass();
-            if (62.0 < m_01 && m_01 < 72.0) {return 0;}
-
-            const float m_02 = (l_p4[0] + l_p4[2]).mass();
-            if (52.0 < m_02 && m_02 < 55.0) {return 0;}
-
-            const float m_12 = (l_p4[1] + l_p4[2]).mass();
-            if (7.2 < m_12 && m_12 < 8.2) {return 0;}
+            if (reject)
+            {
+                if (m_verbose) {std::cout << "Wgamma* --> 2e sample bug fix: event rejected" << std::endl;}
+                return 0;
+            }
         }
 
         // event logic variables 
@@ -1350,7 +1354,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 float mety_up = met * sin(met_phi);
                 float mety_dn = met * sin(met_phi);
                 // get uncorrected jets
-                vector<LorentzVector> ujets = samesign::getJets(hyp_idx, m_jet_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, 20.0, 20.0, 1.0, 0);
+                vector<LorentzVector> ujets = samesign::getJets(hyp_idx, m_jet_corrector, jet_type, /*dR=*/0.4, /*jet_pt>*/10.0, /*|eta|<*/5.0, mu_min_pt, el_min_pt, 1.0, 0);
                 for (size_t u = 0; u != ujets.size(); u++) 
                 {
                     float px   = ujets.at(u).px();
@@ -1526,7 +1530,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             else if ( gen_bjets.size()>3)
             {
                 m_evt.sf_unc_nbtag  = btagEventUncertainty (4, gen_bjets.at(0).pt(), gen_bjets.at(0).eta(), gen_bjets.at(1).pt(), gen_bjets.at(1).eta(),
-                                                            gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), gen_bjets.at(3).pt(), gen_bjets.at(3).eta(), m_is_fast_sim);
+                                                               gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), gen_bjets.at(3).pt(), gen_bjets.at(3).eta(), m_is_fast_sim);
                 m_evt.sf_unc_nbtag3 = btagEventUncertainty3(4, gen_bjets.at(0).pt(), gen_bjets.at(0).eta(), gen_bjets.at(1).pt(), gen_bjets.at(1).eta(),
                                                                gen_bjets.at(2).pt(), gen_bjets.at(2).eta(), gen_bjets.at(3).pt(), gen_bjets.at(3).eta(), m_is_fast_sim);
             }
