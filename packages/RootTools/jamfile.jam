@@ -95,9 +95,24 @@ exe merge_tchain
     : # usage-requirements
     ;
 
+exe ttree_draw_test
+    : # sources
+      ./source/ttree_draw_test.cc
+      # dependent packages
+      /ROOT
+      RootTools/<link>static
+      /boost//program_options/<link>static
+      /MiniFWLite//libMiniFWLite/<link>shared
+    : # requirements 
+      <include>./include
+      <include>./source
+    : # default-build
+    : # usage-requirements
+    ;
 
 # install
 # -----------------------------------------------------#
 
 default-install merge_tchain ;
+default-install ttree_draw_test ;
 default-install RootTools : <link>shared ;

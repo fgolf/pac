@@ -41,7 +41,7 @@ void CreateSignalXsecFile()
     SetBinContent(hc["h_xsec_sbottomtop"] , 675 , 0.0106123 , 17.9891 ); 
     SetBinContent(hc["h_xsec_sbottomtop"] , 700 , 0.0081141 , 18.4146 ); 
 
-    // T1tttt (sbottom pari production -- T6ttWW)
+    // T1tttt (sbottom pair production -- T1tttt)
     // --------------------------------------------------------------------------------- //
     // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
     bin_info = ss::GetSignalBinInfo(at::Sample::t1tttt);
@@ -119,6 +119,20 @@ void CreateSignalXsecFile()
     SetBinContent(hc["h_xsec_t1tttt"] , 1950 , 1.12426e-05 , 62.789  ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 1975 , 9.20837e-06 , 64.0165 ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 2000 , 7.52864e-06 , 65.128  ); 
+    
+    // TChiwz (chargino-neutralino production -- TChiwz)
+    //https://twiki.cern.ch/twiki/pub/CMS/EwkinoSignalmodels/8TeVc1pn2_finer.xsec
+    //https://twiki.cern.ch/twiki/pub/CMS/EwkinoSignalmodels/8TeVc1pn2_finer.xsec
+    // --------------------------------------------------------------------------------- //
+
+    bin_info = ss::GetSignalBinInfo(at::Sample::tchiwh);
+    hc.Add(new TH1F("h_xsec_tchiwh", "Cross Section TChiwz;m_{#tilde{3chi^{3pm}}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    SetBinContent(hc["h_xsec_tchiwh"], 100  ,7.070000e+00 + 4.019153e+00, sqrt(pow(4.863176e-01,2) + pow(2.951105e-01,2))); 
+    SetBinContent(hc["h_xsec_tchiwh"], 150  ,1.580000e+00 + 8.079838e-01, sqrt(pow(8.002465e-02,2) + pow(4.629344e-02,2))); 
+    SetBinContent(hc["h_xsec_tchiwh"], 200  ,5.350000e-01 + 2.502323e-01, sqrt(pow(2.463968e-02,2) + pow(1.265101e-02,2))); 
+    SetBinContent(hc["h_xsec_tchiwh"], 250  ,2.220000e-01 + 9.589456e-02, sqrt(pow(9.652981e-03,2) + pow(4.552337e-03,2))); 
+    SetBinContent(hc["h_xsec_tchiwh"], 300  ,1.040000e-01 + 4.192331e-02, sqrt(pow(4.620926e-03,2) + pow(1.990183e-03,2))); 
+    SetBinContent(hc["h_xsec_tchiwh"], 350  ,5.340000e-02 + 2.033198e-02, sqrt(pow(2.144587e-03,2) + pow(9.880333e-04,2))); 
     
     // done
     hc.Write("data/xsec/susy_xsec.root");

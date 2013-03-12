@@ -71,11 +71,19 @@ namespace ss
                 // m_sbottom:  325-700
                 // m_chargino: 150-625 
                 // m_lsp: 50
-                // sbottom mass in [325, 700] GeV with 25 GeV step
-                // chargino mass in [150, msbottom -175] GeV with 25 GeV step
+                // sbottom mass is [325, 700] GeV with 25 GeV steps
+                // chargino mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
                 return MakeSignalBinInfo(25.0f, 300.0f, 725.0f, 25.0f, 125.0f, 650.0f);
+                break;
+            case Sample::tchiwh:
+                // /TChiwh-test/fgolf-TChiwh-test-6138c231f814ac3df24f1150dfcad736/USER 
+                // m_chargino: 150-300 
+                // m_lsp: 1-150 
+                // charginio mass is [150, 300] GeV with 50 GeV steps
+                // neutralino mass is [1 - 150] GeV with 50 GeV steps
+                return MakeSignalBinInfo(50.0f, 100.0f, 350.0f, 50.0f, 0.0f, 200.0f);
                 break;
             default:
                 // return bogus value with warning
@@ -90,9 +98,10 @@ namespace ss
         const std::string title = at::GetSampleInfo(sample).title;
         switch(sample)
         {
-            case Sample::t1tttt:     return title + ";m_{#tilde{g}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"  ; break;
-            case Sample::sbottomtop: return title + ";m_{#tilde{b}} (GeV); m_{#tilde{#chi}^{#pm}} (GeV)"; break;
-            default:                 return title + ";m_{0} (GeV); m_{12} (GeV)"                        ; break;
+            case Sample::t1tttt:     return title + ";m_{#tilde{g}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"         ; break;
+            case Sample::sbottomtop: return title + ";m_{#tilde{b}} (GeV); m_{#tilde{#chi}^{#pm}} (GeV)"       ; break;
+            case Sample::tchiwh:     return title + ";m_{#tilde{#chi}^{#pm}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"; break;
+            default:                 return title + ";m_{0} (GeV); m_{12} (GeV)"                               ; break;
         }
         return title;
     }

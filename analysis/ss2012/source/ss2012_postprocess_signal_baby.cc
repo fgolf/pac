@@ -91,8 +91,7 @@ try
         return false;
     }
 
-
-    cout << "Post processing with the follwing inputs:" << endl;
+    cout << "[ss2012_postprocess_signal_baby] post processing with the following inputs:" << endl;
     cout << "input_file  :\t" << input_file  << endl;
     cout << "output_file :\t" << output_file << endl;
     cout << "sample_name :\t" << sample_name << endl;
@@ -106,8 +105,9 @@ try
     {
         case Sample::t1tttt:     break;
         case Sample::sbottomtop: break;
+        case Sample::tchiwh:     break;
         default: 
-            cout << "Sample " << sample_name << " is not supported" << endl;
+            cout << "[ss2012_postprocess_signal_baby] Error: Sample " << sample_name << " is not supported" << endl;
             return 1;
     }
     SampleInfo sample_info = GetSampleInfo(sample);
@@ -228,6 +228,8 @@ try
     h_xsec->Write();
     clone->Write();
     output.Close();
+
+    cout << "[ss2012_postprocess_signal_baby] complete..." << endl;
 
     // done
     return 0;
