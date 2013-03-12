@@ -138,13 +138,13 @@ try
         return false;
     }
 
-    // check that input file exists and is specified
-    if (rt::ls(input_file).empty())
-    {
-        cout << "[ss2012_merge_baby] Error: ss2012_skim: input file " << input_file << " not found" << endl;
-        cout << desc << "\n";
-        return 1;
-    }
+    // check that input file exists and is specified (hmm, doesn't work for a csv)
+    //if (rt::ls(input_file).empty())
+    //{
+    //    cout << "[ss2012_merge_baby] Error: input file " << input_file << " not found" << endl;
+    //    cout << desc << "\n";
+    //    return 1;
+    //}
 
     // if the run list is specified, check that it exists 
     if (!run_list.empty())

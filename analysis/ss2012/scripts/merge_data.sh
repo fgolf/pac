@@ -3,7 +3,7 @@
 verbose=0
 njets=2
 version=v1
-tag=V02-05-04
+tag=V02-05-07
 path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
 
 # make the output dirs
@@ -12,8 +12,9 @@ path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
 function merge
 {
     local name=$1
-    local input=$2
-    cmd="ss2012_merge_babies --verbose $verbose --input "$input" --output \"${output_path}/${name}.root\" --njets $njets --run_list $run_list" 
+    local anal_type=$2
+    local input=$3
+    cmd="ss2012_merge_babies --anal_type $anal_type --verbose $verbose --input \"$input\" --output \"${output_path}/${name}.root\" --njets $njets --run_list $run_list" 
     echo $cmd
     echo $cmd > logs/${name}_${tag}_baby_merge.log 2>&1 &
     eval $cmd >> logs/${name}_${tag}_baby_merge.log 2>&1 &
@@ -42,7 +43,7 @@ input_files="${input_files},${input_path}/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.r
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root"
-#merge data_hpt_19p49 $input_files
+merge data_hpt_19p49 high_pt $input_files
 
 # low pt 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/low_pt
@@ -59,7 +60,7 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_lpt_19p49 $input_files
+merge data_lpt_19p49 low_pt $input_files
 
 # very low pt 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/vlow_pt
@@ -76,7 +77,7 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_vpt_19p49 $input_files
+merge data_vpt_19p49 vlow_pt $input_files
 
 ## high_pt_eth
 #input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/V01-03-02/eth
