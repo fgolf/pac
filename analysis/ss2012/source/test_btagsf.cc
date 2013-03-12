@@ -22,7 +22,7 @@ try
     using namespace rt;
     using namespace at;
 
-    const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::hcp;
+    const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt;
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0;
     const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive;
 
@@ -41,12 +41,12 @@ try
     const bool is_fastsim = false;
     const at::Sample::value_type sample = Sample::ttw;
     //chain.Add("output/ttw_5323.root");
-    chain.Add("babies/hpt/ttw.root");
+    //chain.Add("babies/hpt/ttw.root");
+    chain.Add("output/ttw_full.root");
 
     //const bool is_fastsim = true;
     //const at::Sample::value_type sample = Sample::sbottomtop;
     //chain.Add("babies/mc/sbottomtop.root");
-    //chain.Add("babies/high_pt/sbottomtop.root");
 
     samesignbtag.Init(&chain);
     for (long entry = 0; entry != chain.GetEntries(); entry++)
@@ -56,7 +56,7 @@ try
 
         // selection
         if (not is_ss())                                                              {continue;}
-        if (njets() < 2)                                                              {continue;}
+        //if (njets() < 2)                                                              {continue;}
         if (not ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
 
         // new btag counts 
@@ -102,7 +102,7 @@ try
     hc.SetDrawOption("hist");
     hc["h_nbtags_sf_up"]->SetLineStyle(2);
     hc["h_nbtags_sf_dn"]->SetLineStyle(2);
-    rt::TH1Overlay overlay("# btagged-jets;# btags;Events", "lg::top sb::off");
+    rt::TH1Overlay overlay("# btagged-jets;# btags;Events", "lg::top sb::right");
     overlay.Add(hc["h_nbtags"      ], "Unscaled"        , kBlack, 2, 20, 1);
     overlay.Add(hc["h_nbtags_sf"   ], "SF Applied"      , kRed  , 2, 22, 1);
     overlay.Add(hc["h_nbtags_sf_up"], "Uncertainty Up"  , kBlue , 2, 24, 2);

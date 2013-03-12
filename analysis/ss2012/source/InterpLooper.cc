@@ -217,6 +217,7 @@ void InterpLooper::BookHists()
         hc.Add(new TH2F("h_syst"               , "h_syst"               , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_syst_jec"           , "h_syst_jec"           , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_syst_btag"          , "h_syst_btag"          , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_syst_met"           , "h_syst_met"           , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_exp"                , "h_exp"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
         hc.Add(new TH2F("h_obs"                , "h_obs"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
