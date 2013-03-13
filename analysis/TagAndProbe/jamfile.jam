@@ -1,0 +1,65 @@
+# jamfile for the ss 2012 analysis 
+# -------------------------------------------------------------------- #
+
+lib tp_tools
+ : # sources
+   ./source/LeptonTree.cc
+   ./source/LeptonTreeWrapper.cc
+   ./source/Measurement.cc
+	 ./source/PerformFits.cc
+   # dependent packages
+   /ROOT
+   /RooFit
+   /MiniFWLite//libMiniFWLite/<link>shared
+   /RootTools//RootTools/<link>static
+   /AnalysisTools//AnalysisTools/<link>static
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
+
+
+exe tp_make_plots
+ : # sources
+   #./source/PlotLooper.cc
+   ./source/tp_make_plots.cc
+   # dependent packages
+	 tp_tools/<link>static
+   /ROOT
+   /RooFit
+   /MiniFWLite//libMiniFWLite/<link>shared
+   /RootTools//RootTools/<link>static
+   /AnalysisTools//AnalysisTools/<link>static
+   /boost//program_options/<link>static
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
+
+exe test_fit
+ : # sources
+   ./macros/FitMassPlots.C
+   # dependent packages
+	 tp_tools/<link>static
+   /ROOT
+	 /RooFit
+   /RootTools//RootTools/<link>static
+   /SimpleTable//SimpleTable/<link>static
+   #/AnalysisTools//AnalysisTools/<link>static
+   #/boost//program_options/<link>static
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
+
+# install libs/exes
+# -------------------------------------------------------------- #
+
+default-install tp_make_plots ;
+default-install test_fit ;
