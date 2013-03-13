@@ -189,7 +189,6 @@ void InterpLooper::BookHists()
     {
         // convenience alias
         rt::TH1Container& hc = m_hist_container;
-        TH1::SetDefaultSumw2(true);
 
         // add denominator count
         //hc.Add(dynamic_cast<TH2F*>(h_den->Clone()));
@@ -202,24 +201,29 @@ void InterpLooper::BookHists()
         // For example: histogram named tt_hnJet_ee would be the Njet distribution
         // for the ee final state in the ttbar sample.
         // MAKE SURE TO CAL SUMW2 FOR EACH 1D HISTOGRAM BEFORE FILLING!!!!!!
+        TH1::SetDefaultSumw2(true);
+
+        // bin and label the axes
         SignalBinInfo bin_info = GetSignalBinInfo(m_sample);
-        hc.Add(new TH2F("h_den"                , "h_den"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_den_unweighted"     , "h_den_unweighted"     , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_num"                , "h_num"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_jup"                , "h_jup"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_jdown"              , "h_jdown"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_bup"                , "h_bup"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_bdown"              , "h_bdown"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_sf"                 , "h_sf"                 , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_df"                 , "h_df"                 , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_fakes"              , "h_fakes"              , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));    
-        hc.Add(new TH2F("h_eff"                , "h_eff"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_syst"               , "h_syst"               , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_syst_jec"           , "h_syst_jec"           , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_syst_btag"          , "h_syst_btag"          , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_syst_met"           , "h_syst_met"           , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_exp"                , "h_exp"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-        hc.Add(new TH2F("h_obs"                , "h_obs"                , bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        const string bin_label = GetSignalBinHistLabel(m_sample);
+
+        hc.Add(new TH2F("h_den"                , ("h_den "           + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_den_unweighted"     , ("h_den_unweighted "+ bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_num"                , ("h_num "           + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_jup"                , ("h_jup "           + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_jdown"              , ("h_jdown "         + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_bup"                , ("h_bup "           + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_bdown"              , ("h_bdown "         + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_sf"                 , ("h_sf "            + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_df"                 , ("h_df "            + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_fakes"              , ("h_fakes "         + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));    
+        hc.Add(new TH2F("h_eff"                , ("h_eff "           + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_syst"               , ("h_syst "          + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_syst_jec"           , ("h_syst_jec "      + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_syst_btag"          , ("h_syst_btag "     + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_syst_met"           , ("h_syst_met "      + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_exp"                , ("h_exp "           + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_obs"                , ("h_obs "           + bin_label).c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
         return;
     }
@@ -292,6 +296,7 @@ int InterpLooper::operator()(long event)
                 mlsp = -999999.0;
         }
            
+        // dilepton hyp type: 1 mm, 2 em, 3 ee
         const at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(dilep_type());
 
         // Weight Factors
@@ -327,6 +332,69 @@ int InterpLooper::operator()(long event)
 
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
+
+        if (hyp_type == DileptonHypType::static_size)
+        {
+            if (m_verbose) {cout << "failing valid hyp type" << endl;}
+            return 0;
+        }
+
+        // charge type
+        DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
+        if (is_ss()) {charge_type = DileptonChargeType::SS;}
+        if (is_sf()) {charge_type = DileptonChargeType::SF;}
+        if (is_df()) {charge_type = DileptonChargeType::DF;}
+        if (is_os()) {charge_type = DileptonChargeType::OS;}
+        if (charge_type == DileptonChargeType::static_size)
+        {
+            if (m_verbose) {cout << "failing valid charge type" << endl;}
+            return 0;
+        }
+
+        // lepton PT requirement
+        float mu_min_pt = 0.0;
+        float el_min_pt = 0.0;
+        switch(m_analysis_type)
+        {
+            case AnalysisType::high_pt:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::high_pt_eth:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::hcp:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+            case AnalysisType::low_pt:
+                mu_min_pt = 10.0;
+                el_min_pt = 10.0;
+                break;
+            case AnalysisType::vlow_pt:
+                mu_min_pt = 5.0;
+                el_min_pt = 10.0;
+                break;
+            case AnalysisType::higgsino:
+                mu_min_pt = 10.;
+                el_min_pt = 10.;
+                break;
+            default:
+                mu_min_pt = 20.0;
+                el_min_pt = 20.0;
+                break;
+        }
+        if (lep1_p4().pt() < (abs(lep1_pdgid()==11) ? el_min_pt : mu_min_pt))
+        {
+            if (m_verbose) {cout << "failing minimum lep1 pT" << endl;}
+            return 0;
+        }
+        if (lep2_p4().pt() < (abs(lep2_pdgid()==11) ? el_min_pt : mu_min_pt))
+        {
+            if (m_verbose) {cout << "failing minimum lep2 pT" << endl;}
+            return 0;
+        }
 
         // only keep MC matched events (MC only)
         const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0));
@@ -432,7 +500,7 @@ int InterpLooper::operator()(long event)
         }
         else if (is_sf())
         {
-            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::base))
+            if (true_ss_event && PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::base))
             {
                 const float fr1 = lep1_is_fo() * GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
                 const float fr2 = lep2_is_fo() * GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
@@ -440,7 +508,7 @@ int InterpLooper::operator()(long event)
                 rt::Fill2D(hc["h_sf"], m0, m12, evt_weight * sf_weight);
             }
         }
-        else if (is_df())
+        else if (true_ss_event && is_df())
         {
             if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::base))
             {
@@ -734,7 +802,7 @@ void InterpLooper::CalculateEfficiency()
                 float eff = 0.0;
                 if (num >= 0.0)
                 {
-                    eff = (num - fakes) / den;  // central value of eps*A*BR
+                    eff = fabs(num - fakes) / den;  // central value of eps*A*BR
                 }
                 hc["h_eff"]->SetBinContent(ix, iy, eff);
             }

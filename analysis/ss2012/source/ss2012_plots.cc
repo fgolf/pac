@@ -195,11 +195,11 @@ int main(int argc, char* argv[])
         cout << "processing "  << sample_name << endl;
         sample    = at::GetSampleFromName(sample_name);
         is_data   = (at::GetSampleInfo(sample).type == at::SampleType::data);
-        is_signal = false; // not used 
+        is_signal = (at::GetSampleInfo(sample).type == at::SampleType::susy);
         if (input_file.empty())
         {
             const string short_name = ati.short_name.c_str();
-            input_file = Form("babies/%s/%s.root", short_name.c_str(), sample_name.c_str());
+            input_file = Form("babies/%s/%s.root", (is_signal ? "signal" : short_name.c_str()), sample_name.c_str());
             if (verbose) {cout << "input file is " << input_file << endl;}
             switch (sample)
             {

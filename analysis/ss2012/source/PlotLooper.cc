@@ -700,7 +700,8 @@ int PlotLooper::operator()(long event)
         // only keep MC matched events (MC only)
         const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
-        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc)
+        const bool is_signal_mc  = (at::GetSampleInfo(m_sample).type == at::SampleType::susy);
+        if ((not is_real_data()) && (not true_ss_event) && (is_rare_mc || is_signal_mc))
         {
             if (m_verbose) {cout << "failing MC truth matching" << endl;}
             return 0;
@@ -869,26 +870,33 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
-        // apply gamma*/upsilon veto
-        //bool has_gamma_cand = false;
-        //if (has_gamma_cand)
-        //{
-        //    return 0;
-        //}
+        // if the value of m_m_sparm0 negative, this check is skipped
+        if (m_sparm0 >= 0.0f && not rt::is_equal(m_sparm0, sparm0()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm0 check: %s, %1.2f != %1.2f", sparm0_name().Data(), m_sparm0, sparm0()) << endl;}
+            return 0;
+        }
 
-        // select m_gluino and m_lsp
-        //if 
-        //(
-        //  m_sample == at::Sample::t1tttt || 
-        //    m_sample == at::Sample::t1tttt_fastsim ||
-        //    m_sample == at::Sample::sbottomtop
-        //)
-        //{
-        //    if (!rt::is_equal(m_sparm0, sparm0()) || !rt::is_equal(m_sparm1, sparm1()))
-        //    {
-        //        return 0;
-        //    }
-        //}
+        // if the value of m_sparm1 is negative, this check is skipped
+        if (m_sparm1 >= 0.0f && not rt::is_equal(m_sparm1, sparm1()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm1 check: %s, %1.2f != %1.2f", sparm1_name().Data(), m_sparm1, sparm1()) << endl;}
+            return 0;
+        }
+
+        // if the value of m_sparm2 is negative, this check is skipped
+        if (m_sparm2 >= 0.0f && not rt::is_equal(m_sparm2, sparm2()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm2 check: %s, %1.2f != %1.2f", sparm2_name().Data(), m_sparm2, sparm2()) << endl;}
+            return 0;
+        }
+
+        // if the value of m_sparm3 is negative, this check is skipped
+        if (m_sparm3 >= 0.0f && not rt::is_equal(m_sparm3, sparm3()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm3 check: %s, %1.2f != %1.2f", sparm3_name().Data(), m_sparm3, sparm3()) << endl;}
+            return 0;
+        }
 
         // ttbar breakdown 
         switch (m_sample)
@@ -933,36 +941,8 @@ int PlotLooper::operator()(long event)
         // Weight Factors
         // ----------------------------------------------------------------------------------------------------------------------------//
 
-        // no scale factors
+        // xsec and luminosity scale factors
         float evt_weight = is_real_data() ? 1.0 : m_lumi * scale1fb();
-
-        // scale
-        //float vtxw = 1.0;
-        //if (m_do_vtx_reweight)
-        //{
-        //    vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
-        //}
-        //m_lumi = is_real_data() ? 1.0 : m_lumi;
-        ////float evt_weight = m_lumi * scale1fb() * vtxw;
-        //float evt_weight = m_lumi * vtxw;
-
-        //// T1tttt is not scaled properly (need make this automatic) 
-        //if (m_sample == at::Sample::t1tttt || m_sample == at::Sample::t1tttt_fastsim)
-        //{
-        //    if (rt::is_equal(sparm0(), 900.0f)) {evt_weight *= (0.060276 *1000)/10000.0;}
-        //    if (rt::is_equal(sparm0(), 950.0f)) {evt_weight *= (0.0381246*1000)/10000.0;}
-        //}
-        //// SBottomTop is not scaled properl (need make this automatic)
-        //else if (m_sample == at::Sample::sbottomtop)
-        //{
-        //    //evt_weight /= scale1fb();
-        //    if (rt::is_equal(sparm0(), 460.0f)) {evt_weight *= (0.152*1000)/10000.0;}
-        //    if (rt::is_equal(sparm0(), 380.0f)) {evt_weight *= (0.506*1000)/10000.0;}
-        //}
-        //else
-        //{
-        //    evt_weight *= scale1fb();
-        //}
 
         // apply scale factors
         if (m_do_scale_factors && not is_real_data())
@@ -980,7 +960,6 @@ int PlotLooper::operator()(long event)
         // name and title suffixes
         string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
         string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
-
 
         // SS
         if (is_ss())
