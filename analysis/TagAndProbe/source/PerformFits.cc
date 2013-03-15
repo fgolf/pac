@@ -9,6 +9,7 @@
 #include "TCanvas.h"
 #include "TH1.h"
 #include "TLatex.h"
+#include "TPaveText.h"
 
 // RooFit
 #include "RooRealVar.h"
@@ -20,13 +21,19 @@
 #include "RooFFTConvPdf.h"
 #include "RooCBShape.h"
 #include "RooAddPdf.h"
+#include "RooProdPdf.h"
 #include "RooExponential.h"
 #include "RooVoigtian.h"
 #include "RooExtendPdf.h"
 #include "RooSimultaneous.h"
 #include "RooCategory.h"
+#include "RooGenericPdf.h"
+#include "RooPolynomial.h"
+#include "RooChebychev.h"
 
+// Tools
 #include "rt/RootTools.h"
+#include "RooCMSShape.h"
 #include "Constants.h"
 
 using namespace std;
@@ -37,6 +44,7 @@ namespace tp
 {
     // PDF defintions
     // ----------------------------------------------------------------- //
+    // ----------------------------------------------------------------- //
 
     // simple base class to hold the PDF types
     struct PdfBase
@@ -44,6 +52,9 @@ namespace tp
         PdfBase() {}
         RooAbsPdfPtr model;
     };
+
+    // BreitWigner * Cyrtal Ball  
+    // ----------------------------------------------------------------- //
 
     struct BreitWignerCBPdf : public PdfBase
     {
@@ -63,14 +74,14 @@ namespace tp
         // z mass 
         string title = Form("mz%s", label.c_str());
         mz = new RooRealVar(title.c_str(), title.c_str(), 91, 80, 100, "GeV");
-        mz->setVal(91.1876);
-        mz->setConstant(kTRUE);
+        mz->setVal(Mz);
+        //mz->setConstant(kTRUE);
 
         // z width
         title = Form("gammaz%s", label.c_str());
-        gammaz = new RooRealVar(title.c_str(), title.c_str(), 2.5, 0.1, 5, "GeV");
-        gammaz->setVal(2.4952);
-        gammaz->setConstant(kTRUE);
+        gammaz = new RooRealVar(title.c_str(), title.c_str(), 2.5, 0.1, 10, "GeV");
+        gammaz->setVal(GammaZ);
+        //gammaz->setConstant(kTRUE);
 
         // the BW
         title = Form("bw%s", label.c_str());
@@ -78,13 +89,49 @@ namespace tp
 
         // Crystal ball
         title = Form("mean%s"  , label.c_str()); mean  = new RooRealVar(title.c_str(), title.c_str(), 0 , -10 , 10);
-        title = Form("gammaz%s", label.c_str()); sigma = new RooRealVar(title.c_str(), title.c_str(), 1 , 0.1 , 5);
+        title = Form("gammaz%s", label.c_str()); sigma = new RooRealVar(title.c_str(), title.c_str(), 1 , 0.1 , 10);
         title = Form("alpha%s" , label.c_str()); alpha = new RooRealVar(title.c_str(), title.c_str(), 5 , 0   , 20);
         title = Form("n%s"     , label.c_str()); n     = new RooRealVar(title.c_str(), title.c_str(), 1 , 0   , 10);
         title = Form("cb%s"    , label.c_str()); cb    = new RooCBShape(title.c_str(), title.c_str(), x, *mean , *sigma , *alpha , *n);
         title = Form("BWconvCB%s", label.c_str());
         model = RooAbsPdfPtr(new RooFFTConvPdf(title.c_str(), title.c_str(), x, *bw, *cb));
     }
+
+    // MC template 
+    // ----------------------------------------------------------------- //
+
+    struct MCTemplateConvGausPdf : public PdfBase
+    {
+        MCTemplateConvGausPdf(RooRealVar &m, TH1F* hist, const std::string& label, RooRealVar *sigma0=0, int intOrder=1);
+        RooRealVar  *mean;
+        RooRealVar  *sigma;
+        RooGaussian *gaus;
+        TH1F        *inHist;
+        RooDataHist *dataHist;
+        RooHistPdf  *histPdf;
+    };
+
+    MCTemplateConvGausPdf::MCTemplateConvGausPdf(RooRealVar &m, TH1F* hist, const std::string& label, RooRealVar *sigma0, int intOrder)
+    {  
+        char name[10];
+        sprintf(name,"%s",label.c_str());
+
+        char vname[50];  
+
+        sprintf(vname,"mean%s",name);  mean  = new RooRealVar(vname,vname,0,-10,10);
+        if(sigma0) { sigma = sigma0; }
+        else       { sprintf(vname,"sigma%s",name); sigma = new RooRealVar(vname,vname,2,0,5); }
+        sprintf(vname,"gaus%s",name);  gaus  = new RooGaussian(vname,vname,m,*mean,*sigma);
+
+        sprintf(vname,"inHist_%s",hist->GetName());
+        inHist = (TH1F*)hist->Clone(vname);
+        sprintf(vname,"dataHist%s",name); dataHist = new RooDataHist(vname,vname,RooArgSet(m),inHist);
+        sprintf(vname,"histPdf%s",name);  histPdf  = new RooHistPdf(vname,vname,m,*dataHist,intOrder);
+        sprintf(vname,"signal%s",name);   model    = new RooFFTConvPdf(vname,vname,m,*histPdf,*gaus);
+    }
+
+    // Exponential 
+    // ----------------------------------------------------------------- //
 
     struct ExponentialPdf : public PdfBase
     {
@@ -102,13 +149,230 @@ namespace tp
             model = RooAbsPdfPtr(new RooExponential(title.c_str(), title.c_str(), x, *t));
     }
 
-    // wrapper to get the PDFs
-    PdfBase* CreateModelPdf(Model::value_type model, RooRealVar &x, const std::string& label = "")
+    // eff * Exponential 
+    // ----------------------------------------------------------------- //
+
+    struct ErfExpPdf : public PdfBase
     {
+        ErfExpPdf(RooRealVar &m, const std::string& label);
+        RooRealVar *alfa;
+        RooRealVar *beta; 
+        RooRealVar *gamma; 
+        RooRealVar *peak;
+    };
+
+    ErfExpPdf::ErfExpPdf(RooRealVar& x, const std::string& label)
+    {
+        string title;
+        title = Form("alfa%s" , label.c_str());  alfa = new RooRealVar(title.c_str(), title.c_str(), 50  ,  5, 200);
+        title = Form("beta%s" , label.c_str());  beta = new RooRealVar(title.c_str(), title.c_str(), 0.01,  0, 10 );
+        title = Form("gamma%s", label.c_str()); gamma = new RooRealVar(title.c_str(), title.c_str(), 0.1 ,  0, 1  );
+        title = Form("peak%s" , label.c_str());  peak = new RooRealVar(title.c_str(), title.c_str(), Mz  , 85, 97 );
+        peak->setConstant(kTRUE);  
+
+        title = Form("background%s", label.c_str());
+        model = RooAbsPdfPtr(new RooCMSShape(title.c_str(), title.c_str(), x, *alfa, *beta, *gamma, *peak));
+    }
+
+    // ChecychevPdf 
+    // ----------------------------------------------------------------- //
+
+    struct ChebychevPdf : public PdfBase
+    {
+        ChebychevPdf (RooRealVar &m, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1; 
+    };
+
+    ChebychevPdf::ChebychevPdf(RooRealVar& x, const std::string& label)
+    {
+        string title;
+        title = Form("a0%s", label.c_str()); a0 = new RooRealVar(title.c_str(), title.c_str(), 0.0, -10, 10);
+        title = Form("a1%s", label.c_str()); a1 = new RooRealVar(title.c_str(), title.c_str(), 0.0, -10, 10);
+
+        title = Form("background%s", label.c_str());
+        model = RooAbsPdfPtr(new RooChebychev(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1)));
+    }
+
+    // Checychev * Exp
+    // ----------------------------------------------------------------- //
+
+    struct ChebyExpPdf : public PdfBase
+    {
+        ChebyExpPdf (RooRealVar &m, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1; 
+        RooRealVar *t; 
+        RooExponential *exp;
+        RooChebychev *chevychev;
+    };
+
+    ChebyExpPdf::ChebyExpPdf(RooRealVar& x, const std::string& label)
+    {
+        string title;
+        title = Form("a0%s", label.c_str()); a0 = new RooRealVar(title.c_str(), title.c_str(), 0.0, -10, 10);
+        title = Form("a1%s", label.c_str()); a1 = new RooRealVar(title.c_str(), title.c_str(), 0.0, -10, 10);
+        title = Form("t%s", label.c_str());   t = new RooRealVar(title.c_str(), title.c_str(), -0.1, -1.0, 0.0);
+
+        title = Form("exp%s", label.c_str()); 
+        exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
+
+        title = Form("background%s", label.c_str());
+        chevychev = new RooChebychev(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1));
+
+        title = Form("chevyexp%s", label.c_str());
+        model = RooAbsPdfPtr(new RooFFTConvPdf(title.c_str(), title.c_str(), x, *chevychev, *exp));
+    }
+
+    // Quadratic * exp (not working) 
+    // ----------------------------------------------------------------- //
+
+    // not working
+    struct QuadraticExpPdf : public PdfBase
+    {
+        QuadraticExpPdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+        RooRealVar *t;
+        RooExponential *exp;
+        RooPolynomial *poly;
+    };
+
+    // (1 + a1*m + a2*m^2) * exp{-t}
+    QuadraticExpPdf::QuadraticExpPdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()),   0.0);//, -10.0, 10.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()),   0.0);//, -10.0, 10.0);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()),   0.0);//, -10.0, 10.0);
+        t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -1e-6, -10.0, 0.000);
+
+        string title = Form("exp%s", l.c_str()); 
+        exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
+
+        title = Form("poly%s", l.c_str());
+        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2));
+
+        title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooProdPdf(title.c_str(), title.c_str(), RooArgList(*poly, *exp)));
+    }
+
+    // 4th order polynomial * exp 
+    // ----------------------------------------------------------------- //
+
+    struct Poly4ExpPdf : public PdfBase
+    {
+        Poly4ExpPdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+        RooRealVar *a3;
+        RooRealVar *a4;
+        RooRealVar *a5;
+        RooRealVar *a6;
+        RooRealVar *t;
+        RooExponential *exp;
+        RooPolynomial *poly;
+    };
+
+    Poly4ExpPdf::Poly4ExpPdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()), 0.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()), 0.0);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()), 0.0);
+        a3 = new RooRealVar(Form("a3%s", l.c_str()), Form("a3%s", l.c_str()), 0.0);
+        a4 = new RooRealVar(Form("a4%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
+        a5 = new RooRealVar(Form("a5%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
+        a6 = new RooRealVar(Form("a6%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
+        t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -1e-6, -10.0, 0.00);
+
+        // (a0 + a1*x + a2*x^2 + a3*x^3 + a4*x^4) * exp{-t}
+        string title = Form("exp%s", l.c_str()); 
+        exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
+
+        title = Form("poly%s", l.c_str());
+        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1));
+
+        title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooProdPdf(title.c_str(), title.c_str(), RooArgList(*poly, *exp)));
+    }
+
+    // 3rd order polynomial 
+    // ----------------------------------------------------------------- //
+
+    struct Poly3Pdf : public PdfBase
+    {
+        Poly3Pdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+        RooRealVar *a3;
+    };
+
+    Poly3Pdf::Poly3Pdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()),   0.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()),   0.0);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()),   0.0);
+        a3 = new RooRealVar(Form("a3%s", l.c_str()), Form("a3%s", l.c_str()),   0.0);
+
+        // (1 + a1*m + a2*m^2) * exp{-t}
+        string title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3)));
+    }
+
+    // 6th order polynomial 
+    // ----------------------------------------------------------------- //
+
+    struct Poly6Pdf : public PdfBase
+    {
+        Poly6Pdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+        RooRealVar *a3;
+        RooRealVar *a4;
+        RooRealVar *a5;
+        RooRealVar *a6;
+    };
+
+    Poly6Pdf::Poly6Pdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()), 0.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()), 0.0);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()), 0.0);
+        a3 = new RooRealVar(Form("a3%s", l.c_str()), Form("a3%s", l.c_str()), 0.0);
+        a4 = new RooRealVar(Form("a4%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
+        a5 = new RooRealVar(Form("a5%s", l.c_str()), Form("a5%s", l.c_str()), 0.0);
+        a6 = new RooRealVar(Form("a6%s", l.c_str()), Form("a6%s", l.c_str()), 0.0);
+
+        // (1 + a1*m + a2*m^2) * exp{-t}
+        string title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3, *a4, *a5, *a6)));
+    }
+
+    // wrapper to get the PDFs
+    // ----------------------------------------------------------------- //
+
+    PdfBase* CreateModelPdf(Model::value_type model, RooRealVar &x, const std::string& label = "", TH1F* const hist_template = NULL)
+    {
+        if (model == Model::MCTemplate && hist_template == NULL)
+        {
+            throw std::invalid_argument("[tp::CreateModelPdf] Error: template histogram is NULL!");
+        }
+
         switch (model)
         {
-            case Model::BreitWignerCB: return new BreitWignerCBPdf(x, label); break;
-            case Model::Exponential:   return new ExponentialPdf(x, label);   break;
+            case Model::BreitWignerCB: return new BreitWignerCBPdf(x, label);                     break; 
+            case Model::MCTemplate:    return new MCTemplateConvGausPdf(x, hist_template, label); break; 
+            case Model::Exponential:   return new ExponentialPdf(x, label);                       break; 
+            case Model::ErfExp:        return new ErfExpPdf(x, label);                            break; 
+            case Model::QuadraticExp:  return new QuadraticExpPdf(x, label);                      break; 
+            case Model::Chebychev:     return new ChebychevPdf(x, label);                         break; 
+            case Model::ChebyExp:      return new ChebyExpPdf(x, label);                          break; 
+            case Model::Poly3:         return new Poly3Pdf(x, label);                             break; 
+            case Model::Poly6:         return new Poly6Pdf(x, label);                             break; 
+            case Model::Poly4Exp:      return new Poly4ExpPdf(x, label);                          break; 
             default:
                 throw std::invalid_argument("[tp::CreateModelPdf] Error: model not supported");
         }
@@ -116,6 +380,9 @@ namespace tp
         // return NULL pointer (should never get here)
         return new PdfBase;
     }
+
+    // simple class to hold the results
+    // ----------------------------------------------------------------- //
 
     // construct
     Result::Result(float e, float eh, float el)
@@ -141,19 +408,45 @@ namespace tp
         return rt::pm(eff, std::max(eff_err_high, eff_err_low), "1.3");
     }
 
+    // helper function to create a tex box
+    TPaveText* CreateTextBox(double x1, double y1, double x2, double y2, const std::string& text, const Color_t color = kBlack)
+    {
+        TPaveText *text_box = new TPaveText(x1,y1,x2,y2,"NDC");
+        text_box->SetTextColor(color);
+        text_box->SetFillStyle(0);
+        text_box->SetBorderSize(0);
+        text_box->SetTextAlign(12);
+        text_box->AddText(text.c_str());
+        return text_box;
+    }
 
     // Peform the fit
     Result PerformSimultaneousFit
     (
-        //const Model::value_type model, 
+        const Model::value_type sig_pass_model, 
+        const Model::value_type sig_fail_model, 
+        const Model::value_type bkg_pass_model, 
+        const Model::value_type bkg_fail_model, 
         const TH1* const h_pass, 
         const TH1* const h_fail,
         const std::string pt_label, 
         const std::string eta_label, 
         const float mlow,
-        const float mhigh
+        const float mhigh,
+        TH1F* const h_pass_template,
+        TH1F* const h_fail_template
     )
     {
+        // test template hist's existence
+        if (sig_pass_model == Model::MCTemplate && h_pass_template == NULL)
+        {
+            throw std::invalid_argument("[tp::PerformSumultaneousFit] Error: pass template histogram is NULL!");
+        }
+        if (sig_fail_model == Model::MCTemplate && h_fail_template == NULL)
+        {
+            throw std::invalid_argument("[tp::PerformSumultaneousFit] Error: fail template histogram is NULL!");
+        }
+
         // independent mass var
         RooRealVar mass("mass", "mass", mlow, mhigh, "GeV");
 
@@ -163,16 +456,16 @@ namespace tp
         sample.defineType("pail",2);
 
         // signal model (need ptr for polymorphism to work -- references for convenience)
-        PdfBase* spass_model_ptr = CreateModelPdf(Model::BreitWignerCB, mass, "_pass");
-        PdfBase* sfail_model_ptr = CreateModelPdf(Model::BreitWignerCB, mass, "_fail");
-        RooAbsPdf& spass_model = *(spass_model_ptr->model);
-        RooAbsPdf& sfail_model = *(sfail_model_ptr->model);
+        PdfBase* spass_model_ptr = CreateModelPdf(sig_pass_model, mass, "_pass", h_pass_template);
+        PdfBase* sfail_model_ptr = CreateModelPdf(sig_fail_model, mass, "_fail", h_fail_template);
+        RooAbsPdf& spass_model   = *(spass_model_ptr->model);
+        RooAbsPdf& sfail_model   = *(sfail_model_ptr->model);
 
         // background model (need ptr for polymorphism to work -- references for convenience)
-        PdfBase* bpass_model_ptr = CreateModelPdf(Model::Exponential,  mass, "_pass");
-        PdfBase* bfail_model_ptr = CreateModelPdf(Model::Exponential,  mass, "_fail");
-        RooAbsPdf& bpass_model = *(bpass_model_ptr->model);
-        RooAbsPdf& bfail_model = *(bfail_model_ptr->model);
+        PdfBase* bpass_model_ptr = CreateModelPdf(bkg_pass_model, mass, "_pass");
+        PdfBase* bfail_model_ptr = CreateModelPdf(bkg_fail_model, mass, "_fail");
+        RooAbsPdf& bpass_model   = *(bpass_model_ptr->model);
+        RooAbsPdf& bfail_model   = *(bfail_model_ptr->model);
 
         // count maximums
         double nsig_max      = h_pass->Integral() + h_fail->Integral();
@@ -204,44 +497,45 @@ namespace tp
         RooSimultaneous total_pdf("total_pdf","total_pdf",sample);
         total_pdf.addPdf(model_pass, "pass");  
         total_pdf.addPdf(model_fail, "fail");
-        total_pdf.fitTo(data_comb, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
+
+        // to the fit
+        RooFitResult *roo_fit_result = total_pdf.fitTo(data_comb, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
 
         // results of eff
-        Result fit_result(eff.getVal(), eff.getErrorHi(), eff.getErrorLo()); 
+        Result simple_result(eff.getVal(), eff.getErrorHi(), eff.getErrorLo()); 
   
         // passing plot
-        fit_result.cpass->cd(); 
+        simple_result.cpass->cd(); 
         RooPlot *mframe_pass = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/tp::MassBinWidth)));
         data_pass.plotOn(mframe_pass, RooFit::MarkerStyle(kFullCircle), RooFit::MarkerSize(0.8), RooFit::DrawOption("ZP"));
         model_pass.plotOn(mframe_pass);
         model_pass.plotOn(mframe_pass,RooFit::Components("ebkg_pass"), RooFit::LineStyle(kDashed), RooFit::LineColor(kRed));
+        mframe_pass->SetTitle("Passing Probes");
         mframe_pass->Draw();
-        TLatex pt_box(0.21, 0.85, pt_label.c_str());
-        pt_box.Draw();
-//   plotPass.AddTextBox(binlabelx,0.21,0.85,0.51,0.90,0,kBlack,-1);
-//   if((name.CompareTo("etapt")==0) || (name.CompareTo("etaphi")==0)) {
-//     plotPass.AddTextBox(binlabely,0.21,0.80,0.51,0.85,0,kBlack,-1);        
-//     plotPass.AddTextBox(yield,0.21,0.76,0.51,0.80,0,kBlack,-1);    
-//   } else {
-//     plotPass.AddTextBox(yield,0.21,0.81,0.51,0.85,0,kBlack,-1);
-//   }
-//   plotPass.AddTextBox(effstr,0.70,0.85,0.94,0.90,0,kBlack,-1);
-//   if(bkgpass>0)
-//     plotPass.AddTextBox(0.70,0.68,0.94,0.83,0,kBlack,-1,2,nsigstr,nbkgstr);//,chi2str);
-//   else
-//     plotPass.AddTextBox(0.70,0.73,0.94,0.83,0,kBlack,-1,1,nsigstr);//,chi2str);
-//      plotPass.Draw(cpass,kTRUE,format);
+        TPaveText *pt_box        = CreateTextBox(0.15, 0.80, 0.41, 0.85, pt_label ); pt_box->Draw();
+        TPaveText *eta_box       = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
+        TPaveText *npass_box     = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_pass_max)); npass_box->Draw();
+        TPaveText *eff_box       = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.str()); eff_box->Draw();
+        TPaveText *nsig_pass_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{sig} = %1.0f #pm %1.0f", nsig_pass.getVal(), nsig_pass.getPropagatedError(*roo_fit_result))); nsig_pass_box->Draw();
+        TPaveText *nbkg_pass_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{bkg} = %1.0f #pm %1.0f", nbkg_pass.getVal(), nbkg_pass.getPropagatedError(*roo_fit_result))); nbkg_pass_box->Draw();
 
         // failing plot
-        fit_result.cfail->cd(); 
+        simple_result.cfail->cd(); 
         RooPlot *mframe_fail = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/tp::MassBinWidth)));
         data_fail.plotOn(mframe_fail, RooFit::MarkerStyle(kFullCircle), RooFit::MarkerSize(0.8), RooFit::DrawOption("ZP"));
         model_fail.plotOn(mframe_fail);
         model_fail.plotOn(mframe_fail,RooFit::Components("ebkg_fail"), RooFit::LineStyle(kDashed), RooFit::LineColor(kRed));
+        mframe_fail->SetTitle("Failing Probes");
         mframe_fail->Draw();
+        pt_box->Draw();
+        eta_box->Draw();
+        TPaveText *nfail_box     = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_fail_max)); nfail_box->Draw();
+        eff_box->Draw();
+        TPaveText *nsig_fail_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{sig} = %1.0f #pm %1.0f", nsig_fail.getVal(), nsig_fail.getPropagatedError(*roo_fit_result))); nsig_fail_box->Draw();
+        TPaveText *nbkg_fail_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{bkg} = %1.0f #pm %1.0f", nbkg_fail.getVal(), nbkg_fail.getPropagatedError(*roo_fit_result))); nbkg_fail_box->Draw();
 
         // done 
-        return fit_result;
+        return simple_result;
     }
 
     // Peform the fit
@@ -262,19 +556,24 @@ namespace tp
         double num_total = num_pass + num_fail;
         double eff_total = num_pass/(num_pass + num_total);
         double err_total = sqrt(eff_total * (1.0 - eff_total)/num_total); // binomial
+        Result simple_result(num_pass/num_total, err_total, err_total); // taking symmetric for now
 
-        Result fit_result;
-        fit_result.eff = num_pass/num_total;
-        fit_result.eff_err_low  = err_total;
-        fit_result.eff_err_high = err_total;
-
-        fit_result.cpass->cd();
+        // labels not working :( -- fixme!
+        simple_result.cpass->cd();
+        TPaveText *pt_box    = CreateTextBox(0.15, 0.80, 0.41, 0.85, pt_label ); pt_box->Draw();
+        TPaveText *eta_box   = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
+        TPaveText *npass_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", num_pass)); npass_box->Draw();
+        TPaveText *eff_box   = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.str()); eff_box->Draw();
         h_pass->Draw();
 
-        fit_result.cfail->cd();
+        simple_result.cfail->cd();
+        pt_box->Draw();
+        eta_box->Draw();
+        TPaveText *nfail_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", num_fail)); nfail_box->Draw();
+        eff_box->Draw();
         h_fail->Draw();
 
-        return fit_result;
+        return simple_result;
     }
 
 } // namespace tp

@@ -13,7 +13,16 @@ namespace tp
         enum value_type
         {
             BreitWignerCB,
+            MCTemplate,
             Exponential,
+            ErfExp,
+            ErfPolyExp,
+            QuadraticExp,
+            Poly3,
+            Poly6,
+            Poly4Exp,
+            Chebychev,
+            ChebyExp,
             static_size
         };
     };
@@ -38,14 +47,18 @@ namespace tp
     // Peform simultaneous fit
     Result PerformSimultaneousFit
     (
-        //const Model::value_type sig_model, 
-        //const Model::value_type bkg_model, 
+        const Model::value_type sig_pass_model, 
+        const Model::value_type sig_fail_model, 
+        const Model::value_type bkg_pass_model, 
+        const Model::value_type bkg_fail_model, 
         const TH1* const h_pass, 
         const TH1* const h_fail,
         const std::string pt_label, 
         const std::string eta_label, 
         const float mlow = 60.0,
-        const float mhigh = 120.0
+        const float mhigh = 120.0,
+        TH1F* const h_pass_template = NULL,
+        TH1F* const h_fail_template = NULL
     );
 
     // Peform  

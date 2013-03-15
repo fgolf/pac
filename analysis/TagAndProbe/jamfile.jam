@@ -7,6 +7,14 @@ lib tp_tools
    ./source/LeptonTreeWrapper.cc
    ./source/Measurement.cc
 	 ./source/PerformFits.cc
+	 ./source/RooCMSShape.cc
+    [ rootcint Dict
+     : 
+       <include>./include
+       <include>./source
+       <header>RooCMSShape.h
+       <linkdef>LinkDef.h
+    ]
    # dependent packages
    /ROOT
    /RooFit
