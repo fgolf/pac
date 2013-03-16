@@ -342,13 +342,17 @@ void PrintCanvas(TCanvas* const canvas, const std::string& filename, const std::
         rt::mkdir(dirname + "/png", /*force=*/true);
         rt::mkdir(dirname + "/eps", /*force=*/true);
         rt::mkdir(dirname + "/pdf", /*force=*/true);
-        canvas->Print(Form("%s/png/%s.eps", dirname.c_str(), basename.c_str()));
-        canvas->Print(Form("%s/eps/%s.png", dirname.c_str(), basename.c_str()));
+        rt::CopyIndexPhp(dirname + "/png");
+        rt::CopyIndexPhp(dirname + "/eps");
+        rt::CopyIndexPhp(dirname + "/pdf");
+        canvas->Print(Form("%s/eps/%s.eps", dirname.c_str(), basename.c_str()));
+        canvas->Print(Form("%s/png/%s.png", dirname.c_str(), basename.c_str()));
         canvas->Print(Form("%s/pdf/%s.pdf", dirname.c_str(), basename.c_str()));
     }
     else
     {
         rt::mkdir(dirname + "/" + suffix, /*force=*/true);
+        rt::CopyIndexPhp(dirname + "/" + suffix);
         canvas->Print(Form("%s/%s/%s.%s", dirname.c_str(), suffix.c_str(), filename.c_str(), suffix.c_str()));
     }
 }
@@ -361,10 +365,6 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
     rt::TH1Container hc_mc(mc_filename); 
 
     // make the output dir
-    rt::mkdir("plots/" + output_path + "/id/png"  , /*force=*/true);
-    rt::mkdir("plots/" + output_path + "/iso/png" , /*force=*/true);
-    rt::mkdir("plots/" + output_path + "/both/png", /*force=*/true);
-    rt::CopyIndexPhp("plots/" + output_path);
 
     // hist for num counts
     rt::TH1Container hc;
