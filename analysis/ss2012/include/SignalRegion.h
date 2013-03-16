@@ -13,8 +13,8 @@ namespace ss
         enum value_type
         {
             // inclusive
-            sr0  = 0,  // baseline:  #jets>=2, if HT<500 then MET>30, HT>80/250 (high/low pT analysis),          lep_pt > 20/10, #jets>=2 (higgsino)
-            sr1  = 1,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT[200-400]                    ,          baseline + #nbtags==0    (higgsino)
+            sr0  = 0,  // baseline:  #jets>=2, if HT<500 then MET>30, HT>80/250 (high/low pT analysis), lep_pt > 20/10, #jets>=2 (higgsino)
+            sr1  = 1,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT[200-400], baseline + #nbtags==0    (higgsino)
             sr2  = 2,  // baseline + #jets>=2, #btags>=0, MET[50-120], HT>400
             sr3  = 3,  // baseline + #jets>=4, #btags>=0, MET[50-120], HT[200-400]
             sr4  = 4,  // baseline + #jets>=4, #btags>=0, MET[50-120], HT>400
@@ -42,11 +42,13 @@ namespace ss
             sr26 = 26, // baseline + #jets>=2, #btags>=2, MET>120, HT>400
             sr27 = 27, // baseline + #jets>=4, #btags>=2, MET>120, HT[200-400]
             sr28 = 28, // baseline + #jets>=4, #btags>=2, MET>120, HT>400
-            //sr29 = 29, // not used 
-            //sr30 = 30, // SS top 1: baseline with MET>30 (only implemented for highpt) 
-            //sr31 = 31, // SS top 1: baseline with MET>30, ++ (only implemented for highpt) 
-            //sr32 = 32, // RPV 1: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for highpt)2
-            //sr33 = 33, // RPV 2: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for highpt)2
+            sr29 = 29, // not used 
+            sr30 = 30, // SS top 1: baseline with MET>30 (only implemented for exclusive highpt) 
+            sr31 = 31, // SS top 1: baseline with MET>30, ++ (only implemented for exclusive highpt) 
+            sr32 = 32, // RPV 1: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for exclusive highpt)
+            sr33 = 33, // RPV 2: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for exclusive highpt)
+            sr34 = 34, // SS top 1: baseline with MET>30 (only implemented for exclusive highpt) 
+            sr35 = 35, // SS top 1: baseline with MET>30, ++ (only implemented for exclusive highpt) 
 
             // keep track of the size
             static_size

@@ -699,9 +699,11 @@ int PlotLooper::operator()(long event)
 
         // only keep MC matched events (MC only)
         const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool not_from_borc = not is_real_data() ? ((lep1_is_fromw()!=-1 && lep1_is_fromw()!=-2) && (lep2_is_fromw()!=-1 || lep2_is_fromw()!=-2) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
         const bool is_signal_mc  = (at::GetSampleInfo(m_sample).type == at::SampleType::susy);
-        if ((not is_real_data()) && (not true_ss_event) && (is_rare_mc || is_signal_mc))
+        const bool is_mc_matched = (m_sample==at::Sample::ttg ? not_from_borc : true_ss_event);
+        if ((not is_real_data()) && (not is_mc_matched) && (is_rare_mc || is_signal_mc))
         {
             if (m_verbose) {cout << "failing MC truth matching" << endl;}
             return 0;
@@ -996,7 +998,7 @@ int PlotLooper::operator()(long event)
         {
             const LorentzVector& p4  = lep1_is_fo() ? lep1_p4()    : lep2_p4();
             const int id             = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
-            if (is_real_data() || (!is_real_data() && true_ss_event))
+            if (is_real_data() || (!is_real_data() && is_mc_matched))
             {
                 if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
                 if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
@@ -1010,7 +1012,7 @@ int PlotLooper::operator()(long event)
             const LorentzVector& l2_p4 = lep2_p4();
             const int l1_id            = lep1_pdgid();
             const int l2_id            = lep2_pdgid();
-            if (is_real_data() || (!is_real_data() && true_ss_event))
+            if (is_real_data() || (!is_real_data() && is_mc_matched))
             {
                 at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
                 at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
@@ -1044,7 +1046,7 @@ int PlotLooper::operator()(long event)
         }
 
         //// dont't fill hists for MC if they are not truth matched (SS or DF only)
-        //if ((not is_real_data()) && (not true_ss_event) && (is_sf() || is_df()))
+        //if ((not is_real_data()) && (not is_mc_matched) && (is_sf() || is_df()))
         //{
         //    if (m_verbose) {cout << "leptons failing truth matching (MC only)" << endl;}
         //    //return 0;

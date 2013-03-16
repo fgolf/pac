@@ -510,7 +510,7 @@ int InterpLooper::operator()(long event)
         }
         else if (true_ss_event && is_df())
         {
-            if (PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::base))
+            if (true_ss_event && PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, YieldType::base))
             {
                 const float fr1 = GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
                 const float fr2 = GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());

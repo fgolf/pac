@@ -240,7 +240,14 @@ const ss::SignalRegionInfo s_HptInclSignalRegionInfos[] =
         "sr28: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
-    }
+    },
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 // low pT, inclusive 
@@ -477,6 +484,62 @@ const ss::SignalRegionInfo s_LptInclSignalRegionInfos[] =
         "sr28: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr29",
+        // title
+        "sr29: not used"
+        // latex
+        "sr29: not used"
+    },
+    {
+        // name
+        "sr30",
+        // title
+        "SSTop1: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr31",
+        // title
+        "SSTop2: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}, ++$"
+    },
+    {
+        // name
+        "sr32",
+        // title
+        "sr32: # jets #geq 2, # btags #geq 0, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr33",
+        // title
+        "sr33: # jets #geq 2, # btags = 1, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr33",
+        // title
+        "sr33: # jets #geq 2, # btags = 1, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr34",
+        // title
+        "sr34: # jets #geq 2, # btags = 1, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV, ++",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$, ++"
     }
 };
 
@@ -584,7 +647,14 @@ const ss::SignalRegionInfo s_HcpInclSignalRegionInfos[] =
     {"sr25", "not used", "not used"},
     {"sr26", "not used", "not used"},
     {"sr27", "not used", "not used"},
-    {"sr28", "not used", "not used"}
+    {"sr28", "not used", "not used"},
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 const ss::SignalRegionInfo s_HiggsinoInclSignalRegionInfos[] = 
@@ -631,7 +701,14 @@ const ss::SignalRegionInfo s_HiggsinoInclSignalRegionInfos[] =
     {"sr25", "not used", "not used"},
     {"sr26", "not used", "not used"},
     {"sr27", "not used", "not used"},
-    {"sr28", "not used", "not used"}
+    {"sr28", "not used", "not used"},
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 // exclusive signal regions infos
@@ -871,7 +948,14 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         "sr28: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
-    }
+    },
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 // low pT, exclusive
@@ -1108,7 +1192,14 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         "sr28: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
-    }
+    },
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 // very low pT, exclusive
@@ -1180,7 +1271,14 @@ const ss::SignalRegionInfo s_HcpExclSignalRegionInfos[] =
     {"sr25", "not used", "not used"},
     {"sr26", "not used", "not used"},
     {"sr27", "not used", "not used"},
-    {"sr28", "not used", "not used"}
+    {"sr28", "not used", "not used"},
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 // HCP, exclusive
@@ -1221,7 +1319,14 @@ const ss::SignalRegionInfo s_HiggsinoExclSignalRegionInfos[] =
     {"sr25", "not used", "not used"},
     {"sr26", "not used", "not used"},
     {"sr27", "not used", "not used"},
-    {"sr28", "not used", "not used"}
+    {"sr28", "not used", "not used"},
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 
@@ -1445,55 +1550,55 @@ namespace ss
         float ht    = ssb::ht();
         float met   = ssb::pfmet();
 
-        if (not ssb::is_real_data())
-        {
-            // jet scale up/down
-            switch(jec_yield_type)
-            {
-                case at::YieldType::up:
-                    njets  = ssb::njets_up();
-                    nbtags = ssb::nbtags_reweighted_jec_up();
-                    ht     = ssb::ht_up();
-                    met    = ssb::pfmet_up();
-                    break;
-                case at::YieldType::down:
-                    njets  = ssb::njets_dn();
-                    nbtags = ssb::nbtags_reweighted_jec_dn();
-                    ht     = ssb::ht_dn();
-                    met    = ssb::pfmet_dn();
-                    break;
-                case at::YieldType::base:
-                    njets  = ssb::njets();
-                    nbtags = ssb::nbtags_reweighted();
-                    ht     = ssb::ht();
-                    met    = ssb::pfmet();
-                    break;
-                default:
-                    njets  = ssb::njets();
-                    nbtags = ssb::nbtags_reweighted();
-                    ht     = ssb::ht();
-                    met    = ssb::pfmet();
-                    break;
-            }
-
-            // btag scale up/down
-            // this will overide the nbtags setting above
-            switch(btag_yield_type)
-            {
-                case at::YieldType::up:
-                    nbtags = ssb::nbtags_reweighted_up();
-                    break;
-                case at::YieldType::down:
-                    nbtags = ssb::nbtags_reweighted_dn();
-                    break;
-                case at::YieldType::base:
-                    nbtags = ssb::nbtags_reweighted();
-                    break;
-                default:
-                    nbtags = ssb::nbtags_reweighted();
-                    break;
-            }
-        }
+         if (not ssb::is_real_data())
+         {
+             // jet scale up/down
+             switch(jec_yield_type)
+             {
+                 case at::YieldType::up:
+                     njets  = ssb::njets_up();
+                     nbtags = ssb::nbtags_reweighted_jec_up();
+                     ht     = ssb::ht_up();
+                     met    = ssb::pfmet_up();
+                     break;
+                 case at::YieldType::down:
+                     njets  = ssb::njets_dn();
+                     nbtags = ssb::nbtags_reweighted_jec_dn();
+                     ht     = ssb::ht_dn();
+                     met    = ssb::pfmet_dn();
+                     break;
+                 case at::YieldType::base:
+                     njets  = ssb::njets();
+                     nbtags = ssb::nbtags_reweighted();
+                     ht     = ssb::ht();
+                     met    = ssb::pfmet();
+                     break;
+                 default:
+                     njets  = ssb::njets();
+                     nbtags = ssb::nbtags_reweighted();
+                     ht     = ssb::ht();
+                     met    = ssb::pfmet();
+                     break;
+             }
+ 
+             // btag scale up/down
+             // this will overide the nbtags setting above
+             switch(btag_yield_type)
+             {
+                 case at::YieldType::up:
+                     nbtags = ssb::nbtags_reweighted_up();
+                     break;
+                 case at::YieldType::down:
+                     nbtags = ssb::nbtags_reweighted_dn();
+                     break;
+                 case at::YieldType::base:
+                     nbtags = ssb::nbtags_reweighted();
+                     break;
+                 default:
+                     nbtags = ssb::nbtags_reweighted();
+                     break;
+             }
+         }
 
         // high pt
         if (anal_type==AnalysisType::high_pt_eth || anal_type==AnalysisType::high_pt)
@@ -1534,6 +1639,13 @@ namespace ss
                     case SignalRegion::sr26: return (baseline && nbtags>=2 && njets>=2 && ht>400 && met>120);
                     case SignalRegion::sr27: return (baseline && nbtags>=2 && njets>=4 && ht>200 && met>120);
                     case SignalRegion::sr28: return (baseline && nbtags>=2 && njets>=4 && ht>400 && met>120);
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (false); // not used --> default is to fail
+                    case SignalRegion::sr31: return (false); // not used --> default is to fail
+                    case SignalRegion::sr32: return (false); // not used --> default is to fail
+                    case SignalRegion::sr33: return (false); // not used --> default is to fail
+                    case SignalRegion::sr34: return (false); // not used --> default is to fail
+                    case SignalRegion::sr35: return (false); // not used --> default is to fail
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
@@ -1570,6 +1682,13 @@ namespace ss
                     case SignalRegion::sr26: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
                     case SignalRegion::sr27: return (baseline && nbtags>=2 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
                     case SignalRegion::sr28: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (njets>=2 && nbtags>=2 && ht>80  && met>30                 );
+                    case SignalRegion::sr31: return (njets>=2 && nbtags>=2 && ht>80  && met>30  && ssb::is_pp());
+                    case SignalRegion::sr32: return (njets>=2 && nbtags>=0 && ht>500 && met>0                  );
+                    case SignalRegion::sr33: return (njets>=2 && nbtags>=2 && ht>500 && met>0                  );
+                    case SignalRegion::sr34: return (njets>=2 && nbtags==1 && ht>80  && met>30                 );
+                    case SignalRegion::sr35: return (njets>=2 && nbtags==1 && ht>80  && met>30  && ssb::is_pp());
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
@@ -1614,6 +1733,13 @@ namespace ss
                     case SignalRegion::sr26: return (baseline && njets>=2 && nbtags>=2 && ht>400 && met>120);
                     case SignalRegion::sr27: return (baseline && njets>=4 && nbtags>=2 && ht>250 && met>120);
                     case SignalRegion::sr28: return (baseline && njets>=4 && nbtags>=2 && ht>400 && met>120);
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (false); // not used --> default is to fail
+                    case SignalRegion::sr31: return (false); // not used --> default is to fail
+                    case SignalRegion::sr32: return (false); // not used --> default is to fail
+                    case SignalRegion::sr33: return (false); // not used --> default is to fail
+                    case SignalRegion::sr34: return (false); // not used --> default is to fail
+                    case SignalRegion::sr35: return (false); // not used --> default is to fail
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
@@ -1650,6 +1776,13 @@ namespace ss
                     case SignalRegion::sr26: return (baseline && nbtags>=2 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
                     case SignalRegion::sr27: return (baseline && nbtags>=2 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
                     case SignalRegion::sr28: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (false); // not used --> default is to fail
+                    case SignalRegion::sr31: return (false); // not used --> default is to fail
+                    case SignalRegion::sr32: return (false); // not used --> default is to fail
+                    case SignalRegion::sr33: return (false); // not used --> default is to fail
+                    case SignalRegion::sr34: return (false); // not used --> default is to fail
+                    case SignalRegion::sr35: return (false); // not used --> default is to fail
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
@@ -1661,35 +1794,42 @@ namespace ss
             {
                 switch (signal_region)
                 {
-                    case SignalRegion::sr0  : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 0  );
-                    case SignalRegion::sr1  : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 30 );
-                    case SignalRegion::sr2  : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 30 && ssb::is_pp());
-                    case SignalRegion::sr3  : return (nbtags >= 2 && njets>= 4 && ht > 200 && met > 120);
-                    case SignalRegion::sr4  : return (nbtags >= 2 && njets>= 4 && ht > 200 && met > 50 );
-                    case SignalRegion::sr5  : return (nbtags >= 2 && njets>= 4 && ht > 320 && met > 50 );
-                    case SignalRegion::sr6  : return (nbtags >= 2 && njets>= 4 && ht > 320 && met > 120);
-                    case SignalRegion::sr7  : return (nbtags >= 2 && njets>= 2 && ht > 200 && met > 50);
-                    case SignalRegion::sr8  : return (nbtags >= 2 && njets>= 4 && ht > 320 && met > 0  );
-                    case SignalRegion::sr9  : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 30 && ssb::is_mm());
-                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr0 : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 0  );
+                    case SignalRegion::sr1 : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 30 );
+                    case SignalRegion::sr2 : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 30 && ssb::is_pp());
+                    case SignalRegion::sr3 : return (nbtags >= 2 && njets>= 4 && ht > 200 && met > 120);
+                    case SignalRegion::sr4 : return (nbtags >= 2 && njets>= 4 && ht > 200 && met > 50 );
+                    case SignalRegion::sr5 : return (nbtags >= 2 && njets>= 4 && ht > 320 && met > 50 );
+                    case SignalRegion::sr6 : return (nbtags >= 2 && njets>= 4 && ht > 320 && met > 120);
+                    case SignalRegion::sr7 : return (nbtags >= 2 && njets>= 2 && ht > 200 && met > 50);
+                    case SignalRegion::sr8 : return (nbtags >= 2 && njets>= 4 && ht > 320 && met > 0  );
+                    case SignalRegion::sr9 : return (nbtags >= 2 && njets>= 2 && ht > 80  && met > 30 && ssb::is_mm());
+                    case SignalRegion::sr10: return (false); // not used --> default is to fail
+                    case SignalRegion::sr11: return (false); // not used --> default is to fail
+                    case SignalRegion::sr12: return (false); // not used --> default is to fail
+                    case SignalRegion::sr13: return (false); // not used --> default is to fail
+                    case SignalRegion::sr14: return (false); // not used --> default is to fail
+                    case SignalRegion::sr15: return (false); // not used --> default is to fail
+                    case SignalRegion::sr16: return (false); // not used --> default is to fail
+                    case SignalRegion::sr17: return (false); // not used --> default is to fail
+                    case SignalRegion::sr18: return (false); // not used --> default is to fail
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (false); // not used --> default is to fail
+                    case SignalRegion::sr21: return (false); // not used --> default is to fail
+                    case SignalRegion::sr22: return (false); // not used --> default is to fail
+                    case SignalRegion::sr23: return (false); // not used --> default is to fail
+                    case SignalRegion::sr24: return (false); // not used --> default is to fail
+                    case SignalRegion::sr25: return (false); // not used --> default is to fail
+                    case SignalRegion::sr26: return (false); // not used --> default is to fail
+                    case SignalRegion::sr27: return (false); // not used --> default is to fail
+                    case SignalRegion::sr28: return (false); // not used --> default is to fail
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (false); // not used --> default is to fail
+                    case SignalRegion::sr31: return (false); // not used --> default is to fail
+                    case SignalRegion::sr32: return (false); // not used --> default is to fail
+                    case SignalRegion::sr33: return (false); // not used --> default is to fail
+                    case SignalRegion::sr34: return (false); // not used --> default is to fail
+                    case SignalRegion::sr35: return (false); // not used --> default is to fail
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 }
             }
@@ -1697,35 +1837,42 @@ namespace ss
             {
                 switch (signal_region)
                 {
-                    case SignalRegion::sr0  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr1  : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (50 < met && met < 120));
-                    case SignalRegion::sr2  : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (met > 120            ));
-                    case SignalRegion::sr3  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (50 < met && met < 120));
-                    case SignalRegion::sr4  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (met > 120            ));
-                    case SignalRegion::sr5  : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (0  < met && met < 50 ));
-                    case SignalRegion::sr6  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr7  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr8  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr9  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr0 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr1 : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (50 < met && met < 120));
+                    case SignalRegion::sr2 : return (nbtags >= 2 && njets >= 4 && (200 < ht && ht < 320) && (met > 120            ));
+                    case SignalRegion::sr3 : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (50 < met && met < 120));
+                    case SignalRegion::sr4 : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (met > 120            ));
+                    case SignalRegion::sr5 : return (nbtags >= 2 && njets >= 4 && (ht > 320            ) && (0  < met && met < 50 ));
+                    case SignalRegion::sr6 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr7 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr8 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr9 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10: return (false); // not used --> default is to fail
+                    case SignalRegion::sr11: return (false); // not used --> default is to fail
+                    case SignalRegion::sr12: return (false); // not used --> default is to fail
+                    case SignalRegion::sr13: return (false); // not used --> default is to fail
+                    case SignalRegion::sr14: return (false); // not used --> default is to fail
+                    case SignalRegion::sr15: return (false); // not used --> default is to fail
+                    case SignalRegion::sr16: return (false); // not used --> default is to fail
+                    case SignalRegion::sr17: return (false); // not used --> default is to fail
+                    case SignalRegion::sr18: return (false); // not used --> default is to fail
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (false); // not used --> default is to fail
+                    case SignalRegion::sr21: return (false); // not used --> default is to fail
+                    case SignalRegion::sr22: return (false); // not used --> default is to fail
+                    case SignalRegion::sr23: return (false); // not used --> default is to fail
+                    case SignalRegion::sr24: return (false); // not used --> default is to fail
+                    case SignalRegion::sr25: return (false); // not used --> default is to fail
+                    case SignalRegion::sr26: return (false); // not used --> default is to fail
+                    case SignalRegion::sr27: return (false); // not used --> default is to fail
+                    case SignalRegion::sr28: return (false); // not used --> default is to fail
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (false); // not used --> default is to fail
+                    case SignalRegion::sr31: return (false); // not used --> default is to fail
+                    case SignalRegion::sr32: return (false); // not used --> default is to fail
+                    case SignalRegion::sr33: return (false); // not used --> default is to fail
+                    case SignalRegion::sr34: return (false); // not used --> default is to fail
+                    case SignalRegion::sr35: return (false); // not used --> default is to fail
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 }
             }
@@ -1738,35 +1885,42 @@ namespace ss
             {
                 switch (signal_region)
                 {
-                    case SignalRegion::sr0  : return (baseline);
-                    case SignalRegion::sr1  : return (baseline && ssb::nbtags30() == 0);
-                    case SignalRegion::sr2  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr3  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr4  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr5  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr6  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr7  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr8  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr9  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr0 : return (baseline);
+                    case SignalRegion::sr1 : return (baseline && ssb::nbtags30() == 0);
+                    case SignalRegion::sr2 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr3 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr4 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr5 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr6 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr7 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr8 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr9 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10: return (false); // not used --> default is to fail
+                    case SignalRegion::sr11: return (false); // not used --> default is to fail
+                    case SignalRegion::sr12: return (false); // not used --> default is to fail
+                    case SignalRegion::sr13: return (false); // not used --> default is to fail
+                    case SignalRegion::sr14: return (false); // not used --> default is to fail
+                    case SignalRegion::sr15: return (false); // not used --> default is to fail
+                    case SignalRegion::sr16: return (false); // not used --> default is to fail
+                    case SignalRegion::sr17: return (false); // not used --> default is to fail
+                    case SignalRegion::sr18: return (false); // not used --> default is to fail
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (false); // not used --> default is to fail
+                    case SignalRegion::sr21: return (false); // not used --> default is to fail
+                    case SignalRegion::sr22: return (false); // not used --> default is to fail
+                    case SignalRegion::sr23: return (false); // not used --> default is to fail
+                    case SignalRegion::sr24: return (false); // not used --> default is to fail
+                    case SignalRegion::sr25: return (false); // not used --> default is to fail
+                    case SignalRegion::sr26: return (false); // not used --> default is to fail
+                    case SignalRegion::sr27: return (false); // not used --> default is to fail
+                    case SignalRegion::sr28: return (false); // not used --> default is to fail
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (false); // not used --> default is to fail
+                    case SignalRegion::sr31: return (false); // not used --> default is to fail
+                    case SignalRegion::sr32: return (false); // not used --> default is to fail
+                    case SignalRegion::sr33: return (false); // not used --> default is to fail
+                    case SignalRegion::sr34: return (false); // not used --> default is to fail
+                    case SignalRegion::sr35: return (false); // not used --> default is to fail
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
@@ -1774,35 +1928,42 @@ namespace ss
             {
                 switch (signal_region)
                 {
-                    case SignalRegion::sr0  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr1  : return (baseline);
-                    case SignalRegion::sr2  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr3  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr4  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr5  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr6  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr7  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr8  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr9  : return (false); // not used --> default is to fail
-                    case SignalRegion::sr10 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr11 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr12 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr13 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr14 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr15 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr16 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr17 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr18 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr19 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr20 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr21 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr22 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr23 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr24 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr25 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr26 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr27 : return (false); // not used --> default is to fail
-                    case SignalRegion::sr28 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr0 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr1 : return (baseline);
+                    case SignalRegion::sr2 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr3 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr4 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr5 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr6 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr7 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr8 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr9 : return (false); // not used --> default is to fail
+                    case SignalRegion::sr10: return (false); // not used --> default is to fail
+                    case SignalRegion::sr11: return (false); // not used --> default is to fail
+                    case SignalRegion::sr12: return (false); // not used --> default is to fail
+                    case SignalRegion::sr13: return (false); // not used --> default is to fail
+                    case SignalRegion::sr14: return (false); // not used --> default is to fail
+                    case SignalRegion::sr15: return (false); // not used --> default is to fail
+                    case SignalRegion::sr16: return (false); // not used --> default is to fail
+                    case SignalRegion::sr17: return (false); // not used --> default is to fail
+                    case SignalRegion::sr18: return (false); // not used --> default is to fail
+                    case SignalRegion::sr19: return (false); // not used --> default is to fail
+                    case SignalRegion::sr20: return (false); // not used --> default is to fail
+                    case SignalRegion::sr21: return (false); // not used --> default is to fail
+                    case SignalRegion::sr22: return (false); // not used --> default is to fail
+                    case SignalRegion::sr23: return (false); // not used --> default is to fail
+                    case SignalRegion::sr24: return (false); // not used --> default is to fail
+                    case SignalRegion::sr25: return (false); // not used --> default is to fail
+                    case SignalRegion::sr26: return (false); // not used --> default is to fail
+                    case SignalRegion::sr27: return (false); // not used --> default is to fail
+                    case SignalRegion::sr28: return (false); // not used --> default is to fail
+                    case SignalRegion::sr29: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (false); // not used --> default is to fail
+                    case SignalRegion::sr31: return (false); // not used --> default is to fail
+                    case SignalRegion::sr32: return (false); // not used --> default is to fail
+                    case SignalRegion::sr33: return (false); // not used --> default is to fail
+                    case SignalRegion::sr34: return (false); // not used --> default is to fail
+                    case SignalRegion::sr35: return (false); // not used --> default is to fail
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }

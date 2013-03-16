@@ -43,7 +43,7 @@ input_files="${input_files},${input_path}/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.r
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_hpt_19p49 high_pt $input_files
+merge data_hpt_19p5 high_pt $input_files
 
 # low pt 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/low_pt
@@ -60,7 +60,7 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_lpt_19p49 low_pt $input_files
+merge data_lpt_19p5 low_pt $input_files
 
 # very low pt 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/vlow_pt
@@ -77,7 +77,7 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_vpt_19p49 vlow_pt $input_files
+merge data_vpt_19p5 vlow_pt $input_files
 
 ## high_pt_eth
 #input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/V01-03-02/eth
