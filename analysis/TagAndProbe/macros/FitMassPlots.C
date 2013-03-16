@@ -339,16 +339,16 @@ void PrintCanvas(TCanvas* const canvas, const std::string& filename, const std::
     const std::string basename = rt::basename(filename);
     if (suffix == "all")
     {
-        rt::mkdir(dirname + "/png");
-        rt::mkdir(dirname + "/eps");
-        rt::mkdir(dirname + "/pdf");
+        rt::mkdir(dirname + "/png", /*force=*/true);
+        rt::mkdir(dirname + "/eps", /*force=*/true);
+        rt::mkdir(dirname + "/pdf", /*force=*/true);
         canvas->Print(Form("%s/png/%s.eps", dirname.c_str(), basename.c_str()));
         canvas->Print(Form("%s/eps/%s.png", dirname.c_str(), basename.c_str()));
         canvas->Print(Form("%s/pdf/%s.pdf", dirname.c_str(), basename.c_str()));
     }
     else
     {
-        rt::mkdir(dirname + "/" + suffix);
+        rt::mkdir(dirname + "/" + suffix, /*force=*/true);
         canvas->Print(Form("%s/%s/%s.%s", dirname.c_str(), suffix.c_str(), filename.c_str(), suffix.c_str()));
     }
 }
@@ -552,10 +552,10 @@ try
     hc_iso.Write (Form("plots/%s/iso/results.root" , output_label.c_str()));
     hc_both.Write(Form("plots/%s/both/results.root", output_label.c_str()));
 
-    rt::mkdir("tables/" + output_label + "/id");
-    rt::mkdir("tables/" + output_label + "/iso");
-    rt::mkdir("tables/" + output_label + "/prod");
-    rt::mkdir("tables/" + output_label + "/both");
+    rt::mkdir("tables/" + output_label + "/id"  , /*force=*/true);
+    rt::mkdir("tables/" + output_label + "/iso" , /*force=*/true);
+    rt::mkdir("tables/" + output_label + "/prod", /*force=*/true);
+    rt::mkdir("tables/" + output_label + "/both", /*force=*/true);
     t_id.saveAs   ("tables/" + output_label + "/id/sf.txt"  ); t_id.print();
     t_iso.saveAs  ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
     t_prod.saveAs ("tables/" + output_label + "/prod/sf.txt" ); t_iso.print();
