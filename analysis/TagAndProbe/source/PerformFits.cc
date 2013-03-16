@@ -385,27 +385,43 @@ namespace tp
     // ----------------------------------------------------------------- //
 
     // construct
-    Result::Result(float e, float eh, float el)
-        : eff(e)
-        , eff_err_high(eh)
-        , eff_err_low(el)
-        , cpass(new TCanvas("cpass", "cpass", 800, 600))
+    Result::Result(const float e, const float de, const float n, const float dn, const float d, const float dd)
+        : cpass(new TCanvas("cpass", "cpass", 800, 600))
         , cfail(new TCanvas("cfail", "cfail", 800, 600))
     {
+        eff.value = e;
+        eff.error = de;
+        num.value = n;
+        num.error = dn;
+        den.value = d;
+        den.error = dd;
     }
 
     Result::Result()
-        : eff(0)
-        , eff_err_high(0)
-        , eff_err_low(0)
-        , cpass(new TCanvas("cpass", "cpass", 800, 600))
+        : cpass(new TCanvas("cpass", "cpass", 800, 600))
         , cfail(new TCanvas("cfail", "cfail", 800, 600))
     {
+        eff.value = -999999.0;
+        eff.error = -999999.0;
+        num.value = -999999.0;
+        num.error = -999999.0;
+        den.value = -999999.0;
+        den.error = -999999.0;
     }
 
-    std::string Result::str() const
+    std::string Result::eff_str() const
     {
-        return rt::pm(eff, std::max(eff_err_high, eff_err_low), "1.3");
+        return rt::pm(eff.value, eff.value, "1.3");
+    }
+
+    std::string Result::num_str() const
+    {
+        return rt::pm(num.value, num.value, "1.3");
+    }
+
+    std::string Result::den_str() const
+    {
+        return rt::pm(den.value, den.value, "1.3");
     }
 
     // helper function to create a tex box
@@ -477,7 +493,8 @@ namespace tp
         RooRealVar nbkg_pass("nbkg_pass","Background count in PASS sample", 50, 0, nbkg_pass_max);
         RooRealVar nbkg_fail("nbkg_fail","Background count in FAIL sample", 0.1*nbkg_fail_max, 0.01, nbkg_fail_max);
         RooFormulaVar nsig_pass("nsig_pass" ,"eff*nsig"      , RooArgList(eff, nsig));
-        RooFormulaVar nsig_fail("nsign_fail","(1.0-eff)*nsig", RooArgList(eff, nsig));
+        RooFormulaVar nsig_fail("nsig_fail" ,"(1.0-eff)*nsig", RooArgList(eff, nsig));
+        RooFormulaVar ntot_pass("ntot_pass" ,"nsig_pass+nbkg_pass", RooArgList(nsig_pass, nbkg_pass));
 
         // efficiency counts
         RooExtendPdf esig_pass("esig_pass","esig_pass", spass_model, nsig_pass, "signalRange");
@@ -502,7 +519,15 @@ namespace tp
         RooFitResult *roo_fit_result = total_pdf.fitTo(data_comb, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
 
         // results of eff
-        Result simple_result(eff.getVal(), eff.getErrorHi(), eff.getErrorLo()); 
+        Result simple_result
+        (
+            eff.getVal(), 
+            max(eff.getErrorHi(), eff.getErrorLo()),
+            nsig_pass.getVal(), 
+            nsig_pass.getPropagatedError(*roo_fit_result),
+            ntot_pass.getVal(), 
+            ntot_pass.getPropagatedError(*roo_fit_result)
+        );
   
         // passing plot
         simple_result.cpass->cd(); 
@@ -515,7 +540,7 @@ namespace tp
         TPaveText *pt_box        = CreateTextBox(0.15, 0.80, 0.41, 0.85, pt_label ); pt_box->Draw();
         TPaveText *eta_box       = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
         TPaveText *npass_box     = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_pass_max)); npass_box->Draw();
-        TPaveText *eff_box       = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.str()); eff_box->Draw();
+        TPaveText *eff_box       = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.eff_str()); eff_box->Draw();
         TPaveText *nsig_pass_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{sig} = %1.0f #pm %1.0f", nsig_pass.getVal(), nsig_pass.getPropagatedError(*roo_fit_result))); nsig_pass_box->Draw();
         TPaveText *nbkg_pass_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{bkg} = %1.0f #pm %1.0f", nbkg_pass.getVal(), nbkg_pass.getPropagatedError(*roo_fit_result))); nbkg_pass_box->Draw();
 
@@ -551,19 +576,22 @@ namespace tp
     )
     {
         // connts
-        double num_pass  = h_pass->Integral();
-        double num_fail  = h_fail->Integral();
-        double num_total = num_pass + num_fail;
-        double eff_total = num_pass/(num_pass + num_total);
-        double err_total = sqrt(eff_total * (1.0 - eff_total)/num_total); // binomial
-        Result simple_result(num_pass/num_total, err_total, err_total); // taking symmetric for now
+        double num_pass      = h_pass->Integral();
+        double num_pass_err  = rt::IntegralAndError(h_pass).second;
+        double num_fail      = h_fail->Integral();
+        double num_fail_err  = rt::IntegralAndError(h_fail).second;
+        double num_total     = num_pass + num_fail;
+        double num_total_err = sqrt(num_pass_err*num_pass_err + num_fail_err*num_fail_err);
+        double eff           = num_pass/num_total;
+        double eff_err       = sqrt(eff * (1.0 - eff)/num_total); // binomial
+        Result simple_result(eff, eff_err, num_pass, num_pass_err, num_total, num_total_err); // taking symmetric for now
 
         // labels not working :( -- fixme!
         simple_result.cpass->cd();
         TPaveText *pt_box    = CreateTextBox(0.15, 0.80, 0.41, 0.85, pt_label ); pt_box->Draw();
         TPaveText *eta_box   = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
         TPaveText *npass_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", num_pass)); npass_box->Draw();
-        TPaveText *eff_box   = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.str()); eff_box->Draw();
+        TPaveText *eff_box   = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.eff_str()); eff_box->Draw();
         h_pass->Draw();
 
         simple_result.cfail->cd();

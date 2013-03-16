@@ -91,7 +91,7 @@ namespace tp
             // EGamma Denominator Isolation selections
             if (selection == Selection::EGammaDenIso)
             {
-                if (el_is_crack)            {return false;}
+                //if (el_is_crack)            {return false;}
                 if (not el_is_rand)         {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
@@ -113,7 +113,7 @@ namespace tp
             // EGamma Denominator ID selections
             if (selection == Selection::EGammaDenID)
             {
-                if (el_is_crack)            {return false;}
+                //if (el_is_crack)            {return false;}
                 if (not el_is_rand)         {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
@@ -134,7 +134,7 @@ namespace tp
             // EGamma Denominator Both selections
             if (selection == Selection::EGammaDenBoth)
             {
-                if (el_is_crack)            {return false;}
+                //if (el_is_crack)            {return false;}
                 if (not el_is_rand)         {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
@@ -160,7 +160,7 @@ namespace tp
             // EGamma Numerator Isolation selections
             if (selection == Selection::EGammaNum)
             {
-                if (el_is_crack)             {return false;}
+                //if (el_is_crack)             {return false;}
                 if (not el_passes_pt)        {return false;}
                 if (not el_passes_trig_tag)  {return false;}
                 if (not el_passes_id)        {return false;}

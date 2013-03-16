@@ -187,35 +187,41 @@ const tp::Model::value_type both_models[npt_bins][neta_bins][4] =
 };
 
 
-//CTable FitMassPlots(const std::string& data_filename = "", const std::string& mc_filename = "", const string& output_path = "test", const std::string& measurement = "id", const std::string& suffix = "eps")
-CTable FitMassPlots(const std::string& data_filename = "", const std::string& mc_filename = "", const string& output_path = "test", const tp::Model::value_type models[npt_bins][neta_bins][4] = id_models, const std::string& suffix = "eps")
+// returns the num/den hists
+rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::string& mc_filename = "", const string& output_path = "test", const tp::Model::value_type models[npt_bins][neta_bins][4] = id_models, const std::string& suffix = "eps")
 {
     // histograms
     rt::TH1Container hc_data(data_filename); 
     rt::TH1Container hc_mc(mc_filename); 
 
     // make the output dir
-    //rt::mkdir("plots/" + output_path + "/" + measurement, /*force=*/true);
-    //rt::CopyIndexPhp("plots/" + output_path+ "/" + measurement);
     rt::mkdir("plots/" + output_path, /*force=*/true);
     rt::CopyIndexPhp("plots/" + output_path);
-    
-    CTable t;
-    t.useTitle();
-    t.setTitle("data/MC efficiency and scale factor");
+
+    // hist for num counts
+    rt::TH1Container hc;
+    hc.Add(new TH2F("h_data_num", "Numerator Counts;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
+    hc.Add(new TH2F("h_mc_num"  , "Numerator Counts;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
+
+    // hist for den counts
+    hc.Add(new TH2F("h_data_den", "Denominator Counts;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
+    hc.Add(new TH2F("h_mc_den"  , "Denominator Counts;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
+
+    // hist for eff
+    hc.Add(new TH2F("h_data_eff", "Efficiency;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
+    hc.Add(new TH2F("h_mc_eff"  , "Efficiency;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
 
     //size_t pt_bin = 1;
     //size_t eta_bin = 1;
     for (size_t pt_bin = 0; pt_bin != npt_bins; pt_bin++)
-    //for (size_t pt_bin = 0; pt_bin != 1; pt_bin++)
+        //for (size_t pt_bin = 0; pt_bin != 1; pt_bin++)
     {
         const float pt_min = pt_bins[pt_bin];
         const float pt_max = pt_bins[pt_bin+1];
         const string pt_label = Form("%1.0f GeV < p_{T} < %1.0f GeV", pt_min, pt_max); 
-        t.setColLabel(pt_label, pt_bin);
 
         for (size_t eta_bin = 0; eta_bin != neta_bins; eta_bin++)
-        //for (size_t eta_bin = 0; eta_bin != 1; eta_bin++)
+            //for (size_t eta_bin = 0; eta_bin != 1; eta_bin++)
         {
             // set the models
             const tp::Model::value_type sig_pass_model = models[pt_bin][eta_bin][0];
@@ -226,7 +232,6 @@ CTable FitMassPlots(const std::string& data_filename = "", const std::string& mc
             const float eta_min = eta_bins[eta_bin];
             const float eta_max = eta_bins[eta_bin+1];
             const string eta_label = Form("%1.2f < |\\eta| < %1.2f", eta_min, eta_max); 
-            t.setRowLabel(eta_label, eta_bin);
 
             cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
             cout << Form("fitting for bin: %s %s -- pt%lu_eta%lu", pt_label.c_str(), eta_label.c_str(), pt_bin, eta_bin) << endl;
@@ -234,16 +239,17 @@ CTable FitMassPlots(const std::string& data_filename = "", const std::string& mc
 
             const string hist_pass_name = Form("h_pass_pt%lu_eta%lu", pt_bin, eta_bin);
             const string hist_fail_name = Form("h_fail_pt%lu_eta%lu", pt_bin, eta_bin);
-            
+
             TH1F* h_data_pass = dynamic_cast<TH1F*>(hc_data[hist_pass_name]);
             TH1F* h_data_fail = dynamic_cast<TH1F*>(hc_data[hist_fail_name]);
             TH1F* h_mc_pass   = dynamic_cast<TH1F*>(hc_mc  [hist_pass_name]);
             TH1F* h_mc_fail   = dynamic_cast<TH1F*>(hc_mc  [hist_fail_name]);
 
-            if (eta_bin != 2) // skip crack
+            //if (eta_bin != 2) // skip crack
             {
                 // do the fit
                 tp::Result dr = tp::PerformSimultaneousFit(sig_pass_model, sig_fail_model, bkg_pass_model, bkg_fail_model, h_data_pass, h_data_fail, pt_label, eta_label, mlow, mhigh, h_mc_pass, h_mc_fail);
+                //tp::Result dr = tp::PerformSimpleCount(h_data_pass, h_data_fail, pt_label, eta_label, mlow, mhigh);
                 dr.cpass->cd();
                 dr.cpass->Draw();
                 dr.cpass->Print(Form("plots/%s/p_data_pass_pt%lu_eta%lu.%s", output_path.c_str(), pt_bin, eta_bin, suffix.c_str()));
@@ -260,49 +266,132 @@ CTable FitMassPlots(const std::string& data_filename = "", const std::string& mc
                 mr.cfail->Draw();
                 mr.cpass->Print(Form("plots/%s/p_mc_fail_pt%lu_eta%lu.%s", output_path.c_str(), pt_bin, eta_bin, suffix.c_str()));
 
-                // scale factor
-                float dr_err = std::max(dr.eff_err_high, dr.eff_err_low);
-                float mr_err = std::max(mr.eff_err_high, mr.eff_err_low);
-                float sf_val = dr.eff/mr.eff;
-                float sf_err = sf_val * sqrt(pow(dr_err/dr.eff, 2) + pow(mr_err/mr.eff, 2));
-                string sf    = rt::pm(sf_val, sf_err, "1.3");
-
-                // set the table
-                t.setCell(sf, eta_bin, pt_bin); 
+                // ROOT counts bins from 1-N not 0-(N-1) like C++ 
+                hc["h_data_num"]->SetBinContent(eta_bin+1, pt_bin+1, dr.num.value);
+                hc["h_data_num"]->SetBinError  (eta_bin+1, pt_bin+1, dr.num.error);
+                hc["h_data_den"]->SetBinContent(eta_bin+1, pt_bin+1, dr.den.value);
+                hc["h_data_den"]->SetBinError  (eta_bin+1, pt_bin+1, dr.den.error);
+                hc["h_data_eff"]->SetBinContent(eta_bin+1, pt_bin+1, dr.eff.value);
+                hc["h_data_eff"]->SetBinError  (eta_bin+1, pt_bin+1, dr.eff.error);
+                hc["h_mc_num"  ]->SetBinContent(eta_bin+1, pt_bin+1, mr.num.value);
+                hc["h_mc_num"  ]->SetBinError  (eta_bin+1, pt_bin+1, mr.num.error);
+                hc["h_mc_den"  ]->SetBinContent(eta_bin+1, pt_bin+1, mr.den.value);
+                hc["h_mc_den"  ]->SetBinError  (eta_bin+1, pt_bin+1, mr.den.error);
+                hc["h_mc_eff"  ]->SetBinContent(eta_bin+1, pt_bin+1, mr.eff.value);
+                hc["h_mc_eff"  ]->SetBinError  (eta_bin+1, pt_bin+1, mr.eff.error);
             }
-            else
-            {
-                cout << "skipping electron crack bin" << endl;
-                t.setCell("NA", eta_bin, pt_bin); 
-            }
+            /*             else */
+            /*             { */
+            /*                 // ROOT counts bins from 1-N not 0-(N-1) like C++  */
+            /*                 cout << "skipping electron crack bin" << endl; */
+            /*                 hc["h_data_num"]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_data_num"]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_data_den"]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_data_den"]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_data_eff"]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_data_eff"]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_mc_num"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_mc_num"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_mc_den"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_mc_den"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_mc_eff"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
+            /*                 hc["h_mc_eff"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
+            /*             } */
         }
     }
 
-    return t;
+    // make eff projection plots
+    for (size_t pt_bin = 0; pt_bin != npt_bins; pt_bin++)
+    {
+        const float pt_min = pt_bins[pt_bin];
+        const float pt_max = pt_bins[pt_bin+1];
+        const string title = Form("Efficiency (%1.0f GeV < p_{T} < %1.0f GeV);|#eta|;#varepsilon", pt_min, pt_max);
+        TH1D* h_data_proj = dynamic_cast<TH2*>(hc["h_data_eff"])->ProjectionX(Form("h_data_eff_vs_eta_pt%lu", pt_bin), pt_bin+1, pt_bin+1);
+        TH1D* h_mc_proj   = dynamic_cast<TH2*>(hc["h_mc_eff"  ])->ProjectionX(Form("h_mc_eff_vs_eta_pt%lu"  , pt_bin), pt_bin+1, pt_bin+1);
+        h_data_proj->SetTitle(("Data " + title).c_str());
+        h_mc_proj->SetTitle(("MC " + title).c_str());
+        hc.Add(h_data_proj);
+        hc.Add(h_mc_proj);
+
+        const string sf_title = Form("Data/MC scalefactor (%1.0f GeV < p_{T} < %1.0f GeV);|#eta|;#varepsilon", pt_min, pt_max);
+        hc.Add(rt::DivideHists(h_data_proj, h_mc_proj, Form("h_sf_vs_eta_pt%lu", pt_bin), title));
+    }
+    for (size_t eta_bin = 0; eta_bin != neta_bins; eta_bin++)
+    {
+        const float eta_min = eta_bins[eta_bin];
+        const float eta_max = eta_bins[eta_bin+1];
+        const string title  = Form("Efficiency (%1.2f < |\\eta| < %1.2f);p_{T} (GeV);#varepsilon", eta_min, eta_max);
+        TH1D* h_data_proj = dynamic_cast<TH2*>(hc["h_data_eff"])->ProjectionY(Form("h_data_eff_vs_pt_eta%lu", eta_bin), eta_bin+1, eta_bin+1);
+        TH1D* h_mc_proj   = dynamic_cast<TH2*>(hc["h_mc_eff"  ])->ProjectionY(Form("h_mc_eff_vs_pt_eta%lu" , eta_bin), eta_bin+1, eta_bin+1);
+        h_data_proj->SetTitle(("Data " + title).c_str());
+        h_mc_proj->SetTitle(("MC " + title).c_str());
+        hc.Add(h_data_proj);
+        hc.Add(h_mc_proj);
+
+        const string sf_title = Form("Data/MC scalefactor (%1.2f < |\\eta| < %1.2f);p_{T} (GeV);#varepsilon", eta_min, eta_max);
+        hc.Add(rt::DivideHists(h_data_proj, h_mc_proj, Form("h_sf_vs_pt_eta%lu", eta_bin), title));
+    }
+
+    // make scale factor plots
+    hc.Add(rt::DivideHists(hc["h_data_eff"], hc["h_mc_eff"], "h_sf", "data/MC scale Factor"));
+
+    return hc;
 }
+
 
 #ifndef __CINT__
 int main()
 try
 {
-    //const std::string input_path = "plots/Egamma_orig";
-    //CTable t_id   = FitMassPlots(input_path +"/id/data/plots.root", input_path + "/id/mc/plots.root", "fits/test", id_models, "png");
-    const std::string input_path = "plots/Egamma_orig";
-    const std::string output_label = "fits/egamma_orig_v10"; 
-    CTable t_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , id_models  , "eps");
-    CTable t_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , iso_models , "eps");
-    CTable t_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", both_models, "eps");
+/*     const std::string input_path  = "plots/Egamma_orig"; */
+/*     const std::string output_label = "fits/test";  */
+/*     rt::TH1Container hc_id = FitMassPlots(input_path + "/id/data/plots.root", input_path + "/id/mc/plots.root"  , output_label + "/id", id_models  , "png"); */
+/*     hc_id.Write("plots/fits/test/id_results.root"); */
+/*     CTable t_id = rt::CreateTableFromHist(hc_id["h_sf"], "Data/MC ScaleFactor ID", "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true); */
+/*     t_id.print(); */
 
-    t_id.setTitle("data/MC eff and SF for electron ID");
-    t_iso.setTitle("data/MC eff and SF for electron Iso");
-    t_both.setTitle("data/MC eff and SF for electron Iso+ID");
+    // do the fits
+    const std::string input_path = "plots/Egamma_orig";
+    const std::string output_label = "fits/egamma_orig_v10";
+    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , id_models  , "eps");
+    rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , iso_models , "eps");
+    rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", both_models, "eps");
+
+    TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)");
+
+    // make the tables
+    CTable t_id   = rt::CreateTableFromHist(hc_id  ["h_sf"], "Data/MC ScaleFactor ID"    , "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_iso  = rt::CreateTableFromHist(hc_iso ["h_sf"], "Data/MC ScaleFactor ISO"   , "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_prod = rt::CreateTableFromHist(h_sf_prod      , "Data/MC ScaleFactor ID*ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_both = rt::CreateTableFromHist(hc_both["h_sf"], "Data/MC ScaleFactor ID+ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
+
+    // print to screen
+    t_id.print();
+    t_iso.print();
+    t_prod.print();
+    t_both.print();
     
-    rt::mkdir("tables/" + output_label + "/id"  , /*force=*/true); 
-    rt::mkdir("tables/" + output_label + "/iso" , /*force=*/true); 
-    rt::mkdir("tables/" + output_label + "/both", /*force=*/true); 
-    t_id.saveAs  ("tables/" + output_label + "/id/sf.txt"  ); t_id.print();
-    t_iso.saveAs ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
-    t_both.saveAs("tables/" + output_label + "/both/sf.txt"); t_both.print();
+    hc_id.SetMinMax(0, 1.1);
+    hc_iso.SetMinMax(0, 1.1);
+    hc_both.SetMinMax(0, 1.1);
+
+    hc_id.Write  (Form("plots/%s/id/results.root"  , output_label.c_str()));
+    hc_iso.Write (Form("plots/%s/iso/results.root" , output_label.c_str()));
+    hc_both.Write(Form("plots/%s/both/results.root", output_label.c_str()));
+
+    //t_id.setTitle("data/MC eff and SF for electron ID");
+    //t_iso.setTitle("data/MC eff and SF for electron Iso");
+    //t_both.setTitle("data/MC eff and SF for electron Iso+ID");
+    //
+    //rt::mkdir("tables/" + output_label + "/id"  , /*force=*/true); 
+    //rt::mkdir("tables/" + output_label + "/iso" , /*force=*/true); 
+    //rt::mkdir("tables/" + output_label + "/both", /*force=*/true); 
+    //t_id.saveAs  ("tables/" + output_label + "/id/sf.txt"  ); t_id.print();
+    //t_iso.saveAs ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
+    //t_both.saveAs("tables/" + output_label + "/both/sf.txt"); t_both.print();
+    //t_id.print();
+    //t_iso.print();
+    //t_both.print();
 
     return 0;
 }

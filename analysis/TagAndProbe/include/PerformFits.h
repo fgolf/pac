@@ -27,19 +27,28 @@ namespace tp
         };
     };
 
+    // cheesy struct to hold value/error 
+    struct value_t
+    {
+        float value;
+        float error;
+    };
+
     // a simple struct to hold the results
     struct Result
     {
         Result();
-        Result(float, float, float);
+        Result(const float, const float, const float, const float, const float, const float);
 
-        float eff;
-        float eff_err_high;
-        float eff_err_low;
+        value_t eff;
+        value_t num;
+        value_t den;
         TCanvas* cpass;
         TCanvas* cfail;
 
-        std::string str() const;
+        std::string eff_str() const;
+        std::string num_str() const;
+        std::string den_str() const;
     };
 
     // Get the model
