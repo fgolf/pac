@@ -24,13 +24,13 @@ namespace at
         TChain* chain, 
         Function analyze, 
         NtupleClass& ntuple_class,
-        long num_events,
+        const long num_events,
         const std::string& goodrun_file_name,
-        bool fast,
-        bool verbose,
-        int evt_run,
-        int evt_lumi,
-        int evt_event
+        const bool fast,
+        const bool verbose,
+        const int evt_run,
+        const int evt_lumi,
+        const int evt_event
     )
     {
         using namespace std;
@@ -245,13 +245,13 @@ namespace at
         TChain* chain, 
         Function analyze, 
         NtupleClass& ntuple_class,
-        long num_events,
+        const long num_events,
         const std::string& goodrun_file_name,
-        bool fast,
-        bool verbose,
-        int evt_run,
-        int evt_lumi,
-        int evt_event
+        const bool fast,
+        const bool verbose,
+        const int evt_run,
+        const int evt_lumi,
+        const int evt_event
     )
     {
         using namespace std;

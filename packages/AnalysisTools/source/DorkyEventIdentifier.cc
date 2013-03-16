@@ -19,6 +19,8 @@ namespace at
     {
         if (run != other.run) 
             return false;
+        if (lumi != other.lumi)
+            return false;
         if (event != other.event)
             return false;
         return true;
