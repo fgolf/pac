@@ -53,6 +53,8 @@ lib RootTools
             <define>__RTINT__
             <include>./include
             <include>./source
+            <include>$(SIMPLETABLE_PATH)/.
+            <header>CTable.h
             <header>rt/MiscTools.h
             <header>rt/FillHist.h
             <header>rt/TH1Container.h

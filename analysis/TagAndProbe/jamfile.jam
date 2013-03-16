@@ -18,9 +18,9 @@ lib tp_tools
    # dependent packages
    /ROOT
    /RooFit
-   /MiniFWLite//libMiniFWLite/<link>shared
-   /RootTools//RootTools/<link>static
-   /AnalysisTools//AnalysisTools/<link>static
+   /MiniFWLite//libMiniFWLite
+   /RootTools//RootTools
+   /AnalysisTools//AnalysisTools
  : # requirements
    <include>./include
    <include>./source

@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------- #
-# Makefile for ss2012_plots.exe 
+# Makefile for ss2012_skim_list.exe 
 # ----------------------------------------------------------------------- #
 
 include ${PAC}/tools/Makefile.common
@@ -10,9 +10,9 @@ include ${PAC}/tools/Makefile.common
 # source files
 programs        := ss2012_event_list.exe
 program_dir_rel := analysis/ss2012
-sources         := ss2012_event_list.cc
+sources         := ss2012_event_list.cc 
 include_dir     := include source
-defines         := __NON_ROOT_BUILD__
+defines         := 
 
 # additional libraries
 # ----------------------------------------------------------------------- #
@@ -32,8 +32,12 @@ $(eval $(include_mini_fwlite))
 # SimpleTable 
 $(eval $(include_simple_table))
 
-# ss2012_tools 
-$(eval $(include_ss2012_tools))
+# Frank's tools
+$(eval $(include_fg_tools))
+
+# CMS2 
+$(eval $(include_cms2_header))
+$(eval $(include_cms2_core))
 
 # CMS2 
 $(eval $(include_cms2_header))

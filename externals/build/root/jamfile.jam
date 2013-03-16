@@ -6,7 +6,11 @@ project ROOT
   ;
 
 # static verison of root (not working yet)
-# lib libRoot : : <name>Root <search>$(ROOT_PATH)/lib <link>static ;
+#lib libAfterImage :  : <name>AfterImage <search>$(ROOT_PATH)/lib <link>static ;
+#lib liblzma       :  : <name>lzma       <search>$(ROOT_PATH)/lib <link>static ;
+#lib libpcre       :  : <name>pcre       <search>$(ROOT_PATH)/lib <link>static ;
+#lib libRoot       :  : <name>Root       <search>$(ROOT_PATH)/lib <link>static ;
+#lib libmathtext   :  : <name>mathtext   <search>$(ROOT_PATH)/lib <link>static ;
 
 # dynamic libs
 lib libm          : : <name>m  <link>shared ;
