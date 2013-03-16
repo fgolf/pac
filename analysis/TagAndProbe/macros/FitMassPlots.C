@@ -333,6 +333,26 @@ const tp::Model::value_type mu_both_models[npt_bins][neta_bins][4] =
     }
 };
 
+void PrintCanvas(TCanvas* const canvas, const std::string& filename, const std::string& suffix = "png")
+{
+    const std::string dirname  = rt::dirname(filename);
+    const std::string basename = rt::basename(filename);
+    if (suffix == "all")
+    {
+        rt::mkdir(dirname + "/png");
+        rt::mkdir(dirname + "/eps");
+        rt::mkdir(dirname + "/pdf");
+        canvas->Print(Form("%s/png/%s.eps", dirname.c_str(), basename.c_str()));
+        canvas->Print(Form("%s/eps/%s.png", dirname.c_str(), basename.c_str()));
+        canvas->Print(Form("%s/pdf/%s.pdf", dirname.c_str(), basename.c_str()));
+    }
+    else
+    {
+        rt::mkdir(dirname + "/" + suffix);
+        canvas->Print(Form("%s/%s/%s.%s", dirname.c_str(), suffix.c_str(), filename.c_str(), suffix.c_str()));
+    }
+}
+
 // returns the num/den hists
 rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::string& mc_filename = "", const string& output_path = "test", const tp::Model::value_type models[npt_bins][neta_bins][4] = el_id_models, const std::string& suffix = "eps")
 {
@@ -341,7 +361,9 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
     rt::TH1Container hc_mc(mc_filename); 
 
     // make the output dir
-    rt::mkdir("plots/" + output_path, /*force=*/true);
+    rt::mkdir("plots/" + output_path + "/id/png"  , /*force=*/true);
+    rt::mkdir("plots/" + output_path + "/iso/png" , /*force=*/true);
+    rt::mkdir("plots/" + output_path + "/both/png", /*force=*/true);
     rt::CopyIndexPhp("plots/" + output_path);
 
     // hist for num counts
@@ -398,19 +420,19 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
                 //tp::Result dr = tp::PerformSimpleCount(h_data_pass, h_data_fail, pt_label, eta_label, mlow, mhigh);
                 dr.cpass->cd();
                 dr.cpass->Draw();
-                dr.cpass->Print(Form("plots/%s/p_data_pass_pt%lu_eta%lu.%s", output_path.c_str(), pt_bin, eta_bin, suffix.c_str()));
+                PrintCanvas(dr.cpass, Form("plots/%s/p_data_pass_pt%lu_eta%lu", output_path.c_str(), pt_bin, eta_bin), "all");
                 dr.cfail->cd();
                 dr.cfail->Draw();
-                dr.cfail->Print(Form("plots/%s/p_data_fail_pt%lu_eta%lu.%s", output_path.c_str(), pt_bin, eta_bin, suffix.c_str()));
+                PrintCanvas(dr.cfail, Form("plots/%s/p_data_fail_pt%lu_eta%lu", output_path.c_str(), pt_bin, eta_bin), "all");
 
                 // count the MC
                 tp::Result mr = tp::PerformSimpleCount(h_mc_pass, h_mc_fail, pt_label, eta_label, mlow, mhigh);
                 mr.cpass->cd();
                 mr.cpass->Draw();
-                mr.cpass->Print(Form("plots/%s/p_mc_pass_pt%lu_eta%lu.%s", output_path.c_str(), pt_bin, eta_bin, suffix.c_str()));
+                PrintCanvas(mr.cpass, Form("plots/%s/p_mc_pass_pt%lu_eta%lu", output_path.c_str(), pt_bin, eta_bin), "all");
                 mr.cfail->cd();
                 mr.cfail->Draw();
-                mr.cpass->Print(Form("plots/%s/p_mc_fail_pt%lu_eta%lu.%s", output_path.c_str(), pt_bin, eta_bin, suffix.c_str()));
+                PrintCanvas(mr.cfail, Form("plots/%s/p_mc_fail_pt%lu_eta%lu", output_path.c_str(), pt_bin, eta_bin), "all");
 
                 // ROOT counts bins from 1-N not 0-(N-1) like C++ 
                 hc["h_data_num"]->SetBinContent(eta_bin+1, pt_bin+1, dr.num.value);
@@ -504,9 +526,9 @@ try
 /*     const std::string input_path = "plots/SameSignMu_orig"; */
 /*     const std::string output_label = "fits/SameSignMu_v1"; */
 
-    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , el_id_models  , "png");
-    rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , el_iso_models , "png");
-    rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", el_both_models, "eps");
+    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , el_id_models  , "all");
+    rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , el_iso_models , "all");
+    rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", el_both_models, "all");
 
     TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)");
 
@@ -522,19 +544,25 @@ try
     t_prod.print();
     t_both.print();
 
-    hc_id.SetMinMax(0, 1.1);
-    hc_iso.SetMinMax(0, 1.1);
-    hc_both.SetMinMax(0, 1.1);
+    //hc_id.SetMinMax(0, 1.1);
+    //hc_iso.SetMinMax(0, 1.1);
+    //hc_both.SetMinMax(0, 1.1);
 
     hc_id.Write  (Form("plots/%s/id/results.root"  , output_label.c_str()));
     hc_iso.Write (Form("plots/%s/iso/results.root" , output_label.c_str()));
     hc_both.Write(Form("plots/%s/both/results.root", output_label.c_str()));
 
-    t_id.saveAs  ("tables/" + output_label + "/id/sf.txt"  ); t_id.print();
-    t_iso.saveAs ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
-    t_both.saveAs("tables/" + output_label + "/both/sf.txt"); t_both.print();
+    rt::mkdir("tables/" + output_label + "/id");
+    rt::mkdir("tables/" + output_label + "/iso");
+    rt::mkdir("tables/" + output_label + "/prod");
+    rt::mkdir("tables/" + output_label + "/both");
+    t_id.saveAs   ("tables/" + output_label + "/id/sf.txt"  ); t_id.print();
+    t_iso.saveAs  ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
+    t_prod.saveAs ("tables/" + output_label + "/prod/sf.txt" ); t_iso.print();
+    t_both.saveAs ("tables/" + output_label + "/both/sf.txt"); t_both.print();
     t_id.print();
     t_iso.print();
+    t_prod.print();
     t_both.print();
 
     return 0;
