@@ -26,6 +26,9 @@
 #include "boost/shared_ptr.hpp"
 #endif
 
+// Ian's table class
+#include "CTable.h"
+
 // lorentz vector of floats 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 
@@ -266,6 +269,12 @@ namespace rt
         const std::string& title = ""
     );
 
+    // Divide Hists and return new hist (client is owner of the TH1*)
+    TH1* DivideHists(TH1* h_num, TH1* h_den, const std::string& name, const std::string& title = "", const std::string& option = "");
+
+    // Multiply Hists and return new hist (client is owner of the TH1*)
+    TH1* MultiplyHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "", const std::string& option = "");
+
     // set statbox position
     void SetStatBoxPosition(TH1* hist_ptr, float x1 = 0.8, float y1 = 0.8, float x2 = 1.0, float y2 = 1.0);
 
@@ -319,6 +328,21 @@ namespace rt
     // get the bin content with float values
     double GetBinContent1D(TH1* h, const float x);
     double GetBinContent2D(TH2* h, const float x, const float y);
+
+    // create a CTable from a hist (1D and 2D only)
+    CTable CreateTableFromHist
+    (
+        TH1* hist, 
+        const std::string& title = "", 
+        const std::string& xtitle = "", 
+        const std::string& ytitle = "",
+        const std::string& xunit = "", 
+        const std::string& yunit = "",
+        const std::string& precision = "1.2", 
+        const std::string& xprecision = "1.2", 
+        const std::string& yprecision = "1.2",
+        const bool reverse_axis = false
+    );
 
     // inflate the bin error by percentage of the bin value (used for systematic uncertainties)
     void SetSystematicUncertainty(TH1* h, float sys_unc);

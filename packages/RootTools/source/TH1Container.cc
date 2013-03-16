@@ -505,10 +505,21 @@ void TH1Container::SetStats(bool stats)
 }
 
 
+void TH1Container::SetMinMax(const float min, const float max)
+{
+    for (map<string, TH1Ptr>::const_iterator iter = m_pimpl->hist_map.begin(); iter != m_pimpl->hist_map.end(); iter++)
+    {
+        iter->second->SetMinimum(min);
+        iter->second->SetMaximum(max);
+    }
+}
+
+
 void TH1Container::Write(const std::string& file_name, const std::string& root_file_dir, const std::string& option) const
 {
     rt::Write(m_pimpl->hist_map, file_name, root_file_dir, option);
 }
+
 
 void TH1Container::Write(TFile* root_file, const std::string& root_file_dir) const
 {

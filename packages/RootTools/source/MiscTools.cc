@@ -326,6 +326,154 @@ namespace rt
         return std::make_pair(static_cast<float>(result.first), static_cast<float>(result.second));
     }
 
+    // create a CTable from a hist (1D and 2D only)
+    CTable CreateTableFromHist
+    (
+        TH1* hist, 
+        const std::string& title, 
+        const std::string& xtitle, 
+        const std::string& ytitle,
+        const std::string& xunit, 
+        const std::string& yunit,
+        const std::string& precision, 
+        const std::string& xprecision, 
+        const std::string& yprecision,
+        const bool reverse_axis
+    )
+    {
+        using std::string;
+    
+        CTable table;
+        if (not title.empty())
+        {
+            table.useTitle();
+            table.setTitle(title);
+        }
+    
+        // NULL pointer --> throw exception 
+        if (hist == NULL)
+        {
+            throw std::invalid_argument("[CreateTableFromHist] Error: hist pointer is NULL"); 
+        }
+    
+        // 3D hist --> throw exception 
+        if (dynamic_cast<TH3*>(hist))
+        {
+            throw std::invalid_argument("[CreateTableFromHist] Error: only supports TH2 or TH1"); 
+        }
+    
+        // 2D hist
+        if (dynamic_cast<TH2*>(hist))
+        {
+            TAxis* const xaxis = (reverse_axis ? hist->GetYaxis() : hist->GetXaxis());
+            TAxis* const yaxis = (reverse_axis ? hist->GetXaxis() : hist->GetYaxis());
+    
+            for (int xbin = 1; xbin != xaxis->GetNbins()+1; xbin++)
+            {
+                const int col = xbin-1;
+                const float xmin = xaxis->GetBinLowEdge(xbin);
+                const float xmax = xaxis->GetBinUpEdge(xbin);
+    
+                // column label
+                string xlabel;
+                if (not xtitle.empty())
+                {
+                    if (not xunit.empty())
+                    {
+                        string format = "%" + xprecision + "f " + xunit + " < \%s < %" + xprecision + "f " + xunit;
+                        xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
+                    }
+                    else
+                    {
+                        string format = "%" + xprecision + "f < \%s < %" + xprecision + "f";
+                        xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
+                    }
+                }
+                else
+                {
+                    string format = "%" + xprecision + "f < \%s < %" + xprecision + "f";
+                    xlabel = Form(format.c_str(), xmin, xaxis->GetTitle(), xmax);
+                }
+                table.setColLabel(xlabel, col);
+    
+                for (int ybin = 1; ybin != yaxis->GetNbins()+1; ybin++)
+                {
+                    const int row = ybin-1;
+                    const float ymin = yaxis->GetBinLowEdge(ybin);
+                    const float ymax = yaxis->GetBinUpEdge(ybin);
+    
+                    // row label
+                    string ylabel;
+                    if (not ytitle.empty())
+                    {
+                        if (not yunit.empty())
+                        {
+                            string format = "%" + yprecision + "f " + yunit + " < \%s < %" + yprecision + "f " + yunit;
+                            ylabel = Form(format.c_str(), ymin, ytitle.c_str(), ymax);
+                        }
+                        else
+                        {
+                            string format = "%" + yprecision + "f < \%s < %" + yprecision + "f";
+                            ylabel = Form(format.c_str(), ymin, ytitle.c_str(), ymax);
+                        }
+                    }
+                    else
+                    {
+                        string format = "%" + yprecision + "f < \%s < %" + yprecision + "f";
+                        ylabel = Form(format.c_str(), ymin, yaxis->GetTitle(), ymax);
+                    }
+                    table.setRowLabel(ylabel, row);
+    
+                    // set the cell
+                    string entry = (reverse_axis ? rt::pm(hist->GetBinContent(ybin, xbin), hist->GetBinError(ybin, xbin), precision) :
+                                                   rt::pm(hist->GetBinContent(xbin, ybin), hist->GetBinError(xbin, ybin), precision));
+                    table.setCell(entry, row, col);
+                }
+            }
+        }
+    
+        // 1D hist
+        else if (dynamic_cast<TH1*>(hist))
+        {
+            TAxis* const xaxis = hist->GetXaxis();
+    
+            for (int xbin = 1; xbin != xaxis->GetNbins()+1; xbin++)
+            {
+                const int row = xbin-1;
+                const float xmin = xaxis->GetBinLowEdge(xbin);
+                const float xmax = xaxis->GetBinUpEdge(xbin);
+    
+                // column label
+                string xlabel;
+                if (not xtitle.empty())
+                {
+                    if (not xunit.empty())
+                    {
+                        string format = "%" + xprecision + "f " + xunit + " < \%s < %" + xprecision + "f " + xunit;
+                        xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
+                    }
+                    else
+                    {
+                        string format = "%" + xprecision + "f < \%s < %" + xprecision + "f";
+                        xlabel = Form(format.c_str(), xmin, xtitle.c_str(), xmax);
+                    }
+                }
+                else
+                {
+                    string format = "%" + xprecision + "f < \%s < %" + xprecision + "f";
+                    xlabel = Form(format.c_str(), xmin, xaxis->GetTitle(), xmax);
+                }
+                table.setRowLabel(xlabel, row);
+    
+                // set the cell
+                string entry = rt::pm(hist->GetBinContent(xbin), hist->GetBinError(xbin), precision);
+                table.setCell(entry, row, 0);
+            }
+        }
+    
+        return table;
+    }
+
     // print value and error with +/-
     std::string pm(double value, double error, const std::string& precision)
     {
@@ -1086,6 +1234,42 @@ namespace rt
 
         // Done
         return temp;
+    }
+
+    // Divide Hists and return new hist (client is owner of the TH1*)
+    TH1* DivideHists(TH1* h_num, TH1* h_den, const std::string& name, const std::string& title, const std::string& option)
+    {
+        // check that hists are valid
+        if (!h_num || !h_den)
+        {
+            throw runtime_error("rt::DivideHists: at least one of the Histograms are NULL");
+        }
+
+        TH1* h_result = dynamic_cast<TH1*>(h_num->Clone(name.c_str()));
+        if (not title.empty())
+        {
+            h_result->SetTitle(title.c_str());
+        }
+        h_result->Divide(h_num, h_den, 1.0, 1.0, option.c_str());
+        return h_result;
+    }
+
+    // Muilplty Hists and return new hist (client is owner of the TH1*)
+    TH1* MultiplyHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title, const std::string& option)
+    {
+        // check that hists are valid
+        if (!h1 || !h2)
+        {
+            throw runtime_error("rt::DivideHists: at least one of the Histograms are NULL");
+        }
+
+        TH1* h_result = dynamic_cast<TH1*>(h1->Clone(name.c_str()));
+        if (not title.empty())
+        {
+            h_result->SetTitle(title.c_str());
+        }
+        h_result->Multiply(h2, h2, 1.0, 1.0, option.c_str());
+        return h_result;
     }
 
     // copy the index.php file to dirname

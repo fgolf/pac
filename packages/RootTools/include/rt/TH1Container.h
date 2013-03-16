@@ -93,9 +93,10 @@ class TH1Container
         void SetOption(const std::string& option = "");
         void SetDrawOption(const std::string& option = "");
         void SetStats(bool stats = true);
+        void SetMinMax(const float min, const float max);
         
         // write all histograms to a root file
-        void Write(const std::string& file_name, const std::string& root_file_dir = "", const std::string& option = "UPDATE") const;
+        void Write(const std::string& file_name, const std::string& root_file_dir = "", const std::string& option = "RECREATE") const;
         void Write(TFile* root_file, const std::string& root_file_dir = "") const;
         
         // print all histograms to an (eps, png, pdf)
