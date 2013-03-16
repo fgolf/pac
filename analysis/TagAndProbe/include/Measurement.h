@@ -29,11 +29,17 @@ namespace tp
             EGammaDenBoth,
             EGammaNum,
 
-            // same sign
+            // same sign electrons
             SameSignElDenID,
             SameSignElDenIso,
             SameSignElDenBoth,
             SameSignElNum,
+
+            // same sign muons
+            SameSignMuDenID,
+            SameSignMuDenIso,
+            SameSignMuDenBoth,
+            SameSignMuNum,
 
             static_size,
         };

@@ -46,28 +46,28 @@ const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 20
 const size_t neta_bins = 5; const float eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5};
 
 // models for the ID
-const tp::Model::value_type id_models[npt_bins][neta_bins][4] =
+const tp::Model::value_type el_id_models[npt_bins][neta_bins][4] =
 {
     {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
-        /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta0, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
         /*eta1, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta2, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
-        /*eta3, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
         /*eta4, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
     },
     {
-        /*eta0, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta0, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
         /*eta1, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
-        /*eta3, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
         /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
     }, 
     {
-        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
         /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }, 
         /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
         /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
+        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }
     },
     {
         /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
@@ -93,7 +93,7 @@ const tp::Model::value_type id_models[npt_bins][neta_bins][4] =
 };
 
 // models for the Iso
-const tp::Model::value_type iso_models[npt_bins][neta_bins][4] =
+const tp::Model::value_type el_iso_models[npt_bins][neta_bins][4] =
 {
     {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
         /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
@@ -140,21 +140,21 @@ const tp::Model::value_type iso_models[npt_bins][neta_bins][4] =
 };
 
 // models for the Iso+iso
-const tp::Model::value_type both_models[npt_bins][neta_bins][4] =
+const tp::Model::value_type el_both_models[npt_bins][neta_bins][4] =
 {
     {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
-        /*eta0, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta1, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-        /*eta2, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
+        /*eta2, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
         /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-        /*eta4, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
+        /*eta4, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
     },
     {
-        /*eta0, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta0, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
         /*eta1, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
-        /*eta3, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
+        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
+        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::ErfExp     , Model::ErfExp     },
+        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
     }, 
     {
         /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
@@ -188,7 +188,7 @@ const tp::Model::value_type both_models[npt_bins][neta_bins][4] =
 
 
 // returns the num/den hists
-rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::string& mc_filename = "", const string& output_path = "test", const tp::Model::value_type models[npt_bins][neta_bins][4] = id_models, const std::string& suffix = "eps")
+rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::string& mc_filename = "", const string& output_path = "test", const tp::Model::value_type models[npt_bins][neta_bins][4] = el_id_models, const std::string& suffix = "eps")
 {
     // histograms
     rt::TH1Container hc_data(data_filename); 
@@ -211,10 +211,10 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
     hc.Add(new TH2F("h_data_eff", "Efficiency;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
     hc.Add(new TH2F("h_mc_eff"  , "Efficiency;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
 
-    //size_t pt_bin = 1;
-    //size_t eta_bin = 1;
+/*     size_t pt_bin = 0; */
+/*     size_t eta_bin = 1; */
     for (size_t pt_bin = 0; pt_bin != npt_bins; pt_bin++)
-        //for (size_t pt_bin = 0; pt_bin != 1; pt_bin++)
+    //for (size_t pt_bin = 0; pt_bin != 2; pt_bin++)
     {
         const float pt_min = pt_bins[pt_bin];
         const float pt_max = pt_bins[pt_bin+1];
@@ -245,7 +245,7 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
             TH1F* h_mc_pass   = dynamic_cast<TH1F*>(hc_mc  [hist_pass_name]);
             TH1F* h_mc_fail   = dynamic_cast<TH1F*>(hc_mc  [hist_fail_name]);
 
-            //if (eta_bin != 2) // skip crack
+            if (eta_bin != 2) // skip crack
             {
                 // do the fit
                 tp::Result dr = tp::PerformSimultaneousFit(sig_pass_model, sig_fail_model, bkg_pass_model, bkg_fail_model, h_data_pass, h_data_fail, pt_label, eta_label, mlow, mhigh, h_mc_pass, h_mc_fail);
@@ -280,23 +280,23 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
                 hc["h_mc_eff"  ]->SetBinContent(eta_bin+1, pt_bin+1, mr.eff.value);
                 hc["h_mc_eff"  ]->SetBinError  (eta_bin+1, pt_bin+1, mr.eff.error);
             }
-            /*             else */
-            /*             { */
-            /*                 // ROOT counts bins from 1-N not 0-(N-1) like C++  */
-            /*                 cout << "skipping electron crack bin" << endl; */
-            /*                 hc["h_data_num"]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_data_num"]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_data_den"]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_data_den"]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_data_eff"]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_data_eff"]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_mc_num"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_mc_num"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_mc_den"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_mc_den"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_mc_eff"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0); */
-            /*                 hc["h_mc_eff"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0); */
-            /*             } */
+            else
+            {
+                // ROOT counts bins from 1-N not 0-(N-1) like C++
+                cout << "skipping electron crack bin" << endl;
+                hc["h_data_num"]->SetBinContent(eta_bin+1, pt_bin+1, 0);
+                hc["h_data_num"]->SetBinError  (eta_bin+1, pt_bin+1, 0);
+                hc["h_data_den"]->SetBinContent(eta_bin+1, pt_bin+1, 0);
+                hc["h_data_den"]->SetBinError  (eta_bin+1, pt_bin+1, 0);
+                hc["h_data_eff"]->SetBinContent(eta_bin+1, pt_bin+1, 0);
+                hc["h_data_eff"]->SetBinError  (eta_bin+1, pt_bin+1, 0);
+                hc["h_mc_num"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0);
+                hc["h_mc_num"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0);
+                hc["h_mc_den"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0);
+                hc["h_mc_den"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0);
+                hc["h_mc_eff"  ]->SetBinContent(eta_bin+1, pt_bin+1, 0);
+                hc["h_mc_eff"  ]->SetBinError  (eta_bin+1, pt_bin+1, 0);
+            }
         }
     }
 
@@ -314,7 +314,7 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
         hc.Add(h_mc_proj);
 
         const string sf_title = Form("Data/MC scalefactor (%1.0f GeV < p_{T} < %1.0f GeV);|#eta|;#varepsilon", pt_min, pt_max);
-        hc.Add(rt::DivideHists(h_data_proj, h_mc_proj, Form("h_sf_vs_eta_pt%lu", pt_bin), title));
+        hc.Add(rt::DivideHists(h_data_proj, h_mc_proj, Form("h_sf_vs_eta_pt%lu", pt_bin), sf_title));
     }
     for (size_t eta_bin = 0; eta_bin != neta_bins; eta_bin++)
     {
@@ -329,7 +329,7 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
         hc.Add(h_mc_proj);
 
         const string sf_title = Form("Data/MC scalefactor (%1.2f < |\\eta| < %1.2f);p_{T} (GeV);#varepsilon", eta_min, eta_max);
-        hc.Add(rt::DivideHists(h_data_proj, h_mc_proj, Form("h_sf_vs_pt_eta%lu", eta_bin), title));
+        hc.Add(rt::DivideHists(h_data_proj, h_mc_proj, Form("h_sf_vs_pt_eta%lu", eta_bin), sf_title));
     }
 
     // make scale factor plots
@@ -351,33 +351,38 @@ try
 /*     t_id.print(); */
 
     // do the fits
-    const std::string input_path = "plots/Egamma_orig";
-    const std::string output_label = "fits/egamma_orig_v10";
-    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , id_models  , "eps");
-    rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , iso_models , "eps");
-    rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", both_models, "eps");
+    //const std::string input_path = "plots/Egamma_orig";
+    //const std::string output_label = "fits/egamma_orig_v10";
+    const std::string input_path = "plots/SameSign_orig";
+    const std::string output_label = "fits/SameSign_orig_v2";
+/*     const std::string input_path = "plots/SameSignMu_orig"; */
+/*     const std::string output_label = "fits/SameSignMu_v1"; */
 
-    TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)");
+    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , el_id_models  , "png");
+/*     rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , el_iso_models , "png"); */
+/*     rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", el_both_models, "eps"); */
+
+/*     TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)"); */
 
     // make the tables
     CTable t_id   = rt::CreateTableFromHist(hc_id  ["h_sf"], "Data/MC ScaleFactor ID"    , "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
-    CTable t_iso  = rt::CreateTableFromHist(hc_iso ["h_sf"], "Data/MC ScaleFactor ISO"   , "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
-    CTable t_prod = rt::CreateTableFromHist(h_sf_prod      , "Data/MC ScaleFactor ID*ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
-    CTable t_both = rt::CreateTableFromHist(hc_both["h_sf"], "Data/MC ScaleFactor ID+ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
+/*     CTable t_iso  = rt::CreateTableFromHist(hc_iso ["h_sf"], "Data/MC ScaleFactor ISO"   , "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true); */
+/*     CTable t_prod = rt::CreateTableFromHist(h_sf_prod      , "Data/MC ScaleFactor ID*ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true); */
+/*     CTable t_both = rt::CreateTableFromHist(hc_both["h_sf"], "Data/MC ScaleFactor ID+ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true); */
 
     // print to screen
     t_id.print();
-    t_iso.print();
-    t_prod.print();
-    t_both.print();
-    
-    hc_id.SetMinMax(0, 1.1);
-    hc_iso.SetMinMax(0, 1.1);
-    hc_both.SetMinMax(0, 1.1);
-
+/*     t_iso.print(); */
+/*     t_prod.print(); */
+/*     t_both.print(); */
+/*      */
+/*     hc_id.SetMinMax(0, 1.1); */
+/*     hc_iso.SetMinMax(0, 1.1); */
+/*     hc_both.SetMinMax(0, 1.1); */
+/*  */
     hc_id.Write  (Form("plots/%s/id/results.root"  , output_label.c_str()));
-    hc_iso.Write (Form("plots/%s/iso/results.root" , output_label.c_str()));
-    hc_both.Write(Form("plots/%s/both/results.root", output_label.c_str()));
+/*     hc_iso.Write (Form("plots/%s/iso/results.root" , output_label.c_str())); */
+/*     hc_both.Write(Form("plots/%s/both/results.root", output_label.c_str())); */
 
     //t_id.setTitle("data/MC eff and SF for electron ID");
     //t_iso.setTitle("data/MC eff and SF for electron Iso");
@@ -389,9 +394,9 @@ try
     //t_id.saveAs  ("tables/" + output_label + "/id/sf.txt"  ); t_id.print();
     //t_iso.saveAs ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
     //t_both.saveAs("tables/" + output_label + "/both/sf.txt"); t_both.print();
-    //t_id.print();
+    t_id.print();
     //t_iso.print();
-    //t_both.print();
+/*     t_both.print(); */
 
     return 0;
 }

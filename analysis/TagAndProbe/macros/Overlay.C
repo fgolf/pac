@@ -7,7 +7,8 @@ using namespace std;
 const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200};
 const size_t neta_bins = 5; const float eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5};
 
-void Overlay(const std::string& filename = "plots/fits/egamma_orig_v10/both/results.root", const std::string& suffix = "eps")
+//void Overlay(const std::string& filename = "plots/fits/egamma_orig_v10/both/results.root", const std::string& suffix = "eps")
+void Overlay(const std::string& filename = "plots/fits/SameSign_orig_v1/both/results.root", const std::string& suffix = "eps")
 {
     rt::TH1Container hc(filename);
     hc.List();
@@ -34,7 +35,7 @@ void Overlay(const std::string& filename = "plots/fits/egamma_orig_v10/both/resu
         const string plot_title = Form("Efficiency (%1.2f < |\\eta| < %1.2f);p_{T} (GeV);#varepsilon", eta_min, eta_max);
         p[plot_name] = new rt::TH1Overlay(plot_title, "lg::bottom_right sb::off");
         p[plot_name]->Add(hc[Form("h_data_eff_vs_pt_eta%lu", eta_bin)] , "data", kBlue, 2, 20);
-        p[plot_name]->Add(hc[Form("h_mc_eff_vs_pt_etat%lu"  , eta_bin)], "MC"  , kRed , 2, 22);
+        p[plot_name]->Add(hc[Form("h_mc_eff_vs_pt_eta%lu"  , eta_bin)], "MC"  , kRed , 2, 22);
     }
 
     hc.SetLineColor(kBlue);

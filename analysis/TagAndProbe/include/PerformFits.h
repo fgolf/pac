@@ -18,9 +18,12 @@ namespace tp
             ErfExp,
             ErfPolyExp,
             QuadraticExp,
+            Linear,
             Poly3,
             Poly6,
+            Poly8,
             Poly4Exp,
+            Poly8Exp,
             Chebychev,
             ChebyExp,
             static_size

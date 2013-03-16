@@ -282,8 +282,6 @@ namespace tp
         a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()), 0.0);
         a3 = new RooRealVar(Form("a3%s", l.c_str()), Form("a3%s", l.c_str()), 0.0);
         a4 = new RooRealVar(Form("a4%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
-        a5 = new RooRealVar(Form("a5%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
-        a6 = new RooRealVar(Form("a6%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
         t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -1e-6, -10.0, 0.00);
 
         // (a0 + a1*x + a2*x^2 + a3*x^3 + a4*x^4) * exp{-t}
@@ -291,10 +289,75 @@ namespace tp
         exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
 
         title = Form("poly%s", l.c_str());
-        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1));
+        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3, *a4));
 
         title = Form("background%s", l.c_str());
         model = RooAbsPdfPtr(new RooProdPdf(title.c_str(), title.c_str(), RooArgList(*poly, *exp)));
+    }
+
+    // 8th order polynomial * exp 
+    // ----------------------------------------------------------------- //
+
+    struct Poly8ExpPdf : public PdfBase
+    {
+        Poly8ExpPdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+        RooRealVar *a3;
+        RooRealVar *a4;
+        RooRealVar *a5;
+        RooRealVar *a6;
+        RooRealVar *a7;
+        RooRealVar *a8;
+        RooRealVar *t;
+        RooExponential *exp;
+        RooPolynomial *poly;
+    };
+
+    // Sum(an*x^n) * exp{-|t|*x}, n = 0, 8
+    Poly8ExpPdf::Poly8ExpPdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()), 0.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()), 0.0);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()), 0.0);
+        a3 = new RooRealVar(Form("a3%s", l.c_str()), Form("a3%s", l.c_str()), 0.0);
+        a4 = new RooRealVar(Form("a4%s", l.c_str()), Form("a4%s", l.c_str()), 0.0);
+        a5 = new RooRealVar(Form("a5%s", l.c_str()), Form("a5%s", l.c_str()), 0.0);
+        a6 = new RooRealVar(Form("a6%s", l.c_str()), Form("a6%s", l.c_str()), 0.0);
+        a7 = new RooRealVar(Form("a7%s", l.c_str()), Form("a7%s", l.c_str()), 0.0);
+        a8 = new RooRealVar(Form("a8%s", l.c_str()), Form("a8%s", l.c_str()), 0.0);
+        t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -1e-6, -10.0, 0.00);
+
+        // (a0 + a1*x + a2*x^2 + a3*x^3 + a4*x^4) * exp{-t}
+        string title = Form("exp%s", l.c_str()); 
+        exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
+
+        title = Form("poly%s", l.c_str());
+        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8));
+
+        title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooProdPdf(title.c_str(), title.c_str(), RooArgList(*poly, *exp)));
+    }
+
+    // linear 
+    // ----------------------------------------------------------------- //
+
+    struct LinearPdf : public PdfBase
+    {
+        LinearPdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+    };
+
+    LinearPdf::LinearPdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()),   0.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()),   0.0);
+
+        // (1 + a1*m + a2*m^2) * exp{-t}
+        string title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1)));
     }
 
     // 3rd order polynomial 
@@ -346,9 +409,43 @@ namespace tp
         a5 = new RooRealVar(Form("a5%s", l.c_str()), Form("a5%s", l.c_str()), 0.0);
         a6 = new RooRealVar(Form("a6%s", l.c_str()), Form("a6%s", l.c_str()), 0.0);
 
-        // (1 + a1*m + a2*m^2) * exp{-t}
+        // Sum(an*m^n), n = 0, 6
         string title = Form("background%s", l.c_str());
         model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3, *a4, *a5, *a6)));
+    }
+
+    // 8th order polynomial 
+    // ----------------------------------------------------------------- //
+
+    struct Poly8Pdf : public PdfBase
+    {
+        Poly8Pdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+        RooRealVar *a3;
+        RooRealVar *a4;
+        RooRealVar *a5;
+        RooRealVar *a6;
+        RooRealVar *a7;
+        RooRealVar *a8;
+    };
+
+    // Sum(an*m^n), n = 0, 10 
+    Poly8Pdf::Poly8Pdf(RooRealVar &x, const std::string& l)
+    {
+        a0  = new RooRealVar(Form("a0%s" , l.c_str()), Form("a0%s" , l.c_str()), 0.0);
+        a1  = new RooRealVar(Form("a1%s" , l.c_str()), Form("a1%s" , l.c_str()), 0.0);
+        a2  = new RooRealVar(Form("a2%s" , l.c_str()), Form("a2%s" , l.c_str()), 0.0);
+        a3  = new RooRealVar(Form("a3%s" , l.c_str()), Form("a3%s" , l.c_str()), 0.0);
+        a4  = new RooRealVar(Form("a4%s" , l.c_str()), Form("a4%s" , l.c_str()), 0.0);
+        a5  = new RooRealVar(Form("a5%s" , l.c_str()), Form("a5%s" , l.c_str()), 0.0);
+        a6  = new RooRealVar(Form("a6%s" , l.c_str()), Form("a6%s" , l.c_str()), 0.0);
+        a7  = new RooRealVar(Form("a7%s" , l.c_str()), Form("a7%s" , l.c_str()), 0.0);
+        a8  = new RooRealVar(Form("a8%s" , l.c_str()), Form("a8%s" , l.c_str()), 0.0);
+
+        string title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8)));
     }
 
     // wrapper to get the PDFs
@@ -370,9 +467,12 @@ namespace tp
             case Model::QuadraticExp:  return new QuadraticExpPdf(x, label);                      break; 
             case Model::Chebychev:     return new ChebychevPdf(x, label);                         break; 
             case Model::ChebyExp:      return new ChebyExpPdf(x, label);                          break; 
+            case Model::Linear:        return new LinearPdf(x, label);                            break; 
             case Model::Poly3:         return new Poly3Pdf(x, label);                             break; 
             case Model::Poly6:         return new Poly6Pdf(x, label);                             break; 
+            case Model::Poly8:         return new Poly8Pdf(x, label);                             break; 
             case Model::Poly4Exp:      return new Poly4ExpPdf(x, label);                          break; 
+            case Model::Poly8Exp:      return new Poly8ExpPdf(x, label);                          break; 
             default:
                 throw std::invalid_argument("[tp::CreateModelPdf] Error: model not supported");
         }
