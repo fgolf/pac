@@ -609,6 +609,7 @@ namespace tp
         RooFormulaVar nsig_pass("nsig_pass" ,"eff*nsig"      , RooArgList(eff, nsig));
         RooFormulaVar nsig_fail("nsig_fail" ,"(1.0-eff)*nsig", RooArgList(eff, nsig));
         RooFormulaVar ntot_pass("ntot_pass" ,"nsig_pass+nbkg_pass", RooArgList(nsig_pass, nbkg_pass));
+        RooFormulaVar ntot_fail("ntot_fail" ,"nsig_fail+nbkg_fail", RooArgList(nsig_fail, nbkg_fail));
 
         // efficiency counts
         RooExtendPdf esig_pass("esig_pass","esig_pass", spass_model, nsig_pass, "signalRange");
@@ -631,6 +632,7 @@ namespace tp
 
         // to the fit
         RooFitResult *roo_fit_result = total_pdf.fitTo(data_comb, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
+        //mass.setRange("signalRange", 81, 101);
 
         // results of eff
         Result simple_result
@@ -657,6 +659,7 @@ namespace tp
         TPaveText *eff_box       = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.eff_str()); eff_box->Draw();
         TPaveText *nsig_pass_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{sig} = %1.0f #pm %1.0f", nsig_pass.getVal(), nsig_pass.getPropagatedError(*roo_fit_result))); nsig_pass_box->Draw();
         TPaveText *nbkg_pass_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{bkg} = %1.0f #pm %1.0f", nbkg_pass.getVal(), nbkg_pass.getPropagatedError(*roo_fit_result))); nbkg_pass_box->Draw();
+        TPaveText *ntot_pass_box = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N_{tot} = %1.0f #pm %1.0f", ntot_pass.getVal(), ntot_pass.getPropagatedError(*roo_fit_result))); ntot_pass_box->Draw();
 
         // failing plot
         simple_result.cfail->cd(); 
@@ -672,6 +675,7 @@ namespace tp
         eff_box->Draw();
         TPaveText *nsig_fail_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{sig} = %1.0f #pm %1.0f", nsig_fail.getVal(), nsig_fail.getPropagatedError(*roo_fit_result))); nsig_fail_box->Draw();
         TPaveText *nbkg_fail_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{bkg} = %1.0f #pm %1.0f", nbkg_fail.getVal(), nbkg_fail.getPropagatedError(*roo_fit_result))); nbkg_fail_box->Draw();
+        TPaveText *ntot_fail_box = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N_{tot} = %1.0f #pm %1.0f", ntot_fail.getVal(), ntot_fail.getPropagatedError(*roo_fit_result))); ntot_fail_box->Draw();
 
         // done 
         return simple_result;
@@ -690,9 +694,9 @@ namespace tp
     )
     {
         // connts
-        double num_pass      = h_pass->Integral();
+        double num_pass      = rt::IntegralAndError(h_pass).first;
         double num_pass_err  = rt::IntegralAndError(h_pass).second;
-        double num_fail      = h_fail->Integral();
+        double num_fail      = rt::IntegralAndError(h_fail).first;
         double num_fail_err  = rt::IntegralAndError(h_fail).second;
         double num_total     = num_pass + num_fail;
         double num_total_err = sqrt(num_pass_err*num_pass_err + num_fail_err*num_fail_err);
@@ -700,20 +704,36 @@ namespace tp
         double eff_err       = sqrt(eff * (1.0 - eff)/num_total); // binomial
         Result simple_result(eff, eff_err, num_pass, num_pass_err, num_total, num_total_err); // taking symmetric for now
 
-        // labels not working :( -- fixme!
-        simple_result.cpass->cd();
+        // independent mass var
+        RooRealVar mass("mass", "mass", mlow, mhigh, "GeV");
+        RooDataHist hist_pass("data_pass", "data_pass", RooArgSet(mass), h_pass);
+        RooDataHist hist_fail("data_fail", "data_fail", RooArgSet(mass), h_fail);
+
+        // passing plot
+        simple_result.cpass->cd(); 
+        RooPlot *mframe_pass = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/tp::MassBinWidth)));
+        hist_pass.plotOn(mframe_pass);
+        mframe_pass->SetTitle("MC Passing Probes");
+        mframe_pass->Draw();
         TPaveText *pt_box    = CreateTextBox(0.15, 0.80, 0.41, 0.85, pt_label ); pt_box->Draw();
         TPaveText *eta_box   = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
-        TPaveText *npass_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", num_pass)); npass_box->Draw();
+        TPaveText *npass_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", h_pass->Integral())); npass_box->Draw();
         TPaveText *eff_box   = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.eff_str()); eff_box->Draw();
-        h_pass->Draw();
+        TPaveText *num_box   = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{pass } = %1.0f", simple_result.num.value)); num_box->Draw();
+        TPaveText *den_box   = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{total} = %1.0f", simple_result.den.value)); den_box->Draw();
 
-        simple_result.cfail->cd();
+        // failing plot
+        simple_result.cfail->cd(); 
+        RooPlot *mframe_fail = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/tp::MassBinWidth)));
+        hist_fail.plotOn(mframe_fail);
+        mframe_fail->SetTitle("MC Failing Probes");
+        mframe_fail->Draw();
         pt_box->Draw();
         eta_box->Draw();
-        TPaveText *nfail_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", num_fail)); nfail_box->Draw();
+        TPaveText *nfail_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", h_fail->Integral())); nfail_box->Draw();
         eff_box->Draw();
-        h_fail->Draw();
+        num_box->Draw();
+        den_box->Draw();
 
         return simple_result;
     }
