@@ -84,11 +84,11 @@ namespace tp
                 if (el_is_crack)            {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
-                if (not el_passes_3q)       {return false;}
-                if (not el_passes_d0)       {return false;}
-                if (not el_passes_hoe)      {return false;}
-                if (not el_passes_no_mhits) {return false;}
                 if (not el_passes_id)       {return false;}
+//                 if (not el_passes_3q)       {return false;}
+//                 if (not el_passes_d0)       {return false;}
+//                 if (not el_passes_hoe)      {return false;}
+//                 if (not el_passes_no_mhits) {return false;}
             }
 
             // EGamma Denominator Isolation selections
@@ -108,7 +108,8 @@ namespace tp
                 if (el_is_crack)             {return false;}
                 if (not el_passes_pt)        {return false;}
                 if (not el_passes_trig_tag)  {return false;}
-                if (not el_passes_ss_iso)    {return false;}
+                //if (not el_passes_ss_iso)    {return false;}
+                if (not el_passes_eg_iso)    {return false;}
             }
 
             // EGamma Denominator ID selections
@@ -147,12 +148,13 @@ namespace tp
                 if (el_is_crack)             {return false;}
                 if (not el_passes_pt)        {return false;}
                 if (not el_passes_trig_tag)  {return false;}
-                if (not el_passes_3q)        {return false;}
-                if (not el_passes_d0)        {return false;}
-                if (not el_passes_hoe)       {return false;}
-                if (not el_passes_no_mhits)  {return false;}
+//                 if (not el_passes_3q)        {return false;}
+//                 if (not el_passes_d0)        {return false;}
+//                 if (not el_passes_hoe)       {return false;}
+//                 if (not el_passes_no_mhits)  {return false;}
+//                 if (not el_passes_ss_iso)    {return false;}
                 if (not el_passes_id)        {return false;}
-                if (not el_passes_ss_iso)    {return false;}
+                if (not el_passes_eg_iso)    {return false;}
             }
 
             // EGamma Numerator Isolation selections

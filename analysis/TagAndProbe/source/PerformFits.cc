@@ -106,6 +106,11 @@ namespace tp
         RooRealVar  *mean;
         RooRealVar  *sigma;
         RooGaussian *gaus;
+//         RooRealVar* mean;
+//         RooRealVar* sigma;
+//         RooRealVar* alpha;
+//         RooRealVar* n;
+//         RooCBShape* cb;
         TH1F        *inHist;
         RooDataHist *dataHist;
         RooHistPdf  *histPdf;
@@ -113,21 +118,30 @@ namespace tp
 
     MCTemplateConvGausPdf::MCTemplateConvGausPdf(RooRealVar &m, TH1F* hist, const std::string& label, RooRealVar *sigma0, int intOrder)
     {  
-        char name[10];
-        sprintf(name,"%s",label.c_str());
+//         char name[10];
+//         sprintf(name,"%s",label.c_str());
+// 
+//         char vname[50];  
+// 
+//         sprintf(vname,"mean%s",name);  mean  = new RooRealVar(vname,vname,0,-10,10);
+//         if(sigma0) { sigma = sigma0; }
+//         else       { sprintf(vname,"sigma%s",name); sigma = new RooRealVar(vname,vname,2,0,5); }
+//         sprintf(vname,"gaus%s",name);  gaus  = new RooGaussian(vname,vname,m,*mean,*sigma);
 
-        char vname[50];  
+        string title;
+        title = Form("mean%s"  , label.c_str()); mean  = new RooRealVar(title.c_str(), title.c_str(), 0 , -10 , 10);
+        title = Form("sigma%s" , label.c_str()); sigma = new RooRealVar(title.c_str(), title.c_str(), 2 ,   0 , 10);
+        title = Form("gaus%s"  , label.c_str()); gaus  = new RooGaussian(title.c_str(), title.c_str(), m, *mean , *sigma);
+//         title = Form("alpha%s" , label.c_str()); alpha = new RooRealVar(title.c_str(), title.c_str(), 5 , 0   , 20);
+//         title = Form("n%s"     , label.c_str()); n     = new RooRealVar(title.c_str(), title.c_str(), 1 , 0   , 10);
+//         title = Form("cb%s"    , label.c_str()); cb    = new RooCBShape(title.c_str(), title.c_str(), m, *mean , *sigma , *alpha , *n);
 
-        sprintf(vname,"mean%s",name);  mean  = new RooRealVar(vname,vname,0,-10,10);
-        if(sigma0) { sigma = sigma0; }
-        else       { sprintf(vname,"sigma%s",name); sigma = new RooRealVar(vname,vname,2,0,5); }
-        sprintf(vname,"gaus%s",name);  gaus  = new RooGaussian(vname,vname,m,*mean,*sigma);
-
-        sprintf(vname,"inHist_%s",hist->GetName());
-        inHist = (TH1F*)hist->Clone(vname);
-        sprintf(vname,"dataHist%s",name); dataHist = new RooDataHist(vname,vname,RooArgSet(m),inHist);
-        sprintf(vname,"histPdf%s",name);  histPdf  = new RooHistPdf(vname,vname,m,*dataHist,intOrder);
-        sprintf(vname,"signal%s",name);   model    = new RooFFTConvPdf(vname,vname,m,*histPdf,*gaus);
+        title = Form("inHist_%s",hist->GetName());
+        inHist = dynamic_cast<TH1F*>(hist->Clone(title.c_str()));
+        title = Form("dataHist%s",label.c_str()); dataHist = new RooDataHist(title.c_str(), title.c_str(), RooArgSet(m), inHist);
+        title = Form("histPdf%s" ,label.c_str()); histPdf  = new RooHistPdf(title.c_str(), title.c_str(), m,*dataHist, intOrder);
+        //title = Form("signal%s"  ,label.c_str()); model    = new RooFFTConvPdf(title.c_str(), title.c_str(), m, *histPdf, *cb);
+        title = Form("signal%s"  ,label.c_str()); model    = new RooFFTConvPdf(title.c_str(), title.c_str(), m, *histPdf, *gaus);
     }
 
     // Exponential 

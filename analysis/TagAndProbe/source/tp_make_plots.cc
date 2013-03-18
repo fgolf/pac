@@ -9,12 +9,12 @@
 #include "TChain.h"
 #include "TH1F.h"
 #include "Math/LorentzVector.h"
-#include "Measurement.h"
 
 // BOOST
 #include <boost/program_options.hpp>
 
 // Tools
+#include "Measurement.h"
 #include "rt/RootTools.h"
 #include "at/Sample.h"
 #include "at/ScanChain.h"
@@ -97,6 +97,10 @@ void LeptonTreeLooper::EndJob()
 // egamma binning
 const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200};
 const size_t neta_bins = 5; const float eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5};
+
+// mu binning
+//const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200};
+//const size_t neta_bins = 2; const float eta_bins[] = {0, 1.2, 2.5};
 
 void LeptonTreeLooper::BookHists()
 {

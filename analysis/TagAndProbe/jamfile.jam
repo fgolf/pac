@@ -48,7 +48,25 @@ exe tp_make_plots
  : # usage-requirements
  ;
 
-exe test_fit
+#exe tp_fit_plots
+# : # sources
+#   ./source/tp_fit_plots.cc
+#   # dependent packages
+#	 tp_tools/<link>static
+#   /ROOT
+#	 /RooFit
+#   /RootTools//RootTools/<link>static
+#   /SimpleTable//SimpleTable/<link>static
+#   #/AnalysisTools//AnalysisTools/<link>static
+#   /boost//program_options/<link>static
+# : # requirements
+#   <include>./include
+#   <include>./source
+# : # default-build
+# : # usage-requirements
+# ;
+
+exe test_fits
  : # sources
    ./macros/FitMassPlots.C
    # dependent packages
@@ -58,7 +76,6 @@ exe test_fit
    /RootTools//RootTools/<link>static
    /SimpleTable//SimpleTable/<link>static
    #/AnalysisTools//AnalysisTools/<link>static
-   #/boost//program_options/<link>static
  : # requirements
    <include>./include
    <include>./source
@@ -70,4 +87,5 @@ exe test_fit
 # -------------------------------------------------------------- #
 
 default-install tp_make_plots ;
-default-install test_fit ;
+#default-install tp_fit_plots ;
+default-install test_fits ;
