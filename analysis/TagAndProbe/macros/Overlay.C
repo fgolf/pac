@@ -5,8 +5,8 @@
 using namespace std;
 
 const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200};
-/* const size_t neta_bins = 5; const float eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5}; */
-const size_t neta_bins = 2; const float eta_bins[] = {0, 1.2, 2.5};
+const size_t neta_bins = 5; const float eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5};
+/* const size_t neta_bins = 2; const float eta_bins[] = {0, 1.2, 2.5}; */
 
 //void Overlay(const std::string& filename = "plots/fits/egamma_orig_v10/both/results.root", const std::string& suffix = "eps")
 void Overlay(const std::string& filename = "plots/fits/SameSign_orig_v2/both/results.root", const std::string& suffix = "eps")
