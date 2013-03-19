@@ -31,16 +31,16 @@ if [ -d "$project_dir/lib" ] ; then
     PATH=$PATH:$PAC/bin
 elif [ ! -z $CMSSW_BASE ] ; then
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$LD_LIBRARY_PATH:$ROOTSYS/lib
-    DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/release/$DYLD_LIBRARY_PATH:$ROOTSYS/lib
+    DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$DYLD_LIBRARY_PATH:$ROOTSYS/lib
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$LD_LIBRARY_PATH
-    DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/debug/$DYLD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin/cmssw/release
     PATH=${PATH/\/bin\/release/${PAC}\/bin\/cmssw\/release} # kludge: replace the path with bin/cmssw/release
 else
     LD_LIBRARY_PATH=$project_dir/bin/release:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/release:$DYLD_LIBRARY_PATH
     LD_LIBRARY_PATH=$project_dir/bin/debug:$LD_LIBRARY_PATH
-    DYLD_LIBRARY_PATH=$project_dir/bin/debug/$DYLD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=$project_dir/bin/debug:$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin/release
     PATH=${PATH/\/bin\/cmssw\/release/${PAC}\/bin\/release} # kludge: replace the old path with bin/release
 fi
