@@ -11,7 +11,7 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 
-//// namespaces
+// namespaces
 //#pragma link C++ namespace tp; 
 //
 //// typedefs

@@ -333,16 +333,16 @@ rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::
     hc.Add(new TH2F("h_data_eff", "Efficiency;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
     hc.Add(new TH2F("h_mc_eff"  , "Efficiency;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
 
-/*     size_t pt_bin = 5; */
-/*     size_t eta_bin = 4; */
-    for (size_t pt_bin = 0; pt_bin != npt_bins; pt_bin++)
-    //for (size_t pt_bin = 0; pt_bin != 3; pt_bin++)
+    size_t pt_bin = 0;
+    size_t eta_bin = 0;
+/*     for (size_t pt_bin = 0; pt_bin != npt_bins; pt_bin++) */
+/*     for (size_t pt_bin = 0; pt_bin != 3; pt_bin++) */
     {
         const float pt_min = pt_bins[pt_bin];
         const float pt_max = pt_bins[pt_bin+1];
         const string pt_label = Form("%1.0f GeV < p_{T} < %1.0f GeV", pt_min, pt_max); 
 
-        for (size_t eta_bin = 0; eta_bin != neta_bins; eta_bin++)
+/*         for (size_t eta_bin = 0; eta_bin != neta_bins; eta_bin++) */
         {
             // set the models
             const tp::Model::value_type sig_pass_model = models[pt_bin][eta_bin][0];
@@ -472,12 +472,12 @@ try
 /*     t_id.print(); */
 
     // do the fits
-/*     const std::string input_path = "plots/Egamma_orig"; */
-/*     const std::string output_label = "fits/egamma_orig_v10"; */
-    const std::string input_path = "plots/SameSign_orig";
-    const std::string output_label = "fits/SameSignEl_v1";
-/*     rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , el_id_models  , "all"); */
-/*     rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , el_iso_models , "all"); */
+    const std::string input_path = "plots/Egamma_orig";
+    const std::string output_label = "fits/egamma_orig_v12";
+/*     const std::string input_path = "plots/SameSign_orig"; */
+/*     const std::string output_label = "fits/SameSignEl_v1"; */
+    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , el_id_models  , "all");
+    rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , el_iso_models , "all");
     rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", el_both_models, "all");
 
 /*     const std::string input_path = "plots/SameSignMu_orig"; */
@@ -486,39 +486,39 @@ try
 /*     rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , mu_iso_models , "all"); */
 /*     rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", mu_both_models, "all"); */
 
-/*     TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)"); */
+    TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)");
 
     // make the tables
-/*     CTable t_id   = rt::CreateTableFromHist(hc_id  ["h_sf"], "Data/MC ScaleFactor ID"    , "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true); */
-/*     CTable t_iso  = rt::CreateTableFromHist(hc_iso ["h_sf"], "Data/MC ScaleFactor ISO"   , "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true); */
-/*     CTable t_prod = rt::CreateTableFromHist(h_sf_prod      , "Data/MC ScaleFactor ID*ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true); */
-    CTable t_both = rt::CreateTableFromHist(hc_both["h_sf"], "Data/MC ScaleFactor ID+ISO", "\\eta", "p_{T}", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_id   = rt::CreateTableFromHist(hc_id  ["h_sf"], "Data/MC ScaleFactor ID"    , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_iso  = rt::CreateTableFromHist(hc_iso ["h_sf"], "Data/MC ScaleFactor ISO"   , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_prod = rt::CreateTableFromHist(h_sf_prod      , "Data/MC ScaleFactor ID*ISO", "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_both = rt::CreateTableFromHist(hc_both["h_sf"], "Data/MC ScaleFactor ID+ISO", "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
 
     // print to screen
-/*     t_id.print(); */
-/*     t_iso.print(); */
-/*     t_prod.print(); */
+    t_id.print();
+    t_iso.print();
+    t_prod.print();
     t_both.print();
 
     //hc_id.SetMinMax(0, 1.1);
     //hc_iso.SetMinMax(0, 1.1);
     //hc_both.SetMinMax(0, 1.1);
 
-/*     hc_id.Write  (Form("plots/%s/id/results.root"  , output_label.c_str())); */
-/*     hc_iso.Write (Form("plots/%s/iso/results.root" , output_label.c_str())); */
+    hc_id.Write  (Form("plots/%s/id/results.root"  , output_label.c_str()));
+    hc_iso.Write (Form("plots/%s/iso/results.root" , output_label.c_str()));
     hc_both.Write(Form("plots/%s/both/results.root", output_label.c_str()));
 
-//    rt::mkdir("tables/" + output_label + "/id"  , /*force=*/true);
-//    rt::mkdir("tables/" + output_label + "/iso" , /*force=*/true);
-//    rt::mkdir("tables/" + output_label + "/prod", /*force=*/true);
-//    rt::mkdir("tables/" + output_label + "/both", /*force=*/true);
-/*     t_id.saveAs   ("tables/" + output_label + "/id/sf.txt"  ); t_id.print(); */
-/*     t_iso.saveAs  ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print(); */
-/*     t_prod.saveAs ("tables/" + output_label + "/prod/sf.txt" ); t_iso.print(); */
+    rt::mkdir("tables/" + output_label + "/id"  , /*force=*/true);
+    rt::mkdir("tables/" + output_label + "/iso" , /*force=*/true);
+    rt::mkdir("tables/" + output_label + "/prod", /*force=*/true);
+    rt::mkdir("tables/" + output_label + "/both", /*force=*/true);
+    t_id.saveAs   ("tables/" + output_label + "/id/sf.txt"  ); t_id.print();
+    t_iso.saveAs  ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
+    t_prod.saveAs ("tables/" + output_label + "/prod/sf.txt" ); t_iso.print();
     t_both.saveAs ("tables/" + output_label + "/both/sf.txt"); t_both.print();
-/*     t_id.print(); */
-/*     t_iso.print(); */
-/*     t_prod.print(); */
+    t_id.print();
+    t_iso.print();
+    t_prod.print();
     t_both.print();
 
     return 0;

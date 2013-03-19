@@ -89,3 +89,4 @@ exe test_fits
 default-install tp_make_plots ;
 #default-install tp_fit_plots ;
 default-install test_fits ;
+default-install tp_tools : <link>shared ;

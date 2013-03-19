@@ -41,17 +41,19 @@ namespace tp
     struct Result
     {
         Result();
-        Result(const float, const float, const float, const float, const float, const float);
+        Result(const float, const float, const float, const float, const float, const float, const float, const float);
 
         value_t eff;
         value_t num;
         value_t den;
+        value_t bkg;
         TCanvas* cpass;
         TCanvas* cfail;
 
         std::string eff_str() const;
         std::string num_str() const;
         std::string den_str() const;
+        std::string bkg_str() const;
     };
 
     // Get the model

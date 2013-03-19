@@ -499,7 +499,7 @@ namespace tp
     // ----------------------------------------------------------------- //
 
     // construct
-    Result::Result(const float e, const float de, const float n, const float dn, const float d, const float dd)
+    Result::Result(const float e, const float de, const float n, const float dn, const float d, const float dd, const float b, const float db)
         : cpass(new TCanvas("cpass", "cpass", 800, 600))
         , cfail(new TCanvas("cfail", "cfail", 800, 600))
     {
@@ -509,6 +509,8 @@ namespace tp
         num.error = dn;
         den.value = d;
         den.error = dd;
+        bkg.value = b;
+        bkg.error = db;
     }
 
     Result::Result()
@@ -521,6 +523,8 @@ namespace tp
         num.error = -999999.0;
         den.value = -999999.0;
         den.error = -999999.0;
+        bkg.value = -999999.0;
+        bkg.error = -999999.0;
     }
 
     std::string Result::eff_str() const
@@ -537,6 +541,12 @@ namespace tp
     {
         return rt::pm(den.value, den.value, "1.3");
     }
+
+    std::string Result::bkg_str() const
+    {
+        return rt::pm(bkg.value, bkg.value, "1.3");
+    }
+
 
     // helper function to create a tex box
     TPaveText* CreateTextBox(double x1, double y1, double x2, double y2, const std::string& text, const Color_t color = kBlack)
@@ -632,18 +642,54 @@ namespace tp
 
         // to the fit
         RooFitResult *roo_fit_result = total_pdf.fitTo(data_comb, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
-        //mass.setRange("signalRange", 81, 101);
+        //mass.setRange("window", 85, 97);
+        mass.setRange("window", 60, 120);
+        RooAbsReal* int_eff       = eff.createIntegral      (mass, RooFit::NormSet(mass), RooFit::Range("window"));
+        RooAbsReal* int_nsig_pass = nsig_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
+        RooAbsReal* int_nbkg_pass = nbkg_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
+        RooAbsReal* int_ntot_pass = ntot_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
+        RooAbsReal* int_nsig_fail = nsig_fail.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
+        RooAbsReal* int_nbkg_fail = nbkg_fail.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
+        RooAbsReal* int_ntot_fail = ntot_fail.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
+        RooAbsReal* int_nsig      = nsig.createIntegral     (mass, RooFit::NormSet(mass), RooFit::Range("window"));
+
+        // divide by the high low range to get the correct bin width
+        float mass_range = fabs(mhigh-mlow); 
+
+        value_t nfail_sig = {int_nsig_fail->getVal()/(mass_range), int_nsig_fail->getPropagatedError(*roo_fit_result)/(mass_range)};
+        value_t nfail_bgk = {int_nbkg_fail->getVal()/(mass_range), int_nbkg_fail->getPropagatedError(*roo_fit_result)/(mass_range)};
+        value_t nfail_tot = {int_ntot_fail->getVal()/(mass_range), int_ntot_fail->getPropagatedError(*roo_fit_result)/(mass_range)};
+
+        double eff_val = int_nsig_pass->getVal()/int_nsig->getVal();
+        double eff_err = sqrt(eff_val * (1.0 - eff_val))/(int_nsig->getVal()/(mass_range)); // binomial
+        value_t eff_prime = {eff_val, eff_err};
+
+        cout << nsig_pass.getVal() << "\t" << int_nsig_pass->getVal() << "\t" << int_nsig_pass->getPropagatedError(*roo_fit_result) << endl;
+        cout << nsig_fail.getVal() << "\t" << int_nsig_fail->getVal() << "\t" << int_nsig_fail->getPropagatedError(*roo_fit_result) << endl;
 
         // results of eff
         Result simple_result
         (
-            eff.getVal(), 
-            max(eff.getErrorHi(), eff.getErrorLo()),
-            nsig_pass.getVal(), 
-            nsig_pass.getPropagatedError(*roo_fit_result),
-            ntot_pass.getVal(), 
-            ntot_pass.getPropagatedError(*roo_fit_result)
+            eff.getVal(),
+            eff_prime.value,
+            int_nsig_pass->getVal()/(mass_range), 
+            int_nsig_pass->getPropagatedError(*roo_fit_result)/(mass_range),
+            int_ntot_pass->getVal()/(mass_range), 
+            int_ntot_pass->getPropagatedError(*roo_fit_result)/(mass_range),
+            int_nbkg_pass->getVal()/(mass_range), 
+            int_nbkg_pass->getPropagatedError(*roo_fit_result)/(mass_range)
         );
+        //Result simple_result
+        //(
+        //    eff.getVal(),
+        //    eff.getPropagatedError(*roo_fit_result),
+        //    nsig_pass.getVal(), 
+        //    nsig_pass.getPropagatedError(*roo_fit_result),
+        //    nsig.getVal(), 
+        //    nsig.getPropagatedError(*roo_fit_result),
+        //    nbkg_pass.getVal(), 
+        //    nbkg_pass.getPropagatedError(*roo_fit_result)
+        //);
   
         // passing plot
         simple_result.cpass->cd(); 
@@ -657,9 +703,12 @@ namespace tp
         TPaveText *eta_box       = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
         TPaveText *npass_box     = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_pass_max)); npass_box->Draw();
         TPaveText *eff_box       = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.eff_str()); eff_box->Draw();
-        TPaveText *nsig_pass_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{sig} = %1.0f #pm %1.0f", nsig_pass.getVal(), nsig_pass.getPropagatedError(*roo_fit_result))); nsig_pass_box->Draw();
-        TPaveText *nbkg_pass_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{bkg} = %1.0f #pm %1.0f", nbkg_pass.getVal(), nbkg_pass.getPropagatedError(*roo_fit_result))); nbkg_pass_box->Draw();
-        TPaveText *ntot_pass_box = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N_{tot} = %1.0f #pm %1.0f", ntot_pass.getVal(), ntot_pass.getPropagatedError(*roo_fit_result))); ntot_pass_box->Draw();
+        TPaveText *nsig_pass_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N^{pass}_{sig} = %1.2f #pm %1.2f", simple_result.num.value, simple_result.num.error)); nsig_pass_box->Draw();
+        TPaveText *nbkg_pass_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N^{pass}_{bkg} = %1.2f #pm %1.2f", simple_result.bkg.value, simple_result.bkg.error)); nbkg_pass_box->Draw();
+        TPaveText *ntot_pass_box = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N^{pass}_{tot} = %1.2f #pm %1.2f", simple_result.den.value, simple_result.den.error)); ntot_pass_box->Draw();
+        TPaveText *nsig_fail_box = CreateTextBox(0.65, 0.60, 0.85, 0.64, Form("N^{fail}_{sig} = %1.2f #pm %1.2f", nfail_sig.value, nfail_sig.error)); nsig_fail_box->Draw();
+        TPaveText *nbkg_fail_box = CreateTextBox(0.65, 0.55, 0.85, 0.59, Form("N^{fail}_{bkg} = %1.2f #pm %1.2f", nfail_bgk.value, nfail_bgk.error)); nbkg_fail_box->Draw();
+        TPaveText *ntot_fail_box = CreateTextBox(0.65, 0.50, 0.85, 0.54, Form("N^{fail}_{tot} = %1.2f #pm %1.2f", nfail_tot.value, nfail_tot.error)); ntot_fail_box->Draw();
 
         // failing plot
         simple_result.cfail->cd(); 
@@ -673,9 +722,12 @@ namespace tp
         eta_box->Draw();
         TPaveText *nfail_box     = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_fail_max)); nfail_box->Draw();
         eff_box->Draw();
-        TPaveText *nsig_fail_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{sig} = %1.0f #pm %1.0f", nsig_fail.getVal(), nsig_fail.getPropagatedError(*roo_fit_result))); nsig_fail_box->Draw();
-        TPaveText *nbkg_fail_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{bkg} = %1.0f #pm %1.0f", nbkg_fail.getVal(), nbkg_fail.getPropagatedError(*roo_fit_result))); nbkg_fail_box->Draw();
-        TPaveText *ntot_fail_box = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N_{tot} = %1.0f #pm %1.0f", ntot_fail.getVal(), ntot_fail.getPropagatedError(*roo_fit_result))); ntot_fail_box->Draw();
+        nsig_pass_box->Draw();
+        nbkg_pass_box->Draw();
+        ntot_pass_box->Draw();
+        nsig_fail_box->Draw();
+        nbkg_fail_box->Draw();
+        ntot_fail_box->Draw();
 
         // done 
         return simple_result;
@@ -694,15 +746,15 @@ namespace tp
     )
     {
         // connts
-        double num_pass      = rt::IntegralAndError(h_pass).first;
-        double num_pass_err  = rt::IntegralAndError(h_pass).second;
-        double num_fail      = rt::IntegralAndError(h_fail).first;
-        double num_fail_err  = rt::IntegralAndError(h_fail).second;
+        double num_pass      = rt::IntegralAndError(h_pass, 60, 120).first;
+        double num_pass_err  = rt::IntegralAndError(h_pass, 60, 120).second;
+        double num_fail      = rt::IntegralAndError(h_fail, 60, 120).first;
+        double num_fail_err  = rt::IntegralAndError(h_fail, 60, 120).second;
         double num_total     = num_pass + num_fail;
         double num_total_err = sqrt(num_pass_err*num_pass_err + num_fail_err*num_fail_err);
         double eff           = num_pass/num_total;
         double eff_err       = sqrt(eff * (1.0 - eff)/num_total); // binomial
-        Result simple_result(eff, eff_err, num_pass, num_pass_err, num_total, num_total_err); // taking symmetric for now
+        Result simple_result(eff, eff_err, num_pass, num_pass_err, num_total, num_total_err, 0, 0); // taking symmetric for now
 
         // independent mass var
         RooRealVar mass("mass", "mass", mlow, mhigh, "GeV");
@@ -719,8 +771,9 @@ namespace tp
         TPaveText *eta_box   = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
         TPaveText *npass_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", h_pass->Integral())); npass_box->Draw();
         TPaveText *eff_box   = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.eff_str()); eff_box->Draw();
-        TPaveText *num_box   = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{pass } = %1.0f", simple_result.num.value)); num_box->Draw();
-        TPaveText *den_box   = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{total} = %1.0f", simple_result.den.value)); den_box->Draw();
+        TPaveText *num_box   = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N_{pass} = %1.0f" , simple_result.num.value)); num_box->Draw();
+        TPaveText *fail_box  = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N_{fail} = %1.0f" , num_fail)); num_box->Draw();
+        TPaveText *den_box   = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N_{total} = %1.0f", simple_result.den.value)); den_box->Draw();
 
         // failing plot
         simple_result.cfail->cd(); 
@@ -733,6 +786,7 @@ namespace tp
         TPaveText *nfail_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", h_fail->Integral())); nfail_box->Draw();
         eff_box->Draw();
         num_box->Draw();
+        fail_box->Draw();
         den_box->Draw();
 
         return simple_result;
