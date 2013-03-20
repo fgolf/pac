@@ -73,14 +73,12 @@ namespace tp
     {
         // z mass 
         string title = Form("mz%s", label.c_str());
-        mz = new RooRealVar(title.c_str(), title.c_str(), 91, 80, 100, "GeV");
-        mz->setVal(Mz);
+        mz = new RooRealVar(title.c_str(), title.c_str(), Mz, 80, 100, "GeV");
         //mz->setConstant(kTRUE);
 
         // z width
         title = Form("gammaz%s", label.c_str());
-        gammaz = new RooRealVar(title.c_str(), title.c_str(), 2.5, 0.1, 10, "GeV");
-        gammaz->setVal(GammaZ);
+        gammaz = new RooRealVar(title.c_str(), title.c_str(), GammaZ, 0.1, 10, "GeV");
         //gammaz->setConstant(kTRUE);
 
         // the BW
@@ -106,11 +104,6 @@ namespace tp
         RooRealVar  *mean;
         RooRealVar  *sigma;
         RooGaussian *gaus;
-//         RooRealVar* mean;
-//         RooRealVar* sigma;
-//         RooRealVar* alpha;
-//         RooRealVar* n;
-//         RooCBShape* cb;
         TH1F        *inHist;
         RooDataHist *dataHist;
         RooHistPdf  *histPdf;
@@ -118,29 +111,15 @@ namespace tp
 
     MCTemplateConvGausPdf::MCTemplateConvGausPdf(RooRealVar &m, TH1F* hist, const std::string& label, RooRealVar *sigma0, int intOrder)
     {  
-//         char name[10];
-//         sprintf(name,"%s",label.c_str());
-// 
-//         char vname[50];  
-// 
-//         sprintf(vname,"mean%s",name);  mean  = new RooRealVar(vname,vname,0,-10,10);
-//         if(sigma0) { sigma = sigma0; }
-//         else       { sprintf(vname,"sigma%s",name); sigma = new RooRealVar(vname,vname,2,0,5); }
-//         sprintf(vname,"gaus%s",name);  gaus  = new RooGaussian(vname,vname,m,*mean,*sigma);
-
         string title;
         title = Form("mean%s"  , label.c_str()); mean  = new RooRealVar(title.c_str(), title.c_str(), 0 , -10 , 10);
         title = Form("sigma%s" , label.c_str()); sigma = new RooRealVar(title.c_str(), title.c_str(), 2 ,   0 , 10);
         title = Form("gaus%s"  , label.c_str()); gaus  = new RooGaussian(title.c_str(), title.c_str(), m, *mean , *sigma);
-//         title = Form("alpha%s" , label.c_str()); alpha = new RooRealVar(title.c_str(), title.c_str(), 5 , 0   , 20);
-//         title = Form("n%s"     , label.c_str()); n     = new RooRealVar(title.c_str(), title.c_str(), 1 , 0   , 10);
-//         title = Form("cb%s"    , label.c_str()); cb    = new RooCBShape(title.c_str(), title.c_str(), m, *mean , *sigma , *alpha , *n);
 
         title = Form("inHist_%s",hist->GetName());
         inHist = dynamic_cast<TH1F*>(hist->Clone(title.c_str()));
         title = Form("dataHist%s",label.c_str()); dataHist = new RooDataHist(title.c_str(), title.c_str(), RooArgSet(m), inHist);
         title = Form("histPdf%s" ,label.c_str()); histPdf  = new RooHistPdf(title.c_str(), title.c_str(), m,*dataHist, intOrder);
-        //title = Form("signal%s"  ,label.c_str()); model    = new RooFFTConvPdf(title.c_str(), title.c_str(), m, *histPdf, *cb);
         title = Form("signal%s"  ,label.c_str()); model    = new RooFFTConvPdf(title.c_str(), title.c_str(), m, *histPdf, *gaus);
     }
 
@@ -560,6 +539,8 @@ namespace tp
         return text_box;
     }
 
+    //value_t GetIntegratedSubRange(RooAbsPdf model, 
+
     // Peform the fit
     Result PerformSimultaneousFit
     (
@@ -593,7 +574,7 @@ namespace tp
         // Define categories
         RooCategory sample("sample","");
         sample.defineType("pass",1);
-        sample.defineType("pail",2);
+        sample.defineType("fail",2);
 
         // signal model (need ptr for polymorphism to work -- references for convenience)
         PdfBase* spass_model_ptr = CreateModelPdf(sig_pass_model, mass, "_pass", h_pass_template);
@@ -621,13 +602,13 @@ namespace tp
         RooFormulaVar ntot_pass("ntot_pass" ,"nsig_pass+nbkg_pass", RooArgList(nsig_pass, nbkg_pass));
         RooFormulaVar ntot_fail("ntot_fail" ,"nsig_fail+nbkg_fail", RooArgList(nsig_fail, nbkg_fail));
 
-        // efficiency counts
-        RooExtendPdf esig_pass("esig_pass","esig_pass", spass_model, nsig_pass, "signalRange");
-        RooExtendPdf ebkg_pass("ebkg_pass","ebkg_pass", bpass_model, nbkg_pass, "signalRange");
+        // add signal and background PDF for the total shape
+        RooExtendPdf esig_pass("esig_pass","esig_pass", spass_model, nsig_pass);
+        RooExtendPdf ebkg_pass("ebkg_pass","ebkg_pass", bpass_model, nbkg_pass);
         RooAddPdf model_pass("model_pass","Model for PASS sample", RooArgList(esig_pass, ebkg_pass));
 
-        RooExtendPdf esig_fail("esig_fail","esig_fail", sfail_model, nsig_fail, "signalRange");
-        RooExtendPdf ebkg_fail("ebkg_fail","ebkg_fail", bfail_model, nbkg_fail, "signalRange");
+        RooExtendPdf esig_fail("esig_fail","esig_fail", sfail_model, nsig_fail);
+        RooExtendPdf ebkg_fail("ebkg_fail","ebkg_fail", bfail_model, nbkg_fail);
         RooAddPdf model_fail("model_fail","Model for Fail sample", RooArgList(esig_fail, ebkg_fail));
 
         // import data histograms
@@ -640,79 +621,76 @@ namespace tp
         total_pdf.addPdf(model_pass, "pass");  
         total_pdf.addPdf(model_fail, "fail");
 
-        // to the fit
+        // do the fit
         RooFitResult *roo_fit_result = total_pdf.fitTo(data_comb, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
-        //mass.setRange("window", 85, 97);
-        mass.setRange("window", 60, 120);
-        RooAbsReal* int_eff       = eff.createIntegral      (mass, RooFit::NormSet(mass), RooFit::Range("window"));
-        RooAbsReal* int_nsig_pass = nsig_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
-        RooAbsReal* int_nbkg_pass = nbkg_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
-        RooAbsReal* int_ntot_pass = ntot_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
-        RooAbsReal* int_nsig_fail = nsig_fail.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
-        RooAbsReal* int_nbkg_fail = nbkg_fail.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
-        RooAbsReal* int_ntot_fail = ntot_fail.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("window"));
-        RooAbsReal* int_nsig      = nsig.createIntegral     (mass, RooFit::NormSet(mass), RooFit::Range("window"));
 
-        // divide by the high low range to get the correct bin width
-        float mass_range = fabs(mhigh-mlow); 
+        // integrate on a subrange
+        mass.setRange("zwindow", 81, 101);
+        //mass.setRange("zwindow", 60, 120);
+        RooAbsReal* int_nsig_pass = esig_pass.createIntegral (mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
+        RooAbsReal* int_nbkg_pass = ebkg_pass.createIntegral (mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
+        RooAbsReal* int_ntot_pass = model_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
+        RooAbsReal* int_nsig_fail = esig_fail.createIntegral (mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
+        RooAbsReal* int_nbkg_fail = ebkg_fail.createIntegral (mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
+        RooAbsReal* int_ntot_fail = model_fail.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
 
-        value_t nfail_sig = {int_nsig_fail->getVal()/(mass_range), int_nsig_fail->getPropagatedError(*roo_fit_result)/(mass_range)};
-        value_t nfail_bgk = {int_nbkg_fail->getVal()/(mass_range), int_nbkg_fail->getPropagatedError(*roo_fit_result)/(mass_range)};
-        value_t nfail_tot = {int_ntot_fail->getVal()/(mass_range), int_ntot_fail->getPropagatedError(*roo_fit_result)/(mass_range)};
+        // conventience varariables for the full fit counts
+        value_t npass_sig = {nsig_pass.getVal(), nsig_pass.getPropagatedError(*roo_fit_result)};
+        value_t npass_bkg = {nbkg_pass.getVal(), nbkg_pass.getPropagatedError(*roo_fit_result)};
+        value_t npass_tot = {ntot_pass.getVal(), ntot_pass.getPropagatedError(*roo_fit_result)};
+        value_t nfail_sig = {nsig_fail.getVal(), nsig_fail.getPropagatedError(*roo_fit_result)};
+        value_t nfail_bkg = {nbkg_fail.getVal(), nbkg_fail.getPropagatedError(*roo_fit_result)};
+        value_t nfail_tot = {ntot_fail.getVal(), ntot_fail.getPropagatedError(*roo_fit_result)};
+        value_t data_eff  = {eff.getVal(), eff.getPropagatedError(*roo_fit_result)};
 
-        double eff_val = int_nsig_pass->getVal()/int_nsig->getVal();
-        double eff_err = sqrt(eff_val * (1.0 - eff_val))/(int_nsig->getVal()/(mass_range)); // binomial
-        value_t eff_prime = {eff_val, eff_err};
+        // the value integrated on the subrange
+        value_t int_npass_sig = {int_nsig_pass->getVal() * npass_sig.value, int_nsig_pass->getVal() * npass_sig.error};
+        value_t int_npass_bkg = {int_nbkg_pass->getVal() * npass_bkg.value, int_nbkg_pass->getVal() * npass_bkg.error};
+        value_t int_npass_tot = {int_ntot_pass->getVal() * npass_tot.value, int_ntot_pass->getVal() * npass_tot.error};
+        value_t int_nfail_sig = {int_nsig_fail->getVal() * nfail_sig.value, int_nsig_fail->getVal() * nfail_sig.error};
+        value_t int_nfail_bkg = {int_nbkg_fail->getVal() * nfail_bkg.value, int_nbkg_fail->getVal() * nfail_bkg.error};
+        value_t int_nfail_tot = {int_ntot_fail->getVal() * nfail_tot.value, int_ntot_fail->getVal() * nfail_tot.error};
 
-        cout << nsig_pass.getVal() << "\t" << int_nsig_pass->getVal() << "\t" << int_nsig_pass->getPropagatedError(*roo_fit_result) << endl;
-        cout << nsig_fail.getVal() << "\t" << int_nsig_fail->getVal() << "\t" << int_nsig_fail->getPropagatedError(*roo_fit_result) << endl;
-
-        // results of eff
+        // the new efficiency
+        value_t num = int_npass_sig;
+        value_t den = {int_npass_sig.value + int_nfail_sig.value, sqrt(pow(int_npass_sig.error,2) + pow(int_nfail_sig.error,2))};
+        value_t int_data_eff = {num.value/den.value, data_eff.error};
+ 
+        // results of eff */
         Result simple_result
         (
-            eff.getVal(),
-            eff_prime.value,
-            int_nsig_pass->getVal()/(mass_range), 
-            int_nsig_pass->getPropagatedError(*roo_fit_result)/(mass_range),
-            int_ntot_pass->getVal()/(mass_range), 
-            int_ntot_pass->getPropagatedError(*roo_fit_result)/(mass_range),
-            int_nbkg_pass->getVal()/(mass_range), 
-            int_nbkg_pass->getPropagatedError(*roo_fit_result)/(mass_range)
+             data_eff.value, 
+             data_eff.error,
+             num.value,
+             num.error,
+             den.value,
+             den.error,
+             int_npass_bkg.value,
+             int_npass_bkg.error
         );
-        //Result simple_result
-        //(
-        //    eff.getVal(),
-        //    eff.getPropagatedError(*roo_fit_result),
-        //    nsig_pass.getVal(), 
-        //    nsig_pass.getPropagatedError(*roo_fit_result),
-        //    nsig.getVal(), 
-        //    nsig.getPropagatedError(*roo_fit_result),
-        //    nbkg_pass.getVal(), 
-        //    nbkg_pass.getPropagatedError(*roo_fit_result)
-        //);
-  
+ 
         // passing plot
         simple_result.cpass->cd(); 
-        RooPlot *mframe_pass = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/tp::MassBinWidth)));
+        RooPlot *mframe_pass = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/2.0)));
         data_pass.plotOn(mframe_pass, RooFit::MarkerStyle(kFullCircle), RooFit::MarkerSize(0.8), RooFit::DrawOption("ZP"));
         model_pass.plotOn(mframe_pass);
         model_pass.plotOn(mframe_pass,RooFit::Components("ebkg_pass"), RooFit::LineStyle(kDashed), RooFit::LineColor(kRed));
         mframe_pass->SetTitle("Passing Probes");
         mframe_pass->Draw();
-        TPaveText *pt_box        = CreateTextBox(0.15, 0.80, 0.41, 0.85, pt_label ); pt_box->Draw();
-        TPaveText *eta_box       = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
+        TPaveText *pt_box    = CreateTextBox(0.15, 0.80, 0.41, 0.85, pt_label ); pt_box->Draw();
+        TPaveText *eta_box   = CreateTextBox(0.15, 0.75, 0.33, 0.80, eta_label); eta_box->Draw();
         TPaveText *npass_box     = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_pass_max)); npass_box->Draw();
-        TPaveText *eff_box       = CreateTextBox(0.65, 0.80, 0.85, 0.84, "#varepsilon = " + simple_result.eff_str()); eff_box->Draw();
-        TPaveText *nsig_pass_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N^{pass}_{sig} = %1.2f #pm %1.2f", simple_result.num.value, simple_result.num.error)); nsig_pass_box->Draw();
-        TPaveText *nbkg_pass_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N^{pass}_{bkg} = %1.2f #pm %1.2f", simple_result.bkg.value, simple_result.bkg.error)); nbkg_pass_box->Draw();
-        TPaveText *ntot_pass_box = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N^{pass}_{tot} = %1.2f #pm %1.2f", simple_result.den.value, simple_result.den.error)); ntot_pass_box->Draw();
-        TPaveText *nsig_fail_box = CreateTextBox(0.65, 0.60, 0.85, 0.64, Form("N^{fail}_{sig} = %1.2f #pm %1.2f", nfail_sig.value, nfail_sig.error)); nsig_fail_box->Draw();
-        TPaveText *nbkg_fail_box = CreateTextBox(0.65, 0.55, 0.85, 0.59, Form("N^{fail}_{bkg} = %1.2f #pm %1.2f", nfail_bgk.value, nfail_bgk.error)); nbkg_fail_box->Draw();
-        TPaveText *ntot_fail_box = CreateTextBox(0.65, 0.50, 0.85, 0.54, Form("N^{fail}_{tot} = %1.2f #pm %1.2f", nfail_tot.value, nfail_tot.error)); ntot_fail_box->Draw();
+        TPaveText *eff_box       = CreateTextBox(0.65, 0.80, 0.85, 0.84, Form("#varepsilon = %1.3f #pm %1.3f"   , int_data_eff.value , int_data_eff.error )); eff_box->Draw();
+        TPaveText *nsig_pass_box = CreateTextBox(0.65, 0.75, 0.85, 0.79, Form("N^{pass}_{sig} = %1.0f #pm %1.0f", npass_sig.value    , npass_sig.error    )); nsig_pass_box->Draw();
+        TPaveText *nbkg_pass_box = CreateTextBox(0.65, 0.70, 0.85, 0.74, Form("N^{pass}_{bkg} = %1.0f #pm %1.0f", npass_bkg.value    , npass_bkg.error    )); nbkg_pass_box->Draw();
+        TPaveText *ntot_pass_box = CreateTextBox(0.65, 0.65, 0.85, 0.69, Form("N^{pass}_{tot} = %1.0f #pm %1.0f", npass_tot.value    , npass_tot.error    )); ntot_pass_box->Draw();
+        TPaveText *nsig_fail_box = CreateTextBox(0.65, 0.60, 0.85, 0.64, Form("N^{fail}_{sig} = %1.0f #pm %1.0f", nfail_sig.value    , nfail_sig.error    )); nsig_fail_box->Draw();
+        TPaveText *nbkg_fail_box = CreateTextBox(0.65, 0.55, 0.85, 0.59, Form("N^{fail}_{bkg} = %1.0f #pm %1.0f", nfail_bkg.value    , nfail_bkg.error    )); nbkg_fail_box->Draw();
+        TPaveText *ntot_fail_box = CreateTextBox(0.65, 0.50, 0.85, 0.54, Form("N^{fail}_{tot} = %1.0f #pm %1.0f", nfail_tot.value    , nfail_tot.error    )); ntot_fail_box->Draw();
 
         // failing plot
         simple_result.cfail->cd(); 
-        RooPlot *mframe_fail = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/tp::MassBinWidth)));
+        RooPlot *mframe_fail = mass.frame(RooFit::Bins(static_cast<int>(fabs(mhigh-mlow)/2.0)));
         data_fail.plotOn(mframe_fail, RooFit::MarkerStyle(kFullCircle), RooFit::MarkerSize(0.8), RooFit::DrawOption("ZP"));
         model_fail.plotOn(mframe_fail);
         model_fail.plotOn(mframe_fail,RooFit::Components("ebkg_fail"), RooFit::LineStyle(kDashed), RooFit::LineColor(kRed));
@@ -720,7 +698,7 @@ namespace tp
         mframe_fail->Draw();
         pt_box->Draw();
         eta_box->Draw();
-        TPaveText *nfail_box     = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_fail_max)); nfail_box->Draw();
+        TPaveText *nfail_box = CreateTextBox(0.15, 0.70, 0.33, 0.75, Form("%1.0f Events", nbkg_fail_max)); nfail_box->Draw();
         eff_box->Draw();
         nsig_pass_box->Draw();
         nbkg_pass_box->Draw();
@@ -728,6 +706,33 @@ namespace tp
         nsig_fail_box->Draw();
         nbkg_fail_box->Draw();
         ntot_fail_box->Draw();
+
+        // print the results
+        CTable t1;
+        t1.useTitle();
+        t1.setTitle("data fit results full range");
+        t1.setTable() (                         "value",         "error")
+                      ( "signal_pass" , npass_sig.value, npass_sig.error)
+                      ( "signal_fail" , nfail_sig.value, nfail_sig.error)
+                      ( "bkg_pass"    , npass_bkg.value, npass_bkg.error)
+                      ( "bkg_fail"    , nfail_bkg.value, nfail_bkg.error)
+                      ( "total_pass"  , npass_tot.value, npass_tot.error)
+                      ( "total_fail"  , nfail_tot.value, nfail_tot.error)
+                      ( "eff"         , data_eff.value , data_eff.error );
+        t1.print();
+
+        CTable t2;
+        t2.useTitle();
+        t2.setTitle("data fit results subrange");
+        t2.setTable() (                                 "value",         "error")
+                      ( "signal_pass" , int_npass_sig.value, int_npass_sig.error)
+                      ( "signal_fail" , int_nfail_sig.value, int_nfail_sig.error)
+                      ( "bkg_pass"    , int_npass_bkg.value, int_npass_bkg.error)
+                      ( "bkg_fail"    , int_nfail_bkg.value, int_nfail_bkg.error)
+                      ( "total_pass"  , int_npass_tot.value, int_npass_tot.error)
+                      ( "total_fail"  , int_nfail_tot.value, int_nfail_tot.error)
+                      ( "eff"         , int_data_eff.value , int_data_eff.error );
+        t2.print();
 
         // done 
         return simple_result;
@@ -745,15 +750,20 @@ namespace tp
         const float mhigh
     )
     {
+        const float zwin_low  = 81.0;
+        const float zwin_high = 101.0;
+//         const float zwin_low  = 60.0;
+//         const float zwin_high = 120.0;
+
         // connts
-        double num_pass      = rt::IntegralAndError(h_pass, 60, 120).first;
-        double num_pass_err  = rt::IntegralAndError(h_pass, 60, 120).second;
-        double num_fail      = rt::IntegralAndError(h_fail, 60, 120).first;
-        double num_fail_err  = rt::IntegralAndError(h_fail, 60, 120).second;
-        double num_total     = num_pass + num_fail;
-        double num_total_err = sqrt(num_pass_err*num_pass_err + num_fail_err*num_fail_err);
-        double eff           = num_pass/num_total;
-        double eff_err       = sqrt(eff * (1.0 - eff)/num_total); // binomial
+        const double num_pass      = rt::IntegralAndError(h_pass, zwin_low, zwin_high).first;
+        const double num_pass_err  = rt::IntegralAndError(h_pass, zwin_low, zwin_high).second;
+        const double num_fail      = rt::IntegralAndError(h_fail, zwin_low, zwin_high).first;
+        const double num_fail_err  = rt::IntegralAndError(h_fail, zwin_low, zwin_high).second;
+        const double num_total     = num_pass + num_fail;
+        const double num_total_err = sqrt(num_pass_err*num_pass_err + num_fail_err*num_fail_err);
+        const double eff           = num_pass/num_total;
+        const double eff_err       = sqrt(eff * (1.0 - eff)/num_total); // binomial
         Result simple_result(eff, eff_err, num_pass, num_pass_err, num_total, num_total_err, 0, 0); // taking symmetric for now
 
         // independent mass var

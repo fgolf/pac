@@ -21,6 +21,7 @@ lib tp_tools
    /MiniFWLite//libMiniFWLite
    /RootTools//RootTools
    /AnalysisTools//AnalysisTools
+   /SimpleTable//SimpleTable
  : # requirements
    <include>./include
    <include>./source

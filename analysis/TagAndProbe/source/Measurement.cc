@@ -55,7 +55,7 @@ namespace tp
             const float el_iso         = (pfchiso03() + TMath::Max(0.0f, pfemiso03() + pfnhiso03() - ea03() * TMath::Max(0.0f, rhoIsoAllCentral())))/el_probe_pt;
             const float el_iso_eg_cut  = (el_is_endcap ? (el_probe_pt < 20.0 ? 0.10 : 0.15) : 0.15);  // egamma value 
             const float el_iso_ss_cut  = 0.09;                                                        // ss2012 value
-            const float el_d0_cut      = 0.10;
+            const float el_d0_cut      = 0.010;
             const float el_tag_pt_cut  = 32.0;
             const float el_hoe_cut     = (el_is_endcap ? 0.075 : 0.1); 
             const int   el_mhits_cut   = 0; // allow maximum number of missing hits
@@ -84,17 +84,17 @@ namespace tp
                 if (el_is_crack)            {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
-                if (not el_passes_3q)       {return false;}
-                if (not el_passes_d0)       {return false;}
+                if (not el_passes_id)       {return false;}
                 if (not el_passes_hoe)      {return false;}
                 if (not el_passes_no_mhits) {return false;}
-                if (not el_passes_id)       {return false;}
+                if (not el_passes_3q)       {return false;}
+                if (not el_passes_d0)       {return false;}
             }
 
             // EGamma Denominator Isolation selections
             if (selection == Selection::EGammaDenIso)
             {
-                //if (el_is_crack)            {return false;}
+                if (el_is_crack)            {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
                 if (not el_passes_id)       {return false;}
@@ -108,13 +108,14 @@ namespace tp
                 if (el_is_crack)             {return false;}
                 if (not el_passes_pt)        {return false;}
                 if (not el_passes_trig_tag)  {return false;}
+                //if (not el_passes_eg_iso)    {return false;}
                 if (not el_passes_ss_iso)    {return false;}
             }
 
             // EGamma Denominator ID selections
             if (selection == Selection::EGammaDenID)
             {
-                //if (el_is_crack)            {return false;}
+                if (el_is_crack)            {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
                 if (not el_passes_eg_iso)   {return false;}
@@ -133,7 +134,7 @@ namespace tp
             // EGamma Denominator Both selections
             if (selection == Selection::EGammaDenBoth)
             {
-                //if (el_is_crack)            {return false;}
+                if (el_is_crack)            {return false;}
                 if (not el_passes_pt)       {return false;}
                 if (not el_passes_trig_tag) {return false;}
             }
@@ -147,18 +148,19 @@ namespace tp
                 if (el_is_crack)             {return false;}
                 if (not el_passes_pt)        {return false;}
                 if (not el_passes_trig_tag)  {return false;}
-                if (not el_passes_3q)        {return false;}
-                if (not el_passes_d0)        {return false;}
+                if (not el_passes_id)        {return false;}
                 if (not el_passes_hoe)       {return false;}
                 if (not el_passes_no_mhits)  {return false;}
-                if (not el_passes_id)        {return false;}
+                if (not el_passes_3q)        {return false;}
+                if (not el_passes_d0)        {return false;}
+                //if (not el_passes_eg_iso)    {return false;}
                 if (not el_passes_ss_iso)    {return false;}
             }
 
             // EGamma Numerator Isolation selections
             if (selection == Selection::EGammaNum)
             {
-                //if (el_is_crack)             {return false;}
+                if (el_is_crack)             {return false;}
                 if (not el_passes_pt)        {return false;}
                 if (not el_passes_trig_tag)  {return false;}
                 if (not el_passes_id)        {return false;}
@@ -178,7 +180,7 @@ namespace tp
             const float mu_d0          = fabs(d0vtx()); 
             const float mu_iso         = (pfchiso03() + TMath::Max(0.0f, pfemiso03() + pfnhiso03() - 0.5f * dbeta03()))/mu_probe_pt;
             const float mu_iso_ss_cut  = 0.10;                                                        // ss2012 value
-            const float mu_d0_cut      = 0.10;
+            const float mu_d0_cut      = 0.005;
             const float mu_tag_pt_cut  = 30.0;
 
             // cut decisions 

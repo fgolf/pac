@@ -9,7 +9,7 @@ mhigh=120
 #analysis=Egamma
 analysis=SameSignEl
 
-output=plots/${analysis}_eg/
+output=plots/${analysis}_orig/
 tp_make_plots  --mode Electron   --den ${analysis}DenID   --num ${analysis}Num --verbose 0 --nev -1 --output $output/id/data/plots.root   --fit_mlow $mlow --fit_mhigh $mhigh >& logs/${analysis}_data_id.log &
 tp_make_plots  --mode ElectronMC --den ${analysis}DenID   --num ${analysis}Num --verbose 0 --nev -1 --output $output/id/mc/plots.root     --fit_mlow $mlow --fit_mhigh $mhigh >& logs/${analysis}_mc_id.log   &
 tp_make_plots  --mode Electron   --den ${analysis}DenIso  --num ${analysis}Num --verbose 0 --nev -1 --output $output/iso/data/plots.root  --fit_mlow $mlow --fit_mhigh $mhigh >& logs/${analysis}_data_iso.log &

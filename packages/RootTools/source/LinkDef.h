@@ -97,7 +97,10 @@
 #pragma link C++ fucntion rt::SetTDRStyle;
 #pragma link C++ fucntion rt::MakeTChain;
 #pragma link C++ fucntion rt::CreateTChainFromCommaSeperatedList;
+#pragma link C++ fucntion rt::CreateTableFromHist;
 #pragma link C++ fucntion rt::SetSystematicUncertainty;
+#pragma link C++ fucntion rt::MultiplyHists;
+#pragma link C++ fucntion rt::DivideHists;
 
 // constructors
 #pragma link C++ function rt::TH1Container::TH1Container;

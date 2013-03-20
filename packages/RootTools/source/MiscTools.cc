@@ -1268,7 +1268,7 @@ namespace rt
         {
             h_result->SetTitle(title.c_str());
         }
-        h_result->Multiply(h2, h2, 1.0, 1.0, option.c_str());
+        h_result->Multiply(h1, h2, 1.0, 1.0, option.c_str());
         return h_result;
     }
 

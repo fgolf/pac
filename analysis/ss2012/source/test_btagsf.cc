@@ -4,7 +4,8 @@
 //#include "at/DileptonHypType.h"
 #include "AnalysisType.h"
 #include "SignalRegion.h"
-#include "at/MCBtagCount.h"
+//#include "at/MCBtagCount.h"
+#include "mccounttest.h"
 #include "SSB2012.h"
 #include "CTable.h"
 #include <string>
@@ -14,6 +15,7 @@
 //#include <boost/program_options.hpp>
 
 using namespace std;
+using namespace btag;
 
 int main()
 try
@@ -60,9 +62,9 @@ try
         if (not ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
 
         // new btag counts 
-        int num_btags_sf    = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::base); 
-        int num_btags_sf_dn = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::down);  
-        int num_btags_sf_up = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::up  );  
+        int num_btags_sf    = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::base, "T1tttt", is_fastsim); 
+        int num_btags_sf_dn = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::down, "T1tttt", is_fastsim);  
+        int num_btags_sf_up = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::up  , "T1tttt", is_fastsim);  
 
         // fill
         hc["h_nbtags"      ]->Fill(nbtags()       );
@@ -91,8 +93,8 @@ try
     t.useTitle();
     t.setTitle("# btagged-jets");
     t.setTable() (                                            "# 0-btags")
-                 ("unscaled"         , hc["h_nbtags"]->GetEntries()      )
-                 ("rescaled"         , hc["h_nbtags_sf"]->GetEntries()   )
+                 ("unscaled"         , hc["h_nbtags"      ]->GetEntries())
+                 ("rescaled"         , hc["h_nbtags_sf"   ]->GetEntries())
                  ("uncertainty up"   , hc["h_nbtags_sf_up"]->GetEntries())
                  ("uncertainty down" , hc["h_nbtags_sf_dn"]->GetEntries());
     t.print();
@@ -114,9 +116,9 @@ try
     //hc.Write("plots/btagsf_sbottomtop/btagsf_sbottomtop.root"); 
     //hc.Print("plots/btagsf_sbottomtop", "eps"); 
     //rt::Print(overlay, "plots/btagsf_sbottomtop/p_nbtags", "eps");
-    hc.Write("plots/btagsf_ttw/btagsf_ttw.root"); 
-    hc.Print("plots/btagsf_ttw", "eps"); 
-    rt::Print(overlay, "plots/btagsf_ttw/p_nbtags", "eps");
+    hc.Write("plots/btagsf_ttw_new/btagsf_ttw.root"); 
+    hc.Print("plots/btagsf_ttw_new", "eps"); 
+    rt::Print(overlay, "plots/btagsf_ttw_new/p_nbtags", "eps");
 }
 catch (std::exception& e)
 {
