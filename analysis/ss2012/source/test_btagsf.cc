@@ -4,8 +4,8 @@
 //#include "at/DileptonHypType.h"
 #include "AnalysisType.h"
 #include "SignalRegion.h"
-//#include "at/MCBtagCount.h"
-#include "mccounttest.h"
+#include "at/MCBtagCount.h"
+//#include "mccounttest.h"
 #include "SSB2012.h"
 #include "CTable.h"
 #include <string>
@@ -14,12 +14,10 @@
 #include "TRandom.h"
 //#include <boost/program_options.hpp>
 
-using namespace std;
-using namespace btag;
-
 int main()
 try
 {
+    using namespace std;
     using namespace ssb;
     using namespace rt;
     using namespace at;
@@ -62,9 +60,13 @@ try
         if (not ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
 
         // new btag counts 
-        int num_btags_sf    = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::base, "T1tttt", is_fastsim); 
-        int num_btags_sf_dn = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::down, "T1tttt", is_fastsim);  
-        int num_btags_sf_up = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::up  , "T1tttt", is_fastsim);  
+//         int num_btags_sf    = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::base, "T1tttt", is_fastsim); 
+//         int num_btags_sf_dn = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::down, "T1tttt", is_fastsim);  
+//         int num_btags_sf_up = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::up  , "T1tttt", is_fastsim);  
+        // new btag counts 
+        int num_btags_sf    = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::base); 
+        int num_btags_sf_dn = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::down);  
+        int num_btags_sf_up = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::up  );  
 
         // fill
         hc["h_nbtags"      ]->Fill(nbtags()       );

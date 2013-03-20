@@ -6,25 +6,38 @@
 // only works on CMS2
 float DileptonTagAndProbeScaleFactor(const int hyp_idx)
 {
-    const float sf1 = TagAndProbeScaleFactor(cms2.hyp_lt_id().at(hyp_idx), cms2.hyp_lt_p4().at(hyp_idx).pt(), cms2.hyp_lt_p4().at(hyp_idx).eta());
-    const float sf2 = TagAndProbeScaleFactor(cms2.hyp_ll_id().at(hyp_idx), cms2.hyp_ll_p4().at(hyp_idx).pt(), cms2.hyp_ll_p4().at(hyp_idx).eta());
+    const int l1_id    = cms2.hyp_lt_id().at(hyp_idx);
+    const float l1_pt  = cms2.hyp_lt_p4().at(hyp_idx).pt();
+    const float l1_eta = (abs(l1_id)==13 ? cms2.hyp_lt_p4().at(hyp_idx).pt() : cms2.els_etaSC().at(cms2.hyp_lt_index().at(hyp_idx)));
+    const int l2_id    = cms2.hyp_ll_id().at(hyp_idx);
+    const float l2_pt  = cms2.hyp_ll_p4().at(hyp_idx).pt();
+    const float l2_eta = (abs(l1_id)==13 ? cms2.hyp_ll_p4().at(hyp_idx).pt() : cms2.els_etaSC().at(cms2.hyp_ll_index().at(hyp_idx)));
+
+    const float sf1 = TagAndProbeScaleFactor(l1_id, l1_pt, l1_eta);
+    const float sf2 = TagAndProbeScaleFactor(l2_id, l2_pt, l2_eta);
     return (sf1 * sf2);
 }
 
 // general 
-float DileptonTagAndProbeScaleFactor(const int l1_id, const LorentzVector& l1_p4, const int l2_id, const LorentzVector& l2_p4)
+float DileptonTagAndProbeScaleFactor(const int l1_id, const float l1_pt, const float l1_eta, const int l2_id, const float l2_pt, const float l2_eta)
 {
-    const float sf1 = TagAndProbeScaleFactor(l1_id, l1_p4.pt(), l1_p4.eta());
-    const float sf2 = TagAndProbeScaleFactor(l2_id, l2_p4.pt(), l2_p4.eta());
+    const float sf1 = TagAndProbeScaleFactor(l1_id, l1_pt, l1_eta);
+    const float sf2 = TagAndProbeScaleFactor(l2_id, l2_pt, l2_eta);
     return (sf1 * sf2);
 }
 
+// NOTE: eta for electrons should be SC eta
 float TagAndProbeScaleFactor(int id, float pt, float eta)
 {
+    // haven't measured low-low pt
+    if (5 < pt && pt < 10)
+    {
+        return 1.0;
+    }
+    const double aeta = fabs(eta);
+
     if (abs(id)==11) 
     {
-        const double aeta = fabs(eta);
-
         if (10 < pt && pt < 15)
         {
             if (0.00   < aeta && aeta < 0.80  ) {return 0.834;}
@@ -74,8 +87,6 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
 
     if (abs(id)==13) 
     {
-        const double aeta = fabs(eta);
-
         if (10 < pt && pt < 15)
         {
             if (0.00  < aeta && aeta < 1.20) {return 0.973;}

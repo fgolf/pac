@@ -371,7 +371,6 @@ exe test_frb
 exe test_btagsf
  : # sources
    ./source/test_btagsf.cc
-	 ./source/mccounttest.cc
    ss2012_tools/<link>static
    # dependent packages
    /ROOT

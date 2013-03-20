@@ -22,9 +22,11 @@ float DileptonTagAndProbeScaleFactor(const int hyp_idx);
 float DileptonTagAndProbeScaleFactor
 (
     const int l1_id, 
-    const LorentzVector& l1_p4, 
+    const float l1_pt, 
+    const float l1_eta, 
     const int l2_id, 
-    const LorentzVector& l2_p4
+    const float l2_pt, 
+    const float l2_eta 
 );
 
 // Lepton ID and isolatoin efficiency (lepton)

@@ -1473,9 +1473,11 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.lep2.sf_trig   = -999999; // not done
 
             // scale factor for lepton reconstruction efficiency
-            m_evt.sf_lepeff      = DileptonTagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4, lep2_id, m_evt.lep2.p4);
-            m_evt.lep1.sf_lepeff = TagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), m_evt.lep1.p4.eta()); 
-            m_evt.lep2.sf_lepeff = TagAndProbeScaleFactor(lep2_id, m_evt.lep2.p4.pt(), m_evt.lep2.p4.eta());
+            const float eta1 = (abs(lep1_id) == 13 ? m_evt.lep1.p4.eta() : m_evt.lep1.sc_p4.eta());
+            const float eta2 = (abs(lep2_id) == 13 ? m_evt.lep2.p4.eta() : m_evt.lep2.sc_p4.eta());
+            m_evt.sf_lepeff      = DileptonTagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), eta1, lep2_id, m_evt.lep2.p4.pt(), eta2);
+            m_evt.lep1.sf_lepeff = TagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), eta1); 
+            m_evt.lep2.sf_lepeff = TagAndProbeScaleFactor(lep2_id, m_evt.lep2.p4.pt(), eta2);
 
             // scale factor for # btags 
             vector<LorentzVector> bjets;

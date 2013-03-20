@@ -318,7 +318,9 @@ int InterpLooper::operator()(long event)
         if (m_do_scale_factors && not is_real_data())
         {
             // lepton efficiencies
-            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4(), lep2_pdgid(), lep2_p4());
+            const float eta1 = (abs(lep1_pdgid()) == 13 ? lep1_p4().eta() : lep1_sc_p4().eta());
+            const float eta2 = (abs(lep2_pdgid()) == 13 ? lep2_p4().eta() : lep2_sc_p4().eta());
+            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
 
             // trigger scale factor
             evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  

@@ -774,49 +774,6 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
-        //if (lep2_p4().pt() < m_l2_min_pt || lep2_p4().pt() > m_l2_max_pt)
-        //{
-        //    if (m_verbose) {cout << "failing minimum/maximum lep2 pT" << endl;}
-        //    return 0;
-        //}
-        //if (lep1_p4().pt() < m_l1_min_pt || lep1_p4().pt() > m_l1_max_pt)
-        //{
-        //    if (m_verbose) {cout << "failing minimum/maximum lep1 pT" << endl;}
-        //    return 0;
-        //}
-
-        // d0 requirement
-        //if ((is_ss() || is_os()) && abs(lep1_d0()) > (abs(lep1_pdgid())==11 ? 0.01 : 0.005))
-        //{
-        //    if (m_verbose) {cout << "lep1 failing minimum d0 cut" << endl;}
-        //    return 0;
-        //}
-        //if ((is_ss() || is_os()) && abs(lep2_d0()) > (abs(lep2_pdgid())==11 ? 0.01 : 0.005))
-        //{
-        //    if (m_verbose) {cout << "lep1 failing minimum d0 cut" << endl;}
-        //    return 0;
-        //}
-
-        // ioslation
-        //if (is_ss() && (lep1_corpfiso() > 0.08 || lep2_corpfiso() > 0.08))
-        //{
-        //    return 0;
-        //}
-        //if (is_sf() && ((lep1_is_num() && lep1_corpfiso() > 0.08) || (lep2_is_num() && lep2_corpfiso() > 0.08)))
-        //{
-        //    return 0;
-        //}
-        //if (is_os() && (lep1_corpfiso() > 0.08 || lep2_corpfiso() > 0.08))
-        //{
-        //    return 0;
-        //}
-
-        // MET
-        //if (pfmet() < 30)
-        //{
-        //    return 0;
-        //}
-
         // HT cut
         if (ht() < m_min_ht)
         {
@@ -950,7 +907,9 @@ int PlotLooper::operator()(long event)
         if (m_do_scale_factors && not is_real_data())
         {
             // lepton efficiencies
-            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4(), lep2_pdgid(), lep2_p4());
+            const float eta1 = (abs(lep1_pdgid()) == 13 ? lep1_p4().eta() : lep1_sc_p4().eta());
+            const float eta2 = (abs(lep2_pdgid()) == 13 ? lep2_p4().eta() : lep2_sc_p4().eta());
+            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
 
             // trigger scale factor
             evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
