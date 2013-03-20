@@ -67,52 +67,53 @@ void PrintYields
         latex.append("\\begin{tabular}{l|cccc} \\hline\\hline\n"                   ); 
         latex.append("source & $ee$ & $\\mu\\mu$ & $e\\mu$ & $\\ell\\ell $ \\\\\n" ); 
         latex.append("\\hline\n"                                                   ); 
-        latex.append(Form("%s \\\\\n", m_yield["ttdil"  ].GetLatex("ttdil"       , GetSampleInfo(Sample::ttdil  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ttslb"  ].GetLatex("ttslb"       , GetSampleInfo(Sample::ttslb  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ttslo"  ].GetLatex("ttslo"       , GetSampleInfo(Sample::ttslo  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ttotr"  ].GetLatex("ttotr"       , GetSampleInfo(Sample::ttotr  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttdil"   ].GetLatex("ttdil"      , GetSampleInfo(Sample::ttdil  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttslb"   ].GetLatex("ttslb"      , GetSampleInfo(Sample::ttslb  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttslo"   ].GetLatex("ttslo"      , GetSampleInfo(Sample::ttslo  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttotr"   ].GetLatex("ttotr"      , GetSampleInfo(Sample::ttotr  ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_yield["t_schan"].GetLatex("t_schan"     , GetSampleInfo(Sample::t_schan).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["t_tchan"].GetLatex("t_tchan"     , GetSampleInfo(Sample::t_tchan).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["t_tw"   ].GetLatex("t_tw"        , GetSampleInfo(Sample::t_tw   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["t_schan" ].GetLatex("t_schan"    , GetSampleInfo(Sample::t_schan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["t_tchan" ].GetLatex("t_tchan"    , GetSampleInfo(Sample::t_tchan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["t_tw"    ].GetLatex("t_tw"       , GetSampleInfo(Sample::t_tw   ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_yield["dy"     ].GetLatex("dy"          , GetSampleInfo(Sample::dy     ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["wjets"  ].GetLatex("wjets"       , GetSampleInfo(Sample::wjets  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ww"     ].GetLatex("ww"          , GetSampleInfo(Sample::ww     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["dy"      ].GetLatex("dy"         , GetSampleInfo(Sample::dy     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wjets"   ].GetLatex("wjets"      , GetSampleInfo(Sample::wjets  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ww"      ].GetLatex("ww"         , GetSampleInfo(Sample::ww     ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_yield["wgstar" ].GetLatex("wgstar"      , GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["wz"     ].GetLatex("wz"          , GetSampleInfo(Sample::wz     ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["zz"     ].GetLatex("zz"          , GetSampleInfo(Sample::zz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wgstar2m"].GetLatex("wgstar2m"   , GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wgstar2t"].GetLatex("wgstar2t"   , GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wz"      ].GetLatex("wz"         , GetSampleInfo(Sample::wz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["zz"      ].GetLatex("zz"         , GetSampleInfo(Sample::zz     ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_yield["ttg"    ].GetLatex("ttg"         , GetSampleInfo(Sample::ttg    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ttw"    ].GetLatex("ttw"         , GetSampleInfo(Sample::ttw    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ttz"    ].GetLatex("ttz"         , GetSampleInfo(Sample::ttz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["tbz"    ].GetLatex("tbz"         , GetSampleInfo(Sample::tbz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ttww"   ].GetLatex("ttww"        , GetSampleInfo(Sample::ttww   ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["wwg"    ].GetLatex("wwg"         , GetSampleInfo(Sample::wwg    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["www"    ].GetLatex("www"         , GetSampleInfo(Sample::www    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["wwz"    ].GetLatex("wwz"         , GetSampleInfo(Sample::wwz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["wzz"    ].GetLatex("wzz"         , GetSampleInfo(Sample::wzz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["zzz"    ].GetLatex("zzz"         , GetSampleInfo(Sample::zzz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["wwqq"   ].GetLatex("wwqq"        , GetSampleInfo(Sample::wwqq   ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_yield["ww_ds"  ].GetLatex("ww_ds"       , GetSampleInfo(Sample::ww_ds  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttg"     ].GetLatex("ttg"        , GetSampleInfo(Sample::ttg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttw"     ].GetLatex("ttw"        , GetSampleInfo(Sample::ttw    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttz"     ].GetLatex("ttz"        , GetSampleInfo(Sample::ttz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["tbz"     ].GetLatex("tbz"        , GetSampleInfo(Sample::tbz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ttww"    ].GetLatex("ttww"       , GetSampleInfo(Sample::ttww   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wwg"     ].GetLatex("wwg"        , GetSampleInfo(Sample::wwg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["www"     ].GetLatex("www"        , GetSampleInfo(Sample::www    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wwz"     ].GetLatex("wwz"        , GetSampleInfo(Sample::wwz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wzz"     ].GetLatex("wzz"        , GetSampleInfo(Sample::wzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["zzz"     ].GetLatex("zzz"        , GetSampleInfo(Sample::zzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wwqq"    ].GetLatex("wwqq"       , GetSampleInfo(Sample::wwqq   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["ww_ds"   ].GetLatex("ww_ds"      , GetSampleInfo(Sample::ww_ds  ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_mc.GetLatex          ("mc"          , "Total MC"                          , /*print_sys_error*/false).c_str()));
-        latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_sf.GetLatex          ("sf"          , "SF"                                , /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", yield_df.GetLatex          ("df"          , "DF"                                , /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", yield_spil.GetLatex        ("sc"          , "SC"                                , /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", yield_fake.GetLatex        ("fake"        , "SF + DF"                           , /*print_sys_error*/false).c_str()));
-        latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_cfake.GetLatex       ("cfake"       , "SF + DF - SC"                      , /*print_sys_error*/true ).c_str()));
-        latex.append("\\hline\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_flip.GetLatex        ("flip"        , "Charge Flips"                      , /*print_sys_error*/true ).c_str()));
-        latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_rare.GetLatex        ("pred"        , "MC Pred"                           , /*print_sys_error*/true ).c_str()));
-        latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_pred.GetLatex        ("total pred"  , "Total Pred"                        , /*print_sys_error*/true ).c_str()));
-        latex.append("\\hline\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_data.GetLatex        ("data"        , "Data"                              , /*print_sys_error*/true ).c_str()));
+        latex.append(Form("%s \\\\\n", yield_mc.GetLatex           ("mc"         , "Total MC"                          , /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");                                
+        latex.append(Form("%s \\\\\n", yield_sf.GetLatex           ("sf"         , "SF"                                , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_df.GetLatex           ("df"         , "DF"                                , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_spil.GetLatex         ("sc"         , "SC"                                , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_fake.GetLatex         ("fake"       , "SF + DF"                           , /*print_sys_error*/false).c_str()));
+        latex.append("\\hline\n");                                
+        latex.append(Form("%s \\\\\n", yield_cfake.GetLatex        ("cfake"      , "SF + DF - SC"                      , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\\hline\n");                         
+        latex.append(Form("%s \\\\\n", yield_flip.GetLatex         ("flip"       , "Charge Flips"                      , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\n");                                
+        latex.append(Form("%s \\\\\n", yield_rare.GetLatex         ("pred"       , "MC Pred"                           , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\n");                                
+        latex.append(Form("%s \\\\\n", yield_pred.GetLatex         ("total pred" , "Total Pred"                        , /*print_sys_error*/true ).c_str()));
+        latex.append("\\hline\\hline\n");                         
+        latex.append(Form("%s \\\\\n", yield_data.GetLatex         ("data"       , "Data"                              , /*print_sys_error*/true ).c_str()));
         latex.append("\\hline\\hline\n" ); 
         latex.append("\\end{tabular}\n" ); 
         //latex.append("\\end{center}\n"  ); 
@@ -142,7 +143,7 @@ void PrintYields
         (GetSampleInfo(Sample::wjets   ).name, m_yield["wjets"    ] .ee_pm() , m_yield["wjets"    ] .mm_pm() , m_yield["wjets"    ] .em_pm() , m_yield["wjets"    ] .ll_pm())
         (GetSampleInfo(Sample::ww      ).name, m_yield["ww"       ] .ee_pm() , m_yield["ww"       ] .mm_pm() , m_yield["ww"       ] .em_pm() , m_yield["ww"       ] .ll_pm())
         //(GetSampleInfo(Sample::wgstar ).name, m_yield["wgstar"  ] .ee_pm() , m_yield["wgstar"   ] .mm_pm() , m_yield["wgstar"   ] .em_pm() , m_yield["wgstar"   ] .ll_pm())
-        (GetSampleInfo(Sample::wgstar2e).name, m_yield["wgstar2e" ] .ee_pm() , m_yield["wgstar2e" ] .mm_pm() , m_yield["wgstar2e" ] .em_pm() , m_yield["wgstar2e" ] .ll_pm())
+        //(GetSampleInfo(Sample::wgstar2e).name, m_yield["wgstar2e" ] .ee_pm() , m_yield["wgstar2e" ] .mm_pm() , m_yield["wgstar2e" ] .em_pm() , m_yield["wgstar2e" ] .ll_pm())
         (GetSampleInfo(Sample::wgstar2m).name, m_yield["wgstar2m" ] .ee_pm() , m_yield["wgstar2m" ] .mm_pm() , m_yield["wgstar2m" ] .em_pm() , m_yield["wgstar2m" ] .ll_pm())
         (GetSampleInfo(Sample::wgstar2t).name, m_yield["wgstar2t" ] .ee_pm() , m_yield["wgstar2t" ] .mm_pm() , m_yield["wgstar2t" ] .em_pm() , m_yield["wgstar2t" ] .ll_pm())
         (GetSampleInfo(Sample::wz      ).name, m_yield["wz"       ] .ee_pm() , m_yield["wz"       ] .mm_pm() , m_yield["wz"       ] .em_pm() , m_yield["wz"       ] .ll_pm())
@@ -213,38 +214,39 @@ void PrintSidebandContamination
         latex.append("\\begin{tabular}{l|cccc} \\hline\\hline\n"                   ); 
         latex.append("source & $ee$ & $\\mu\\mu$ & $e\\mu$ & $\\ell\\ell $ \\\\\n" ); 
         latex.append("\\hline\n"                                                   ); 
-        latex.append(Form("%s \\\\\n", m_fake["ttdil"  ].GetLatex("ttdil"  , GetSampleInfo(Sample::ttdil  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ttslb"  ].GetLatex("ttslb"  , GetSampleInfo(Sample::ttslb  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ttslo"  ].GetLatex("ttslo"  , GetSampleInfo(Sample::ttslo  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ttotr"  ].GetLatex("ttotr"  , GetSampleInfo(Sample::ttotr  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttdil"   ].GetLatex("ttdil"   , GetSampleInfo(Sample::ttdil  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttslb"   ].GetLatex("ttslb"   , GetSampleInfo(Sample::ttslb  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttslo"   ].GetLatex("ttslo"   , GetSampleInfo(Sample::ttslo  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttotr"   ].GetLatex("ttotr"   , GetSampleInfo(Sample::ttotr  ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_fake["t_schan"].GetLatex("t_schan", GetSampleInfo(Sample::t_schan).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["t_tchan"].GetLatex("t_tchan", GetSampleInfo(Sample::t_tchan).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["t_tw"   ].GetLatex("t_tw"   , GetSampleInfo(Sample::t_tw   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["t_schan" ].GetLatex("t_schan" , GetSampleInfo(Sample::t_schan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["t_tchan" ].GetLatex("t_tchan" , GetSampleInfo(Sample::t_tchan).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["t_tw"    ].GetLatex("t_tw"    , GetSampleInfo(Sample::t_tw   ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_fake["dy"     ].GetLatex("dy"     , GetSampleInfo(Sample::dy     ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["wjets"  ].GetLatex("wjets"  , GetSampleInfo(Sample::wjets  ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ww"     ].GetLatex("ww"     , GetSampleInfo(Sample::ww     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["dy"      ].GetLatex("dy"      , GetSampleInfo(Sample::dy     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wjets"   ].GetLatex("wjets"   , GetSampleInfo(Sample::wjets  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ww"      ].GetLatex("ww"      , GetSampleInfo(Sample::ww     ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_fake["wgstar" ].GetLatex("wgstar" , GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["wz"     ].GetLatex("wz"     , GetSampleInfo(Sample::wz     ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["zz"     ].GetLatex("zz"     , GetSampleInfo(Sample::zz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wgstar2m"].GetLatex("wgstar2m", GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wgstar2t"].GetLatex("wgstar2t", GetSampleInfo(Sample::wgstar ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wz"      ].GetLatex("wz"      , GetSampleInfo(Sample::wz     ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["zz"      ].GetLatex("zz"      , GetSampleInfo(Sample::zz     ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");
-        latex.append(Form("%s \\\\\n", m_fake["ttg"    ].GetLatex("ttg"    , GetSampleInfo(Sample::ttg    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ttw"    ].GetLatex("ttw"    , GetSampleInfo(Sample::ttw    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ttz"    ].GetLatex("ttz"    , GetSampleInfo(Sample::ttz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["tbz"    ].GetLatex("tbz"    , GetSampleInfo(Sample::tbz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ttww"   ].GetLatex("ttww"   , GetSampleInfo(Sample::ttww   ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["wwg"    ].GetLatex("wwg"    , GetSampleInfo(Sample::wwg    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["www"    ].GetLatex("www"    , GetSampleInfo(Sample::www    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["wwz"    ].GetLatex("wwz"    , GetSampleInfo(Sample::wwz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["wzz"    ].GetLatex("wzz"    , GetSampleInfo(Sample::wzz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["zzz"    ].GetLatex("zzz"    , GetSampleInfo(Sample::zzz    ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["wwqq"   ].GetLatex("wwqq"   , GetSampleInfo(Sample::wwqq   ).latex, /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", m_fake["ww_ds"  ].GetLatex("ww_ds"  , GetSampleInfo(Sample::ww_ds  ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttg"     ].GetLatex("ttg"     , GetSampleInfo(Sample::ttg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttw"     ].GetLatex("ttw"     , GetSampleInfo(Sample::ttw    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttz"     ].GetLatex("ttz"     , GetSampleInfo(Sample::ttz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["tbz"     ].GetLatex("tbz"     , GetSampleInfo(Sample::tbz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ttww"    ].GetLatex("ttww"    , GetSampleInfo(Sample::ttww   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wwg"     ].GetLatex("wwg"     , GetSampleInfo(Sample::wwg    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["www"     ].GetLatex("www"     , GetSampleInfo(Sample::www    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wwz"     ].GetLatex("wwz"     , GetSampleInfo(Sample::wwz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wzz"     ].GetLatex("wzz"     , GetSampleInfo(Sample::wzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["zzz"     ].GetLatex("zzz"     , GetSampleInfo(Sample::zzz    ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["wwqq"    ].GetLatex("wwqq"    , GetSampleInfo(Sample::wwqq   ).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_fake["ww_ds"   ].GetLatex("ww_ds"   , GetSampleInfo(Sample::ww_ds  ).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\\hline\n");
-        latex.append(Form("%s \\\\\n", yield_mc.GetLatex          ("mc"    , "Total MC"                          , /*print_sys_error*/false).c_str()));
-        latex.append(Form("%s \\\\\n", yield_spil.GetLatex        ("pc"    , "Total rare MC"                     , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_mc.GetLatex          ("mc"      , "Total MC"                          , /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", yield_spil.GetLatex        ("pc"      , "Total rare MC"                     , /*print_sys_error*/false).c_str()));
         latex.append("\\hline\\hline\n" ); 
         latex.append("\\end{tabular}\n" ); 
         cout << latex << endl;
@@ -261,33 +263,35 @@ void PrintSidebandContamination
         t_yields.setColLabel("ll", 3);
         t_yields.setTable()
         (                                                           "ee",                       "mm",                       "em",                      "ll")
-        (GetSampleInfo(Sample::ttdil  ).name, m_fake["ttdil"  ].ee_pm() , m_fake["ttdil"  ].mm_pm() , m_fake["ttdil"  ].em_pm() , m_fake["ttdil"  ].ll_pm())
-        (GetSampleInfo(Sample::ttslb  ).name, m_fake["ttslb"  ].ee_pm() , m_fake["ttslb"  ].mm_pm() , m_fake["ttslb"  ].em_pm() , m_fake["ttslb"  ].ll_pm())
-        (GetSampleInfo(Sample::ttslo  ).name, m_fake["ttslo"  ].ee_pm() , m_fake["ttslo"  ].mm_pm() , m_fake["ttslo"  ].em_pm() , m_fake["ttslo"  ].ll_pm())
-        (GetSampleInfo(Sample::ttotr  ).name, m_fake["ttotr"  ].ee_pm() , m_fake["ttotr"  ].mm_pm() , m_fake["ttotr"  ].em_pm() , m_fake["ttotr"  ].ll_pm())
-        (GetSampleInfo(Sample::t_schan).name, m_fake["t_schan"].ee_pm() , m_fake["t_schan"].mm_pm() , m_fake["t_schan"].em_pm() , m_fake["t_schan"].ll_pm())
-        (GetSampleInfo(Sample::t_tchan).name, m_fake["t_tchan"].ee_pm() , m_fake["t_tchan"].mm_pm() , m_fake["t_tchan"].em_pm() , m_fake["t_tchan"].ll_pm())
-        (GetSampleInfo(Sample::t_tw   ).name, m_fake["t_tw"   ].ee_pm() , m_fake["t_tw"   ].mm_pm() , m_fake["t_tw"   ].em_pm() , m_fake["t_tw"   ].ll_pm())
-        (GetSampleInfo(Sample::dy     ).name, m_fake["dy"     ].ee_pm() , m_fake["dy"     ].mm_pm() , m_fake["dy"     ].em_pm() , m_fake["dy"     ].ll_pm())
-        (GetSampleInfo(Sample::wjets  ).name, m_fake["wjets"  ].ee_pm() , m_fake["wjets"  ].mm_pm() , m_fake["wjets"  ].em_pm() , m_fake["wjets"  ].ll_pm())
-        (GetSampleInfo(Sample::ww     ).name, m_fake["ww"     ].ee_pm() , m_fake["ww"     ].mm_pm() , m_fake["ww"     ].em_pm() , m_fake["ww"     ].ll_pm())
-        (GetSampleInfo(Sample::wgstar ).name, m_fake["wgstar" ].ee_pm() , m_fake["wgstar" ].mm_pm() , m_fake["wgstar" ].em_pm() , m_fake["wgstar" ].ll_pm())
-        (GetSampleInfo(Sample::wz     ).name, m_fake["wz"     ].ee_pm() , m_fake["wz"     ].mm_pm() , m_fake["wz"     ].em_pm() , m_fake["wz"     ].ll_pm())
-        (GetSampleInfo(Sample::zz     ).name, m_fake["zz"     ].ee_pm() , m_fake["zz"     ].mm_pm() , m_fake["zz"     ].em_pm() , m_fake["zz"     ].ll_pm())
-        (GetSampleInfo(Sample::ttg    ).name, m_fake["ttg"    ].ee_pm() , m_fake["ttg"    ].mm_pm() , m_fake["ttg"    ].em_pm() , m_fake["ttg"    ].ll_pm())
-        (GetSampleInfo(Sample::ttw    ).name, m_fake["ttw"    ].ee_pm() , m_fake["ttw"    ].mm_pm() , m_fake["ttw"    ].em_pm() , m_fake["ttw"    ].ll_pm())
-        (GetSampleInfo(Sample::ttz    ).name, m_fake["ttz"    ].ee_pm() , m_fake["ttz"    ].mm_pm() , m_fake["ttz"    ].em_pm() , m_fake["ttz"    ].ll_pm())
-        (GetSampleInfo(Sample::tbz    ).name, m_fake["tbz"    ].ee_pm() , m_fake["tbz"    ].mm_pm() , m_fake["tbz"    ].em_pm() , m_fake["tbz"    ].ll_pm())
-        (GetSampleInfo(Sample::ttww   ).name, m_fake["ttww"   ].ee_pm() , m_fake["ttww"   ].mm_pm() , m_fake["ttww"   ].em_pm() , m_fake["ttww"   ].ll_pm())
-        (GetSampleInfo(Sample::wwg    ).name, m_fake["wwg"    ].ee_pm() , m_fake["wwg"    ].mm_pm() , m_fake["wwg"    ].em_pm() , m_fake["wwg"    ].ll_pm())
-        (GetSampleInfo(Sample::www    ).name, m_fake["www"    ].ee_pm() , m_fake["www"    ].mm_pm() , m_fake["www"    ].em_pm() , m_fake["www"    ].ll_pm())
-        (GetSampleInfo(Sample::wwz    ).name, m_fake["wwz"    ].ee_pm() , m_fake["wwz"    ].mm_pm() , m_fake["wwz"    ].em_pm() , m_fake["wwz"    ].ll_pm())
-        (GetSampleInfo(Sample::wzz    ).name, m_fake["wzz"    ].ee_pm() , m_fake["wzz"    ].mm_pm() , m_fake["wzz"    ].em_pm() , m_fake["wzz"    ].ll_pm())
-        (GetSampleInfo(Sample::zzz    ).name, m_fake["zzz"    ].ee_pm() , m_fake["zzz"    ].mm_pm() , m_fake["zzz"    ].em_pm() , m_fake["zzz"    ].ll_pm())
-        (GetSampleInfo(Sample::wwqq   ).name, m_fake["wwqq"   ].ee_pm() , m_fake["wwqq"   ].mm_pm() , m_fake["wwqq"   ].em_pm() , m_fake["wwqq"   ].ll_pm())
-        (GetSampleInfo(Sample::ww_ds  ).name, m_fake["ww_ds"  ].ee_pm() , m_fake["ww_ds"  ].mm_pm() , m_fake["ww_ds"  ].em_pm() , m_fake["ww_ds"  ].ll_pm())
-        ("Total MC"                         , yield_mc.ee_pm()          , yield_mc.mm_pm()          , yield_mc.em_pm()          , yield_mc.ll_pm()         ) 
-        ("Total Rare MC"                    , yield_spil.ee_pm()        , yield_spil.mm_pm()        , yield_spil.em_pm()        , yield_spil.ll_pm()       ) ;
+        (GetSampleInfo(Sample::ttdil   ).name, m_fake["ttdil"   ].ee_pm() , m_fake["ttdil"   ].mm_pm() , m_fake["ttdil"   ].em_pm() , m_fake["ttdil"   ].ll_pm())
+        (GetSampleInfo(Sample::ttslb   ).name, m_fake["ttslb"   ].ee_pm() , m_fake["ttslb"   ].mm_pm() , m_fake["ttslb"   ].em_pm() , m_fake["ttslb"   ].ll_pm())
+        (GetSampleInfo(Sample::ttslo   ).name, m_fake["ttslo"   ].ee_pm() , m_fake["ttslo"   ].mm_pm() , m_fake["ttslo"   ].em_pm() , m_fake["ttslo"   ].ll_pm())
+        (GetSampleInfo(Sample::ttotr   ).name, m_fake["ttotr"   ].ee_pm() , m_fake["ttotr"   ].mm_pm() , m_fake["ttotr"   ].em_pm() , m_fake["ttotr"   ].ll_pm())
+        (GetSampleInfo(Sample::t_schan ).name, m_fake["t_schan" ].ee_pm() , m_fake["t_schan" ].mm_pm() , m_fake["t_schan" ].em_pm() , m_fake["t_schan" ].ll_pm())
+        (GetSampleInfo(Sample::t_tchan ).name, m_fake["t_tchan" ].ee_pm() , m_fake["t_tchan" ].mm_pm() , m_fake["t_tchan" ].em_pm() , m_fake["t_tchan" ].ll_pm())
+        (GetSampleInfo(Sample::t_tw    ).name, m_fake["t_tw"    ].ee_pm() , m_fake["t_tw"    ].mm_pm() , m_fake["t_tw"    ].em_pm() , m_fake["t_tw"    ].ll_pm())
+        (GetSampleInfo(Sample::dy      ).name, m_fake["dy"      ].ee_pm() , m_fake["dy"      ].mm_pm() , m_fake["dy"      ].em_pm() , m_fake["dy"      ].ll_pm())
+        (GetSampleInfo(Sample::wjets   ).name, m_fake["wjets"   ].ee_pm() , m_fake["wjets"   ].mm_pm() , m_fake["wjets"   ].em_pm() , m_fake["wjets"   ].ll_pm())
+        (GetSampleInfo(Sample::ww      ).name, m_fake["ww"      ].ee_pm() , m_fake["ww"      ].mm_pm() , m_fake["ww"      ].em_pm() , m_fake["ww"      ].ll_pm())
+        //(GetSampleInfo(Sample::wgstar ).name, m_fake["wgstar" ].ee_pm() , m_fake["wgstar" ].mm_pm() , m_fake["wgstar" ].em_pm() , m_fake["wgstar" ].ll_pm())
+        (GetSampleInfo(Sample::wgstar2m).name, m_fake["wgstar2m"].ee_pm() , m_fake["wgstar2m"].mm_pm() , m_fake["wgstar2m"].em_pm() , m_fake["wgstar2m"].ll_pm())
+        (GetSampleInfo(Sample::wgstar2t).name, m_fake["wgstar2t"].ee_pm() , m_fake["wgstar2t"].mm_pm() , m_fake["wgstar2t"].em_pm() , m_fake["wgstar2t"].ll_pm())
+        (GetSampleInfo(Sample::wz      ).name, m_fake["wz"      ].ee_pm() , m_fake["wz"      ].mm_pm() , m_fake["wz"      ].em_pm() , m_fake["wz"      ].ll_pm())
+        (GetSampleInfo(Sample::zz      ).name, m_fake["zz"      ].ee_pm() , m_fake["zz"      ].mm_pm() , m_fake["zz"      ].em_pm() , m_fake["zz"      ].ll_pm())
+        (GetSampleInfo(Sample::ttg     ).name, m_fake["ttg"     ].ee_pm() , m_fake["ttg"     ].mm_pm() , m_fake["ttg"     ].em_pm() , m_fake["ttg"     ].ll_pm())
+        (GetSampleInfo(Sample::ttw     ).name, m_fake["ttw"     ].ee_pm() , m_fake["ttw"     ].mm_pm() , m_fake["ttw"     ].em_pm() , m_fake["ttw"     ].ll_pm())
+        (GetSampleInfo(Sample::ttz     ).name, m_fake["ttz"     ].ee_pm() , m_fake["ttz"     ].mm_pm() , m_fake["ttz"     ].em_pm() , m_fake["ttz"     ].ll_pm())
+        (GetSampleInfo(Sample::tbz     ).name, m_fake["tbz"     ].ee_pm() , m_fake["tbz"     ].mm_pm() , m_fake["tbz"     ].em_pm() , m_fake["tbz"     ].ll_pm())
+        (GetSampleInfo(Sample::ttww    ).name, m_fake["ttww"    ].ee_pm() , m_fake["ttww"    ].mm_pm() , m_fake["ttww"    ].em_pm() , m_fake["ttww"    ].ll_pm())
+        (GetSampleInfo(Sample::wwg     ).name, m_fake["wwg"     ].ee_pm() , m_fake["wwg"     ].mm_pm() , m_fake["wwg"     ].em_pm() , m_fake["wwg"     ].ll_pm())
+        (GetSampleInfo(Sample::www     ).name, m_fake["www"     ].ee_pm() , m_fake["www"     ].mm_pm() , m_fake["www"     ].em_pm() , m_fake["www"     ].ll_pm())
+        (GetSampleInfo(Sample::wwz     ).name, m_fake["wwz"     ].ee_pm() , m_fake["wwz"     ].mm_pm() , m_fake["wwz"     ].em_pm() , m_fake["wwz"     ].ll_pm())
+        (GetSampleInfo(Sample::wzz     ).name, m_fake["wzz"     ].ee_pm() , m_fake["wzz"     ].mm_pm() , m_fake["wzz"     ].em_pm() , m_fake["wzz"     ].ll_pm())
+        (GetSampleInfo(Sample::zzz     ).name, m_fake["zzz"     ].ee_pm() , m_fake["zzz"     ].mm_pm() , m_fake["zzz"     ].em_pm() , m_fake["zzz"     ].ll_pm())
+        (GetSampleInfo(Sample::wwqq    ).name, m_fake["wwqq"    ].ee_pm() , m_fake["wwqq"    ].mm_pm() , m_fake["wwqq"    ].em_pm() , m_fake["wwqq"    ].ll_pm())
+        (GetSampleInfo(Sample::ww_ds   ).name, m_fake["ww_ds"   ].ee_pm() , m_fake["ww_ds"   ].mm_pm() , m_fake["ww_ds"   ].em_pm() , m_fake["ww_ds "  ].ll_pm())
+        ("Total MC"                          , yield_mc.ee_pm()           , yield_mc.mm_pm()           , yield_mc.em_pm()           , yield_mc.ll_pm()          ) 
+        ("Total Rare MC"                     , yield_spil.ee_pm()         , yield_spil.mm_pm()         , yield_spil.em_pm()         , yield_spil.ll_pm()        ) ;
 
 
         // print it
@@ -312,8 +316,15 @@ void PrintETHCard
     const int charge_option = 0; 
     
     //for (size_t sr_num = 0; sr_num != ss::SignalRegion::static_size; sr_num++)
-    for (size_t sr_num = 0; sr_num != 29; sr_num++)
+    const size_t num_signal_regions = (analysis_type == ss::AnalysisType::high_pt ? 35 : 28);
+    for (size_t sr_num = 0; sr_num != num_signal_regions+1; sr_num++)
     {
+        // skip 9 and 19 and 29
+        if (sr_num == 9 || sr_num == 19 || sr_num == 29)
+        {
+            continue;
+        }
+
         const string signal_region_name    = Form("sr%lu", sr_num);
         const ss::SignalRegion::value_type signal_region = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name); 
         const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
@@ -393,10 +404,14 @@ void PrintSummaryYields
     t_yields_3.setTitle("summary table for SS 2012 yields and background predictions (sr20-sr28)");
 
     // fill the columns
-    for (unsigned int signal_region_num = 0; signal_region_num != ss::SignalRegion::static_size; signal_region_num++)
+    //for (unsigned int signal_region_num = 0; signal_region_num != ss::SignalRegion::static_size; signal_region_num++)
+    for (unsigned int signal_region_num = 0; signal_region_num != 29; signal_region_num++)
     {
         // no using these SRs
-        if (signal_region_num==9 or signal_region_num==19) {continue;} 
+        if (signal_region_num==9 or signal_region_num==19 or signal_region_num==29)
+        {
+            continue;
+        } 
 
         // which table are we using?
         CTable* temp_ptr = NULL;

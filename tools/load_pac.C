@@ -44,6 +44,7 @@
     gSystem->AddIncludePath("-I$BOOST_CURRENT/boost");
     gSystem->Load(Form("%s/libboost_system.so"    , pac_path.c_str()));
     gSystem->Load(Form("%s/libboost_filesystem.so", pac_path.c_str()));
+    gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
     gSystem->Load(Form("%s/libRootTools.so"       , pac_path.c_str()));
 
     // CMS2
@@ -60,8 +61,8 @@
 
     // SS2012 Tools
     gSystem->AddIncludePath("-I$PAC/analysis/ss2012/include");
-    gSystem->Load(Form("%s/libss2012_tools.so", pac_path.c_str()));
     gSystem->Load(Form("%s/libssb2012.so"     , pac_path.c_str()));
+    gSystem->Load(Form("%s/libss2012_tools.so", pac_path.c_str()));
 
     // Ian's Simple table
     gSystem->AddIncludePath("-I$PAC/externals/source/SimpleTable");

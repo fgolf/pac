@@ -30,7 +30,7 @@ echo
 # --------------------------------------------------------------- #
 
 echo Checking out myBabyMaker
-tag=FakeRate04Feb2013
+tag=FakeRate19March2013
 #tag=HEAD
 pushd externals/build/cms2_frb
 ./checkout.sh $tag

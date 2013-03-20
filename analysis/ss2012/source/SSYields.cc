@@ -435,7 +435,7 @@ namespace ss
     
         // to include in prediction
         // wgstar;
-        m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        //m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wgstar"] += GetYield(option, Sample::wgstar2m, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wgstar"] += GetYield(option, Sample::wgstar2t, signal_region, analysis_type, signal_region_type, charge_option, output_path);
     

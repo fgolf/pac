@@ -53,8 +53,8 @@ lib RootTools
             <define>__RTINT__
             <include>./include
             <include>./source
-            <include>$(SIMPLETABLE_PATH)/.
-            <header>CTable.h
+            #<include>$(SIMPLETABLE_PATH)/.
+            #<header>CTable.h
             <header>rt/MiscTools.h
             <header>rt/FillHist.h
             <header>rt/TH1Container.h
@@ -70,14 +70,15 @@ lib RootTools
       ]
       # dependent packages
       /ROOT
-      /boost//headers          
-      /boost//filesystem
-      /boost//regex
-      /SimpleTable//SimpleTable
+      /boost//headers/<link>shared          
+      /boost//filesystem/<link>shared
+      /boost//regex/<link>shared
+      /SimpleTable//SimpleTable/<link>shared
     : # requirements 
       <define>__RTINT__
       <include>./include
       <include>./source 
+      <link>shared
     : # default-build
     : # usage-requirements
       <include>./include

@@ -329,20 +329,20 @@ namespace rt
     double GetBinContent1D(TH1* h, const float x);
     double GetBinContent2D(TH2* h, const float x, const float y);
 
-    // create a CTable from a hist (1D and 2D only)
-    CTable CreateTableFromHist
-    (
-        TH1* hist, 
-        const std::string& title = "", 
-        const std::string& xtitle = "", 
-        const std::string& ytitle = "",
-        const std::string& xunit = "", 
-        const std::string& yunit = "",
-        const std::string& precision = "1.2", 
-        const std::string& xprecision = "1.2", 
-        const std::string& yprecision = "1.2",
-        const bool reverse_axis = false
-    );
+    // create a CTable from a hist (1D and 2D only)                            
+    CTable CreateTableFromHist                                                 
+    (                                                                          
+        TH1* hist,                                                             
+        const std::string& title = "",                                         
+        const std::string& xtitle = "",                                        
+        const std::string& ytitle = "",                                        
+        const std::string& xunit = "",                                         
+        const std::string& yunit = "",                                         
+        const std::string& precision = "1.2",                                  
+        const std::string& xprecision = "1.2",                                 
+        const std::string& yprecision = "1.2",                                 
+        const bool reverse_axis = false                                        
+    );                                                                         
 
     // inflate the bin error by percentage of the bin value (used for systematic uncertainties)
     void SetSystematicUncertainty(TH1* h, float sys_unc);

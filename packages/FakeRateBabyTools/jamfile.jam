@@ -18,3 +18,5 @@ lib FakeRateBabyTools
     <include>./include
     <include>./source
   ;
+
+default-install FakeRateBabyTools : <link>shared ;
