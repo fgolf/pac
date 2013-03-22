@@ -68,10 +68,10 @@ void LeptonEff::EndJob()
     hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_mu"], hc["h_mc_mu"],      "h_eff_mu"       , "#mu efficiency;|#eta|;p_{T} (GeV)"));
 }
 
-const size_t el_npt_bins  = 8; const float el_pt_bins [] = {10, 15, 20, 30, 40, 50, 70, 100, 200};
+const size_t el_npt_bins  = 7; const float el_pt_bins [] = {10, 20, 30, 40, 50, 70, 100, 200};
 const size_t el_neta_bins = 3; const float el_eta_bins[] = {0, 1.4442, 1.566, 2.5};
 
-const size_t mu_npt_bins  = 8; const float mu_pt_bins [] = {10, 15, 20, 30, 40, 50, 70, 100, 200};
+const size_t mu_npt_bins  = 7; const float mu_pt_bins [] = {10, 20, 30, 40, 50, 70, 100, 200};
 const size_t mu_neta_bins = 2; const float mu_eta_bins[] = {0, 1.2, 2.5};
 
 /* const size_t neta_bins = 2; const float eta_bins[] = {0, 1.2, 2.5}; */
