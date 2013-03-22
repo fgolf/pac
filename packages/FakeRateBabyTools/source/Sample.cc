@@ -128,6 +128,20 @@ namespace fr
         },
         {
             // name
+            "tthad", 
+            // title,
+            "t\\bar{t} hadronic", 
+            // baby_path
+            "/nfs-7/userdata/rwkelley/babies/fr/FakeRate19March2013/TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1*.root", 
+            // output file
+            "plots/tthad/tthad.root",
+            // SampleType
+            SampleType::bkgd,
+            // color
+            kBlue
+        },
+        {
+            // name
             "wjets", 
             // title,
             "$W+jets$", 

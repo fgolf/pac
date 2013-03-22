@@ -16,6 +16,7 @@ namespace fr
             data_el,
             qcd,
             ttbar,
+            tthad,
             wjets,
             dy,
             static_size
