@@ -9,11 +9,11 @@
 
 using namespace at;
 
+const float mupt = 10.0;
+const float elpt = 10.0;
+    
 std::vector<unsigned int> efftools::getRecoJets () {
 
-    const float mupt = 20.;
-    const float elpt = 20.;
-    
     std::vector<unsigned int> goodJets_;
     for (unsigned int jidx = 0; jidx < cms2.pfjets_p4().size(); jidx++) {
         
@@ -70,9 +70,6 @@ std::vector<unsigned int> efftools::getRecoJets () {
 
 std::vector<unsigned int> efftools::getRecoJets (const GenParticleStruct& struct1, const GenParticleStruct& struct2) {
 
-    const float mupt = 20.;
-    const float elpt = 20.;
-    
     std::vector<unsigned int> goodJets_;
     for (unsigned int jidx = 0; jidx < cms2.pfjets_p4().size(); jidx++) {
         
@@ -141,9 +138,6 @@ std::vector<unsigned int> efftools::getRecoJets (const GenParticleStruct& struct
 
 std::vector<unsigned int> efftools::getRecoJets (unsigned int hidx) {
 
-    const float mupt = 20.;
-    const float elpt = 20.;
-    
     std::vector<unsigned int> goodJets_;
     for (unsigned int jidx = 0; jidx < cms2.pfjets_p4().size(); jidx++) {
         
@@ -251,9 +245,6 @@ float efftools::getClosestParton(const LorentzVector& p4, float parton_pt)
 
 std::pair<LorentzVector, int> efftools::getRecoLepton (const GenParticleStruct& struct1) {
 
-    const float mupt = 20.;
-    const float elpt = 20.;
-    
     int id = abs(struct1.id_) == 15 ? struct1.did_ : struct1.id_;
     int idx = abs(struct1.id_) == 15 ? struct1.didx_ : struct1.idx_;
 
