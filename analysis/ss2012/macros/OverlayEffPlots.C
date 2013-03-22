@@ -8,8 +8,8 @@ const float lumi = 19.5;
 
 void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix = "png")
 {
-	rt::TH1Container hc_dy("plots/mceff/dy/plots_large.root");
-	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_large.root");
+	rt::TH1Container hc_dy("plots/mceff/dy/plots_100k.root");
+	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_100k.root");
     std::string path = "plots/mceff/overlay";
 
     rt::TH1Container hc;
@@ -28,7 +28,7 @@ void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix =
     hc.Add(rt::SubtractHists(hc_dy["h_eff_el_pt1_vs_eta"], hc_tt["h_eff_el_pt1_vs_eta"], "h_eff_el_diff_pt1_vs_eta", "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (higher p_{T} electron);|#eta|"));
     hc.Add(rt::SubtractHists(hc_dy["h_eff_el_pt2_vs_eta"], hc_tt["h_eff_el_pt2_vs_eta"], "h_eff_el_diff_pt2_vs_eta", "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (lower p_{T} electron);|#eta|" ));
     hc.Add(rt::SubtractHists(hc_dy["h_eff_el_vs_eta"    ], hc_tt["h_eff_el_vs_eta"    ], "h_eff_el_diff_vs_eta"    , "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (electron);|#eta|"             ));
-    hc.Add(rt::SubtractHists(hc_dy["h_eff_el"           ], hc_tt["h_eff_el"           ], "h_eff_el"                , "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (electron);|#eta|;p_{T} (GeV)" ));
+    hc.Add(rt::SubtractHists(hc_dy["h_eff_el"           ], hc_tt["h_eff_el"           ], "h_eff_el_diff"           , "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (electron);|#eta|;p_{T} (GeV)" ));
 
     // overlay
 
@@ -132,8 +132,8 @@ void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix =
 
 void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "png")
 {
-	rt::TH1Container hc_dy("plots/mceff/dy/plots_large.root");
-	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_large.root");
+	rt::TH1Container hc_dy("plots/mceff/dy/plots_100k.root");
+	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_100k.root");
     std::string path = "plots/mceff/overlay";
 
     rt::TH1Container hc;
@@ -152,7 +152,7 @@ void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "pn
     hc.Add(rt::SubtractHists(hc_dy["h_eff_mu_pt1_vs_eta"], hc_tt["h_eff_mu_pt1_vs_eta"], "h_eff_mu_diff_pt1_vs_eta", "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (higher p_{T} #mu);|#eta|"));
     hc.Add(rt::SubtractHists(hc_dy["h_eff_mu_pt2_vs_eta"], hc_tt["h_eff_mu_pt2_vs_eta"], "h_eff_mu_diff_pt2_vs_eta", "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (lower p_{T} #mu);|#eta|" ));
     hc.Add(rt::SubtractHists(hc_dy["h_eff_mu_vs_eta"    ], hc_tt["h_eff_mu_vs_eta"    ], "h_eff_mu_diff_vs_eta"    , "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (#mu);|#eta|"             ));
-    hc.Add(rt::SubtractHists(hc_dy["h_eff_mu"           ], hc_tt["h_eff_mu"           ], "h_eff_mu"                , "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (#mu);|#eta|;p_{T} (GeV)" ));
+    hc.Add(rt::SubtractHists(hc_dy["h_eff_mu"           ], hc_tt["h_eff_mu"           ], "h_eff_mu_diff"           , "#varepsilon_{DY} - #varepsilon_{t#bar{t}} (#mu);|#eta|;p_{T} (GeV)" ));
 
     // overlay
 
@@ -252,5 +252,12 @@ void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "pn
         hc.Print(path, suffix);
         rt::Print(p, path, suffix);
     }
+}
+
+void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
+{
+    OverlayElectronEffPlots(tex, suffix);
+    OverlayMuonEffPlots(tex, suffix);
+    return;
 }
 
