@@ -13,10 +13,10 @@ typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 namespace efftools {
 
     // get reco lepton matched to a given gen lepton
-    std::pair<LorentzVector, int> getRecoLepton (struct GenParticleStruct& struct1);
+    std::pair<LorentzVector, int> getRecoLepton (const GenParticleStruct& struct1);
 
     // get reco jets for same sign analysis, perform overlap removal for gen hyp and all good reco leptons
-    std::vector<unsigned int> getRecoJets (struct GenParticleStruct& struct1, struct GenParticleStruct& struct2);
+    std::vector<unsigned int> getRecoJets (const GenParticleStruct& struct1, const GenParticleStruct& struct2);
 
     // get reco jets for same sign analysis, perform overlap removal for a given hyp and all good reco leptons
     std::vector<unsigned int> getRecoJets (unsigned int hidx);

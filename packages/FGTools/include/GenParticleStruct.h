@@ -14,6 +14,9 @@ struct GenParticleStruct {
     float deta_;
     int rid_;
     unsigned int ridx_;    
+
+    // sort by pt
+    static bool SortByPt(const GenParticleStruct& lhs, const GenParticleStruct& rhs) {return rhs.pt_ > lhs.pt_;}
 };
 
 #endif

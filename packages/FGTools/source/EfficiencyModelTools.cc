@@ -68,7 +68,7 @@ std::vector<unsigned int> efftools::getRecoJets () {
     return goodJets_;
 }
 
-std::vector<unsigned int> efftools::getRecoJets (struct GenParticleStruct& struct1, struct GenParticleStruct& struct2) {
+std::vector<unsigned int> efftools::getRecoJets (const GenParticleStruct& struct1, const GenParticleStruct& struct2) {
 
     const float mupt = 20.;
     const float elpt = 20.;
@@ -249,7 +249,7 @@ float efftools::getClosestParton(const LorentzVector& p4, float parton_pt)
 	return prev_dr;
 }
 
-std::pair<LorentzVector, int> efftools::getRecoLepton (struct GenParticleStruct& struct1) {
+std::pair<LorentzVector, int> efftools::getRecoLepton (const GenParticleStruct& struct1) {
 
     const float mupt = 20.;
     const float elpt = 20.;
