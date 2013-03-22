@@ -1236,6 +1236,42 @@ namespace rt
         return temp;
     }
 
+    // Subtract Hists and return new hist (client is owner of the TH1*)
+    TH1* SubtractHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title)
+    {
+        // check that hists are valid
+        if (!h1 || !h2)
+        {
+            throw runtime_error("rt::SubtractHists: at least one of the Histograms are NULL");
+        }
+
+        TH1* h_result = dynamic_cast<TH1*>(h1->Clone(name.c_str()));
+        if (not title.empty())
+        {
+            h_result->SetTitle(title.c_str());
+        }
+        h_result->Add(h1, h2, 1.0, -1.0);
+        return h_result;
+    }
+
+    // Add Hists and return new hist (client is owner of the TH1*)
+    TH1* AddHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title)
+    {
+        // check that hists are valid
+        if (!h1 || !h2)
+        {
+            throw runtime_error("rt::AddHists: at least one of the Histograms are NULL");
+        }
+
+        TH1* h_result = dynamic_cast<TH1*>(h1->Clone(name.c_str()));
+        if (not title.empty())
+        {
+            h_result->SetTitle(title.c_str());
+        }
+        h_result->Add(h1, h2, 1.0, 1.0);
+        return h_result;
+    }
+
     // Divide Hists and return new hist (client is owner of the TH1*)
     TH1* DivideHists(TH1* h_num, TH1* h_den, const std::string& name, const std::string& title, const std::string& option)
     {

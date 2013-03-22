@@ -381,7 +381,8 @@ namespace rt
             hist->SetLineWidth(1);
             hist->SetOption(hist->GetOption());
             hist->SetDrawOption(hist->GetDrawOption());
-            hist->SetFillStyle(1001);  // hard coded until i determine how to do this better
+            //hist->SetFillStyle(1001);  // hard coded until i determine how to do this better
+            hist->SetFillStyle(fill);  // hard coded until i determine how to do this better
         }
         else
         {

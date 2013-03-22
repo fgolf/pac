@@ -269,6 +269,12 @@ namespace rt
         const std::string& title = ""
     );
 
+    // Add Hists and return new hist (client is owner of the TH1*)
+    TH1* AddHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "");
+
+    // Subtract Hists and return new hist (client is owner of the TH1*)
+    TH1* SubtractHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "");
+
     // Divide Hists and return new hist (client is owner of the TH1*)
     TH1* DivideHists(TH1* h_num, TH1* h_den, const std::string& name, const std::string& title = "", const std::string& option = "");
 
