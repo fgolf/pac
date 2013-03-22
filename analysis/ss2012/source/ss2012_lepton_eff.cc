@@ -69,7 +69,7 @@ void LeptonEff::EndJob()
 }
 
 const size_t el_npt_bins  = 8; const float el_pt_bins [] = {10, 15, 20, 30, 40, 50, 70, 100, 200};
-const size_t el_neta_bins = 5; const float el_eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5};
+const size_t el_neta_bins = 3; const float el_eta_bins[] = {0, 1.4442, 1.566, 2.5};
 
 const size_t mu_npt_bins  = 8; const float mu_pt_bins [] = {10, 15, 20, 30, 40, 50, 70, 100, 200};
 const size_t mu_neta_bins = 2; const float mu_eta_bins[] = {0, 1.2, 2.5};
@@ -123,11 +123,15 @@ int LeptonEff::operator() (long event)
         // get gen LorenzVectors
         const LorentzVector l1_p4 = (l1_is_tau  ? genps_lepdaughter_p4().at(l1.idx_).at(l1.didx_) : genps_p4().at(l1.idx_));
         const LorentzVector l2_p4 = (l2_is_tau  ? genps_lepdaughter_p4().at(l2.idx_).at(l2.didx_) : genps_p4().at(l2.idx_));
+        const float l1_pt  = min(l1_p4.pt(), (l1_is_el ? el_pt_bins[el_npt_bins] : mu_pt_bins[mu_npt_bins]));
+        const float l2_pt  = min(l2_p4.pt(), (l2_is_el ? el_pt_bins[el_npt_bins] : mu_pt_bins[mu_npt_bins]));
+        const float l1_eta = fabs(l1_p4.eta());
+        const float l2_eta = fabs(l2_p4.eta());
 
-        if (l1_is_el) {hc["h_mc_el"]->Fill(l1_p4.eta(), l1_p4.pt()); hc["h_mc_el_pt1"]->Fill(l1_p4.eta(), l1_p4.pt());}
-        if (l1_is_mu) {hc["h_mc_mu"]->Fill(l1_p4.eta(), l1_p4.pt()); hc["h_mc_mu_pt1"]->Fill(l1_p4.eta(), l1_p4.pt());}
-        if (l2_is_el) {hc["h_mc_el"]->Fill(l2_p4.eta(), l2_p4.pt()); hc["h_mc_el_pt2"]->Fill(l2_p4.eta(), l2_p4.pt());}
-        if (l2_is_mu) {hc["h_mc_mu"]->Fill(l2_p4.eta(), l2_p4.pt()); hc["h_mc_mu_pt2"]->Fill(l2_p4.eta(), l2_p4.pt());}
+        if (l1_is_el) {hc["h_mc_el"]->Fill(l1_eta, l1_pt); hc["h_mc_el_pt1"]->Fill(l1_eta, l1_pt);}
+        if (l1_is_mu) {hc["h_mc_mu"]->Fill(l1_eta, l1_pt); hc["h_mc_mu_pt1"]->Fill(l1_eta, l1_pt);}
+        if (l2_is_el) {hc["h_mc_el"]->Fill(l2_eta, l2_pt); hc["h_mc_el_pt2"]->Fill(l2_eta, l2_pt);}
+        if (l2_is_mu) {hc["h_mc_mu"]->Fill(l2_eta, l2_pt); hc["h_mc_mu_pt2"]->Fill(l2_eta, l2_pt);}
 
         // determine if matched to gen
         const std::pair<LorentzVector, int> reco_lep1 = efftools::getRecoLepton(l1);
@@ -162,10 +166,15 @@ int LeptonEff::operator() (long event)
             //l2_reco_iso        = samesign::leptonIsolation(l2.id_, reco_lep2.second);
         }
 
-        if (l1_is_el && l1_reco_matched) {hc["h_reco_el"]->Fill(l1_p4.eta(), l1_p4.pt()); hc["h_reco_el_pt1"]->Fill(l1_p4.eta(), l1_p4.pt());}
-        if (l1_is_mu && l1_reco_matched) {hc["h_reco_mu"]->Fill(l1_p4.eta(), l1_p4.pt()); hc["h_reco_mu_pt1"]->Fill(l1_p4.eta(), l1_p4.pt());}
-        if (l2_is_el && l2_reco_matched) {hc["h_reco_el"]->Fill(l2_p4.eta(), l2_p4.pt()); hc["h_reco_el_pt2"]->Fill(l2_p4.eta(), l2_p4.pt());}
-        if (l2_is_mu && l2_reco_matched) {hc["h_reco_mu"]->Fill(l2_p4.eta(), l2_p4.pt()); hc["h_reco_mu_pt2"]->Fill(l2_p4.eta(), l2_p4.pt());}
+        const float l1_reco_pt  = min(l1_reco_p4.pt(), (l1_is_el ? el_pt_bins[el_npt_bins] : mu_pt_bins[mu_npt_bins]));
+        const float l2_reco_pt  = min(l2_reco_p4.pt(), (l2_is_el ? el_pt_bins[el_npt_bins] : mu_pt_bins[mu_npt_bins]));
+        const float l1_reco_eta = fabs(l1_reco_p4.eta());
+        const float l2_reco_eta = fabs(l2_reco_p4.eta());
+
+        if (l1_is_el && l1_reco_matched && l1_reco_passes_id && l1_reco_passes_iso) {hc["h_reco_el"]->Fill(l1_reco_eta, l1_reco_pt); hc["h_reco_el_pt1"]->Fill(l1_reco_eta, l1_reco_pt);}
+        if (l1_is_mu && l1_reco_matched && l1_reco_passes_id && l1_reco_passes_iso) {hc["h_reco_mu"]->Fill(l1_reco_eta, l1_reco_pt); hc["h_reco_mu_pt1"]->Fill(l1_reco_eta, l1_reco_pt);}
+        if (l2_is_el && l2_reco_matched && l2_reco_passes_id && l2_reco_passes_iso) {hc["h_reco_el"]->Fill(l2_reco_eta, l2_reco_pt); hc["h_reco_el_pt2"]->Fill(l2_reco_eta, l2_reco_pt);}
+        if (l2_is_mu && l2_reco_matched && l2_reco_passes_id && l2_reco_passes_iso) {hc["h_reco_mu"]->Fill(l2_reco_eta, l2_reco_pt); hc["h_reco_mu_pt2"]->Fill(l2_reco_eta, l2_reco_pt);}
 	}
     catch (std::exception& e)
     {
