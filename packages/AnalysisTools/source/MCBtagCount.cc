@@ -92,6 +92,12 @@ namespace at
                     vec.assign(err, err + sizeof(err) / sizeof(err[0]));
                     break;
                 }
+                case Sample::sbottomtop:
+                {
+                    const float err[] = {0.00574604,0.00677246,0.00509557,0.00374240,0.00314873,0.000637591,-0.000242591,-4.16636e-05,-0.00292352,-0.00581479,-0.000461876,-0.00676391,0.00488830,3.05474e-05};
+                    vec.assign(err, err + sizeof(err) / sizeof(err[0]));
+                    break;
+                }
                 default: {return scale_factor;}
             }
                 //if (model == "T1") {
@@ -141,6 +147,13 @@ namespace at
                 case Sample::t1tttt:
                 {
                     const float err[] = {-0.00769350,0.00246567,0.00672805,0.00625175,0.0121922,0.0183616,0.0224260,0.0350031,0.0361672,0.0372230,0.0116431,0.0207569,0.0382855,0.0252644};
+                    vec.assign(err, err + sizeof(err) / sizeof(err[0]));
+                    break;
+                }
+                case Sample::sbottomtop:
+                {
+                    
+                    const float err[] = {-0.0183669,-0.0125071,-0.0174156,-0.0164738,-0.0167200,-0.0149260,-0.0180894,-0.0154648,-0.0141536,-0.0119079,-0.0206974,0.000753522,0.0221000,0.0209901};
                     vec.assign(err, err + sizeof(err) / sizeof(err[0]));
                     break;
                 }
@@ -197,11 +210,17 @@ namespace at
                 switch (sample)
                 {
                     case Sample::t1tttt:
-                        {
-                            const float err[]   = {0.118477,0.162964,0.223318,0.220063,0.222306,0.267305,0.222287,0.283804,0.252221,0.324747,0.527015,0.659528,1.19317,1.50547};
-                            vec.assign(err, err + sizeof(err) / sizeof(err[0]));
-                            break;
-                        }
+                    {
+                        const float err[]   = {0.118477,0.162964,0.223318,0.220063,0.222306,0.267305,0.222287,0.283804,0.252221,0.324747,0.527015,0.659528,1.19317,1.50547};
+                        vec.assign(err, err + sizeof(err) / sizeof(err[0]));
+                        break;
+                    }
+                    case Sample::sbottomtop:
+                    {
+                         const float err[]   = {0.241447,0.297617,0.365921,0.372697,0.378869,0.434225,0.385061,0.452832,0.412124,0.498940,0.675028,0.813003,1.31961,1.57929};
+                         vec.assign(err, err + sizeof(err) / sizeof(err[0]));
+                        break;
+                    }
                     default: {return scale_factor;}
                 };
 
@@ -251,6 +270,12 @@ namespace at
                     case Sample::t1tttt:
                     {
                         const float err[]   = {0.772327,0.874528,1.19814,1.24806,1.49608,1.73841,2.00430,2.54257,3.27898,4.35726,5.31846,7.44186,9.19039,15.6896};
+                        vec.assign(err, err + sizeof(err) / sizeof(err[0]));
+                        break;
+                    }
+                    case Sample::sbottomtop:
+                    {
+                        const float err[]   = {0.694594,0.753930,1.01105,1.02488,1.18455,1.36025,1.57676,1.87545,2.24691,2.81635,3.46050,5.75946,6.89900,15.8855};
                         vec.assign(err, err + sizeof(err) / sizeof(err[0]));
                         break;
                     }
