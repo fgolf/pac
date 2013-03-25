@@ -49,23 +49,23 @@ exe tp_make_plots
  : # usage-requirements
  ;
 
-#exe tp_fit_plots
-# : # sources
-#   ./source/tp_fit_plots.cc
-#   # dependent packages
-#	 tp_tools/<link>static
-#   /ROOT
-#	 /RooFit
-#   /RootTools//RootTools/<link>static
-#   /SimpleTable//SimpleTable/<link>static
-#   #/AnalysisTools//AnalysisTools/<link>static
-#   /boost//program_options/<link>static
-# : # requirements
-#   <include>./include
-#   <include>./source
-# : # default-build
-# : # usage-requirements
-# ;
+exe tp_fit_plots
+ : # sources
+   ./source/tp_fit_plots.cc
+   # dependent packages
+	 tp_tools/<link>static
+   /ROOT
+	 /RooFit
+   /RootTools//RootTools/<link>static
+   /SimpleTable//SimpleTable/<link>static
+   #/AnalysisTools//AnalysisTools/<link>static
+   /boost//program_options/<link>static
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
 
 exe test_fits
  : # sources
@@ -105,7 +105,7 @@ exe test_fits
 # -------------------------------------------------------------- #
 
 default-install tp_make_plots ;
-#default-install tp_fit_plots ;
+default-install tp_fit_plots ;
 default-install test_fits ;
 #default-install syst_fits ;
 default-install tp_tools : <link>shared ;

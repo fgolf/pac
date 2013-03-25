@@ -1,6 +1,8 @@
+// C++
 #include <iostream>
 #include <fstream>
-#include "rt/RootTools.h" 
+
+// ROOT
 #include "TCanvas.h" 
 #include "TFile.h" 
 //#include "TF1.h" 
@@ -9,6 +11,8 @@
 #include "TROOT.h"
 #include "TH1D.h"
 #include "TTree.h"
+
+// RooFit
 #include "RooDataHist.h"
 #include "RooDataSet.h"
 #include "RooRealVar.h"
@@ -33,9 +37,15 @@
 #include "RooGenericPdf.h"
 #include "RooPlot.h"
 
+// BOOST
+#include <boost/program_options.hpp>
+
+// Tools
 #include "PerformFits.h"
 #include "CTable.h"
-
+#include "rt/RootTools.h" 
+#include "Measurement.h"
+ 
 using namespace std;
 using namespace tp;
 
@@ -311,7 +321,6 @@ void PrintCanvas(TCanvas* const canvas, const std::string& filename, const std::
 
 // returns the num/den hists
 template <typename ModelArray>
-//rt::TH1Container FitMassPlots(const std::string& data_filename = "", const std::string& mc_filename = "", const string& output_path = "test", const tp::Model::value_type models[npt_bins][neta_bins][4] = mu_id_models, const std::string& suffix = "eps")
 rt::TH1Container FitMassPlots(const bool do_electrons, const std::string& data_filename, const std::string& mc_filename, const ModelArray& models, const string& output_path = "test", const std::string& suffix = "eps")
 {
     // histograms
@@ -321,8 +330,8 @@ rt::TH1Container FitMassPlots(const bool do_electrons, const std::string& data_f
     // ugly but does the job...
     const size_t npt_bins       = (do_electrons ? el_npt_bins  : mu_npt_bins );
     const size_t neta_bins      = (do_electrons ? el_neta_bins : mu_neta_bins);
-    const float* const pt_bins  = (do_electrons ? el_pt_bins  : mu_pt_bins );
-    const float* const eta_bins = (do_electrons ? el_eta_bins : mu_eta_bins);
+    const float* const pt_bins  = (do_electrons ? el_pt_bins   : mu_pt_bins );
+    const float* const eta_bins = (do_electrons ? el_eta_bins  : mu_eta_bins);
 
     // hist for num counts
     rt::TH1Container hc;
@@ -338,13 +347,14 @@ rt::TH1Container FitMassPlots(const bool do_electrons, const std::string& data_f
     hc.Add(new TH2F("h_mc_eff"  , "Efficiency;|#eta|;p_{T} (GeV)", neta_bins, eta_bins, npt_bins, pt_bins));
 
 
-/*     size_t pt_bin = 0; */
-/*     size_t eta_bin = 4; */
+//     size_t pt_bin = 0;
+//     size_t eta_bin = 0;
     for (size_t pt_bin = 0; pt_bin != npt_bins; pt_bin++)
     {
         const float pt_min = pt_bins[pt_bin];
         const float pt_max = pt_bins[pt_bin+1];
         const string pt_label = Form("%1.0f GeV < p_{T} < %1.0f GeV", pt_min, pt_max); 
+        cout << pt_label << endl;
 
         for (size_t eta_bin = 0; eta_bin != neta_bins; eta_bin++)
         {
@@ -357,6 +367,7 @@ rt::TH1Container FitMassPlots(const bool do_electrons, const std::string& data_f
             const float eta_min = eta_bins[eta_bin];
             const float eta_max = eta_bins[eta_bin+1];
             const string eta_label = Form("%1.2f < |\\eta| < %1.2f", eta_min, eta_max); 
+            cout << eta_label << endl;
 
             cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
             cout << Form("fitting for bin: %s %s -- pt%lu_eta%lu", pt_label.c_str(), eta_label.c_str(), pt_bin, eta_bin) << endl;
@@ -374,7 +385,6 @@ rt::TH1Container FitMassPlots(const bool do_electrons, const std::string& data_f
             {
                 // do the fit
                 tp::Result dr = tp::PerformSimultaneousFit(sig_pass_model, sig_fail_model, bkg_pass_model, bkg_fail_model, h_data_pass, h_data_fail, pt_label, eta_label, mlow, mhigh, h_mc_pass, h_mc_fail);
-                //tp::Result dr = tp::PerformSimpleCount(h_data_pass, h_data_fail, pt_label, eta_label, mlow, mhigh);
                 dr.cpass->cd();
                 dr.cpass->Draw();
                 PrintCanvas(dr.cpass, Form("plots/%s/p_data_pass_pt%lu_eta%lu", output_path.c_str(), pt_bin, eta_bin), "all");
@@ -464,40 +474,81 @@ rt::TH1Container FitMassPlots(const bool do_electrons, const std::string& data_f
 }
 
 
-#ifndef __CINT__
-int main()
+int main(int argc, char* argv[])
 try
 {
-    // do the fits
-/*     const std::string input_path = "plots/Egamma_orig"; */
-/*     const std::string output_label = "fits/egamma_v2"; */
-/*     const std::string input_path = "plots/SameSignEl_egamma"; */
-/*     const std::string output_label = "fits/SameSignEl_egamma"; */
-/*     const std::string input_path = "plots/SameSignEl_hoe"; */
-/*     const std::string output_label = "fits/SameSignEl_hoe"; */
-/*     const std::string input_path = "plots/SameSignEl_nmhits0"; */
-/*     const std::string output_label = "fits/SameSignEl_nmhits0"; */
-/*     const std::string input_path = "plots/SameSignEl_3q"; */
-/*     const std::string output_label = "fits/SameSignEl_3q"; */
-/*     const std::string input_path = "plots/SameSignEl_iso"; */
-/*     const std::string output_label = "fits/SameSignEl_iso"; */
-/*     const std::string input_path = "plots/SameSignEl_d0"; */
-/*     const std::string output_label = "fits/SameSignEl_d0"; */
-/*     const std::string input_path = "plots/SameSignEl_orig"; */
-/*     const std::string output_label = "fits/SameSignEl_test"; */
-//    rt::TH1Container hc_id   = FitMassPlots(/*do_electrons=*/true, input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , el_id_models  , output_label + "/id"  , "all");
-//    rt::TH1Container hc_iso  = FitMassPlots(/*do_electrons=*/true, input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , el_iso_models , output_label + "/iso" , "all");
-//    rt::TH1Container hc_both = FitMassPlots(/*do_electrons=*/true, input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", el_both_models, output_label + "/both", "all");
+    std::string output_label = "";
+    std::string input_path   = "";
+    std::string mode_name    = "";
 
-    const std::string input_path = "plots/SameSignMu_orig";
-    const std::string output_label = "fits/SameSignMu_test"; 
-    rt::TH1Container hc_id   = FitMassPlots(/*do_electrons=*/false, input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , mu_id_models  , output_label + "/id"  , "all");
-    rt::TH1Container hc_iso  = FitMassPlots(/*do_electrons=*/false, input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , mu_iso_models , output_label + "/iso" , "all");
-    rt::TH1Container hc_both = FitMassPlots(/*do_electrons=*/false, input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", mu_both_models, output_label + "/both", "all");
+    namespace po = boost::program_options;
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help"  , "print this menu")
+        ("mode"  , po::value<std::string>(&mode_name)->required()   , "REQUIRED: which channel are we analysising (Muon, Electron)"  )
+        ("label" , po::value<std::string>(&output_label)->required(), "REQUIRED: output label for the fits (e.g. plots/<label>/id/)" )
+        ("input" , po::value<std::string>(&input_path)->required()  , "REQUIRED: input path to the plots to fit"                     )
+        ;
+
+    // parse it
+    try
+    {
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+
+        if (vm.count("help")) 
+        {
+            cout << desc << "\n";
+            return 1;
+        }
+
+        po::notify(vm);
+    }
+    catch (const std::exception& e)
+    {
+        cerr << e.what() << "\nexiting" << endl;
+        cout << desc << "\n";
+        return 1;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error!" << "\n";
+        return false;
+    }
+
+    // mode
+    tp::Mode::value_type mode = tp::GetModeFromString(mode_name);
+    if (mode != tp::Mode::Electron || mode != tp::Mode::Muon)
+    {
+        cerr << "[tp_fit_plots] ERROR: mode is invalid.  Must be electron or muon" << endl;
+        cout << desc << endl;
+    }
+
+    cout << "inputs:" << endl;
+    cout << "output_label     :\t" << output_label     << endl; 
+    cout << "input_path       :\t" << input_path       << endl; 
+    cout << "mode_name        :\t" << mode_name        << endl; 
+
+    // do it
+    // ------------------------------------------------------------------ //
+
+    const bool do_electrons = (mode == tp::Mode::Electron);
+    output_label = Form("plots/fits/%s", output_label.c_str());
+
+    // do the fits
+    rt::TH1Container hc_id   = (do_electrons ? FitMassPlots(/*do_electrons=*/true , input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , el_id_models  , output_label + "/id"  , "all") :
+                                               FitMassPlots(/*do_electrons=*/false, input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , mu_id_models  , output_label + "/id"  , "all"));
+    rt::TH1Container hc_iso  = (do_electrons ? FitMassPlots(/*do_electrons=*/true , input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , el_iso_models , output_label + "/iso" , "all") :
+                                               FitMassPlots(/*do_electrons=*/false, input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , mu_iso_models , output_label + "/iso" , "all"));
+    rt::TH1Container hc_both = (do_electrons ? FitMassPlots(/*do_electrons=*/true , input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", el_both_models, output_label + "/both", "all") :
+                                               FitMassPlots(/*do_electrons=*/false, input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", mu_both_models, output_label + "/both", "all"));
 
     TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)");
+    h_sf_prod->SetDirectory(NULL);
     hc_both.Add(h_sf_prod);
+
     TH1* h_sf_diff = rt::SubtractHists(hc_both["h_sf"], hc_both["h_sf_prod"], "h_sf_diff", "data/MC scale Factor difference (ID+Iso - ID*Iso)");
+    h_sf_diff->SetDirectory(NULL);
     hc_both.Add(h_sf_diff);
 
     // make the tables
@@ -544,5 +595,4 @@ catch(std::exception& e)
 {
     cout << e.what() << endl;
 }
-#endif
 
