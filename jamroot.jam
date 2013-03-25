@@ -97,7 +97,7 @@ use-project /CMS2_CORE  : ./externals/build/cms2_core ;
 
 # CMS2_FRB
 #local cms2_frb_tag = HEAD ;
-local cms2_frb_tag = FakeRate04Feb2013 ;
+local cms2_frb_tag = FakeRate19March2013 ;
 path-constant CMS2_FRB : ./externals/source/cms2_frb/$(cms2_frb_tag) ;
 use-project /CMS2_FRB  : ./externals/build/cms2_frb ;
 
