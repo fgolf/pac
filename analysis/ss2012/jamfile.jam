@@ -28,7 +28,6 @@ lib ss2012_tools
     ./source/FakeRateType.cc
     ./source/SSYields.cc
     ./source/SignalBinInfo.cc
-    ./source/LeptonScaleFactors.cc
     [ rootcint Dict
      : 
        <include>./include
