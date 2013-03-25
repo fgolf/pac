@@ -44,158 +44,156 @@ const float mlow  = 60.0;
 const float mhigh = 120.0;
 
 // electron binning
-/* const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200}; */
-/* const size_t neta_bins = 5; const float eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5}; */
+const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200};
+const size_t neta_bins = 5; const float eta_bins[] = {0, 0.8, 1.4442, 1.566, 2.0, 2.5};
 
 // mu binning
-const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200};
-const size_t neta_bins = 2; const float eta_bins[] = {0, 1.2, 2.5};
+/* const size_t npt_bins  = 6; const float pt_bins [] = {10, 15, 20, 30, 40, 50, 200}; */
+/* const size_t neta_bins = 2; const float eta_bins[] = {0, 1.2, 2.5}; */
 
 // Electrons
 // --------------------------------------------------------------------------------- //
 
-
-//
 // models for the ID
-//const tp::Model::value_type el_id_models[npt_bins][neta_bins][4] =
-//{
-//    {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
-//        /*eta0, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta1, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-//        /*eta2, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
-//        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta4, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
-//    },
-//    {
-//        /*eta0, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta1, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
-//        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
-//    }, 
-//    {
-//        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
-//        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }, 
-//        /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-//        /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
-//    },
-//    {
-//        /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
-//        /*eta2, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-//        /*eta3, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
-//    },
-//    {
-//        /*eta0, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta1, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta2, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
-//        /*eta3, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta4, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
-//    },
-//    {
-//        /*eta0, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta1, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta2, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
-//        /*eta3, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta4, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
-//    }
-//};
-//
-//// models for the Iso
-//const tp::Model::value_type el_iso_models[npt_bins][neta_bins][4] =
-//{
-//    {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
-//        /*eta0, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta1, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta2, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
-//        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta4, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
-//    },
-//    {
-//        /*eta0, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta1, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta2, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
-//        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta4, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
-//    }, 
-//    {
-//        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }, 
-//        /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-//        /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
-//        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
-//    },
-//    {
-//        /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
-//        /*eta2, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-//        /*eta3, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }
-//    },
-//    {
-//        /*eta0, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta1, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta2, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
-//        /*eta3, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta4, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
-//    },
-//    {
-//        /*eta0, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta1, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta2, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
-//        /*eta3, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta4, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
-//    }
-//};
-//
-//// models for the Iso+iso
-//const tp::Model::value_type el_both_models[npt_bins][neta_bins][4] =
-//{
-//    {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
-//        /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-//        /*eta1, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta2, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
-//        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-//        /*eta4, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
-//    },
-//    {
-//        /*eta0, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-//        /*eta1, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-//        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-//        /*eta3, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
-//    },
-//    {
-//        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
-//        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
-//        /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    }, // not used, electron crack
-//        /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
-//        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    }
-//    },
-//    {
-//        /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-//        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
-//        /*eta2, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-//        /*eta3, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
-//        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
-//    },
-//    {
-//        /*eta0, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta1, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta2, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
-//        /*eta3, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta4, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
-//    },
-//    {
-//        /*eta0, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta1, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta2, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
-//        /*eta3, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
-//        /*eta4, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
-//    }
-//};
+const tp::Model::value_type el_id_models[npt_bins][neta_bins][4] =
+{
+    {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
+        /*eta0, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta1, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta2, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
+        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta4, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
+    },
+    {
+        /*eta0, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta1, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
+        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
+    }, 
+    {
+        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
+        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }, 
+        /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
+        /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
+    },
+    {
+        /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
+        /*eta2, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
+        /*eta3, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
+    },
+    {
+        /*eta0, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta1, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta2, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
+        /*eta3, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta4, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
+    },
+    {
+        /*eta0, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta1, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta2, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
+        /*eta3, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta4, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
+    }
+};
+
+// models for the Iso
+const tp::Model::value_type el_iso_models[npt_bins][neta_bins][4] =
+{
+    {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
+        /*eta0, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta1, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta2, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
+        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta4, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}
+    },
+    {
+        /*eta0, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta1, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta2, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
+        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta4, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
+    }, 
+    {
+        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }, 
+        /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
+        /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
+        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
+    },
+    {
+        /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
+        /*eta2, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
+        /*eta3, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }
+    },
+    {
+        /*eta0, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta1, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta2, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
+        /*eta3, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta4, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
+    },
+    {
+        /*eta0, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta1, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta2, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
+        /*eta3, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta4, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
+    }
+};
+
+// models for the Iso+iso
+const tp::Model::value_type el_both_models[npt_bins][neta_bins][4] =
+{
+    {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
+        /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta1, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta2, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
+        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta4, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
+    },
+    {
+        /*eta0, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta1, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
+        /*eta3, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
+    },
+    {
+        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
+        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
+        /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    }, // not used, electron crack
+        /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
+        /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    }
+    },
+    {
+        /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
+        /*eta2, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
+        /*eta3, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
+        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
+    },
+    {
+        /*eta0, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta1, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta2, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
+        /*eta3, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta4, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
+    },
+    {
+        /*eta0, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta1, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta2, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }, // not used, electron crack
+        /*eta3, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
+        /*eta4, pt5 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  }
+    }
+};
 
 // Muons
 // --------------------------------------------------------------------------------- //
@@ -271,7 +269,7 @@ const tp::Model::value_type mu_both_models[npt_bins][neta_bins][4] =
     }, 
     {
         /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
-        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential , Model::Exponential} 
+        /*eta1, pt2 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential , Model::Exponential} 
     },
     {
         /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
@@ -472,7 +470,7 @@ try
 
     // do the fits
 /*     const std::string input_path = "plots/Egamma_orig"; */
-/*     const std::string output_label = "fits/egamma_orig_v13"; */
+/*     const std::string output_label = "fits/egamma_v2"; */
 /*     const std::string input_path = "plots/SameSignEl_egamma"; */
 /*     const std::string output_label = "fits/SameSignEl_egamma"; */
 /*     const std::string input_path = "plots/SameSignEl_hoe"; */
@@ -485,31 +483,36 @@ try
 /*     const std::string output_label = "fits/SameSignEl_iso"; */
 /*     const std::string input_path = "plots/SameSignEl_d0"; */
 /*     const std::string output_label = "fits/SameSignEl_d0"; */
-/*     const std::string input_path = "plots/SameSignEl_orig"; */
-/*     const std::string output_label = "fits/SameSignEl_v2"; */
-/*     rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , el_id_models  , "all"); */
-/*     rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , el_iso_models , "all"); */
-/*     rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", el_both_models, "all"); */
+    const std::string input_path = "plots/SameSignEl_orig";
+    const std::string output_label = "fits/SameSignEl_v5";
+    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , el_id_models  , "all");
+    rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , el_iso_models , "all");
+    rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", el_both_models, "all");
 
-    const std::string input_path = "plots/SameSignMu_orig";
-    const std::string output_label = "fits/SameSignMu_v3";
-    rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , mu_id_models  , "all");
-    rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , mu_iso_models , "all");
-    rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", mu_both_models, "all");
+/*     const std::string input_path = "plots/SameSignMu_orig"; */
+/*     const std::string output_label = "fits/SameSignMu_v5"; */
+/*     rt::TH1Container hc_id   = FitMassPlots(input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , output_label + "/id"  , mu_id_models  , "all"); */
+/*     rt::TH1Container hc_iso  = FitMassPlots(input_path +"/iso/data/plots.root" , input_path + "/iso/mc/plots.root" , output_label + "/iso" , mu_iso_models , "all"); */
+/*     rt::TH1Container hc_both = FitMassPlots(input_path +"/both/data/plots.root", input_path + "/both/mc/plots.root", output_label + "/both", mu_both_models, "all"); */
 
     TH1* h_sf_prod = rt::MultiplyHists(hc_id["h_sf"], hc_iso["h_sf"], "h_sf_prod", "data/MC scale Factor (ID*Iso)");
+    hc_both.Add(h_sf_prod);
+    TH1* h_sf_diff = rt::SubtractHists(hc_both["h_sf"], hc_both["h_sf_prod"], "h_sf_diff", "data/MC scale Factor difference (ID+Iso - ID*Iso)");
+    hc_both.Add(h_sf_diff);
 
     // make the tables
-    CTable t_id   = rt::CreateTableFromHist(hc_id  ["h_sf"], "Data/MC ScaleFactor ID"    , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
-    CTable t_iso  = rt::CreateTableFromHist(hc_iso ["h_sf"], "Data/MC ScaleFactor ISO"   , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
-    CTable t_prod = rt::CreateTableFromHist(h_sf_prod      , "Data/MC ScaleFactor ID*ISO", "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
-    CTable t_both = rt::CreateTableFromHist(hc_both["h_sf"], "Data/MC ScaleFactor ID+ISO", "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_id   = rt::CreateTableFromHist(hc_id  ["h_sf"     ], "Data/MC ScaleFactor ID"             , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_iso  = rt::CreateTableFromHist(hc_iso ["h_sf"     ], "Data/MC ScaleFactor ISO"            , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_prod = rt::CreateTableFromHist(h_sf_prod           , "Data/MC ScaleFactor ID*ISO"         , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_both = rt::CreateTableFromHist(hc_both["h_sf"     ], "Data/MC ScaleFactor ID+ISO"         , "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
+    CTable t_diff = rt::CreateTableFromHist(hc_both["h_sf_diff"], "Data/MC ScaleFactor ID+ISO - ID*Iso", "p_{T}", "\\eta", "GeV", "", "1.3", "1.0", "1.2", true);
 
     // print to screen
     t_id.print();
     t_iso.print();
     t_prod.print();
     t_both.print();
+    t_diff.print();
 
     //hc_id.SetMinMax(0, 1.1);
     //hc_iso.SetMinMax(0, 1.1);
@@ -527,10 +530,13 @@ try
     t_iso.saveAs  ("tables/" + output_label + "/iso/sf.txt" ); t_iso.print();
     t_prod.saveAs ("tables/" + output_label + "/prod/sf.txt" ); t_iso.print();
     t_both.saveAs ("tables/" + output_label + "/both/sf.txt"); t_both.print();
+    t_diff.saveAs ("tables/" + output_label + "/prod/sf_dff.txt"); t_diff.print();
     t_id.print();
     t_iso.print();
     t_prod.print();
     t_both.print();
+    cout << "\nDifference between product and simultaneous" << endl;
+    t_diff.print();
 
     return 0;
 }

@@ -84,10 +84,28 @@ exe test_fits
  : # usage-requirements
  ;
 
+#exe syst_fits
+# : # sources
+#   ./macros/SystFits.C
+#   # dependent packages
+#	 tp_tools/<link>static
+#   /ROOT
+#	 /RooFit
+#   /RootTools//RootTools/<link>static
+#   /SimpleTable//SimpleTable/<link>static
+#   #/AnalysisTools//AnalysisTools/<link>static
+# : # requirements
+#   <include>./include
+#   <include>./source
+# : # default-build
+# : # usage-requirements
+# ;
+
 # install libs/exes
 # -------------------------------------------------------------- #
 
 default-install tp_make_plots ;
 #default-install tp_fit_plots ;
 default-install test_fits ;
+#default-install syst_fits ;
 default-install tp_tools : <link>shared ;

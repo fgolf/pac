@@ -30,6 +30,7 @@
 #include "RooGenericPdf.h"
 #include "RooPolynomial.h"
 #include "RooChebychev.h"
+#include "RooArgusBG.h"
 
 // Tools
 #include "rt/RootTools.h"
@@ -87,7 +88,7 @@ namespace tp
 
         // Crystal ball
         title = Form("mean%s"  , label.c_str()); mean  = new RooRealVar(title.c_str(), title.c_str(), 0 , -10 , 10);
-        title = Form("gammaz%s", label.c_str()); sigma = new RooRealVar(title.c_str(), title.c_str(), 1 , 0.1 , 10);
+        title = Form("sigma%s" , label.c_str()); sigma = new RooRealVar(title.c_str(), title.c_str(), 1 , 0.1 , 10);
         title = Form("alpha%s" , label.c_str()); alpha = new RooRealVar(title.c_str(), title.c_str(), 5 , 0   , 20);
         title = Form("n%s"     , label.c_str()); n     = new RooRealVar(title.c_str(), title.c_str(), 1 , 0   , 10);
         title = Form("cb%s"    , label.c_str()); cb    = new RooCBShape(title.c_str(), title.c_str(), x, *mean , *sigma , *alpha , *n);
@@ -135,11 +136,34 @@ namespace tp
 
     ExponentialPdf::ExponentialPdf(RooRealVar& x, const std::string& label)
     {
-            string title = Form("t%s", label.c_str()); 
-            t = new RooRealVar(title.c_str(), title.c_str(), -0.1, -1.0, 0.0);
+        string title = Form("t%s", label.c_str()); 
+        t = new RooRealVar(title.c_str(), title.c_str(), -0.1, -1.0, 0.0);
 
-            title = Form("exp%s", label.c_str()); 
-            model = RooAbsPdfPtr(new RooExponential(title.c_str(), title.c_str(), x, *t));
+        title = Form("exp%s", label.c_str()); 
+        model = RooAbsPdfPtr(new RooExponential(title.c_str(), title.c_str(), x, *t));
+    }
+
+    // Argus 
+    // ----------------------------------------------------------------- //
+
+    struct ArgusPdf : public PdfBase
+    {
+        ArgusPdf(RooRealVar& x, const std::string& label);
+        RooRealVar* m;
+        RooRealVar* c;
+        RooRealVar* p;
+        RooArgusBG* argus;
+    };
+
+    ArgusPdf::ArgusPdf(RooRealVar& x, const std::string& label)
+    {
+        string title;
+        title = Form("m%s", label.c_str()); m = new RooRealVar(title.c_str(), title.c_str(), -20);
+        title = Form("c%s", label.c_str()); c = new RooRealVar(title.c_str(), title.c_str(), -100);
+        title = Form("p%s", label.c_str()); p = new RooRealVar(title.c_str(), title.c_str(), -1);
+
+        title = Form("argus%s", label.c_str()); 
+        model = RooAbsPdfPtr(new RooArgusBG(title.c_str(), title.c_str(), x, *m, *c, *p));
     }
 
     // eff * Exponential 
@@ -159,7 +183,7 @@ namespace tp
         string title;
         title = Form("alfa%s" , label.c_str());  alfa = new RooRealVar(title.c_str(), title.c_str(), 50  ,  5, 200);
         title = Form("beta%s" , label.c_str());  beta = new RooRealVar(title.c_str(), title.c_str(), 0.01,  0, 10 );
-        title = Form("gamma%s", label.c_str()); gamma = new RooRealVar(title.c_str(), title.c_str(), 0.1 ,  0, 1  );
+        title = Form("gamma%s", label.c_str()); gamma = new RooRealVar(title.c_str(), title.c_str(), 0.1 ,  0, 1.0);
         title = Form("peak%s" , label.c_str());  peak = new RooRealVar(title.c_str(), title.c_str(), Mz  , 85, 97 );
         peak->setConstant(kTRUE);  
 
@@ -217,13 +241,54 @@ namespace tp
         model = RooAbsPdfPtr(new RooFFTConvPdf(title.c_str(), title.c_str(), x, *chevychev, *exp));
     }
 
-    // Quadratic * exp (not working) 
+    // Linear * exp + constant
     // ----------------------------------------------------------------- //
 
     // not working
-    struct QuadraticExpPdf : public PdfBase
+    struct LinearExpPdf : public PdfBase
     {
-        QuadraticExpPdf(RooRealVar &x, const std::string& label);
+        LinearExpPdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        //RooRealVar *c;
+        RooRealVar *t;
+        RooExponential *exp;
+        RooPolynomial *poly;
+        RooProdPdf* polyexp;
+    };
+
+    // (a0 + a1*m) * exp{t*m} + c
+    LinearExpPdf::LinearExpPdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()), 0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()), 0.5, 0.10, 10);
+        //c  = new RooRealVar(Form("c%s" , l.c_str()), Form("c %s", l.c_str()), 0);
+        t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -0.05, -100.00, 0.0);
+ 
+        a0->setConstant(true);
+        //c->setConstant(true);
+
+        string title = Form("exp%s", l.c_str()); 
+        exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
+
+        title = Form("poly%s", l.c_str());
+        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1), 0);
+
+        title = Form("polyexp%s", l.c_str());
+        polyexp = new RooProdPdf(title.c_str(), title.c_str(), RooArgList(*poly, *exp));
+        model = RooAbsPdfPtr(polyexp);
+
+//         title = Form("background%s", l.c_str());
+//         model = RooAbsPdfPtr(new RooAddPdf(title.c_str(), title.c_str(), *polyexp, *c));
+    }
+
+    // Quadratic * exp
+    // ----------------------------------------------------------------- //
+
+    // not working
+    struct Poly2ExpPdf : public PdfBase
+    {
+        Poly2ExpPdf(RooRealVar &x, const std::string& label);
         RooRealVar *a0;
         RooRealVar *a1;
         RooRealVar *a2;
@@ -233,18 +298,53 @@ namespace tp
     };
 
     // (1 + a1*m + a2*m^2) * exp{-t}
-    QuadraticExpPdf::QuadraticExpPdf(RooRealVar &x, const std::string& l)
+    Poly2ExpPdf::Poly2ExpPdf(RooRealVar &x, const std::string& l)
     {
-        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()),   0.0);//, -10.0, 10.0);
-        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()),   0.0);//, -10.0, 10.0);
-        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()),   0.0);//, -10.0, 10.0);
-        t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -1e-6, -10.0, 0.000);
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()), 0.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()), -0.001);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()), 0.0);
+        t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -0.05, -100.00, 0.0);
 
         string title = Form("exp%s", l.c_str()); 
         exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
 
         title = Form("poly%s", l.c_str());
-        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2));
+        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2), 0);
+
+        title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooProdPdf(title.c_str(), title.c_str(), RooArgList(*poly, *exp)));
+    }
+
+    // 3rd order polynomial * exp 
+    // ----------------------------------------------------------------- //
+
+    struct Poly3ExpPdf : public PdfBase
+    {
+        Poly3ExpPdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+        RooRealVar *a3;
+        RooRealVar *t;
+        RooExponential *exp;
+        RooPolynomial *poly;
+    };
+
+    Poly3ExpPdf::Poly3ExpPdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()), 0.0);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()), 0.0);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()), 0.0);
+        a3 = new RooRealVar(Form("a3%s", l.c_str()), Form("a3%s", l.c_str()), 0.0);
+        //t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -1e-6, -10.0, 0.00);
+        t  = new RooRealVar(Form("t%s" , l.c_str()), Form("t%s" , l.c_str()), -0.05, -10.00, 0.0);
+
+        // (a0 + a1*x + a2*x^2 + a3*x^3 + a4*x^4) * exp{-t}
+        string title = Form("exp%s", l.c_str()); 
+        exp = new RooExponential(title.c_str(), title.c_str(), x, *t);
+
+        title = Form("poly%s", l.c_str());
+        poly = new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3), 0);
 
         title = Form("background%s", l.c_str());
         model = RooAbsPdfPtr(new RooProdPdf(title.c_str(), title.c_str(), RooArgList(*poly, *exp)));
@@ -261,8 +361,6 @@ namespace tp
         RooRealVar *a2;
         RooRealVar *a3;
         RooRealVar *a4;
-        RooRealVar *a5;
-        RooRealVar *a6;
         RooRealVar *t;
         RooExponential *exp;
         RooPolynomial *poly;
@@ -353,6 +451,28 @@ namespace tp
         model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1)));
     }
 
+    // 2nd order polynomial 
+    // ----------------------------------------------------------------- //
+
+    struct Poly2Pdf : public PdfBase
+    {
+        Poly2Pdf(RooRealVar &x, const std::string& label);
+        RooRealVar *a0;
+        RooRealVar *a1;
+        RooRealVar *a2;
+    };
+
+    Poly2Pdf::Poly2Pdf(RooRealVar &x, const std::string& l)
+    {
+        a0 = new RooRealVar(Form("a0%s", l.c_str()), Form("a0%s", l.c_str()), -0.02, 0, -0.05);
+        a1 = new RooRealVar(Form("a1%s", l.c_str()), Form("a1%s", l.c_str()), 0.000, -0.01, 0.01);
+        a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()), 0.0);
+                                                                              
+        // (1 + a1*m + a2*m^2)
+        string title = Form("background%s", l.c_str());
+        model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2)));
+    }
+
     // 3rd order polynomial 
     // ----------------------------------------------------------------- //
 
@@ -372,7 +492,7 @@ namespace tp
         a2 = new RooRealVar(Form("a2%s", l.c_str()), Form("a2%s", l.c_str()),   0.0);
         a3 = new RooRealVar(Form("a3%s", l.c_str()), Form("a3%s", l.c_str()),   0.0);
 
-        // (1 + a1*m + a2*m^2) * exp{-t}
+        // (1 + a1*m + a2*m^2+ a3*m^3)
         string title = Form("background%s", l.c_str());
         model = RooAbsPdfPtr(new RooPolynomial(title.c_str(), title.c_str(), x, RooArgList(*a0, *a1, *a2, *a3)));
     }
@@ -456,14 +576,18 @@ namespace tp
             case Model::BreitWignerCB: return new BreitWignerCBPdf(x, label);                     break; 
             case Model::MCTemplate:    return new MCTemplateConvGausPdf(x, hist_template, label); break; 
             case Model::Exponential:   return new ExponentialPdf(x, label);                       break; 
+            case Model::Argus:         return new ArgusPdf(x, label);                             break; 
             case Model::ErfExp:        return new ErfExpPdf(x, label);                            break; 
-            case Model::QuadraticExp:  return new QuadraticExpPdf(x, label);                      break; 
             case Model::Chebychev:     return new ChebychevPdf(x, label);                         break; 
             case Model::ChebyExp:      return new ChebyExpPdf(x, label);                          break; 
             case Model::Linear:        return new LinearPdf(x, label);                            break; 
+            case Model::Poly2:         return new Poly2Pdf(x, label);                             break; 
             case Model::Poly3:         return new Poly3Pdf(x, label);                             break; 
             case Model::Poly6:         return new Poly6Pdf(x, label);                             break; 
             case Model::Poly8:         return new Poly8Pdf(x, label);                             break; 
+            case Model::LinearExp:     return new LinearExpPdf(x, label);                         break; 
+            case Model::Poly2Exp:      return new Poly2ExpPdf(x, label);                          break; 
+            case Model::Poly3Exp:      return new Poly3ExpPdf(x, label);                          break; 
             case Model::Poly4Exp:      return new Poly4ExpPdf(x, label);                          break; 
             case Model::Poly8Exp:      return new Poly8ExpPdf(x, label);                          break; 
             default:
@@ -625,8 +749,8 @@ namespace tp
         RooFitResult *roo_fit_result = total_pdf.fitTo(data_comb, RooFit::Extended(), RooFit::Strategy(1), RooFit::Save());
 
         // integrate on a subrange
-        mass.setRange("zwindow", 81, 101);
-        //mass.setRange("zwindow", 60, 120);
+//         mass.setRange("zwindow", 81, 101);
+        mass.setRange("zwindow", 60, 120);
         RooAbsReal* int_nsig_pass = esig_pass.createIntegral (mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
         RooAbsReal* int_nbkg_pass = ebkg_pass.createIntegral (mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
         RooAbsReal* int_ntot_pass = model_pass.createIntegral(mass, RooFit::NormSet(mass), RooFit::Range("zwindow"));
@@ -750,10 +874,10 @@ namespace tp
         const float mhigh
     )
     {
-        const float zwin_low  = 81.0;
-        const float zwin_high = 101.0;
-//         const float zwin_low  = 60.0;
-//         const float zwin_high = 120.0;
+//         const float zwin_low  = 81.0;
+//         const float zwin_high = 101.0;
+        const float zwin_low  = 60.0;
+        const float zwin_high = 120.0;
 
         // connts
         const double num_pass      = rt::IntegralAndError(h_pass, zwin_low, zwin_high).first;
