@@ -518,10 +518,11 @@ try
 
     // mode
     tp::Mode::value_type mode = tp::GetModeFromString(mode_name);
-    if (mode != tp::Mode::Electron || mode != tp::Mode::Muon)
+    if (not (mode == tp::Mode::Electron or mode == tp::Mode::Muon))
     {
         cerr << "[tp_fit_plots] ERROR: mode is invalid.  Must be electron or muon" << endl;
         cout << desc << endl;
+        return 1;
     }
 
     cout << "inputs:" << endl;
