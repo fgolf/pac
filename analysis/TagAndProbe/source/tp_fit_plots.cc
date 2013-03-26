@@ -115,7 +115,7 @@ const tp::Model::value_type el_id_models[el_npt_bins][el_neta_bins][4] =
 const tp::Model::value_type el_iso_models[el_npt_bins][el_neta_bins][4] =
 {
     {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
-        /*eta0, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta1, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
         /*eta2, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
         /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
@@ -129,18 +129,18 @@ const tp::Model::value_type el_iso_models[el_npt_bins][el_neta_bins][4] =
         /*eta4, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
     }, 
     {
-        /*eta0, pt2 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::ErfExp     , Model::ErfExp     },
-        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }, 
+        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, 
         /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
         /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
         /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
     },
     {
         /*eta0, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
+        /*eta1, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
         /*eta2, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
         /*eta3, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
-        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }
+        /*eta4, pt3 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
     },
     {
         /*eta0, pt4 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Chebychev  , Model::Chebychev  },
@@ -165,19 +165,19 @@ const tp::Model::value_type el_both_models[el_npt_bins][el_neta_bins][4] =
         /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta1, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta2, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
-        /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
+        /*eta3, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta4, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
     },
     {
         /*eta0, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta1, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::ErfExp     , Model::ErfExp     },
-        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
+        /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta3, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
     },
     {
-        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
-        /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
+        /*eta0, pt2 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::ErfExp      , Model::ErfExp    },
+        /*eta1, pt2 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::ErfExp      , Model::ErfExp    },
         /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    }, // not used, electron crack
         /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    },
         /*eta4, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp      , Model::ErfExp    }
