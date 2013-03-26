@@ -6,8 +6,8 @@ mlow=60
 mhigh=120
 
 # Electrons
-#analysis=Egamma
-analysis=SameSignEl
+analysis=Egamma
+#analysis=SameSignEl
 
 output=plots/${analysis}_orig/
 tp_make_plots  --mode Electron   --den ${analysis}DenID   --num ${analysis}Num --verbose 0 --nev -1 --output $output/id/data/plots.root   --fit_mlow $mlow --fit_mhigh $mhigh >& logs/${analysis}_data_id.log &
