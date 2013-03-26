@@ -129,7 +129,7 @@ const tp::Model::value_type el_iso_models[el_npt_bins][el_neta_bins][4] =
         /*eta4, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
     }, 
     {
-        /*eta0, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta0, pt2 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::ErfExp     , Model::ErfExp     },
         /*eta1, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      }, 
         /*eta2, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
         /*eta3, pt2 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Poly3      , Model::Poly3      },
@@ -163,8 +163,8 @@ const tp::Model::value_type el_both_models[el_npt_bins][el_neta_bins][4] =
 {
     {                  //           sig pass,             sig fail,           bkg pass,            bkg fail,
         /*eta0, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
-        /*eta1, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
-        /*eta2, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}, // not used, electron crack
+        /*eta1, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
+        /*eta2, pt0 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential}, // not used, electron crack
         /*eta3, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential},
         /*eta4, pt0 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::Exponential, Model::Exponential}
     },
@@ -172,7 +172,7 @@ const tp::Model::value_type el_both_models[el_npt_bins][el_neta_bins][4] =
         /*eta0, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta1, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::Exponential, Model::Exponential},
         /*eta2, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }, // not used, electron crack
-        /*eta3, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     },
+        /*eta3, pt1 =*/{Model::BreitWignerCB, Model::BreitWignerCB, Model::ErfExp     , Model::ErfExp     },
         /*eta4, pt1 =*/{Model::MCTemplate   , Model::MCTemplate   , Model::ErfExp     , Model::ErfExp     }
     },
     {
@@ -485,9 +485,9 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"  , "print this menu")
-        ("mode"  , po::value<std::string>(&mode_name)->required()   , "REQUIRED: which channel are we analysising (Muon, Electron)"  )
-        ("label" , po::value<std::string>(&output_label)->required(), "REQUIRED: output label for the fits (e.g. plots/<label>/id/)" )
-        ("input" , po::value<std::string>(&input_path)->required()  , "REQUIRED: input path to the plots to fit"                     )
+        ("mode"  , po::value<std::string>(&mode_name)->required()   , "REQUIRED: which channel are we analysising (Muon, Electron)"      )
+        ("label" , po::value<std::string>(&output_label)->required(), "REQUIRED: output label for the fits (e.g. plots/fits/<label>/id/)")
+        ("input" , po::value<std::string>(&input_path)->required()  , "REQUIRED: input path to the plots to fit"                         )
         ;
 
     // parse it
@@ -533,7 +533,7 @@ try
     // ------------------------------------------------------------------ //
 
     const bool do_electrons = (mode == tp::Mode::Electron);
-    output_label = Form("plots/fits/%s", output_label.c_str());
+    output_label = Form("fits/%s", output_label.c_str());
 
     // do the fits
     rt::TH1Container hc_id   = (do_electrons ? FitMassPlots(/*do_electrons=*/true , input_path +"/id/data/plots.root"  , input_path + "/id/mc/plots.root"  , el_id_models  , output_label + "/id"  , "all") :
