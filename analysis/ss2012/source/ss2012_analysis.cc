@@ -51,6 +51,7 @@ try
     int jetMetScale                 = 0;
     bool isFastSim                  = false;
     std::string apply_jec_otf       = "";
+    std::string apply_jec_unc       = "";
     double jet_pt_cut               = -1;
     int run                         = -1;
     int lumi                        = -1;
@@ -80,6 +81,7 @@ try
         ("isFastSim"     , po::value<bool>(&isFastSim)                     , "use FastSim btag scale factors"                                                        )
         ("use_el_eta"    , po::value<bool>(&use_el_eta)                    , "use the |et->eta| to determine is electron is barrel or endcap"                        )
         ("apply_jec_otf" , po::value<std::string>(&apply_jec_otf)          , "apply JEC on-the-fly using the specified global tag"                                   )
+        ("apply_jec_unc" , po::value<std::string>(&apply_jec_unc)          , "apply JEC uncertainty using the specified global tag"                                  )
         ("jet_pt_cut"    , po::value<double>(&jet_pt_cut)                  , "jet pt threshold"                                                                      )
         ("run"           , po::value<int>(&run)                            , "select a specific run (negative numbers == all)"                                       )
         ("lumi"          , po::value<int>(&lumi)                           , "select a specific lumi (negative numbers == all)"                                      )
@@ -134,6 +136,7 @@ try
     cout << "isFastSim          :\t" << isFastSim           << endl;
     cout << "use_el_eta         :\t" << use_el_eta          << endl;
     cout << "apply_jec_otf      :\t" << apply_jec_otf       << endl;
+    cout << "apply_jec_unc      :\t" << apply_jec_unc       << endl;
     cout << "jet_pt_cut         :\t" << jet_pt_cut          << endl;
     cout << "run                :\t" << run                 << endl;
     cout << "lumi               :\t" << lumi                << endl;
@@ -266,6 +269,7 @@ try
             sync_print,
             verbose,
             apply_jec_otf,
+            apply_jec_unc,
             jet_pt_cut
         ),
         cms2,

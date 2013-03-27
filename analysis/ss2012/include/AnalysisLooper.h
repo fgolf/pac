@@ -9,10 +9,11 @@
 #include <string>
 #include "SameSignTree.h"
 #include "AnalysisType.h"
+#include "metSelections.h"
+#include "jetcorr/FactorizedJetCorrector.h"
+#include "jetcorr/JetCorrectionUncertainty.h"
 
 class TH2F;
-class FactorizedJetCorrector;
-class MetCorrector;
 
 // typdefs
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
@@ -39,6 +40,7 @@ public:
         const bool sync_print = false,
         const bool verbose = false,
         const std::string apply_jec_otf = "",
+        const std::string apply_jec_unc = "",
         const double jet_pt_cut = -1
     );
 
@@ -68,7 +70,7 @@ private:
     bool m_filter_bad_runs;
     bool m_sync_print;
     bool m_verbose;
-    double m_jet_pt_cut;
+    float m_jet_pt_cut;
     int m_hyp_count;
 
     // fake rate hists
@@ -77,8 +79,9 @@ private:
     std::tr1::shared_ptr<TH2F> h_flip;
 
     // on-the-fly JEC
-    FactorizedJetCorrector* m_jet_corrector;
-    MetCorrector* m_met_corrector;
+    std::tr1::shared_ptr<FactorizedJetCorrector> m_jet_corrector;
+    std::tr1::shared_ptr<MetCorrector> m_met_corrector;
+    std::tr1::shared_ptr<JetCorrectionUncertainty> m_jet_corr_unc;
     std::vector<std::string> m_list_of_jec_filenames;
 
     // 0 mm, 1 em, 2 ee

@@ -68,7 +68,7 @@ define include_cms2_header
 endef
 
 # include CMS2 CORE
-cms2_core_tag := ss2012_V02-04-01
+cms2_core_tag := ss2012_V02-05-08
 define include_cms2_core
 	CPPFLAGS      += $(addprefix -I,$(project_dir)/externals/source/cms2_core/$(cms2_core_tag))
 	CPPFLAGS      += $(addprefix -I,$(project_dir)/externals/source/cms2_core/$(cms2_core_tag)/CORE)
