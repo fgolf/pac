@@ -24,10 +24,10 @@ public:
     (
         const std::string& root_file_name,
         at::Sample::value_type sample,
-        ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
+        //ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
         ss::AnalysisType::value_type analysis_type = ss::AnalysisType::high_pt,
         ss::SignalRegionType::value_type signal_region_type = ss::SignalRegionType::inclusive,
-        at::YieldType::value_type yield_type = at::YieldType::base,
+        //at::YieldType::value_type yield_type = at::YieldType::base,
         const std::string& fake_rate_file_name = "",
         const std::string& flip_rate_file_name = "",
         const std::string& den_hist_file_name = "",
@@ -72,10 +72,10 @@ private:
     float m_fl_unc;
     float m_mc_unc;
     at::Sample::value_type m_sample;
-    ss::SignalRegion::value_type m_signal_region;
+    //ss::SignalRegion::value_type m_signal_region;
     ss::AnalysisType::value_type m_analysis_type;
     ss::SignalRegionType::value_type m_signal_region_type;
-    at::YieldType::value_type m_yield_type;
+    //at::YieldType::value_type m_yield_type;
     at::FakeRateBinInfo m_fr_bin_info;
     at::FlipRateBinInfo m_fl_bin_info;
 

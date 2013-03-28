@@ -1505,7 +1505,8 @@ namespace ss
         const AnalysisType::value_type& anal_type,
         const SignalRegionType::value_type& signal_region_type,
         const at::YieldType::value_type& jec_yield_type,
-        const at::YieldType::value_type& btag_yield_type
+        const at::YieldType::value_type& btag_yield_type,
+        const bool do_btag_sf
     )
     {
         // lepton pt cuts
@@ -1546,9 +1547,15 @@ namespace ss
         // kinematic variables that define the signal region
         const bool lep_d0 = true; // place holder
         int njets   = ssb::njets();
-        int nbtags  = (ssb::is_real_data() ? ssb::nbtags() : ssb::nbtags_reweighted());
         float ht    = ssb::ht();
         float met   = ssb::pfmet();
+        int nbtags  = ssb::nbtags();
+
+        // apply the btag scale factor
+        if (not ssb::is_real_data() && do_btag_sf)
+        {
+            nbtags = ssb::nbtags_reweighted();
+        }
 
          if (not ssb::is_real_data())
          {
@@ -1569,13 +1576,13 @@ namespace ss
                      break;
                  case at::YieldType::base:
                      njets  = ssb::njets();
-                     nbtags = ssb::nbtags_reweighted();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
                      ht     = ssb::ht();
                      met    = ssb::pfmet();
                      break;
                  default:
                      njets  = ssb::njets();
-                     nbtags = ssb::nbtags_reweighted();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
                      ht     = ssb::ht();
                      met    = ssb::pfmet();
                      break;
@@ -1592,10 +1599,10 @@ namespace ss
                      nbtags = ssb::nbtags_reweighted_dn();
                      break;
                  case at::YieldType::base:
-                     nbtags = ssb::nbtags_reweighted();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
                      break;
                  default:
-                     nbtags = ssb::nbtags_reweighted();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
                      break;
              }
          }

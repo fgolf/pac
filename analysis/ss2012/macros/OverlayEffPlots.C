@@ -8,8 +8,10 @@ const float lumi = 19.5;
 
 void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix = "png")
 {
-	rt::TH1Container hc_dy("plots/mceff/dy/plots_100k.root");
-	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_100k.root");
+/* 	rt::TH1Container hc_dy("plots/mceff/dy/plots.root"); */
+/* 	rt::TH1Container hc_tt("plots/mceff/ttjets/plots.root"); */
+	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M.root");
+	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M.root");
     std::string path = "plots/mceff/overlay";
 
     rt::TH1Container hc;
@@ -73,6 +75,42 @@ void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix =
     p["p_eff_el_vs_pt"].SetLegendTextSize(0.042);
     p["p_eff_el_vs_pt"].AddText("Electron", 0.25, 0.235);
 
+    // el ISO eff vs pt 
+    p["p_eff_el_iso_vs_pt"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_el_iso_vs_pt"].Add(hc_dy["h_eff_el_iso_vs_pt"], dy_title, cdy, 2, sdy);
+    p["p_eff_el_iso_vs_pt"].Add(hc_tt["h_eff_el_iso_vs_pt"], tt_title, ctt, 2, stt);
+    p["p_eff_el_iso_vs_pt"].SetYAxisRange(min, max);
+    p["p_eff_el_iso_vs_pt"].SetLegendOption("p");
+    p["p_eff_el_iso_vs_pt"].SetLegendTextSize(0.042);
+    p["p_eff_el_iso_vs_pt"].AddText("Electron", 0.25, 0.235);
+
+    // el ISO eff vs eta 
+    p["p_eff_el_iso_vs_eta"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_el_iso_vs_eta"].Add(hc_dy["h_eff_el_iso_vs_eta"], dy_title, cdy, 2, sdy);
+    p["p_eff_el_iso_vs_eta"].Add(hc_tt["h_eff_el_iso_vs_eta"], tt_title, ctt, 2, stt);
+    p["p_eff_el_iso_vs_eta"].SetYAxisRange(min, max);
+    p["p_eff_el_iso_vs_eta"].SetLegendOption("p");
+    p["p_eff_el_iso_vs_eta"].SetLegendTextSize(0.042);
+    p["p_eff_el_iso_vs_eta"].AddText("Electron", 0.25, 0.235);
+
+    // el ID eff vs pt 
+    p["p_eff_el_id_vs_pt"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_el_id_vs_pt"].Add(hc_dy["h_eff_el_id_vs_pt"], dy_title, cdy, 2, sdy);
+    p["p_eff_el_id_vs_pt"].Add(hc_tt["h_eff_el_id_vs_pt"], tt_title, ctt, 2, stt);
+    p["p_eff_el_id_vs_pt"].SetYAxisRange(min, max);
+    p["p_eff_el_id_vs_pt"].SetLegendOption("p");
+    p["p_eff_el_id_vs_pt"].SetLegendTextSize(0.042);
+    p["p_eff_el_id_vs_pt"].AddText("Electron", 0.25, 0.235);
+
+    // el ID eff vs eta 
+    p["p_eff_el_id_vs_eta"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_el_id_vs_eta"].Add(hc_dy["h_eff_el_id_vs_eta"], dy_title, cdy, 2, sdy);
+    p["p_eff_el_id_vs_eta"].Add(hc_tt["h_eff_el_id_vs_eta"], tt_title, ctt, 2, stt);
+    p["p_eff_el_id_vs_eta"].SetYAxisRange(min, max);
+    p["p_eff_el_id_vs_eta"].SetLegendOption("p");
+    p["p_eff_el_id_vs_eta"].SetLegendTextSize(0.042);
+    p["p_eff_el_id_vs_eta"].AddText("Electron", 0.25, 0.235);
+
     // el eff pt1 vs pt 
     p["p_eff_el_pt1_vs_eta"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
     p["p_eff_el_pt1_vs_eta"].Add(hc_dy["h_eff_el_pt1_vs_eta"], dy_title, cdy, 2, sdy);
@@ -101,7 +139,7 @@ void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix =
     p["p_eff_el_vs_eta"].AddText("Electron", 0.25, 0.235);
 
     // table
-    CTable t = rt::CreateTableFromHist(hc["h_eff_el"],"eff DY - eff ttbar", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
+    CTable t = rt::CreateTableFromHist(hc["h_eff_el_diff"],"eff DY - eff ttbar", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
     if (tex)
     {
         t.printTex();
@@ -116,24 +154,26 @@ void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix =
     // print
     if (suffix=="all")
     {
-        hc.Print(path, "png");
-        hc.Print(path, "pdf");
-        hc.Print(path, "eps");
-        rt::Print(p, path, "png");
-        rt::Print(p, path, "pdf");
-        rt::Print(p, path, "eps");
+        hc.Print(path + "/png", "png");
+        hc.Print(path + "/png", "pdf");
+        hc.Print(path + "/png", "eps");
+        rt::Print(p, path + "/png", "png");
+        rt::Print(p, path + "/png", "pdf");
+        rt::Print(p, path + "/png", "eps");
     }
     else
     {
-        hc.Print(path, suffix);
-        rt::Print(p, path, suffix);
+        hc.Print(path + "/" + suffix, suffix);
+        rt::Print(p, path + "/" + suffix, suffix);
     }
 }
 
 void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "png")
 {
-	rt::TH1Container hc_dy("plots/mceff/dy/plots_100k.root");
-	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_100k.root");
+/* 	rt::TH1Container hc_dy("plots/mceff/dy/plots.root"); */
+/* 	rt::TH1Container hc_tt("plots/mceff/ttjets/plots.root"); */
+	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M.root");
+	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M.root");
     std::string path = "plots/mceff/overlay";
 
     rt::TH1Container hc;
@@ -197,6 +237,42 @@ void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "pn
     p["p_eff_mu_vs_pt"].SetLegendTextSize(0.042);
     p["p_eff_mu_vs_pt"].AddText("Muon", 0.25, 0.235);
 
+    // mu ID eff vs pt 
+    p["p_eff_mu_iso_vs_pt"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_mu_iso_vs_pt"].Add(hc_dy["h_eff_mu_iso_vs_pt"], dy_title, cdy, 2, sdy);
+    p["p_eff_mu_iso_vs_pt"].Add(hc_tt["h_eff_mu_iso_vs_pt"], tt_title, ctt, 2, stt);
+    p["p_eff_mu_iso_vs_pt"].SetYAxisRange(min, max);
+    p["p_eff_mu_iso_vs_pt"].SetLegendOption("p");
+    p["p_eff_mu_iso_vs_pt"].SetLegendTextSize(0.042);
+    p["p_eff_mu_iso_vs_pt"].AddText("Muon", 0.25, 0.235);
+
+    // mu ID eff vs eta 
+    p["p_eff_mu_iso_vs_eta"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_mu_iso_vs_eta"].Add(hc_dy["h_eff_mu_iso_vs_eta"], dy_title, cdy, 2, sdy);
+    p["p_eff_mu_iso_vs_eta"].Add(hc_tt["h_eff_mu_iso_vs_eta"], tt_title, ctt, 2, stt);
+    p["p_eff_mu_iso_vs_eta"].SetYAxisRange(min, max);
+    p["p_eff_mu_iso_vs_eta"].SetLegendOption("p");
+    p["p_eff_mu_iso_vs_eta"].SetLegendTextSize(0.042);
+    p["p_eff_mu_iso_vs_eta"].AddText("Muon", 0.25, 0.235);
+
+    // mu id eff vs pt 
+    p["p_eff_mu_id_vs_pt"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_mu_id_vs_pt"].Add(hc_dy["h_eff_mu_id_vs_pt"], dy_title, cdy, 2, sdy);
+    p["p_eff_mu_id_vs_pt"].Add(hc_tt["h_eff_mu_id_vs_pt"], tt_title, ctt, 2, stt);
+    p["p_eff_mu_id_vs_pt"].SetYAxisRange(min, max);
+    p["p_eff_mu_id_vs_pt"].SetLegendOption("p");
+    p["p_eff_mu_id_vs_pt"].SetLegendTextSize(0.042);
+    p["p_eff_mu_id_vs_pt"].AddText("Muon", 0.25, 0.235);
+
+    // mu id eff vs eta 
+    p["p_eff_mu_id_vs_eta"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
+    p["p_eff_mu_id_vs_eta"].Add(hc_dy["h_eff_mu_id_vs_eta"], dy_title, cdy, 2, sdy);
+    p["p_eff_mu_id_vs_eta"].Add(hc_tt["h_eff_mu_id_vs_eta"], tt_title, ctt, 2, stt);
+    p["p_eff_mu_id_vs_eta"].SetYAxisRange(min, max);
+    p["p_eff_mu_id_vs_eta"].SetLegendOption("p");
+    p["p_eff_mu_id_vs_eta"].SetLegendTextSize(0.042);
+    p["p_eff_mu_id_vs_eta"].AddText("Muon", 0.25, 0.235);
+
     // mu eff pt1 vs pt 
     p["p_eff_mu_pt1_vs_eta"] = rt::TH1Overlay(title, "sb::off lg::bottom_right");
     p["p_eff_mu_pt1_vs_eta"].Add(hc_dy["h_eff_mu_pt1_vs_eta"], dy_title, cdy, 2, sdy);
@@ -225,7 +301,7 @@ void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "pn
     p["p_eff_mu_vs_eta"].AddText("Muon", 0.25, 0.235);
 
     // table
-    CTable t = rt::CreateTableFromHist(hc["h_eff_mu"],"eff DY - eff ttbar", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
+    CTable t = rt::CreateTableFromHist(hc["h_eff_mu_diff"],"eff DY - eff ttbar", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
     if (tex)
     {
         t.printTex();
@@ -240,17 +316,17 @@ void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "pn
     // print
     if (suffix=="all")
     {
-        hc.Print(path, "png");
-        hc.Print(path, "pdf");
-        hc.Print(path, "eps");
-        rt::Print(p, path, "png");
-        rt::Print(p, path, "pdf");
-        rt::Print(p, path, "eps");
+        hc.Print(path + "/png", "png");
+        hc.Print(path + "/png", "pdf");
+        hc.Print(path + "/png", "eps");
+        rt::Print(p, path + "/png", "png");
+        rt::Print(p, path + "/png", "pdf");
+        rt::Print(p, path + "/png", "eps");
     }
     else
     {
-        hc.Print(path, suffix);
-        rt::Print(p, path, suffix);
+        hc.Print(path + "/" + suffix, suffix);
+        rt::Print(p, path + "/" + suffix, suffix);
     }
 }
 

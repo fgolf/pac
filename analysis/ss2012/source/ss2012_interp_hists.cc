@@ -40,8 +40,8 @@ try
     float fake_sys_unc              = 0.5;
     float flip_sys_unc              = 0.3;
     float mc_sys_unc                = 0.5;
-    unsigned int signal_region_num  = 0;
-    int yield_type_raw              = 0;
+    //unsigned int signal_region_num  = 0;
+    //int yield_type_raw              = 0;
     float lumi                      = 1.0;
     bool verbose                    = false;
 
@@ -53,12 +53,12 @@ try
         ("sample"    , po::value<std::string>(&sample_name)->required(), "REQUIRED: name of input sample (from at/Sample.h)"                             )
         ("output"    , po::value<std::string>(&output_file)            , "name of output root file"                                                      )
         ("anal_type" , po::value<std::string>(&analysis_type_name)     , "name of analysis type (from AnalysisType.h)"                                   )
-        ("yield_type", po::value<int>(&yield_type_raw)                 , "yield type (0 == base (default), > 0 == up, < 0 == down)"                      )
+        //("yield_type", po::value<int>(&yield_type_raw)                 , "yield type (0 == base (default), > 0 == up, < 0 == down)"                      )
         ("fr_file"   , po::value<std::string>(&fake_rate_file_name)    , Form("fake rate file name (default: %s)", fake_rate_file_name.c_str())          )
         ("fl_file"   , po::value<std::string>(&flip_rate_file_name)    , Form("flip rate file name (default: %s)", flip_rate_file_name.c_str())          )
         ("den_file"  , po::value<std::string>(&den_hist_file_name)     , Form("den count file name (default: %s)", input_file.c_str())                   )
         ("nev"       , po::value<long>(&number_of_events)              , "number of events to run on (-1 == all)"                                        )
-        ("sr"        , po::value<unsigned int>(&signal_region_num)     , "signal region number (default is 0)"                                           )
+        ////("sr"        , po::value<unsigned int>(&signal_region_num)     , "signal region number (default is 0)"                                           )
         ("do_sf"     , po::value<bool>(&do_scale_factors)              , "use the MC scale factors (default is true)"                                    )
         ("sparm0"    , po::value<float>(&sparm0)                       , "sparm0 is required to be this value"                                           )
         ("sparm1"    , po::value<float>(&sparm1)                       , "sparm1 is required to be this value"                                           )
@@ -110,12 +110,12 @@ try
     cout << "sample_name         :\t" << sample_name         << endl;
     cout << "output_file         :\t" << output_file         << endl;
     cout << "analysis_type_name  :\t" << analysis_type_name  << endl;
-    cout << "yield_type_raw      :\t" << yield_type_raw      << endl;
+    //cout << "yield_type_raw      :\t" << yield_type_raw      << endl;
     cout << "fake_rate_file_name :\t" << fake_rate_file_name << endl;
     cout << "flip_rate_file_name :\t" << flip_rate_file_name << endl;
     cout << "den_hist_file_name  :\t" << den_hist_file_name  << endl;
     cout << "number_of_events    :\t" << number_of_events    << endl;
-    cout << "signal_region_num   :\t" << signal_region_num   << endl;
+    //cout << "signal_region_num   :\t" << signal_region_num   << endl;
     cout << "do_scale_factors    :\t" << do_scale_factors    << endl;
     cout << "sparm0              :\t" << sparm0              << endl;
     cout << "sparm1              :\t" << sparm1              << endl;
@@ -148,13 +148,13 @@ try
     const ss::AnalysisTypeInfo ati                   = ss::GetAnalysisTypeInfo(analysis_type); 
 
     // yield type
-    const at::YieldType::value_type yield_type = at::GetYieldType(yield_type_raw);
+    //const at::YieldType::value_type yield_type = at::GetYieldType(yield_type_raw);
 
     // signal region and type
     const SignalRegionType::value_type signal_region_type = (exclusive ? SignalRegionType::exclusive : SignalRegionType::inclusive);
-    const std::string signal_region_type_name             = GetSignalRegionTypeName(signal_region_type);
-    const string signal_region_name                       = Form("sr%d", signal_region_num);
-    const SignalRegion::value_type signal_region          = GetSignalRegionFromName(signal_region_name, ati.name, signal_region_type_name);
+    //const std::string signal_region_type_name             = GetSignalRegionTypeName(signal_region_type);
+    //const string signal_region_name                       = Form("sr%d", signal_region_num);
+    //const SignalRegion::value_type signal_region          = GetSignalRegionFromName(signal_region_name, ati.name, signal_region_type_name);
 
     // sample
     at::Sample::value_type sample = at::GetSampleFromName(sample_name);
@@ -181,10 +181,10 @@ try
         (
             output_file,       
             sample,
-            signal_region,
+            //signal_region,
             analysis_type,
             signal_region_type,
-            yield_type,
+            //yield_type,
             fake_rate_file_name,
             flip_rate_file_name,
             den_hist_file_name,

@@ -75,7 +75,8 @@ namespace ss
                 // chargino mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 300.0f, 725.0f, 25.0f, 125.0f, 650.0f);
+                //return MakeSignalBinInfo(25.0f, 300.0f, 725.0f, 25.0f, 125.0f, 650.0f);
+                return MakeSignalBinInfo(25.0f, 325.0f, 725.0f, 25.0f, 150.0f, 550.0f);
                 break;
             case Sample::tchiwh:
                 // /TChiwh-test/fgolf-TChiwh-test-6138c231f814ac3df24f1150dfcad736/USER 

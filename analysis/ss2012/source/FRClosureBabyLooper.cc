@@ -480,7 +480,7 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
                 el_min_pt = 20.0;
                 break;
         }
-        const float min_pt = std::min(mu_min_pt, el_min_pt);
+        //const float min_pt = std::min(mu_min_pt, el_min_pt);
 
         // gen level  
         // --------------------------------------------------------------------------------------------------------- //
