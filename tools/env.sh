@@ -25,8 +25,16 @@ export PAC=$project_dir
 alias cdpac="cd $PAC"
 
 # set the path to CMS2 CORE 
-export CMS2_CORE_TAG=ss2012_V02-05-08
-export CMS2_CORE=$PAC/externals/source/cms2_core/$CMS2_CORE_TAG/CORE
+export CMS2CORE_TAG=ss2012_V02-05-08
+export CMS2CORE=$PAC/externals/source/cms2_core/$CMS2CORE_TAG/CORE
+
+# convenience
+export AT=$PAC/packages/AnalysisTools
+export RT=$PAC/packages/RootTools
+export SS=$PAC/analysis/ss2012
+alias cdat="cd $AT"
+alias cdrt="cd $RT"
+alias cdss="cd $SS"
 
 PATH=$project_dir/bin:$PATH
 if [ -d "$project_dir/lib" ] ; then
