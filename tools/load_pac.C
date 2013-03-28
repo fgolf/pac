@@ -35,8 +35,19 @@
     {
         pac_path += (is_debug ? "/bin/debug" : "/bin/release");
     }
-    //cout << pac_path << endl;
+    if (is_debug)
+    {
+        cout << "PAC path set to: " << pac_path << endl;
+    }
     
+    // CMS2 header
+    gSystem->AddIncludePath("-I$PAC/packages/cms2/05.03.23/header");
+    gSystem->Load(Form("%s/libcms2_core.so"    , pac_path.c_str()));
+
+    // CMS2 CORE
+    gSystem->AddIncludePath("-I$PAC/externals/source/cms2_core/$CMS2CORE/CORE");
+    gSystem->Load(Form("%s/libcms2_header.so"  , pac_path.c_str()));
+
     // RootTools
     gSystem->AddIncludePath("-D'__RTINT__'");
     gSystem->AddIncludePath("-I$PAC/packages/RootTools/include");
@@ -47,16 +58,9 @@
     gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
     gSystem->Load(Form("%s/libRootTools.so"       , pac_path.c_str()));
 
-    // CMS2
-    gSystem->AddIncludePath("-I$PAC/packages/cms2/05.03.23/header");
-    gSystem->AddIncludePath("-I$PAC/externals/source/cms2_core/HEAD/CORE");
-    gSystem->Load(Form("%s/libcms2_header.so"  , pac_path.c_str()));
-    gSystem->Load(Form("%s/libcms2_core.so"    , pac_path.c_str()));
-
     // AnalysisTools
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/include");
     gSystem->AddIncludePath("-I$PAC/packages/AnalysisTools/source");
-    gSystem->Load(Form("%s/libcms2_core.so"    , pac_path.c_str()));
     gSystem->Load(Form("%s/libAnalysisTools.so", pac_path.c_str()));
 
     // SS2012 Tools

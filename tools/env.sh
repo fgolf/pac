@@ -42,6 +42,7 @@ if [ -d "$project_dir/lib" ] ; then
     DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin
 elif [ ! -z $CMSSW_BASE ] ; then
+#if [ ! -z $CMSSW_BASE ] ; then
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$LD_LIBRARY_PATH:$ROOTSYS/lib
     DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$DYLD_LIBRARY_PATH:$ROOTSYS/lib
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$LD_LIBRARY_PATH
