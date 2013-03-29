@@ -27,11 +27,12 @@
 
     //if (lib_path.find(pac_path.c_str()) == std::string::npos)
     std::string pac_path = gSystem->Getenv("PAC");
+    std::string cms2core = gSystem->Getenv("CMS2CORE");
     if (cmssw)
     {
         pac_path += (is_debug ? "/bin/cmssw/debug" : "/bin/cmssw/release");
     }
-    else 
+    else
     {
         pac_path += (is_debug ? "/bin/debug" : "/bin/release");
     }
@@ -39,14 +40,14 @@
     {
         cout << "PAC path set to: " << pac_path << endl;
     }
-    
+
     // CMS2 header
     gSystem->AddIncludePath("-I$PAC/packages/cms2/05.03.23/header");
-    gSystem->Load(Form("%s/libcms2_core.so"    , pac_path.c_str()));
+    gSystem->Load(Form("%s/libcms2_header.so", pac_path.c_str()));
 
     // CMS2 CORE
-    gSystem->AddIncludePath("-I$PAC/externals/source/cms2_core/$CMS2CORE/CORE");
-    gSystem->Load(Form("%s/libcms2_header.so"  , pac_path.c_str()));
+    gSystem->AddIncludePath(Form("-I%s/externals/source/cms2_core/%s/CORE", pac_path.c_str(), cms2core.c_str()));
+    gSystem->Load(Form("%s/libcms2_core.so", pac_path.c_str()));
 
     // RootTools
     gSystem->AddIncludePath("-D'__RTINT__'");
