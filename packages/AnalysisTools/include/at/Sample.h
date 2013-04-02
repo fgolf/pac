@@ -64,6 +64,9 @@ namespace at
             qcd,
             qcd_mu15,
             tchiwh,
+            wh_zh_tth_hzz,
+            wh_zh_tth_hww,
+            wh_zh_tth_htt,
             static_size
         };
     };

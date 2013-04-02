@@ -435,7 +435,7 @@ namespace ss
     
         // to include in prediction
         // wgstar;
-        //m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+//         //m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wgstar"] += GetYield(option, Sample::wgstar2m, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wgstar"] += GetYield(option, Sample::wgstar2t, signal_region, analysis_type, signal_region_type, charge_option, output_path);
     
@@ -465,51 +465,53 @@ namespace ss
     
         // want the total of the MC
         ss::Yield yield_mc;
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttdil"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslb"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslo"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttotr"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_schan"]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tchan"]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tw"   ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["dy"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wjets"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar" ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwqq"   ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wz"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zz"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttg"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttw"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["tbz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttww"   ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwg"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["www"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wzz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zzz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww_ds"  ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttdil"   ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslb"   ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslo"   ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttotr"   ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_schan" ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tchan" ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tw"    ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["dy"      ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wjets"   ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww"      ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar2m"]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar2t"]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwqq"    ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wz"      ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zz"      ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttg"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttw"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttz"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["tbz"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttww"    ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwg"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["www"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwz"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wzz"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zzz"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww_ds"   ]); 
         m["mc"] = yield_mc;
     
      
         // want the rare MC only for the prediction
         ss::Yield yield_rare;
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar"]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwqq"  ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wz"    ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zz"    ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttg"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttw"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["tbz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttww"  ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwg"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["www"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wzz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zzz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ww_ds" ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar2m"]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar2t"]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwqq"    ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wz"      ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zz"      ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttg"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttw"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttz"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["tbz"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttww"    ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwg"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["www"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwz"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wzz"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zzz"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ww_ds"   ]); 
         m["rare"] = yield_rare;
      
         // done

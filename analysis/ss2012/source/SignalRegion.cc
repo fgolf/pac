@@ -1564,13 +1564,13 @@ namespace ss
              {
                  case at::YieldType::up:
                      njets  = ssb::njets_up();
-                     nbtags = ssb::nbtags_reweighted_jec_up();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_up() : ssb::nbtags_up());
                      ht     = ssb::ht_up();
                      met    = ssb::pfmet_up();
                      break;
                  case at::YieldType::down:
                      njets  = ssb::njets_dn();
-                     nbtags = ssb::nbtags_reweighted_jec_dn();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_dn() : ssb::nbtags_dn());
                      ht     = ssb::ht_dn();
                      met    = ssb::pfmet_dn();
                      break;

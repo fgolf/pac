@@ -25,6 +25,7 @@ lib ss2012_tools
     ./source/SignalRegion.cc
     ./source/AnalysisType.cc
     ./source/TTbarBreakDown.cc
+    ./source/HiggsXsec.cc
     ./source/FakeRateType.cc
     ./source/SSYields.cc
     ./source/SignalBinInfo.cc
@@ -35,6 +36,7 @@ lib ss2012_tools
        <include>$(ANALYSISTOOLS)/include
        <include>./source
        #<header>SignalRegion.h
+       <header>HiggsXsec.h
        <header>AnalysisType.h
        <header>FakeRateType.h
        <header>SignalBinInfo.h
@@ -46,6 +48,7 @@ lib ss2012_tools
     /CMS2//cms2_header
     /ROOT
     /AnalysisTools//AnalysisTools
+    /SimpleTable//SimpleTable
     /RootTools//RootTools
   : # requirements
     <include>./include

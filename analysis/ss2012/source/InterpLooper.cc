@@ -182,7 +182,7 @@ void InterpLooper::EndJob()
     t_counts.print();
 }
 
-const size_t max_sr = 1;
+const size_t max_sr = 28;
 
 std::string GetSRLabel(ss::SignalRegion::value_type sr)
 {

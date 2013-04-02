@@ -91,7 +91,7 @@ use-project /SimpleTable       : ./externals/build/SimpleTable ;
 
 # CMS2_CORE
 #local cms2_core_tag = HEAD ;
-local cms2_core_tag = ss2012_V02-05-08 ;
+local cms2_core_tag = [ os.environ CMS2CORE_TAG ] ;
 path-constant CMS2_CORE : ./externals/source/cms2_core/$(cms2_core_tag) ;
 use-project /CMS2_CORE  : ./externals/build/cms2_core ;
 

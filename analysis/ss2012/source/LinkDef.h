@@ -53,5 +53,6 @@
 #pragma link C++ function ss::GetFlipYield;
 #pragma link C++ function ss::GetYield;
 #pragma link C++ function ss::GetYieldsMap;
+#pragma link C++ function ss::PrintHiggsXsecTable;
 
 #endif // __CINT__

@@ -79,6 +79,8 @@ public:
     int nbtags20;
     int nbtags30;
     int ttbar_bkdn;
+    int higgs_bkdn;
+    int higgs_decay;
     float vtxw;
     float mt;
     float ht;

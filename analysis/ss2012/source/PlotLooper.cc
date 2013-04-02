@@ -682,7 +682,11 @@ int PlotLooper::operator()(long event)
         rt::TH1Container& hc = m_hist_container;
 
         // scale 1b (set before cuts) 
-        m_scale1fb = scale1fb();
+        m_scale1fb = (is_real_data() ? 1.0 : scale1fb());
+        // fix to wgstar's scale1fb
+        if (m_sample == Sample::wgstar2m) {m_scale1fb = 0.00638;}
+        if (m_sample == Sample::wgstar2t) {m_scale1fb = 0.00672;}
+
         m_xsec     = xsec();
         m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
         hc["h_lumi"]->Fill(m_lumi);
@@ -901,7 +905,7 @@ int PlotLooper::operator()(long event)
         // ----------------------------------------------------------------------------------------------------------------------------//
 
         // xsec and luminosity scale factors
-        float evt_weight = is_real_data() ? 1.0 : m_lumi * scale1fb();
+        float evt_weight = is_real_data() ? 1.0 : m_lumi * m_scale1fb;
 
         // apply scale factors
         if (m_do_scale_factors && not is_real_data())

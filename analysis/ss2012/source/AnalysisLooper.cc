@@ -35,6 +35,7 @@
 #include "EfficiencyModelTools.h"
 #include "ScaleFactors.h"
 #include "TTbarBreakDown.h"
+#include "HiggsXsec.h"
 #include "SignalBinInfo.h"
 
 // ROOT
@@ -378,7 +379,7 @@ SSAnalysisLooper::SSAnalysisLooper
         temp_jec_string = rt::string_remove_all(temp_jec_string, "::ALL");
         const at::SampleType::value_type sample_type = at::GetSampleInfo(m_sample).type;
 
-        std::string path = rt::getenv("CMS2_CORE");
+        std::string path = rt::getenv("CMS2CORE");
         if (!path.empty())
         {
             path += "/jetcorr/data/";
@@ -433,7 +434,7 @@ SSAnalysisLooper::SSAnalysisLooper
         std::string temp_jec_string = rt::string_upper(apply_jec_unc);
         temp_jec_string = rt::string_remove_all(temp_jec_string, "::ALL");
 
-        std::string path = rt::getenv("CMS2_CORE");
+        std::string path = rt::getenv("CMS2CORE");
         if (!path.empty())
         {
             path += "/jetcorr/data";
@@ -771,6 +772,20 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
         if (not evt_isRealData())
         {
+            // xsec is a special case for the higgs backgrounds
+            if (m_sample == Sample::wh_zh_tth_hzz || m_sample == Sample::wh_zh_tth_hww || m_sample == Sample::wh_zh_tth_htt)
+            {
+                const ss::HiggsProduction::value_type higgs_production = ss::GetHiggsProduction();
+                const ss::HiggsDecay::value_type higgs_decay           = ss::GetHiggsDecay();
+                m_evt.higgs_bkdn          = static_cast<int>(higgs_production);
+                m_evt.higgs_decay         = static_cast<int>(higgs_decay);
+                m_evt.event_info.xsec     = ss::GetHiggsXsec(higgs_production, higgs_decay);
+                m_evt.event_info.scale1fb = ss::GetHiggsScale1fb(m_sample, higgs_production, higgs_decay, m_evt.event_info.nevts);
+
+                if (m_verbose) {cout << "AnalysisLooper: Higgs Process = " << higgs_production << endl;} 
+                if (m_verbose) {cout << "AnalysisLooper: Higgs Decay = "   << higgs_decay      << endl;} 
+            }
+
             // sparms parameters
             if (m_sparms) 
             {
@@ -1144,10 +1159,11 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         };
 
         // event wieghts 
+
         //float vtxw  = evt_isRealData() ? 1.0 : vtxweight_n(numberOfGoodVertices(), evt_isRealData(), false);
         float vtxw  = 1.0;
-        float xsec  = evt_isRealData() ? 1.0 : evt_scale1fb();
-        float scale = evt_isRealData() ? 1.0 : m_lumi * xsec * vtxw; 
+        const float scale1fb = evt_isRealData() ? 1.0 : m_evt.event_info.scale1fb;
+        float scale          = evt_isRealData() ? 1.0 : m_lumi * scale1fb * vtxw; 
 
         // fill event level info 
         m_evt.event_info.FillCommon(m_sample, filename);
@@ -1675,14 +1691,34 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.vjets_p4     = samesign::getJets           (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             bjet_flags         = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
             jet_flags          = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
-            bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
-            jet_flags_up       = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
-            jet_flags_dn       = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
-            m_evt.vbjets_p4_up = samesign::getBtaggedJets    (hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
-            m_evt.vbjets_p4_dn = samesign::getBtaggedJets    (hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
-            m_evt.vjets_p4_up  = samesign::getJets           (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
-            m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+            if (not m_jet_corr_unc)
+            {
+                bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+                jet_flags_up       = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+                m_evt.vbjets_p4_up = samesign::getBtaggedJets    (hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+                m_evt.vjets_p4_up  = samesign::getJets           (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+
+                bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+                jet_flags_dn       = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+                m_evt.vbjets_p4_dn = samesign::getBtaggedJets    (hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+                m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+            }
+            else
+            {
+                JetCorrectionUncertainty* jcu = m_jet_corr_unc.get();
+                enum JetScaleType scale_up = JETS_SCALE_UP;
+                enum JetScaleType scale_dn = JETS_SCALE_DOWN;
+
+                bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, jcu, scale_up, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                jet_flags_up       = samesign::getJetFlags       (hyp_idx, jcu, scale_up, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                m_evt.vbjets_p4_up = samesign::getBtaggedJets    (hyp_idx, jcu, scale_up, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+                m_evt.vjets_p4_up  = samesign::getJets           (hyp_idx, jcu, scale_up, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+
+                bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, jcu, scale_dn, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                jet_flags_dn       = samesign::getJetFlags       (hyp_idx, jcu, scale_dn, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                m_evt.vbjets_p4_dn = samesign::getBtaggedJets    (hyp_idx, jcu, scale_dn, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+                m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, jcu, scale_dn, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+            }
         }
         else
         {
@@ -1690,14 +1726,35 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.vjets_p4     = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             bjet_flags         = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
             jet_flags          = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
-            bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
-            jet_flags_up       = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
-            jet_flags_dn       = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
-            m_evt.vbjets_p4_up = samesign::getBtaggedJets    (hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
-            m_evt.vbjets_p4_dn = samesign::getBtaggedJets    (hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
-            m_evt.vjets_p4_up  = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
-            m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+            if (not m_jet_corr_unc)
+            {
+                bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+                jet_flags_up       = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
+                m_evt.vbjets_p4_up = samesign::getBtaggedJets    (hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+                m_evt.vjets_p4_up  = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 ); 
+
+                bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+                jet_flags_dn       = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+                m_evt.vbjets_p4_dn = samesign::getBtaggedJets    (hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+                m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
+            }
+            else
+            {
+                FactorizedJetCorrector* jc    = m_jet_corrector.get();
+                JetCorrectionUncertainty* jcu = m_jet_corr_unc.get();
+                enum JetScaleType scale_up = JETS_SCALE_UP;
+                enum JetScaleType scale_dn = JETS_SCALE_DOWN;
+
+                bjet_flags_up      = samesign::getBtaggedJetFlags(hyp_idx, jc, jcu, scale_up, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                jet_flags_up       = samesign::getJetFlags       (hyp_idx, jc, jcu, scale_up, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                m_evt.vbjets_p4_up = samesign::getBtaggedJets    (hyp_idx, jc, jcu, scale_up, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+                m_evt.vjets_p4_up  = samesign::getJets           (hyp_idx, jc, jcu, scale_up, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+
+                bjet_flags_dn      = samesign::getBtaggedJetFlags(hyp_idx, jc, jcu, scale_dn, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                jet_flags_dn       = samesign::getJetFlags       (hyp_idx, jc, jcu, scale_dn, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                m_evt.vbjets_p4_dn = samesign::getBtaggedJets    (hyp_idx, jc, jcu, scale_dn, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+                m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, jc, jcu, scale_dn, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt); 
+            }
         }
 
         //cout << jet_flags.size() << "\t" << bjet_flags.size() << endl;

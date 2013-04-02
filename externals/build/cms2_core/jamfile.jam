@@ -1,6 +1,11 @@
 # libs for CMS2 NtupleMacros/CORE
 # -------------------------------------------------------------------- #
 
+if $(CMS2_CORE) != "" 
+{
+  ECHO "CMS2 CORE is set to: " $(CMS2_CORE) "\n" ;
+}
+
 lib cms2_core
   : # sources
    #[ glob $(CMS2_CORE)/CORE/*.cc ]
