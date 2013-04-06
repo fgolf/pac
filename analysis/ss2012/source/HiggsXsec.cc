@@ -154,7 +154,7 @@ namespace ss
     (
         const at::Sample::value_type sample, 
         const HiggsProduction::value_type higgs_production, 
-        const unsigned int num_generated
+        const int num_generated
     )
     {
         using namespace at;
@@ -194,7 +194,7 @@ namespace ss
         const at::Sample::value_type sample, 
         const HiggsProduction::value_type higgs_production, 
         const HiggsDecay::value_type higgs_decay,
-        const unsigned int num_generated
+        const int num_generated
     )
     {
         const float xsec = GetHiggsXsec(higgs_production, higgs_decay);

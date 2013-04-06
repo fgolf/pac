@@ -51,7 +51,7 @@ namespace ss
     (
         const at::Sample::value_type sample, 
         const HiggsProduction::value_type higgs_production, 
-        const unsigned int num_generated
+        const int num_generated
     );
 
     // scale 1fb using the xsec from GetHiggsXsec()
@@ -62,7 +62,7 @@ namespace ss
         const at::Sample::value_type sample, 
         const HiggsProduction::value_type higgs_production,
         const HiggsDecay::value_type higgs_decay,
-        const unsigned int num_generated
+        const int num_generated
     );
 
     // print a summary table of the xsecs

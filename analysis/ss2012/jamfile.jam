@@ -370,6 +370,27 @@ exe ss2012_fr_closure
   : # usage-requirements
   ;
 
+exe ss2012_make_single_lep_tree
+  : # sources
+    ./source/ss2012_make_single_lep_tree.cc
+    # dependent packages
+    /ROOT
+    ss2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /FGTools//FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+
 # simple test
 # -------------------------------------------------------------- #
 
@@ -412,6 +433,7 @@ exe test_btagsf
 
 default-install ss2012_tools : <link>shared ;
 default-install ss2012_analysis ;
+default-install ss2012_make_single_lep_tree ;
 default-install ss2012_plots ;
 default-install ss2012_event_list ;
 default-install ss2012_skim ;

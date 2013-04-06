@@ -182,7 +182,7 @@ void InterpLooper::EndJob()
     t_counts.print();
 }
 
-const size_t max_sr = 28;
+const size_t max_sr = 1;
 
 std::string GetSRLabel(ss::SignalRegion::value_type sr)
 {
@@ -230,6 +230,7 @@ void InterpLooper::BookHists()
             hc.Add(new TH2F((sr+"nFakes"             ).c_str(), (sr+"nFakes "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));    
             hc.Add(new TH2F((sr+"nJESUP"             ).c_str(), (sr+"nJESUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJESDN"             ).c_str(), (sr+"nJESDN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nBTABASE"           ).c_str(), (sr+"nBTABASE "           +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nBTAUP"             ).c_str(), (sr+"nBTAUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nBTADN"             ).c_str(), (sr+"nBTADN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrJES"          ).c_str(), (sr+"effErrJES "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
@@ -360,6 +361,7 @@ int InterpLooper::operator()(long event)
             // trigger scale factor
             evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
         }
+        //evt_weight == 1.0;
 
         // denominator histograms 
         // ---------------------------------------------------------------------------------------------------------------------------- //
@@ -444,7 +446,8 @@ int InterpLooper::operator()(long event)
         }
 
         // only keep MC matched events (MC only)
-        const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0));
+//         const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0));
+        const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1));
         //const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mcid()*lep2_mcid()>0));
         //const bool lep1_matched  = (abs(lep1_mc3id())==11 or abs(lep1_mc3id())==13 or abs(lep1_mc3id())==15);
         //const bool lep2_matched  = (abs(lep2_mc3id())==11 or abs(lep2_mc3id())==13 or abs(lep2_mc3id())==15);
@@ -528,7 +531,7 @@ int InterpLooper::operator()(long event)
             if (is_ss()) 
             {
                 // unscaled numerator counts
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*do_btag_sf=*/false))
                 {
                     rt::Fill2D(hc[sr+"nPassing"], m0, m12, evt_weight);
                 }
@@ -545,12 +548,17 @@ int InterpLooper::operator()(long event)
                 }
 
                 // Btag scale up/down
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::up, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*do_btag_sf=*/true))
+                {
+                    rt::Fill2D(hc[sr+"nBTABASE"], m0, m12, evt_weight);
+                }
+
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::up, /*do_btag_sf=*/true))
                 {
                     rt::Fill2D(hc[sr+"nBTAUP"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::down, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::down, /*do_btag_sf=*/true))
                 {
                     rt::Fill2D(hc[sr+"nBTADN"], m0, m12, evt_weight);
                 }
@@ -793,7 +801,8 @@ void InterpLooper::SetBtagSystematic()
         {
             for (unsigned int iy = 1; iy < nbinsy; iy++)
             {
-                const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
+                //const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
+                const float num      = hc[sr+"nBTABASE"  ]->GetBinContent(ix, iy);
                 const float num_up   = hc[sr+"nBTAUP"    ]->GetBinContent(ix, iy);
                 const float num_down = hc[sr+"nBTADN"    ]->GetBinContent(ix, iy);            
                 const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);

@@ -115,8 +115,8 @@ namespace ss
     );
 
     // set aliases for TTree
-    void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type);
-    void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type);
+    void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf = true);
+    void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf = true);
 
 } // namespace ss
 

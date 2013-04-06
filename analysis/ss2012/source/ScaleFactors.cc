@@ -30,7 +30,7 @@ float DileptonTagAndProbeScaleFactor(const int l1_id, const float l1_pt, const f
 float TagAndProbeScaleFactor(int id, float pt, float eta)
 {
     // haven't measured low-low pt
-    if (5 < pt && pt < 10)
+    if (pt < 10)
     {
         return 1.0;
     }
@@ -38,6 +38,12 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
 
     if (abs(id)==11) 
     {
+        if (1.4442 < aeta && aeta < 1.566)
+        {
+            cout << "[ss::TagAndProbeScaleFactor] WARNING -> eta is in the transition region. returning bogus value -999999" << endl;
+            return -999999.0;
+        }
+        
         if (10 < pt && pt < 15)
         {
             if (0.00   < aeta && aeta < 0.80  ) {return 0.834;}
@@ -82,6 +88,8 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
         }
 
         // if we get here, return bogus value
+        cout << "[ss::TagAndProbeScaleFactor] WARNING -> missed coverage -- returning bogus value -999999" << endl;
+        cout << Form("[ss::TagAndProbeScaleFactor] id: %d pt: %f eta: %f", id, pt, aeta) << endl; 
         return -999999.0;
     }
 
@@ -119,6 +127,8 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
         }
 
         // if we get here, return bogus value
+        cout << "[ss::TagAndProbeScaleFactor] WARNING -> missed coverage -- returning bogus value -999999" << endl;
+        cout << Form("[ss::TagAndProbeScaleFactor] id: %d pt: %f eta: %f", id, pt, aeta) << endl; 
         return -999999.0;
     }
 

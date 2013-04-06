@@ -22,7 +22,7 @@ public:
     void SetAliases (TTree &tree) const;
     void FillCommon (int id, int idx);
 
-private:
+protected:
 
     std::string prefix_;
 

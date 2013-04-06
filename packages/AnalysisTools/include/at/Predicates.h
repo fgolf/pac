@@ -34,6 +34,12 @@ namespace at
         T m_p4;
     };
     
+    template <typename T>
+    struct ScalarSumPt
+    {
+        float operator () (const T& lhs, const T& rhs) const {return (rhs.Pt() + lhs.Pt());}
+    };
+    
     // function objects
     struct CompareCharPtrs
     {
