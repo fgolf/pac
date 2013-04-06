@@ -111,7 +111,9 @@ namespace ss
         const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive,
         const at::YieldType::value_type& jec_yield_type = at::YieldType::base,
         const at::YieldType::value_type& btag_yield_type = at::YieldType::base,
-        const bool do_btag_sf = true  // applied for MC only
+        const at::YieldType::value_type& met_yield_type = at::YieldType::base,
+        const bool do_btag_sf = true, // applied for MC only
+        const bool do_jer = false     // applied for MC only
     );
 
     // set aliases for TTree

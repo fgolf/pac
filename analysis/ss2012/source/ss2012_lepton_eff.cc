@@ -45,45 +45,48 @@ void LeptonEff::EndJob()
 	TH1Container& hc = m_hist_container;
 
     // make some efficiency plots
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_pt1"], hc["h_mc_el_pt1"], "y", "h_eff_el_pt1_vs_pt" , "electron efficiency (higher p_{T});p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_pt2"], hc["h_mc_el_pt2"], "y", "h_eff_el_pt2_vs_pt" , "electron efficiency (lower p_{T});p_{T} (GeV)"        ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_pt1"], hc["h_mc_el_pt1"], "x", "h_eff_el_pt1_vs_eta", "electron efficiency (higher p_{T});|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_pt2"], hc["h_mc_el_pt2"], "x", "h_eff_el_pt2_vs_eta", "electron efficiency (lower p_{T});|#eta|"             ));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_el_pt1"], hc["h_mc_el_pt1"],      "h_eff_el_pt1"       , "electron efficiency (higher p_{T});|#eta|;p_{T} (GeV)"));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_el_pt2"], hc["h_mc_el_pt2"],      "h_eff_el_pt2"       , "electron efficiency (lower p_{T});|#eta|;p_{T} (GeV)" ));
 
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el"], hc["h_mc_el"], "y", "h_eff_el_vs_pt" , "electron efficiency;p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el"], hc["h_mc_el"], "x", "h_eff_el_vs_eta", "electron efficiency;|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_el"], hc["h_mc_el"],      "h_eff_el"       , "electron efficiency;|#eta|;p_{T} (GeV)"));
+    // electrons
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_reco_el"    ], hc["h_mc_el"], "h_eff_el"    , "electron efficiency;|#eta|;p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_reco_el_id" ], hc["h_mc_el"], "h_eff_el_id" , "electron ID efficiency;|#eta|;p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_reco_el_iso"], hc["h_mc_el"], "h_eff_el_iso", "electron ISO efficiency;|#eta|;p_{T} (GeV)"));
 
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_iso"], hc["h_mc_el"], "y", "h_eff_el_iso_vs_pt" , "electron iso efficiency;p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_iso"], hc["h_mc_el"], "x", "h_eff_el_iso_vs_eta", "electron iso efficiency;|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_el_iso"], hc["h_mc_el"],      "h_eff_el_iso"       , "electron iso efficiency;|#eta|;p_{T} (GeV)"));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_vs_pt"    ], hc["h_mc_el_vs_pt"], "h_eff_el_vs_pt"    , "electron efficiency;p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_id_vs_pt" ], hc["h_mc_el_vs_pt"], "h_eff_el_id_vs_pt" , "electron ID efficiency;p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_iso_vs_pt"], hc["h_mc_el_vs_pt"], "h_eff_el_iso_vs_pt", "electron ISO efficiency;p_{T} (GeV)"));
 
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_id"], hc["h_mc_el"], "x", "h_eff_el_id_vs_eta"       , "electron id efficiency;|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_id"], hc["h_mc_el"], "y", "h_eff_el_id_vs_pt"        , "electron id efficiency;p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_id"], hc["h_mc_el"], "y", "h_eff_el_id_vs_pt_barrel" , "electron id efficiency (barrel);p_{T} (GeV)",     0, 1.4442));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_el_id"], hc["h_mc_el"], "y", "h_eff_el_id_vs_pt_endcap" , "electron id efficiency (endcap);p_{T} (GeV)", 1.566,    2.5));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_el_id"], hc["h_mc_el"],      "h_eff_el_id"              , "electron id efficiency;|#eta|;p_{T} (GeV)"));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_vs_pt_barrel"    ], hc["h_mc_el_vs_pt_barrel"], "h_eff_el_vs_pt_barrel"    , "electron efficiency (|#eta| < 1.4);p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_id_vs_pt_barrel" ], hc["h_mc_el_vs_pt_barrel"], "h_eff_el_id_vs_pt_barrel" , "electron ID efficiency (|#eta| < 1.4);p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_iso_vs_pt_barrel"], hc["h_mc_el_vs_pt_barrel"], "h_eff_el_iso_vs_pt_barrel", "electron ISO efficiency (|#eta| < 1.4);p_{T} (GeV)"));
 
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_pt1"], hc["h_mc_mu_pt1"], "y", "h_eff_mu_pt1_vs_pt" , "#mu efficiency (higher p_{T});p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_pt2"], hc["h_mc_mu_pt2"], "y", "h_eff_mu_pt2_vs_pt" , "#mu efficiency (lower p_{T});p_{T} (GeV)"        ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_pt1"], hc["h_mc_mu_pt1"], "x", "h_eff_mu_pt1_vs_eta", "#mu efficiency (higher p_{T});|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_pt2"], hc["h_mc_mu_pt2"], "x", "h_eff_mu_pt2_vs_eta", "#mu efficiency (lower p_{T});|#eta|"             ));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_mu_pt1"], hc["h_mc_mu_pt1"],      "h_eff_mu_pt1"       , "#mu efficiency (higher p_{T});|#eta|;p_{T} (GeV)"));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_mu_pt2"], hc["h_mc_mu_pt2"],      "h_eff_mu_pt2"       , "#mu efficiency (lower p_{T});|#eta|;p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_vs_pt_endcap"    ], hc["h_mc_el_vs_pt_endcap"], "h_eff_el_vs_pt_endcap"    , "electron efficiency (|#eta| > 1.6);p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_id_vs_pt_endcap" ], hc["h_mc_el_vs_pt_endcap"], "h_eff_el_id_vs_pt_endcap" , "electron ID efficiency (|#eta| > 1.6);p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_iso_vs_pt_endcap"], hc["h_mc_el_vs_pt_endcap"], "h_eff_el_iso_vs_pt_endcap", "electron ISO efficiency (|#eta| > 1.6);p_{T} (GeV)"));
 
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu"], hc["h_mc_mu"], "y", "h_eff_mu_vs_pt" , "#mu efficiency;p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu"], hc["h_mc_mu"], "x", "h_eff_mu_vs_eta", "#mu efficiency;|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_mu"], hc["h_mc_mu"],      "h_eff_mu"       , "#mu efficiency;|#eta|;p_{T} (GeV)"));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_vs_eta"    ], hc["h_mc_el_vs_eta"], "h_eff_el_vs_eta"    , "electron efficiency;|#eta|"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_id_vs_eta" ], hc["h_mc_el_vs_eta"], "h_eff_el_id_vs_eta" , "electron ID efficiency;|#eta|" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_el_iso_vs_eta"], hc["h_mc_el_vs_eta"], "h_eff_el_iso_vs_eta", "electron ISO efficiency;|#eta|"));
 
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_id"], hc["h_mc_mu"], "y", "h_eff_mu_id_vs_pt" , "#mu id efficiency;p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_id"], hc["h_mc_mu"], "x", "h_eff_mu_id_vs_eta", "#mu id efficiency;|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_mu_id"], hc["h_mc_mu"],      "h_eff_mu_id"       , "#mu id efficiency;|#eta|;p_{T} (GeV)"));
+    // muons
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_reco_mu"    ], hc["h_mc_mu"], "h_eff_mu"    , "#mu efficiency;|#eta|;p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_reco_mu_id" ], hc["h_mc_mu"], "h_eff_mu_id" , "#mu ID efficiency;|#eta|;p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot2D(hc["h_reco_mu_iso"], hc["h_mc_mu"], "h_eff_mu_iso", "#mu ISO efficiency;|#eta|;p_{T} (GeV)"));
 
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_iso"], hc["h_mc_mu"], "y", "h_eff_mu_iso_vs_pt" , "#mu iso efficiency;p_{T} (GeV)"       ));
-    hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_reco_mu_iso"], hc["h_mc_mu"], "x", "h_eff_mu_iso_vs_eta", "#mu iso efficiency;|#eta|"            ));
-    hc.Add(rt::MakeEfficiencyPlot2D(        hc["h_reco_mu_iso"], hc["h_mc_mu"],      "h_eff_mu_iso"       , "#mu iso efficiency;|#eta|;p_{T} (GeV)"));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_vs_pt"    ], hc["h_mc_mu_vs_pt"], "h_eff_mu_vs_pt"    , "#mu efficiency;p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_id_vs_pt" ], hc["h_mc_mu_vs_pt"], "h_eff_mu_id_vs_pt" , "#mu ID efficiency;p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_iso_vs_pt"], hc["h_mc_mu_vs_pt"], "h_eff_mu_iso_vs_pt", "#mu ISO efficiency;p_{T} (GeV)"));
+
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_vs_pt_barrel"    ], hc["h_mc_mu_vs_pt_barrel"], "h_eff_mu_vs_pt_barrel"    , "#mu efficiency (|#eta| < 1.2);p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_id_vs_pt_barrel" ], hc["h_mc_mu_vs_pt_barrel"], "h_eff_mu_id_vs_pt_barrel" , "#mu ID efficiency (|#eta| < 1.2);p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_iso_vs_pt_barrel"], hc["h_mc_mu_vs_pt_barrel"], "h_eff_mu_iso_vs_pt_barrel", "#mu ISO efficiency (|#eta| < 1.2);p_{T} (GeV)"));
+
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_vs_pt_endcap"    ], hc["h_mc_mu_vs_pt_endcap"], "h_eff_mu_vs_pt_endcap"    , "#mu efficiency (|#eta| > 1.2);p_{T} (GeV)"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_id_vs_pt_endcap" ], hc["h_mc_mu_vs_pt_endcap"], "h_eff_mu_id_vs_pt_endcap" , "#mu ID efficiency (|#eta| > 1.2);p_{T} (GeV)" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_iso_vs_pt_endcap"], hc["h_mc_mu_vs_pt_endcap"], "h_eff_mu_iso_vs_pt_endcap", "#mu ISO efficiency (|#eta| > 1.2);p_{T} (GeV)"));
+
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_vs_eta"    ], hc["h_mc_mu_vs_eta"], "h_eff_mu_vs_eta"    , "#mu efficiency;|#eta|"    ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_id_vs_eta" ], hc["h_mc_mu_vs_eta"], "h_eff_mu_id_vs_eta" , "#mu ID efficiency;|#eta|" ));
+    hc.Add(rt::MakeEfficiencyPlot(hc["h_reco_mu_iso_vs_eta"], hc["h_mc_mu_vs_eta"], "h_eff_mu_iso_vs_eta", "#mu ISO efficiency;|#eta|"));
 }
 
 const size_t el_npt_bins  = 7; const float el_pt_bins [] = {10, 20, 30, 40, 50, 70, 100, 200};
@@ -93,32 +96,59 @@ const size_t el_neta_bins = 3; const float el_eta_bins[] = {0, 1.4, 1.6, 2.5};
 const size_t mu_npt_bins  = 7; const float mu_pt_bins [] = {10, 20, 30, 40, 50, 70, 100, 200};
 const size_t mu_neta_bins = 2; const float mu_eta_bins[] = {0, 1.2, 2.5};
 
-/* const size_t neta_bins = 2; const float eta_bins[] = {0, 1.2, 2.5}; */
 void LeptonEff::BookHists()
 {
 	TH1Container& hc = m_hist_container;
 
-	hc.Add(new TH2F("h_mc_el_pt1"          , "MC electron (higher p_{T});|#eta|;p_{T} (GeV)"     , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_mc_el_pt2"          , "MC electron (lower p_{T});|#eta|;p_{T} (GeV)"      , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_mc_el"              , "MC electron;|#eta|;p_{T} (GeV)"                    , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el_pt1"        , "matched electron (higher p_{T});|#eta|;p_{T} (GeV)", el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el_pt2"        , "matched electron (lower p_{T});|#eta|;p_{T} (GeV)" , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el"            , "matched electron;|#eta|;p_{T} (GeV)"               , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el_iso"        , "matched electron iso;|#eta|;p_{T} (GeV)"           , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el_id"         , "matched electron id;|#eta|;p_{T} (GeV)"            , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el_nocrack"    , "matched electron (no crack);|#eta|;p_{T} (GeV)"    , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el_iso_nocrack", "matched electron iso (no crack);|#eta|;p_{T} (GeV)", el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
-	hc.Add(new TH2F("h_reco_el_id_nocrack" , "matched electron id (no crack);|#eta|;p_{T} (GeV)" , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
+    // electrons
+	hc.Add(new TH2F("h_mc_el"      , "MC electron;|#eta|;p_{T} (GeV)"         , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
+	hc.Add(new TH2F("h_reco_el"    , "matched electron;|#eta|;p_{T} (GeV)"    , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
+	hc.Add(new TH2F("h_reco_el_iso", "matched electron iso;|#eta|;p_{T} (GeV)", el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
+	hc.Add(new TH2F("h_reco_el_id" , "matched electron id;|#eta|;p_{T} (GeV)" , el_neta_bins, el_eta_bins, el_npt_bins, el_pt_bins));
 
-	hc.Add(new TH2F("h_mc_mu_pt1"         , "MC #mu (higher p_{T});|#eta|;p_{T} (GeV)"     , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
-	hc.Add(new TH2F("h_mc_mu_pt2"         , "MC #mu (lower p_{T});|#eta|;p_{T} (GeV)"      , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
-	hc.Add(new TH2F("h_mc_mu"             , "MC #mu;|#eta|;p_{T} (GeV)"                    , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
-	hc.Add(new TH2F("h_reco_mu_pt1"       , "matched #mu (higher p_{T});|#eta|;p_{T} (GeV)", mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
-	hc.Add(new TH2F("h_reco_mu_pt2"       , "matched #mu (lower p_{T});|#eta|;p_{T} (GeV)" , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
-	hc.Add(new TH2F("h_reco_mu"           , "matched #mu;|#eta|;p_{T} (GeV)"               , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
-	hc.Add(new TH2F("h_reco_mu_iso"       , "matched #mu iso;|#eta|;p_{T} (GeV)"           , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
-	hc.Add(new TH2F("h_reco_mu_id"        , "matched #mu id;|#eta|;p_{T} (GeV)"            , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
+    hc.Add(new TH1F("h_mc_el_vs_pt"             , "electron MC;p_{T} (GeV)"                       , el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_vs_pt"           , "matched electron MC;p_{T} (GeV)"               , el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_iso_vs_pt"       , "matched electron MC;p_{T} (GeV)"               , el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_id_vs_pt"        , "matched electron MC;p_{T} (GeV)"               , el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_mc_el_vs_pt_barrel"      , "electron MC (|#eta| < 1.4);p_{T} (GeV)"        , el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_vs_pt_barrel"    , "matched electron MC (|#eta| < 1.4);p_{T} (GeV)", el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_iso_vs_pt_barrel", "matched electron MC (|#eta| < 1.4);p_{T} (GeV)", el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_id_vs_pt_barrel" , "matched electron MC (|#eta| < 1.4);p_{T} (GeV)", el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_mc_el_vs_pt_endcap"      , "electron MC (|#eta| > 1.6);p_{T} (GeV)"        , el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_vs_pt_endcap"    , "matched electron MC (|#eta| > 1.6);p_{T} (GeV)", el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_iso_vs_pt_endcap", "matched electron MC (|#eta| > 1.6);p_{T} (GeV)", el_npt_bins , el_pt_bins));
+    hc.Add(new TH1F("h_reco_el_id_vs_pt_endcap" , "matched electron MC (|#eta| > 1.6);p_{T} (GeV)", el_npt_bins , el_pt_bins));
+
+    hc.Add(new TH1F("h_mc_el_vs_eta"      , "electron MC;|#eta|"        , el_neta_bins, el_eta_bins));
+    hc.Add(new TH1F("h_reco_el_vs_eta"    , "matched electron MC;|#eta|", el_neta_bins, el_eta_bins));
+    hc.Add(new TH1F("h_reco_el_id_vs_eta" , "matched electron MC;|#eta|", el_neta_bins, el_eta_bins));
+    hc.Add(new TH1F("h_reco_el_iso_vs_eta", "matched electron MC;|#eta|", el_neta_bins, el_eta_bins));
+
+    // muons
+	hc.Add(new TH2F("h_mc_mu"      , "MC #mu;|#eta|;p_{T} (GeV)"         , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
+	hc.Add(new TH2F("h_reco_mu"    , "matched #mu;|#eta|;p_{T} (GeV)"    , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
+	hc.Add(new TH2F("h_reco_mu_iso", "matched #mu iso;|#eta|;p_{T} (GeV)", mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
+	hc.Add(new TH2F("h_reco_mu_id" , "matched #mu id;|#eta|;p_{T} (GeV)" , mu_neta_bins, mu_eta_bins, mu_npt_bins, mu_pt_bins));
+
+    hc.Add(new TH1F("h_mc_mu_vs_pt"             , "#mu MC;p_{T} (GeV)"                       , mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_vs_pt"           , "matched #mu MC;p_{T} (GeV)"               , mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_iso_vs_pt"       , "matched #mu MC;p_{T} (GeV)"               , mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_id_vs_pt"        , "matched #mu MC;p_{T} (GeV)"               , mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_vs_pt_barrel"    , "matched #mu MC (|#eta| < 1.2);p_{T} (GeV)", mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_mc_mu_vs_pt_barrel"      , "#mu MC (|#eta| < 1.2);p_{T} (GeV)"        , mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_iso_vs_pt_barrel", "matched #mu MC (|#eta| < 1.2);p_{T} (GeV)", mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_id_vs_pt_barrel" , "matched #mu MC (|#eta| < 1.2);p_{T} (GeV)", mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_vs_pt_endcap"    , "matched #mu MC (|#eta| > 1.2);p_{T} (GeV)", mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_mc_mu_vs_pt_endcap"      , "#mu MC (|#eta| > 1.2);p_{T} (GeV)"        , mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_iso_vs_pt_endcap", "matched #mu MC (|#eta| > 1.2);p_{T} (GeV)", mu_npt_bins , mu_pt_bins));
+    hc.Add(new TH1F("h_reco_mu_id_vs_pt_endcap" , "matched #mu MC (|#eta| > 1.2);p_{T} (GeV)", mu_npt_bins , mu_pt_bins));
+
+    hc.Add(new TH1F("h_mc_mu_vs_eta"      , "#mu MC;|#eta|"        , mu_neta_bins, mu_eta_bins));
+    hc.Add(new TH1F("h_reco_mu_vs_eta"    , "matched #mu MC;|#eta|", mu_neta_bins, mu_eta_bins));
+    hc.Add(new TH1F("h_reco_mu_id_vs_eta" , "matched #mu MC;|#eta|", mu_neta_bins, mu_eta_bins));
+    hc.Add(new TH1F("h_reco_mu_iso_vs_eta", "matched #mu MC;|#eta|", mu_neta_bins, mu_eta_bins));
 }
+
 
 int LeptonEff::operator() (long event)
 {
@@ -153,14 +183,46 @@ int LeptonEff::operator() (long event)
         const float l2_pt  = min(l2_p4.pt(), (l2_is_el ? el_pt_bins[el_npt_bins] : mu_pt_bins[mu_npt_bins]));
         const float l1_eta = fabs(l1_p4.eta());
         const float l2_eta = fabs(l2_p4.eta());
-        const bool l1_crack = (1.4 < l1_eta && l1_eta < 1.6);
-        const bool l2_crack = (1.4 < l2_eta && l2_eta < 1.6);
+        const bool l1_is_crack = (1.4 < l1_eta && l1_eta < 1.6);
+        const bool l2_is_crack = (1.4 < l2_eta && l2_eta < 1.6);
+        const bool l1_is_barrel = (l1_eta < (l1_is_el ? 1.4 : 1.2));
+        const bool l2_is_barrel = (l2_eta < (l2_is_el ? 1.4 : 1.2));
+        const bool l1_is_endcap = (l1_eta > (l1_is_el ? 1.6 : 1.2));
+        const bool l2_is_endcap = (l2_eta > (l2_is_el ? 1.6 : 1.2));
 
-        if (l1_is_el) {hc["h_mc_el"]->Fill(l1_eta, l1_pt); hc["h_mc_el_pt1"]->Fill(l1_eta, l1_pt);}
-        if (l1_is_mu) {hc["h_mc_mu"]->Fill(l1_eta, l1_pt); hc["h_mc_mu_pt1"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_el) {hc["h_mc_el"]->Fill(l2_eta, l2_pt); hc["h_mc_el_pt2"]->Fill(l2_eta, l2_pt);}
-        if (l2_is_mu) {hc["h_mc_mu"]->Fill(l2_eta, l2_pt); hc["h_mc_mu_pt2"]->Fill(l2_eta, l2_pt);}
-
+        if (l1_is_el && not l1_is_crack)
+        {
+            hc["h_mc_el"]->Fill(l1_eta, l1_pt);
+            hc["h_mc_el_vs_pt" ]->Fill(l1_pt );
+            hc["h_mc_el_vs_eta"]->Fill(l1_eta);
+            if (l1_is_barrel) {hc["h_mc_el_vs_pt_barrel" ]->Fill(l1_pt);}
+            if (l1_is_endcap) {hc["h_mc_el_vs_pt_endcap" ]->Fill(l1_pt);}
+        }
+        if (l2_is_el && not l1_is_crack)
+        {
+            hc["h_mc_el"]->Fill(l2_eta, l1_pt);
+            hc["h_mc_el_vs_pt" ]->Fill(l2_pt );
+            hc["h_mc_el_vs_eta"]->Fill(l2_eta);
+            if (l2_is_barrel) {hc["h_mc_el_vs_pt_barrel" ]->Fill(l2_pt);}
+            if (l2_is_endcap) {hc["h_mc_el_vs_pt_endcap" ]->Fill(l2_pt);}
+        }
+        if (l1_is_mu)
+        {
+            hc["h_mc_mu"]->Fill(l1_eta, l1_pt);
+            hc["h_mc_mu_vs_pt" ]->Fill(l1_pt );
+            hc["h_mc_mu_vs_eta"]->Fill(l1_eta);
+            if (l1_is_barrel) {hc["h_mc_mu_vs_pt_barrel" ]->Fill(l1_pt);}
+            if (l1_is_endcap) {hc["h_mc_mu_vs_pt_endcap" ]->Fill(l1_pt);}
+        }
+        if (l2_is_mu)
+        {
+            hc["h_mc_mu"]->Fill(l2_eta, l1_pt);
+            hc["h_mc_mu_vs_pt" ]->Fill(l2_pt );
+            hc["h_mc_mu_vs_eta"]->Fill(l2_eta);
+            if (l2_is_barrel) {hc["h_mc_mu_vs_pt_barrel" ]->Fill(l2_pt);}
+            if (l2_is_endcap) {hc["h_mc_mu_vs_pt_endcap" ]->Fill(l2_pt);}
+        }
+    
         // determine if matched to gen
         const std::pair<LorentzVector, int> reco_lep1 = efftools::getRecoLepton(l1);
         bool l1_reco_matched    = false;
@@ -199,27 +261,118 @@ int LeptonEff::operator() (long event)
 //         const float l1_reco_eta = fabs(l1_reco_p4.eta());
 //         const float l2_reco_eta = fabs(l2_reco_p4.eta());
 
-        if (l1_is_el && l1_reco_matched && l1_reco_num) {hc["h_reco_el"]->Fill(l1_eta, l1_pt); hc["h_reco_el_pt1"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_el && l2_reco_matched && l2_reco_num) {hc["h_reco_el"]->Fill(l2_eta, l2_pt); hc["h_reco_el_pt2"]->Fill(l2_eta, l2_pt);}
-        if (l1_is_mu && l1_reco_matched && l1_reco_num) {hc["h_reco_mu"]->Fill(l1_eta, l1_pt); hc["h_reco_mu_pt1"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_mu && l2_reco_matched && l2_reco_num) {hc["h_reco_mu"]->Fill(l2_eta, l2_pt); hc["h_reco_mu_pt2"]->Fill(l2_eta, l2_pt);}
+        // reco electrons
+        if (l1_is_el && l1_reco_matched && not l1_is_crack)
+        {
+            if (l1_reco_num)
+            {
+                hc["h_reco_el"       ]->Fill(l1_eta, l1_pt);
+                hc["h_reco_el_vs_pt" ]->Fill(l1_pt );
+                hc["h_reco_el_vs_eta"]->Fill(l1_eta);
+                if (l1_is_barrel) {hc["h_reco_el_vs_pt_barrel" ]->Fill(l1_pt);}
+                if (l1_is_endcap) {hc["h_reco_el_vs_pt_endcap" ]->Fill(l1_pt);}
+            }
+            if (l1_reco_passes_id)
+            {
+                hc["h_reco_el_id"       ]->Fill(l1_eta, l1_pt);
+                hc["h_reco_el_id_vs_pt" ]->Fill(l1_pt );
+                hc["h_reco_el_id_vs_eta"]->Fill(l1_eta);
+                if (l1_is_barrel) {hc["h_reco_el_id_vs_pt_barrel" ]->Fill(l1_pt);}
+                if (l1_is_endcap) {hc["h_reco_el_id_vs_pt_endcap" ]->Fill(l1_pt);}
+            }
+            if (l1_reco_passes_iso)
+            {
+                hc["h_reco_el_iso"       ]->Fill(l1_eta, l1_pt);
+                hc["h_reco_el_iso_vs_pt" ]->Fill(l1_pt );
+                hc["h_reco_el_iso_vs_eta"]->Fill(l1_eta);
+                if (l1_is_barrel) {hc["h_reco_el_iso_vs_pt_barrel" ]->Fill(l1_pt);}
+                if (l1_is_endcap) {hc["h_reco_el_iso_vs_pt_endcap" ]->Fill(l1_pt);}
+            }
+        }
+        if (l2_is_el && l2_reco_matched && not l2_is_crack)
+        {
+            if (l2_reco_num)
+            {
+                hc["h_reco_el"       ]->Fill(l2_eta, l2_pt);
+                hc["h_reco_el_vs_pt" ]->Fill(l2_pt );
+                hc["h_reco_el_vs_eta"]->Fill(l2_eta);
+                if (l2_is_barrel) {hc["h_reco_el_vs_pt_barrel" ]->Fill(l2_pt);}
+                if (l2_is_endcap) {hc["h_reco_el_vs_pt_endcap" ]->Fill(l2_pt);}
+            }
+            if (l2_reco_passes_id)
+            {
+                hc["h_reco_el_id"       ]->Fill(l2_eta, l2_pt);
+                hc["h_reco_el_id_vs_pt" ]->Fill(l2_pt );
+                hc["h_reco_el_id_vs_eta"]->Fill(l2_eta);
+                if (l2_is_barrel) {hc["h_reco_el_id_vs_pt_barrel" ]->Fill(l2_pt);}
+                if (l2_is_endcap) {hc["h_reco_el_id_vs_pt_endcap" ]->Fill(l2_pt);}
+            }
+            if (l2_reco_passes_iso)
+            {
+                hc["h_reco_el_iso"       ]->Fill(l2_eta, l2_pt);
+                hc["h_reco_el_iso_vs_pt" ]->Fill(l2_pt );
+                hc["h_reco_el_iso_vs_eta"]->Fill(l2_eta);
+                if (l2_is_barrel) {hc["h_reco_el_iso_vs_pt_barrel" ]->Fill(l2_pt);}
+                if (l2_is_endcap) {hc["h_reco_el_iso_vs_pt_endcap" ]->Fill(l2_pt);}
+            }
+        }
 
-        if (l1_is_el && l1_reco_matched && l1_reco_passes_id) {hc["h_reco_el_id"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_el && l2_reco_matched && l2_reco_passes_id) {hc["h_reco_el_id"]->Fill(l2_eta, l2_pt);}
-        if (l1_is_mu && l1_reco_matched && l1_reco_passes_id) {hc["h_reco_mu_id"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_mu && l2_reco_matched && l2_reco_passes_id) {hc["h_reco_mu_id"]->Fill(l2_eta, l2_pt);}
-
-        if (l1_is_el && !l1_crack && l1_reco_matched && l1_reco_num)        {hc["h_reco_el_nocrack"    ]->Fill(l1_eta, l1_pt);}
-        if (l2_is_el && !l1_crack && l2_reco_matched && l2_reco_num)        {hc["h_reco_el_nocrack"    ]->Fill(l2_eta, l2_pt);}
-        if (l1_is_el && !l1_crack && l1_reco_matched && l1_reco_passes_id ) {hc["h_reco_el_id_nocrack" ]->Fill(l1_eta, l1_pt);}
-        if (l2_is_el && !l2_crack && l2_reco_matched && l2_reco_passes_id ) {hc["h_reco_el_id_nocrack" ]->Fill(l2_eta, l2_pt);}
-        if (l1_is_el && !l1_crack && l1_reco_matched && l1_reco_passes_iso) {hc["h_reco_el_iso_nocrack"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_el && !l2_crack && l2_reco_matched && l2_reco_passes_iso) {hc["h_reco_el_iso_nocrack"]->Fill(l2_eta, l2_pt);}
-
-        if (l1_is_el && l1_reco_matched && l1_reco_passes_iso) {hc["h_reco_el_iso"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_el && l2_reco_matched && l2_reco_passes_iso) {hc["h_reco_el_iso"]->Fill(l2_eta, l2_pt);}
-        if (l1_is_mu && l1_reco_matched && l1_reco_passes_iso) {hc["h_reco_mu_iso"]->Fill(l1_eta, l1_pt);}
-        if (l2_is_mu && l2_reco_matched && l2_reco_passes_iso) {hc["h_reco_mu_iso"]->Fill(l2_eta, l2_pt);}
+        // reco muons
+        if (l1_is_mu && l1_reco_matched)
+        {
+            if (l1_reco_num)
+            {
+                hc["h_reco_mu"       ]->Fill(l1_eta, l1_pt);
+                hc["h_reco_mu_vs_pt" ]->Fill(l1_pt );
+                hc["h_reco_mu_vs_eta"]->Fill(l1_eta);
+                if (l1_is_barrel) {hc["h_reco_mu_vs_pt_barrel" ]->Fill(l1_pt);}
+                if (l1_is_endcap) {hc["h_reco_mu_vs_pt_endcap" ]->Fill(l1_pt);}
+            }
+            if (l1_reco_passes_id)
+            {
+                hc["h_reco_mu_id"       ]->Fill(l1_eta, l1_pt);
+                hc["h_reco_mu_id_vs_pt" ]->Fill(l1_pt );
+                hc["h_reco_mu_id_vs_eta"]->Fill(l1_eta);
+                if (l1_is_barrel) {hc["h_reco_mu_id_vs_pt_barrel" ]->Fill(l1_pt);}
+                if (l1_is_endcap) {hc["h_reco_mu_id_vs_pt_endcap" ]->Fill(l1_pt);}
+            }
+            if (l1_reco_passes_iso)
+            {
+                hc["h_reco_mu_iso"       ]->Fill(l1_eta, l1_pt);
+                hc["h_reco_mu_iso_vs_pt" ]->Fill(l1_pt );
+                hc["h_reco_mu_iso_vs_eta"]->Fill(l1_eta);
+                if (l1_is_barrel) {hc["h_reco_mu_iso_vs_pt_barrel" ]->Fill(l1_pt);}
+                if (l1_is_endcap) {hc["h_reco_mu_iso_vs_pt_endcap" ]->Fill(l1_pt);}
+            }
+        }
+        if (l2_is_mu && l2_reco_matched)
+        {
+            if (l2_reco_num)
+            {
+                hc["h_reco_mu"       ]->Fill(l2_eta, l2_pt);
+                hc["h_reco_mu_vs_pt" ]->Fill(l2_pt );
+                hc["h_reco_mu_vs_eta"]->Fill(l2_eta);
+                if (l2_is_barrel) {hc["h_reco_mu_vs_pt_barrel" ]->Fill(l2_pt);}
+                if (l2_is_endcap) {hc["h_reco_mu_vs_pt_endcap" ]->Fill(l2_pt);}
+            }
+            if (l2_reco_passes_id)
+            {
+                hc["h_reco_mu_id"       ]->Fill(l2_eta, l2_pt);
+                hc["h_reco_mu_id_vs_pt" ]->Fill(l2_pt );
+                hc["h_reco_mu_id_vs_eta"]->Fill(l2_eta);
+                if (l2_is_barrel) {hc["h_reco_mu_id_vs_pt_barrel" ]->Fill(l2_pt);}
+                if (l2_is_endcap) {hc["h_reco_mu_id_vs_pt_endcap" ]->Fill(l2_pt);}
+            }
+            if (l2_reco_passes_iso)
+            {
+                hc["h_reco_mu_iso"       ]->Fill(l2_eta, l2_pt);
+                hc["h_reco_mu_iso_vs_pt" ]->Fill(l2_pt );
+                hc["h_reco_mu_iso_vs_eta"]->Fill(l2_eta);
+                if (l2_is_barrel) {hc["h_reco_mu_iso_vs_pt_barrel" ]->Fill(l2_pt);}
+                if (l2_is_endcap) {hc["h_reco_mu_iso_vs_pt_endcap" ]->Fill(l2_pt);}
+            }
+        }
+        
 	}
     catch (std::exception& e)
     {

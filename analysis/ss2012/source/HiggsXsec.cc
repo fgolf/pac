@@ -15,39 +15,19 @@ namespace ss
     // /WH_ZH_TTH_HToZZ_M-125_8TeV-pythia6/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM
     // /WH_ZH_TTH_HToWW_M-125_8TeV-pythia6/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM
     // M_Higgs = 125 GeV
+    using namespace tas;
+
     HiggsProduction::value_type GetHiggsProduction()
     {
-        using namespace tas;
-
-        // determine process
-        bool is_zh  = false;
-        bool is_wh  = false;
-        bool is_tth = false;
-
-        // nice for troubleshooting
-        //dumpDocLines();
-
-        for (size_t idx = 0; idx != genps_id().size(); idx++)
-        {
-            // only consider status 3
-            if (genps_status().at(idx) != 3) {continue;}
-
-            const unsigned int id     = abs(genps_id().at(idx));
-            const unsigned int mother = abs(genps_id_mother().at(idx));
-
-            // is it ZH/WH/ttH? 
-            if (not (is_zh or is_wh or is_tth) && mother != 25)
-            {
-                if (id==23) {is_zh  = true; break;} 
-                if (id==24) {is_wh  = true; break;}
-                if (id==6 ) {is_tth = true; break;}
-            }
-        }
-
         // return the result
-        if (is_zh ) {return HiggsProduction::ZH; }
-        if (is_wh ) {return HiggsProduction::WH; }
-        if (is_tth) {return HiggsProduction::TTH;}
+        switch (genps_signalProcessID())
+        {
+            case 24 : return HiggsProduction::ZH;  break;   //'MSUB(24)=1  !ZH production', 
+            case 26 : return HiggsProduction::WH;  break;   //'MSUB(26)=1  !WH production', 
+            case 121: return HiggsProduction::TTH; break;   //'MSUB(121)=1 !gg to ttH', 
+            case 122: return HiggsProduction::TTH; break;   //'MSUB(122)=1 !qq to ttH', 
+            default: {/*do nothing*/}
+        }
 
         // if we get here, we failed to find something that makes sense 
         // in this context

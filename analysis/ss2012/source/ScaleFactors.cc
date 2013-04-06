@@ -29,7 +29,7 @@ float DileptonTagAndProbeScaleFactor(const int l1_id, const float l1_pt, const f
 // NOTE: eta for electrons should be SC eta
 float TagAndProbeScaleFactor(int id, float pt, float eta)
 {
-    // haven't measured low-low pt
+    // haven't measured very-low pt
     if (pt < 10)
     {
         return 1.0;
@@ -168,6 +168,11 @@ float DileptonTriggerScaleFactor
         if (hyp_type == at::DileptonHypType::EE)   {return 0.93;                     } 
         if (hyp_type == at::DileptonHypType::MUMU) {return (is_barrel ? 0.94 : 0.90);} 
         if (hyp_type == at::DileptonHypType::EMU)  {return 0.93;                     } 
+    }
+    if (anal_type == ss::AnalysisType::vlow_pt)
+    {
+        // not measured yet
+        return 0.0;
     }
 
     return 0.0;

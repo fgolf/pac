@@ -531,34 +531,34 @@ int InterpLooper::operator()(long event)
             if (is_ss()) 
             {
                 // unscaled numerator counts
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*do_btag_sf=*/false))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
                 {
                     rt::Fill2D(hc[sr+"nPassing"], m0, m12, evt_weight);
                 }
 
                 // JEC scale up/scale down
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::up, /*Btag=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::up, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
                 {
                     rt::Fill2D(hc[sr+"nJESUP"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::down, /*Btag=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::down, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
                 {
                     rt::Fill2D(hc[sr+"nJESDN"], m0, m12, evt_weight);
                 }
 
                 // Btag scale up/down
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*do_btag_sf=*/true))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
                 {
                     rt::Fill2D(hc[sr+"nBTABASE"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::up, /*do_btag_sf=*/true))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::up, /*met=*/YieldType::base, m_do_scale_factors))
                 {
                     rt::Fill2D(hc[sr+"nBTAUP"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::down, /*do_btag_sf=*/true))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::down, /*met=*/YieldType::base, m_do_scale_factors))
                 {
                     rt::Fill2D(hc[sr+"nBTADN"], m0, m12, evt_weight);
                 }

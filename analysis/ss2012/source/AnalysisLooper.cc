@@ -176,26 +176,112 @@ void SetBtagDiscriminator(const vector<LorentzVector>& jets_p4, vector<float>& j
     return;
 }
 
-void PrintJetInfo(const std::string& label, const vector<LorentzVector>& jets_p4)
+// void PrintJetInfo(const std::string& label, const vector<LorentzVector>& jets_p4)
+// {
+//     cout << label << ":" << endl;
+//     float sum_pt = 0.0;
+//     for (size_t i = 0; i < jets_p4.size(); i++)
+//     {
+//         LorentzVector jet_p4 = jets_p4.at(i);
+//         cout << Form("idx %d, pt %f, eta %f, phi %f", (int)i, jet_p4.pt(), jet_p4.eta(), jet_p4.phi()) << endl;
+//         sum_pt += jet_p4.pt();
+//     }
+//     cout << "sum jet pt = " << sum_pt << endl;
+// }
+
+
+//std::vector<float> GetJetCorrValue(const std::vector<bool>& vjets_flags, jet_corrector)
+//{
+//    // now impose the pt requirement after applying the extra corrections
+//    std::vector<float> final_jets;
+//    for (unsigned int jidx = 0; jidx < vjets_flags.size(); jidx++)
+//    {
+//        if (!vjets_flags.at(jidx))
+//        {
+//            continue;
+//        }
+//
+//        float jet_cor = 0;
+//        if (not jet_corrector)
+//        {
+//            jet_corrector->setRho(cms2.evt_ww_rho_vor());
+//            jet_corrector->setJetA(cms2.pfjets_area().at(jidx));
+//            jet_corrector->setJetPt(cms2.pfjets_p4().at(jidx).pt());
+//            jet_corrector->setJetEta(cms2.pfjets_p4().at(jidx).eta());        
+//            float jet_cor = jet_corrector->getCorrection();
+//        }
+//        else
+//        {
+//            jet_cor = (evt_isRealData() ? pfjets_corL1FastL2L3residual().at(jidx) : pfjets_corL1FastL2L3().at(jidx);
+//        }
+//        final_jets.push_back(vjet);
+//    }
+//
+//    return final_jets;
+//}
+
+
+//std::vector<float> GetJetCorrUncValue(m_evts.vjets_flags, jet_cor_unc.get(), at::YieldType::value_type jes_type)
+//{
+//    // now impose the pt requirement after applying the extra corrections
+//    std::vector<float> final_jets;
+//    for (unsigned int jidx = 0; jidx < vjets_flags.size(); jidx++)
+//    {
+//        if (!vjets_flags.at(jidx))
+//        {
+//            continue;
+//        }
+//
+//        float jet_unc = 0;
+//        const LorentzVector& vjet = cms2.pfjets_p4().at(jidx);
+//        if (not jet_corrector)
+//        {
+//            float jet_cor = jet_corrector->getCorrection();
+//            jet_unc->setJetPt(vjet.pt());	 
+//            jet_unc->setJetEta(vjet.eta());	 
+//        }
+//        else
+//        {
+//            jet_unc = getJetMetSyst(1, vjet.pt(), vjet.eta());
+//        }
+//        final_jets.push_back(vjet);
+//    }
+//    return final_jets;
+//}
+
+
+void PrintJetInfo
+(
+    const std::string& label,
+    const vector<LorentzVector>& jets_p4,
+    FactorizedJetCorrector* jet_corrector = NULL,
+    JetCorrectionUncertainty *jet_unc = NULL,
+    at::YieldType::value_type jec_type  = at::YieldType::base,
+    at::YieldType::value_type beff_type = at::YieldType::base
+)
 {
     cout << label << ":" << endl;
+    float sum_pt = 0.0;
     for (size_t i = 0; i < jets_p4.size(); i++)
     {
         LorentzVector jet_p4 = jets_p4.at(i);
         cout << Form("idx %d, pt %f, eta %f, phi %f", (int)i, jet_p4.pt(), jet_p4.eta(), jet_p4.phi()) << endl;
+        sum_pt += jet_p4.pt();
     }
+    cout << "sum jet pt = " << sum_pt << endl;
 }
 
-///void PrintJetInfo(const std::string& label, const vector<LorentzVector>& jets_p4, const vector<float>& jets_disc)
-///{
-///    cout << label << ":" << endl;
-///    for (size_t i = 0; i < jets_p4.size(); i++)
-///    {
-///        LorentzVector jet_p4 = jets_p4.at(i);
-///        float disc           = jets_disc.at(i);
-///        cout << Form("idx %d, pt %f, eta %f, phi %f, disc %f", (int)i, jet_p4.pt(), jet_p4.eta(), jet_p4.phi(), disc) << endl;
-///    }
-///}
+
+//void PrintJetInfo(const std::string& label, const vector<LorentzVector>& jets_p4, const vector<float>& jets_disc)
+//{
+//    cout << label << ":" << endl;
+//    for (size_t i = 0; i < jets_p4.size(); i++)
+//    {
+//        LorentzVector jet_p4 = jets_p4.at(i);
+//        float disc           = jets_disc.at(i);
+//        cout << Form("idx %d, pt %f, eta %f, phi %f, disc %f", (int)i, jet_p4.pt(), jet_p4.eta(), jet_p4.phi(), disc) << endl;
+//    }
+//}
 
 //void PrintJetInfo(const std::string& label, const vector<LorentzVector>& jets_p4, const vector<LorentzVector>& jets_nearjet_p4,  const vector<float>& jets_nearjet_dr, const vector<float>& jets_disc)
 //{
@@ -210,7 +296,17 @@ void PrintJetInfo(const std::string& label, const vector<LorentzVector>& jets_p4
 //    }
 //}
 
-void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_type, int jet_met_scale, bool use_el_eta = true, FactorizedJetCorrector *jet_corrector = NULL, MetCorrector *met_corrector = NULL)
+void PrintForSync
+(
+    int ihyp,
+    float mu_min_pt,
+    float el_min_pt,
+    enum JetType jet_type,
+    int jet_met_scale,
+    bool use_el_eta = true,
+    FactorizedJetCorrector *jet_corrector = NULL,
+    MetCorrector *met_corrector = NULL
+)
 {
     // convenience
     const LorentzVector& lt_p4 = hyp_lt_p4().at(ihyp);
@@ -313,7 +409,7 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
     //  cout << "ID lepton 2: "; PrintIdInfo(l2_id, l2_idx, true);
     //  //cout << "ID iso 2: "; PrintIsoInfo(l2_id, l2_idx);
     //}
-    PrintJetInfo(Form("passing jets for hyp %d", ihyp), jets_p4);
+    //PrintJetInfo(Form("passing jets for hyp %d", ihyp), jets_p4);
 }
 
 // construct:
@@ -670,50 +766,50 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         // fix for wgamma* -> lnu2e sample
         // /WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM
         // This had an unphysical peak in the m_3l distribtuon
-        if (m_sample == at::Sample::wgstar2e)
-        {
-            vector<LorentzVector> l_p4;
-            for (size_t i = 0; i != genps_p4().size(); i++)
-            {
-                const unsigned int id = abs(genps_id().at(i));
-                if (genps_status().at(i) != 3) {continue;}
+        //if (m_sample == at::Sample::wgstar2e)
+        //{
+        //    vector<LorentzVector> l_p4;
+        //    for (size_t i = 0; i != genps_p4().size(); i++)
+        //    {
+        //        const unsigned int id = abs(genps_id().at(i));
+        //        if (genps_status().at(i) != 3) {continue;}
 
-                if (id == 11)
-                {
-                    l_p4.push_back(genps_p4().at(i));
-                }
-                if (id == 13)
-                {
-                    l_p4.push_back(genps_p4().at(i));
-                }
-            }
+        //        if (id == 11)
+        //        {
+        //            l_p4.push_back(genps_p4().at(i));
+        //        }
+        //        if (id == 13)
+        //        {
+        //            l_p4.push_back(genps_p4().at(i));
+        //        }
+        //    }
 
-            // sort by pt
-            std::sort(l_p4.begin(), l_p4.end(), at::SortByPt<LorentzVector>());
+        //    // sort by pt
+        //    std::sort(l_p4.begin(), l_p4.end(), at::SortByPt<LorentzVector>());
 
-            // must have 3 generater level leptons
-            if (l_p4.size() < 3) 
-            {
-                return 0;
-            }
+        //    // must have 3 generater level leptons
+        //    if (l_p4.size() < 3) 
+        //    {
+        //        return 0;
+        //    }
 
-            //const float m_3l      = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
-            const float pt_max    = l_p4.at(0).pt();
-            const float m01       = (l_p4[0] + l_p4[1]).mass();
-            const float m02       = (l_p4[0] + l_p4[2]).mass();
-            const float m12       = (l_p4[1] + l_p4[2]).mass();
-            const bool pt_max_cut = (100.0 < pt_max && pt_max < 160.0);
-            const bool m01_cut    = (62.0 < m01 && m01 < 72.0);
-            const bool m02_cut    = (52.0 < m02 && m02 < 55.0);
-            const bool m12_cut    = (7.2 < m12 && m12 < 8.2);
-            const bool reject     = (pt_max_cut && m01_cut && m02_cut && m12_cut);
+        //    //const float m_3l      = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
+        //    const float pt_max    = l_p4.at(0).pt();
+        //    const float m01       = (l_p4[0] + l_p4[1]).mass();
+        //    const float m02       = (l_p4[0] + l_p4[2]).mass();
+        //    const float m12       = (l_p4[1] + l_p4[2]).mass();
+        //    const bool pt_max_cut = (100.0 < pt_max && pt_max < 160.0);
+        //    const bool m01_cut    = (62.0 < m01 && m01 < 72.0);
+        //    const bool m02_cut    = (52.0 < m02 && m02 < 55.0);
+        //    const bool m12_cut    = (7.2 < m12 && m12 < 8.2);
+        //    const bool reject     = (pt_max_cut && m01_cut && m02_cut && m12_cut);
 
-            if (reject)
-            {
-                if (m_verbose) {std::cout << "Wgamma* --> 2e sample bug fix: event rejected" << std::endl;}
-                return 0;
-            }
-        }
+        //    if (reject)
+        //    {
+        //        if (m_verbose) {std::cout << "Wgamma* --> 2e sample bug fix: event rejected" << std::endl;}
+        //        return 0;
+        //    }
+        //}
 
         // event logic variables 
         // --------------------------------------------------------------------------------------------------------- //
@@ -779,8 +875,8 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 const ss::HiggsDecay::value_type higgs_decay           = ss::GetHiggsDecay();
                 m_evt.higgs_bkdn          = static_cast<int>(higgs_production);
                 m_evt.higgs_decay         = static_cast<int>(higgs_decay);
-                m_evt.event_info.xsec     = ss::GetHiggsXsec(higgs_production, higgs_decay);
-                m_evt.event_info.scale1fb = ss::GetHiggsScale1fb(m_sample, higgs_production, higgs_decay, m_evt.event_info.nevts);
+//                 m_evt.event_info.xsec     = ss::GetHiggsXsec(higgs_production, higgs_decay);
+//                 m_evt.event_info.scale1fb = ss::GetHiggsScale1fb(m_sample, higgs_production, higgs_decay, m_evt.event_info.nevts);
 
                 if (m_verbose) {cout << "AnalysisLooper: Higgs Process = " << higgs_production << endl;} 
                 if (m_verbose) {cout << "AnalysisLooper: Higgs Decay = "   << higgs_decay      << endl;} 
@@ -873,6 +969,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         if (!cleaning_standardNovember2011()) 
         {
             if (m_verbose) {std::cout << "fails November2011 cleaning requirement" << std::endl;}
+            m_tree->Fill();
             return 0;
         }
 
@@ -1396,9 +1493,9 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                     {
                         m_jet_corr_unc->setJetPt(pt);	 
                         m_jet_corr_unc->setJetEta(eta);	 
-                        float jet_cor = m_jet_corr_unc->getUncertainty(true);	 
-                        corr_up = (1. + jet_cor);
-                        corr_dn = (1. - jet_cor);
+                        float jet_cor_unc = m_jet_corr_unc->getUncertainty(true);	 
+                        corr_up = (1. + jet_cor_unc);
+                        corr_dn = (1. - jet_cor_unc);
                     }
                     else
                     {
@@ -1490,9 +1587,9 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                     {
                         m_jet_corr_unc->setJetPt(pt);	 
                         m_jet_corr_unc->setJetEta(eta);	 
-                        float jet_cor = m_jet_corr_unc->getUncertainty(true);	 
-                        corr_up = (1. + jet_cor);
-                        corr_dn = (1. - jet_cor);
+                        float jet_cor_unc = m_jet_corr_unc->getUncertainty(true);	 
+                        corr_up = (1. + jet_cor_unc);
+                        corr_dn = (1. - jet_cor_unc);
                     }
                     else
                     {
@@ -1611,7 +1708,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             // scale factor for lepton reconstruction efficiency
             const float eta1 = (abs(lep1_id) == 13 ? m_evt.lep1.p4.eta() : m_evt.lep1.sc_p4.eta());
             const float eta2 = (abs(lep2_id) == 13 ? m_evt.lep2.p4.eta() : m_evt.lep2.sc_p4.eta());
-            m_evt.sf_lepeff      = DileptonTagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), eta1, lep2_id, m_evt.lep2.p4.pt(), eta2);
+            m_evt.sf_dilepeff    = DileptonTagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), eta1, lep2_id, m_evt.lep2.p4.pt(), eta2);
             m_evt.lep1.sf_lepeff = TagAndProbeScaleFactor(lep1_id, m_evt.lep1.p4.pt(), eta1); 
             m_evt.lep2.sf_lepeff = TagAndProbeScaleFactor(lep2_id, m_evt.lep2.p4.pt(), eta2);
 
@@ -1757,6 +1854,9 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
         }
 
+        // get the jet uncertainties
+        //m_evt.vjets_corr_unc = GetJetCorrUncValue(m_evts.vjets_flags, jet_cor_unc.get()  );
+
         //cout << jet_flags.size() << "\t" << bjet_flags.size() << endl;
         // jet btag flag and mc flavor matching
         const CMS2Tag cms2_tag = at::GetCMS2Tag();
@@ -1821,18 +1921,54 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
         }
 
+        const unsigned int seed = 10;
+        //const unsigned int seed = evt_event();
+
         // calculate the "reweighted" MC btag yields
         if (not evt_isRealData() && (cms2_tag.version > 21))
         {
             // # btags reweighted
-            m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base);
-            m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  );
-            m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down);
+            m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
 
             // # btags reweighted and JES +/-
-            m_evt.nbtags_reweighted_jec_up = at::MCBtagCount(m_evt.vjets_p4_up, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base);
-            m_evt.nbtags_reweighted_jec_dn = at::MCBtagCount(m_evt.vjets_p4_dn, m_evt.vjets_btagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base);
+            m_evt.nbtags_reweighted_jec_up = at::MCBtagCount(m_evt.vjets_p4_up, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nbtags_reweighted_jec_dn = at::MCBtagCount(m_evt.vjets_p4_dn, m_evt.vjets_btagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
         }
+
+        // scale the JER 
+        if (not evt_isRealData() && (cms2_tag.version > 21))
+        {
+            // set initial values
+            m_evt.pfmet_jer     = met;
+            m_evt.pfmet_jer_phi = met_phi;
+            vector<LorentzVector> vjets_jer_p4  = m_evt.vjets_p4;
+            vector<LorentzVector> vbjets_jer_p4 = m_evt.vbjets_p4; 
+
+            // update the values by scaling the JER
+            vector<LorentzVector> vbjets_reweighted_jer_p4 = at::RecountedBjets(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+            //cout << "pf met before = " << m_evt.pfmet_jer << endl;;
+            m_evt.pfmet_jer     = met;
+            m_evt.pfmet_jer_phi = met_phi;
+            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_jer_phi, m_evt.ht_jer, seed);
+            //cout << "pf met after v1 = " << m_evt.pfmet_jer << endl;;
+            m_evt.pfmet_jer     = met;
+            m_evt.pfmet_jer_phi = met_phi;
+            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_jer_phi, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/40, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
+//             cout << "pf met after v2 = " << m_evt.pfmet_jer << endl;;
+            samesign::smearJETScaleJets(vbjets_jer_p4, seed);
+            samesign::smearJETScaleJets(vbjets_reweighted_jer_p4, seed);
+
+            // set the branches 
+            m_evt.njets_jer             = vjets_jer_p4.size();
+            m_evt.nbtags_jer            = vbjets_jer_p4.size();
+            m_evt.nbtags_reweighted_jer = vbjets_reweighted_jer_p4.size();
+        }
+
+        // scale the unclustered MET
+        m_evt.pfmet_uncl_up = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/1 , /*scale=*/0.1);
+        m_evt.pfmet_uncl_dn = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/-1, /*scale=*/0.1);
 
         //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
         //SetBtagDiscriminator(m_evt.vjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
@@ -2078,6 +2214,14 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
         // Fill the tree
         m_tree->Fill();
+
+        if (m_sync_print)
+        {
+            PrintJetInfo(Form("passing jets for hyp %d"     , hyp_idx), m_evt.vjets_p4   );
+            PrintJetInfo(Form("passing jets JES+ for hyp %d", hyp_idx), m_evt.vjets_p4_up);
+            PrintJetInfo(Form("passing jets JES- for hyp %d", hyp_idx), m_evt.vjets_p4_dn);
+        }
+
 
         // printout
         if (m_evt.is_good_lumi && m_evt.njets >= 2)

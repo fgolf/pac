@@ -1308,6 +1308,26 @@ namespace rt
         return h_result;
     }
 
+    // Subtract Hists and then divide by the first and return new hist (client is owner of the TH1*)
+    // rel diff = (h1 - h2)/h1
+    TH1* RelativeDiffHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title)
+    {
+        // check that hists are valid
+        if (!h1 || !h2)
+        {
+            throw runtime_error("rt::RelativeDiffHist: at least one of the Histograms are NULL");
+        }
+
+        TH1* h_result = dynamic_cast<TH1*>(h1->Clone(name.c_str()));
+        if (not title.empty())
+        {
+            h_result->SetTitle(title.c_str());
+        }
+        h_result->Add(h1, h2, 1.0, -1.0);
+        h_result->Divide(h1);
+        return h_result;
+    }
+
     // copy the index.php file to dirname
     void CopyIndexPhp(const std::string& target_dir)
     {
@@ -1690,6 +1710,22 @@ namespace rt
     {
         std::string result(str);
         boost::replace_all(result, sub_str, new_sub_str); 
+        return result;
+    }
+
+    // replace first occurrence of sub_str from str with new_sub_str
+    std::string string_replace_first(const std::string& str, const std::string& sub_str, const std::string& new_sub_str)
+    {
+        std::string result(str);
+        boost::replace_first(result, sub_str, new_sub_str); 
+        return result;
+    }
+
+    // replace last occurrence of sub_str from str with new_sub_str
+    std::string string_replace_last(const std::string& str, const std::string& sub_str, const std::string& new_sub_str)
+    {
+        std::string result(str);
+        boost::replace_first(result, sub_str, new_sub_str); 
         return result;
     }
 

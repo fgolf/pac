@@ -1013,7 +1013,7 @@ namespace at
             // ntuple_path
             "WH_ZH_TTH_HToWW_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // tag
-            "V05-03-24",
+            "V05-03-28",
             // SampleType 
             SampleType::bkgd,
             // Sample
@@ -1105,7 +1105,6 @@ namespace at
 
         // special cases
         if ( 
-             (sample == Sample::sbottomtop) || 
              (sample == Sample::glusbottom) || 
              (sample == Sample::glustop)
             )

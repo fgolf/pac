@@ -1,6 +1,7 @@
 #include "rt/RootTools.h"
 #include "CTable.h"
 #include <iostream> 
+#include <string> 
 
 using namespace std;
 	
@@ -449,10 +450,190 @@ void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "pn
     }
 }
 
-void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
+
+void CreateOverlay
+(
+    std::map<std::string, rt::TH1Overlay>& p,
+    const std::string& hist_name,
+    const rt::TH1Container& hc_dy,
+    const rt::TH1Container& hc_tt,
+    const std::string& label = "",
+    const std::string& option = "sb::off lg::bottom_right",
+    const float min = 0.0,
+    const float max = 1.1
+)
 {
-    OverlayElectronEffPlots(tex, suffix);
-    OverlayMuonEffPlots(tex, suffix);
+	std::string plot_title = Form("CMS Simulation, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	std::string plot_name  = rt::string_replace_first(hist_name, "h_", "p_");
+
+    Color_t cdy   = kRed;
+    Color_t ctt   = kBlack;
+
+    std::string dy_title = "DY #rightarrow l^{+}l^{-}";
+    std::string tt_title = "t#bar{t}";
+
+    Style_t sdy = 20;
+    Style_t stt = 22;
+
+    p[plot_name] = rt::TH1Overlay(plot_title, option);
+    p[plot_name].Add(hc_dy[hist_name], dy_title, cdy, 2, sdy);
+    p[plot_name].Add(hc_tt[hist_name], tt_title, ctt, 2, stt);
+    p[plot_name].SetYAxisRange(min, max);
+    p[plot_name].SetLegendOption("p");
+    p[plot_name].SetLegendTextSize(0.042);
+    if (not label.empty())
+    {
+        p[plot_name].AddText(label, 0.25, 0.235);
+    }
+
     return;
 }
 
+    // el eff pt1 vs pt 
+
+void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
+{
+/*     OverlayElectronEffPlots(tex, suffix); */
+/*     OverlayMuonEffPlots(tex, suffix); */
+/*     return; */
+
+	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M_v2.root");
+	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M_v2.root");
+/* 	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M.root"); */
+/* 	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M.root"); */
+/* 	rt::TH1Container hc_dy("plots/mceff/dy/plots_test.root"); */
+/* 	rt::TH1Container hc_tt("plots/mceff/dy/plots_test.root"); */
+    rt::TH1Container hc;
+    std::string path = "plots/mceff/overlay2";
+
+
+	std::map<std::string, rt::TH1Overlay> p;
+
+	// set style
+	rt::SetTDRStyle();
+	gStyle->SetTitleBorderSize(0);
+    hc.SetMarkerSize(1.8);
+
+    // relative difference
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el"             ], hc_tt["h_eff_el"             ], "h_eff_el_rel_diff"              , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron);|#eta|;p_{T} (GeV)"       ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_vs_eta"      ], hc_tt["h_eff_el_vs_eta"      ], "h_eff_el_rel_diff_vs_eta"       , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron);|#eta|"                   ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_vs_pt"       ], hc_tt["h_eff_el_vs_pt"       ], "h_eff_el_rel_diff_vs_pt"        , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron);p_{T} (GeV)"              ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_vs_pt_barrel"], hc_tt["h_eff_el_vs_pt_barrel"], "h_eff_el_rel_diff_vs_pt_barrel" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron; |#eta| < 1.4);p_{T} (GeV)"));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_vs_pt_endcap"], hc_tt["h_eff_el_vs_pt_endcap"], "h_eff_el_rel_diff_vs_pt_endcap" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron; |#eta| > 1.6);p_{T} (GeV)"));
+
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_id"             ], hc_tt["h_eff_el_id"             ], "h_eff_el_id_rel_diff"              , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron ID);|#eta|;p_{T} (GeV)"       ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_id_vs_eta"      ], hc_tt["h_eff_el_id_vs_eta"      ], "h_eff_el_id_rel_diff_vs_eta"       , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron ID);|#eta|"                   ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_id_vs_pt"       ], hc_tt["h_eff_el_id_vs_pt"       ], "h_eff_el_id_rel_diff_vs_pt"        , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron ID);p_{T} (GeV)"              ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_id_vs_pt_barrel"], hc_tt["h_eff_el_id_vs_pt_barrel"], "h_eff_el_id_rel_diff_vs_pt_barrel" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron ID; |#eta| < 1.4);p_{T} (GeV)"));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_id_vs_pt_endcap"], hc_tt["h_eff_el_id_vs_pt_endcap"], "h_eff_el_id_rel_diff_vs_pt_endcap" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron ID; |#eta| > 1.6);p_{T} (GeV)"));
+
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_iso"             ], hc_tt["h_eff_el_iso"             ], "h_eff_el_iso_rel_diff"              , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron Iso);|#eta|;p_{T} (GeV)"       ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_iso_vs_eta"      ], hc_tt["h_eff_el_iso_vs_eta"      ], "h_eff_el_iso_rel_diff_vs_eta"       , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron Iso);|#eta|"                   ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_iso_vs_pt"       ], hc_tt["h_eff_el_iso_vs_pt"       ], "h_eff_el_iso_rel_diff_vs_pt"        , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron Iso);p_{T} (GeV)"              ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_iso_vs_pt_barrel"], hc_tt["h_eff_el_iso_vs_pt_barrel"], "h_eff_el_iso_rel_diff_vs_pt_barrel" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron Iso; |#eta| < 1.4);p_{T} (GeV)"));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_el_iso_vs_pt_endcap"], hc_tt["h_eff_el_iso_vs_pt_endcap"], "h_eff_el_iso_rel_diff_vs_pt_endcap" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (electron Iso; |#eta| > 1.6);p_{T} (GeV)"));
+
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu"             ], hc_tt["h_eff_mu"             ], "h_eff_mu_rel_diff"              , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu);|#eta|;p_{T} (GeV)"       ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_vs_eta"      ], hc_tt["h_eff_mu_vs_eta"      ], "h_eff_mu_rel_diff_vs_eta"       , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu);|#eta|"                   ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_vs_pt"       ], hc_tt["h_eff_mu_vs_pt"       ], "h_eff_mu_rel_diff_vs_pt"        , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu);p_{T} (GeV)"              ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_vs_pt_barrel"], hc_tt["h_eff_mu_vs_pt_barrel"], "h_eff_mu_rel_diff_vs_pt_barrel" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu; |#eta| < 1.2);p_{T} (GeV)"));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_vs_pt_endcap"], hc_tt["h_eff_mu_vs_pt_endcap"], "h_eff_mu_rel_diff_vs_pt_endcap" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu; |#eta| > 1.2);p_{T} (GeV)"));
+
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_id"             ], hc_tt["h_eff_mu_id"             ], "h_eff_mu_id_rel_diff"              , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu ID);|#eta|;p_{T} (GeV)"       ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_id_vs_eta"      ], hc_tt["h_eff_mu_id_vs_eta"      ], "h_eff_mu_id_rel_diff_vs_eta"       , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu ID);|#eta|"                   ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_id_vs_pt"       ], hc_tt["h_eff_mu_id_vs_pt"       ], "h_eff_mu_id_rel_diff_vs_pt"        , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu ID);p_{T} (GeV)"              ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_id_vs_pt_barrel"], hc_tt["h_eff_mu_id_vs_pt_barrel"], "h_eff_mu_id_rel_diff_vs_pt_barrel" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu ID; |#eta| < 1.2);p_{T} (GeV)"));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_id_vs_pt_endcap"], hc_tt["h_eff_mu_id_vs_pt_endcap"], "h_eff_mu_id_rel_diff_vs_pt_endcap" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu ID; |#eta| > 1.2);p_{T} (GeV)"));
+
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_iso"             ], hc_tt["h_eff_mu_iso"             ], "h_eff_mu_iso_rel_diff"              , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu Iso);|#eta|;p_{T} (GeV)"       ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_iso_vs_eta"      ], hc_tt["h_eff_mu_iso_vs_eta"      ], "h_eff_mu_iso_rel_diff_vs_eta"       , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu Iso);|#eta|"                   ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_iso_vs_pt"       ], hc_tt["h_eff_mu_iso_vs_pt"       ], "h_eff_mu_iso_rel_diff_vs_pt"        , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu Iso);p_{T} (GeV)"              ));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_iso_vs_pt_barrel"], hc_tt["h_eff_mu_iso_vs_pt_barrel"], "h_eff_mu_iso_rel_diff_vs_pt_barrel" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu Iso; |#eta| < 1.2);p_{T} (GeV)"));
+    hc.Add(rt::RelativeDiffHists(hc_dy["h_eff_mu_iso_vs_pt_endcap"], hc_tt["h_eff_mu_iso_vs_pt_endcap"], "h_eff_mu_iso_rel_diff_vs_pt_endcap" , "(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY} (#mu Iso; |#eta| > 1.2);p_{T} (GeV)"));
+
+    // cross check
+    hc_dy.Add(rt::AddHists(hc_dy["h_reco_el_id_vs_pt_barrel"], hc_dy["h_reco_el_id_vs_pt_endcap"], "h_reco_el_id_vs_pt_barrel_endcap", "sum N barrel + endcap"));
+    hc_dy.Add(rt::AddHists(hc_dy["h_mc_el_vs_pt_barrel"     ], hc_dy["h_mc_el_vs_pt_endcap"     ], "h_mc_el_vs_pt_barrel_endcap"        , "sum D barrel + endcap"));
+    hc_tt.Add(rt::AddHists(hc_tt["h_reco_el_id_vs_pt_barrel"], hc_tt["h_reco_el_id_vs_pt_endcap"], "h_reco_el_id_vs_pt_barrel_endcap", "sum N barrel + endcap"));
+    hc_tt.Add(rt::AddHists(hc_tt["h_mc_el_vs_pt_barrel"     ], hc_tt["h_mc_el_vs_pt_endcap"     ], "h_mc_el_vs_pt_barrel_endcap"        , "sum D barrel + endcap"));
+    hc_dy.Add(rt::MakeEfficiencyPlot(hc_dy["h_reco_el_id_vs_pt_barrel_endcap" ], hc_dy["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
+    hc_tt.Add(rt::MakeEfficiencyPlot(hc_tt["h_reco_el_id_vs_pt_barrel_endcap" ], hc_tt["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
+
+    // overlay
+    CreateOverlay(p, "h_mc_el_vs_pt_barrel_endcap"     , hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
+    CreateOverlay(p, "h_reco_el_id_vs_pt_barrel_endcap", hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
+    CreateOverlay(p, "h_eff_el_id_vs_pt_barrel_endcap" , hc_dy, hc_tt, "electrons");
+
+    // mu eff vs eta 
+    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].Add(hc_dy["h_reco_el_id_vs_pt_barrel"], "DY barrel");
+    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].Add(hc_dy["h_reco_el_id_vs_pt_endcap"], "DY endcap");
+    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].SetLegendOption("p");
+    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].SetLegendTextSize(0.042);
+    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
+
+    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].Add(hc_dy["h_mc_el_vs_pt_barrel"], "DY barrel");
+    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].Add(hc_dy["h_mc_el_vs_pt_endcap"], "DY endcap");
+    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].SetLegendOption("p");
+    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].SetLegendTextSize(0.042);
+    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
+
+    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].Add(hc_tt["h_reco_el_id_vs_pt_barrel"], "tt barrel");
+    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].Add(hc_tt["h_reco_el_id_vs_pt_endcap"], "tt endcap");
+    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].SetLegendOption("p");
+    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].SetLegendTextSize(0.042);
+    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
+
+    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].Add(hc_tt["h_mc_el_vs_pt_barrel"], "tt barrel");
+    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].Add(hc_tt["h_mc_el_vs_pt_endcap"], "tt endcap");
+    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].SetLegendOption("p");
+    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].SetLegendTextSize(0.042);
+    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
+
+
+    CreateOverlay(p, "h_eff_el_vs_eta"           , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_vs_eta"           , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_vs_pt"            , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_vs_pt_barrel"     , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_vs_pt_endcap"     , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_id_vs_eta"        , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_id_vs_pt"         , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_id_vs_pt_barrel"  , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_id_vs_pt_endcap"  , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_iso_vs_eta"       , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_iso_vs_pt"        , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_iso_vs_pt_barrel" , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_iso_vs_pt_endcap" , hc_dy, hc_tt, "electrons");
+
+    CreateOverlay(p, "h_eff_mu_vs_eta"           , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_vs_pt"            , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_vs_pt_barrel"     , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_vs_pt_endcap"     , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_id_vs_eta"        , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_id_vs_pt"         , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_id_vs_pt_barrel"  , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_id_vs_pt_endcap"  , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_iso_vs_eta"       , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_iso_vs_pt"        , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_iso_vs_pt_barrel" , hc_dy, hc_tt, "muons");
+    CreateOverlay(p, "h_eff_mu_iso_vs_pt_endcap" , hc_dy, hc_tt, "muons");
+
+    // print
+    if (suffix=="all")
+    {
+        hc.Print(path + "/png", "png");
+        hc.Print(path + "/png", "pdf");
+        hc.Print(path + "/png", "eps");
+        rt::Print(p, path + "/png", "png");
+        rt::Print(p, path + "/png", "pdf");
+        rt::Print(p, path + "/png", "eps");
+    }
+    else
+    {
+        hc.Print(path + "/" + suffix, suffix);
+        rt::Print(p, path + "/" + suffix, suffix);
+    }
+}

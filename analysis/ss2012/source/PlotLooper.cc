@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <numeric>
 #include <tr1/array>
 #include <cmath>
 #include "mcSelections.h"
@@ -273,7 +274,7 @@ void PlotLooper::EndJob()
     cout << "Num Events Generated = " << m_nevts    << endl;
 
     // set the error to the lumi * scale1fb * ClopperPearsonUncertainty
-    if (m_sample != at::Sample::data)
+    if (m_sample != at::Sample::data && m_nevts > 0)
     {
         const float weight = (m_lumi * m_scale1fb);
         hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_mm"]->GetEntries()), m_nevts));
@@ -702,8 +703,8 @@ int PlotLooper::operator()(long event)
         }
 
         // only keep MC matched events (MC only)
-        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
-        const bool not_from_borc = not is_real_data() ? ((lep1_is_fromw()!=-1 && lep1_is_fromw()!=-2) && (lep2_is_fromw()!=-1 || lep2_is_fromw()!=-2) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()==1) && (lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool not_from_borc = not is_real_data() ? ((lep1_is_fromw()>=0) && (lep2_is_fromw()>=0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
         const bool is_signal_mc  = (at::GetSampleInfo(m_sample).type == at::SampleType::susy);
         const bool is_mc_matched = (m_sample==at::Sample::ttg ? not_from_borc : true_ss_event);
@@ -820,7 +821,8 @@ int PlotLooper::operator()(long event)
         }
 
         // two btagged jets
-        if (nbtags() < static_cast<int>(m_nbtags))
+        const unsigned int num_btags = ((not is_real_data() && m_do_scale_factors) ? nbtags_reweighted() : nbtags());
+        if (num_btags < m_nbtags)
         {
             if (m_verbose) {cout << "faling # btags cut" << endl;}
             return 0;
@@ -952,7 +954,7 @@ int PlotLooper::operator()(long event)
                      pfmet(),
                      ht(),
                      njets(),
-                     nbtags()) << endl;
+                     num_btags) << endl;
             }
         }
 
@@ -1065,7 +1067,7 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_ht"    +qs], ht()        , evt_weight);
         rt::Fill(hc["h_mt"    +qs], lep1_mt()   , evt_weight);
         rt::Fill(hc["h_met"   +qs], pfmet()     , evt_weight);
-        rt::Fill(hc["h_nbtags"+qs], nbtags()    , evt_weight);
+        rt::Fill(hc["h_nbtags"+qs], num_btags   , evt_weight);
         rt::Fill(hc["h_njets" +qs], njets()     , evt_weight);
 
         rt::Fill(hc["h_pt1"   +hs+qs], p41.pt()    , evt_weight);
@@ -1073,7 +1075,7 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_ht"    +hs+qs], ht()        , evt_weight);
         rt::Fill(hc["h_mt"    +hs+qs], lep1_mt()   , evt_weight);
         rt::Fill(hc["h_met"   +hs+qs], pfmet()     , evt_weight);
-        rt::Fill(hc["h_nbtags"+hs+qs], nbtags()    , evt_weight);
+        rt::Fill(hc["h_nbtags"+hs+qs], num_btags   , evt_weight);
         rt::Fill(hc["h_njets" +hs+qs], njets()     , evt_weight);
 
         // dilep

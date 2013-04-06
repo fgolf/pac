@@ -74,7 +74,6 @@ public:
     int njets;
     int njets20;
     int njets30;
-    int nbtags_reweighted;
     int nbtags;
     int nbtags20;
     int nbtags30;
@@ -89,7 +88,7 @@ public:
     float rho;
     float rho_iso;
     float sf_dileptrig;
-    float sf_lepeff;
+    float sf_dilepeff;
     bool trig_mm;
     bool trig_em;
     bool trig_ee;
@@ -116,14 +115,19 @@ public:
     //
     int njets_dn;
     int njets_up;
+    int njets_jer;
     int nbtags_dn;
     int nbtags_up;
+    int nbtags_jer;
+    int nbtags_reweighted;
     int nbtags_reweighted_dn;
     int nbtags_reweighted_up;
+    int nbtags_reweighted_jer;
     int nbtags_reweighted_jec_up;
     int nbtags_reweighted_jec_dn;
     float ht_dn;
     float ht_up;
+    float ht_jer;
     int njets20_dn;
     int njets20_up;
     int nbtags20_dn;
@@ -140,6 +144,10 @@ public:
     float pfmet_up;
     float pfmet_phi_dn;
     float pfmet_phi_up;
+    float pfmet_jer;
+    float pfmet_jer_phi;
+    float pfmet_uncl_up;
+    float pfmet_uncl_dn;
 
     //
     // susy parameters

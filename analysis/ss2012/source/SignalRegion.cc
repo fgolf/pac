@@ -1506,7 +1506,9 @@ namespace ss
         const SignalRegionType::value_type& signal_region_type,
         const at::YieldType::value_type& jec_yield_type,
         const at::YieldType::value_type& btag_yield_type,
-        const bool do_btag_sf
+        const at::YieldType::value_type& met_yield_type,
+        const bool do_btag_sf,
+        const bool do_jer
     )
     {
         // lepton pt cuts
@@ -1590,24 +1592,53 @@ namespace ss
  
              // btag scale up/down
              // this will overide the nbtags setting above
-            // only do the JES if the btag up/down flag is base or not set
-            if (jec_yield_type != at::YieldType::up and jec_yield_type != at::YieldType::down)
+             switch(btag_yield_type)
+             {
+                 case at::YieldType::up:
+                     nbtags = ssb::nbtags_reweighted_up();
+                     break;
+                 case at::YieldType::down:
+                     nbtags = ssb::nbtags_reweighted_dn();
+                     break;
+                 case at::YieldType::base:
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     break;
+                 default:
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     break;
+             }
+
+            // rescale the JER
+            if (do_jer)
             {
-                switch(btag_yield_type)
-                {
-                    case at::YieldType::up:
-                        nbtags = ssb::nbtags_reweighted_up();
-                        break;
-                    case at::YieldType::down:
-                        nbtags = ssb::nbtags_reweighted_dn();
-                        break;
-                    case at::YieldType::base:
-                        nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                        break;
-                    default:
-                        nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                        break;
-                }
+                njets  = ssb::njets_jer();
+                ht     = ssb::ht_jer();
+                met    = ssb::pfmet_jer();
+                nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jer() : ssb::nbtags_jer());
+            }
+
+            // rescale the unclustered energy
+            switch(met_yield_type)
+            {
+                case at::YieldType::up:
+                    njets  = ssb::njets();
+                    ht     = ssb::ht();
+                    met    = ssb::pfmet_uncl_up();
+                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                    break;
+                case at::YieldType::down:
+                    njets  = ssb::njets();
+                    ht     = ssb::ht();
+                    met    = ssb::pfmet_uncl_dn();
+                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                    break;
+                case at::YieldType::base:
+                    njets  = ssb::njets();
+                    ht     = ssb::ht();
+                    met    = ssb::pfmet();
+                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                    break;
+                default: {/*do nothing*/}
             }
          }
 
@@ -2021,7 +2052,7 @@ namespace ss
         // do btag scale factor
         if (do_btag_sf)
         {
-            tree.SetAlias("nbs", "(is_real_data ? nbtags : nbtags_reweighted)");
+            tree.SetAlias("nbs", "(is_real_data==1 ? nbtags : nbtags_reweighted)");
         }
         else
         {

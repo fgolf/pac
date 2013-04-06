@@ -281,6 +281,10 @@ namespace rt
     // Multiply Hists and return new hist (client is owner of the TH1*)
     TH1* MultiplyHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "", const std::string& option = "");
 
+    // Subtract Hists and then divide by the first and return new hist (client is owner of the TH1*)
+    // rel diff = (h1 - h2)/h1
+    TH1* RelativeDiffHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "");
+
     // set statbox position
     void SetStatBoxPosition(TH1* hist_ptr, float x1 = 0.8, float y1 = 0.8, float x2 = 1.0, float y2 = 1.0);
 
@@ -463,8 +467,14 @@ namespace rt
     // remove all occurrences of sub_str from str
     std::string string_remove_all(const std::string& str, const std::string& sub_str);
 
-    // replace all occurrences of sub_str from str with new_sub_str (not working yet)
+    // replace all occurrences of sub_str from str with new_sub_str
     std::string string_replace_all(const std::string& str, const std::string& sub_str, const std::string& new_sub_str);
+
+    // replace first occurrences of sub_str from str with new_sub_str
+    std::string string_replace_first(const std::string& str, const std::string& sub_str, const std::string& new_sub_str);
+
+    // replace last occurrences of sub_str from str with new_sub_str
+    std::string string_replace_last(const std::string& str, const std::string& sub_str, const std::string& new_sub_str);
 
     // replace all upper case characters to lower case 
     std::string string_lower(const std::string& str);

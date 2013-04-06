@@ -692,6 +692,12 @@ protected:
 	int	ttbar_bkdn_;
 	TBranch *ttbar_bkdn_branch;
 	bool ttbar_bkdn_isLoaded;
+	int	higgs_bkdn_;
+	TBranch *higgs_bkdn_branch;
+	bool higgs_bkdn_isLoaded;
+	int	higgs_decay_;
+	TBranch *higgs_decay_branch;
+	bool higgs_decay_isLoaded;
 	float	vtxw_;
 	TBranch *vtxw_branch;
 	bool vtxw_isLoaded;
@@ -779,18 +785,27 @@ protected:
 	int	njets_up_;
 	TBranch *njets_up_branch;
 	bool njets_up_isLoaded;
+	int	njets_jer_;
+	TBranch *njets_jer_branch;
+	bool njets_jer_isLoaded;
 	int	nbtags_dn_;
 	TBranch *nbtags_dn_branch;
 	bool nbtags_dn_isLoaded;
 	int	nbtags_up_;
 	TBranch *nbtags_up_branch;
 	bool nbtags_up_isLoaded;
+	int	nbtags_jer_;
+	TBranch *nbtags_jer_branch;
+	bool nbtags_jer_isLoaded;
 	float	ht_dn_;
 	TBranch *ht_dn_branch;
 	bool ht_dn_isLoaded;
 	float	ht_up_;
 	TBranch *ht_up_branch;
 	bool ht_up_isLoaded;
+	float	ht_jer_;
+	TBranch *ht_jer_branch;
+	bool ht_jer_isLoaded;
 	int	njets20_dn_;
 	TBranch *njets20_dn_branch;
 	bool njets20_dn_isLoaded;
@@ -836,6 +851,9 @@ protected:
 	int	nbtags_reweighted_jec_up_;
 	TBranch *nbtags_reweighted_jec_up_branch;
 	bool nbtags_reweighted_jec_up_isLoaded;
+	int	nbtags_reweighted_jer_;
+	TBranch *nbtags_reweighted_jer_branch;
+	bool nbtags_reweighted_jer_isLoaded;
 	float	ht30_dn_;
 	TBranch *ht30_dn_branch;
 	bool ht30_dn_isLoaded;
@@ -854,6 +872,18 @@ protected:
 	float	pfmet_phi_up_;
 	TBranch *pfmet_phi_up_branch;
 	bool pfmet_phi_up_isLoaded;
+	float	pfmet_jer_;
+	TBranch *pfmet_jer_branch;
+	bool pfmet_jer_isLoaded;
+	float	pfmet_jer_phi_;
+	TBranch *pfmet_jer_phi_branch;
+	bool pfmet_jer_phi_isLoaded;
+	float	pfmet_uncl_dn_;
+	TBranch *pfmet_uncl_dn_branch;
+	bool pfmet_uncl_dn_isLoaded;
+	float	pfmet_uncl_up_;
+	TBranch *pfmet_uncl_up_branch;
+	bool pfmet_uncl_up_isLoaded;
 	float	sf_dileptrig_;
 	TBranch *sf_dileptrig_branch;
 	bool sf_dileptrig_isLoaded;
@@ -2375,6 +2405,16 @@ void Init(TTree *tree) {
 		ttbar_bkdn_branch = tree->GetBranch("ttbar_bkdn");
 		if (ttbar_bkdn_branch) {ttbar_bkdn_branch->SetAddress(&ttbar_bkdn_);}
 	}
+	higgs_bkdn_branch = 0;
+	if (tree->GetBranch("higgs_bkdn") != 0) {
+		higgs_bkdn_branch = tree->GetBranch("higgs_bkdn");
+		if (higgs_bkdn_branch) {higgs_bkdn_branch->SetAddress(&higgs_bkdn_);}
+	}
+	higgs_decay_branch = 0;
+	if (tree->GetBranch("higgs_decay") != 0) {
+		higgs_decay_branch = tree->GetBranch("higgs_decay");
+		if (higgs_decay_branch) {higgs_decay_branch->SetAddress(&higgs_decay_);}
+	}
 	vtxw_branch = 0;
 	if (tree->GetBranch("vtxw") != 0) {
 		vtxw_branch = tree->GetBranch("vtxw");
@@ -2520,6 +2560,11 @@ void Init(TTree *tree) {
 		njets_up_branch = tree->GetBranch("njets_up");
 		if (njets_up_branch) {njets_up_branch->SetAddress(&njets_up_);}
 	}
+	njets_jer_branch = 0;
+	if (tree->GetBranch("njets_jer") != 0) {
+		njets_jer_branch = tree->GetBranch("njets_jer");
+		if (njets_jer_branch) {njets_jer_branch->SetAddress(&njets_jer_);}
+	}
 	nbtags_dn_branch = 0;
 	if (tree->GetBranch("nbtags_dn") != 0) {
 		nbtags_dn_branch = tree->GetBranch("nbtags_dn");
@@ -2530,6 +2575,11 @@ void Init(TTree *tree) {
 		nbtags_up_branch = tree->GetBranch("nbtags_up");
 		if (nbtags_up_branch) {nbtags_up_branch->SetAddress(&nbtags_up_);}
 	}
+	nbtags_jer_branch = 0;
+	if (tree->GetBranch("nbtags_jer") != 0) {
+		nbtags_jer_branch = tree->GetBranch("nbtags_jer");
+		if (nbtags_jer_branch) {nbtags_jer_branch->SetAddress(&nbtags_jer_);}
+	}
 	ht_dn_branch = 0;
 	if (tree->GetBranch("ht_dn") != 0) {
 		ht_dn_branch = tree->GetBranch("ht_dn");
@@ -2539,6 +2589,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("ht_up") != 0) {
 		ht_up_branch = tree->GetBranch("ht_up");
 		if (ht_up_branch) {ht_up_branch->SetAddress(&ht_up_);}
+	}
+	ht_jer_branch = 0;
+	if (tree->GetBranch("ht_jer") != 0) {
+		ht_jer_branch = tree->GetBranch("ht_jer");
+		if (ht_jer_branch) {ht_jer_branch->SetAddress(&ht_jer_);}
 	}
 	njets20_dn_branch = 0;
 	if (tree->GetBranch("njets20_dn") != 0) {
@@ -2615,6 +2670,11 @@ void Init(TTree *tree) {
 		nbtags_reweighted_jec_up_branch = tree->GetBranch("nbtags_reweighted_jec_up");
 		if (nbtags_reweighted_jec_up_branch) {nbtags_reweighted_jec_up_branch->SetAddress(&nbtags_reweighted_jec_up_);}
 	}
+	nbtags_reweighted_jer_branch = 0;
+	if (tree->GetBranch("nbtags_reweighted_jer") != 0) {
+		nbtags_reweighted_jer_branch = tree->GetBranch("nbtags_reweighted_jer");
+		if (nbtags_reweighted_jer_branch) {nbtags_reweighted_jer_branch->SetAddress(&nbtags_reweighted_jer_);}
+	}
 	ht30_dn_branch = 0;
 	if (tree->GetBranch("ht30_dn") != 0) {
 		ht30_dn_branch = tree->GetBranch("ht30_dn");
@@ -2644,6 +2704,26 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("pfmet_phi_up") != 0) {
 		pfmet_phi_up_branch = tree->GetBranch("pfmet_phi_up");
 		if (pfmet_phi_up_branch) {pfmet_phi_up_branch->SetAddress(&pfmet_phi_up_);}
+	}
+	pfmet_jer_branch = 0;
+	if (tree->GetBranch("pfmet_jer") != 0) {
+		pfmet_jer_branch = tree->GetBranch("pfmet_jer");
+		if (pfmet_jer_branch) {pfmet_jer_branch->SetAddress(&pfmet_jer_);}
+	}
+	pfmet_jer_phi_branch = 0;
+	if (tree->GetBranch("pfmet_jer_phi") != 0) {
+		pfmet_jer_phi_branch = tree->GetBranch("pfmet_jer_phi");
+		if (pfmet_jer_phi_branch) {pfmet_jer_phi_branch->SetAddress(&pfmet_jer_phi_);}
+	}
+	pfmet_uncl_dn_branch = 0;
+	if (tree->GetBranch("pfmet_uncl_dn") != 0) {
+		pfmet_uncl_dn_branch = tree->GetBranch("pfmet_uncl_dn");
+		if (pfmet_uncl_dn_branch) {pfmet_uncl_dn_branch->SetAddress(&pfmet_uncl_dn_);}
+	}
+	pfmet_uncl_up_branch = 0;
+	if (tree->GetBranch("pfmet_uncl_up") != 0) {
+		pfmet_uncl_up_branch = tree->GetBranch("pfmet_uncl_up");
+		if (pfmet_uncl_up_branch) {pfmet_uncl_up_branch->SetAddress(&pfmet_uncl_up_);}
 	}
 	sf_dileptrig_branch = 0;
 	if (tree->GetBranch("sf_dileptrig") != 0) {
@@ -3251,6 +3331,8 @@ void GetEntry(unsigned int idx)
 		nbtags20_isLoaded = false;
 		nbtags30_isLoaded = false;
 		ttbar_bkdn_isLoaded = false;
+		higgs_bkdn_isLoaded = false;
+		higgs_decay_isLoaded = false;
 		vtxw_isLoaded = false;
 		mt_isLoaded = false;
 		ht_isLoaded = false;
@@ -3280,10 +3362,13 @@ void GetEntry(unsigned int idx)
 		trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_isLoaded = false;
 		njets_dn_isLoaded = false;
 		njets_up_isLoaded = false;
+		njets_jer_isLoaded = false;
 		nbtags_dn_isLoaded = false;
 		nbtags_up_isLoaded = false;
+		nbtags_jer_isLoaded = false;
 		ht_dn_isLoaded = false;
 		ht_up_isLoaded = false;
+		ht_jer_isLoaded = false;
 		njets20_dn_isLoaded = false;
 		njets20_up_isLoaded = false;
 		nbtags20_dn_isLoaded = false;
@@ -3299,12 +3384,17 @@ void GetEntry(unsigned int idx)
 		nbtags_reweighted_up_isLoaded = false;
 		nbtags_reweighted_jec_dn_isLoaded = false;
 		nbtags_reweighted_jec_up_isLoaded = false;
+		nbtags_reweighted_jer_isLoaded = false;
 		ht30_dn_isLoaded = false;
 		ht30_up_isLoaded = false;
 		pfmet_dn_isLoaded = false;
 		pfmet_up_isLoaded = false;
 		pfmet_phi_dn_isLoaded = false;
 		pfmet_phi_up_isLoaded = false;
+		pfmet_jer_isLoaded = false;
+		pfmet_jer_phi_isLoaded = false;
+		pfmet_uncl_dn_isLoaded = false;
+		pfmet_uncl_up_isLoaded = false;
 		sf_dileptrig_isLoaded = false;
 		sf_lepeff_isLoaded = false;
 		sparm0_isLoaded = false;
@@ -3631,6 +3721,8 @@ void LoadAllBranches()
 	if (nbtags20_branch != 0) nbtags20();
 	if (nbtags30_branch != 0) nbtags30();
 	if (ttbar_bkdn_branch != 0) ttbar_bkdn();
+	if (higgs_bkdn_branch != 0) higgs_bkdn();
+	if (higgs_decay_branch != 0) higgs_decay();
 	if (vtxw_branch != 0) vtxw();
 	if (mt_branch != 0) mt();
 	if (ht_branch != 0) ht();
@@ -3660,10 +3752,13 @@ void LoadAllBranches()
 	if (trig_em_riso1p0mu5_el8_id_m8_pfnopuht175_branch != 0) trig_em_riso1p0mu5_el8_id_m8_pfnopuht175();
 	if (njets_dn_branch != 0) njets_dn();
 	if (njets_up_branch != 0) njets_up();
+	if (njets_jer_branch != 0) njets_jer();
 	if (nbtags_dn_branch != 0) nbtags_dn();
 	if (nbtags_up_branch != 0) nbtags_up();
+	if (nbtags_jer_branch != 0) nbtags_jer();
 	if (ht_dn_branch != 0) ht_dn();
 	if (ht_up_branch != 0) ht_up();
+	if (ht_jer_branch != 0) ht_jer();
 	if (njets20_dn_branch != 0) njets20_dn();
 	if (njets20_up_branch != 0) njets20_up();
 	if (nbtags20_dn_branch != 0) nbtags20_dn();
@@ -3679,12 +3774,17 @@ void LoadAllBranches()
 	if (nbtags_reweighted_up_branch != 0) nbtags_reweighted_up();
 	if (nbtags_reweighted_jec_dn_branch != 0) nbtags_reweighted_jec_dn();
 	if (nbtags_reweighted_jec_up_branch != 0) nbtags_reweighted_jec_up();
+	if (nbtags_reweighted_jer_branch != 0) nbtags_reweighted_jer();
 	if (ht30_dn_branch != 0) ht30_dn();
 	if (ht30_up_branch != 0) ht30_up();
 	if (pfmet_dn_branch != 0) pfmet_dn();
 	if (pfmet_up_branch != 0) pfmet_up();
 	if (pfmet_phi_dn_branch != 0) pfmet_phi_dn();
 	if (pfmet_phi_up_branch != 0) pfmet_phi_up();
+	if (pfmet_jer_branch != 0) pfmet_jer();
+	if (pfmet_jer_phi_branch != 0) pfmet_jer_phi();
+	if (pfmet_uncl_dn_branch != 0) pfmet_uncl_dn();
+	if (pfmet_uncl_up_branch != 0) pfmet_uncl_up();
 	if (sf_dileptrig_branch != 0) sf_dileptrig();
 	if (sf_lepeff_branch != 0) sf_lepeff();
 	if (sparm0_branch != 0) sparm0();
@@ -6708,6 +6808,32 @@ void LoadAllBranches()
 		}
 		return ttbar_bkdn_;
 	}
+	int &higgs_bkdn()
+	{
+		if (not higgs_bkdn_isLoaded) {
+			if (higgs_bkdn_branch != 0) {
+				higgs_bkdn_branch->GetEntry(index);
+			} else { 
+				printf("branch higgs_bkdn_branch does not exist!\n");
+				exit(1);
+			}
+			higgs_bkdn_isLoaded = true;
+		}
+		return higgs_bkdn_;
+	}
+	int &higgs_decay()
+	{
+		if (not higgs_decay_isLoaded) {
+			if (higgs_decay_branch != 0) {
+				higgs_decay_branch->GetEntry(index);
+			} else { 
+				printf("branch higgs_decay_branch does not exist!\n");
+				exit(1);
+			}
+			higgs_decay_isLoaded = true;
+		}
+		return higgs_decay_;
+	}
 	float &vtxw()
 	{
 		if (not vtxw_isLoaded) {
@@ -7085,6 +7211,19 @@ void LoadAllBranches()
 		}
 		return njets_up_;
 	}
+	int &njets_jer()
+	{
+		if (not njets_jer_isLoaded) {
+			if (njets_jer_branch != 0) {
+				njets_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch njets_jer_branch does not exist!\n");
+				exit(1);
+			}
+			njets_jer_isLoaded = true;
+		}
+		return njets_jer_;
+	}
 	int &nbtags_dn()
 	{
 		if (not nbtags_dn_isLoaded) {
@@ -7111,6 +7250,19 @@ void LoadAllBranches()
 		}
 		return nbtags_up_;
 	}
+	int &nbtags_jer()
+	{
+		if (not nbtags_jer_isLoaded) {
+			if (nbtags_jer_branch != 0) {
+				nbtags_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch nbtags_jer_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags_jer_isLoaded = true;
+		}
+		return nbtags_jer_;
+	}
 	float &ht_dn()
 	{
 		if (not ht_dn_isLoaded) {
@@ -7136,6 +7288,19 @@ void LoadAllBranches()
 			ht_up_isLoaded = true;
 		}
 		return ht_up_;
+	}
+	float &ht_jer()
+	{
+		if (not ht_jer_isLoaded) {
+			if (ht_jer_branch != 0) {
+				ht_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch ht_jer_branch does not exist!\n");
+				exit(1);
+			}
+			ht_jer_isLoaded = true;
+		}
+		return ht_jer_;
 	}
 	int &njets20_dn()
 	{
@@ -7332,6 +7497,19 @@ void LoadAllBranches()
 		}
 		return nbtags_reweighted_jec_up_;
 	}
+	int &nbtags_reweighted_jer()
+	{
+		if (not nbtags_reweighted_jer_isLoaded) {
+			if (nbtags_reweighted_jer_branch != 0) {
+				nbtags_reweighted_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch nbtags_reweighted_jer_branch does not exist!\n");
+				exit(1);
+			}
+			nbtags_reweighted_jer_isLoaded = true;
+		}
+		return nbtags_reweighted_jer_;
+	}
 	float &ht30_dn()
 	{
 		if (not ht30_dn_isLoaded) {
@@ -7409,6 +7587,58 @@ void LoadAllBranches()
 			pfmet_phi_up_isLoaded = true;
 		}
 		return pfmet_phi_up_;
+	}
+	float &pfmet_jer()
+	{
+		if (not pfmet_jer_isLoaded) {
+			if (pfmet_jer_branch != 0) {
+				pfmet_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch pfmet_jer_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_jer_isLoaded = true;
+		}
+		return pfmet_jer_;
+	}
+	float &pfmet_jer_phi()
+	{
+		if (not pfmet_jer_phi_isLoaded) {
+			if (pfmet_jer_phi_branch != 0) {
+				pfmet_jer_phi_branch->GetEntry(index);
+			} else { 
+				printf("branch pfmet_jer_phi_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_jer_phi_isLoaded = true;
+		}
+		return pfmet_jer_phi_;
+	}
+	float &pfmet_uncl_dn()
+	{
+		if (not pfmet_uncl_dn_isLoaded) {
+			if (pfmet_uncl_dn_branch != 0) {
+				pfmet_uncl_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch pfmet_uncl_dn_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_uncl_dn_isLoaded = true;
+		}
+		return pfmet_uncl_dn_;
+	}
+	float &pfmet_uncl_up()
+	{
+		if (not pfmet_uncl_up_isLoaded) {
+			if (pfmet_uncl_up_branch != 0) {
+				pfmet_uncl_up_branch->GetEntry(index);
+			} else { 
+				printf("branch pfmet_uncl_up_branch does not exist!\n");
+				exit(1);
+			}
+			pfmet_uncl_up_isLoaded = true;
+		}
+		return pfmet_uncl_up_;
 	}
 	float &sf_dileptrig()
 	{
@@ -8911,6 +9141,8 @@ namespace ssb {
 	const int &nbtags20();
 	const int &nbtags30();
 	const int &ttbar_bkdn();
+	const int &higgs_bkdn();
+	const int &higgs_decay();
 	const float &vtxw();
 	const float &mt();
 	const float &ht();
@@ -8940,10 +9172,13 @@ namespace ssb {
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175();
 	const int &njets_dn();
 	const int &njets_up();
+	const int &njets_jer();
 	const int &nbtags_dn();
 	const int &nbtags_up();
+	const int &nbtags_jer();
 	const float &ht_dn();
 	const float &ht_up();
+	const float &ht_jer();
 	const int &njets20_dn();
 	const int &njets20_up();
 	const int &nbtags20_dn();
@@ -8959,12 +9194,17 @@ namespace ssb {
 	const int &nbtags_reweighted_up();
 	const int &nbtags_reweighted_jec_dn();
 	const int &nbtags_reweighted_jec_up();
+	const int &nbtags_reweighted_jer();
 	const float &ht30_dn();
 	const float &ht30_up();
 	const float &pfmet_dn();
 	const float &pfmet_up();
 	const float &pfmet_phi_dn();
 	const float &pfmet_phi_up();
+	const float &pfmet_jer();
+	const float &pfmet_jer_phi();
+	const float &pfmet_uncl_dn();
+	const float &pfmet_uncl_up();
 	const float &sf_dileptrig();
 	const float &sf_lepeff();
 	const float &sparm0();

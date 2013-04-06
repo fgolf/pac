@@ -103,6 +103,7 @@
 #pragma link C++ fucntion rt::DivideHists;
 #pragma link C++ fucntion rt::AddHists;
 #pragma link C++ fucntion rt::SubtractHists;
+#pragma link C++ fucntion rt::RelativeDiffHists;
 
 // constructors
 #pragma link C++ function rt::TH1Container::TH1Container;

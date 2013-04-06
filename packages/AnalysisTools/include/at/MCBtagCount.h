@@ -74,7 +74,20 @@ namespace at
         const std::vector<int>& vjets_mcflavor,
         const at::Sample::value_type sample,
         const bool is_fastsim = false,
-        const YieldType::value_type yield_type = YieldType::base
+        const YieldType::value_type yield_type = YieldType::base,
+        const unsigned int seed = 123456
+    );
+
+    // get a vector of the new of the MC btags using the random number procedure
+    std::vector<LorentzVector> RecountedBjets
+    (
+        const std::vector<LorentzVector>& vjets_p4,
+        const std::vector<bool>& vjets_btags,
+        const std::vector<int>& vjets_mcflavor,
+        const at::Sample::value_type sample,
+        const bool is_fastsim = false,
+        const YieldType::value_type yield_type = YieldType::base,
+        const unsigned int seed = 123456
     );
 
 } // namespace at

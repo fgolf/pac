@@ -11,7 +11,12 @@
 #include <iostream>
 #include <boost/program_options.hpp>
 
-using namespace ssb;
+
+const float m_sb       = 525.0f;
+const float m_chargino = 250.0f;
+const bool do_btag_sf  = true;
+const bool check_mass  = true;
+// const bool check_mass  = false;
 
 struct event_info_t
 {
@@ -60,7 +65,11 @@ CTable EventLists
     const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
     const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive,
-    const at::DileptonChargeType::value_type& charge_type      = at::DileptonChargeType::SS
+    const at::DileptonChargeType::value_type& charge_type      = at::DileptonChargeType::SS,
+    const at::YieldType::value_type jes_type                   = at::YieldType::base,
+    const at::YieldType::value_type beff_type                  = at::YieldType::base,
+    const at::YieldType::value_type met_type                  = at::YieldType::base,
+    const bool do_jer                                          = false
 )
 {
     const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
@@ -77,58 +86,146 @@ CTable EventLists
         // intialize event
         samesignbtag.GetEntry(entry);
 
+        // hard coded mess to troubleshoot --> delete me when done
+        const bool good_mass = (rt::is_equal(ssb::sparm0(), m_sb) && rt::is_equal(ssb::sparm1(), m_chargino));
+        if (not good_mass && check_mass)
+        {
+            continue;
+        }
+
         // selection
         //if (is_real_data() && not is_good_lumi())   {continue;}
         switch(charge_type)
         {
-            case at::DileptonChargeType::SS: if(not is_ss()) {continue;}; break;
-            case at::DileptonChargeType::SF: if(not is_sf()) {continue;}; break;
-            case at::DileptonChargeType::DF: if(not is_df()) {continue;}; break;
-            case at::DileptonChargeType::OS: if(not is_os()) {continue;}; break;
+            case at::DileptonChargeType::SS: if (not ssb::is_ss()) {continue;}; break;
+            case at::DileptonChargeType::SF: if (not ssb::is_sf()) {continue;}; break;
+            case at::DileptonChargeType::DF: if (not ssb::is_df()) {continue;}; break;
+            case at::DileptonChargeType::OS: if (not ssb::is_os()) {continue;}; break;
             default: continue;
         }
-        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
-        if (is_real_data() && not is_good_lumi()) {continue;}
-        if (is_os() && dilep_type()==1)           {continue;}  // don't care about mm/OS events
+        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type, jes_type, beff_type, met_type, do_btag_sf, do_jer)) {continue;}
+        if (ssb::is_real_data() && not ssb::is_good_lumi()) {continue;}
+        if (ssb::is_os() && ssb::dilep_type()==1)           {continue;}  // don't care about mm/OS events
 
         // MC matching
-        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool true_ss_event = not ssb::is_real_data() ? ((ssb::lep1_is_fromw()==1 && ssb::lep2_is_fromw()==1) && (ssb::lep1_mc3id()*ssb::lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(sample).type == at::SampleType::rare);
-        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc) {continue;}
+        if ((not ssb::is_real_data()) && (not true_ss_event) && is_rare_mc) {continue;}
 
         // local variables
-        const string channel = at::GetDileptonHypTypeName(dilep_type());
-        const string l1_flav = (abs(lep1_pdgid())==11 ? "el" : "mu");
-        const string l2_flav = (abs(lep2_pdgid())==11 ? "el" : "mu");
+        const string channel = at::GetDileptonHypTypeName(ssb::dilep_type());
+        const string l1_flav = (abs(ssb::lep1_pdgid())==11 ? "el" : "mu");
+        const string l2_flav = (abs(ssb::lep2_pdgid())==11 ? "el" : "mu");
+
+        // kinematic variables that define the signal region
+        int njets   = ssb::njets();
+        float ht    = ssb::ht();
+        float met   = ssb::pfmet();
+        int nbtags  = ssb::nbtags();
+
+        // apply the btag scale factor
+        if (not ssb::is_real_data() && do_btag_sf)
+        {
+            nbtags = ssb::nbtags_reweighted();
+        }
+
+         if (not ssb::is_real_data())
+         {
+             // jet scale up/down
+             switch(jes_type)
+             {
+                 case at::YieldType::up:
+                     njets  = ssb::njets_up();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_up() : ssb::nbtags_up());
+                     ht     = ssb::ht_up();
+                     met    = ssb::pfmet_up();
+                     break;
+                 case at::YieldType::down:
+                     njets  = ssb::njets_dn();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_dn() : ssb::nbtags_dn());
+                     ht     = ssb::ht_dn();
+                     met    = ssb::pfmet_dn();
+                     break;
+                 case at::YieldType::base:
+                     njets  = ssb::njets();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     ht     = ssb::ht();
+                     met    = ssb::pfmet();
+                     break;
+                 default:
+                     njets  = ssb::njets();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     ht     = ssb::ht();
+                     met    = ssb::pfmet();
+                     break;
+             }
+ 
+             // btag scale up/down
+             // this will overide the nbtags setting above
+             switch(beff_type)
+             {
+                 case at::YieldType::up:
+                     nbtags = ssb::nbtags_reweighted_up();
+                     break;
+                 case at::YieldType::down:
+                     nbtags = ssb::nbtags_reweighted_dn();
+                     break;
+                 case at::YieldType::base:
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     break;
+                 default:
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     break;
+             }
+
+            if (do_jer)
+            {
+                njets  = ssb::njets_jer();
+                ht     = ssb::ht_jer();
+                met    = ssb::pfmet_jer();
+                nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jer() : ssb::nbtags_jer());
+            }
+
+             // btag scale up/down
+             // this will overide the nbtags setting above
+             switch(met_type)
+             {
+                 case at::YieldType::up  : met = ssb::pfmet_uncl_up(); break;
+                 case at::YieldType::down: met = ssb::pfmet_uncl_dn(); break;
+                 default: {/*do nothing*/}
+             }
+
+         }
+
 
         // store the event info
         const event_info_t event_info =
         {
-            run(), 
-            ls(), 
-            evt(), 
+            ssb::run(), 
+            ssb::ls(), 
+            ssb::evt(), 
             channel, 
             l1_flav, 
-            lep1_p4().pt(), 
-            lep1_p4().eta(), 
-            lep1_p4().phi(), 
-            lep1_passes_id(), 
-            lep1_corpfiso(), 
-            10000*lep1_d0(), 
-            10000*lep1_dz(), 
+            ssb::lep1_p4().pt(), 
+            ssb::lep1_p4().eta(), 
+            ssb::lep1_p4().phi(), 
+            ssb::lep1_passes_id(), 
+            ssb::lep1_corpfiso(), 
+            10000*ssb::lep1_d0(), 
+            10000*ssb::lep1_dz(), 
             l2_flav, 
-            lep2_p4().pt(), 
-            lep2_p4().eta(), 
-            lep2_p4().phi(), 
-            lep2_passes_id(), 
-            lep2_corpfiso(), 
-            10000*lep2_d0(), 
-            10000*lep2_dz(), 
-            dilep_mass(), 
-            pfmet(), 
-            ht(), 
-            njets(), 
-            nbtags(), 
+            ssb::lep2_p4().pt(), 
+            ssb::lep2_p4().eta(), 
+            ssb::lep2_p4().phi(), 
+            ssb::lep2_passes_id(), 
+            ssb::lep2_corpfiso(), 
+            10000*ssb::lep2_d0(), 
+            10000*ssb::lep2_dz(), 
+            ssb::dilep_mass(), 
+            met, 
+            ht, 
+            njets, 
+            nbtags, 
         };
         events.push_back(event_info);
     }
@@ -212,9 +309,15 @@ CTable EventCounts
     const at::Sample::value_type& sample,
     const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
-    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive
+    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive,
+    const at::YieldType::value_type jes_type                   = at::YieldType::base,
+    const at::YieldType::value_type beff_type                  = at::YieldType::base,
+    const at::YieldType::value_type met_type                  = at::YieldType::base,
+    const bool do_jer                                          = false
 )
 {
+    using namespace ssb;
+
     const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
     const std::string srt_name         = ss::GetSignalRegionTypeName(signal_region_type);
     const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, anal_type, signal_region_type);
@@ -233,13 +336,20 @@ CTable EventCounts
         
         //cout << Form("run: %d, ls: %d, event: %d", run(), ls(), evt()) << endl;
 
+        // hard coded mess to troubleshoot --> delete me when done
+        const bool good_mass = (rt::is_equal(ssb::sparm0(), m_sb) && rt::is_equal(ssb::sparm1(), m_chargino));
+        if (not good_mass && check_mass)
+        {
+            continue;
+        }
+
         // selection
-        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type)) {continue;}
+        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type, jes_type, beff_type, met_type, do_btag_sf, do_jer)) {continue;}
         if (is_real_data() && not is_good_lumi()) {continue;}
         if (is_os() && dilep_type()==1)           {continue;}
 
         // MC matching
-        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
+        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()==1 && lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(sample).type == at::SampleType::rare);
         if ((not is_real_data()) && (not true_ss_event) && is_rare_mc) {continue;}
 
@@ -301,19 +411,27 @@ try
     std::string output_file             = "";
     std::string charge_option           = "ss";
     bool print_list                     = true;
+    int jes                             = 0;
+    int beff                            = 0;
+    int met                             = 0;
+    bool jer                            = false;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"      , "print this menu")
-        ("sample"    , po::value<std::string>(&sample_name)             , "sample to run on (from at/Samples.h)"                    )
-        ("input"    , po::value<std::string>(&input_file)               , "name of input root file (optional)"                      )
-        ("output"    , po::value<std::string>(&output_file)             , "output file name for lists (blank means print to screen)")
-        ("sr"        , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                     )
-        ("sr_type"   , po::value<std::string>(&signal_region_type_name) , "signal region type (default is inclusive)"               )
-        ("anal_type" , po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"           )
-        ("charge"    , po::value<std::string>(&charge_option)           , "charge option (ss, sf, df, os, all)"                     )
-        ("print_list", po::value<bool>(&print_list)                     , "print the event lists (default is true)"                 )
+        ("sample"    , po::value<std::string>(&sample_name)             , "sample to run on (from at/Samples.h)"                           )
+        ("input"    , po::value<std::string>(&input_file)               , "name of input root file (optional)"                             )
+        ("output"    , po::value<std::string>(&output_file)             , "output file name for lists (blank means print to screen)"       )
+        ("sr"        , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                            )
+        ("sr_type"   , po::value<std::string>(&signal_region_type_name) , "signal region type (default is inclusive)"                      )
+        ("anal_type" , po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"                  )
+        ("charge"    , po::value<std::string>(&charge_option)           , "charge option (ss, sf, df, os, all)"                            )
+        ("print_list", po::value<bool>(&print_list)                     , "print the event lists (default is true)"                        )
+        ("jer"       , po::value<bool>(&jer)                            , "JER flag (1 apply JER rescale, else do nothing)"                )
+        ("jes"       , po::value<int>(&jes)                             , "JES flag (+1 scale up, -1 scale down, 0 do nothing)"            )
+        ("beff"      , po::value<int>(&beff)                            , "beff flag (+1 scale up, -1 scale down, 0 do nothing)"           )
+        ("met"       , po::value<int>(&met)                             , "unclustered MET flag (+1 scale up, -1 scale down, 0 do nothing)")
 
         ;
 
@@ -347,6 +465,9 @@ try
     const ss::AnalysisType::value_type at      = ss::GetAnalysisTypeFromName(analysis_type_name);
     const ss::SignalRegionType::value_type srt = ss::GetSignalRegionTypeFromName(signal_region_type_name);
     const ss::SignalRegion::value_type sr      = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
+    const at::YieldType::value_type jes_type   = at::GetYieldType(jes);
+    const at::YieldType::value_type beff_type  = at::GetYieldType(beff);
+    const at::YieldType::value_type met_type   = at::GetYieldType(met);
 
     // write output
     if (not output_file.empty())
@@ -373,28 +494,28 @@ try
         chain.Add(Form("babies/%s/%s.root", ss::GetAnalysisTypeInfo(at).short_name.c_str(), sample_info.name.c_str()));
     }
 
-    CTable counts = EventCounts(chain, sample, at, sr, srt);
+    CTable counts = EventCounts(chain, sample, at, sr, srt, jes_type, beff_type, met_type, jer);
     out << "total yields:\n" << counts << endl; 
     if (print_list)
     {
         if (charge_option == "all" or charge_option =="ss")
         {
-            CTable ss_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::SS);
+            CTable ss_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SS, jes_type, beff_type, met_type, jer);
             out << "printing SS events:\n" << ss_lists << endl;
         }
         if (charge_option == "all" or charge_option =="sf")
         {
-            CTable sf_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::SF);
+            CTable sf_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SF, jes_type, beff_type, met_type, jer);
             out << "printing SF events:\n" << sf_lists << endl;
         }
         if (charge_option == "all" or charge_option =="df")
         {
-            CTable df_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::DF);
+            CTable df_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::DF, jes_type, beff_type, met_type, jer);
             out << "printing DF events:\n" << df_lists << endl;
         }
         if (charge_option == "all" or charge_option =="os")
         {
-            CTable os_lists = EventLists (chain, sample, at, sr, srt, at::DileptonChargeType::OS);
+            CTable os_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::OS, jes_type, beff_type, met_type, jer);
             out << "printing OS events:\n" << os_lists << endl;
         }
     }

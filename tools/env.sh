@@ -25,7 +25,7 @@ export PAC=$project_dir
 alias cdpac="cd $PAC"
 
 # set the path to CMS2 CORE 
-export CMS2CORE_TAG=ss2012_V02-05-09
+export CMS2CORE_TAG=ss2012_V02-05-10
 export CMS2CORE=$PAC/externals/source/cms2_core/$CMS2CORE_TAG/CORE
 
 # convenience
@@ -42,17 +42,17 @@ if [ -d "$project_dir/lib" ] ; then
     DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin
 elif [ ! -z $CMSSW_BASE ] ; then
-    LD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$LD_LIBRARY_PATH:$ROOTSYS/lib
-    DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$DYLD_LIBRARY_PATH:$ROOTSYS/lib
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$DYLD_LIBRARY_PATH
+    LD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$LD_LIBRARY_PATH:$ROOTSYS/lib
+    DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$DYLD_LIBRARY_PATH:$ROOTSYS/lib
     PATH=$PATH:$PAC/bin/cmssw/release
     PATH=${PATH/\/bin\/release/${PAC}\/bin\/cmssw\/release} # kludge: replace the path with bin/cmssw/release
 else
-    LD_LIBRARY_PATH=$project_dir/bin/release:$LD_LIBRARY_PATH
-    DYLD_LIBRARY_PATH=$project_dir/bin/release:$DYLD_LIBRARY_PATH
     LD_LIBRARY_PATH=$project_dir/bin/debug:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/debug:$DYLD_LIBRARY_PATH
+    LD_LIBRARY_PATH=$project_dir/bin/release:$LD_LIBRARY_PATH
+    DYLD_LIBRARY_PATH=$project_dir/bin/release:$DYLD_LIBRARY_PATH
     PATH=$PATH:$PAC/bin/release
     PATH=${PATH/\/bin\/cmssw\/release/${PAC}\/bin\/release} # kludge: replace the old path with bin/release
 fi

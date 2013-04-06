@@ -485,14 +485,15 @@ namespace at
         }
     }
 
-    unsigned int MCBtagCount
+    std::vector<LorentzVector> RecountedBjets
     (
         const std::vector<LorentzVector>& vjets_p4,
         const std::vector<bool>& vjets_btags,
         const std::vector<int>& vjets_mcflavor,
         const at::Sample::value_type sample,
         const bool is_fastsim,
-        const YieldType::value_type yield_type
+        const YieldType::value_type yield_type,
+        const unsigned int seed
     )
     {
         // check inputs
@@ -515,10 +516,11 @@ namespace at
         const int unc_type_light = 0;
 
         // random number generator
-        static TRandom random(123456);
+        static TRandom random;
+        random.SetSeed(seed);
 
         // loop over jets
-        unsigned int num_btags = 0; 
+        std::vector<LorentzVector> bjets_p4; 
         for (size_t jidx = 0; jidx != vjets_p4.size(); jidx++)
         {
             const bool btagged   = vjets_btags.at(jidx);
@@ -534,14 +536,29 @@ namespace at
             if (CountBtag(btagged, sf, eff, random_number))
             {
                 //cout << "couting this btag as a btag" << endl;
-                num_btags++; 
+                bjets_p4.push_back(vjets_p4.at(jidx)); 
             }
             else
             {
                 //cout << "NOT couting this btag as a btag" << endl;
             }
         }
-        return num_btags;
+        return bjets_p4;
     }
+
+    unsigned int MCBtagCount
+    (
+        const std::vector<LorentzVector>& vjets_p4,
+        const std::vector<bool>& vjets_btags,
+        const std::vector<int>& vjets_mcflavor,
+        const at::Sample::value_type sample,
+        const bool is_fastsim,
+        const YieldType::value_type yield_type,
+        const unsigned int seed
+    )
+    {
+        return RecountedBjets(vjets_p4, vjets_btags, vjets_mcflavor, sample, is_fastsim, yield_type, seed).size();
+    }
+
 
 } // namespace at

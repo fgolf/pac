@@ -226,6 +226,8 @@ namespace ssb {
 	const int &nbtags20() { return samesignbtag.nbtags20(); }
 	const int &nbtags30() { return samesignbtag.nbtags30(); }
 	const int &ttbar_bkdn() { return samesignbtag.ttbar_bkdn(); }
+	const int &higgs_bkdn() { return samesignbtag.higgs_bkdn(); }
+	const int &higgs_decay() { return samesignbtag.higgs_decay(); }
 	const float &vtxw() { return samesignbtag.vtxw(); }
 	const float &mt() { return samesignbtag.mt(); }
 	const float &ht() { return samesignbtag.ht(); }
@@ -255,10 +257,13 @@ namespace ssb {
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175(); }
 	const int &njets_dn() { return samesignbtag.njets_dn(); }
 	const int &njets_up() { return samesignbtag.njets_up(); }
+	const int &njets_jer() { return samesignbtag.njets_jer(); }
 	const int &nbtags_dn() { return samesignbtag.nbtags_dn(); }
 	const int &nbtags_up() { return samesignbtag.nbtags_up(); }
+	const int &nbtags_jer() { return samesignbtag.nbtags_jer(); }
 	const float &ht_dn() { return samesignbtag.ht_dn(); }
 	const float &ht_up() { return samesignbtag.ht_up(); }
+	const float &ht_jer() { return samesignbtag.ht_jer(); }
 	const int &njets20_dn() { return samesignbtag.njets20_dn(); }
 	const int &njets20_up() { return samesignbtag.njets20_up(); }
 	const int &nbtags20_dn() { return samesignbtag.nbtags20_dn(); }
@@ -274,12 +279,17 @@ namespace ssb {
 	const int &nbtags_reweighted_up() { return samesignbtag.nbtags_reweighted_up(); }
 	const int &nbtags_reweighted_jec_dn() { return samesignbtag.nbtags_reweighted_jec_dn(); }
 	const int &nbtags_reweighted_jec_up() { return samesignbtag.nbtags_reweighted_jec_up(); }
+	const int &nbtags_reweighted_jer() { return samesignbtag.nbtags_reweighted_jer(); }
 	const float &ht30_dn() { return samesignbtag.ht30_dn(); }
 	const float &ht30_up() { return samesignbtag.ht30_up(); }
 	const float &pfmet_dn() { return samesignbtag.pfmet_dn(); }
 	const float &pfmet_up() { return samesignbtag.pfmet_up(); }
 	const float &pfmet_phi_dn() { return samesignbtag.pfmet_phi_dn(); }
 	const float &pfmet_phi_up() { return samesignbtag.pfmet_phi_up(); }
+	const float &pfmet_jer() { return samesignbtag.pfmet_jer(); }
+	const float &pfmet_jer_phi() { return samesignbtag.pfmet_jer_phi(); }
+	const float &pfmet_uncl_dn() { return samesignbtag.pfmet_uncl_dn(); }
+	const float &pfmet_uncl_up() { return samesignbtag.pfmet_uncl_up(); }
 	const float &sf_dileptrig() { return samesignbtag.sf_dileptrig(); }
 	const float &sf_lepeff() { return samesignbtag.sf_lepeff(); }
 	const float &sparm0() { return samesignbtag.sparm0(); }
