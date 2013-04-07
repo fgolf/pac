@@ -723,7 +723,7 @@ int SSAnalysisLooper::SetJetCorrector(std::vector<std::string> &list_of_filename
 
     m_jet_corrector.reset(makeJetCorrector(list_of_filenames));
     m_met_corrector.reset(new MetCorrector(list_of_filenames));
-    if (!m_jet_corrector && !m_met_corrector) return 1;
+    if (!m_jet_corrector && !m_met_corrector) {return 1;}
     return 0;
 }
 
@@ -762,54 +762,6 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 }
             }
         }
-
-        // fix for wgamma* -> lnu2e sample
-        // /WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM
-        // This had an unphysical peak in the m_3l distribtuon
-        //if (m_sample == at::Sample::wgstar2e)
-        //{
-        //    vector<LorentzVector> l_p4;
-        //    for (size_t i = 0; i != genps_p4().size(); i++)
-        //    {
-        //        const unsigned int id = abs(genps_id().at(i));
-        //        if (genps_status().at(i) != 3) {continue;}
-
-        //        if (id == 11)
-        //        {
-        //            l_p4.push_back(genps_p4().at(i));
-        //        }
-        //        if (id == 13)
-        //        {
-        //            l_p4.push_back(genps_p4().at(i));
-        //        }
-        //    }
-
-        //    // sort by pt
-        //    std::sort(l_p4.begin(), l_p4.end(), at::SortByPt<LorentzVector>());
-
-        //    // must have 3 generater level leptons
-        //    if (l_p4.size() < 3) 
-        //    {
-        //        return 0;
-        //    }
-
-        //    //const float m_3l      = (l_p4[0] + l_p4[1] + l_p4[2]).mass();
-        //    const float pt_max    = l_p4.at(0).pt();
-        //    const float m01       = (l_p4[0] + l_p4[1]).mass();
-        //    const float m02       = (l_p4[0] + l_p4[2]).mass();
-        //    const float m12       = (l_p4[1] + l_p4[2]).mass();
-        //    const bool pt_max_cut = (100.0 < pt_max && pt_max < 160.0);
-        //    const bool m01_cut    = (62.0 < m01 && m01 < 72.0);
-        //    const bool m02_cut    = (52.0 < m02 && m02 < 55.0);
-        //    const bool m12_cut    = (7.2 < m12 && m12 < 8.2);
-        //    const bool reject     = (pt_max_cut && m01_cut && m02_cut && m12_cut);
-
-        //    if (reject)
-        //    {
-        //        if (m_verbose) {std::cout << "Wgamma* --> 2e sample bug fix: event rejected" << std::endl;}
-        //        return 0;
-        //    }
-        //}
 
         // event logic variables 
         // --------------------------------------------------------------------------------------------------------- //
