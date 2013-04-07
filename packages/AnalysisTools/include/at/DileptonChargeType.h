@@ -27,8 +27,11 @@ namespace at
 	// return the title for latex of the name the DileptonChargeType
 	std::string GetDileptonChargeTypeLatex(const DileptonChargeType::value_type& charge_type);
 
-	// get the type form the name
+	// get the type from the name
 	DileptonChargeType::value_type GetDilepChargeTypeFromName(std::string charge_type_name); 
+
+	// get the type from the name number
+	DileptonChargeType::value_type GetDilepChargeTypeFromNumber(int charge_type_num); 
 };
 
 #endif // DILEPTONCHARGETYPE_H 

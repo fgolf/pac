@@ -55,5 +55,23 @@ namespace at
         };
         throw std::domain_error(Form("ERROR: at::GetDilepChargeTypeFromName: name %s not found", charge_type_name.c_str()));
 	}
+
+	DileptonChargeType::value_type GetDilepChargeTypeFromNumber(int charge_type_num) 
+	{
+        if (charge_type_num < 0) 
+        {
+            return DileptonChargeType::static_size;
+        }
+        switch(charge_type_num)
+        {
+            case 0: return DileptonChargeType::SS; break;
+            case 1: return DileptonChargeType::SF; break;
+            case 2: return DileptonChargeType::DF; break;
+            case 3: return DileptonChargeType::OS; break;
+            case 4: return DileptonChargeType::static_size; break;
+            default:
+                throw std::domain_error(Form("ERROR: at::GetDilepChargeTypeFromName: num %d not found", charge_type_num));
+        };
+	}
 }
 
