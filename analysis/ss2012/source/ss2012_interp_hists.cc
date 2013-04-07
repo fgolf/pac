@@ -44,6 +44,9 @@ try
     //int yield_type_raw              = 0;
     float lumi                      = 1.0;
     bool verbose                    = false;
+    int run                         = -1;
+    int ls                          = -1;
+    int event                       = -1;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -71,6 +74,9 @@ try
         ("lumi"      , po::value<float>(&lumi)                         , "luminosity"                                                                    )
         ("excl"      , po::value<bool>(&exclusive)                     , "use exclusive signal region"                                                   )
         ("verbose"   , po::value<bool>(&verbose)                       , "verbosity"                                                                     )
+        ("run"       , po::value<int>(&run)                            , "select a specific run (negative numbers == all)"                               )
+        ("ls"        , po::value<int>(&ls)                             , "select a specific ls (negative numbers == all)"                                )
+        ("event"     , po::value<int>(&event)                          , "select a specific event (negative numbers == all)"                             )
         ;
 
     // parse it
@@ -128,6 +134,9 @@ try
     cout << "lumi                :\t" << lumi                << endl;
     cout << "exclusive           :\t" << exclusive           << endl;
     cout << "verbose             :\t" << verbose             << endl;
+    cout << "run                 :\t" << run                 << endl;
+    cout << "ls                  :\t" << ls                  << endl;
+    cout << "event               :\t" << event               << endl;
 
     // check that input file exists and is specified
     if (!input_file.empty())
@@ -204,7 +213,10 @@ try
         number_of_events,
         /*good run list =*/"",
         is_data,
-        verbose
+        verbose,
+        run,
+        ls,
+        event
     );
 
     // done 

@@ -41,6 +41,7 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
         if (1.4442 < aeta && aeta < 1.566)
         {
             cout << "[ss::TagAndProbeScaleFactor] WARNING -> eta is in the transition region. returning bogus value -999999" << endl;
+            cout << Form("[ss::TagAndProbeScaleFactor] id: %d pt: %f eta: %f", id, pt, aeta) << endl; 
             return -999999.0;
         }
         
@@ -49,42 +50,42 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
             if (0.00   < aeta && aeta < 0.80  ) {return 0.834;}
             if (0.80   < aeta && aeta < 1.4442) {return 0.973;}
             if (1.566  < aeta && aeta < 2.00  ) {return 0.954;}
-            if (2.00   < aeta && aeta < 2.50  ) {return 1.119;}
+            if (2.00   < aeta                 ) {return 1.119;}
         }
         else if (15 < pt && pt < 20)
         {
             if (0.00   < aeta && aeta < 0.80  ) {return 0.918;}
             if (0.80   < aeta && aeta < 1.4442) {return 0.906;}
             if (1.566  < aeta && aeta < 2.00  ) {return 0.909;}
-            if (2.00   < aeta && aeta < 2.50  ) {return 0.944;}
+            if (2.00   < aeta                 ) {return 0.944;}
         }
         else if (20 < pt && pt < 30)
         {
             if (0.00   < aeta && aeta < 0.80  ) {return 0.954;}
             if (0.80   < aeta && aeta < 1.4442) {return 0.923;}
             if (1.566  < aeta && aeta < 2.00  ) {return 0.921;}
-            if (2.00   < aeta && aeta < 2.50  ) {return 0.993;}
+            if (2.00   < aeta                 ) {return 0.993;}
         }
         else if (30 < pt && pt < 40)
         {
             if (0.00   < aeta && aeta < 0.80  ) {return 0.960;}
             if (0.80   < aeta && aeta < 1.4442) {return 0.935;}
             if (1.566  < aeta && aeta < 2.00  ) {return 0.924;}
-            if (2.00   < aeta && aeta < 2.50  ) {return 0.959;}
+            if (2.00   < aeta                 ) {return 0.959;}
         }
         else if (40 < pt && pt < 50)
         {
             if (0.00   < aeta && aeta < 0.80  ) {return 0.972;}
             if (0.80   < aeta && aeta < 1.4442) {return 0.955;}
             if (1.566  < aeta && aeta < 2.00  ) {return 0.950;}
-            if (2.00   < aeta && aeta < 2.50  ) {return 0.968;}
+            if (2.00   < aeta                 ) {return 0.968;}
         }
         else if (pt > 50)
         {
             if (0.00   < aeta && aeta < 0.80  ) {return 0.969;}
             if (0.80   < aeta && aeta < 1.4442) {return 0.956;}
             if (1.566  < aeta && aeta < 2.00  ) {return 0.995;}
-            if (2.00   < aeta && aeta < 2.50  ) {return 0.969;}
+            if (2.00   < aeta                 ) {return 0.969;}
         }
 
         // if we get here, return bogus value
@@ -98,32 +99,32 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
         if (10 < pt && pt < 15)
         {
             if (0.00  < aeta && aeta < 1.20) {return 0.973;}
-            if (1.20  < aeta && aeta < 2.50) {return 0.954;}
+            if (1.20  < aeta               ) {return 0.954;}
         }
         else if (15 < pt && pt < 20)
         {
             if (0.00  < aeta && aeta < 1.20) {return 0.957;}
-            if (1.20  < aeta && aeta < 2.50) {return 0.971;}
+            if (1.20  < aeta               ) {return 0.971;}
         }
         else if (20 < pt && pt < 30)
         {
             if (0.00  < aeta && aeta < 1.20) {return 0.964;}
-            if (1.20  < aeta && aeta < 2.50) {return 0.981;}
+            if (1.20  < aeta               ) {return 0.981;}
         }
         else if (30 < pt && pt < 40)
         {
             if (0.00  < aeta && aeta < 1.20) {return 0.971;}
-            if (1.20  < aeta && aeta < 2.50) {return 0.978;}
+            if (1.20  < aeta               ) {return 0.978;}
         }
         else if (40 < pt && pt < 50)
         {
             if (0.00  < aeta && aeta < 1.20) {return 0.978;}
-            if (1.20  < aeta && aeta < 2.50) {return 0.984;}
+            if (1.20  < aeta               ) {return 0.984;}
         }
         else if (pt > 50)
         {
             if (0.00  < aeta && aeta < 1.20) {return 0.974;}
-            if (1.20  < aeta && aeta < 2.50) {return 0.977;}
+            if (1.20  < aeta               ) {return 0.977;}
         }
 
         // if we get here, return bogus value

@@ -985,7 +985,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         }
 
         // loop over hypotheses
-        HypInfo best_hyp(0, DileptonChargeType::static_size, DileptonHypType::static_size);
+        HypInfo best_hyp((hyp_type().empty() ? -1 : 0), DileptonChargeType::static_size, DileptonHypType::static_size);
         for (size_t ihyp = 0; ihyp != hyp_type().size(); ihyp++)
         {                
             // leptons variables
@@ -1128,20 +1128,21 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         // --------------------------------------------------------------------------------------------------------- //
 
         // best hyp index
-        unsigned int hyp_idx = best_hyp.idx;
-        DileptonChargeType::value_type event_type = best_hyp.charge_type;
+        int hyp_idx = best_hyp.idx;
+        const DileptonChargeType::value_type charge_type = best_hyp.charge_type;
 
         // all: 0, mm: 1, em: 2, ee: 3
-        DileptonHypType::value_type dilepton_type = hyp_p4().empty() ? DileptonHypType::static_size : hyp_typeToHypType(hyp_type().at(hyp_idx));
+        const DileptonHypType::value_type dilepton_type = ((hyp_idx < 0 or hyp_p4().empty()) ? DileptonHypType::static_size : hyp_typeToHypType(hyp_type().at(hyp_idx)));
 
         // write events to the tree for book keeping
-        if (event_type == DileptonChargeType::static_size)
+        if (charge_type == DileptonChargeType::static_size)
         {
             if (m_verbose) {std::cout << "fails good event type requirement" << std::endl;}
 
             // fill event level info 
-            m_evt.event_info.FillCommon(m_sample, filename);
             m_evt.dilep_type = DileptonHypType::static_size;
+            m_evt.charge_type = -999999;
+            m_evt.event_info.FillCommon(m_sample, filename);
 
             // fill the dilepton analysis independent variables 
             if (not hyp_p4().empty())
@@ -1161,7 +1162,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         else
         {
             if (m_verbose) {std::cout << "passes good dilepton type requirement: " << at::GetDileptonHypTypeName(dilepton_type) << std::endl;}
-            if (m_verbose) {std::cout << "passes good charge type requirement:  "  << at::GetDileptonChargeTypeName(event_type) << std::endl;}
+            if (m_verbose) {std::cout << "passes good charge type requirement:  "  << at::GetDileptonChargeTypeName(charge_type) << std::endl;}
             if (m_verbose) {std::cout << "good hyp index is : " << hyp_idx << std::endl;}
         }
 
@@ -1677,14 +1678,15 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         }
         
         // classification
-        m_evt.is_ss   = (event_type==DileptonChargeType::SS);
-        m_evt.is_sf   = (event_type==DileptonChargeType::SF);
-        m_evt.is_df   = (event_type==DileptonChargeType::DF);
-        m_evt.is_os   = (event_type==DileptonChargeType::OS);
-        m_evt.em_mufo = m_evt.em && ((lep1_fo && lep1_is_mu) || (lep2_fo && lep2_is_mu));  
-        m_evt.em_elfo = m_evt.em && ((lep1_fo && lep1_is_el) || (lep2_fo && lep2_is_el));
-        m_evt.is_pp   = hyp_lt_charge().at(hyp_idx)>0 && hyp_ll_charge().at(hyp_idx)>0; 
-        m_evt.is_mm   = hyp_lt_charge().at(hyp_idx)<0 && hyp_ll_charge().at(hyp_idx)<0; 
+        m_evt.is_ss       = (charge_type==DileptonChargeType::SS);
+        m_evt.is_sf       = (charge_type==DileptonChargeType::SF);
+        m_evt.is_df       = (charge_type==DileptonChargeType::DF);
+        m_evt.is_os       = (charge_type==DileptonChargeType::OS);
+        m_evt.charge_type = charge_type;
+        m_evt.em_mufo     = m_evt.em && ((lep1_fo && lep1_is_mu) || (lep2_fo && lep2_is_mu));  
+        m_evt.em_elfo     = m_evt.em && ((lep1_fo && lep1_is_el) || (lep2_fo && lep2_is_el));
+        m_evt.is_pp       = hyp_lt_charge().at(hyp_idx)>0 && hyp_ll_charge().at(hyp_idx)>0; 
+        m_evt.is_mm       = hyp_lt_charge().at(hyp_idx)<0 && hyp_ll_charge().at(hyp_idx)<0; 
 
         // selected only triggered events
         if (not((m_evt.ee && m_evt.trig_ee) || (m_evt.em && m_evt.trig_em) || (m_evt.mm && m_evt.trig_mm)))
@@ -2230,49 +2232,49 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             if (dilepton_type==DileptonHypType::MUMU)
             {
                 if(m_verbose) {cout << "type == mm" << endl;}
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[0] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[0] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[0] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[0] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[0] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[0] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[0] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[0] += scale;
+                if(charge_type==DileptonChargeType::SS) m_count_nobtag_ss[0] += scale;
+                if(charge_type==DileptonChargeType::SF) m_count_nobtag_sf[0] += scale;
+                if(charge_type==DileptonChargeType::DF) m_count_nobtag_df[0] += scale;
+                if(charge_type==DileptonChargeType::OS) m_count_nobtag_os[0] += scale;
+                if(charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[0] += scale;
+                if(charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[0] += scale;
+                if(charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[0] += scale;
+                if(charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[0] += scale;
             }
             if (dilepton_type==DileptonHypType::EMU)
             {
                 if(m_verbose) {cout << "type == em" << endl;}
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[1] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[1] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[1] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[1] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[1] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[1] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[1] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[1] += scale;
+                if(charge_type==DileptonChargeType::SS) m_count_nobtag_ss[1] += scale;
+                if(charge_type==DileptonChargeType::SF) m_count_nobtag_sf[1] += scale;
+                if(charge_type==DileptonChargeType::DF) m_count_nobtag_df[1] += scale;
+                if(charge_type==DileptonChargeType::OS) m_count_nobtag_os[1] += scale;
+                if(charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[1] += scale;
+                if(charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[1] += scale;
+                if(charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[1] += scale;
+                if(charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[1] += scale;
             }
             if (dilepton_type==DileptonHypType::EE)
             {
                 if(m_verbose) {cout << "type == ee" << endl;}
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[2] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[2] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[2] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[2] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[2] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[2] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[2] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[2] += scale;
+                if(charge_type==DileptonChargeType::SS) m_count_nobtag_ss[2] += scale;
+                if(charge_type==DileptonChargeType::SF) m_count_nobtag_sf[2] += scale;
+                if(charge_type==DileptonChargeType::DF) m_count_nobtag_df[2] += scale;
+                if(charge_type==DileptonChargeType::OS) m_count_nobtag_os[2] += scale;
+                if(charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[2] += scale;
+                if(charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[2] += scale;
+                if(charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[2] += scale;
+                if(charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[2] += scale;
             }
             // count all 
             {
-                if(event_type==DileptonChargeType::SS) m_count_nobtag_ss[3] += scale;
-                if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[3] += scale;
-                if(event_type==DileptonChargeType::DF) m_count_nobtag_df[3] += scale;
-                if(event_type==DileptonChargeType::OS) m_count_nobtag_os[3] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[3] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[3] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[3] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[3] += scale;
+                if(charge_type==DileptonChargeType::SS) m_count_nobtag_ss[3] += scale;
+                if(charge_type==DileptonChargeType::SF) m_count_nobtag_sf[3] += scale;
+                if(charge_type==DileptonChargeType::DF) m_count_nobtag_df[3] += scale;
+                if(charge_type==DileptonChargeType::OS) m_count_nobtag_os[3] += scale;
+                if(charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[3] += scale;
+                if(charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[3] += scale;
+                if(charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[3] += scale;
+                if(charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[3] += scale;
             }
         }
     }

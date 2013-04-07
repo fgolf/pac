@@ -30,7 +30,6 @@ namespace ssb {
 	const bool &filt_trkfail() { return samesignbtag.filt_trkfail(); }
 	const bool &filt_eebadsc() { return samesignbtag.filt_eebadsc(); }
 	const bool &passes_metfilters() { return samesignbtag.passes_metfilters(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4() { return samesignbtag.lep1_p4(); }
 	const bool &lep1_passes_id() { return samesignbtag.lep1_passes_id(); }
 	const bool &lep1_passes_iso() { return samesignbtag.lep1_passes_iso(); }
 	const bool &lep1_is_num() { return samesignbtag.lep1_is_num(); }
@@ -73,16 +72,10 @@ namespace ssb {
 	const float &lep1_dbeta04() { return samesignbtag.lep1_dbeta04(); }
 	const float &lep1_sf_lepeff() { return samesignbtag.lep1_sf_lepeff(); }
 	const float &lep1_sf_trig() { return samesignbtag.lep1_sf_trig(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4() { return samesignbtag.lep1_mcp4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4() { return samesignbtag.lep1_mc3p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4() { return samesignbtag.lep1_mc_momp4(); }
 	const int &lep1_mcid() { return samesignbtag.lep1_mcid(); }
 	const int &lep1_mc3id() { return samesignbtag.lep1_mc3id(); }
 	const int &lep1_momid() { return samesignbtag.lep1_momid(); }
 	const int &lep1_mc3_momid() { return samesignbtag.lep1_mc3_momid(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4() { return samesignbtag.lep1_gsf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4() { return samesignbtag.lep1_ctf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4() { return samesignbtag.lep1_sc_p4(); }
 	const bool &lep1_q3agree() { return samesignbtag.lep1_q3agree(); }
 	const bool &lep1_is_conv() { return samesignbtag.lep1_is_conv(); }
 	const int &lep1_qsc() { return samesignbtag.lep1_qsc(); }
@@ -100,7 +93,6 @@ namespace ssb {
 	const float &lep1_ooemoop() { return samesignbtag.lep1_ooemoop(); }
 	const float &lep1_conv_dist() { return samesignbtag.lep1_conv_dist(); }
 	const float &lep1_conv_dcot() { return samesignbtag.lep1_conv_dcot(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4() { return samesignbtag.lep1_gfit_p4(); }
 	const bool &lep1_is_global() { return samesignbtag.lep1_is_global(); }
 	const bool &lep1_is_tracker() { return samesignbtag.lep1_is_tracker(); }
 	const bool &lep1_is_stamu() { return samesignbtag.lep1_is_stamu(); }
@@ -117,7 +109,14 @@ namespace ssb {
 	const float &lep1_pterr() { return samesignbtag.lep1_pterr(); }
 	const float &lep1_ecal_vetodep() { return samesignbtag.lep1_ecal_vetodep(); }
 	const float &lep1_hcal_vetodep() { return samesignbtag.lep1_hcal_vetodep(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4() { return samesignbtag.lep2_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4() { return samesignbtag.lep1_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4() { return samesignbtag.lep1_mcp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4() { return samesignbtag.lep1_mc3p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4() { return samesignbtag.lep1_mc_momp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4() { return samesignbtag.lep1_gsf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4() { return samesignbtag.lep1_ctf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4() { return samesignbtag.lep1_sc_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4() { return samesignbtag.lep1_gfit_p4(); }
 	const bool &lep2_passes_id() { return samesignbtag.lep2_passes_id(); }
 	const bool &lep2_passes_iso() { return samesignbtag.lep2_passes_iso(); }
 	const bool &lep2_is_num() { return samesignbtag.lep2_is_num(); }
@@ -160,16 +159,10 @@ namespace ssb {
 	const float &lep2_dbeta04() { return samesignbtag.lep2_dbeta04(); }
 	const float &lep2_sf_lepeff() { return samesignbtag.lep2_sf_lepeff(); }
 	const float &lep2_sf_trig() { return samesignbtag.lep2_sf_trig(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4() { return samesignbtag.lep2_mcp4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4() { return samesignbtag.lep2_mc3p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4() { return samesignbtag.lep2_mc_momp4(); }
 	const int &lep2_mcid() { return samesignbtag.lep2_mcid(); }
 	const int &lep2_mc3id() { return samesignbtag.lep2_mc3id(); }
 	const int &lep2_momid() { return samesignbtag.lep2_momid(); }
 	const int &lep2_mc3_momid() { return samesignbtag.lep2_mc3_momid(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4() { return samesignbtag.lep2_gsf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4() { return samesignbtag.lep2_ctf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4() { return samesignbtag.lep2_sc_p4(); }
 	const bool &lep2_q3agree() { return samesignbtag.lep2_q3agree(); }
 	const bool &lep2_is_conv() { return samesignbtag.lep2_is_conv(); }
 	const int &lep2_qsc() { return samesignbtag.lep2_qsc(); }
@@ -187,7 +180,6 @@ namespace ssb {
 	const float &lep2_ooemoop() { return samesignbtag.lep2_ooemoop(); }
 	const float &lep2_conv_dist() { return samesignbtag.lep2_conv_dist(); }
 	const float &lep2_conv_dcot() { return samesignbtag.lep2_conv_dcot(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4() { return samesignbtag.lep2_gfit_p4(); }
 	const bool &lep2_is_global() { return samesignbtag.lep2_is_global(); }
 	const bool &lep2_is_tracker() { return samesignbtag.lep2_is_tracker(); }
 	const bool &lep2_is_stamu() { return samesignbtag.lep2_is_stamu(); }
@@ -204,6 +196,14 @@ namespace ssb {
 	const float &lep2_pterr() { return samesignbtag.lep2_pterr(); }
 	const float &lep2_ecal_vetodep() { return samesignbtag.lep2_ecal_vetodep(); }
 	const float &lep2_hcal_vetodep() { return samesignbtag.lep2_hcal_vetodep(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4() { return samesignbtag.lep2_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4() { return samesignbtag.lep2_mcp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4() { return samesignbtag.lep2_mc3p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4() { return samesignbtag.lep2_mc_momp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4() { return samesignbtag.lep2_gsf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4() { return samesignbtag.lep2_ctf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4() { return samesignbtag.lep2_sc_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4() { return samesignbtag.lep2_gfit_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &dilep_p4() { return samesignbtag.dilep_p4(); }
 	const bool &is_os() { return samesignbtag.is_os(); }
 	const bool &is_ss() { return samesignbtag.is_ss(); }
@@ -219,6 +219,7 @@ namespace ssb {
 	const int &fiduciality() { return samesignbtag.fiduciality(); }
 	const unsigned int &selection() { return samesignbtag.selection(); }
 	const bool &is_good_lumi() { return samesignbtag.is_good_lumi(); }
+	const int &charge_type() { return samesignbtag.charge_type(); }
 	const int &njets() { return samesignbtag.njets(); }
 	const int &njets20() { return samesignbtag.njets20(); }
 	const int &njets30() { return samesignbtag.njets30(); }
@@ -291,7 +292,7 @@ namespace ssb {
 	const float &pfmet_uncl_dn() { return samesignbtag.pfmet_uncl_dn(); }
 	const float &pfmet_uncl_up() { return samesignbtag.pfmet_uncl_up(); }
 	const float &sf_dileptrig() { return samesignbtag.sf_dileptrig(); }
-	const float &sf_lepeff() { return samesignbtag.sf_lepeff(); }
+	const float &sf_dilepeff() { return samesignbtag.sf_dilepeff(); }
 	const float &sparm0() { return samesignbtag.sparm0(); }
 	const float &sparm1() { return samesignbtag.sparm1(); }
 	const float &sparm2() { return samesignbtag.sparm2(); }

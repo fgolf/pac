@@ -2052,7 +2052,7 @@ namespace ss
         // do btag scale factor
         if (do_btag_sf)
         {
-            tree.SetAlias("nbs", "(is_real_data==1 ? nbtags : nbtags_reweighted)");
+            tree.SetAlias("nbs", "nbtags_reweighted");
         }
         else
         {

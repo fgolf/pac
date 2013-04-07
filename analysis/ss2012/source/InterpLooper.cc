@@ -221,7 +221,6 @@ void InterpLooper::BookHists()
             const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
 
             hc.Add(new TH2F((sr+"nGenerated"         ).c_str(), (sr+"nGenerated "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"nGenerated_weighted").c_str(), (sr+"nGenerated_weighted "+bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nPassing"           ).c_str(), (sr+"nPassing "           +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effNormNice"        ).c_str(), (sr+"effNormNice "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effNormNicePerc"    ).c_str(), (sr+"effNormNicePerc "    +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
@@ -335,34 +334,6 @@ int InterpLooper::operator()(long event)
         // dilepton hyp type: 1 mm, 2 em, 3 ee
         const at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(dilep_type());
 
-        // Weight Factors
-        // ----------------------------------------------------------------------------------------------------------------------------//
-
-        // no scale factors
-        //const float evt_weight = (is_real_data() ? 1.0 : m_lumi * scale1fb());
-        float evt_weight = 1.0; 
-
-        // scale
-        float vtxw = 1.0;
-        //if (m_do_vtx_reweight)
-        //{
-        //    vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
-        //}
-        evt_weight *= vtxw;
-
-        // apply scale factors
-        if (m_do_scale_factors && not is_real_data())
-        {
-            // lepton efficiencies
-            const float eta1 = (abs(lep1_pdgid()) == 13 ? lep1_p4().eta() : lep1_sc_p4().eta());
-            const float eta2 = (abs(lep2_pdgid()) == 13 ? lep2_p4().eta() : lep2_sc_p4().eta());
-            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
-
-            // trigger scale factor
-            evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
-        }
-        //evt_weight == 1.0;
-
         // denominator histograms 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
@@ -374,8 +345,7 @@ int InterpLooper::operator()(long event)
             // denominator (event counts)
             // ----------------------------------------------------------------------------------------------------------------------- //
 
-            rt::Fill2D(hc[sr+"nGenerated_weighted"], m0, m12, evt_weight);
-            rt::Fill2D(hc[sr+"nGenerated"         ], m0, m12, 1.0       );
+            rt::Fill2D(hc[sr+"nGenerated"], m0, m12, 1.0);
         }
 
         // selections 
@@ -393,7 +363,12 @@ int InterpLooper::operator()(long event)
         if (is_ss()) {charge_type = DileptonChargeType::SS;}
         if (is_sf()) {charge_type = DileptonChargeType::SF;}
         if (is_df()) {charge_type = DileptonChargeType::DF;}
-        if (is_os()) {charge_type = DileptonChargeType::OS;}
+        if (is_os()) {charge_type = DileptonChargeType::OS;}  // dont' care about OS
+        if (ssb::charge_type() < 0)
+        {
+            if (m_verbose) {cout << "failing valid hypothesis requirement\t" << ssb::charge_type() << endl;}
+            return 0;
+        }
         if (charge_type == DileptonChargeType::static_size)
         {
             if (m_verbose) {cout << "failing valid charge type" << endl;}
@@ -446,8 +421,8 @@ int InterpLooper::operator()(long event)
         }
 
         // only keep MC matched events (MC only)
-//         const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0));
-        const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1));
+        const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0));
+//         const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1));
         //const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mcid()*lep2_mcid()>0));
         //const bool lep1_matched  = (abs(lep1_mc3id())==11 or abs(lep1_mc3id())==13 or abs(lep1_mc3id())==15);
         //const bool lep2_matched  = (abs(lep2_mc3id())==11 or abs(lep2_mc3id())==13 or abs(lep2_mc3id())==15);
@@ -489,6 +464,13 @@ int InterpLooper::operator()(long event)
             return 0;
         }
 
+        // at least passes baseline
+        if (not PassesSignalRegion(ss::SignalRegion::sr0, m_analysis_type, m_signal_region_type))
+        {
+            if (m_verbose) {cout << "fails the baseline selection" << endl;}
+            return 0;
+        }
+
         // count events
         if (dilep_type()==DileptonHypType::MUMU)
         {
@@ -518,6 +500,39 @@ int InterpLooper::operator()(long event)
             if(is_df()) m_count_df[3] += 1.0;
             if(is_os()) m_count_os[3] += 1.0;
         }
+                
+        // Weight Factors
+        // ----------------------------------------------------------------------------------------------------------------------------//
+
+        // no scale factors
+        //const float evt_weight = (is_real_data() ? 1.0 : m_lumi * scale1fb());
+        float evt_weight = 1.0; 
+
+        // scale
+        float vtxw = 1.0;
+        //if (m_do_vtx_reweight)
+        //{
+        //    vtxw = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
+        //}
+        evt_weight *= vtxw;
+
+        // apply scale factors
+        if (m_do_scale_factors && not is_real_data())
+        {
+            //cout << filename() << endl;
+
+            // lepton efficiencies
+            const float eta1 = (abs(lep1_pdgid()) == 13 ? lep1_p4().eta() : lep1_sc_p4().eta());
+            const float eta2 = (abs(lep2_pdgid()) == 13 ? lep2_p4().eta() : lep2_sc_p4().eta());
+//             cout << evt() << "\t" << lep1_pdgid() << "\t" << lep1_p4().pt() << "\t" << lep1_p4().eta() << "\t" << lep1_sc_p4().eta() << "\t" << eta1 << endl;
+//             cout << evt() << "\t" << lep2_pdgid() << "\t" << lep2_p4().pt() << "\t" << lep2_p4().eta() << "\t" << lep2_sc_p4().eta() << "\t" << eta2 << endl;
+            evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
+
+            // trigger scale factor
+            evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
+        }
+        //evt_weight == 1.0;
+
 
         // Fill hists
         // ------------------------------------------------------------------------------------//

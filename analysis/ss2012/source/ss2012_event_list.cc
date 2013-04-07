@@ -15,8 +15,8 @@
 const float m_sb       = 525.0f;
 const float m_chargino = 250.0f;
 const bool do_btag_sf  = true;
-const bool check_mass  = true;
-// const bool check_mass  = false;
+// const bool check_mass  = true;
+const bool check_mass  = false;
 
 struct event_info_t
 {
@@ -58,23 +58,60 @@ struct SortByEventInfo
     }
 };
 
+bool IsGoodEvent
+(
+    const at::Sample::value_type& sample,
+    const ss::AnalysisType::value_type analysis_type,
+    const ss::SignalRegion::value_type signal_region,
+    const ss::SignalRegionType::value_type signal_region_type,
+    const at::YieldType::value_type jes_type,
+    const at::YieldType::value_type beff_type,
+    const at::YieldType::value_type met_type,
+    const bool do_jer
+)
+{
+    using namespace ssb;
+
+    // hard coded mess to troubleshoot --> delete me when done
+    const bool good_mass = (rt::is_equal(ssb::sparm0(), m_sb) && rt::is_equal(ssb::sparm1(), m_chargino));
+    if (not good_mass && check_mass)
+    {
+        return false;
+    }
+
+    // basic selection
+    if (ssb::charge_type() < 0) {return false;}
+    if (not ss::PassesSignalRegion(signal_region, analysis_type, signal_region_type, jes_type, beff_type, met_type, do_btag_sf, do_jer)) {return false;}
+    if (is_real_data() && not is_good_lumi()) {return false;}
+    if (is_os() && dilep_type()==1)           {return false;}
+
+    // MC matching
+    const bool true_ss_event = (not is_real_data() ? ((lep1_is_fromw()==1 && lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0)) : false);
+    const bool is_rare_mc = (at::GetSampleInfo(sample).type == at::SampleType::rare);
+    const bool is_sig_mc  = (at::GetSampleInfo(sample).type == at::SampleType::susy);
+    if ((not is_real_data()) && (not true_ss_event) && (is_rare_mc or is_sig_mc)) {return false;}
+
+    // if here, then select
+    return true;
+}
+
 CTable EventLists
 (
     TChain& chain,
     const at::Sample::value_type& sample,
-    const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
+    const ss::AnalysisType::value_type& analysis_type          = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
-    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive,
+    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::exclusive,
     const at::DileptonChargeType::value_type& charge_type      = at::DileptonChargeType::SS,
     const at::YieldType::value_type jes_type                   = at::YieldType::base,
     const at::YieldType::value_type beff_type                  = at::YieldType::base,
-    const at::YieldType::value_type met_type                  = at::YieldType::base,
+    const at::YieldType::value_type met_type                   = at::YieldType::base,
     const bool do_jer                                          = false
 )
 {
-    const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
+    const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(analysis_type);
     const std::string srt_name         = ss::GetSignalRegionTypeName(signal_region_type);
-    const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, anal_type, signal_region_type);
+    const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, analysis_type, signal_region_type);
     const std::string charge_type_name = at::GetDileptonChargeTypeName(charge_type);
 
     // store the events information for sorting
@@ -86,31 +123,15 @@ CTable EventLists
         // intialize event
         samesignbtag.GetEntry(entry);
 
-        // hard coded mess to troubleshoot --> delete me when done
-        const bool good_mass = (rt::is_equal(ssb::sparm0(), m_sb) && rt::is_equal(ssb::sparm1(), m_chargino));
-        if (not good_mass && check_mass)
+        // selection
+        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, jes_type, beff_type, met_type, do_jer))
+        {
+            continue; 
+        }
+        if (charge_type != at::GetDilepChargeTypeFromNumber(ssb::charge_type()))
         {
             continue;
         }
-
-        // selection
-        //if (is_real_data() && not is_good_lumi())   {continue;}
-        switch(charge_type)
-        {
-            case at::DileptonChargeType::SS: if (not ssb::is_ss()) {continue;}; break;
-            case at::DileptonChargeType::SF: if (not ssb::is_sf()) {continue;}; break;
-            case at::DileptonChargeType::DF: if (not ssb::is_df()) {continue;}; break;
-            case at::DileptonChargeType::OS: if (not ssb::is_os()) {continue;}; break;
-            default: continue;
-        }
-        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type, jes_type, beff_type, met_type, do_btag_sf, do_jer)) {continue;}
-        if (ssb::is_real_data() && not ssb::is_good_lumi()) {continue;}
-        if (ssb::is_os() && ssb::dilep_type()==1)           {continue;}  // don't care about mm/OS events
-
-        // MC matching
-        const bool true_ss_event = not ssb::is_real_data() ? ((ssb::lep1_is_fromw()==1 && ssb::lep2_is_fromw()==1) && (ssb::lep1_mc3id()*ssb::lep2_mc3id()>0)) : false;
-        const bool is_rare_mc    = (at::GetSampleInfo(sample).type == at::SampleType::rare);
-        if ((not ssb::is_real_data()) && (not true_ss_event) && is_rare_mc) {continue;}
 
         // local variables
         const string channel = at::GetDileptonHypTypeName(ssb::dilep_type());
@@ -307,20 +328,20 @@ CTable EventCounts
 (
     TChain& chain,
     const at::Sample::value_type& sample,
-    const ss::AnalysisType::value_type& anal_type              = ss::AnalysisType::high_pt,
+    const ss::AnalysisType::value_type& analysis_type          = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
-    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::inclusive,
+    const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::exclusive,
     const at::YieldType::value_type jes_type                   = at::YieldType::base,
     const at::YieldType::value_type beff_type                  = at::YieldType::base,
-    const at::YieldType::value_type met_type                  = at::YieldType::base,
+    const at::YieldType::value_type met_type                   = at::YieldType::base,
     const bool do_jer                                          = false
 )
 {
     using namespace ssb;
 
-    const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(anal_type);
+    const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(analysis_type);
     const std::string srt_name         = ss::GetSignalRegionTypeName(signal_region_type);
-    const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, anal_type, signal_region_type);
+    const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, analysis_type, signal_region_type);
 
     // yields         ee,  mm,  em,  ll
     float y_ss[4] = {0.0, 0.0, 0.0, 0.0};
@@ -336,22 +357,11 @@ CTable EventCounts
         
         //cout << Form("run: %d, ls: %d, event: %d", run(), ls(), evt()) << endl;
 
-        // hard coded mess to troubleshoot --> delete me when done
-        const bool good_mass = (rt::is_equal(ssb::sparm0(), m_sb) && rt::is_equal(ssb::sparm1(), m_chargino));
-        if (not good_mass && check_mass)
-        {
-            continue;
-        }
-
         // selection
-        if (!ss::PassesSignalRegion(signal_region, anal_type, signal_region_type, jes_type, beff_type, met_type, do_btag_sf, do_jer)) {continue;}
-        if (is_real_data() && not is_good_lumi()) {continue;}
-        if (is_os() && dilep_type()==1)           {continue;}
-
-        // MC matching
-        const bool true_ss_event = not is_real_data() ? ((lep1_is_fromw()==1 && lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
-        const bool is_rare_mc    = (at::GetSampleInfo(sample).type == at::SampleType::rare);
-        if ((not is_real_data()) && (not true_ss_event) && is_rare_mc) {continue;}
+        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, jes_type, beff_type, met_type, do_jer))
+        {
+            continue; 
+        }
 
         // fill counts
         if (is_ss()) 
@@ -406,7 +416,7 @@ try
     std::string sample_name             = "data";
     std::string analysis_type_name      = "high_pt";
     std::string signal_region_name      = "sr0";
-    std::string signal_region_type_name = "inclusive";
+    std::string signal_region_type_name = "exclusive";
     std::string input_file              = "";
     std::string output_file             = "";
     std::string charge_option           = "ss";
@@ -424,7 +434,7 @@ try
         ("input"    , po::value<std::string>(&input_file)               , "name of input root file (optional)"                             )
         ("output"    , po::value<std::string>(&output_file)             , "output file name for lists (blank means print to screen)"       )
         ("sr"        , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                            )
-        ("sr_type"   , po::value<std::string>(&signal_region_type_name) , "signal region type (default is inclusive)"                      )
+        ("sr_type"   , po::value<std::string>(&signal_region_type_name) , "signal region type (default is exclusive)"                      )
         ("anal_type" , po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"                  )
         ("charge"    , po::value<std::string>(&charge_option)           , "charge option (ss, sf, df, os, all)"                            )
         ("print_list", po::value<bool>(&print_list)                     , "print the event lists (default is true)"                        )

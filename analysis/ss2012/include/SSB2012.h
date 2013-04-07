@@ -104,9 +104,6 @@ protected:
 	bool	passes_metfilters_;
 	TBranch *passes_metfilters_branch;
 	bool passes_metfilters_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_p4_;
-	TBranch *lep1_p4_branch;
-	bool lep1_p4_isLoaded;
 	bool	lep1_passes_id_;
 	TBranch *lep1_passes_id_branch;
 	bool lep1_passes_id_isLoaded;
@@ -233,15 +230,6 @@ protected:
 	float	lep1_sf_trig_;
 	TBranch *lep1_sf_trig_branch;
 	bool lep1_sf_trig_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_mcp4_;
-	TBranch *lep1_mcp4_branch;
-	bool lep1_mcp4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_mc3p4_;
-	TBranch *lep1_mc3p4_branch;
-	bool lep1_mc3p4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_mc_momp4_;
-	TBranch *lep1_mc_momp4_branch;
-	bool lep1_mc_momp4_isLoaded;
 	int	lep1_mcid_;
 	TBranch *lep1_mcid_branch;
 	bool lep1_mcid_isLoaded;
@@ -254,15 +242,6 @@ protected:
 	int	lep1_mc3_momid_;
 	TBranch *lep1_mc3_momid_branch;
 	bool lep1_mc3_momid_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_gsf_p4_;
-	TBranch *lep1_gsf_p4_branch;
-	bool lep1_gsf_p4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_ctf_p4_;
-	TBranch *lep1_ctf_p4_branch;
-	bool lep1_ctf_p4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_sc_p4_;
-	TBranch *lep1_sc_p4_branch;
-	bool lep1_sc_p4_isLoaded;
 	bool	lep1_q3agree_;
 	TBranch *lep1_q3agree_branch;
 	bool lep1_q3agree_isLoaded;
@@ -314,9 +293,6 @@ protected:
 	float	lep1_conv_dcot_;
 	TBranch *lep1_conv_dcot_branch;
 	bool lep1_conv_dcot_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_gfit_p4_;
-	TBranch *lep1_gfit_p4_branch;
-	bool lep1_gfit_p4_isLoaded;
 	bool	lep1_is_global_;
 	TBranch *lep1_is_global_branch;
 	bool lep1_is_global_isLoaded;
@@ -365,9 +341,30 @@ protected:
 	float	lep1_hcal_vetodep_;
 	TBranch *lep1_hcal_vetodep_branch;
 	bool lep1_hcal_vetodep_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_p4_;
-	TBranch *lep2_p4_branch;
-	bool lep2_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_p4_;
+	TBranch *lep1_p4_branch;
+	bool lep1_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_mcp4_;
+	TBranch *lep1_mcp4_branch;
+	bool lep1_mcp4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_mc3p4_;
+	TBranch *lep1_mc3p4_branch;
+	bool lep1_mc3p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_mc_momp4_;
+	TBranch *lep1_mc_momp4_branch;
+	bool lep1_mc_momp4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_gsf_p4_;
+	TBranch *lep1_gsf_p4_branch;
+	bool lep1_gsf_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_ctf_p4_;
+	TBranch *lep1_ctf_p4_branch;
+	bool lep1_ctf_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_sc_p4_;
+	TBranch *lep1_sc_p4_branch;
+	bool lep1_sc_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep1_gfit_p4_;
+	TBranch *lep1_gfit_p4_branch;
+	bool lep1_gfit_p4_isLoaded;
 	bool	lep2_passes_id_;
 	TBranch *lep2_passes_id_branch;
 	bool lep2_passes_id_isLoaded;
@@ -494,15 +491,6 @@ protected:
 	float	lep2_sf_trig_;
 	TBranch *lep2_sf_trig_branch;
 	bool lep2_sf_trig_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_mcp4_;
-	TBranch *lep2_mcp4_branch;
-	bool lep2_mcp4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_mc3p4_;
-	TBranch *lep2_mc3p4_branch;
-	bool lep2_mc3p4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_mc_momp4_;
-	TBranch *lep2_mc_momp4_branch;
-	bool lep2_mc_momp4_isLoaded;
 	int	lep2_mcid_;
 	TBranch *lep2_mcid_branch;
 	bool lep2_mcid_isLoaded;
@@ -515,15 +503,6 @@ protected:
 	int	lep2_mc3_momid_;
 	TBranch *lep2_mc3_momid_branch;
 	bool lep2_mc3_momid_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_gsf_p4_;
-	TBranch *lep2_gsf_p4_branch;
-	bool lep2_gsf_p4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_ctf_p4_;
-	TBranch *lep2_ctf_p4_branch;
-	bool lep2_ctf_p4_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_sc_p4_;
-	TBranch *lep2_sc_p4_branch;
-	bool lep2_sc_p4_isLoaded;
 	bool	lep2_q3agree_;
 	TBranch *lep2_q3agree_branch;
 	bool lep2_q3agree_isLoaded;
@@ -575,9 +554,6 @@ protected:
 	float	lep2_conv_dcot_;
 	TBranch *lep2_conv_dcot_branch;
 	bool lep2_conv_dcot_isLoaded;
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_gfit_p4_;
-	TBranch *lep2_gfit_p4_branch;
-	bool lep2_gfit_p4_isLoaded;
 	bool	lep2_is_global_;
 	TBranch *lep2_is_global_branch;
 	bool lep2_is_global_isLoaded;
@@ -626,6 +602,30 @@ protected:
 	float	lep2_hcal_vetodep_;
 	TBranch *lep2_hcal_vetodep_branch;
 	bool lep2_hcal_vetodep_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_p4_;
+	TBranch *lep2_p4_branch;
+	bool lep2_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_mcp4_;
+	TBranch *lep2_mcp4_branch;
+	bool lep2_mcp4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_mc3p4_;
+	TBranch *lep2_mc3p4_branch;
+	bool lep2_mc3p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_mc_momp4_;
+	TBranch *lep2_mc_momp4_branch;
+	bool lep2_mc_momp4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_gsf_p4_;
+	TBranch *lep2_gsf_p4_branch;
+	bool lep2_gsf_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_ctf_p4_;
+	TBranch *lep2_ctf_p4_branch;
+	bool lep2_ctf_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_sc_p4_;
+	TBranch *lep2_sc_p4_branch;
+	bool lep2_sc_p4_isLoaded;
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lep2_gfit_p4_;
+	TBranch *lep2_gfit_p4_branch;
+	bool lep2_gfit_p4_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *dilep_p4_;
 	TBranch *dilep_p4_branch;
 	bool dilep_p4_isLoaded;
@@ -671,6 +671,9 @@ protected:
 	bool	is_good_lumi_;
 	TBranch *is_good_lumi_branch;
 	bool is_good_lumi_isLoaded;
+	int	charge_type_;
+	TBranch *charge_type_branch;
+	bool charge_type_isLoaded;
 	int	njets_;
 	TBranch *njets_branch;
 	bool njets_isLoaded;
@@ -887,9 +890,9 @@ protected:
 	float	sf_dileptrig_;
 	TBranch *sf_dileptrig_branch;
 	bool sf_dileptrig_isLoaded;
-	float	sf_lepeff_;
-	TBranch *sf_lepeff_branch;
-	bool sf_lepeff_isLoaded;
+	float	sf_dilepeff_;
+	TBranch *sf_dilepeff_branch;
+	bool sf_dilepeff_isLoaded;
 	float	sparm0_;
 	TBranch *sparm0_branch;
 	bool sparm0_isLoaded;
@@ -2370,6 +2373,11 @@ void Init(TTree *tree) {
 		is_good_lumi_branch = tree->GetBranch("is_good_lumi");
 		if (is_good_lumi_branch) {is_good_lumi_branch->SetAddress(&is_good_lumi_);}
 	}
+	charge_type_branch = 0;
+	if (tree->GetBranch("charge_type") != 0) {
+		charge_type_branch = tree->GetBranch("charge_type");
+		if (charge_type_branch) {charge_type_branch->SetAddress(&charge_type_);}
+	}
 	njets_branch = 0;
 	if (tree->GetBranch("njets") != 0) {
 		njets_branch = tree->GetBranch("njets");
@@ -2730,10 +2738,10 @@ void Init(TTree *tree) {
 		sf_dileptrig_branch = tree->GetBranch("sf_dileptrig");
 		if (sf_dileptrig_branch) {sf_dileptrig_branch->SetAddress(&sf_dileptrig_);}
 	}
-	sf_lepeff_branch = 0;
-	if (tree->GetBranch("sf_lepeff") != 0) {
-		sf_lepeff_branch = tree->GetBranch("sf_lepeff");
-		if (sf_lepeff_branch) {sf_lepeff_branch->SetAddress(&sf_lepeff_);}
+	sf_dilepeff_branch = 0;
+	if (tree->GetBranch("sf_dilepeff") != 0) {
+		sf_dilepeff_branch = tree->GetBranch("sf_dilepeff");
+		if (sf_dilepeff_branch) {sf_dilepeff_branch->SetAddress(&sf_dilepeff_);}
 	}
 	sparm0_branch = 0;
 	if (tree->GetBranch("sparm0") != 0) {
@@ -3135,7 +3143,6 @@ void GetEntry(unsigned int idx)
 		filt_trkfail_isLoaded = false;
 		filt_eebadsc_isLoaded = false;
 		passes_metfilters_isLoaded = false;
-		lep1_p4_isLoaded = false;
 		lep1_passes_id_isLoaded = false;
 		lep1_passes_iso_isLoaded = false;
 		lep1_is_num_isLoaded = false;
@@ -3178,16 +3185,10 @@ void GetEntry(unsigned int idx)
 		lep1_dbeta04_isLoaded = false;
 		lep1_sf_lepeff_isLoaded = false;
 		lep1_sf_trig_isLoaded = false;
-		lep1_mcp4_isLoaded = false;
-		lep1_mc3p4_isLoaded = false;
-		lep1_mc_momp4_isLoaded = false;
 		lep1_mcid_isLoaded = false;
 		lep1_mc3id_isLoaded = false;
 		lep1_momid_isLoaded = false;
 		lep1_mc3_momid_isLoaded = false;
-		lep1_gsf_p4_isLoaded = false;
-		lep1_ctf_p4_isLoaded = false;
-		lep1_sc_p4_isLoaded = false;
 		lep1_q3agree_isLoaded = false;
 		lep1_is_conv_isLoaded = false;
 		lep1_qsc_isLoaded = false;
@@ -3205,7 +3206,6 @@ void GetEntry(unsigned int idx)
 		lep1_ooemoop_isLoaded = false;
 		lep1_conv_dist_isLoaded = false;
 		lep1_conv_dcot_isLoaded = false;
-		lep1_gfit_p4_isLoaded = false;
 		lep1_is_global_isLoaded = false;
 		lep1_is_tracker_isLoaded = false;
 		lep1_is_stamu_isLoaded = false;
@@ -3222,7 +3222,14 @@ void GetEntry(unsigned int idx)
 		lep1_pterr_isLoaded = false;
 		lep1_ecal_vetodep_isLoaded = false;
 		lep1_hcal_vetodep_isLoaded = false;
-		lep2_p4_isLoaded = false;
+		lep1_p4_isLoaded = false;
+		lep1_mcp4_isLoaded = false;
+		lep1_mc3p4_isLoaded = false;
+		lep1_mc_momp4_isLoaded = false;
+		lep1_gsf_p4_isLoaded = false;
+		lep1_ctf_p4_isLoaded = false;
+		lep1_sc_p4_isLoaded = false;
+		lep1_gfit_p4_isLoaded = false;
 		lep2_passes_id_isLoaded = false;
 		lep2_passes_iso_isLoaded = false;
 		lep2_is_num_isLoaded = false;
@@ -3265,16 +3272,10 @@ void GetEntry(unsigned int idx)
 		lep2_dbeta04_isLoaded = false;
 		lep2_sf_lepeff_isLoaded = false;
 		lep2_sf_trig_isLoaded = false;
-		lep2_mcp4_isLoaded = false;
-		lep2_mc3p4_isLoaded = false;
-		lep2_mc_momp4_isLoaded = false;
 		lep2_mcid_isLoaded = false;
 		lep2_mc3id_isLoaded = false;
 		lep2_momid_isLoaded = false;
 		lep2_mc3_momid_isLoaded = false;
-		lep2_gsf_p4_isLoaded = false;
-		lep2_ctf_p4_isLoaded = false;
-		lep2_sc_p4_isLoaded = false;
 		lep2_q3agree_isLoaded = false;
 		lep2_is_conv_isLoaded = false;
 		lep2_qsc_isLoaded = false;
@@ -3292,7 +3293,6 @@ void GetEntry(unsigned int idx)
 		lep2_ooemoop_isLoaded = false;
 		lep2_conv_dist_isLoaded = false;
 		lep2_conv_dcot_isLoaded = false;
-		lep2_gfit_p4_isLoaded = false;
 		lep2_is_global_isLoaded = false;
 		lep2_is_tracker_isLoaded = false;
 		lep2_is_stamu_isLoaded = false;
@@ -3309,6 +3309,14 @@ void GetEntry(unsigned int idx)
 		lep2_pterr_isLoaded = false;
 		lep2_ecal_vetodep_isLoaded = false;
 		lep2_hcal_vetodep_isLoaded = false;
+		lep2_p4_isLoaded = false;
+		lep2_mcp4_isLoaded = false;
+		lep2_mc3p4_isLoaded = false;
+		lep2_mc_momp4_isLoaded = false;
+		lep2_gsf_p4_isLoaded = false;
+		lep2_ctf_p4_isLoaded = false;
+		lep2_sc_p4_isLoaded = false;
+		lep2_gfit_p4_isLoaded = false;
 		dilep_p4_isLoaded = false;
 		is_os_isLoaded = false;
 		is_ss_isLoaded = false;
@@ -3324,6 +3332,7 @@ void GetEntry(unsigned int idx)
 		fiduciality_isLoaded = false;
 		selection_isLoaded = false;
 		is_good_lumi_isLoaded = false;
+		charge_type_isLoaded = false;
 		njets_isLoaded = false;
 		njets20_isLoaded = false;
 		njets30_isLoaded = false;
@@ -3396,7 +3405,7 @@ void GetEntry(unsigned int idx)
 		pfmet_uncl_dn_isLoaded = false;
 		pfmet_uncl_up_isLoaded = false;
 		sf_dileptrig_isLoaded = false;
-		sf_lepeff_isLoaded = false;
+		sf_dilepeff_isLoaded = false;
 		sparm0_isLoaded = false;
 		sparm1_isLoaded = false;
 		sparm2_isLoaded = false;
@@ -3525,7 +3534,6 @@ void LoadAllBranches()
 	if (filt_trkfail_branch != 0) filt_trkfail();
 	if (filt_eebadsc_branch != 0) filt_eebadsc();
 	if (passes_metfilters_branch != 0) passes_metfilters();
-	if (lep1_p4_branch != 0) lep1_p4();
 	if (lep1_passes_id_branch != 0) lep1_passes_id();
 	if (lep1_passes_iso_branch != 0) lep1_passes_iso();
 	if (lep1_is_num_branch != 0) lep1_is_num();
@@ -3568,16 +3576,10 @@ void LoadAllBranches()
 	if (lep1_dbeta04_branch != 0) lep1_dbeta04();
 	if (lep1_sf_lepeff_branch != 0) lep1_sf_lepeff();
 	if (lep1_sf_trig_branch != 0) lep1_sf_trig();
-	if (lep1_mcp4_branch != 0) lep1_mcp4();
-	if (lep1_mc3p4_branch != 0) lep1_mc3p4();
-	if (lep1_mc_momp4_branch != 0) lep1_mc_momp4();
 	if (lep1_mcid_branch != 0) lep1_mcid();
 	if (lep1_mc3id_branch != 0) lep1_mc3id();
 	if (lep1_momid_branch != 0) lep1_momid();
 	if (lep1_mc3_momid_branch != 0) lep1_mc3_momid();
-	if (lep1_gsf_p4_branch != 0) lep1_gsf_p4();
-	if (lep1_ctf_p4_branch != 0) lep1_ctf_p4();
-	if (lep1_sc_p4_branch != 0) lep1_sc_p4();
 	if (lep1_q3agree_branch != 0) lep1_q3agree();
 	if (lep1_is_conv_branch != 0) lep1_is_conv();
 	if (lep1_qsc_branch != 0) lep1_qsc();
@@ -3595,7 +3597,6 @@ void LoadAllBranches()
 	if (lep1_ooemoop_branch != 0) lep1_ooemoop();
 	if (lep1_conv_dist_branch != 0) lep1_conv_dist();
 	if (lep1_conv_dcot_branch != 0) lep1_conv_dcot();
-	if (lep1_gfit_p4_branch != 0) lep1_gfit_p4();
 	if (lep1_is_global_branch != 0) lep1_is_global();
 	if (lep1_is_tracker_branch != 0) lep1_is_tracker();
 	if (lep1_is_stamu_branch != 0) lep1_is_stamu();
@@ -3612,7 +3613,14 @@ void LoadAllBranches()
 	if (lep1_pterr_branch != 0) lep1_pterr();
 	if (lep1_ecal_vetodep_branch != 0) lep1_ecal_vetodep();
 	if (lep1_hcal_vetodep_branch != 0) lep1_hcal_vetodep();
-	if (lep2_p4_branch != 0) lep2_p4();
+	if (lep1_p4_branch != 0) lep1_p4();
+	if (lep1_mcp4_branch != 0) lep1_mcp4();
+	if (lep1_mc3p4_branch != 0) lep1_mc3p4();
+	if (lep1_mc_momp4_branch != 0) lep1_mc_momp4();
+	if (lep1_gsf_p4_branch != 0) lep1_gsf_p4();
+	if (lep1_ctf_p4_branch != 0) lep1_ctf_p4();
+	if (lep1_sc_p4_branch != 0) lep1_sc_p4();
+	if (lep1_gfit_p4_branch != 0) lep1_gfit_p4();
 	if (lep2_passes_id_branch != 0) lep2_passes_id();
 	if (lep2_passes_iso_branch != 0) lep2_passes_iso();
 	if (lep2_is_num_branch != 0) lep2_is_num();
@@ -3655,16 +3663,10 @@ void LoadAllBranches()
 	if (lep2_dbeta04_branch != 0) lep2_dbeta04();
 	if (lep2_sf_lepeff_branch != 0) lep2_sf_lepeff();
 	if (lep2_sf_trig_branch != 0) lep2_sf_trig();
-	if (lep2_mcp4_branch != 0) lep2_mcp4();
-	if (lep2_mc3p4_branch != 0) lep2_mc3p4();
-	if (lep2_mc_momp4_branch != 0) lep2_mc_momp4();
 	if (lep2_mcid_branch != 0) lep2_mcid();
 	if (lep2_mc3id_branch != 0) lep2_mc3id();
 	if (lep2_momid_branch != 0) lep2_momid();
 	if (lep2_mc3_momid_branch != 0) lep2_mc3_momid();
-	if (lep2_gsf_p4_branch != 0) lep2_gsf_p4();
-	if (lep2_ctf_p4_branch != 0) lep2_ctf_p4();
-	if (lep2_sc_p4_branch != 0) lep2_sc_p4();
 	if (lep2_q3agree_branch != 0) lep2_q3agree();
 	if (lep2_is_conv_branch != 0) lep2_is_conv();
 	if (lep2_qsc_branch != 0) lep2_qsc();
@@ -3682,7 +3684,6 @@ void LoadAllBranches()
 	if (lep2_ooemoop_branch != 0) lep2_ooemoop();
 	if (lep2_conv_dist_branch != 0) lep2_conv_dist();
 	if (lep2_conv_dcot_branch != 0) lep2_conv_dcot();
-	if (lep2_gfit_p4_branch != 0) lep2_gfit_p4();
 	if (lep2_is_global_branch != 0) lep2_is_global();
 	if (lep2_is_tracker_branch != 0) lep2_is_tracker();
 	if (lep2_is_stamu_branch != 0) lep2_is_stamu();
@@ -3699,6 +3700,14 @@ void LoadAllBranches()
 	if (lep2_pterr_branch != 0) lep2_pterr();
 	if (lep2_ecal_vetodep_branch != 0) lep2_ecal_vetodep();
 	if (lep2_hcal_vetodep_branch != 0) lep2_hcal_vetodep();
+	if (lep2_p4_branch != 0) lep2_p4();
+	if (lep2_mcp4_branch != 0) lep2_mcp4();
+	if (lep2_mc3p4_branch != 0) lep2_mc3p4();
+	if (lep2_mc_momp4_branch != 0) lep2_mc_momp4();
+	if (lep2_gsf_p4_branch != 0) lep2_gsf_p4();
+	if (lep2_ctf_p4_branch != 0) lep2_ctf_p4();
+	if (lep2_sc_p4_branch != 0) lep2_sc_p4();
+	if (lep2_gfit_p4_branch != 0) lep2_gfit_p4();
 	if (dilep_p4_branch != 0) dilep_p4();
 	if (is_os_branch != 0) is_os();
 	if (is_ss_branch != 0) is_ss();
@@ -3714,6 +3723,7 @@ void LoadAllBranches()
 	if (fiduciality_branch != 0) fiduciality();
 	if (selection_branch != 0) selection();
 	if (is_good_lumi_branch != 0) is_good_lumi();
+	if (charge_type_branch != 0) charge_type();
 	if (njets_branch != 0) njets();
 	if (njets20_branch != 0) njets20();
 	if (njets30_branch != 0) njets30();
@@ -3786,7 +3796,7 @@ void LoadAllBranches()
 	if (pfmet_uncl_dn_branch != 0) pfmet_uncl_dn();
 	if (pfmet_uncl_up_branch != 0) pfmet_uncl_up();
 	if (sf_dileptrig_branch != 0) sf_dileptrig();
-	if (sf_lepeff_branch != 0) sf_lepeff();
+	if (sf_dilepeff_branch != 0) sf_dilepeff();
 	if (sparm0_branch != 0) sparm0();
 	if (sparm1_branch != 0) sparm1();
 	if (sparm2_branch != 0) sparm2();
@@ -4259,19 +4269,6 @@ void LoadAllBranches()
 			passes_metfilters_isLoaded = true;
 		}
 		return passes_metfilters_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4()
-	{
-		if (not lep1_p4_isLoaded) {
-			if (lep1_p4_branch != 0) {
-				lep1_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_p4_isLoaded = true;
-		}
-		return *lep1_p4_;
 	}
 	bool &	lep1_passes_id()
 	{
@@ -4819,45 +4816,6 @@ void LoadAllBranches()
 		}
 		return lep1_sf_trig_;
 	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4()
-	{
-		if (not lep1_mcp4_isLoaded) {
-			if (lep1_mcp4_branch != 0) {
-				lep1_mcp4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_mcp4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_mcp4_isLoaded = true;
-		}
-		return *lep1_mcp4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4()
-	{
-		if (not lep1_mc3p4_isLoaded) {
-			if (lep1_mc3p4_branch != 0) {
-				lep1_mc3p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_mc3p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_mc3p4_isLoaded = true;
-		}
-		return *lep1_mc3p4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4()
-	{
-		if (not lep1_mc_momp4_isLoaded) {
-			if (lep1_mc_momp4_branch != 0) {
-				lep1_mc_momp4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_mc_momp4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_mc_momp4_isLoaded = true;
-		}
-		return *lep1_mc_momp4_;
-	}
 	int &lep1_mcid()
 	{
 		if (not lep1_mcid_isLoaded) {
@@ -4909,45 +4867,6 @@ void LoadAllBranches()
 			lep1_mc3_momid_isLoaded = true;
 		}
 		return lep1_mc3_momid_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4()
-	{
-		if (not lep1_gsf_p4_isLoaded) {
-			if (lep1_gsf_p4_branch != 0) {
-				lep1_gsf_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_gsf_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_gsf_p4_isLoaded = true;
-		}
-		return *lep1_gsf_p4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4()
-	{
-		if (not lep1_ctf_p4_isLoaded) {
-			if (lep1_ctf_p4_branch != 0) {
-				lep1_ctf_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_ctf_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_ctf_p4_isLoaded = true;
-		}
-		return *lep1_ctf_p4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4()
-	{
-		if (not lep1_sc_p4_isLoaded) {
-			if (lep1_sc_p4_branch != 0) {
-				lep1_sc_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_sc_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_sc_p4_isLoaded = true;
-		}
-		return *lep1_sc_p4_;
 	}
 	bool &	lep1_q3agree()
 	{
@@ -5170,19 +5089,6 @@ void LoadAllBranches()
 		}
 		return lep1_conv_dcot_;
 	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4()
-	{
-		if (not lep1_gfit_p4_isLoaded) {
-			if (lep1_gfit_p4_branch != 0) {
-				lep1_gfit_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep1_gfit_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep1_gfit_p4_isLoaded = true;
-		}
-		return *lep1_gfit_p4_;
-	}
 	bool &	lep1_is_global()
 	{
 		if (not lep1_is_global_isLoaded) {
@@ -5391,18 +5297,109 @@ void LoadAllBranches()
 		}
 		return lep1_hcal_vetodep_;
 	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4()
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4()
 	{
-		if (not lep2_p4_isLoaded) {
-			if (lep2_p4_branch != 0) {
-				lep2_p4_branch->GetEntry(index);
+		if (not lep1_p4_isLoaded) {
+			if (lep1_p4_branch != 0) {
+				lep1_p4_branch->GetEntry(index);
 			} else { 
-				printf("branch lep2_p4_branch does not exist!\n");
+				printf("branch lep1_p4_branch does not exist!\n");
 				exit(1);
 			}
-			lep2_p4_isLoaded = true;
+			lep1_p4_isLoaded = true;
 		}
-		return *lep2_p4_;
+		return *lep1_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4()
+	{
+		if (not lep1_mcp4_isLoaded) {
+			if (lep1_mcp4_branch != 0) {
+				lep1_mcp4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_mcp4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_mcp4_isLoaded = true;
+		}
+		return *lep1_mcp4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4()
+	{
+		if (not lep1_mc3p4_isLoaded) {
+			if (lep1_mc3p4_branch != 0) {
+				lep1_mc3p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_mc3p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_mc3p4_isLoaded = true;
+		}
+		return *lep1_mc3p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4()
+	{
+		if (not lep1_mc_momp4_isLoaded) {
+			if (lep1_mc_momp4_branch != 0) {
+				lep1_mc_momp4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_mc_momp4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_mc_momp4_isLoaded = true;
+		}
+		return *lep1_mc_momp4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4()
+	{
+		if (not lep1_gsf_p4_isLoaded) {
+			if (lep1_gsf_p4_branch != 0) {
+				lep1_gsf_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_gsf_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_gsf_p4_isLoaded = true;
+		}
+		return *lep1_gsf_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4()
+	{
+		if (not lep1_ctf_p4_isLoaded) {
+			if (lep1_ctf_p4_branch != 0) {
+				lep1_ctf_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_ctf_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_ctf_p4_isLoaded = true;
+		}
+		return *lep1_ctf_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4()
+	{
+		if (not lep1_sc_p4_isLoaded) {
+			if (lep1_sc_p4_branch != 0) {
+				lep1_sc_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_sc_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_sc_p4_isLoaded = true;
+		}
+		return *lep1_sc_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4()
+	{
+		if (not lep1_gfit_p4_isLoaded) {
+			if (lep1_gfit_p4_branch != 0) {
+				lep1_gfit_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep1_gfit_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep1_gfit_p4_isLoaded = true;
+		}
+		return *lep1_gfit_p4_;
 	}
 	bool &	lep2_passes_id()
 	{
@@ -5950,45 +5947,6 @@ void LoadAllBranches()
 		}
 		return lep2_sf_trig_;
 	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4()
-	{
-		if (not lep2_mcp4_isLoaded) {
-			if (lep2_mcp4_branch != 0) {
-				lep2_mcp4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_mcp4_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_mcp4_isLoaded = true;
-		}
-		return *lep2_mcp4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4()
-	{
-		if (not lep2_mc3p4_isLoaded) {
-			if (lep2_mc3p4_branch != 0) {
-				lep2_mc3p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_mc3p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_mc3p4_isLoaded = true;
-		}
-		return *lep2_mc3p4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4()
-	{
-		if (not lep2_mc_momp4_isLoaded) {
-			if (lep2_mc_momp4_branch != 0) {
-				lep2_mc_momp4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_mc_momp4_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_mc_momp4_isLoaded = true;
-		}
-		return *lep2_mc_momp4_;
-	}
 	int &lep2_mcid()
 	{
 		if (not lep2_mcid_isLoaded) {
@@ -6040,45 +5998,6 @@ void LoadAllBranches()
 			lep2_mc3_momid_isLoaded = true;
 		}
 		return lep2_mc3_momid_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4()
-	{
-		if (not lep2_gsf_p4_isLoaded) {
-			if (lep2_gsf_p4_branch != 0) {
-				lep2_gsf_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_gsf_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_gsf_p4_isLoaded = true;
-		}
-		return *lep2_gsf_p4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4()
-	{
-		if (not lep2_ctf_p4_isLoaded) {
-			if (lep2_ctf_p4_branch != 0) {
-				lep2_ctf_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_ctf_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_ctf_p4_isLoaded = true;
-		}
-		return *lep2_ctf_p4_;
-	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4()
-	{
-		if (not lep2_sc_p4_isLoaded) {
-			if (lep2_sc_p4_branch != 0) {
-				lep2_sc_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_sc_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_sc_p4_isLoaded = true;
-		}
-		return *lep2_sc_p4_;
 	}
 	bool &	lep2_q3agree()
 	{
@@ -6301,19 +6220,6 @@ void LoadAllBranches()
 		}
 		return lep2_conv_dcot_;
 	}
-	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4()
-	{
-		if (not lep2_gfit_p4_isLoaded) {
-			if (lep2_gfit_p4_branch != 0) {
-				lep2_gfit_p4_branch->GetEntry(index);
-			} else { 
-				printf("branch lep2_gfit_p4_branch does not exist!\n");
-				exit(1);
-			}
-			lep2_gfit_p4_isLoaded = true;
-		}
-		return *lep2_gfit_p4_;
-	}
 	bool &	lep2_is_global()
 	{
 		if (not lep2_is_global_isLoaded) {
@@ -6522,6 +6428,110 @@ void LoadAllBranches()
 		}
 		return lep2_hcal_vetodep_;
 	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4()
+	{
+		if (not lep2_p4_isLoaded) {
+			if (lep2_p4_branch != 0) {
+				lep2_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_p4_isLoaded = true;
+		}
+		return *lep2_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4()
+	{
+		if (not lep2_mcp4_isLoaded) {
+			if (lep2_mcp4_branch != 0) {
+				lep2_mcp4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_mcp4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_mcp4_isLoaded = true;
+		}
+		return *lep2_mcp4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4()
+	{
+		if (not lep2_mc3p4_isLoaded) {
+			if (lep2_mc3p4_branch != 0) {
+				lep2_mc3p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_mc3p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_mc3p4_isLoaded = true;
+		}
+		return *lep2_mc3p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4()
+	{
+		if (not lep2_mc_momp4_isLoaded) {
+			if (lep2_mc_momp4_branch != 0) {
+				lep2_mc_momp4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_mc_momp4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_mc_momp4_isLoaded = true;
+		}
+		return *lep2_mc_momp4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4()
+	{
+		if (not lep2_gsf_p4_isLoaded) {
+			if (lep2_gsf_p4_branch != 0) {
+				lep2_gsf_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_gsf_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_gsf_p4_isLoaded = true;
+		}
+		return *lep2_gsf_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4()
+	{
+		if (not lep2_ctf_p4_isLoaded) {
+			if (lep2_ctf_p4_branch != 0) {
+				lep2_ctf_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_ctf_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_ctf_p4_isLoaded = true;
+		}
+		return *lep2_ctf_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4()
+	{
+		if (not lep2_sc_p4_isLoaded) {
+			if (lep2_sc_p4_branch != 0) {
+				lep2_sc_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_sc_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_sc_p4_isLoaded = true;
+		}
+		return *lep2_sc_p4_;
+	}
+	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4()
+	{
+		if (not lep2_gfit_p4_isLoaded) {
+			if (lep2_gfit_p4_branch != 0) {
+				lep2_gfit_p4_branch->GetEntry(index);
+			} else { 
+				printf("branch lep2_gfit_p4_branch does not exist!\n");
+				exit(1);
+			}
+			lep2_gfit_p4_isLoaded = true;
+		}
+		return *lep2_gfit_p4_;
+	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &dilep_p4()
 	{
 		if (not dilep_p4_isLoaded) {
@@ -6716,6 +6726,19 @@ void LoadAllBranches()
 			is_good_lumi_isLoaded = true;
 		}
 		return is_good_lumi_;
+	}
+	int &charge_type()
+	{
+		if (not charge_type_isLoaded) {
+			if (charge_type_branch != 0) {
+				charge_type_branch->GetEntry(index);
+			} else { 
+				printf("branch charge_type_branch does not exist!\n");
+				exit(1);
+			}
+			charge_type_isLoaded = true;
+		}
+		return charge_type_;
 	}
 	int &njets()
 	{
@@ -7653,18 +7676,18 @@ void LoadAllBranches()
 		}
 		return sf_dileptrig_;
 	}
-	float &sf_lepeff()
+	float &sf_dilepeff()
 	{
-		if (not sf_lepeff_isLoaded) {
-			if (sf_lepeff_branch != 0) {
-				sf_lepeff_branch->GetEntry(index);
+		if (not sf_dilepeff_isLoaded) {
+			if (sf_dilepeff_branch != 0) {
+				sf_dilepeff_branch->GetEntry(index);
 			} else { 
-				printf("branch sf_lepeff_branch does not exist!\n");
+				printf("branch sf_dilepeff_branch does not exist!\n");
 				exit(1);
 			}
-			sf_lepeff_isLoaded = true;
+			sf_dilepeff_isLoaded = true;
 		}
-		return sf_lepeff_;
+		return sf_dilepeff_;
 	}
 	float &sparm0()
 	{
@@ -8945,7 +8968,6 @@ namespace ssb {
 	const bool &filt_trkfail();
 	const bool &filt_eebadsc();
 	const bool &passes_metfilters();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
 	const bool &lep1_passes_id();
 	const bool &lep1_passes_iso();
 	const bool &lep1_is_num();
@@ -8988,16 +9010,10 @@ namespace ssb {
 	const float &lep1_dbeta04();
 	const float &lep1_sf_lepeff();
 	const float &lep1_sf_trig();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4();
 	const int &lep1_mcid();
 	const int &lep1_mc3id();
 	const int &lep1_momid();
 	const int &lep1_mc3_momid();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4();
 	const bool &lep1_q3agree();
 	const bool &lep1_is_conv();
 	const int &lep1_qsc();
@@ -9015,7 +9031,6 @@ namespace ssb {
 	const float &lep1_ooemoop();
 	const float &lep1_conv_dist();
 	const float &lep1_conv_dcot();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4();
 	const bool &lep1_is_global();
 	const bool &lep1_is_tracker();
 	const bool &lep1_is_stamu();
@@ -9032,7 +9047,14 @@ namespace ssb {
 	const float &lep1_pterr();
 	const float &lep1_ecal_vetodep();
 	const float &lep1_hcal_vetodep();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4();
 	const bool &lep2_passes_id();
 	const bool &lep2_passes_iso();
 	const bool &lep2_is_num();
@@ -9075,16 +9097,10 @@ namespace ssb {
 	const float &lep2_dbeta04();
 	const float &lep2_sf_lepeff();
 	const float &lep2_sf_trig();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4();
 	const int &lep2_mcid();
 	const int &lep2_mc3id();
 	const int &lep2_momid();
 	const int &lep2_mc3_momid();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4();
 	const bool &lep2_q3agree();
 	const bool &lep2_is_conv();
 	const int &lep2_qsc();
@@ -9102,7 +9118,6 @@ namespace ssb {
 	const float &lep2_ooemoop();
 	const float &lep2_conv_dist();
 	const float &lep2_conv_dcot();
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4();
 	const bool &lep2_is_global();
 	const bool &lep2_is_tracker();
 	const bool &lep2_is_stamu();
@@ -9119,6 +9134,14 @@ namespace ssb {
 	const float &lep2_pterr();
 	const float &lep2_ecal_vetodep();
 	const float &lep2_hcal_vetodep();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4();
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &dilep_p4();
 	const bool &is_os();
 	const bool &is_ss();
@@ -9134,6 +9157,7 @@ namespace ssb {
 	const int &fiduciality();
 	const unsigned int &selection();
 	const bool &is_good_lumi();
+	const int &charge_type();
 	const int &njets();
 	const int &njets20();
 	const int &njets30();
@@ -9206,7 +9230,7 @@ namespace ssb {
 	const float &pfmet_uncl_dn();
 	const float &pfmet_uncl_up();
 	const float &sf_dileptrig();
-	const float &sf_lepeff();
+	const float &sf_dilepeff();
 	const float &sparm0();
 	const float &sparm1();
 	const float &sparm2();

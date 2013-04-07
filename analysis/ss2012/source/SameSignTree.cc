@@ -16,6 +16,7 @@ void SameSignTree::Reset()
 
     selection                                = 0;
     is_good_lumi                             = true;
+    charge_type                              = -999999;
     njets                                    = -999999;
     njets20                                  = -999999;
     njets30                                  = -999999;
@@ -195,6 +196,7 @@ void SameSignTree::SetBranches(TTree &tree)
 
     tree.Branch("selection"                                , &selection                                , "selection/i"                                ); 
     tree.Branch("is_good_lumi"                             , &is_good_lumi                             , "is_good_lumi/O"                             ); 
+    tree.Branch("charge_type"                              , &charge_type                              , "charge_type/I"                              ); 
     tree.Branch("njets"                                    , &njets                                    , "njets/I"                                    ); 
     tree.Branch("njets20"                                  , &njets20                                  , "njets20/I"                                  ); 
     tree.Branch("njets30"                                  , &njets30                                  , "njets30/I"                                  ); 
