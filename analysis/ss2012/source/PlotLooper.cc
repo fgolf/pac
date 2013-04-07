@@ -720,6 +720,11 @@ int PlotLooper::operator()(long event)
         if (is_sf()) {charge_type = DileptonChargeType::SF;}
         if (is_df()) {charge_type = DileptonChargeType::DF;}
         if (is_os()) {charge_type = DileptonChargeType::OS;}
+        if (ssb::charge_type() < 0)
+        {
+            if (m_verbose) {cout << "failing valid hypothesis requirement" << endl;}
+            return 0;
+        }
         if (charge_type == DileptonChargeType::static_size)
         {
             if (m_verbose) {cout << "failing valid charge type" << endl;}
