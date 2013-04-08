@@ -34,6 +34,9 @@ void SameSignTree::Reset()
     rho                                      = -999999.0;
     rho_iso                                  = -999999.0;
     sf_dileptrig                             = 1.0;
+    sf_dileptrig_hpt                         = 1.0;
+    sf_dileptrig_lpt                         = 1.0;
+    sf_dileptrig_vpt                         = 1.0;
     sf_dilepeff                              = 1.0;
     trig_mm                                  = false;
     trig_em                                  = false;
@@ -269,6 +272,9 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("pfmet_uncl_dn"                            , &pfmet_uncl_dn                            , "pfmet_uncl_dn/F"                            ); 
     tree.Branch("pfmet_uncl_up"                            , &pfmet_uncl_up                            , "pfmet_uncl_up/F"                            ); 
     tree.Branch("sf_dileptrig"                             , &sf_dileptrig                             , "sf_dileptrig/F"                             ); 
+    tree.Branch("sf_dileptrig_hpt"                         , &sf_dileptrig_hpt                         , "sf_dileptrig_hpt/F"                         ); 
+    tree.Branch("sf_dileptrig_lpt"                         , &sf_dileptrig_lpt                         , "sf_dileptrig_lpt/F"                         ); 
+    tree.Branch("sf_dileptrig_vpt"                         , &sf_dileptrig_vpt                         , "sf_dileptrig_vpt/F"                         ); 
     tree.Branch("sf_dilepeff"                              , &sf_dilepeff                              , "sf_dilepeff/F"                              ); 
     tree.Branch("sparm0"                                   , &sparm0                                   , "sparm0/F"                                   ); 
     tree.Branch("sparm1"                                   , &sparm1                                   , "sparm1/F"                                   ); 

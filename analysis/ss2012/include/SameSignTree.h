@@ -89,6 +89,9 @@ public:
     float rho;
     float rho_iso;
     float sf_dileptrig;
+    float sf_dileptrig_hpt;
+    float sf_dileptrig_lpt;
+    float sf_dileptrig_vpt;
     float sf_dilepeff;
     bool trig_mm;
     bool trig_em;

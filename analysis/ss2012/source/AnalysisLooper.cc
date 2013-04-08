@@ -1655,7 +1655,10 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         if (!evt_isRealData())
         {
             // scale factor for trigger efficiency
-            m_evt.sf_dileptrig   = DileptonTriggerScaleFactor(dilepton_type, m_analysis_type, m_evt.lep2.p4);
+            m_evt.sf_dileptrig     = DileptonTriggerScaleFactor(dilepton_type, m_analysis_type      , m_evt.lep2.p4);
+            m_evt.sf_dileptrig_hpt = DileptonTriggerScaleFactor(dilepton_type, AnalysisType::high_pt, m_evt.lep2.p4);
+            m_evt.sf_dileptrig_lpt = DileptonTriggerScaleFactor(dilepton_type, AnalysisType::low_pt , m_evt.lep2.p4);
+            m_evt.sf_dileptrig_vpt = DileptonTriggerScaleFactor(dilepton_type, AnalysisType::vlow_pt, m_evt.lep2.p4);
             m_evt.lep1.sf_trig   = -999999; // not done 
             m_evt.lep2.sf_trig   = -999999; // not done
 
