@@ -24,6 +24,7 @@ lib ss2012_tools
     ./source/SkimChainSSB.cc
     ./source/SignalRegion.cc
     ./source/AnalysisType.cc
+    ./source/SystematicType.cc
     ./source/TTbarBreakDown.cc
     ./source/HiggsXsec.cc
     ./source/FakeRateType.cc

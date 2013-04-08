@@ -24,14 +24,14 @@ public:
     (
         const std::string& root_file_name,
         at::Sample::value_type sample,
-        //ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
+        std::vector<unsigned int> sr_nums,
         ss::AnalysisType::value_type analysis_type = ss::AnalysisType::high_pt,
         ss::SignalRegionType::value_type signal_region_type = ss::SignalRegionType::inclusive,
-        //at::YieldType::value_type yield_type = at::YieldType::base,
         const std::string& fake_rate_file_name = "",
         const std::string& flip_rate_file_name = "",
         const std::string& den_hist_file_name = "",
         bool do_scale_factors = true,
+        bool do_beff_sf = true,
         float sparm0 = -999999.0,
         float sparm1 = -999999.0,
         float sparm2 = -999999.0,
@@ -61,6 +61,7 @@ private:
     bool m_verbose;
     bool m_is_data;
     bool m_do_scale_factors;
+    bool m_do_beff_sf;
     float m_sparm0;
     float m_sparm1;
     float m_sparm2;
@@ -72,10 +73,9 @@ private:
     float m_fl_unc;
     float m_mc_unc;
     at::Sample::value_type m_sample;
-    //ss::SignalRegion::value_type m_signal_region;
+    std::vector<unsigned int> m_sr_nums;
     ss::AnalysisType::value_type m_analysis_type;
     ss::SignalRegionType::value_type m_signal_region_type;
-    //at::YieldType::value_type m_yield_type;
     at::FakeRateBinInfo m_fr_bin_info;
     at::FlipRateBinInfo m_fl_bin_info;
 

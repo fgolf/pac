@@ -4,6 +4,7 @@
 #include <string>
 #include "at/YieldType.h"
 #include "AnalysisType.h"
+#include "SystematicType.h"
 #include "TTree.h"
 
 namespace ss
@@ -103,17 +104,45 @@ namespace ss
     // Get the SignalRegionType from a string
     SignalRegionType::value_type GetSignalRegionTypeFromName(const std::string& signal_region_type_name);
 
-    // passes signal rgion
+    // passes signal region
+    // automatically determine which met/ht/njets/nbtags to use
+    //bool PassesSignalRegion
+    //(
+    //    const SignalRegion::value_type& signal_region,
+    //    const AnalysisType::value_type& anal_type,
+    //    const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive,
+    //    const at::YieldType::value_type& jec_yield_type = at::YieldType::base,
+    //    const at::YieldType::value_type& btag_yield_type = at::YieldType::base,
+    //    const at::YieldType::value_type& met_yield_type = at::YieldType::base,
+    //    const bool do_btag_sf = true, // applied for MC only
+    //    const bool do_jer = false     // applied for MC only
+    //);
+
+    // passes signal region
+    // automatically determine which met/ht/njets/nbtags to use
     bool PassesSignalRegion
     (
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type& anal_type,
         const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive,
-        const at::YieldType::value_type& jec_yield_type = at::YieldType::base,
-        const at::YieldType::value_type& btag_yield_type = at::YieldType::base,
-        const at::YieldType::value_type& met_yield_type = at::YieldType::base,
-        const bool do_btag_sf = true, // applied for MC only
-        const bool do_jer = false     // applied for MC only
+        const bool do_beff_sf = true, // applied for MC only
+        const SystematicType::value_type& syst_type = SystematicType::None
+    );
+
+    // passes signal region
+    bool PassesSignalRegion
+    (
+        const float met,
+        const float ht,
+        const int njets,
+        const int nbtags,
+        const float l1_pt,
+        const float l2_pt,
+        const int l1_id,
+        const int l2_id,
+        const SignalRegion::value_type& signal_region,
+        const AnalysisType::value_type& anal_type,
+        const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive
     );
 
     // set aliases for TTree

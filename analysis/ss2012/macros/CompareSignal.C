@@ -52,7 +52,7 @@ void PrintPlots
     delete h_diff;
 }
 
-void CompareSignal(const std::string& file1, const std::string& file2, const std::string& label, const std::string& draw_option = "text", const std::string& suffix = "eps")
+void CompareSignal(const std::string& file1, const std::string& file2, const std::string& label, const int sr_num = -1, const std::string& draw_option = "text", const std::string& suffix = "eps")
 {
     rt::TH1Container hc1(file1);
     rt::TH1Container hc2(file2);
@@ -71,15 +71,38 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
     rt::mkdir(path, true);
 
     TCanvas c1("c1", "c1", 1600, 1200);
-    //for (size_t sr_num = 0; sr_num != 2; sr_num++)
-/*     size_t sr_num = 21; */
-    size_t sr_num = 1;
+
+    if (sr_num < 0)
+    {
+        for (size_t nsr = 0; nsr != 29; nsr++)
+        {
+            // skip blank SRS
+            if (nsr == 9 or nsr == 19) {continue;}
+
+            // skip baseline regions
+            if (nsr == 0 or nsr == 10 or nsr == 20) {continue;} 
+
+            const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(nsr)); 
+
+            PrintPlots(sr+"nGenerated"     , hc1, hc2, path, suffix, draw_option, "1.0f"); 
+            PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.0f"); 
+            PrintPlots(sr+"effNormNice"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
+            PrintPlots(sr+"effNormNicePerc", hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
+            PrintPlots(sr+"effErrJESUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+            PrintPlots(sr+"effErrJESDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+            PrintPlots(sr+"effErrBTAUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+            PrintPlots(sr+"effErrBTADN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+            PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f");
+            PrintPlots(sr+"effErrStat"     , hc1, hc2, path, suffix, draw_option, "1.3f");
+        }
+    }
+    else
     {
         // skip blank SRS
-        //if (sr_num == 9 or sr_num == 19) {continue;}
+        if (sr_num == 9 or sr_num == 19) {return;}
 
         // skip baseline regions
-        //if (sr_num == 0 or sr_num == 10 or sr_num == 20) {continue;} 
+        if (sr_num == 0 or sr_num == 10 or sr_num == 20) {return;} 
 
         const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
 
@@ -87,13 +110,11 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
         PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.0f"); 
         PrintPlots(sr+"effNormNice"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
         PrintPlots(sr+"effNormNicePerc", hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
-        //PrintPlots(sr+"effErrJES"      , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.50); 
-        PrintPlots(sr+"effErrJESUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15); 
-        PrintPlots(sr+"effErrJESDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15); 
-        //PrintPlots(sr+"effErrBTA"      , hc1, hc2, path, suffix, draw_option, "1.3f"); 
-        PrintPlots(sr+"effErrBTAUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25); 
-        PrintPlots(sr+"effErrBTADN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25); 
-        PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f"); 
-        PrintPlots(sr+"effErrStat"     , hc1, hc2, path, suffix, draw_option, "1.3f"); 
+        PrintPlots(sr+"effErrJESUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+        PrintPlots(sr+"effErrJESDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+        PrintPlots(sr+"effErrBTAUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+        PrintPlots(sr+"effErrBTADN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+        PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f");
+        PrintPlots(sr+"effErrStat"     , hc1, hc2, path, suffix, draw_option, "1.3f");
     }
 }

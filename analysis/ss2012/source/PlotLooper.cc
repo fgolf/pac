@@ -834,7 +834,7 @@ int PlotLooper::operator()(long event)
         }
 
         // passes signal region
-        if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type))
+        if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, m_do_scale_factors))
         {
             if (m_verbose) {cout << "faling signal region cut" << endl;}
             return 0;

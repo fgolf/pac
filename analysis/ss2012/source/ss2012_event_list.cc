@@ -4,6 +4,8 @@
 #include "at/DileptonHypType.h"
 #include "AnalysisType.h"
 #include "SignalRegion.h"
+#include "SystematicType.h"
+#include "ScaleFactors.h"
 #include "SSB2012.h"
 #include "CTable.h"
 #include <string>
@@ -11,12 +13,6 @@
 #include <iostream>
 #include <boost/program_options.hpp>
 
-
-const float m_sb       = 525.0f;
-const float m_chargino = 250.0f;
-const bool do_btag_sf  = true;
-// const bool check_mass  = true;
-const bool check_mass  = false;
 
 struct event_info_t
 {
@@ -45,6 +41,8 @@ struct event_info_t
     float        ht;
     unsigned int njets;
     unsigned int nbtags;
+    float        sf_dilepeff;
+    float        sf_trigeff;
 };
 
 struct SortByEventInfo
@@ -64,24 +62,15 @@ bool IsGoodEvent
     const ss::AnalysisType::value_type analysis_type,
     const ss::SignalRegion::value_type signal_region,
     const ss::SignalRegionType::value_type signal_region_type,
-    const at::YieldType::value_type jes_type,
-    const at::YieldType::value_type beff_type,
-    const at::YieldType::value_type met_type,
-    const bool do_jer
+    const ss::SystematicType::value_type syst_type,
+    const bool do_beff_sf
 )
 {
     using namespace ssb;
 
-    // hard coded mess to troubleshoot --> delete me when done
-    const bool good_mass = (rt::is_equal(ssb::sparm0(), m_sb) && rt::is_equal(ssb::sparm1(), m_chargino));
-    if (not good_mass && check_mass)
-    {
-        return false;
-    }
-
     // basic selection
     if (ssb::charge_type() < 0) {return false;}
-    if (not ss::PassesSignalRegion(signal_region, analysis_type, signal_region_type, jes_type, beff_type, met_type, do_btag_sf, do_jer)) {return false;}
+    if (not ss::PassesSignalRegion(signal_region, analysis_type, signal_region_type, do_beff_sf, syst_type)) {return false;}
     if (is_real_data() && not is_good_lumi()) {return false;}
     if (is_os() && dilep_type()==1)           {return false;}
 
@@ -102,17 +91,19 @@ CTable EventLists
     const ss::AnalysisType::value_type& analysis_type          = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
     const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::exclusive,
-    const at::DileptonChargeType::value_type& charge_type      = at::DileptonChargeType::SS,
-    const at::YieldType::value_type jes_type                   = at::YieldType::base,
-    const at::YieldType::value_type beff_type                  = at::YieldType::base,
-    const at::YieldType::value_type met_type                   = at::YieldType::base,
-    const bool do_jer                                          = false
+    const at::DileptonChargeType::value_type& c_type           = at::DileptonChargeType::SS,
+    const ss::SystematicType::value_type syst_type             = ss::SystematicType::None,
+    const bool do_beff_sf                                      = true,
+    const float sparm0                                         = -999999,
+    const float sparm1                                         = -999999,
+    const float sparm2                                         = -999999,
+    const float sparm3                                         = -999999
 )
 {
     const ss::AnalysisTypeInfo at_info = ss::GetAnalysisTypeInfo(analysis_type);
     const std::string srt_name         = ss::GetSignalRegionTypeName(signal_region_type);
     const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region, analysis_type, signal_region_type);
-    const std::string charge_type_name = at::GetDileptonChargeTypeName(charge_type);
+    const std::string charge_type_name = at::GetDileptonChargeTypeName(c_type);
 
     // store the events information for sorting
 	vector<event_info_t> events;
@@ -124,14 +115,20 @@ CTable EventLists
         samesignbtag.GetEntry(entry);
 
         // selection
-        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, jes_type, beff_type, met_type, do_jer))
+        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, syst_type, do_beff_sf))
         {
             continue; 
         }
-        if (charge_type != at::GetDilepChargeTypeFromNumber(ssb::charge_type()))
+        if (c_type != at::GetDilepChargeTypeFromNumber(ssb::charge_type()))
         {
             continue;
         }
+
+        // if the value of m_sparmN negative, this check is skipped
+        if (sparm0 >= 0.0f && not rt::is_equal(sparm0, ssb::sparm0())) {continue;}
+        if (sparm1 >= 0.0f && not rt::is_equal(sparm1, ssb::sparm1())) {continue;}
+        if (sparm2 >= 0.0f && not rt::is_equal(sparm2, ssb::sparm2())) {continue;}
+        if (sparm3 >= 0.0f && not rt::is_equal(sparm3, ssb::sparm3())) {continue;}
 
         // local variables
         const string channel = at::GetDileptonHypTypeName(ssb::dilep_type());
@@ -139,85 +136,17 @@ CTable EventLists
         const string l2_flav = (abs(ssb::lep2_pdgid())==11 ? "el" : "mu");
 
         // kinematic variables that define the signal region
-        int njets   = ssb::njets();
-        float ht    = ssb::ht();
-        float met   = ssb::pfmet();
-        int nbtags  = ssb::nbtags();
+        float met   = -999999;
+        float ht    = -999999;
+        int njets   = -999999;
+        int nbtags  = -999999;
+        ss::GetReweightedKinematicVariables(met, ht, njets, nbtags, do_beff_sf, syst_type);
 
-        // apply the btag scale factor
-        if (not ssb::is_real_data() && do_btag_sf)
-        {
-            nbtags = ssb::nbtags_reweighted();
-        }
-
-         if (not ssb::is_real_data())
-         {
-             // jet scale up/down
-             switch(jes_type)
-             {
-                 case at::YieldType::up:
-                     njets  = ssb::njets_up();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_up() : ssb::nbtags_up());
-                     ht     = ssb::ht_up();
-                     met    = ssb::pfmet_up();
-                     break;
-                 case at::YieldType::down:
-                     njets  = ssb::njets_dn();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_dn() : ssb::nbtags_dn());
-                     ht     = ssb::ht_dn();
-                     met    = ssb::pfmet_dn();
-                     break;
-                 case at::YieldType::base:
-                     njets  = ssb::njets();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     ht     = ssb::ht();
-                     met    = ssb::pfmet();
-                     break;
-                 default:
-                     njets  = ssb::njets();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     ht     = ssb::ht();
-                     met    = ssb::pfmet();
-                     break;
-             }
- 
-             // btag scale up/down
-             // this will overide the nbtags setting above
-             switch(beff_type)
-             {
-                 case at::YieldType::up:
-                     nbtags = ssb::nbtags_reweighted_up();
-                     break;
-                 case at::YieldType::down:
-                     nbtags = ssb::nbtags_reweighted_dn();
-                     break;
-                 case at::YieldType::base:
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     break;
-                 default:
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     break;
-             }
-
-            if (do_jer)
-            {
-                njets  = ssb::njets_jer();
-                ht     = ssb::ht_jer();
-                met    = ssb::pfmet_jer();
-                nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jer() : ssb::nbtags_jer());
-            }
-
-             // btag scale up/down
-             // this will overide the nbtags setting above
-             switch(met_type)
-             {
-                 case at::YieldType::up  : met = ssb::pfmet_uncl_up(); break;
-                 case at::YieldType::down: met = ssb::pfmet_uncl_dn(); break;
-                 default: {/*do nothing*/}
-             }
-
-         }
-
+        // lepton efficiencies
+        const float eta1 = (abs(ssb::lep1_pdgid()) == 13 ? ssb::lep1_p4().eta() : ssb::lep1_sc_p4().eta());
+        const float eta2 = (abs(ssb::lep2_pdgid()) == 13 ? ssb::lep2_p4().eta() : ssb::lep2_sc_p4().eta());
+        const float sf_dilepeff = DileptonTagAndProbeScaleFactor(ssb::lep1_pdgid(), ssb::lep1_p4().pt(), eta1, ssb::lep2_pdgid(), ssb::lep2_p4().pt(), eta2);
+        const float sf_trigeff  = DileptonTriggerScaleFactor(static_cast<at::DileptonHypType::value_type>(ssb::dilep_type()), analysis_type, ssb::lep2_p4());
 
         // store the event info
         const event_info_t event_info =
@@ -247,6 +176,8 @@ CTable EventLists
             ht, 
             njets, 
             nbtags, 
+            sf_dilepeff,
+            sf_trigeff
         };
         events.push_back(event_info);
     }
@@ -285,6 +216,8 @@ CTable EventLists
     list.setColLabel("ht"      , col++);
     list.setColLabel("njets"   , col++);
     list.setColLabel("nbjets"  , col++);
+    list.setColLabel("sf lep"  , col++);
+    list.setColLabel("sf trig" , col++);
 
     // set the table entries
     size_t row = 0;
@@ -293,31 +226,33 @@ CTable EventLists
         const event_info_t& event = events.at(i);
 
         size_t col = 0;
-        list.setCell(event.run                     , row, col++);
-        list.setCell(event.ls                      , row, col++);
-        list.setCell(event.evt                     , row, col++);
-        list.setCell(event.channel                 , row, col++);
-        list.setCell(event.l1_flav                 , row, col++);
-        list.setCell(Form("%4.2f"  , event.l1_pt)  , row, col++);
-        list.setCell(Form("%4.2f"  , event.l1_eta) , row, col++);
-        list.setCell(Form("%4.2f"  , event.l1_phi) , row, col++);
-        list.setCell(Form("%1u"    , event.l1_id)  , row, col++);
-        list.setCell(Form("%4.2f"  , event.l1_iso) , row, col++);
-        list.setCell(Form("%4.2f"  , event.l1_d0)  , row, col++);
-        list.setCell(Form("%4.2f"  , event.l1_dz)  , row, col++);
-        list.setCell(event.l2_flav                 , row, col++);
-        list.setCell(Form("%4.2f"  , event.l2_pt)  , row, col++);
-        list.setCell(Form("%4.2f"  , event.l2_eta) , row, col++);
-        list.setCell(Form("%4.2f"  , event.l2_phi) , row, col++);
-        list.setCell(Form("%1u"    , event.l2_id)  , row, col++);
-        list.setCell(Form("%4.2f"  , event.l2_iso) , row, col++);
-        list.setCell(Form("%4.2f"  , event.l2_d0)  , row, col++);
-        list.setCell(Form("%4.2f"  , event.l2_dz)  , row, col++);
-        list.setCell(Form("%4.2f"  , event.m_ll)   , row, col++);
-        list.setCell(Form("%4.2f"  , event.met)    , row, col++);
-        list.setCell(Form("%4.2f"  , event.ht)     , row, col++);
-        list.setCell(Form("%1u"    , event.njets)  , row, col++);
-        list.setCell(Form("%1u"    , event.nbtags) , row, col++);
+        list.setCell(event.run                          , row, col++);
+        list.setCell(event.ls                           , row, col++);
+        list.setCell(event.evt                          , row, col++);
+        list.setCell(event.channel                      , row, col++);
+        list.setCell(event.l1_flav                      , row, col++);
+        list.setCell(Form("%4.2f"  , event.l1_pt)       , row, col++);
+        list.setCell(Form("%4.2f"  , event.l1_eta)      , row, col++);
+        list.setCell(Form("%4.2f"  , event.l1_phi)      , row, col++);
+        list.setCell(Form("%1u"    , event.l1_id)       , row, col++);
+        list.setCell(Form("%4.2f"  , event.l1_iso)      , row, col++);
+        list.setCell(Form("%4.2f"  , event.l1_d0)       , row, col++);
+        list.setCell(Form("%4.2f"  , event.l1_dz)       , row, col++);
+        list.setCell(event.l2_flav                      , row, col++);
+        list.setCell(Form("%4.2f"  , event.l2_pt)       , row, col++);
+        list.setCell(Form("%4.2f"  , event.l2_eta)      , row, col++);
+        list.setCell(Form("%4.2f"  , event.l2_phi)      , row, col++);
+        list.setCell(Form("%1u"    , event.l2_id)       , row, col++);
+        list.setCell(Form("%4.2f"  , event.l2_iso)      , row, col++);
+        list.setCell(Form("%4.2f"  , event.l2_d0)       , row, col++);
+        list.setCell(Form("%4.2f"  , event.l2_dz)       , row, col++);
+        list.setCell(Form("%4.2f"  , event.m_ll)        , row, col++);
+        list.setCell(Form("%4.2f"  , event.met)         , row, col++);
+        list.setCell(Form("%4.2f"  , event.ht)          , row, col++);
+        list.setCell(Form("%1u"    , event.njets)       , row, col++);
+        list.setCell(Form("%1u"    , event.nbtags)      , row, col++);
+        list.setCell(Form("%4.3f"  , event.sf_dilepeff) , row, col++);
+        list.setCell(Form("%4.3f"  , event.sf_trigeff)  , row, col++);
         row++;
     }
     return list;
@@ -331,10 +266,12 @@ CTable EventCounts
     const ss::AnalysisType::value_type& analysis_type          = ss::AnalysisType::high_pt,
     const ss::SignalRegion::value_type& signal_region          = ss::SignalRegion::sr0,
     const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::exclusive,
-    const at::YieldType::value_type jes_type                   = at::YieldType::base,
-    const at::YieldType::value_type beff_type                  = at::YieldType::base,
-    const at::YieldType::value_type met_type                   = at::YieldType::base,
-    const bool do_jer                                          = false
+    const ss::SystematicType::value_type syst_type             = ss::SystematicType::None,
+    const bool do_beff_sf                                      = true,
+    const float sparm0                                         = -999999,
+    const float sparm1                                         = -999999,
+    const float sparm2                                         = -999999,
+    const float sparm3                                         = -999999
 )
 {
     using namespace ssb;
@@ -358,10 +295,20 @@ CTable EventCounts
         //cout << Form("run: %d, ls: %d, event: %d", run(), ls(), evt()) << endl;
 
         // selection
-        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, jes_type, beff_type, met_type, do_jer))
+        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, syst_type, do_beff_sf))
         {
             continue; 
         }
+        if (ssb::charge_type()<0)
+        {
+            continue;
+        }
+
+        // if the value of m_sparmN negative, this check is skipped
+        if (sparm0 >= 0.0f && not rt::is_equal(sparm0, ssb::sparm0())) {continue;}
+        if (sparm1 >= 0.0f && not rt::is_equal(sparm1, ssb::sparm1())) {continue;}
+        if (sparm2 >= 0.0f && not rt::is_equal(sparm2, ssb::sparm2())) {continue;}
+        if (sparm3 >= 0.0f && not rt::is_equal(sparm3, ssb::sparm3())) {continue;}
 
         // fill counts
         if (is_ss()) 
@@ -417,14 +364,16 @@ try
     std::string analysis_type_name      = "high_pt";
     std::string signal_region_name      = "sr0";
     std::string signal_region_type_name = "exclusive";
+    std::string syst_type_name          = "none";
     std::string input_file              = "";
     std::string output_file             = "";
     std::string charge_option           = "ss";
+    bool do_beff_sf                     = false;
     bool print_list                     = true;
-    int jes                             = 0;
-    int beff                            = 0;
-    int met                             = 0;
-    bool jer                            = false;
+    float sparm0                        = -999999.0;
+    float sparm1                        = -999999.0;
+    float sparm2                        = -999999.0;
+    float sparm3                        = -999999.0;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -436,13 +385,14 @@ try
         ("sr"        , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                            )
         ("sr_type"   , po::value<std::string>(&signal_region_type_name) , "signal region type (default is exclusive)"                      )
         ("anal_type" , po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"                  )
+        ("syst_type" , po::value<std::string>(&signal_region_type_name) , "systematic type (default is none)"                              )
         ("charge"    , po::value<std::string>(&charge_option)           , "charge option (ss, sf, df, os, all)"                            )
         ("print_list", po::value<bool>(&print_list)                     , "print the event lists (default is true)"                        )
-        ("jer"       , po::value<bool>(&jer)                            , "JER flag (1 apply JER rescale, else do nothing)"                )
-        ("jes"       , po::value<int>(&jes)                             , "JES flag (+1 scale up, -1 scale down, 0 do nothing)"            )
-        ("beff"      , po::value<int>(&beff)                            , "beff flag (+1 scale up, -1 scale down, 0 do nothing)"           )
-        ("met"       , po::value<int>(&met)                             , "unclustered MET flag (+1 scale up, -1 scale down, 0 do nothing)")
-
+        ("do_beff_sf", po::value<bool>(&do_beff_sf)                     , "beff scale factor flag (mc only, default is true)"              )
+        ("sparm0"    , po::value<float>(&sparm0)                        , "sparm0 is required to be this value"                            )
+        ("sparm1"    , po::value<float>(&sparm1)                        , "sparm1 is required to be this value"                            )
+        ("sparm2"    , po::value<float>(&sparm2)                        , "sparm2 is required to be this value"                            )
+        ("sparm3"    , po::value<float>(&sparm3)                        , "sparm3 is required to be this value"                            )
         ;
 
     po::variables_map vm;
@@ -472,12 +422,10 @@ try
     // do it
     // -------------------------------------------------------------------------------------------------//
 
-    const ss::AnalysisType::value_type at      = ss::GetAnalysisTypeFromName(analysis_type_name);
-    const ss::SignalRegionType::value_type srt = ss::GetSignalRegionTypeFromName(signal_region_type_name);
-    const ss::SignalRegion::value_type sr      = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
-    const at::YieldType::value_type jes_type   = at::GetYieldType(jes);
-    const at::YieldType::value_type beff_type  = at::GetYieldType(beff);
-    const at::YieldType::value_type met_type   = at::GetYieldType(met);
+    const ss::AnalysisType::value_type at          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type srt     = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    const ss::SignalRegion::value_type sr          = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
+    const ss::SystematicType::value_type syst_type = ss::GetSystematicTypeFromName(syst_type_name);
 
     // write output
     if (not output_file.empty())
@@ -504,28 +452,28 @@ try
         chain.Add(Form("babies/%s/%s.root", ss::GetAnalysisTypeInfo(at).short_name.c_str(), sample_info.name.c_str()));
     }
 
-    CTable counts = EventCounts(chain, sample, at, sr, srt, jes_type, beff_type, met_type, jer);
+    CTable counts = EventCounts(chain, sample, at, sr, srt, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
     out << "total yields:\n" << counts << endl; 
     if (print_list)
     {
         if (charge_option == "all" or charge_option =="ss")
         {
-            CTable ss_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SS, jes_type, beff_type, met_type, jer);
+            CTable ss_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SS, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
             out << "printing SS events:\n" << ss_lists << endl;
         }
         if (charge_option == "all" or charge_option =="sf")
         {
-            CTable sf_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SF, jes_type, beff_type, met_type, jer);
+            CTable sf_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SF, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
             out << "printing SF events:\n" << sf_lists << endl;
         }
         if (charge_option == "all" or charge_option =="df")
         {
-            CTable df_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::DF, jes_type, beff_type, met_type, jer);
+            CTable df_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::DF, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
             out << "printing DF events:\n" << df_lists << endl;
         }
         if (charge_option == "all" or charge_option =="os")
         {
-            CTable os_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::OS, jes_type, beff_type, met_type, jer);
+            CTable os_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::OS, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
             out << "printing OS events:\n" << os_lists << endl;
         }
     }

@@ -34,14 +34,14 @@ InterpLooper::InterpLooper
 (
     const std::string& root_file_name,
     Sample::value_type sample,
-    //SignalRegion::value_type signal_region,
+    std::vector<unsigned int> sr_nums,
     AnalysisType::value_type analysis_type,
     SignalRegionType::value_type signal_region_type,
-    //at::YieldType::value_type yield_type,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
     const std::string& den_hist_file_name,
     bool do_scale_factors,
+    bool do_beff_sf,
     float sparm0,
     float sparm1,
     float sparm2,
@@ -58,6 +58,7 @@ InterpLooper::InterpLooper
     , m_verbose(verbose)
     , m_is_data(at::SampleIsData(sample))
     , m_do_scale_factors(do_scale_factors)
+    , m_do_beff_sf(do_beff_sf)
     , m_sparm0(sparm0)
     , m_sparm1(sparm1)
     , m_sparm2(sparm2)
@@ -69,10 +70,9 @@ InterpLooper::InterpLooper
     , m_fl_unc(fl_unc)
     , m_mc_unc(mc_unc)
     , m_sample(sample)
-    //, m_signal_region(signal_region)
+    , m_sr_nums(sr_nums)
     , m_analysis_type(analysis_type)
     , m_signal_region_type(signal_region_type)
-    //, m_yield_type(yield_type)
 {
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
@@ -190,6 +190,12 @@ std::string GetSRLabel(ss::SignalRegion::value_type sr)
     return Form((sr < 10 ? "SR0%u_" : "SR%u_"), sr_num);
 }
 
+//const std::tr1::array<int, 27> sr_nums = {{ 0,  1,  2,  3,  4,  5,  6,  7,  8, 
+//                                           10, 11, 12, 13, 14, 15, 16, 17, 18,
+//                                           20, 21, 22, 23, 24, 25, 26, 27, 28}};
+//
+// const std::tr1::array<int, 3> sr_nums = {{ 0,  1,  21}}; 
+
 // book hists 
 void InterpLooper::BookHists()
 {
@@ -215,10 +221,11 @@ void InterpLooper::BookHists()
         SignalBinInfo bi = GetSignalBinInfo(m_sample);
         const string bin_label = GetSignalBinHistLabel(m_sample);
 
-        for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+        //for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+        for (size_t i = 0; i != m_sr_nums.size(); i++)
         {
-            if (sr_num == 9 or sr_num == 19) {continue;}
-            const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
+            const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
+//             cout << i << "\t" << m_sr_nums.at(i) << "\t" << sr << endl;
 
             hc.Add(new TH2F((sr+"nGenerated"         ).c_str(), (sr+"nGenerated "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nPassing"           ).c_str(), (sr+"nPassing "           +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
@@ -229,7 +236,6 @@ void InterpLooper::BookHists()
             hc.Add(new TH2F((sr+"nFakes"             ).c_str(), (sr+"nFakes "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));    
             hc.Add(new TH2F((sr+"nJESUP"             ).c_str(), (sr+"nJESUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJESDN"             ).c_str(), (sr+"nJESDN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"nBTABASE"           ).c_str(), (sr+"nBTABASE "           +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nBTAUP"             ).c_str(), (sr+"nBTAUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nBTADN"             ).c_str(), (sr+"nBTADN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrJES"          ).c_str(), (sr+"effErrJES "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
@@ -337,10 +343,9 @@ int InterpLooper::operator()(long event)
         // denominator histograms 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
-        for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+        for (size_t i = 0; i != m_sr_nums.size(); i++)
         {
-            if (sr_num == 9 or sr_num == 19) {continue;}
-            const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
+            const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
 
             // denominator (event counts)
             // ----------------------------------------------------------------------------------------------------------------------- //
@@ -519,61 +524,49 @@ int InterpLooper::operator()(long event)
         // apply scale factors
         if (m_do_scale_factors && not is_real_data())
         {
-            //cout << filename() << endl;
-
             // lepton efficiencies
             const float eta1 = (abs(lep1_pdgid()) == 13 ? lep1_p4().eta() : lep1_sc_p4().eta());
             const float eta2 = (abs(lep2_pdgid()) == 13 ? lep2_p4().eta() : lep2_sc_p4().eta());
-//             cout << evt() << "\t" << lep1_pdgid() << "\t" << lep1_p4().pt() << "\t" << lep1_p4().eta() << "\t" << lep1_sc_p4().eta() << "\t" << eta1 << endl;
-//             cout << evt() << "\t" << lep2_pdgid() << "\t" << lep2_p4().pt() << "\t" << lep2_p4().eta() << "\t" << lep2_sc_p4().eta() << "\t" << eta2 << endl;
             evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
 
             // trigger scale factor
             evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
         }
-        //evt_weight == 1.0;
-
 
         // Fill hists
         // ------------------------------------------------------------------------------------//
 
-        for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
-        { 
-            if (sr_num == 9 or sr_num == 19) {continue;}
-            const ss::SignalRegion::value_type signal_region = static_cast<ss::SignalRegion::value_type>(sr_num);
+        for (size_t i = 0; i != m_sr_nums.size(); i++)
+        {
+            const ss::SignalRegion::value_type signal_region = static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i));
             const string sr = GetSRLabel(signal_region); 
 
             if (is_ss()) 
             {
                 // unscaled numerator counts
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::None))
                 {
                     rt::Fill2D(hc[sr+"nPassing"], m0, m12, evt_weight);
                 }
 
                 // JEC scale up/scale down
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::up, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::JES_UP))
                 {
                     rt::Fill2D(hc[sr+"nJESUP"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::down, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::JES_DN))
                 {
                     rt::Fill2D(hc[sr+"nJESDN"], m0, m12, evt_weight);
                 }
 
                 // Btag scale up/down
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::base, /*met=*/YieldType::base, m_do_scale_factors))
-                {
-                    rt::Fill2D(hc[sr+"nBTABASE"], m0, m12, evt_weight);
-                }
-
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::up, /*met=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_UP))
                 {
                     rt::Fill2D(hc[sr+"nBTAUP"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, /*JEC=*/YieldType::base, /*Btag=*/YieldType::down, /*met=*/YieldType::base, m_do_scale_factors))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_DN))
                 {
                     rt::Fill2D(hc[sr+"nBTADN"], m0, m12, evt_weight);
                 }
@@ -767,10 +760,9 @@ void InterpLooper::SetJESSystematic()
     // convenience alias
     rt::TH1Container& hc = m_hist_container;
 
-    for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
     {
-        if (sr_num == 9 or sr_num == 19) {continue;}
-        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
 
         unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
         unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
@@ -805,10 +797,9 @@ void InterpLooper::SetBtagSystematic()
     // convenience alias
     rt::TH1Container& hc = m_hist_container;
 
-    for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
     {
-        if (sr_num == 9 or sr_num == 19) {continue;}
-        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
 
         unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
         unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
@@ -816,8 +807,7 @@ void InterpLooper::SetBtagSystematic()
         {
             for (unsigned int iy = 1; iy < nbinsy; iy++)
             {
-                //const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
-                const float num      = hc[sr+"nBTABASE"  ]->GetBinContent(ix, iy);
+                const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
                 const float num_up   = hc[sr+"nBTAUP"    ]->GetBinContent(ix, iy);
                 const float num_down = hc[sr+"nBTADN"    ]->GetBinContent(ix, iy);            
                 const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
@@ -852,10 +842,9 @@ void InterpLooper::SetTotalSystematic()
     const double trig = 0.06; // not doing low pT analysis yet
     const double pdf  = 0.02;
 
-    for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
     {
-        if (sr_num == 9 or sr_num == 19) {continue;}
-        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
 
         unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
         unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
@@ -887,10 +876,9 @@ void InterpLooper::SetTotalSignalContamination()
     // convenience alias
     rt::TH1Container& hc = m_hist_container;
 
-    for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
     {
-        if (sr_num == 9 or sr_num == 19) {continue;}
-        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
 
         // Total signal contamination from fakes
         // total fakes = SF - DF
@@ -907,10 +895,9 @@ void InterpLooper::CalculateEfficiency()
     // get signal contamination
     SetTotalSignalContamination();
 
-    for (size_t sr_num = 0; sr_num != max_sr+1; sr_num++)
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
     {
-        if (sr_num == 9 or sr_num == 19) {continue;}
-        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
 
         unsigned int nbinsx = hc[sr + "nGenerated"]->GetNbinsX()+1;
         unsigned int nbinsy = hc[sr + "nGenerated"]->GetNbinsY()+1;
@@ -919,7 +906,7 @@ void InterpLooper::CalculateEfficiency()
             for (unsigned int iy = 1; iy < nbinsy; iy++)
             {
                 const float num   = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
-                const float fakes = hc[sr+"nFakes"    ]->GetBinContent(ix ,iy);
+                //const float fakes = hc[sr+"nFakes"    ]->GetBinContent(ix ,iy);
                 const float den   = hc[sr+"nGenerated"]->GetBinContent(ix ,iy);
 
                 if (den > 0.0) 

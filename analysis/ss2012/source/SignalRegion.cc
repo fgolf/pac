@@ -1,5 +1,6 @@
 #include "SignalRegion.h"
 #include "AnalysisType.h"
+#include "SystematicType.h"
 #include "SSB2012.h"
 #include <stdexcept>
 
@@ -1501,152 +1502,54 @@ namespace ss
     // passes signal region
     bool PassesSignalRegion
     (
+        const float met,
+        const float ht,
+        const int njets,
+        const int nbtags,
+        const float l1_pt,
+        const float l2_pt,
+        const int l1_id,
+        const int l2_id,
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type& anal_type,
-        const SignalRegionType::value_type& signal_region_type,
-        const at::YieldType::value_type& jec_yield_type,
-        const at::YieldType::value_type& btag_yield_type,
-        const at::YieldType::value_type& met_yield_type,
-        const bool do_btag_sf,
-        const bool do_jer
+        const SignalRegionType::value_type& signal_region_type
     )
     {
-        // lepton pt cuts
-        const unsigned int id1 = abs(ssb::lep1_pdgid());
-        const unsigned int id2 = abs(ssb::lep2_pdgid());
-        const float pt1 = ssb::lep1_p4().pt();
-        const float pt2 = ssb::lep2_p4().pt();
         switch(anal_type)
         {
             case AnalysisType::high_pt:
-                if (pt1 < 20.0) return false;
-                if (pt2 < 20.0) return false;
+                if (l1_pt < 20.0) return false;
+                if (l2_pt < 20.0) return false;
                 break;
             case AnalysisType::high_pt_eth:
-                if (pt1 < 20.0) return false;
-                if (pt2 < 20.0) return false;
+                if (l1_pt < 20.0) return false;
+                if (l2_pt < 20.0) return false;
                 break;
             case AnalysisType::hcp:
-                if (pt1 < 20.0) return false;
-                if (pt2 < 20.0) return false;
+                if (l1_pt < 20.0) return false;
+                if (l2_pt < 20.0) return false;
                 break;
             case AnalysisType::low_pt:
-                if (pt1 < 10.0) return false;
-                if (pt2 < 10.0) return false;
+                if (l1_pt < 10.0) return false;
+                if (l2_pt < 10.0) return false;
                 break;
             case AnalysisType::vlow_pt:
-                if (pt1 < (id1==11 ? 10.0 : 5.0)) return false;
-                if (pt2 < (id2==11 ? 10.0 : 5.0)) return false;
+                if (l1_pt < (l1_id==11 ? 10.0 : 5.0)) return false;
+                if (l2_pt < (l2_id==11 ? 10.0 : 5.0)) return false;
                 break;
             case AnalysisType::higgsino:
-                if (max(pt1,pt2) < 20.0) return false;
-                if (min(pt1,pt2) < 10.0) return false;
+                if (max(l1_pt, l2_pt) < 20.0) return false;
+                if (min(l1_pt, l2_pt) < 10.0) return false;
                 break;
             default:
                 return false;
         }
 
-        // kinematic variables that define the signal region
-        const bool lep_d0 = true; // place holder
-        int njets   = ssb::njets();
-        float ht    = ssb::ht();
-        float met   = ssb::pfmet();
-        int nbtags  = ssb::nbtags();
-
-        // apply the btag scale factor
-        if (not ssb::is_real_data() && do_btag_sf)
-        {
-            nbtags = ssb::nbtags_reweighted();
-        }
-
-         if (not ssb::is_real_data())
-         {
-             // jet scale up/down
-             switch(jec_yield_type)
-             {
-                 case at::YieldType::up:
-                     njets  = ssb::njets_up();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_up() : ssb::nbtags_up());
-                     ht     = ssb::ht_up();
-                     met    = ssb::pfmet_up();
-                     break;
-                 case at::YieldType::down:
-                     njets  = ssb::njets_dn();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_dn() : ssb::nbtags_dn());
-                     ht     = ssb::ht_dn();
-                     met    = ssb::pfmet_dn();
-                     break;
-                 case at::YieldType::base:
-                     njets  = ssb::njets();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     ht     = ssb::ht();
-                     met    = ssb::pfmet();
-                     break;
-                 default:
-                     njets  = ssb::njets();
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     ht     = ssb::ht();
-                     met    = ssb::pfmet();
-                     break;
-             }
- 
-             // btag scale up/down
-             // this will overide the nbtags setting above
-             switch(btag_yield_type)
-             {
-                 case at::YieldType::up:
-                     nbtags = ssb::nbtags_reweighted_up();
-                     break;
-                 case at::YieldType::down:
-                     nbtags = ssb::nbtags_reweighted_dn();
-                     break;
-                 case at::YieldType::base:
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     break;
-                 default:
-                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                     break;
-             }
-
-            // rescale the JER
-            if (do_jer)
-            {
-                njets  = ssb::njets_jer();
-                ht     = ssb::ht_jer();
-                met    = ssb::pfmet_jer();
-                nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jer() : ssb::nbtags_jer());
-            }
-
-            // rescale the unclustered energy
-            switch(met_yield_type)
-            {
-                case at::YieldType::up:
-                    njets  = ssb::njets();
-                    ht     = ssb::ht();
-                    met    = ssb::pfmet_uncl_up();
-                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                    break;
-                case at::YieldType::down:
-                    njets  = ssb::njets();
-                    ht     = ssb::ht();
-                    met    = ssb::pfmet_uncl_dn();
-                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                    break;
-                case at::YieldType::base:
-                    njets  = ssb::njets();
-                    ht     = ssb::ht();
-                    met    = ssb::pfmet();
-                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
-                    break;
-                default: {/*do nothing*/}
-            }
-         }
-
         // high pt
         if (anal_type==AnalysisType::high_pt_eth || anal_type==AnalysisType::high_pt)
         {
             const float met_cut = (ht < 500.0 ? 30.0 : 0.0); 
-            const bool baseline = (lep_d0 && njets>=2 && ht>=80.0 && met>met_cut);
+            const bool baseline = (njets>=2 && ht>=80.0 && met>met_cut);
 
             if (signal_region_type==SignalRegionType::inclusive)
             {
@@ -1740,7 +1643,7 @@ namespace ss
         if (anal_type==AnalysisType::low_pt || anal_type==AnalysisType::vlow_pt)
         {
             const float met_cut = (ht < 500.0 ? 30.0 : 0.0); 
-            const bool baseline = (lep_d0 && njets>=2 && ht>=250.0 && met>met_cut);
+            const bool baseline = (njets>=2 && ht>=250.0 && met>met_cut);
 
             if (signal_region_type==SignalRegionType::inclusive)
             {
@@ -1922,7 +1825,7 @@ namespace ss
         }
         if (anal_type==AnalysisType::higgsino)
         {
-            const bool baseline = (lep_d0 && ssb::njets30()>=2);
+            const bool baseline = (ssb::njets30()>=2);
             if (signal_region_type==SignalRegionType::inclusive)
             {
                 switch (signal_region)
@@ -2015,6 +1918,180 @@ namespace ss
         return false;
     }
 
+    // passes signal region
+    bool PassesSignalRegion
+    (
+        const SignalRegion::value_type& signal_region,
+        const AnalysisType::value_type& anal_type,
+        const SignalRegionType::value_type& signal_region_type,
+        const bool do_beff_sf,
+        const SystematicType::value_type& syst_type
+    )
+    {
+        // lepton pt cuts
+        const unsigned int l1_id = abs(ssb::lep1_pdgid());
+        const unsigned int l2_id = abs(ssb::lep2_pdgid());
+        const float l1_pt        = ssb::lep1_p4().pt();
+        const float l2_pt        = ssb::lep2_p4().pt();
+
+        // kinematic variables that define the signal region
+        float met   = -999999;
+        float ht    = -999999;
+        int nbtags  = -999999;
+        int njets   = -999999;
+        ss::GetReweightedKinematicVariables(met, ht, njets, nbtags, do_beff_sf, syst_type);
+
+        // call main fucntion with this ht/met/njets/nbtags
+        return PassesSignalRegion(met, ht, njets, nbtags, l1_pt, l2_pt, l1_id, l2_id, signal_region, anal_type, signal_region_type);
+    }
+
+    // passes signal region
+    bool PassesSignalRegion
+    (
+        const SignalRegion::value_type& signal_region,
+        const AnalysisType::value_type& anal_type,
+        const SignalRegionType::value_type& signal_region_type,
+        const at::YieldType::value_type& jec_yield_type,
+        const at::YieldType::value_type& btag_yield_type,
+        const at::YieldType::value_type& met_yield_type,
+        const bool do_btag_sf,
+        const bool do_jer
+    )
+    {
+        // lepton pt cuts
+        const unsigned int id1 = abs(ssb::lep1_pdgid());
+        const unsigned int id2 = abs(ssb::lep2_pdgid());
+        const float pt1 = ssb::lep1_p4().pt();
+        const float pt2 = ssb::lep2_p4().pt();
+        switch(anal_type)
+        {
+            case AnalysisType::high_pt:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
+            case AnalysisType::high_pt_eth:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
+            case AnalysisType::hcp:
+                if (pt1 < 20.0) return false;
+                if (pt2 < 20.0) return false;
+                break;
+            case AnalysisType::low_pt:
+                if (pt1 < 10.0) return false;
+                if (pt2 < 10.0) return false;
+                break;
+            case AnalysisType::vlow_pt:
+                if (pt1 < (id1==11 ? 10.0 : 5.0)) return false;
+                if (pt2 < (id2==11 ? 10.0 : 5.0)) return false;
+                break;
+            case AnalysisType::higgsino:
+                if (max(pt1,pt2) < 20.0) return false;
+                if (min(pt1,pt2) < 10.0) return false;
+                break;
+            default:
+                return false;
+        }
+
+        // kinematic variables that define the signal region
+        int njets   = ssb::njets();
+        float ht    = ssb::ht();
+        float met   = ssb::pfmet();
+        int nbtags  = ssb::nbtags();
+
+        // apply the btag scale factor
+        if (not ssb::is_real_data() && do_btag_sf)
+        {
+            nbtags = ssb::nbtags_reweighted();
+        }
+
+         if (not ssb::is_real_data())
+         {
+             // jet scale up/down
+             switch(jec_yield_type)
+             {
+                 case at::YieldType::up:
+                     njets  = ssb::njets_up();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_up() : ssb::nbtags_up());
+                     ht     = ssb::ht_up();
+                     met    = ssb::pfmet_up();
+                     break;
+                 case at::YieldType::down:
+                     njets  = ssb::njets_dn();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jec_dn() : ssb::nbtags_dn());
+                     ht     = ssb::ht_dn();
+                     met    = ssb::pfmet_dn();
+                     break;
+                 case at::YieldType::base:
+                     njets  = ssb::njets();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     ht     = ssb::ht();
+                     met    = ssb::pfmet();
+                     break;
+                 default:
+                     njets  = ssb::njets();
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     ht     = ssb::ht();
+                     met    = ssb::pfmet();
+                     break;
+             }
+ 
+             // btag scale up/down
+             // this will overide the nbtags setting above
+             switch(btag_yield_type)
+             {
+                 case at::YieldType::up:
+                     nbtags = ssb::nbtags_reweighted_up();
+                     break;
+                 case at::YieldType::down:
+                     nbtags = ssb::nbtags_reweighted_dn();
+                     break;
+                 case at::YieldType::base:
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     break;
+                 default:
+                     nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                     break;
+             }
+
+            // rescale the JER
+            if (do_jer)
+            {
+                njets  = ssb::njets_jer();
+                ht     = ssb::ht_jer();
+                met    = ssb::pfmet_jer();
+                nbtags = (do_btag_sf ? ssb::nbtags_reweighted_jer() : ssb::nbtags_jer());
+            }
+
+            // rescale the unclustered energy
+            switch(met_yield_type)
+            {
+                case at::YieldType::up:
+                    njets  = ssb::njets();
+                    ht     = ssb::ht();
+                    met    = ssb::pfmet_uncl_up();
+                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                    break;
+                case at::YieldType::down:
+                    njets  = ssb::njets();
+                    ht     = ssb::ht();
+                    met    = ssb::pfmet_uncl_dn();
+                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                    break;
+                case at::YieldType::base:
+                    njets  = ssb::njets();
+                    ht     = ssb::ht();
+                    met    = ssb::pfmet();
+                    nbtags = (do_btag_sf ? ssb::nbtags_reweighted() : ssb::nbtags());
+                    break;
+                default: {/*do nothing*/}
+            }
+         }
+            
+        // call main fucntion with this ht/met/njets/nbtags
+        return PassesSignalRegion(met, ht, njets, nbtags, pt1, pt2, id1, id2, signal_region, anal_type, signal_region_type);
+    }
+
     // set aliases for TTree
     void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf)
     {
@@ -2041,6 +2118,11 @@ namespace ss
         tree.SetAlias("fr2"    , "lep1_wfr/(1.0-lep2_wfr)"    ); 
         tree.SetAlias("fl2"    , "lep2_wflip/(1.0-lep2_wflip)"); 
         tree.SetAlias("l2_dz"  , "fabs(lep2_dz)"              ); 
+
+        // truth matched
+        tree.SetAlias("is_ss_mc3"   , "lep1_mc3id*lep2_mc3id>0"             );
+        tree.SetAlias("lep_is_fromw", "lep1_is_fromw==1 && lep2_is_fromw==1");
+        tree.SetAlias("mc_matched"  , "is_ss_mc3 && lep_is_fromw"           );
 
         // fake rates
         tree.SetAlias("sfw", "l1_fo*fr1 + l2_fo*fr2");

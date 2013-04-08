@@ -16,14 +16,16 @@
 
 // typedefs
 #pragma link C++ enum ss::SignalRegion::value_type;
-#pragma link C++ enum ss::AnalysisType::value_type;
 #pragma link C++ enum ss::SignalRegionType::value_type;
+#pragma link C++ enum ss::AnalysisType::value_type;
+#pragma link C++ enum ss::SystematicType::value_type;
 
 // templated classes
 
 // classes or structs
 #pragma link C++ struct ss::SignalRegion+;
 #pragma link C++ struct ss::AnalysisType+;
+#pragma link C++ struct ss::SystematicType+;
 #pragma link C++ struct ss::Yield+;
 #pragma link C++ struct ss::SignalBinInfo+;
 
@@ -54,5 +56,6 @@
 #pragma link C++ function ss::GetYield;
 #pragma link C++ function ss::GetYieldsMap;
 #pragma link C++ function ss::PrintHiggsXsecTable;
+#pragma link C++ function ss::GetSystematicTypeFromName;
 
 #endif // __CINT__

@@ -30,8 +30,10 @@ try
     std::string den_hist_file_name  = "";
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";
+    std::string sr_string           = "-1";
     bool exclusive                  = true;
     bool do_scale_factors           = true;
+    bool do_beff_sf                 = true;
     float sparm0                    = -999999.0;
     float sparm1                    = -999999.0;
     float sparm2                    = -999999.0;
@@ -40,8 +42,6 @@ try
     float fake_sys_unc              = 0.5;
     float flip_sys_unc              = 0.3;
     float mc_sys_unc                = 0.5;
-    //unsigned int signal_region_num  = 0;
-    //int yield_type_raw              = 0;
     float lumi                      = 1.0;
     bool verbose                    = false;
     int run                         = -1;
@@ -56,13 +56,13 @@ try
         ("sample"    , po::value<std::string>(&sample_name)->required(), "REQUIRED: name of input sample (from at/Sample.h)"                             )
         ("output"    , po::value<std::string>(&output_file)            , "name of output root file"                                                      )
         ("anal_type" , po::value<std::string>(&analysis_type_name)     , "name of analysis type (from AnalysisType.h)"                                   )
-        //("yield_type", po::value<int>(&yield_type_raw)                 , "yield type (0 == base (default), > 0 == up, < 0 == down)"                      )
         ("fr_file"   , po::value<std::string>(&fake_rate_file_name)    , Form("fake rate file name (default: %s)", fake_rate_file_name.c_str())          )
         ("fl_file"   , po::value<std::string>(&flip_rate_file_name)    , Form("flip rate file name (default: %s)", flip_rate_file_name.c_str())          )
         ("den_file"  , po::value<std::string>(&den_hist_file_name)     , Form("den count file name (default: %s)", input_file.c_str())                   )
+        ("sr"        , po::value<std::string>(&sr_string)              , "comma seperated list of SRs to run on (any < 0 means all -- default)"          )
         ("nev"       , po::value<long>(&number_of_events)              , "number of events to run on (-1 == all)"                                        )
-        ////("sr"        , po::value<unsigned int>(&signal_region_num)     , "signal region number (default is 0)"                                           )
         ("do_sf"     , po::value<bool>(&do_scale_factors)              , "use the MC scale factors (default is true)"                                    )
+        ("do_beff_sf", po::value<bool>(&do_beff_sf)                    , "do the btag efficiency reweight (MC only -- default is true)"                  )
         ("sparm0"    , po::value<float>(&sparm0)                       , "sparm0 is required to be this value"                                           )
         ("sparm1"    , po::value<float>(&sparm1)                       , "sparm1 is required to be this value"                                           )
         ("sparm2"    , po::value<float>(&sparm2)                       , "sparm2 is required to be this value"                                           )
@@ -116,13 +116,13 @@ try
     cout << "sample_name         :\t" << sample_name         << endl;
     cout << "output_file         :\t" << output_file         << endl;
     cout << "analysis_type_name  :\t" << analysis_type_name  << endl;
-    //cout << "yield_type_raw      :\t" << yield_type_raw      << endl;
     cout << "fake_rate_file_name :\t" << fake_rate_file_name << endl;
     cout << "flip_rate_file_name :\t" << flip_rate_file_name << endl;
     cout << "den_hist_file_name  :\t" << den_hist_file_name  << endl;
     cout << "number_of_events    :\t" << number_of_events    << endl;
-    //cout << "signal_region_num   :\t" << signal_region_num   << endl;
+    cout << "sr                  :\t" << sr_string           << endl;
     cout << "do_scale_factors    :\t" << do_scale_factors    << endl;
+    cout << "do_beff_sf          :\t" << do_beff_sf          << endl;
     cout << "sparm0              :\t" << sparm0              << endl;
     cout << "sparm1              :\t" << sparm1              << endl;
     cout << "sparm2              :\t" << sparm2              << endl;
@@ -149,6 +149,31 @@ try
         }
     }
 
+    // parse the signal region string
+    std::vector<std::string> sr_strings = rt::string_split(sr_string);
+    std::vector<unsigned int> sr_nums;
+    for (size_t i = 0; i != sr_strings.size(); i++)
+    {
+        int sr_num_raw = boost::lexical_cast<int>(sr_strings.at(i));
+        // any < 0 numbers means run on all
+        if (sr_num_raw < 0)
+        {
+            sr_nums.clear();
+            const unsigned int values[] = { 0,  1,  2,  3,  4,  5,  6,  7,  8,
+                                           10, 11, 12, 13, 14, 15, 16, 17, 18,
+                                           20, 21, 22, 23, 24, 25, 26, 27, 28};
+            sr_nums.assign(values, values+27);
+            break;
+        }
+        sr_nums.push_back(sr_num_raw);
+    }
+    cout << "[ss2012_interp_hists] running in SR(s): ";
+    for (size_t i = 0; i != sr_nums.size(); i++)
+    {
+        if (sr_nums.at(i) != sr_nums.back()) {cout << sr_nums.at(i) << ", ";}
+        else                                 {cout << sr_nums.at(i) << endl;}
+    }
+
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
 
@@ -161,9 +186,6 @@ try
 
     // signal region and type
     const SignalRegionType::value_type signal_region_type = (exclusive ? SignalRegionType::exclusive : SignalRegionType::inclusive);
-    //const std::string signal_region_type_name             = GetSignalRegionTypeName(signal_region_type);
-    //const string signal_region_name                       = Form("sr%d", signal_region_num);
-    //const SignalRegion::value_type signal_region          = GetSignalRegionFromName(signal_region_name, ati.name, signal_region_type_name);
 
     // sample
     at::Sample::value_type sample = at::GetSampleFromName(sample_name);
@@ -190,14 +212,14 @@ try
         (
             output_file,       
             sample,
-            //signal_region,
+            sr_nums,
             analysis_type,
             signal_region_type,
-            //yield_type,
             fake_rate_file_name,
             flip_rate_file_name,
             den_hist_file_name,
             do_scale_factors,
+            do_beff_sf,
             sparm0,
             sparm1,
             sparm2,
