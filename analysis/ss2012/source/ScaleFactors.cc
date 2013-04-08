@@ -157,7 +157,7 @@ float DileptonTriggerScaleFactor
     //if (hyp_type == at::DileptonHypType::EMU)  {return 0.934;}
 
     const bool is_barrel = (fabs(trailing_p4.eta()) < 1.0);
-    const bool lep_pt    = trailing_p4.pt();
+    const float lep_pt   = trailing_p4.pt();
     
     // values supplied by ETH (LHCP value)
     if (anal_type == ss::AnalysisType::high_pt)

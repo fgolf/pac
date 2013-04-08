@@ -10,7 +10,6 @@ namespace ss
     SystematicType::value_type GetSystematicTypeFromName(const std::string& syst_type_name)
     {
         const std::string st_name = rt::string_lower(syst_type_name);
-
         if      (syst_type_name == "none" ) {return SystematicType::None;   } 
         else if (syst_type_name == "jes+" ) {return SystematicType::JES_UP; } 
         else if (syst_type_name == "jes-" ) {return SystematicType::JES_DN; } 

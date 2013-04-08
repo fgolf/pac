@@ -1878,7 +1878,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
         }
 
-        //const unsigned int seed = 10;
+        // set the seed
         const unsigned int seed = evt_event();
 
         // calculate the "reweighted" MC btag yields
@@ -1904,16 +1904,8 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             vector<LorentzVector> vbjets_jer_p4 = m_evt.vbjets_p4; 
 
             // update the values by scaling the JER
-            vector<LorentzVector> vbjets_reweighted_jer_p4 = at::RecountedBjets(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
-            //cout << "pf met before = " << m_evt.pfmet_jer << endl;;
-            m_evt.pfmet_jer     = met;
-            m_evt.pfmet_jer_phi = met_phi;
-            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_jer_phi, m_evt.ht_jer, seed);
-            //cout << "pf met after v1 = " << m_evt.pfmet_jer << endl;;
-            m_evt.pfmet_jer     = met;
-            m_evt.pfmet_jer_phi = met_phi;
             samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_jer_phi, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/40, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
-//             cout << "pf met after v2 = " << m_evt.pfmet_jer << endl;;
+            vector<LorentzVector> vbjets_reweighted_jer_p4 = at::RecountedBjets(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
             samesign::smearJETScaleJets(vbjets_jer_p4, seed);
             samesign::smearJETScaleJets(vbjets_reweighted_jer_p4, seed);
 

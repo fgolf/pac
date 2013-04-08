@@ -385,7 +385,7 @@ try
         ("sr"        , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                            )
         ("sr_type"   , po::value<std::string>(&signal_region_type_name) , "signal region type (default is exclusive)"                      )
         ("anal_type" , po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"                  )
-        ("syst_type" , po::value<std::string>(&signal_region_type_name) , "systematic type (default is none)"                              )
+        ("syst_type" , po::value<std::string>(&syst_type_name)          , "systematic type (default is none)"                              )
         ("charge"    , po::value<std::string>(&charge_option)           , "charge option (ss, sf, df, os, all)"                            )
         ("print_list", po::value<bool>(&print_list)                     , "print the event lists (default is true)"                        )
         ("do_beff_sf", po::value<bool>(&do_beff_sf)                     , "beff scale factor flag (mc only, default is true)"              )

@@ -236,14 +236,21 @@ void InterpLooper::BookHists()
             hc.Add(new TH2F((sr+"nFakes"             ).c_str(), (sr+"nFakes "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));    
             hc.Add(new TH2F((sr+"nJESUP"             ).c_str(), (sr+"nJESUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJESDN"             ).c_str(), (sr+"nJESDN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nJER"               ).c_str(), (sr+"nJER "               +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nBTAUP"             ).c_str(), (sr+"nBTAUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nBTADN"             ).c_str(), (sr+"nBTADN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nMETUP"             ).c_str(), (sr+"nMETUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nMETDN"             ).c_str(), (sr+"nMETDN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrJES"          ).c_str(), (sr+"effErrJES "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrJESUP"        ).c_str(), (sr+"effErrJESUP "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrJESDN"        ).c_str(), (sr+"effErrJESDN "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrBTA"          ).c_str(), (sr+"effErrBTA "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrBTAUP"        ).c_str(), (sr+"effErrBTAUP "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrBTADN"        ).c_str(), (sr+"effErrBTADN "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrJER"          ).c_str(), (sr+"effErrJER "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrMET"          ).c_str(), (sr+"effErrMET "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrMETUP"        ).c_str(), (sr+"effErrMETUP "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrMETDN"        ).c_str(), (sr+"effErrMETDN "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrTot"          ).c_str(), (sr+"effErrTot "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrStat"         ).c_str(), (sr+"effErrStat "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
         }
@@ -560,6 +567,12 @@ int InterpLooper::operator()(long event)
                     rt::Fill2D(hc[sr+"nJESDN"], m0, m12, evt_weight);
                 }
 
+                // JER scale up/scale down
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::JER))
+                {
+                    rt::Fill2D(hc[sr+"nJER"], m0, m12, evt_weight);
+                }
+
                 // Btag scale up/down
                 if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_UP))
                 {
@@ -569,6 +582,17 @@ int InterpLooper::operator()(long event)
                 if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_DN))
                 {
                     rt::Fill2D(hc[sr+"nBTADN"], m0, m12, evt_weight);
+                }
+
+                // Btag scale up/down
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::MET_UP))
+                {
+                    rt::Fill2D(hc[sr+"nMETUP"], m0, m12, evt_weight);
+                }
+
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::MET_DN))
+                {
+                    rt::Fill2D(hc[sr+"nMETDN"], m0, m12, evt_weight);
                 }
             }
              else if (is_sf())
@@ -791,6 +815,73 @@ void InterpLooper::SetJESSystematic()
     return;
 }
 
+void InterpLooper::SetJERSystematic()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
+    {
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
+
+        unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
+        unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
+        for (unsigned int ix = 1; ix < nbinsx; ix++) 
+        {
+            for (unsigned int iy = 1; iy < nbinsy; iy++) 
+            {
+                const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
+                const float num_up   = hc[sr+"nJER"    ]->GetBinContent(ix, iy);
+                const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
+
+                if (den > 0 && num > 0) 
+                {
+                    const float jer_syst = (num_up-num) / num;
+                    hc[sr+"effErrJER"]->SetBinContent(ix, iy, 1.0 + jer_syst);
+                }
+            }
+        }
+    } // end sr loop
+    return;
+}
+
+void InterpLooper::SetMETSystematic()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
+    {
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
+
+        unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
+        unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
+        for (unsigned int ix = 1; ix < nbinsx; ix++) 
+        {
+            for (unsigned int iy = 1; iy < nbinsy; iy++) 
+            {
+                const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
+                const float num_up   = hc[sr+"nMETUP"    ]->GetBinContent(ix, iy);
+                const float num_down = hc[sr+"nMETDN"    ]->GetBinContent(ix, iy);            
+                const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
+
+                float met_syst_up = 0.0f;
+                float met_syst_dn = 0.0f;
+                if (den > 0 && num > 0) 
+                {
+                    met_syst_up = (num_up-num  ) / num;
+                    met_syst_dn = (num_down-num) / num;
+                    hc[sr+"effErrMETUP"]->SetBinContent(ix, iy, 1.0 + met_syst_up);
+                    hc[sr+"effErrMETDN"]->SetBinContent(ix, iy, 1.0 + met_syst_dn);
+                }
+                hc[sr+"effErrMET"]->SetBinContent(ix, iy, std::max(fabs(met_syst_up), fabs(met_syst_dn)));
+            }
+        }
+    } // end sr loop
+    return;
+}
+
+
 // NOT SURE if this is right -- ask FG
 void InterpLooper::SetBtagSystematic()
 {
@@ -834,6 +925,8 @@ void InterpLooper::SetTotalSystematic()
     rt::TH1Container& hc = m_hist_container;
 
     SetJESSystematic();
+    SetJERSystematic();
+    SetMETSystematic();
     SetBtagSystematic();
 
     // taken as constant
@@ -857,9 +950,11 @@ void InterpLooper::SetTotalSystematic()
                 {
                     const float num        = hc[sr+"nPassing"]->GetBinContent(ix, iy);
                     const float eff        = num/den;
-                    const float jes_syst   = hc[sr+"effErrJES"  ]->GetBinContent(ix, iy);
-                    const float btag_syst  = hc[sr+"effErrBTA"  ]->GetBinContent(ix, iy);
-                    const float syst_error = std::sqrt(pow(lumi, 2) + pow(lep, 2) + pow(trig, 2) + pow(pdf, 2) + pow(jes_syst, 2) + pow(btag_syst, 2));
+                    const float jes_syst   = hc[sr+"effErrJES"]->GetBinContent(ix, iy);
+                    const float jer_syst   = hc[sr+"effErrJER"]->GetBinContent(ix, iy);
+                    const float met_syst   = hc[sr+"effErrMET"]->GetBinContent(ix, iy);
+                    const float btag_syst  = hc[sr+"effErrBTA"]->GetBinContent(ix, iy);
+                    const float syst_error = std::sqrt(pow(lumi, 2) + pow(lep, 2) + pow(trig, 2) + pow(pdf, 2) + pow(jes_syst, 2) + pow(jer_syst, 2) + pow(met_syst, 2) + pow(btag_syst, 2));
                     const float stat_error = (num > 0 ? sqrt(eff*(1.0-eff)/num) : 0); 
                     hc[sr+"effErrTot" ]->SetBinContent(ix, iy, syst_error);
                     hc[sr+"effErrStat"]->SetBinContent(ix, iy, stat_error);

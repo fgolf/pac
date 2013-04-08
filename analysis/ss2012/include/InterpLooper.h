@@ -104,6 +104,8 @@ private:
 
     // systematics
     void SetJESSystematic();
+    void SetJERSystematic();
+    void SetMETSystematic();
     void SetBtagSystematic();
     void SetTotalSystematic();
     void SetTotalSignalContamination();
