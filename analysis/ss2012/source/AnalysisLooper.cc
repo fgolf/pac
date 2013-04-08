@@ -1878,8 +1878,8 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
         }
 
-        const unsigned int seed = 10;
-        //const unsigned int seed = evt_event();
+        //const unsigned int seed = 10;
+        const unsigned int seed = evt_event();
 
         // calculate the "reweighted" MC btag yields
         if (not evt_isRealData() && (cms2_tag.version > 21))
