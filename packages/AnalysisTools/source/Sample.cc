@@ -556,7 +556,7 @@ namespace at
             // latex
             "T1tttt", 
             // ntuple_path
-            "SMS-T1ttttProtoScan_Mgluino-350to1200_mLSP-0to400_8TeV-Pythia6Z_StoreResults-PU_START52_V5_FullSim-v1", 
+            "SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1",
             // tag
             "V05-03-23",
             // SampleType 
@@ -568,19 +568,76 @@ namespace at
         },
         {
             // name
-            "t1tttt_fastsim", 
+            "t1tttt_scans", 
             // title
-            "T1tttt", 
-            // latex 
-            "T1tttt", 
+            "T1tttt (scans)", 
+            // latex
+            "T1tttt (scans)", 
             // ntuple_path
-            "SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1",
+            "", // going straight to baby
             // tag
-            "V05-03-23",
+            "V05-03-28",
             // SampleType 
             SampleType::susy,
             // Sample
-            Sample::t1tttt_fastsim,
+            Sample::t1tttt_scans,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "t6ttww_x05", 
+            // title
+            "#tilde{b}#tilde{b}* #rightarrow t#bar{t}W^{+}W^{-}#tilde{#chi}^{0}#tilde{#chi}^{0}, x = 0.5",
+            // latex 
+            "\\tilde{b}\\tilde{b}^* \\rightarrow t\\bar{t}W^{+}W^{-}\\tilde{\\chi^0}\\tilde{\\chi^0}, x = 0.5",
+            // ntuple_path
+            // https://twiki.cern.ch/twiki/bin/view/CMS/SMST6ttWWScan2Madgraph8TeV
+            "SMS-T6ttWW_mSbottom-200to700_mChargino-50to600_mLSP_25to300_x05_8TeV-Madgraph_Summer12-START52_V9_FSIM_UFL_USER",  
+            // tag
+            "V05-03-28",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::t6ttww_x05,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "t6ttww_x08", 
+            // title
+            "#tilde{b}#tilde{b}* #rightarrow t#bar{t}W^{+}W^{-}#tilde{#chi}^{0}#tilde{#chi}^{0}, x = 0.8",
+            // latex 
+            "\\tilde{b}\\tilde{b}^* \\rightarrow t\\bar{t}W^{+}W^{-}\\tilde{\\chi^0}\\tilde{\\chi^0}, x = 0.8",
+            // ntuple_path
+            // https://twiki.cern.ch/twiki/bin/view/CMS/SMST6ttWWScan2Madgraph8TeV
+            "SMS-T6ttWW_mSbottom-200to700_mChargino-50to600_mLSP_25to300_x08_8TeV-Madgraph_Summer12-START52_V9_FSIM_UFL_USER",  
+            // tag
+            "V05-03-28",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::t6ttww_x08,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "t5tttt", 
+            // title
+            "#tilde{g}#tilde{g} #rightarrow t#bar{t}t#bar{t}#tilde{#chi}^{0}#tilde{#chi}^{0} (#tilde{g} #rigtharrow t#bar{t}* or #tilde{g} #rigtharrow #bar{t}#tilde{t}, t#bar{t}* #rightarrow #bar{t}#tilde{#chi}^{0})",
+            // latex 
+            "\\tilde{g}\\tilde{g} \\rightarrow t\\bar{t}t\\bar{t}\\tilde{\\chi}^{0}\\tilde{\\chi}^{0} (\\tilde{g} \\rigtharrow t\\bar{t}* or \\tilde{g} \\rigtharrow \\bar{t}\\tilde{t}, t\\bar{t}* \\rightarrow \\bar{t}\\tilde{\\chi}^{0})",
+            // ntuple_path
+            // https://twiki.cern.ch/twiki/bin/view/CMS/SMST5ttttMadgraph8TeV
+            "", // going straight to baby
+            // tag
+            "V05-03-28",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::t5tttt,
             // color
             kBlue
         },
@@ -592,7 +649,6 @@ namespace at
             // latex 
             "\\tilde{b}\\tilde{b}^* \\rightarrow t\\bar{t}W^{+}W^{-}\\tilde{\\chi^0}\\tilde{\\chi^0}",
             // ntuple_path
-            // this is out of date, corrently we go straight from edm --> baby
             // https://twiki.cern.ch/twiki/bin/viewauth/CMS/SMST6ttWWMadgraph8TeV 
             "SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph_Summer12-START52_V9_FSIM",  
             // tag

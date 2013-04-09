@@ -106,6 +106,8 @@ private:
     void SetJESSystematic();
     void SetJERSystematic();
     void SetMETSystematic();
+    void SetLepEffSystematic();
+    void SetTrigEffSystematic();
     void SetBtagSystematic();
     void SetTotalSystematic();
     void SetTotalSignalContamination();

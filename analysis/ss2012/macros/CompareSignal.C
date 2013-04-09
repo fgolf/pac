@@ -31,11 +31,13 @@ void PrintPlots
     h_diff->SetDirectory(NULL);
 
     TCanvas c1("c1", "c1", 1600, 1200);
-    gStyle->SetPaintTextFormat(paint_text_option.c_str());
     gStyle->SetPadRightMargin(0.10);
     if (rt::string_contains(draw_option, "colz"))
     {
         gStyle->SetPadRightMargin(0.15);
+    }
+    {
+        gStyle->SetPaintTextFormat(paint_text_option.c_str());
     }
     if (zmax > zmin)
     {
@@ -45,10 +47,9 @@ void PrintPlots
     hc1[plot_name]->Draw(draw_option.c_str()); c1.Print((path + "/" + plot_name + "_v1."   + suffix).c_str());
     hc2[plot_name]->Draw(draw_option.c_str()); c1.Print((path + "/" + plot_name + "_v2."   + suffix).c_str());
 
-    gStyle->SetPaintTextFormat("1.3f");
     h_diff->Draw(draw_option.c_str());
     c1.Print((path + "/" + plot_name + "_diff." + suffix).c_str());
-
+    
     delete h_diff;
 }
 
@@ -58,7 +59,6 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
     rt::TH1Container hc2(file2);
     rt::TH1Container hcd; // diff
 
-    gStyle->SetPaintTextFormat("1.0f");
     gStyle->SetCanvasDefX(1600);
     gStyle->SetCanvasDefY(1200);
 
@@ -69,8 +69,6 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
 
     std::string path = "plots/interp/" + label;
     rt::mkdir(path, true);
-
-    TCanvas c1("c1", "c1", 1600, 1200);
 
     if (sr_num < 0)
     {
@@ -84,15 +82,18 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
 
             const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(nsr)); 
 
-            PrintPlots(sr+"nGenerated"     , hc1, hc2, path, suffix, draw_option, "1.0f"); 
-            PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.0f"); 
-            PrintPlots(sr+"effNormNice"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
-            PrintPlots(sr+"effNormNicePerc", hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
+            PrintPlots(sr+"nGenerated"     , hc1, hc2, path, suffix, draw_option, "1.0f");
+            PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.0f");
+            PrintPlots(sr+"effNormNice"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12);
+            PrintPlots(sr+"effNormNicePerc", hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12);
             PrintPlots(sr+"effErrJESUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
             PrintPlots(sr+"effErrJESDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
             PrintPlots(sr+"effErrBTAUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
             PrintPlots(sr+"effErrBTADN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-            PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f");
+            PrintPlots(sr+"effErrMETUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+            PrintPlots(sr+"effErrMETDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+            PrintPlots(sr+"effErrJER"      , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 1.25);
+/*             PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f"); */
             PrintPlots(sr+"effErrStat"     , hc1, hc2, path, suffix, draw_option, "1.3f");
         }
     }
@@ -106,15 +107,18 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
 
         const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
 
-        PrintPlots(sr+"nGenerated"     , hc1, hc2, path, suffix, draw_option, "1.0f"); 
-        PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.0f"); 
-        PrintPlots(sr+"effNormNice"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
-        PrintPlots(sr+"effNormNicePerc", hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12); 
+        PrintPlots(sr+"nGenerated"     , hc1, hc2, path, suffix, draw_option, "1.0f");
+        PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.0f");
+        PrintPlots(sr+"effNormNice"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12);
+        PrintPlots(sr+"effNormNicePerc", hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12);
         PrintPlots(sr+"effErrJESUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
         PrintPlots(sr+"effErrJESDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
         PrintPlots(sr+"effErrBTAUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
         PrintPlots(sr+"effErrBTADN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-        PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f");
+        PrintPlots(sr+"effErrMETUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+        PrintPlots(sr+"effErrMETDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
+        PrintPlots(sr+"effErrJER"      , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 1.25);
+/*         PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f"); */
         PrintPlots(sr+"effErrStat"     , hc1, hc2, path, suffix, draw_option, "1.3f");
     }
 }

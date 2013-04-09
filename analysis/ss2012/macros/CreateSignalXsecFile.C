@@ -23,7 +23,7 @@ void CreateSignalXsecFile()
     // --------------------------------------------------------------------------------- //
     // https://twiki.cern.ch/twiki/pub/CMS/SMST6ttWWMadgraph8TeV/Sbottom_8TeV_25GeV.txt
     ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(at::Sample::sbottomtop);
-    hc.Add(new TH1F("h_xsec_sbottomtop", "Cross Section sbottom pair (T6ttWW);m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    hc.Add(new TH1F ("h_xsec_sbottomtop", "Cross Section sbottom pair (T6ttWW);m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
     SetBinContent(hc["h_xsec_sbottomtop"] , 325 , 1.25277   , 14.2875 ); 
     SetBinContent(hc["h_xsec_sbottomtop"] , 350 , 0.807323  , 14.3597 ); 
     SetBinContent(hc["h_xsec_sbottomtop"] , 375 , 0.531443  , 14.266  ); 
@@ -41,11 +41,65 @@ void CreateSignalXsecFile()
     SetBinContent(hc["h_xsec_sbottomtop"] , 675 , 0.0106123 , 17.9891 ); 
     SetBinContent(hc["h_xsec_sbottomtop"] , 700 , 0.0081141 , 18.4146 ); 
 
+    // t6ttww_x05 (sbottom pair production -- T6ttWW x=0.5)
+    // --------------------------------------------------------------------------------- //
+    // https://twiki.cern.ch/twiki/pub/CMS/SMST6ttWWScan2Madgraph8TeV/Sbottom_8TeV_25GeV.txt
+    bin_info = ss::GetSignalBinInfo(at::Sample::t6ttww_x05);
+    hc.Add(new TH1F ("h_xsec_t6ttww_x05", "Cross Section sbottom pair (T6ttWW, x=0.5);m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 200 , 18.5245   , 14.9147 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 225 , 9.90959   , 14.9662 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 250 , 5.57596   , 14.7529 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 275 , 3.2781    , 14.7341 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 300 , 1.99608   , 14.6905 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 325 , 1.25277   , 14.2875 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 350 , 0.807323  , 14.3597 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 375 , 0.531443  , 14.266  );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 400 , 0.35683   , 14.2848 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 425 , 0.243755  , 14.0504 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 450 , 0.169668  , 14.2368 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 475 , 0.119275  , 14.6664 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 500 , 0.0855847 , 14.9611 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 525 , 0.0618641 , 15.4135 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 550 , 0.0452067 , 15.8177 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 575 , 0.0333988 , 16.2132 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 600 , 0.0248009 , 16.6406 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 625 , 0.0185257 , 17.0835 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 650 , 0.0139566 , 17.56   );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 675 , 0.0106123 , 17.9891 );
+    SetBinContent(hc["h_xsec_t6ttww_x05"] , 700 , 0.0081141 , 18.4146 );
+
+    // t6ttww_x08 (sbottom pair production -- T6ttWW x=0.8)
+    // --------------------------------------------------------------------------------- //
+    // https://twiki.cern.ch/twiki/pub/CMS/SMST6ttWWScan3Madgraph8TeV/Sbottom_8TeV_25GeV.txt
+    bin_info = ss::GetSignalBinInfo(at::Sample::t6ttww_x08);
+    hc.Add(new TH1F ("h_xsec_t6ttww_x08", "Cross Section sbottom pair (T6ttWW, x=0.8);m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 200 , 18.5245   , 14.9147 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 225 , 9.90959   , 14.9662 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 250 , 5.57596   , 14.7529 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 275 , 3.2781    , 14.7341 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 300 , 1.99608   , 14.6905 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 325 , 1.25277   , 14.2875 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 350 , 0.807323  , 14.3597 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 375 , 0.531443  , 14.266  );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 400 , 0.35683   , 14.2848 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 425 , 0.243755  , 14.0504 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 450 , 0.169668  , 14.2368 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 475 , 0.119275  , 14.6664 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 500 , 0.0855847 , 14.9611 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 525 , 0.0618641 , 15.4135 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 550 , 0.0452067 , 15.8177 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 575 , 0.0333988 , 16.2132 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 600 , 0.0248009 , 16.6406 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 625 , 0.0185257 , 17.0835 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 650 , 0.0139566 , 17.56   );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 675 , 0.0106123 , 17.9891 );
+    SetBinContent(hc["h_xsec_t6ttww_x08"] , 700 , 0.0081141 , 18.4146 );
+
     // T1tttt (sbottom pair production -- T1tttt)
     // --------------------------------------------------------------------------------- //
     // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
     bin_info = ss::GetSignalBinInfo(at::Sample::t1tttt);
-    hc.Add(new TH1F("h_xsec_t1tttt", "Cross Section T1tttt;m_{#tilde{g}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    hc.Add(new  TH1F("h_xsec_t1tttt", "Cross Section T1tttt;m_{#tilde{g}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
     SetBinContent(hc["h_xsec_t1tttt"] , 200  , 1010.1      , 15.3749 ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 225  , 540.437     , 15.0907 ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 250  , 302.3       , 14.8648 ); 
@@ -119,14 +173,45 @@ void CreateSignalXsecFile()
     SetBinContent(hc["h_xsec_t1tttt"] , 1950 , 1.12426e-05 , 62.789  ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 1975 , 9.20837e-06 , 64.0165 ); 
     SetBinContent(hc["h_xsec_t1tttt"] , 2000 , 7.52864e-06 , 65.128  ); 
-    
+
+    // T1tttt (sbottom pair production -- T1tttt scans)
+    // --------------------------------------------------------------------------------- //
+    // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
+    bin_info = ss::GetSignalBinInfo(at::Sample::t1tttt_scans);
+    hc.Add(dynamic_cast<TH1F*>(hc["h_xsec_t1tttt"]->Clone("h_xsec_t1tttt_scans")));
+    hc["h_xsec_t1tttt_scans"]->SetTitle("Cross Section T1tttt (scans);m_{#tilde{g}} (GeV); Cross Section (pb)");
+   
+    // T5tttt (sbottom pair production -- T5tttt)
+    // --------------------------------------------------------------------------------- //
+    // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
+    bin_info = ss::GetSignalBinInfo(at::Sample::t5tttt);
+    hc.Add(new  TH1F("h_xsec_t5tttt", "Cross Section T5tttt;m_{#tilde{g}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    SetBinContent(hc["h_xsec_t5tttt"] , 800  , 0.157399    , 20.1277 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 825  , 0.123451    , 20.6589 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 850  , 0.0966803   , 21.2994 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 875  , 0.0762312   , 22.019  ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 900  , 0.060276    , 22.6836 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 925  , 0.0478794   , 23.4801 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 950  , 0.0381246   , 24.1578 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 975  , 0.0304177   , 24.9003 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1000 , 0.0243547   , 25.6713 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1025 , 0.0195439   , 26.3787 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1050 , 0.0156931   , 26.929  ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1075 , 0.0126249   , 27.6365 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1100 , 0.0101744   , 28.3906 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1125 , 0.00823026  , 29.2287 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1150 , 0.00666673  , 30.0712 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1175 , 0.0054104   , 30.9359 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1200 , 0.00440078  , 31.7987 ); 
+    SetBinContent(hc["h_xsec_t5tttt"] , 1225 , 0.00357858  , 32.5751 ); 
+
     // TChiwz (chargino-neutralino production -- TChiwz)
     //https://twiki.cern.ch/twiki/pub/CMS/EwkinoSignalmodels/8TeVc1pn2_finer.xsec
     //https://twiki.cern.ch/twiki/pub/CMS/EwkinoSignalmodels/8TeVc1pn2_finer.xsec
     // --------------------------------------------------------------------------------- //
 
     bin_info = ss::GetSignalBinInfo(at::Sample::tchiwh);
-    hc.Add(new TH1F("h_xsec_tchiwh", "Cross Section TChiwz;m_{#tilde{3chi^{3pm}}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    hc.Add(new TH1F ("h_xsec_tchiwh", "Cross Section TChiwz;m_{#tilde{3chi^{3pm}}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
     SetBinContent(hc["h_xsec_tchiwh"], 100  ,7.070000e+00 + 4.019153e+00, sqrt(pow(4.863176e-01,2) + pow(2.951105e-01,2))); 
     SetBinContent(hc["h_xsec_tchiwh"], 150  ,1.580000e+00 + 8.079838e-01, sqrt(pow(8.002465e-02,2) + pow(4.629344e-02,2))); 
     SetBinContent(hc["h_xsec_tchiwh"], 200  ,5.350000e-01 + 2.502323e-01, sqrt(pow(2.463968e-02,2) + pow(1.265101e-02,2))); 

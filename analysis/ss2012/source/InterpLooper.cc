@@ -234,6 +234,10 @@ void InterpLooper::BookHists()
             hc.Add(new TH2F((sr+"nSF"                ).c_str(), (sr+"nSF "                +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nDF"                ).c_str(), (sr+"nDF "                +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nFakes"             ).c_str(), (sr+"nFakes "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));    
+            hc.Add(new TH2F((sr+"nLepEffUP"          ).c_str(), (sr+"nLepEffUP "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nLepEffDN"          ).c_str(), (sr+"nLepEffDN "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nTrigEffUP"         ).c_str(), (sr+"nTrigEffUP "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nTrigEffDN"         ).c_str(), (sr+"nTrigEffDN "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJESUP"             ).c_str(), (sr+"nJESUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJESDN"             ).c_str(), (sr+"nJESDN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJER"               ).c_str(), (sr+"nJER "               +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
@@ -251,6 +255,12 @@ void InterpLooper::BookHists()
             hc.Add(new TH2F((sr+"effErrMET"          ).c_str(), (sr+"effErrMET "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrMETUP"        ).c_str(), (sr+"effErrMETUP "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrMETDN"        ).c_str(), (sr+"effErrMETDN "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrLepEff"       ).c_str(), (sr+"effErrLepEff "       +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrLepEffUP"     ).c_str(), (sr+"effErrLepEffUP "     +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrLepEffDN"     ).c_str(), (sr+"effErrLepEffDN "     +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrTrigEff"      ).c_str(), (sr+"effErrTrigEff "      +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrTrigEffUP"    ).c_str(), (sr+"effErrTrigEffUP "    +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"effErrTrigEffDN"    ).c_str(), (sr+"effErrTrigEffDN "    +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrTot"          ).c_str(), (sr+"effErrTot "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrStat"         ).c_str(), (sr+"effErrStat "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
         }
@@ -529,6 +539,11 @@ int InterpLooper::operator()(long event)
         evt_weight *= vtxw;
 
         // apply scale factors
+        float evt_weight_lepeff_up;
+        float evt_weight_lepeff_dn;
+        float evt_weight_trigeff_up;
+        float evt_weight_trigeff_dn;
+
         if (m_do_scale_factors && not is_real_data())
         {
             // lepton efficiencies
@@ -538,6 +553,20 @@ int InterpLooper::operator()(long event)
 
             // trigger scale factor
             evt_weight *= DileptonTriggerScaleFactor(hyp_type, m_analysis_type, lep2_p4());  
+
+            // lepton efficiency systematic uncertainties
+            const float lep_eff_syst_unc = DileptonTagAndProbeScaleFactorSystUnc(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
+            evt_weight_lepeff_up = evt_weight * (1.0 + lep_eff_syst_unc); 
+            evt_weight_lepeff_dn = evt_weight * (1.0 - lep_eff_syst_unc); 
+
+            // trigger efficiency systematic uncertainties
+            const float trig_eff_syst_unc = DileptonTriggerScaleFactorSystUnc();
+            evt_weight_trigeff_up = evt_weight * (1.0 + trig_eff_syst_unc); 
+            evt_weight_trigeff_dn = evt_weight * (1.0 - trig_eff_syst_unc); 
+
+            if (m_verbose) {cout << "applying event weight          = " << evt_weight << endl;}
+            if (m_verbose) {cout << Form("applying event weight lep  %f * (1 +/- %f) = %f / %f", evt_weight,  lep_eff_syst_unc,  evt_weight_lepeff_up,  evt_weight_lepeff_dn)  << endl;}
+            if (m_verbose) {cout << Form("applying event weight trig %f * (1 +/- %f) = %f / %f", evt_weight, trig_eff_syst_unc, evt_weight_trigeff_up, evt_weight_trigeff_dn)  << endl;}
         }
 
         // Fill hists
@@ -550,11 +579,16 @@ int InterpLooper::operator()(long event)
 
             if (is_ss()) 
             {
-                // unscaled numerator counts
+                // scaled numerator counts
                 if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::None))
                 {
-                    rt::Fill2D(hc[sr+"nPassing"], m0, m12, evt_weight);
+                    rt::Fill2D(hc[sr+"nPassing"  ], m0, m12, evt_weight           );
+                    rt::Fill2D(hc[sr+"nLepEffUP" ], m0, m12, evt_weight_lepeff_up );
+                    rt::Fill2D(hc[sr+"nLepEffDN" ], m0, m12, evt_weight_lepeff_dn );
+                    rt::Fill2D(hc[sr+"nTrigEffUP"], m0, m12, evt_weight_trigeff_up);
+                    rt::Fill2D(hc[sr+"nTrigEffDN"], m0, m12, evt_weight_trigeff_dn);
                 }
+
 
                 // JEC scale up/scale down
                 if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::JES_UP))
@@ -815,6 +849,79 @@ void InterpLooper::SetJESSystematic()
     return;
 }
 
+void InterpLooper::SetLepEffSystematic()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
+    {
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
+
+        unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
+        unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
+        for (unsigned int ix = 1; ix < nbinsx; ix++) 
+        {
+            for (unsigned int iy = 1; iy < nbinsy; iy++) 
+            {
+                const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
+                const float num_up   = hc[sr+"nLepEffUP" ]->GetBinContent(ix, iy);
+                const float num_down = hc[sr+"nLepEffDN" ]->GetBinContent(ix, iy);            
+                const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
+
+                float lepeff_syst_up = 0.0f;
+                float lepeff_syst_dn = 0.0f;
+                if (den > 0 && num > 0) 
+                {
+                    lepeff_syst_up = (num_up-num  ) / num;
+                    lepeff_syst_dn = (num_down-num) / num;
+                    hc[sr+"effErrLepEffUP"]->SetBinContent(ix, iy, 1.0 + lepeff_syst_up);
+                    hc[sr+"effErrLepEffDN"]->SetBinContent(ix, iy, 1.0 + lepeff_syst_dn);
+                }
+                hc[sr+"effErrLepEff"]->SetBinContent(ix, iy, std::max(fabs(lepeff_syst_up), fabs(lepeff_syst_dn)));
+            }
+        }
+    } // end sr loop
+    return;
+}
+
+void InterpLooper::SetTrigEffSystematic()
+{
+    // convenience alias
+    rt::TH1Container& hc = m_hist_container;
+
+    for (size_t i = 0; i != m_sr_nums.size(); i++)
+    {
+        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
+
+        unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
+        unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
+        for (unsigned int ix = 1; ix < nbinsx; ix++) 
+        {
+            for (unsigned int iy = 1; iy < nbinsy; iy++) 
+            {
+                const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
+                const float num_up   = hc[sr+"nTrigEffUP"]->GetBinContent(ix, iy);
+                const float num_down = hc[sr+"nTrigEffDN"]->GetBinContent(ix, iy);            
+                const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
+
+                float trigeff_syst_up = 0.0f;
+                float trigeff_syst_dn = 0.0f;
+                if (den > 0 && num > 0) 
+                {
+                    trigeff_syst_up = (num_up-num  ) / num;
+                    trigeff_syst_dn = (num_down-num) / num;
+                    hc[sr+"effErrTrigEffUP"]->SetBinContent(ix, iy, 1.0 + trigeff_syst_up);
+                    hc[sr+"effErrTrigEffDN"]->SetBinContent(ix, iy, 1.0 + trigeff_syst_dn);
+                }
+                hc[sr+"effErrTrigEff"]->SetBinContent(ix, iy, std::max(fabs(trigeff_syst_up), fabs(trigeff_syst_dn)));
+            }
+        }
+    } // end sr loop
+    return;
+}
+
+
 void InterpLooper::SetJERSystematic()
 {
     // convenience alias
@@ -831,13 +938,14 @@ void InterpLooper::SetJERSystematic()
             for (unsigned int iy = 1; iy < nbinsy; iy++) 
             {
                 const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
-                const float num_up   = hc[sr+"nJER"    ]->GetBinContent(ix, iy);
+                const float num_up   = hc[sr+"nJER"      ]->GetBinContent(ix, iy);
                 const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
 
                 if (den > 0 && num > 0) 
                 {
                     const float jer_syst = (num_up-num) / num;
                     hc[sr+"effErrJER"]->SetBinContent(ix, iy, 1.0 + jer_syst);
+//                     hc[sr+"effErrJER"]->SetBinContent(ix, iy, num_up/den);
                 }
             }
         }
@@ -928,11 +1036,13 @@ void InterpLooper::SetTotalSystematic()
     SetJERSystematic();
     SetMETSystematic();
     SetBtagSystematic();
+    SetLepEffSystematic();
+    SetTrigEffSystematic();
 
     // taken as constant
     const double lumi = 0.045;
-    const double lep  = 0.05; // not doing low pT analysis yet
-    const double trig = 0.06; // not doing low pT analysis yet
+//     const double lep  = 0.05; // not doing low pT analysis yet
+//     const double trig = 0.06; // not doing low pT analysis yet
     const double pdf  = 0.02;
 
     for (size_t i = 0; i != m_sr_nums.size(); i++)
@@ -950,12 +1060,14 @@ void InterpLooper::SetTotalSystematic()
                 {
                     const float num        = hc[sr+"nPassing"]->GetBinContent(ix, iy);
                     const float eff        = num/den;
-                    const float jes_syst   = hc[sr+"effErrJES"]->GetBinContent(ix, iy);
-                    const float jer_syst   = hc[sr+"effErrJER"]->GetBinContent(ix, iy);
-                    const float met_syst   = hc[sr+"effErrMET"]->GetBinContent(ix, iy);
-                    const float btag_syst  = hc[sr+"effErrBTA"]->GetBinContent(ix, iy);
-                    const float syst_error = std::sqrt(pow(lumi, 2) + pow(lep, 2) + pow(trig, 2) + pow(pdf, 2) + pow(jes_syst, 2) + pow(jer_syst, 2) + pow(met_syst, 2) + pow(btag_syst, 2));
-                    const float stat_error = (num > 0 ? sqrt(eff*(1.0-eff)/num) : 0); 
+                    const float jes_syst   = hc[sr+"effErrJES"    ]->GetBinContent(ix, iy);
+                    const float jer_syst   = hc[sr+"effErrJER"    ]->GetBinContent(ix, iy);
+                    const float met_syst   = hc[sr+"effErrMET"    ]->GetBinContent(ix, iy);
+                    const float btag_syst  = hc[sr+"effErrBTA"    ]->GetBinContent(ix, iy);
+                    const float lep_syst   = hc[sr+"effErrLepEff" ]->GetBinContent(ix, iy);
+                    const float trig_syst  = hc[sr+"effErrTrigEff"]->GetBinContent(ix, iy);
+                    const float syst_error = std::sqrt(pow(lumi, 2) + pow(lep_syst, 2) + pow(trig_syst, 2) + pow(pdf, 2) + pow(jes_syst, 2) + pow(jer_syst, 2) + pow(met_syst, 2) + pow(btag_syst, 2));
+                    const float stat_error = (num > 0 ? sqrt(eff*(1.0-eff)/den) : 0); 
                     hc[sr+"effErrTot" ]->SetBinContent(ix, iy, syst_error);
                     hc[sr+"effErrStat"]->SetBinContent(ix, iy, stat_error);
                     if (m_verbose) {cout << "jes, btag, total: " << jes_syst << ", " << btag_syst << ", " << syst_error << endl;}

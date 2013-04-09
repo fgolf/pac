@@ -46,7 +46,6 @@ namespace at
                 // downgrage tagged to untagged
                 result = false;
             }
-
         }
 
         // done
@@ -56,8 +55,8 @@ namespace at
     // btag efficiency number
     double BtagEfficiency(const int flavor, const double jet_pt, const int unc_option, const int unc_option_light)
     {
-        if (abs(flavor)==5)      {return 0.7195+unc_option*(0.7665-0.7195);}
-        else if (abs(flavor)==4) {return 0.19249+unc_option*(0.7665 - 0.7195)/5;}
+        if      (abs(flavor)==5) {return 0.7195 +unc_option*(0.7665-0.7195);}
+        else if (abs(flavor)==4) {return 0.19249+unc_option*(0.7665-0.7195)/5;}
         else                     {return (0.0113428+(5.18983e-05*jet_pt))+(-2.59881e-08*(jet_pt*jet_pt))*(1+unc_option_light*0.5);}
     }
 

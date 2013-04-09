@@ -15,6 +15,8 @@ float DileptonTriggerScaleFactor
     const LorentzVector& trailing_p4
 );
 
+float DileptonTriggerScaleFactorSystUnc();
+
 // Lepton ID and isolatoin efficiency (full event -- CMS2)
 float DileptonTagAndProbeScaleFactor(const int hyp_idx);
 
@@ -29,8 +31,20 @@ float DileptonTagAndProbeScaleFactor
     const float l2_eta 
 );
 
+float DileptonTagAndProbeScaleFactorSystUnc
+(
+    const int l1_id, 
+    const float l1_pt, 
+    const float l1_eta, 
+    const int l2_id, 
+    const float l2_pt, 
+    const float l2_eta 
+);
+
+
 // Lepton ID and isolatoin efficiency (lepton)
 float TagAndProbeScaleFactor(int id, float pt, float eta);
+float TagAndProbeScaleFactorSystUnc(int id, float pt, float eta);
 
 // Due to low stats in the TTGamma sample, we use the yield on the baseline region and 
 // extrapolate to each Signal region using a scale factor derived from signal lepton

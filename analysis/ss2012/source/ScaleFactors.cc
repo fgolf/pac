@@ -20,12 +20,26 @@ float DileptonTagAndProbeScaleFactor(const int hyp_idx)
     return (sf1 * sf2);
 }
 
+// from ra5 twiki:
+// https://twiki.cern.ch/twiki/bin/viewauth/CMS/SameSignDilepton2013#Trigger_Efficiencies_and_SF
+float DileptonTriggerScaleFactorSystUnc() 
+{
+    return 0.06;
+}
+
 // general 
 float DileptonTagAndProbeScaleFactor(const int l1_id, const float l1_pt, const float l1_eta, const int l2_id, const float l2_pt, const float l2_eta)
 {
     const float sf1 = TagAndProbeScaleFactor(l1_id, l1_pt, l1_eta);
     const float sf2 = TagAndProbeScaleFactor(l2_id, l2_pt, l2_eta);
     return (sf1 * sf2);
+}
+
+float DileptonTagAndProbeScaleFactorSystUnc(const int l1_id, const float l1_pt, const float l1_eta, const int l2_id, const float l2_pt, const float l2_eta)
+{
+    const float e1  = TagAndProbeScaleFactorSystUnc(l1_id, l1_pt, l1_eta);
+    const float e2  = TagAndProbeScaleFactorSystUnc(l2_id, l2_pt, l2_eta);
+    return (e1 + e2); // fully correlated
 }
 
 // NOTE: eta for electrons should be SC eta
@@ -138,6 +152,28 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
     // if we get here, return bogus value
     return -999999.0;
 }
+
+// Data/MC scale factor for the ID/Iso efficiencies for electrons 
+// NOTE: the eta here is the super cluser eta
+float TagAndProbeScaleFactorSystUnc(int id, float pt, float eta)
+{
+    if (abs(id)==11)
+    {
+        if (10 < pt && pt < 15) {return 0.10 * 0.03;}
+        if (15 < pt && pt < 30) {return 0.05 * 0.03;}
+        else if (pt > 30)       {return 0.05 * 0.03;}
+    }
+    if (abs(id)==13)
+    {
+        if (10 < pt && pt < 15) {return 0.05 * 0.05;}
+        if (15 < pt && pt < 30) {return 0.03 * 0.05;}
+        else if (pt > 30)       {return 0.03 * 0.03;}
+    }
+
+    // if we get here, return bogus value
+    return -999999.0;
+}
+
 
 float DileptonTriggerScaleFactor
 (
