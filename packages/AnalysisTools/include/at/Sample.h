@@ -32,6 +32,7 @@ namespace at
             ttslq,
             ttslb,
             ttslo,
+            tttt,
             zz,
             wz,
             ww,

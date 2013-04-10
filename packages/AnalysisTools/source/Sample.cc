@@ -406,6 +406,24 @@ namespace at
         },
         {
             // name
+            "tttt", 
+            // title
+            "tttt", 
+            // latex
+            "tttt", 
+            // ntuple_path
+            "TTTT_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
+            // tag
+            "V05-03-24",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::tttt,
+            // color
+            kBlue
+        },
+        {
+            // name
             "zz", 
             // title
             "ZZ", 
@@ -1047,7 +1065,7 @@ namespace at
             // title
             "WH, ZH, t#bar{t}H; H #rightarrow ZZ", 
             // latex
-            "WH, ZH, t\\bar{t}H; H \\rightarrow ZZ", 
+            "WH, ZH, $t\\bar{t}H$; $H \\rightarrow ZZ$", 
             // ntuple_path
             "WH_ZH_TTH_HToZZ_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // tag
@@ -1065,7 +1083,7 @@ namespace at
             // title
             "WH, ZH, t#bar{t}H; H #rightarrow WW", 
             // latex
-            "WH, ZH, t\\bar{t}H; H \\rightarrow WW", 
+            "WH, ZH, $t\\bar{t}H$; $H \\rightarrow WW$", 
             // ntuple_path
             "WH_ZH_TTH_HToWW_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // tag
@@ -1083,7 +1101,7 @@ namespace at
             // title
             "WH, ZH, t#bar{t}H; H #rightarrow #tau#tau", 
             // latex
-            "WH, ZH, t\\bar{t}H; H \\rightarrow \\tau\\tau", 
+            "WH, ZH, $t\\bar{t}H$; $H \\rightarrow \\tau\\tau$", 
             // ntuple_path
             "WH_ZH_TTH_HToTauTau_M-125_lepdecay_8TeV-pythia6-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1",
             // tag

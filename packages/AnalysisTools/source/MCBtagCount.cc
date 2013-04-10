@@ -515,7 +515,7 @@ namespace at
         const int unc_type_light = 0;
 
         // random number generator
-        static TRandom random;
+        TRandom random;
         random.SetSeed(seed);
 
         // loop over jets
