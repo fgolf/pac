@@ -4,6 +4,7 @@
 #include <cmath>
 #include "TString.h" 
 #include "rt/RootTools.h" 
+#include "ScaleFactors.h"
 
 using namespace std;
 
@@ -456,7 +457,6 @@ namespace ss
         m["wpwpqq"       ] = GetYield(option, Sample::wpwpqq       , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wz"           ] = GetYield(option, Sample::wz           , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["zz"           ] = GetYield(option, Sample::zz           , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttg"          ] = GetYield(option, Sample::ttg          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["ttw"          ] = GetYield(option, Sample::ttw          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["ttz"          ] = GetYield(option, Sample::ttz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["tbz"          ] = GetYield(option, Sample::tbz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
@@ -470,6 +470,29 @@ namespace ss
         m["wh_zh_tth_hww"] = GetYield(option, Sample::wh_zh_tth_hww, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wh_zh_tth_hzz"] = GetYield(option, Sample::wh_zh_tth_hzz, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wh_zh_tth_htt"] = GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+
+        // handle ttg differently --> apply SF (until we get a larger dataset)
+        if (analysis_type == ss::AnalysisType::high_pt or analysis_type == ss::AnalysisType::high_pt)
+        {
+            const ss::Yield ttg_sr0 = GetYield(option, Sample::ttg, ss::SignalRegion::sr0, analysis_type, signal_region_type, charge_option, output_path);
+            m["ttg"] = ss::Yield();
+
+            // assign value
+            m["ttg"].ee = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).first;
+            m["ttg"].em = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).first;
+            m["ttg"].mm = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).first;
+            m["ttg"].ll = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).first;
+
+            // assign uncertainty
+            m["ttg"].dee = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).second;
+            m["ttg"].dem = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).second;
+            m["ttg"].dmm = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).second;
+            m["ttg"].dll = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).second;
+        }
+        else
+        {
+            m["ttg"] = GetYield(option, Sample::ttg, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        }
     
         // want the total of the MC
         ss::Yield yield_mc;
