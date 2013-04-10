@@ -698,7 +698,7 @@ int PlotLooper::operator()(long event)
         // only keep good lumi (data only) -- is_good_lumi branch not set
         if (m_check_good_lumi && is_real_data() && not is_good_lumi())
         {
-            if (m_verbose) {cout << "faling good run list" << endl;}
+            if (m_verbose) {cout << "failing good run list" << endl;}
             return 0;
         }
 
@@ -821,7 +821,7 @@ int PlotLooper::operator()(long event)
         // two jet events
         if (njets() < static_cast<int>(m_njets))
         {
-            if (m_verbose) {cout << "faling # jets cut" << endl;}
+            if (m_verbose) {cout << "failing # jets cut" << endl;}
             return 0;
         }
 
@@ -829,14 +829,14 @@ int PlotLooper::operator()(long event)
         const unsigned int num_btags = ((not is_real_data() && m_do_scale_factors) ? nbtags_reweighted() : nbtags());
         if (num_btags < m_nbtags)
         {
-            if (m_verbose) {cout << "faling # btags cut" << endl;}
+            if (m_verbose) {cout << "failing # btags cut" << endl;}
             return 0;
         }
 
         // passes signal region
         if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, m_do_scale_factors))
         {
-            if (m_verbose) {cout << "faling signal region cut" << endl;}
+            if (m_verbose) {cout << "failing signal region cut" << endl;}
             return 0;
         }
 

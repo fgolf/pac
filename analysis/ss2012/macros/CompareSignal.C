@@ -47,6 +47,7 @@ void PrintPlots
     hc1[plot_name]->Draw(draw_option.c_str()); c1.Print((path + "/" + plot_name + "_v1."   + suffix).c_str());
     hc2[plot_name]->Draw(draw_option.c_str()); c1.Print((path + "/" + plot_name + "_v2."   + suffix).c_str());
 
+    gStyle->SetPaintTextFormat("1.3f");
     h_diff->Draw(draw_option.c_str());
     c1.Print((path + "/" + plot_name + "_diff." + suffix).c_str());
     
@@ -90,9 +91,9 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
             PrintPlots(sr+"effErrJESDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
             PrintPlots(sr+"effErrBTAUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
             PrintPlots(sr+"effErrBTADN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-            PrintPlots(sr+"effErrMETUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-            PrintPlots(sr+"effErrMETDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-            PrintPlots(sr+"effErrJER"      , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 1.25);
+            PrintPlots(sr+"effErrMETUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+            PrintPlots(sr+"effErrMETDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+            PrintPlots(sr+"effErrJER"      , hc1, hc2, path, suffix, draw_option, "1.3f", 0.80, 1.20);
 /*             PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f"); */
             PrintPlots(sr+"effErrStat"     , hc1, hc2, path, suffix, draw_option, "1.3f");
         }
@@ -115,9 +116,9 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
         PrintPlots(sr+"effErrJESDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
         PrintPlots(sr+"effErrBTAUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
         PrintPlots(sr+"effErrBTADN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-        PrintPlots(sr+"effErrMETUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-        PrintPlots(sr+"effErrMETDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.55, 1.25);
-        PrintPlots(sr+"effErrJER"      , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 1.25);
+        PrintPlots(sr+"effErrMETUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+        PrintPlots(sr+"effErrMETDN"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.85, 1.15);
+        PrintPlots(sr+"effErrJER"      , hc1, hc2, path, suffix, draw_option, "1.3f", 0.80, 1.20);
 /*         PrintPlots(sr+"effErrTot"      , hc1, hc2, path, suffix, draw_option, "1.3f"); */
         PrintPlots(sr+"effErrStat"     , hc1, hc2, path, suffix, draw_option, "1.3f");
     }

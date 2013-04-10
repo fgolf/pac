@@ -1,6 +1,6 @@
 #!/bin/bash
 
-out_name=AN_draft_19p5fb_v2 
+out_name=AN_draft_19p5fb_v3 
 lumi=19.5
 sr=-1
 nev=-1

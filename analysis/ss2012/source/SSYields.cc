@@ -472,22 +472,23 @@ namespace ss
         m["wh_zh_tth_htt"] = GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
         // handle ttg differently --> apply SF (until we get a larger dataset)
-        if (analysis_type == ss::AnalysisType::high_pt or analysis_type == ss::AnalysisType::high_pt)
+        if ((0 < signal_region && signal_region < 29) and (analysis_type == ss::AnalysisType::high_pt or analysis_type == ss::AnalysisType::high_pt))
         {
             const ss::Yield ttg_sr0 = GetYield(option, Sample::ttg, ss::SignalRegion::sr0, analysis_type, signal_region_type, charge_option, output_path);
+            const ss::Yield ttg_srn = GetYield(option, Sample::ttg, signal_region        , analysis_type, signal_region_type, charge_option, output_path);
             m["ttg"] = ss::Yield();
 
             // assign value
-            m["ttg"].ee = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).first;
-            m["ttg"].em = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).first;
-            m["ttg"].mm = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).first;
-            m["ttg"].ll = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).first;
+            m["ttg"].ee = (ttg_sr0.ee > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).first : ttg_srn.ee);
+            m["ttg"].em = (ttg_sr0.em > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).first : ttg_srn.em);
+            m["ttg"].mm = (ttg_sr0.mm > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).first : ttg_srn.mm);
+            m["ttg"].ll = (ttg_sr0.ll > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).first : ttg_srn.ll);
 
             // assign uncertainty
-            m["ttg"].dee = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).second;
-            m["ttg"].dem = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).second;
-            m["ttg"].dmm = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).second;
-            m["ttg"].dll = ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).second;
+            m["ttg"].dee = (ttg_sr0.ee > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).second : ttg_srn.dee);
+            m["ttg"].dem = (ttg_sr0.em > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).second : ttg_srn.dem);
+            m["ttg"].dmm = (ttg_sr0.mm > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).second : ttg_srn.dmm);
+            m["ttg"].dll = (ttg_sr0.ll > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).second : ttg_srn.dll);
         }
         else
         {

@@ -1059,7 +1059,7 @@ void InterpLooper::SetTotalSystematic()
                 if (den > 0)
                 {
                     const float num        = hc[sr+"nPassing"]->GetBinContent(ix, iy);
-                    const float eff        = num/den;
+                    //const float eff        = num/den;
                     const float jes_syst   = hc[sr+"effErrJES"    ]->GetBinContent(ix, iy);
                     const float jer_syst   = hc[sr+"effErrJER"    ]->GetBinContent(ix, iy);
                     const float met_syst   = hc[sr+"effErrMET"    ]->GetBinContent(ix, iy);
@@ -1067,7 +1067,8 @@ void InterpLooper::SetTotalSystematic()
                     const float lep_syst   = hc[sr+"effErrLepEff" ]->GetBinContent(ix, iy);
                     const float trig_syst  = hc[sr+"effErrTrigEff"]->GetBinContent(ix, iy);
                     const float syst_error = std::sqrt(pow(lumi, 2) + pow(lep_syst, 2) + pow(trig_syst, 2) + pow(pdf, 2) + pow(jes_syst, 2) + pow(jer_syst, 2) + pow(met_syst, 2) + pow(btag_syst, 2));
-                    const float stat_error = (num > 0 ? sqrt(eff*(1.0-eff)/den) : 0); 
+                    //const float stat_error = (num > 0 ? sqrt(eff*(1.0-eff)/den) : 0); 
+                    const float stat_error = rt::GetClopperPearsonUncertainty(static_cast<int>(num), static_cast<int>(den));
                     hc[sr+"effErrTot" ]->SetBinContent(ix, iy, syst_error);
                     hc[sr+"effErrStat"]->SetBinContent(ix, iy, stat_error);
                     if (m_verbose) {cout << "jes, btag, total: " << jes_syst << ", " << btag_syst << ", " << syst_error << endl;}
