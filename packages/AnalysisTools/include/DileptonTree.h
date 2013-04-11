@@ -47,8 +47,8 @@ public:
     // dilepton specific info
     //
     LorentzVector dilep_p4;
-    bool is_os;
-    bool is_ss;
+    bool os;
+    bool ss;
     bool mm;
     bool ee;
     bool em;

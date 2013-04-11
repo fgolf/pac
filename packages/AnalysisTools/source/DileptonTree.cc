@@ -59,8 +59,8 @@ void DileptonTree::FillCommon (int idx)
 
     // fill dilepton event branches
     dilep_p4   = cms2.hyp_p4().at(idx);
-    is_os      = (lep1_id * lep2_id < 0);
-    is_ss      = (lep1_id * lep2_id > 0);
+    os         = (lep1_id * lep2_id < 0);
+    ss         = (lep1_id * lep2_id > 0);
     dilep_type = at::hyp_typeToHypType(cms2.hyp_type().at(idx));
     dilep_mass = std::sqrt(fabs(dilep_p4.mass2()));
     dilep_dphi = ROOT::Math::VectorUtil::DeltaPhi(lep1.p4, lep2.p4);
@@ -89,8 +89,8 @@ void DileptonTree::Reset()
     lep2.Reset();
 
     dilep_p4       = LorentzVector(0, 0, 0, 0);
-    is_os          = false;
-    is_ss          = false;
+    os             = false;
+    ss             = false;
 	mm			   = false;
 	ee			   = false;
 	em			   = false;
@@ -109,8 +109,8 @@ void DileptonTree::SetBranches(TTree &tree)
     lep2.SetBranches(tree);
 
     tree.Branch(Form("%sdilep_p4"       , prefix_.c_str()) , "LorentzVector" , &dilep_p4          );
-    tree.Branch(Form("%sis_os"          , prefix_.c_str()) , &is_os          , "is_os/O"          );
-    tree.Branch(Form("%sis_ss"          , prefix_.c_str()) , &is_ss          , "is_ss/O"          );
+    tree.Branch(Form("%sos"             , prefix_.c_str()) , &os             , "os/O"             );
+    tree.Branch(Form("%sss"             , prefix_.c_str()) , &ss             , "ss/O"             );
     tree.Branch(Form("%smm"             , prefix_.c_str()) , &mm             , "mm/O"             );
     tree.Branch(Form("%see"             , prefix_.c_str()) , &ee             , "ee/O"             );
     tree.Branch(Form("%sem"             , prefix_.c_str()) , &em             , "em/O"             );
