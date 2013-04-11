@@ -35,7 +35,7 @@ void CreateHtVsMetPlot
 
     TChain e1("tree");
     e1.Add(Form("babies/%s/data.root", at_info.short_name.c_str()));
-    ss::SetSignalRegionAliases(e1, at);
+    ss::SetSignalRegionAliases(e1, at, /*apply beff sf*/false);
 
     // book
     TH2F* h2_ht_vs_pfmet_baseline_njlt4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
@@ -46,7 +46,7 @@ void CreateHtVsMetPlot
     TH2F* h2_ht_vs_pfmet_baseline_njge4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njge4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
 
     // slection
-    TCut selection = Form("is_ss && is_good_lumi && lep_pt && trig && %s", sr_info.name.c_str());
+    TCut selection = Form("is_ss && lep_pt && %s", sr_info.name.c_str());
 
     e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_mm", selection && "mm && njets<4" , "goff");
     e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njlt4_em", selection && "em && njets<4" , "goff");
@@ -158,4 +158,14 @@ void CreateHtVsMetPlot
         const char* file = Form("plots/%s/%s/%s/HtVsMET_%s_%s.%s", output_path.c_str(), at_info.name.c_str(), "inclusive", at_info.short_name.c_str(), sr_info.name.c_str(), suffix.c_str()); 
         c1->Print(file);
     }
+}
+
+void CreateAllHtVsMetPlots()
+{
+    CreateHtVsMetPlot("AN_draft_19p5fb_v3", "sr0" , "high_pt", "pdf");
+    CreateHtVsMetPlot("AN_draft_19p5fb_v3", "sr20", "high_pt", "pdf");
+    CreateHtVsMetPlot("AN_draft_19p5fb_v3", "sr0" , "low_pt" , "pdf");
+    CreateHtVsMetPlot("AN_draft_19p5fb_v3", "sr20", "low_pt" , "pdf");
+    CreateHtVsMetPlot("AN_draft_19p5fb_v3", "sr0" , "vlow_pt", "pdf");
+    CreateHtVsMetPlot("AN_draft_19p5fb_v3", "sr20", "vlow_pt", "pdf");
 }

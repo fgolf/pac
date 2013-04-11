@@ -170,8 +170,10 @@ public:
     //
     bool is_pp;
     bool is_mm;
+    bool is_ss;
     bool is_sf;
     bool is_df;
+    bool is_os;
     bool no_extraz;
     bool no_extrag;
     bool clean;

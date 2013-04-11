@@ -387,6 +387,86 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 
 }
 
+void PrintElectronFakeRatePlotsEWKCor(const std::string& suffix = "png")
+{
+	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
+    std::string path = "plots/fake_rates/26Feb2013";
+	float lumi = 19.5;
+
+	// set style
+	rt::SetTDRStyle();
+	gStyle->SetTitleBorderSize(0);
+
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+
+    // Fake Rates
+    float max = 0.6;
+    Color_t c20 = kRed;
+    Color_t c40 = kBlack;
+    Color_t c60 = kBlue;
+
+    Style_t s20 = 20;
+    Style_t s40 = 22;
+    Style_t s60 = 24;
+
+    hc.SetMarkerSize(1.8);
+
+    // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
+	std::map<std::string, rt::TH1Overlay> p;
+    p["p_elfr_vs_pt_ewkcor"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr20c_vs_pt_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr40c_vs_pt_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr60c_vs_pt_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_vs_pt_ewkcor"].SetYAxisRange(0, max);
+    p["p_elfr_vs_pt_ewkcor"].SetLegendOption("p");
+    p["p_elfr_vs_pt_ewkcor"].SetLegendTextSize(0.042);
+    p["p_elfr_vs_pt_ewkcor"].AddText("Electrons", 0.25, 0.835);
+
+    p["p_elfr_vs_eta_ewkcor"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr20c_vs_eta_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr40c_vs_eta_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr60c_vs_eta_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_vs_eta_ewkcor"].SetYAxisRange(0, max);
+    p["p_elfr_vs_eta_ewkcor"].SetLegendOption("p");
+    p["p_elfr_vs_eta_ewkcor"].SetLegendTextSize(0.042);
+    p["p_elfr_vs_eta_ewkcor"].AddText("Electrons"         , 0.25, 0.835);
+    p["p_elfr_vs_eta_ewkcor"].AddText("p^{e}_{T} > 20 GeV", 0.25, 0.775);
+
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"].Add(hc["h_elfr20c_noiso_vs_pt_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"].Add(hc["h_elfr40c_noiso_vs_pt_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"].Add(hc["h_elfr60c_noiso_vs_pt_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"].SetYAxisRange(0, max);
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"].SetLegendOption("p");
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"].SetLegendTextSize(0.042);
+    p["p_elfr_trig_noiso_vs_pt_ewkcor"].AddText("Electrons", 0.25, 0.835);
+
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].Add(hc["h_elfr20c_noiso_vs_eta_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].Add(hc["h_elfr40c_noiso_vs_eta_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].Add(hc["h_elfr60c_noiso_vs_eta_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].SetYAxisRange(0, max);
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].SetLegendOption("p");
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].SetLegendTextSize(0.042);
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].AddText("Electrons"         , 0.25, 0.835);
+    p["p_elfr_trig_noiso_vs_eta_ewkcor"].AddText("p^{e}_{T} > 20 GeV", 0.25, 0.775);
+
+    // print
+    if (suffix=="all")
+    {
+        rt::Print(p, path, "png");
+        rt::Print(p, path, "pdf");
+        rt::Print(p, path, "eps");
+    }
+    else
+    {
+        rt::Print(p, path, suffix);
+    }
+
+}
+
+
+
 
 void PrintElectronFakeRatePlotsETH(const std::string& suffix = "png")
 {
@@ -525,12 +605,13 @@ void printFRtable(TH2F* hist)
 
 void PrintFRTables(const std::string lepton="mu")
 {
-    rt::TH1Container hc("data/fake_rates/ssFR_data_standard_16Dec2012.root");
+    //rt::TH1Container hc("data/fake_rates/ssFR_data_standard_16Dec2012.root");
     //rt::TH1Container hc("data/fake_rates/ssFR_data_standard_24Sep2012.root");
 	//rt::TH1Container hc("plots/fake_rates/eth/fakerate_eth.root");
+	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
     if (lepton=="mu")
     {
-        TH2F* h_mufr40c = dynamic_cast<TH2F*>(hc["h_mufr40c"]);
+        TH2F* h_mufr40c = dynamic_cast<TH2F*>(hc["h_mufr40c_ewkcor"]);
         printFRtable(h_mufr40c);
 
         TH2F* h_mufr40c_iso = dynamic_cast<TH2F*>(hc["h_mufr40c_iso"]);
@@ -538,10 +619,10 @@ void PrintFRTables(const std::string lepton="mu")
     }
     if (lepton=="el")
     {
-        TH2F* h_elfr40c = dynamic_cast<TH2F*>(hc["h_elfr40c"]);
+        TH2F* h_elfr40c = dynamic_cast<TH2F*>(hc["h_elfr40c_ewkcor"]);
         printFRtable(h_elfr40c);
 
-        TH2F* h_elfr40c_noiso = dynamic_cast<TH2F*>(hc["h_elfr40c_noiso"]);
+        TH2F* h_elfr40c_noiso = dynamic_cast<TH2F*>(hc["h_elfr40c_noiso_ewkcor"]);
         printFRtable(h_elfr40c_noiso);
     }
 }

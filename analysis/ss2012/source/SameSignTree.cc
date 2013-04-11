@@ -286,8 +286,10 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("sparm3_name"                              , "TString"                                 , &sparm3_name                                 ); 
     tree.Branch("is_pp"                                    , &is_pp                                    , "is_pp/O"                                    ); 
     tree.Branch("is_mm"                                    , &is_mm                                    , "is_mm/O"                                    ); 
+    tree.Branch("is_ss"                                    , &is_ss                                    , "is_ss/O"                                    ); 
     tree.Branch("is_sf"                                    , &is_sf                                    , "is_sf/O"                                    ); 
     tree.Branch("is_df"                                    , &is_df                                    , "is_df/O"                                    ); 
+    tree.Branch("is_os"                                    , &is_os                                    , "is_os/O"                                    ); 
     tree.Branch("no_extraz"                                , &no_extraz                                , "no_extraz/O"                                ); 
     tree.Branch("no_extrag"                                , &no_extrag                                , "no_extrag/O"                                ); 
     tree.Branch("clean"                                    , &clean                                    , "clean/O"                                    ); 

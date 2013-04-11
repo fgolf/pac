@@ -385,10 +385,10 @@ void PrintETHCard
 // print the summary table 
 void PrintSummaryYields
 (
-  const std::string& output_path,
-  const std::string& analysis_type_name, 
-  const std::string& signal_region_type_name, 
-  bool print_latex = false
+    const std::string& output_path,
+    const std::string& analysis_type_name, 
+    const std::string& signal_region_type_name, 
+    bool print_latex = false
 )
 {
     using namespace at;
@@ -396,41 +396,70 @@ void PrintSummaryYields
     const int charge_option = 0;
     const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
     const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    const ss::AnalysisTypeInfo at_info                        = GetAnalysisTypeInfo(analysis_type);
 
-    // table for output
-    CTable t_yields_1;
-    t_yields_1.useTitle();
-    t_yields_1.setTitle("summary table for SS 2012 yields and background predictions (sr0-sr8)");
+    CTable t_yields;
+    t_yields.useTitle();
+    t_yields.setTitle(Form("summary table for SS 2012 yields and background predictions(%s %s)", at_info.name.c_str(), signal_region_type_name.c_str()));
+    t_yields.setColLabel("SR Number"  , 0);
+    t_yields.setColLabel("Fake BG"    , 1);
+    t_yields.setColLabel("Flip BG"    , 2);
+    t_yields.setColLabel("Rare MC"    , 3);
+    t_yields.setColLabel("Total BG"   , 4);
+    t_yields.setColLabel("Event Yield", 5);
 
-    CTable t_yields_2;
-    t_yields_2.useTitle();
-    t_yields_2.setTitle("summary table for SS 2012 yields and background predictions (sr10-sr18)");
-
-    CTable t_yields_3;
-    t_yields_3.useTitle();
-    t_yields_3.setTitle("summary table for SS 2012 yields and background predictions (sr20-sr28)");
-
-    // fill the columns
-    //for (unsigned int signal_region_num = 0; signal_region_num != ss::SignalRegion::static_size; signal_region_num++)
-    for (unsigned int signal_region_num = 0; signal_region_num != 29; signal_region_num++)
+    std::string latex[] = {
+    "\\begin{table}"                                                                                                                                                       ,  // 0 
+    "\\begin{center}"                                                                                                                                                      ,  // 1 
+    "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}"                                                                                                                              ,  // 2 
+    "\\hline"                                                                                                                                                              ,  // 3 
+    "\\nbtags                   & \\met                    & \\njets                    & \\Ht     & SR & Fake BG & Flip BG & Rare MC & Total BG & Observed \\\\ \\hline"  ,  // 4  \hline
+    "\\multirow{9}{*}{$\\geq 0$} & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 0  &"                                                                  ,  // 5  \cline{2-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-4}      & 200-400 & 1  &"                                                                   ,  // 6  \cline{4-5}
+    "                          &                         &                           & $>400$  & 2  &"                                                                     ,  // 7  \cline{3-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 3  &"                                                                   ,  // 8  \cline{4-5}
+    "                          &                         &                           & $>400$  & 4  &"                                                                     ,  // 9  \cline{2-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-4}      & 200-400 & 5  &"                                                                   ,  // 10 \cline{4-5}
+    "                          &                         &                           & $>400$  & 6  &"                                                                     ,  // 11 \cline{3-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 7  &"                                                                   ,  // 12 \cline{4-5}
+    "                          &                         &                           & $>400$  & 8  &"                                                                     ,  // 13 \hline 
+    "\\multirow{9}{*}{$=1$}     & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 10 &"                                                                   ,  // 14 \cline{2-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-4}      & 200-400 & 11 &"                                                                   ,  // 15 \cline{4-5}
+    "                          &                         &                           & $>400$  & 12 &"                                                                     ,  // 16 \cline{3-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 13 &"                                                                   ,  // 17 \cline{4-5}
+    "                          &                         &                           & $>400$  & 14 &"                                                                     ,  // 18 \cline{2-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-4}      & 200-400 & 15 &"                                                                   ,  // 19 \cline{4-5}
+    "                          &                         &                           & $>400$  & 16 &"                                                                     ,  // 20 \cline{3-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 17 &"                                                                   ,  // 21 \cline{4-5}
+    "                          &                         &                           & $>400$  & 18 &"                                                                     ,  // 22 \hline
+    "\\multirow{9}{*}{$\\geq 2$} & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 20 &"                                                                  ,  // 23 \cline{2-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-4}      & 200-400 & 21 &"                                                                   ,  // 24 \cline{4-5}
+    "                          &                         &                           & $>400$  & 22 &"                                                                     ,  // 25 \cline{3-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 23 &"                                                                   ,  // 26 \cline{4-5}
+    "                          &                         &                           & $>400$  & 24 &"                                                                     ,  // 27 \cline{2-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-4}      & 200-400 & 25 &"                                                                   ,  // 28 \cline{4-5}
+    "                          &                         &                           & $>400$  & 26 &"                                                                     ,  // 29 \cline{3-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 27 &"                                                                   ,  // 30 \cline{4-5}
+    "                          &                         &                           & $>400$  & 28 &"                                                                     ,  // 31 \hline
+    "\\end{tabular}"                                                                                                                                                       ,  // 32
+    Form("\\label{tab:%s_%s_yield_summary}", at_info.short_name.c_str(), signal_region_type_name.c_str())                                                                  ,  // 33
+    Form("\\caption{Predicted and observed %s yields for the %s analysis.}", signal_region_type_name.c_str(), at_info.latex.c_str())                                       ,  // 34
+    "\\end{center}"                                                                                                                                                        ,  // 35
+    "\\end{table}"                                                                                                                                                         }; // 36
+                                                                                                                                                                                
+    //for (unsigned int signal_region_num = 0; signal_region_num != ss::SignalRegion::static_size; signal_region_num++)                                                         
+    size_t row = 0;                                                                                                                                                             
+    size_t latex_row = 5;
+    for (unsigned int sr_num = 0; sr_num != 29; sr_num++)
     {
         // no using these SRs
-        if (signal_region_num==9 or signal_region_num==19 or signal_region_num==29)
+        if (sr_num==9 or sr_num==19 or sr_num==29)
         {
             continue;
         } 
 
-        // which table are we using?
-        CTable* temp_ptr = NULL;
-        unsigned int column = signal_region_num;
-        if (signal_region_num <= 8)                             {temp_ptr = &t_yields_1;}
-        if (10 <= signal_region_num && signal_region_num <= 18) {temp_ptr = &t_yields_2; column -=10;}
-        if (20 <= signal_region_num && signal_region_num <= 28) {temp_ptr = &t_yields_3; column -=20;}
-        if (not temp_ptr) {continue;}
-        CTable& t_yields = *temp_ptr;
-
         // signal region info
-        const string signal_region_name = Form("sr%u", signal_region_num);
+        const string signal_region_name = Form("sr%u", sr_num);
         const ss::SignalRegion::value_type signal_region = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name); 
         const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
 
@@ -456,46 +485,66 @@ void PrintSummaryYields
         yield_pred += yield_cfake;
         yield_pred += yield_flip;
 
-        // print the table
-        int row = 0;
-        t_yields.setColLabel(Form("sr%u", signal_region_num), column);
-        if (print_latex)
-        {
-            //t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_cfake.ll, yield_cfake.dll, yield_cfake.sll), row, column);
-            //t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_flip.ll , yield_flip.dll , yield_flip.sll ), row, column);
-            //t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_rare.ll , yield_rare.dll , yield_rare.sll ), row, column);
-            //t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f$\\pm$%1.2f", yield_pred.ll , yield_pred.dll , yield_pred.sll ), row, column);
-            t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_cfake.ll, yield_cfake.tll()), row, column);
-            t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_flip.ll , yield_flip.tll() ), row, column);
-            t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_rare.ll , yield_rare.tll() ), row, column);
-            t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f$\\pm$%1.2f", yield_pred.ll , yield_pred.tll() ), row, column);
-            t_yields.setRowLabel("Event Yield", ++row); t_yields.setCell(static_cast<int>(yield_data.ll)                            , row, column);
-        }
-        else
-        {
-            //t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_cfake.ll, yield_cfake.dll, yield_cfake.sll), row, column);
-            //t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_flip.ll , yield_flip.dll , yield_flip.sll ), row, column);
-            //t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_rare.ll , yield_rare.dll , yield_rare.sll ), row, column);
-            //t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f +/- %1.2f", yield_pred.ll , yield_pred.dll , yield_pred.sll ), row, column);
-            t_yields.setRowLabel("Fake BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_cfake.ll, yield_cfake.tll()), row, column);
-            t_yields.setRowLabel("Flip BG"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_flip.ll , yield_flip.tll() ), row, column);
-            t_yields.setRowLabel("Rare MC"    , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_rare.ll , yield_rare.tll() ), row, column);
-            t_yields.setRowLabel("Total BG"   , ++row); t_yields.setCell(Form("%1.2f +/- %1.2f", yield_pred.ll , yield_pred.tll() ), row, column);
-            t_yields.setRowLabel("Event Yield", ++row); t_yields.setCell(static_cast<int>(yield_data.ll)                           , row, column);
-        }
-    } // loop over SRs
+        // fill latex
+        latex[latex_row].append(Form(" %1.2f$\\pm$%1.2f & %1.2f$\\pm$%1.2f & %1.2f$\\pm$%1.2f & %1.2f$\\pm$%1.2f & %d \\\\"
+                    , yield_cfake.ll, yield_cfake.tll()
+                    , yield_flip.ll , yield_flip.tll()
+                    , yield_rare.ll , yield_rare.tll()
+                    , yield_pred.ll , yield_pred.tll()
+                    , static_cast<int>(yield_data.ll)));
+
+
+        // fill table
+        t_yields.setCell(Form("SR %d", sr_num)                                     , row, 0);
+        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_cfake.ll, yield_cfake.tll()), row, 1);
+        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_flip.ll , yield_flip.tll() ), row, 2);
+        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_rare.ll , yield_rare.tll() ), row, 3);
+        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_pred.ll , yield_pred.tll() ), row, 4);
+        t_yields.setCell(static_cast<int>(yield_data.ll)                           , row, 5);
+
+        latex_row++;
+        row++;
+    }
+
+    latex[4 ].append("\\hline"      ); 
+    latex[5 ].append("\\cline{2-5}" ); 
+    latex[6 ].append("\\cline{4-5}" ); 
+    latex[7 ].append("\\cline{3-5}" ); 
+    latex[8 ].append("\\cline{4-5}" ); 
+    latex[9 ].append("\\cline{2-5}" ); 
+    latex[10].append("\\cline{4-5}" ); 
+    latex[11].append("\\cline{3-5}" ); 
+    latex[12].append("\\cline{4-5}" ); 
+    latex[13].append("\\hline "     ); 
+    latex[14].append("\\cline{2-5}" ); 
+    latex[15].append("\\cline{4-5}" ); 
+    latex[16].append("\\cline{3-5}" ); 
+    latex[17].append("\\cline{4-5}" ); 
+    latex[18].append("\\cline{2-5}" ); 
+    latex[19].append("\\cline{4-5}" ); 
+    latex[20].append("\\cline{3-5}" ); 
+    latex[21].append("\\cline{4-5}" ); 
+    latex[22].append("\\hline"      ); 
+    latex[23].append("\\cline{2-5}" ); 
+    latex[24].append("\\cline{4-5}" ); 
+    latex[25].append("\\cline{3-5}" ); 
+    latex[26].append("\\cline{4-5}" ); 
+    latex[27].append("\\cline{2-5}" ); 
+    latex[28].append("\\cline{4-5}" ); 
+    latex[29].append("\\cline{3-5}" ); 
+    latex[30].append("\\cline{4-5}" ); 
+    latex[31].append("\\hline"      ); 
 
     // print the table
     if (print_latex)
     {
-        t_yields_1.printTex();
-        t_yields_2.printTex();
-        t_yields_3.printTex();
+        for (size_t i = 0; i != 37; i++)
+        {
+            cout << latex[i] << endl;
+        }
     }
     else
     {
-        t_yields_1.print();
-        t_yields_2.print();
-        t_yields_3.print();
+        t_yields.print();
     }
 }

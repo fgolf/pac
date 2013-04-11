@@ -48,8 +48,8 @@ namespace ss
             sr31 = 31, // SS top 1: baseline with MET>30, ++ (only implemented for exclusive highpt) 
             sr32 = 32, // RPV 1: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for exclusive highpt)
             sr33 = 33, // RPV 2: highpt, #jets>=2, #btags>=2, njets>=2, nbtags>= (only implemented for exclusive highpt)
-            sr34 = 34, // SS top 1: baseline with MET>30 (only implemented for exclusive highpt) 
-            sr35 = 35, // SS top 1: baseline with MET>30, ++ (only implemented for exclusive highpt) 
+            sr34 = 34, // SS top 2: baseline with MET>30 (only implemented for exclusive highpt) 
+            sr35 = 35, // SS top 2: baseline with MET>30, ++ (only implemented for exclusive highpt) 
 
             // keep track of the size
             static_size
