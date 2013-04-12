@@ -41,7 +41,8 @@ public:
         const bool verbose = false,
         const std::string apply_jec_otf = "",
         const std::string apply_jec_unc = "",
-        const double jet_pt_cut = -1
+        const double jet_pt_cut = -1,
+        const bool switch_signs = false
     );
 
     // destroy:
@@ -71,6 +72,7 @@ private:
     bool m_sync_print;
     bool m_verbose;
     float m_jet_pt_cut;
+    bool m_switch_signs;
     int m_hyp_count;
 
     // fake rate hists

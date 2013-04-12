@@ -27,7 +27,7 @@ ARGS=$6
 CRABCFG=crab_${TASK}.cfg
 WRAPPER=wrapper_${TASK}.sh
 INPUTS=input.tgz
-WORKING_DIR="/nfs-7/userdata/${USER}/babies/cms2_V05-03-23_ss2012_V02-05-01"
+WORKING_DIR="/nfs-7/userdata/${USER}/babies/cms2_V05-03-28_ss2012_V02-05-10"
 
 #
 # move the inputs.tgz to local dir
@@ -144,6 +144,10 @@ done
 #
 # run looper
 #
+
+# hack to get the looper to work
+export PAC=\$PWD
+export CMS2CORE=\$PWD
 
 # run my looper.....
 cmd="./ss2012_analysis --input \"ntuple*_post.root\" --output ${OUTFILE} ${ARGS}"

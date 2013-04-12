@@ -548,3 +548,12 @@ void PrintSummaryYields
         t_yields.print();
     }
 }
+
+//#ifndef __CINT__
+//int main()
+//{
+//    PrintYields("test","sr0","high_pt","inclusive", 0, true, 0);
+//    PrintYields("test","sr0","high_pt","inclusive", 0, false, 0);
+//    return 0;
+//}
+//#endif

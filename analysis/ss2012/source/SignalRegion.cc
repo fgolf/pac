@@ -1595,7 +1595,7 @@ namespace ss
                 };
             }
             if (signal_region_type==SignalRegionType::exclusive)
-            {
+            {  
                 switch (signal_region)
                 {
                     case SignalRegion::sr0 : return (baseline);
@@ -1628,12 +1628,12 @@ namespace ss
                     case SignalRegion::sr27: return (baseline && nbtags>=2 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
                     case SignalRegion::sr28: return (baseline && nbtags>=2 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
                     case SignalRegion::sr29: return (false); // not used --> default is to fail
-                    case SignalRegion::sr30: return (njets>=2 && nbtags>=2 && ht>80  && met>30                 );
-                    case SignalRegion::sr31: return (njets>=2 && nbtags>=2 && ht>80  && met>30  && ssb::is_pp());
-                    case SignalRegion::sr32: return (njets>=2 && nbtags>=0 && ht>500 && met>0                  );
-                    case SignalRegion::sr33: return (njets>=2 && nbtags>=2 && ht>500 && met>0                  );
-                    case SignalRegion::sr34: return (njets>=2 && nbtags==1 && ht>80  && met>30                 );
-                    case SignalRegion::sr35: return (njets>=2 && nbtags==1 && ht>80  && met>30  && ssb::is_pp());
+                    case SignalRegion::sr30: return (njets>=2 && nbtags>=2 && ht>80  && met>30                );
+                    case SignalRegion::sr31: return (njets>=2 && nbtags>=2 && ht>80  && met>30 && ssb::is_pp());
+                    case SignalRegion::sr32: return (njets>=2 && nbtags>=0 && ht>500 && met>0                 );
+                    case SignalRegion::sr33: return (njets>=2 && nbtags>=2 && ht>500 && met>0                 );
+                    case SignalRegion::sr34: return (njets>=2 && nbtags==1 && ht>80  && met>30                );
+                    case SignalRegion::sr35: return (njets>=2 && nbtags==1 && ht>80  && met>30 && ssb::is_pp() );
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }

@@ -432,7 +432,8 @@ SSAnalysisLooper::SSAnalysisLooper
     const bool verbose,
     const std::string apply_jec_otf,
     const std::string apply_jec_unc,
-    const double jet_pt_cut
+    const double jet_pt_cut,
+    const bool switch_signs
 )
     : AnalysisWithTreeAndHist(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
@@ -447,9 +448,8 @@ SSAnalysisLooper::SSAnalysisLooper
     , m_sync_print(sync_print)
     , m_verbose(verbose || sync_print)
     , m_jet_pt_cut(jet_pt_cut) 
+    , m_switch_signs(switch_signs)
     , m_hyp_count(0)
-    //, m_jet_corrector(NULL)
-    //, m_met_corrector(NULL)
 {
     // set vertex weight file
     if (!vtxreweight_file_name.empty())
@@ -624,8 +624,13 @@ SSAnalysisLooper::SSAnalysisLooper
         if (m_analysis_type == ss::AnalysisType::higgsino) m_jet_pt_cut = 20.0f;
         else m_jet_pt_cut = 40.0f;
     }
-
     cout << "[SSAnalysisLooper] using jet pT cut : " << m_jet_pt_cut << endl;
+
+    // are we flipping th sign?
+    if (m_switch_signs)
+    {
+        cout << "[SSAnalysisLooper] switching the meaing of SS and OS (for OS selection)" << endl;
+    }
 
     // begin job
     BeginJob();
@@ -1036,8 +1041,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             DileptonHypType::value_type type = hyp_typeToHypType(hyp_type().at(ihyp));
 
             // OS (Here a kludge by Claudio to quickly change the meaning of SS and OS .... useful for ttbar as sstop)
-            int dummy = 1;
-            //if (m_switchSigns) dummy=-1;
+            int dummy = (m_switch_signs ? -1 : 1);
             int hyp_q = dummy * hyp_lt_charge().at(ihyp) * hyp_ll_charge().at(ihyp);
             if (hyp_q < 0)
             {

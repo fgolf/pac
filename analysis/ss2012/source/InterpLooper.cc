@@ -539,10 +539,10 @@ int InterpLooper::operator()(long event)
         evt_weight *= vtxw;
 
         // apply scale factors
-        float evt_weight_lepeff_up;
-        float evt_weight_lepeff_dn;
-        float evt_weight_trigeff_up;
-        float evt_weight_trigeff_dn;
+        float evt_weight_lepeff_up  = 0.0;
+        float evt_weight_lepeff_dn  = 0.0;
+        float evt_weight_trigeff_up = 0.0;
+        float evt_weight_trigeff_dn = 0.0;
 
         if (m_do_scale_factors && not is_real_data())
         {

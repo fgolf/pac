@@ -46,7 +46,7 @@ try
     bool sync_print                 = false;
     bool sparms                     = false;
     bool use_el_eta                 = true;
-    //bool switchSigns                = false;
+    bool switchSigns                = false;
     int num_jets                    = 2;
     int jetMetScale                 = 0;
     bool isFastSim                  = false;
@@ -86,7 +86,7 @@ try
         ("run"           , po::value<int>(&run)                            , "select a specific run (negative numbers == all)"                                       )
         ("lumi"          , po::value<int>(&lumi)                           , "select a specific lumi (negative numbers == all)"                                      )
         ("event"         , po::value<int>(&event)                          , "select a specific event (negative numbers == all)"                                     )
-        //("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
+        ("switchSigns"   , po::value<bool>(&switchSigns)                   , "switch the meaning of SS and OS"                                                   )
         ;
 
     // parse it
@@ -138,6 +138,7 @@ try
     cout << "apply_jec_otf      :\t" << apply_jec_otf       << endl;
     cout << "apply_jec_unc      :\t" << apply_jec_unc       << endl;
     cout << "jet_pt_cut         :\t" << jet_pt_cut          << endl;
+    cout << "switchSigns        :\t" << switchSigns         << endl;
     cout << "run                :\t" << run                 << endl;
     cout << "lumi               :\t" << lumi                << endl;
     cout << "event              :\t" << event               << endl;
@@ -270,7 +271,8 @@ try
             verbose,
             apply_jec_otf,
             apply_jec_unc,
-            jet_pt_cut
+            jet_pt_cut,
+            switchSigns
         ),
         cms2,
         number_of_events,

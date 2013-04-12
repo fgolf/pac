@@ -2,7 +2,7 @@
 
 verbose=0
 njets=2
-tag=V02-05-09c
+tag=V02-05-09e
 path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
 
 # make the output dirs
