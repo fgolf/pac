@@ -1,0 +1,427 @@
+# jamfile for the ss 2012 analysis 
+# -------------------------------------------------------------------- #
+
+# libraries
+# -------------------------------------------------------------- #
+
+lib ewkino2012
+  : # sources
+    ./source/EWKINO2012_SS.cc
+    ./source/EWKINO2012Wrapper_SS.cc
+    /ROOT
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+    <include>./include
+  ;
+
+lib ewkino2012_tools
+  : # sources
+    ./source/ScaleFactors.cc
+    ./source/SameSignTree.cc
+    ./source/SkimChainSS.cc
+    ./source/SignalRegion.cc
+    ./source/AnalysisType.cc
+    ./source/TTbarBreakDown.cc
+    ./source/FakeRateType.cc
+    ./source/SSYields.cc
+    ./source/SignalBinInfo.cc
+    [ rootcint Dict
+     : 
+       <include>./include
+       <include>$(ROOTTOOLS)/include
+       <include>$(ANALYSISTOOLS)/include
+       <include>./source
+       #<header>SignalRegion.h
+       <header>AnalysisType.h
+       <header>FakeRateType.h
+       <header>SignalBinInfo.h
+       <header>SSYields.h
+       <linkdef>LinkDef.h
+    ]
+    # dependent packages
+    ewkino2012
+    /CMS2//cms2_header
+    /ROOT
+    /AnalysisTools//AnalysisTools
+    /RootTools//RootTools
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+    <include>./include
+    <include>./source
+  ;
+
+# executables
+# -------------------------------------------------------------- #
+
+exe ewkino2012_ss_analysis
+  : # sources
+    ./source/ewkino2012_ss_analysis.cc
+    ./source/SameSignLooper.cc
+    # dependent packages
+    /ROOT
+    ewkino2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /FGTools//FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+# exe ss2012_plots
+#   : # sources
+#     ./source/ss2012_plots.cc
+#     ./source/PlotLooper.cc
+#     # dependent packages
+#     /ROOT
+#     ss2012_tools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <define>__NON_ROOT_BUILD__
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_interp_hists
+#   : # sources
+#     ./source/ss2012_interp_hists.cc
+#     ./source/InterpLooper.cc
+#     # dependent packages
+#     /ROOT
+#     ss2012_tools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <define>__NON_ROOT_BUILD__
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# #exe ss2012_outreach
+# #  : # sources
+# #    ./source/ss2012_outreach.cc
+# #    ./source/OutreachLooper.cc
+# #    # dependent packages
+# #    ss2012_tools/<link>static
+# #    /ROOT
+# #    /MiniFWLite//libMiniFWLite/<link>shared
+# #    /AnalysisTools//AnalysisTools/<link>static
+# #    /RootTools//RootTools/<link>static
+# #    /FGTools//FGTools/<link>static
+# #    /boost//program_options/<link>static
+# #    /SimpleTable//SimpleTable/<link>static
+# #  : # requirements
+# #    <define>__NON_ROOT_BUILD__
+# #    <include>./include
+# #    <include>./source
+# #  : # default-build
+# #  : # usage-requirements
+# #  ;
+
+# exe ss2012_event_list_eth
+#   : # sources
+#     ./source/ss2012_event_list_eth.cc
+#     # dependent packages
+#     /ROOT
+#     ss2012_tools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <define>__NON_ROOT_BUILD__
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_event_list
+#   : # sources
+#     ./source/ss2012_event_list.cc
+#     # dependent packages
+#     ss2012_tools/<link>static
+#     /ROOT
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <define>__NON_ROOT_BUILD__
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_closure_test
+#   : # sources
+#     ./source/ss2012_closure_test.cc
+#     ./source/FRClosureLooper.cc
+#     # dependent packages
+#     /ROOT
+#     ss2012_tools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <define>__NON_ROOT_BUILD__
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_outreach_closure
+#   : # sources
+#     ./source/ss2012_outreach_closure.cc
+#     ./source/OutreachClosure.cc
+#     ./source/OutreachBaby.cc
+#     ./source/OutreachBabyWrapper.cc
+#     # dependent packages
+#     /ROOT
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <define>__NON_ROOT_BUILD__
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_skim
+#   : # sources
+#     ./source/ss2012_skim.cc
+#     # dependent packages
+#     /ROOT
+#     ss2012_tools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_merge_babies
+#   : # sources
+#     ./source/ss2012_merge_babies.cc
+#     # dependent packages
+#     ss2012_tools/<link>static
+#     /ROOT
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_create_fakerate
+#   : # sources
+#     ./source/ss2012_create_fakerate.cc
+#     ./source/FakeRateBabyLooper.cc
+#     # dependent packages
+#     /ROOT
+#     ss2012_tools/<link>static
+#     /FakeRateBabyTools//FakeRateBabyTools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /RootTools//RootTools/<link>static
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /boost//program_options/<link>static
+#     /boost//headers/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# # quick and dirty cms2 looper
+# exe ss2012_quick_check
+#   : # sources
+#     ./source/ss2012_quick_check.cc
+#     # dependent packages
+#     /ROOT
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     #/SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# # quick and dirty cms2 looper
+# exe ss2012_lepton_eff
+#   : # sources
+#     ./source/ss2012_lepton_eff.cc
+#     # dependent packages
+#     /ROOT
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /boost//program_options/<link>static
+#     /FGTools//FGTools/<link>static
+#     #/SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_make_fr_from_hists
+#   : # sources
+#     ./source/ss2012_make_fr_from_hists.cc
+#     # dependent packages
+#     /ROOT
+#     /FakeRateBabyTools//FakeRateBabyTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /boost//program_options/<link>static
+#     /boost//headers/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_postprocess_signal_baby
+#   : # sources
+#     ./source/ss2012_postprocess_signal_baby.cc
+#     ss2012_tools/<link>static
+#     # dependent packages
+#     /ROOT
+#     /RootTools//RootTools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /boost//program_options/<link>static
+#     /boost//headers/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe ss2012_fr_closure
+#   : # sources
+#     ./source/ss2012_fr_closure.cc
+#     ./source/FRClosureBabyLooper.cc
+#     # dependent packages
+#     /ROOT
+#     ss2012_tools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /AnalysisTools//AnalysisTools/<link>static
+#     /RootTools//RootTools/<link>static
+#     /FGTools//FGTools/<link>static
+#     /boost//program_options/<link>static
+#     /SimpleTable//SimpleTable/<link>static
+#   : # requirements
+#     <define>__NON_ROOT_BUILD__
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# # simple test
+# # -------------------------------------------------------------- #
+
+# exe test_frb
+#   : # sources
+#     ./source/test_frb.cc
+#     # dependent packages
+#     /ROOT
+#     /CMS2_FRB//cms2_frb/<link>static
+#     /FakeRateBabyTools//FakeRateBabyTools/<link>static
+#     /MiniFWLite//libMiniFWLite/<link>shared
+#     /RootTools//RootTools/<link>static
+#     /AnalysisTools//AnalysisTools/<link>static
+#   : # requirements
+#     <include>./include
+#     <include>./source
+#   : # default-build
+#   : # usage-requirements
+#   ;
+
+# exe test_btagsf
+#  : # sources
+#    ./source/test_btagsf.cc
+#    ss2012_tools/<link>static
+#    # dependent packages
+#    /ROOT
+#    /MiniFWLite//libMiniFWLite/<link>shared
+#    /RootTools//RootTools/<link>static
+#    /AnalysisTools//AnalysisTools/<link>static
+#    /SimpleTable//SimpleTable/<link>static
+#  : # requirements
+#    <include>./include
+#    <include>./source
+#  : # default-build
+#  : # usage-requirements
+#  ;
+
+# # install libs/exes
+# # -------------------------------------------------------------- #
+
+# default-install ss2012_tools : <link>shared ;
+# default-install ss2012_analysis ;
+# default-install ss2012_plots ;
+# default-install ss2012_event_list ;
+# default-install ss2012_skim ;
+# default-install ss2012_merge_babies ;
+# #default-install ss2012_outreach ;
+# default-install ss2012_outreach_closure ;
+# default-install ss2012_quick_check ;
+# default-install ss2012_lepton_eff ;
+# default-install ss2012_create_fakerate ;
+# default-install ss2012_make_fr_from_hists ;
+# default-install ss2012_closure_test ;
+# default-install ss2012_postprocess_signal_baby ;
+# default-install ss2012_interp_hists ;
+# default-install ss2012_fr_closure ;
+# default-install test_frb ;
+# default-install test_btagsf ;
