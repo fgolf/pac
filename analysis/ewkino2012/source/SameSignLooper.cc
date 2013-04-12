@@ -1988,11 +1988,6 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         if (indexTauMax15 != -1)
         {
             m_evt.pfTau15 = cms2.taus_pf_p4().at(indexTauMax15);
-            for (int ipf = 0; ipf < cms2.taus_pf_pfcandIndicies().at(indexTauMax15).size(); ipf++)
-            {	  
-                int index = (cms2.taus_pf_pfcandIndicies().at(indexTauMax15)).at(ipf);
-            }	
-
             if (cms2.taus_pf_pfcandIndicies().at(indexTauMax15).size() > 0)
             {
                 int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax15).at(0);
@@ -2004,11 +1999,6 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         if (indexTauMax!=-1)
         {
             m_evt.pfTau = cms2.taus_pf_p4().at(indexTauMax);
-            for (int ipf = 0; ipf < cms2.taus_pf_pfcandIndicies().at(indexTauMax).size(); ipf++)
-            {
-                int index = cms2.taus_pf_pfcandIndicies().at(indexTauMax).at(ipf);
-            }	
-
             if (cms2.taus_pf_pfcandIndicies().at(indexTauMax).size() > 0)
             {
                 int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax).at(0);
@@ -2020,11 +2010,6 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         if (indexTauLooseMax != -1)
         {
             m_evt.pfTauLoose = cms2.taus_pf_p4().at(indexTauLooseMax);
-            for (int ipf = 0; ipf < taus_pf_pfcandIndicies().at(indexTauLooseMax).size(); ipf++)
-            {	  
-                int index = cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).at(ipf);
-            }	
-
             if (cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).size() > 0)
             {
                 int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).at(0);
