@@ -387,69 +387,108 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 
 }
 
-void PrintElectronFakeRatePlotsEWKCor(const std::string& suffix = "png")
+void PrintFakeRatePlotsEWKCor(const std::string& suffix = "png")
 {
-	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
-    std::string path = "plots/fake_rates/26Feb2013";
-	float lumi = 19.5;
+	rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_13Apr2013.root");
+    const std::string path = "plots/fake_rates/13Apr2013";
+	const float lumi = 19.5;
 
 	// set style
 	rt::SetTDRStyle();
 	gStyle->SetTitleBorderSize(0);
 
-	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	const std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 
     // Fake Rates
-    float max = 0.6;
-    Color_t c20 = kRed;
-    Color_t c40 = kBlack;
-    Color_t c60 = kBlue;
+    const float max = 0.6;
+    const Color_t c20 = kRed;
+    const Color_t c40 = kBlack;
+    const Color_t c60 = kBlue;
 
-    Style_t s20 = 20;
-    Style_t s40 = 22;
-    Style_t s60 = 24;
+    const Style_t s20 = 20;
+    const Style_t s40 = 22;
+    const Style_t s60 = 24;
 
     hc.SetMarkerSize(1.8);
 
-    // FR(#vetices), FR(pt), FR(eta) -- cpfiso03_db
+    // electrons 
 	std::map<std::string, rt::TH1Overlay> p;
     p["p_elfr_vs_pt_ewkcor"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
-    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr20c_vs_pt_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
-    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr40c_vs_pt_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
-    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr60c_vs_pt_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr20c_ewkcor_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr40c_ewkcor_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_vs_pt_ewkcor"].Add(hc["h_elfr60c_ewkcor_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_elfr_vs_pt_ewkcor"].SetYAxisRange(0, max);
     p["p_elfr_vs_pt_ewkcor"].SetLegendOption("p");
     p["p_elfr_vs_pt_ewkcor"].SetLegendTextSize(0.042);
     p["p_elfr_vs_pt_ewkcor"].AddText("Electrons", 0.25, 0.835);
 
     p["p_elfr_vs_eta_ewkcor"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
-    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr20c_vs_eta_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
-    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr40c_vs_eta_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
-    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr60c_vs_eta_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr20c_ewkcor_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr40c_ewkcor_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_vs_eta_ewkcor"].Add(hc["h_elfr60c_ewkcor_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
     p["p_elfr_vs_eta_ewkcor"].SetYAxisRange(0, max);
     p["p_elfr_vs_eta_ewkcor"].SetLegendOption("p");
     p["p_elfr_vs_eta_ewkcor"].SetLegendTextSize(0.042);
     p["p_elfr_vs_eta_ewkcor"].AddText("Electrons"         , 0.25, 0.835);
     p["p_elfr_vs_eta_ewkcor"].AddText("p^{e}_{T} > 20 GeV", 0.25, 0.775);
 
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"].Add(hc["h_elfr20c_noiso_vs_pt_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"].Add(hc["h_elfr40c_noiso_vs_pt_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"].Add(hc["h_elfr60c_noiso_vs_pt_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"].SetYAxisRange(0, max);
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"].SetLegendOption("p");
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"].SetLegendTextSize(0.042);
-    p["p_elfr_trig_noiso_vs_pt_ewkcor"].AddText("Electrons", 0.25, 0.835);
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"].Add(hc["h_elfr20c_noiso_ewkcor_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"].Add(hc["h_elfr40c_noiso_ewkcor_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"].Add(hc["h_elfr60c_noiso_ewkcor_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"].SetYAxisRange(0, max);
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"].SetLegendOption("p");
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"].SetLegendTextSize(0.042);
+    p["p_elfr_trig_noiso_ewkcor_vs_pt"].AddText("Electrons", 0.25, 0.835);
+                        
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].Add(hc["h_elfr20c_noiso_ewkcor_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].Add(hc["h_elfr40c_noiso_ewkcor_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].Add(hc["h_elfr60c_noiso_ewkcor_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].SetYAxisRange(0, max);
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].SetLegendOption("p");
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].SetLegendTextSize(0.042);
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].AddText("Electrons"         , 0.25, 0.835);
+    p["p_elfr_trig_noiso_ewkcor_vs_eta"].AddText("p^{e}_{T} > 10 GeV", 0.25, 0.775);
 
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].Add(hc["h_elfr20c_noiso_vs_eta_ewkcor"], "away jet p_{T} > 20 GeV", c20, 2, s20);
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].Add(hc["h_elfr40c_noiso_vs_eta_ewkcor"], "away jet p_{T} > 40 GeV", c40, 2, s40);
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].Add(hc["h_elfr60c_noiso_vs_eta_ewkcor"], "away jet p_{T} > 60 GeV", c60, 2, s60);
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].SetYAxisRange(0, max);
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].SetLegendOption("p");
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].SetLegendTextSize(0.042);
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].AddText("Electrons"         , 0.25, 0.835);
-    p["p_elfr_trig_noiso_vs_eta_ewkcor"].AddText("p^{e}_{T} > 20 GeV", 0.25, 0.775);
+    // muons 
+    p["p_mufr_vs_pt_ewkcor"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_vs_pt_ewkcor"].Add(hc["h_mufr20c_ewkcor_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_mufr_vs_pt_ewkcor"].Add(hc["h_mufr40c_ewkcor_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_mufr_vs_pt_ewkcor"].Add(hc["h_mufr60c_ewkcor_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_mufr_vs_pt_ewkcor"].SetYAxisRange(0, max);
+    p["p_mufr_vs_pt_ewkcor"].SetLegendOption("p");
+    p["p_mufr_vs_pt_ewkcor"].SetLegendTextSize(0.042);
+    p["p_mufr_vs_pt_ewkcor"].AddText("Muonss", 0.25, 0.835);
+
+    p["p_mufr_vs_eta_ewkcor"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_vs_eta_ewkcor"].Add(hc["h_mufr20c_ewkcor_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_mufr_vs_eta_ewkcor"].Add(hc["h_mufr40c_ewkcor_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_mufr_vs_eta_ewkcor"].Add(hc["h_mufr60c_ewkcor_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_mufr_vs_eta_ewkcor"].SetYAxisRange(0, max);
+    p["p_mufr_vs_eta_ewkcor"].SetLegendOption("p");
+    p["p_mufr_vs_eta_ewkcor"].SetLegendTextSize(0.042);
+    p["p_mufr_vs_eta_ewkcor"].AddText("Muonss"              , 0.25, 0.835);
+    p["p_mufr_vs_eta_ewkcor"].AddText("p^{#mu}_{T} > 20 GeV", 0.25, 0.775);
+
+    p["p_mufr_trig_ewkcor_iso_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_trig_ewkcor_iso_vs_pt"].Add(hc["h_mufr20c_iso_ewkcor_vs_pt"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_mufr_trig_ewkcor_iso_vs_pt"].Add(hc["h_mufr40c_iso_ewkcor_vs_pt"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_mufr_trig_ewkcor_iso_vs_pt"].Add(hc["h_mufr60c_iso_ewkcor_vs_pt"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_mufr_trig_ewkcor_iso_vs_pt"].SetYAxisRange(0, max);
+    p["p_mufr_trig_ewkcor_iso_vs_pt"].SetLegendOption("p");
+    p["p_mufr_trig_ewkcor_iso_vs_pt"].SetLegendTextSize(0.042);
+    p["p_mufr_trig_ewkcor_iso_vs_pt"].AddText("Muonss", 0.25, 0.835);
+
+    p["p_mufr_trig_ewkcor_iso_vs_eta"] = rt::TH1Overlay(Form("%s;|#eta|;TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].Add(hc["h_mufr20c_iso_ewkcor_vs_eta"], "away jet p_{T} > 20 GeV", c20, 2, s20);
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].Add(hc["h_mufr40c_iso_ewkcor_vs_eta"], "away jet p_{T} > 40 GeV", c40, 2, s40);
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].Add(hc["h_mufr60c_iso_ewkcor_vs_eta"], "away jet p_{T} > 60 GeV", c60, 2, s60);
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].SetYAxisRange(0, max);
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].SetLegendOption("p");
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].SetLegendTextSize(0.042);
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].AddText("Muonss"             , 0.25, 0.835);
+    p["p_mufr_trig_ewkcor_iso_vs_eta"].AddText("p^{#mu}_{T} > 5 GeV", 0.25, 0.775);
 
     // print
     if (suffix=="all")
