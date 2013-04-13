@@ -60,6 +60,14 @@ namespace ss
     {
         switch(sample)
         {
+            case Sample::ttjets:
+                // used for SSTop.  Only need points for the various channels 
+                // bin 1, 1: ee
+                // bin 2, 1: em
+                // bin 3, 1: mm
+                // bin 4, 1: ll
+                return MakeSignalBinInfo(1, 0, 1, 1, 0, 1);  
+                break;
             case Sample::t1tttt:
                 // /SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z/StoreResults-PU_START52_V9_FastSim-v1/USER 
                 // m_gluino:  350-1200

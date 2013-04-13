@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-version=26Feb2013
+version=11Apr2013
 nev=-1
 
 # create output dir
@@ -37,4 +37,4 @@ cmd="ss2012_make_fr_from_hists --in_data plots/fake_rates/${version}/ssFR_data_s
  --ele_lumi 0.049 --mu_lumi 0.143 \
  --ele_noiso_lumi 0.000130 --mu_iso_lumi 0.0402"
 echo $cmd
-eval $cmd
+#eval $cmd

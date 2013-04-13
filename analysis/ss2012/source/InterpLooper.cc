@@ -324,6 +324,11 @@ int InterpLooper::operator()(long event)
         float mchi, m0, m12, mlsp;
         switch(m_sample)
         {
+            case Sample::ttjets:
+                m0   = 0.5; // put this in the one x bin
+                m12  = 0.5; // put this in the one y bin
+                mlsp = 0;
+                break;
             case Sample::t1tttt:
                 m0   = sparm0();
                 m12  = sparm1();

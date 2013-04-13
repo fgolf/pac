@@ -69,7 +69,7 @@ void OverlayElectronEffPlots(const bool tex = false, const std::string& suffix =
 
     // overlay
 
-	std::string title = Form("CMS Simulation, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	const std::string title = "CMS Simulation, #sqrt{s} = 8 TeV";
 
     float max = 1.1;
     float min = 0.0;
@@ -313,7 +313,7 @@ void OverlayMuonEffPlots(const bool tex = false, const std::string& suffix = "pn
 
     // overlay
 
-	std::string title = Form("CMS Simulation, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	const std::string title = "CMS Simulation, #sqrt{s} = 8 TeV";
 
     float max = 1.1;
     float min = 0.0;
@@ -463,7 +463,7 @@ void CreateOverlay
     const float max = 1.1
 )
 {
-	std::string plot_title = Form("CMS Simulation, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	std::string plot_title = "CMS Simulation, #sqrt{s} = 8 TeV";
 	std::string plot_name  = rt::string_replace_first(hist_name, "h_", "p_");
 
     Color_t cdy   = kRed;
