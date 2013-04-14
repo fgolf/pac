@@ -304,6 +304,6 @@ crab_dir="test_crab"
  "--sample tchiwh $default_args" \
  0 \
  "V02-05-28" \
- "" \
+ "\"mchargino\",\"mlsp\"" \
  1 \
  "START53_V7A::All"
