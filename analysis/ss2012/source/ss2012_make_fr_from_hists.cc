@@ -187,7 +187,6 @@ try
     // output hist containter
     rt::TH1Container hc_new(hc_data);
 
-//     size_t i = 1;
     for (size_t i = 0; i != ajetpt.size(); i++)
     {
         const std::string jpt_str = Form("%uc", ajetpt[i]);
@@ -254,10 +253,10 @@ try
         // correct muon fake rate
         // ----------------------------------------------------------------------------------------------------- //
 
-        TH2* h_data_mu_num     = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s"    , jpt)]);
-        TH2* h_data_mu_fo      = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s"     , jpt)]);
-        TH2* h_data_mu_iso_num = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s", jpt)]);
-        TH2* h_data_mu_iso_fo  = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s" , jpt)]);
+        TH2* h_data_mu_num     = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s"    , jpt)]->Clone());
+        TH2* h_data_mu_fo      = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s"     , jpt)]->Clone());
+        TH2* h_data_mu_iso_num = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s_iso", jpt)]->Clone());
+        TH2* h_data_mu_iso_fo  = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s_iso" , jpt)]->Clone());
 
         // create an artificial histogram for scaling
         TH2* h_mu_scaling = dynamic_cast<TH2*>(h_data_mu_num->Clone(Form("h_mu%s_scaling", jpt)));
@@ -267,21 +266,25 @@ try
 
         TH2* h_mu_iso_scaling = dynamic_cast<TH2*>(h_data_mu_iso_num->Clone(Form("h_mu%s_iso_scaling", jpt)));
         SetScalingHistValues(h_mu_iso_scaling, mu_iso_sf);
-        TH2* h_mc_mu_iso_num = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_mu_num%s", jpt)]), h_mu_iso_scaling, mu_iso_lumi);
-        TH2* h_mc_mu_iso_fo  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_mu_fo%s" , jpt)]), h_mu_iso_scaling, mu_iso_lumi);
+        TH2* h_mc_mu_iso_num = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_mu_num%s_iso", jpt)]), h_mu_iso_scaling, mu_iso_lumi);
+        TH2* h_mc_mu_iso_fo  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_mu_fo%s_iso" , jpt)]), h_mu_iso_scaling, mu_iso_lumi);
+        h_mc_mu_iso_num->SetName(Form("h_mc_mu_iso_num%s", jpt));
+        h_mc_mu_iso_fo ->SetName(Form("h_mc_mu_iso_fo%s" , jpt));
 
         // subtract contamination
         h_data_mu_num->Add(h_mc_mu_num, -1);
         h_data_mu_fo->Add(h_mc_mu_fo, -1);
         h_data_mu_iso_num->Add(h_mc_mu_iso_num, -1);
         h_data_mu_iso_fo->Add(h_mc_mu_iso_fo, -1);
+        h_data_mu_iso_num->SetName(Form("h_data_mu_iso_num%s", jpt));
+        h_data_mu_iso_fo ->SetName(Form("h_data_mu_iso_fo%s" , jpt));
 
         // create fake rates and projections
         TH2* h_mufr_ewkcor        = rt::MakeEfficiencyPlot2D(        h_data_mu_num, h_data_mu_fo,      Form("h_mufr%s_ewkcor"       , jpt), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]));
         TH1* h_mufr_vs_pt_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_mu_num, h_data_mu_fo, "y", Form("h_mufr%s_ewkcor_vs_pt" , jpt), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]));
         TH1* h_mufr_vs_eta_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_mu_num, h_data_mu_fo, "x", Form("h_mufr%s_ewkcor_vs_eta", jpt), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]), 20., 9999.);
 
-        TH2* h_mufr_iso_ewkcor        = rt::MakeEfficiencyPlot2D(h_data_mu_iso_num, h_data_mu_iso_fo,              Form("h_mufr%s_iso_ewkcor"       , jpt), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]));
+        TH2* h_mufr_iso_ewkcor        = rt::MakeEfficiencyPlot2D(        h_data_mu_iso_num, h_data_mu_iso_fo,      Form("h_mufr%s_iso_ewkcor"       , jpt), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]));
         TH1* h_mufr_vs_pt_iso_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_mu_iso_num, h_data_mu_iso_fo, "y", Form("h_mufr%s_iso_ewkcor_vs_pt" , jpt), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]));
         TH1* h_mufr_vs_eta_iso_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_mu_iso_num, h_data_mu_iso_fo, "x", Form("h_mufr%s_iso_ewkcor_vs_eta", jpt), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]), 5.0f, 9999.);
 
@@ -304,6 +307,10 @@ try
         hc_new.Add(h_mufr_vs_eta_iso_ewkcor);
         hc_new.Add(h_ele_noiso_scaling);
         hc_new.Add(h_mu_iso_scaling);
+//         hc_new.Add(h_mc_mu_iso_num);
+//         hc_new.Add(h_mc_mu_iso_fo);
+//         hc_new.Add(h_data_mu_iso_num);
+//         hc_new.Add(h_data_mu_iso_fo);
 
     } // end ajetpt loop
 

@@ -61,11 +61,8 @@ namespace ss
         switch(sample)
         {
             case Sample::ttjets:
+            case Sample::ttw:
                 // used for SSTop.  Only need points for the various channels 
-                // bin 1, 1: ee
-                // bin 2, 1: em
-                // bin 3, 1: mm
-                // bin 4, 1: ll
                 return MakeSignalBinInfo(1, 0, 1, 1, 0, 1);  
                 break;
             case Sample::t1tttt:
@@ -151,8 +148,8 @@ namespace ss
                 break;
             default:
                 // return bogus value with warning
-                cout << "[ss::GetSignalBinInfo] Warning: not a signal sample -- return default bins" << endl;
-                SignalBinInfo bin_info(100u, 0.0f, 1000.0f, 100u, 0.0f, 1000.0f);
+                cout << "[ss::GetSignalBinInfo] Warning: not a signal sample -- return default one bin" << endl;
+                SignalBinInfo bin_info(1u, 0.0f, 1.0f, 1u, 0.0f, 1.0f);
                 return bin_info;
         }
     }

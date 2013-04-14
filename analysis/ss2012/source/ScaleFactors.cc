@@ -159,15 +159,15 @@ float TagAndProbeScaleFactorSystUnc(int id, float pt, float eta)
 {
     if (abs(id)==11)
     {
-        if (10 < pt && pt < 15) {return 0.10 * 0.03;}
-        if (15 < pt && pt < 30) {return 0.05 * 0.03;}
-        else if (pt > 30)       {return 0.05 * 0.03;}
+        if (10 < pt && pt < 15) {return sqrt(0.10*0.10 + 0.03*0.03);}
+        if (15 < pt && pt < 30) {return sqrt(0.05*0.05 + 0.03*0.03);}
+        else if (pt > 30)       {return sqrt(0.05*0.05 + 0.03*0.03);}
     }
     if (abs(id)==13)
     {
-        if (10 < pt && pt < 15) {return 0.05 * 0.05;}
-        if (15 < pt && pt < 30) {return 0.03 * 0.05;}
-        else if (pt > 30)       {return 0.03 * 0.03;}
+        if (10 < pt && pt < 15) {return sqrt(0.05*0.05 + 0.05*0.05);}
+        if (15 < pt && pt < 30) {return sqrt(0.03*0.03 + 0.05*0.05);}
+        else if (pt > 30)       {return sqrt(0.03*0.03 + 0.03*0.03);}
     }
 
     // if we get here, return bogus value

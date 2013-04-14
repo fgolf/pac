@@ -123,7 +123,7 @@ PlotLooper::PlotLooper
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";  // needs to be fixed
+            mufr_name = "h_mufr40c_iso";
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::higgsino:
@@ -145,7 +145,7 @@ PlotLooper::PlotLooper
     cout << "using mu FR hist : " << h_mufr->GetName() << endl;
     cout << "using el FR hist : " << h_elfr->GetName() << endl;
 
-    // set the fake rate histograms
+    // set the flip rate histograms
     std::auto_ptr<TFile> flip_rate_file(rt::OpenRootFile(flip_rate_file_name));
     cout << "using FL file : " << flip_rate_file->GetName() << endl;
     h_flip.reset(dynamic_cast<TH2F*>(flip_rate_file->Get("flipRate")->Clone()));

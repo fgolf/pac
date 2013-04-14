@@ -362,17 +362,71 @@ int InterpLooper::operator()(long event)
         // dilepton hyp type: 1 mm, 2 em, 3 ee
         const at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(dilep_type());
 
+        // selected sparms 
+        // ---------------------------------------------------------------------------------------------------------------------------- //
+
+        // if the value of m_m_sparm0 negative, this check is skipped
+        if (m_sparm0 >= 0.0f && not rt::is_equal(m_sparm0, sparm0()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm0 check: %s, %1.2f != %1.2f", sparm0_name().Data(), m_sparm0, sparm0()) << endl;}
+            return 0;
+        }
+
+        // if the value of m_sparm1 is negative, this check is skipped
+        if (m_sparm1 >= 0.0f && not rt::is_equal(m_sparm1, sparm1()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm1 check: %s, %1.2f != %1.2f", sparm1_name().Data(), m_sparm1, sparm1()) << endl;}
+            return 0;
+        }
+
+        // if the value of m_sparm2 is negative, this check is skipped
+        if (m_sparm2 >= 0.0f && not rt::is_equal(m_sparm2, sparm2()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm2 check: %s, %1.2f != %1.2f", sparm2_name().Data(), m_sparm2, sparm2()) << endl;}
+            return 0;
+        }
+
+        // if the value of m_sparm3 is negative, this check is skipped
+        if (m_sparm3 >= 0.0f && not rt::is_equal(m_sparm3, sparm3()))
+        {
+            if (m_verbose) {cout << Form("fails the sparm3 check: %s, %1.2f != %1.2f", sparm3_name().Data(), m_sparm3, sparm3()) << endl;}
+            return 0;
+        }
+
         // denominator histograms 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
         for (size_t i = 0; i != m_sr_nums.size(); i++)
         {
             const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
+            const bool is_signal = (GetSampleInfo(m_sample).type == SampleType::susy); 
 
-            // denominator (event counts)
-            // ----------------------------------------------------------------------------------------------------------------------- //
-
-            rt::Fill2D(hc[sr+"nGenerated"], m0, m12, 1.0);
+            if (m_sample == Sample::ttjets)
+            {
+                if (event == 0)
+                {
+                    // this is ttjets where it is forced to decay to dileptons.
+                    // (/TTJets_FullLeptMGDecays_8TeV-madgraph/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM)
+                    // (http://www.t2.ucsd.edu/tastwiki/bin/view/CMS/Summer12MonteCarlo53X_Slim_Winter13#Alternative_ttbar)
+                    // The # generated will need to have the BR factored out
+                    // this is done by multiplying by the full sigma*BR and dividing by BR(W --> lv)^2
+                    const float den = 12119013.0/(0.324*0.324); 
+                    rt::Fill2D(hc[sr+"nGenerated"], m0, m12, den);
+                }
+            }
+            if (is_signal)
+            {
+                rt::Fill2D(hc[sr+"nGenerated"], m0, m12, 1.0);
+            }
+            else
+            {
+                if (event == 0)
+                {
+                    // full the number of genrated events from the ntuple 
+                    const float den = nevts(); 
+                    rt::Fill2D(hc[sr+"nGenerated"], m0, m12, den);
+                }
+            }
         }
 
         // selections 
@@ -448,8 +502,8 @@ int InterpLooper::operator()(long event)
         }
 
         // only keep MC matched events (MC only)
-        const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0));
-//         const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1));
+        //const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0));
+        const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1));
         //const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mcid()*lep2_mcid()>0));
         //const bool lep1_matched  = (abs(lep1_mc3id())==11 or abs(lep1_mc3id())==13 or abs(lep1_mc3id())==15);
         //const bool lep2_matched  = (abs(lep2_mc3id())==11 or abs(lep2_mc3id())==13 or abs(lep2_mc3id())==15);
@@ -458,43 +512,6 @@ int InterpLooper::operator()(long event)
         if (not true_ss_event)
         {
             if (m_verbose) {cout << "failing MC truth matching" << endl;}
-            return 0;
-        }
-
-        // selected sparms 
-
-        // if the value of m_m_sparm0 negative, this check is skipped
-        if (m_sparm0 >= 0.0f && not rt::is_equal(m_sparm0, sparm0()))
-        {
-            if (m_verbose) {cout << Form("fails the sparm0 check: %s, %1.2f != %1.2f", sparm0_name().Data(), m_sparm0, sparm0()) << endl;}
-            return 0;
-        }
-
-        // if the value of m_sparm1 is negative, this check is skipped
-        if (m_sparm1 >= 0.0f && not rt::is_equal(m_sparm1, sparm1()))
-        {
-            if (m_verbose) {cout << Form("fails the sparm1 check: %s, %1.2f != %1.2f", sparm1_name().Data(), m_sparm1, sparm1()) << endl;}
-            return 0;
-        }
-
-        // if the value of m_sparm2 is negative, this check is skipped
-        if (m_sparm2 >= 0.0f && not rt::is_equal(m_sparm2, sparm2()))
-        {
-            if (m_verbose) {cout << Form("fails the sparm2 check: %s, %1.2f != %1.2f", sparm2_name().Data(), m_sparm2, sparm2()) << endl;}
-            return 0;
-        }
-
-        // if the value of m_sparm3 is negative, this check is skipped
-        if (m_sparm3 >= 0.0f && not rt::is_equal(m_sparm3, sparm3()))
-        {
-            if (m_verbose) {cout << Form("fails the sparm3 check: %s, %1.2f != %1.2f", sparm3_name().Data(), m_sparm3, sparm3()) << endl;}
-            return 0;
-        }
-
-        // at least passes baseline
-        if (not PassesSignalRegion(ss::SignalRegion::sr0, m_analysis_type, m_signal_region_type))
-        {
-            if (m_verbose) {cout << "fails the baseline selection" << endl;}
             return 0;
         }
 
@@ -527,6 +544,13 @@ int InterpLooper::operator()(long event)
             if(is_df()) m_count_df[3] += 1.0;
             if(is_os()) m_count_os[3] += 1.0;
         }
+
+        // at least passes baseline
+        if (not PassesSignalRegion(ss::SignalRegion::sr0, m_analysis_type, m_signal_region_type))
+        {
+            if (m_verbose) {cout << "fails the baseline selection" << endl;}
+            return 0;
+        }
                 
         // Weight Factors
         // ----------------------------------------------------------------------------------------------------------------------------//
@@ -552,8 +576,8 @@ int InterpLooper::operator()(long event)
         if (m_do_scale_factors && not is_real_data())
         {
             // lepton efficiencies
-            const float eta1 = (abs(lep1_pdgid()) == 13 ? lep1_p4().eta() : lep1_sc_p4().eta());
-            const float eta2 = (abs(lep2_pdgid()) == 13 ? lep2_p4().eta() : lep2_sc_p4().eta());
+            const float eta1      = (abs(lep1_pdgid()) == 13 ? lep1_p4().eta() : lep1_sc_p4().eta());
+            const float eta2      = (abs(lep2_pdgid()) == 13 ? lep2_p4().eta() : lep2_sc_p4().eta());
             evt_weight *= DileptonTagAndProbeScaleFactor(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
 
             // trigger scale factor

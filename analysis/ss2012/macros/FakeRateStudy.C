@@ -405,9 +405,9 @@ void EwkPlots()
 
 void FakeRateEWK(const std::string& suffix = "png")
 {
-    //rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
-    rt::TH1Container hc("plots/fake_rates/test/ssFR_data_ewkcor_26Feb2013.root");
-    string path = "plots/fake_rates/compare_ewkcor_test_v2";
+    rt::TH1Container hc("data/fake_rates/ssFR_data_ewkcor_26Feb2013.root");
+/*     rt::TH1Container hc("plots/fake_rates/test/ssFR_data_ewkcor_26Feb2013.root"); */
+    string path = "plots/fake_rates/compare_ewkcor_413";
     //hc.List();
 
     // set style

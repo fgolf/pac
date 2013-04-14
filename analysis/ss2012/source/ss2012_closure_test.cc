@@ -145,17 +145,16 @@ int main(int argc, char* argv[])
             is_signal = false; // not used 
             if (input_file.empty())
             {
-                input_file = Form("babies/%s.root", sample_name.c_str());
-                // special case for ttbar breakdown
-                switch (sample)
-                {
-                case at::Sample::ttdil: input_file = "babies/ttjets.root"; break; 
-                case at::Sample::ttotr: input_file = "babies/ttjets.root"; break;
-                case at::Sample::ttslb: input_file = "babies/ttjets.root"; break;
-                case at::Sample::ttslo: input_file = "babies/ttjets.root"; break;
-                default: {/*do nothing*/}
-                }
-
+                input_file = Form("babies/%s/%s.root", ati.short_name.c_str(), sample_name.c_str());
+//                 // special case for ttbar breakdown
+//                 switch (sample)
+//                 {
+//                     case at::Sample::ttdil: input_file = Form("babies/%s/ttdil.root", ati.short_name.c_str()); break; 
+//                     case at::Sample::ttotr: input_file = Form("babies/%s/ttotr.root", ati.short_name.c_str()); break;
+//                     case at::Sample::ttslb: input_file = Form("babies/%s/ttslb.root", ati.short_name.c_str()); break;
+//                     case at::Sample::ttslo: input_file = Form("babies/%s/ttslo.root", ati.short_name.c_str()); break;
+//                     default: {/*do nothing*/}
+//                 }
             }
             if (output_file.empty())
             {

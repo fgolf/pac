@@ -69,11 +69,42 @@ FRClosureLooper::FRClosureLooper
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
     cout << "using FR file : " << fake_rate_file->GetName() << endl;
-    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_hist_name.c_str())->Clone()));
-    if (not h_mufr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", mufr_hist_name.c_str()));}
+    string mufr_name = "";
+    string elfr_name = "";
+    switch (m_analysis_type)
+    {
+        case AnalysisType::high_pt:
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_ewkcor";
+            break;
+        case AnalysisType::high_pt_eth:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+        case AnalysisType::low_pt:
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_noiso_ewkcor";
+            break;
+        case AnalysisType::vlow_pt:
+            mufr_name = "h_mufr40c_iso";
+            elfr_name = "h_elfr40c_noiso_ewkcor";
+            break;
+        case AnalysisType::higgsino:
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_ewkcor";
+            break;
+        default:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+    }
+    if (not mufr_hist_name.empty()) {mufr_name = mufr_hist_name;}
+    if (not elfr_hist_name.empty()) {elfr_name = elfr_hist_name;}
+    h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
+    h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
+    if (not h_mufr) {throw std::runtime_error(Form("ERROR: PlotLooper: %s doesn't exist", mufr_name.c_str()));}
+    if (not h_elfr) {throw std::runtime_error(Form("ERROR: PlotLooper: %s doesn't exist", elfr_name.c_str()));}
     h_mufr->SetDirectory(0);
-    h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_hist_name.c_str())->Clone()));
-    if (not h_elfr) {throw std::runtime_error(Form("ERROR: SSAnalysisLooper: %s doesn't exist", elfr_hist_name.c_str()));}
     h_elfr->SetDirectory(0);
 
     cout << "using mu FR hist : " << h_mufr->GetName() << endl;
@@ -245,19 +276,30 @@ void FRClosureLooper::EndJob()
     float ee_ratio_value = pred.ee.value/obs_ee;
     float ee_ratio_error = ee_ratio_value * sqrt(pow(pred.ee.error/pred.ee.value, 2) + pow(obs_ee_error/obs_ee, 2));
     string ee_ratio      = rt::pm(ee_ratio_value, ee_ratio_error);
+    float ee_rdiff_value = (pred.ee.value - obs_ee)/pred.ee.value; 
+    float ee_rdiff_error = (obs_ee/pred.ee.value) * sqrt(pow(pred.ee.error/pred.ee.value, 2) + pow(obs_ee_error/obs_ee, 2));
+    string ee_rdiff      = rt::pm(ee_rdiff_value, ee_rdiff_error); 
 
     float mm_ratio_value = pred.mm.value/obs_mm;
     float mm_ratio_error = mm_ratio_value * sqrt(pow(pred.mm.error/pred.mm.value, 2) + pow(obs_mm_error/obs_mm, 2));
     string mm_ratio      = rt::pm(mm_ratio_value, mm_ratio_error);
+    float mm_rdiff_value = (pred.mm.value - obs_mm)/pred.mm.value; 
+    float mm_rdiff_error = (obs_mm/pred.mm.value) * sqrt(pow(pred.mm.error/pred.mm.value, 2) + pow(obs_mm_error/obs_mm, 2));
+    string mm_rdiff      = rt::pm(mm_rdiff_value, mm_rdiff_error); 
 
     float em_ratio_value = pred.em.value/obs_em;
     float em_ratio_error = em_ratio_value * sqrt(pow(pred.em.error/pred.em.value, 2) + pow(obs_em_error/obs_em, 2));
     string em_ratio      = rt::pm(em_ratio_value, em_ratio_error);
+    float em_rdiff_value = (pred.em.value - obs_em)/pred.em.value; 
+    float em_rdiff_error = (obs_em/pred.em.value) * sqrt(pow(pred.em.error/pred.em.value, 2) + pow(obs_em_error/obs_em, 2));
+    string em_rdiff      = rt::pm(em_rdiff_value, em_rdiff_error); 
 
     float ll_ratio_value = pred.ll.value/obs_ll;
     float ll_ratio_error = ll_ratio_value * sqrt(pow(pred.ll.error/pred.ll.value, 2) + pow(obs_ll_error/obs_ll, 2));
     string ll_ratio      = rt::pm(ll_ratio_value, ll_ratio_error);
-
+    float ll_rdiff_value = (pred.ll.value - obs_ll)/pred.ll.value; 
+    float ll_rdiff_error = (obs_ll/pred.ll.value) * sqrt(pow(pred.ll.error/pred.ll.value, 2) + pow(obs_ll_error/obs_ll, 2));
+    string ll_rdiff      = rt::pm(ll_rdiff_value, ll_rdiff_error); 
 
     // print the output
     const SignalRegionInfo sr_info = GetSignalRegionInfo(m_signal_region, m_analysis_type, m_signal_region_type);
@@ -272,8 +314,11 @@ void FRClosureLooper::EndJob()
                         ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",     df.ll.str(f))
                         ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",   pred.ll.str(f))
                         ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",           obs_ll)
-                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",         ll_ratio);
+                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",         ll_ratio)
+                        ("(p-o)/o" ,         ee_rdiff,         mm_rdiff,         em_rdiff,   				"NA",   				"NA",         ll_rdiff)
+                        ;
     t_yields.print();
+    t_yields.printTex();
 }
 
 // book hists 
@@ -401,13 +446,14 @@ int FRClosureLooper::operator()(long event)
         }
 
         // ttbar breakdown 
+        const TTbarBreakDown::value_type ttbar_breakdown = GetTTbarBreakDown(m_sample, lep1_is_fromw(), lep2_is_fromw()); 
         switch (m_sample)
         {
-        case at::Sample::ttdil: if (ttbar_bkdn() != TTbarBreakDown::TTDIL) return 0; break; 
-        case at::Sample::ttotr: if (ttbar_bkdn() != TTbarBreakDown::TTOTR) return 0; break;
-        case at::Sample::ttslb: if (ttbar_bkdn() != TTbarBreakDown::TTSLB) return 0; break;
-        case at::Sample::ttslo: if (ttbar_bkdn() != TTbarBreakDown::TTSLO) return 0; break;
-        default: {/*do nothing*/}
+            case at::Sample::ttdil: if (ttbar_breakdown != TTbarBreakDown::TTDIL) return 0; break; 
+            case at::Sample::ttotr: if (ttbar_breakdown != TTbarBreakDown::TTOTR) return 0; break;
+            case at::Sample::ttslb: if (ttbar_breakdown != TTbarBreakDown::TTSLB) return 0; break;
+            case at::Sample::ttslo: if (ttbar_breakdown != TTbarBreakDown::TTSLO) return 0; break;
+            default: {/*do nothing*/}
         }
 
         // Weight Factors
@@ -424,16 +470,13 @@ int FRClosureLooper::operator()(long event)
         // ------------------------------------------------------------------------------------//
 
         // name and title suffixes
-        string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
-        string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
+        const string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
+        const string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
 
-        //bool mc3_matched  = is_real_data() ? true : (lep1_mc3id()!=-999 && lep2_mc3id()!=-999);
-        //bool direct_b_l1  = is_real_data() ? true : (mc3_matched && abs(lep1_mc3id())==5 && idIsBeauty(lep1_mc3_momid()) && lep1_is_fromw()<1);
-        //bool direct_b_l2  = is_real_data() ? true : (mc3_matched && abs(lep2_mc3id())==5 && idIsBeauty(lep2_mc3_momid()) && lep2_is_fromw()<1);
-        bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
-        bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
-        bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
-        bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
+        const bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
+        const bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
+        const bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
+        const bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
 
         // SS
         if (is_ss())
