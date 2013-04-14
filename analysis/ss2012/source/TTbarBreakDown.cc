@@ -7,7 +7,15 @@ using namespace at;
 TTbarBreakDown::value_type GetTTbarBreakDown(at::Sample::value_type sample, int lep1_is_fromw, int lep2_is_fromw)
 {
     // not ttjets
-    if (sample != Sample::ttjets)
+    if
+    (
+        sample != Sample::ttjets        || 
+        sample != Sample::ttdil         || 
+        sample != Sample::ttslq         || 
+        sample != Sample::ttslb         || 
+        sample != Sample::ttslo         || 
+        sample != Sample::ttotr
+    )
     {
         return TTbarBreakDown::static_size;
     }
