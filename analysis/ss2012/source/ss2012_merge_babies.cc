@@ -8,10 +8,10 @@
 #include <boost/program_options.hpp>
 
 // trivial no skim function
-bool keep_all_events(long)
+struct keep_all_events
 {
-    return true;
-}
+    bool operator() (long) const {return true;}
+};
 
 // simple # jets selection
 struct simple_skim
@@ -72,8 +72,8 @@ struct simple_skim
         }
         else
         {
-            bool result = (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
-            //const bool result = (dilep_type() < 4 && (is_ss() || is_sf() || is_df()) && njets() >= m_njets);
+            //bool result = (dilep_type() < 4 && (is_ss() || is_os() || is_sf() || is_df()) && njets() >= m_njets);
+            const bool result = (dilep_type() < 4 && (is_ss() || is_sf() || is_df()) && njets() >= m_njets);
             return result;
         }
     }
@@ -96,6 +96,7 @@ try
     int number_of_events      = -1;
     bool verbose              = false;
     bool do_duplicate_removal = true;
+    bool apply_filter         = true;
     int njets                 = 0;
 
     namespace po = boost::program_options;
@@ -109,6 +110,7 @@ try
         ("nev"      , po::value<int>(&number_of_events)              , "number of events"                                     )
         ("njets"    , po::value<int>(&njets)                         , "number of jets to cun on while merging (default is 0)")
         ("duplicate", po::value<bool>(&do_duplicate_removal)         , "remove duplicate events"                              )
+        ("filter"   , po::value<bool>(&apply_filter)                 , "apply the simple filter (default is true)"            )
         ("verbose"  , po::value<bool>(&verbose)                      , "verbosity"                                            )
         ;
 
@@ -165,6 +167,7 @@ try
     cout << "number_of_events     : \t" << number_of_events    << endl;
     cout << "njets                : \t" << njets               << endl;
     cout << "do_duplicate_removal : \t" << do_duplicate_removal<< endl;
+    cout << "apply filter         : \t" << apply_filter        << endl;
     cout << "verbose              : \t" << verbose             << endl;
 
     // do it 
@@ -181,18 +184,34 @@ try
     rt::mkdir(rt::dirname(output_file), /*force=*/true);
 
     // run the skim and do not cut events except for duplicates and bad runs
-    at::SkimChain<SSB2012>
-    (
-        chain,
-        output_file,
-        simple_skim(njets, analysis_type),
-        //keep_all_events,
-        samesignbtag,
-        number_of_events,
-        run_list,
-        do_duplicate_removal,
-        verbose
-    );
+    if (apply_filter)
+    {
+        at::SkimChain<SSB2012>
+        (
+            chain,
+            output_file,
+            simple_skim(njets, analysis_type),
+            samesignbtag,
+            number_of_events,
+            run_list,
+            do_duplicate_removal,
+            verbose
+        );
+    }
+    else
+    {
+        at::SkimChain<SSB2012>
+        (
+            chain,
+            output_file,
+            keep_all_events(),
+            samesignbtag,
+            number_of_events,
+            run_list,
+            do_duplicate_removal,
+            verbose
+        );
+    }
 
     // cleanup
     delete chain;

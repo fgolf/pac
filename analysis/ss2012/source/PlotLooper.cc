@@ -720,16 +720,16 @@ int PlotLooper::operator()(long event)
         if (is_sf()) {charge_type = DileptonChargeType::SF;}
         if (is_df()) {charge_type = DileptonChargeType::DF;}
         if (is_os()) {charge_type = DileptonChargeType::OS;}
-        //if (ssb::charge_type() < 0)
-        //{
-        //    if (m_verbose) {cout << "failing valid hypothesis requirement" << endl;}
-        //    return 0;
-        //}
-        if (charge_type == DileptonChargeType::static_size)
+        if (ssb::charge_type() < 0)
         {
-            if (m_verbose) {cout << "failing valid charge type" << endl;}
+            if (m_verbose) {cout << "failing valid hypothesis requirement" << endl;}
             return 0;
         }
+        //if (charge_type == DileptonChargeType::static_size)
+        //{
+        //    if (m_verbose) {cout << "failing valid charge type" << endl;}
+        //    return 0;
+        //}
 
         // dilepton hyp type: 1 mm, 2 em, 3ee
         const DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
