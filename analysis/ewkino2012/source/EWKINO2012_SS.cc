@@ -14,9 +14,6 @@ namespace ewkino_ss {
 	const float &uncorpfmet_phi() { return ewk12ss.uncorpfmet_phi(); }
 	const float &pu_nvtxs() { return ewk12ss.pu_nvtxs(); }
 	const float &pu_ntrueint() { return ewk12ss.pu_ntrueint(); }
-	const float &scale1fb() { return ewk12ss.scale1fb(); }
-	const float &xsec() { return ewk12ss.xsec(); }
-	const unsigned int &nevts() { return ewk12ss.nevts(); }
 	const float &kfactor() { return ewk12ss.kfactor(); }
 	const float &gen_met() { return ewk12ss.gen_met(); }
 	const float &gen_met_phi() { return ewk12ss.gen_met_phi(); }
@@ -30,7 +27,6 @@ namespace ewkino_ss {
 	const bool &filt_trkfail() { return ewk12ss.filt_trkfail(); }
 	const bool &filt_eebadsc() { return ewk12ss.filt_eebadsc(); }
 	const bool &passes_metfilters() { return ewk12ss.passes_metfilters(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4() { return ewk12ss.lep1_p4(); }
 	const bool &lep1_passes_id() { return ewk12ss.lep1_passes_id(); }
 	const bool &lep1_passes_iso() { return ewk12ss.lep1_passes_iso(); }
 	const bool &lep1_is_num() { return ewk12ss.lep1_is_num(); }
@@ -73,16 +69,10 @@ namespace ewkino_ss {
 	const float &lep1_dbeta04() { return ewk12ss.lep1_dbeta04(); }
 	const float &lep1_sf_lepeff() { return ewk12ss.lep1_sf_lepeff(); }
 	const float &lep1_sf_trig() { return ewk12ss.lep1_sf_trig(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4() { return ewk12ss.lep1_mcp4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4() { return ewk12ss.lep1_mc3p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4() { return ewk12ss.lep1_mc_momp4(); }
 	const int &lep1_mcid() { return ewk12ss.lep1_mcid(); }
 	const int &lep1_mc3id() { return ewk12ss.lep1_mc3id(); }
 	const int &lep1_momid() { return ewk12ss.lep1_momid(); }
 	const int &lep1_mc3_momid() { return ewk12ss.lep1_mc3_momid(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4() { return ewk12ss.lep1_gsf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4() { return ewk12ss.lep1_ctf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4() { return ewk12ss.lep1_sc_p4(); }
 	const bool &lep1_q3agree() { return ewk12ss.lep1_q3agree(); }
 	const bool &lep1_is_conv() { return ewk12ss.lep1_is_conv(); }
 	const int &lep1_qsc() { return ewk12ss.lep1_qsc(); }
@@ -100,7 +90,6 @@ namespace ewkino_ss {
 	const float &lep1_ooemoop() { return ewk12ss.lep1_ooemoop(); }
 	const float &lep1_conv_dist() { return ewk12ss.lep1_conv_dist(); }
 	const float &lep1_conv_dcot() { return ewk12ss.lep1_conv_dcot(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4() { return ewk12ss.lep1_gfit_p4(); }
 	const bool &lep1_is_global() { return ewk12ss.lep1_is_global(); }
 	const bool &lep1_is_tracker() { return ewk12ss.lep1_is_tracker(); }
 	const bool &lep1_is_stamu() { return ewk12ss.lep1_is_stamu(); }
@@ -117,7 +106,14 @@ namespace ewkino_ss {
 	const float &lep1_pterr() { return ewk12ss.lep1_pterr(); }
 	const float &lep1_ecal_vetodep() { return ewk12ss.lep1_ecal_vetodep(); }
 	const float &lep1_hcal_vetodep() { return ewk12ss.lep1_hcal_vetodep(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4() { return ewk12ss.lep2_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_p4() { return ewk12ss.lep1_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mcp4() { return ewk12ss.lep1_mcp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc3p4() { return ewk12ss.lep1_mc3p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_mc_momp4() { return ewk12ss.lep1_mc_momp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gsf_p4() { return ewk12ss.lep1_gsf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_ctf_p4() { return ewk12ss.lep1_ctf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_sc_p4() { return ewk12ss.lep1_sc_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_gfit_p4() { return ewk12ss.lep1_gfit_p4(); }
 	const bool &lep2_passes_id() { return ewk12ss.lep2_passes_id(); }
 	const bool &lep2_passes_iso() { return ewk12ss.lep2_passes_iso(); }
 	const bool &lep2_is_num() { return ewk12ss.lep2_is_num(); }
@@ -160,16 +156,10 @@ namespace ewkino_ss {
 	const float &lep2_dbeta04() { return ewk12ss.lep2_dbeta04(); }
 	const float &lep2_sf_lepeff() { return ewk12ss.lep2_sf_lepeff(); }
 	const float &lep2_sf_trig() { return ewk12ss.lep2_sf_trig(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4() { return ewk12ss.lep2_mcp4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4() { return ewk12ss.lep2_mc3p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4() { return ewk12ss.lep2_mc_momp4(); }
 	const int &lep2_mcid() { return ewk12ss.lep2_mcid(); }
 	const int &lep2_mc3id() { return ewk12ss.lep2_mc3id(); }
 	const int &lep2_momid() { return ewk12ss.lep2_momid(); }
 	const int &lep2_mc3_momid() { return ewk12ss.lep2_mc3_momid(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4() { return ewk12ss.lep2_gsf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4() { return ewk12ss.lep2_ctf_p4(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4() { return ewk12ss.lep2_sc_p4(); }
 	const bool &lep2_q3agree() { return ewk12ss.lep2_q3agree(); }
 	const bool &lep2_is_conv() { return ewk12ss.lep2_is_conv(); }
 	const int &lep2_qsc() { return ewk12ss.lep2_qsc(); }
@@ -187,7 +177,6 @@ namespace ewkino_ss {
 	const float &lep2_ooemoop() { return ewk12ss.lep2_ooemoop(); }
 	const float &lep2_conv_dist() { return ewk12ss.lep2_conv_dist(); }
 	const float &lep2_conv_dcot() { return ewk12ss.lep2_conv_dcot(); }
-	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4() { return ewk12ss.lep2_gfit_p4(); }
 	const bool &lep2_is_global() { return ewk12ss.lep2_is_global(); }
 	const bool &lep2_is_tracker() { return ewk12ss.lep2_is_tracker(); }
 	const bool &lep2_is_stamu() { return ewk12ss.lep2_is_stamu(); }
@@ -204,9 +193,17 @@ namespace ewkino_ss {
 	const float &lep2_pterr() { return ewk12ss.lep2_pterr(); }
 	const float &lep2_ecal_vetodep() { return ewk12ss.lep2_ecal_vetodep(); }
 	const float &lep2_hcal_vetodep() { return ewk12ss.lep2_hcal_vetodep(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_p4() { return ewk12ss.lep2_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mcp4() { return ewk12ss.lep2_mcp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc3p4() { return ewk12ss.lep2_mc3p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_mc_momp4() { return ewk12ss.lep2_mc_momp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gsf_p4() { return ewk12ss.lep2_gsf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_ctf_p4() { return ewk12ss.lep2_ctf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4() { return ewk12ss.lep2_sc_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4() { return ewk12ss.lep2_gfit_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &dilep_p4() { return ewk12ss.dilep_p4(); }
-	const bool &is_os() { return ewk12ss.is_os(); }
-	const bool &is_ss() { return ewk12ss.is_ss(); }
+	const bool &os() { return ewk12ss.os(); }
+	const bool &ss() { return ewk12ss.ss(); }
 	const bool &mm() { return ewk12ss.mm(); }
 	const bool &ee() { return ewk12ss.ee(); }
 	const bool &em() { return ewk12ss.em(); }
@@ -219,8 +216,10 @@ namespace ewkino_ss {
 	const int &fiduciality() { return ewk12ss.fiduciality(); }
 	const unsigned int &selection() { return ewk12ss.selection(); }
 	const bool &is_good_lumi() { return ewk12ss.is_good_lumi(); }
+	const bool &charge_type() { return ewk12ss.charge_type(); }
 	const int &njets() { return ewk12ss.njets(); }
 	const int &nbtags() { return ewk12ss.nbtags(); }
+	const int &nbtags_loose() { return ewk12ss.nbtags_loose(); }
 	const int &ttbar_bkdn() { return ewk12ss.ttbar_bkdn(); }
 	const float &vtxw() { return ewk12ss.vtxw(); }
 	const float &mt() { return ewk12ss.mt(); }
@@ -261,8 +260,10 @@ namespace ewkino_ss {
 	const TString &sparm3_name() { return ewk12ss.sparm3_name(); }
 	const bool &is_pp() { return ewk12ss.is_pp(); }
 	const bool &is_mm() { return ewk12ss.is_mm(); }
+	const bool &is_ss() { return ewk12ss.is_ss(); }
 	const bool &is_sf() { return ewk12ss.is_sf(); }
 	const bool &is_df() { return ewk12ss.is_df(); }
+	const bool &is_os() { return ewk12ss.is_os(); }
 	const bool &no_extraz() { return ewk12ss.no_extraz(); }
 	const bool &no_extrag() { return ewk12ss.no_extrag(); }
 	const bool &clean() { return ewk12ss.clean(); }
@@ -285,6 +286,7 @@ namespace ewkino_ss {
 	const float &lep1_nearjet_dr() { return ewk12ss.lep1_nearjet_dr(); }
 	const float &lep1_nearlep_dr() { return ewk12ss.lep1_nearlep_dr(); }
 	const int &lep1_nearlep_id() { return ewk12ss.lep1_nearlep_id(); }
+	const bool &lep1_isFromH() { return ewk12ss.lep1_isFromH(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearjet_p4() { return ewk12ss.lep2_nearjet_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_nearlep_p4() { return ewk12ss.lep2_nearlep_p4(); }
 	const float &lep2_wfr() { return ewk12ss.lep2_wfr(); }
@@ -292,6 +294,7 @@ namespace ewkino_ss {
 	const float &lep2_nearjet_dr() { return ewk12ss.lep2_nearjet_dr(); }
 	const float &lep2_nearlep_dr() { return ewk12ss.lep2_nearlep_dr(); }
 	const int &lep2_nearlep_id() { return ewk12ss.lep2_nearlep_id(); }
+	const bool &lep2_isFromH() { return ewk12ss.lep2_isFromH(); }
 	const float &jets_dr12() { return ewk12ss.jets_dr12(); }
 	const float &dijet_mass() { return ewk12ss.dijet_mass(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4() { return ewk12ss.vjets_p4(); }
@@ -308,6 +311,7 @@ namespace ewkino_ss {
 	const vector<int> &vjets_mc3id() { return ewk12ss.vjets_mc3id(); }
 	const vector<int> &vjets_momid() { return ewk12ss.vjets_momid(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4() { return ewk12ss.vjets_nearjet_p4(); }
+	const vector<float> &vjets_nearjet_dr() { return ewk12ss.vjets_nearjet_dr(); }
 	const vector<float> &vjets_bdisc() { return ewk12ss.vjets_bdisc(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4() { return ewk12ss.gen_lep1_p4(); }
 	const int &gen_lep1_pdgid() { return ewk12ss.gen_lep1_pdgid(); }
@@ -319,4 +323,111 @@ namespace ewkino_ss {
 	const float &gen_dilep_dphi() { return ewk12ss.gen_dilep_dphi(); }
 	const float &gen_dilep_deta() { return ewk12ss.gen_dilep_deta(); }
 	const float &gen_dilep_dr() { return ewk12ss.gen_dilep_dr(); }
+	const int &pfcandid5() { return ewk12ss.pfcandid5(); }
+	const int &pfcandid10() { return ewk12ss.pfcandid10(); }
+	const int &pfcanddirid10() { return ewk12ss.pfcanddirid10(); }
+	const int &pfcandvetoid10() { return ewk12ss.pfcandvetoid10(); }
+	const int &pfcandvetoLid10() { return ewk12ss.pfcandvetoLid10(); }
+	const int &pfcandidOS10() { return ewk12ss.pfcandidOS10(); }
+	const int &pfcandidOS10looseZ() { return ewk12ss.pfcandidOS10looseZ(); }
+	const int &pfcandid5looseZ() { return ewk12ss.pfcandid5looseZ(); }
+	const float &trkpt5() { return ewk12ss.trkpt5(); }
+	const float &mleptrk5() { return ewk12ss.mleptrk5(); }
+	const float &trkreliso5() { return ewk12ss.trkreliso5(); }
+	const float &trkpt10() { return ewk12ss.trkpt10(); }
+	const float &mleptrk10() { return ewk12ss.mleptrk10(); }
+	const float &trkreliso10() { return ewk12ss.trkreliso10(); }
+	const float &trkpt5loose() { return ewk12ss.trkpt5loose(); }
+	const float &trkreliso5loose() { return ewk12ss.trkreliso5loose(); }
+	const float &trkpt10loose() { return ewk12ss.trkpt10loose(); }
+	const float &trkreliso10loose() { return ewk12ss.trkreliso10loose(); }
+	const float &trkpt10pt0p1() { return ewk12ss.trkpt10pt0p1(); }
+	const float &trkreliso10pt0p1() { return ewk12ss.trkreliso10pt0p1(); }
+	const float &trkpt10pt0p2() { return ewk12ss.trkpt10pt0p2(); }
+	const float &trkreliso10pt0p2() { return ewk12ss.trkreliso10pt0p2(); }
+	const float &trkpt10pt0p3() { return ewk12ss.trkpt10pt0p3(); }
+	const float &trkreliso10pt0p3() { return ewk12ss.trkreliso10pt0p3(); }
+	const float &trkpt10pt0p4() { return ewk12ss.trkpt10pt0p4(); }
+	const float &trkreliso10pt0p4() { return ewk12ss.trkreliso10pt0p4(); }
+	const float &trkpt10pt0p5() { return ewk12ss.trkpt10pt0p5(); }
+	const float &trkreliso10pt0p5() { return ewk12ss.trkreliso10pt0p5(); }
+	const float &trkpt10pt0p6() { return ewk12ss.trkpt10pt0p6(); }
+	const float &trkreliso10pt0p6() { return ewk12ss.trkreliso10pt0p6(); }
+	const float &trkpt10pt0p7() { return ewk12ss.trkpt10pt0p7(); }
+	const float &trkreliso10pt0p7() { return ewk12ss.trkreliso10pt0p7(); }
+	const float &trkpt10pt0p8() { return ewk12ss.trkpt10pt0p8(); }
+	const float &trkreliso10pt0p8() { return ewk12ss.trkreliso10pt0p8(); }
+	const float &trkpt10pt0p9() { return ewk12ss.trkpt10pt0p9(); }
+	const float &trkreliso10pt0p9() { return ewk12ss.trkreliso10pt0p9(); }
+	const float &trkpt10pt1p0() { return ewk12ss.trkpt10pt1p0(); }
+	const float &trkreliso10pt1p0() { return ewk12ss.trkreliso10pt1p0(); }
+	const float &pfcandiso5() { return ewk12ss.pfcandiso5(); }
+	const float &pfcandiso10() { return ewk12ss.pfcandiso10(); }
+	const float &pfcanddiriso10() { return ewk12ss.pfcanddiriso10(); }
+	const float &pfcandvetoiso10() { return ewk12ss.pfcandvetoiso10(); }
+	const float &pfcandvetoLiso10() { return ewk12ss.pfcandvetoLiso10(); }
+	const float &pfcandisoOS10() { return ewk12ss.pfcandisoOS10(); }
+	const float &pfcandisoOS10looseZ() { return ewk12ss.pfcandisoOS10looseZ(); }
+	const float &pfcandiso5looseZ() { return ewk12ss.pfcandiso5looseZ(); }
+	const float &pfcandpt5() { return ewk12ss.pfcandpt5(); }
+	const float &pfcandpt10() { return ewk12ss.pfcandpt10(); }
+	const float &pfcanddirpt10() { return ewk12ss.pfcanddirpt10(); }
+	const float &pfcandvetopt10() { return ewk12ss.pfcandvetopt10(); }
+	const float &pfcandvetoLpt10() { return ewk12ss.pfcandvetoLpt10(); }
+	const float &pfcandptOS10() { return ewk12ss.pfcandptOS10(); }
+	const float &pfcandptOS10looseZ() { return ewk12ss.pfcandptOS10looseZ(); }
+	const float &pfcandpt5looseZ() { return ewk12ss.pfcandpt5looseZ(); }
+	const float &pfcanddz5() { return ewk12ss.pfcanddz5(); }
+	const float &pfcanddz10() { return ewk12ss.pfcanddz10(); }
+	const float &pfcanddirdz10() { return ewk12ss.pfcanddirdz10(); }
+	const float &pfcandvetodz10() { return ewk12ss.pfcandvetodz10(); }
+	const float &pfcandvetoLdz10() { return ewk12ss.pfcandvetoLdz10(); }
+	const float &pfcanddzOS10() { return ewk12ss.pfcanddzOS10(); }
+	const float &pfcanddzOS10looseZ() { return ewk12ss.pfcanddzOS10looseZ(); }
+	const float &pfcanddz5looseZ() { return ewk12ss.pfcanddz5looseZ(); }
+	const float &pfcandmindrj5() { return ewk12ss.pfcandmindrj5(); }
+	const float &pfcandmindrj10() { return ewk12ss.pfcandmindrj10(); }
+	const float &pfcanddirmindrj10() { return ewk12ss.pfcanddirmindrj10(); }
+	const float &pfcandvetomindrj10() { return ewk12ss.pfcandvetomindrj10(); }
+	const float &pfcandvetoLmindrj10() { return ewk12ss.pfcandvetoLmindrj10(); }
+	const float &pfcandpt10pt0p1() { return ewk12ss.pfcandpt10pt0p1(); }
+	const float &pfcandiso10pt0p1() { return ewk12ss.pfcandiso10pt0p1(); }
+	const float &pfcandpt10pt0p2() { return ewk12ss.pfcandpt10pt0p2(); }
+	const float &pfcandiso10pt0p2() { return ewk12ss.pfcandiso10pt0p2(); }
+	const float &pfcandpt10pt0p3() { return ewk12ss.pfcandpt10pt0p3(); }
+	const float &pfcandiso10pt0p3() { return ewk12ss.pfcandiso10pt0p3(); }
+	const float &pfcandpt10pt0p4() { return ewk12ss.pfcandpt10pt0p4(); }
+	const float &pfcandiso10pt0p4() { return ewk12ss.pfcandiso10pt0p4(); }
+	const float &pfcandpt10pt0p5() { return ewk12ss.pfcandpt10pt0p5(); }
+	const float &pfcandiso10pt0p5() { return ewk12ss.pfcandiso10pt0p5(); }
+	const float &pfcandpt10pt0p6() { return ewk12ss.pfcandpt10pt0p6(); }
+	const float &pfcandiso10pt0p6() { return ewk12ss.pfcandiso10pt0p6(); }
+	const float &pfcandpt10pt0p7() { return ewk12ss.pfcandpt10pt0p7(); }
+	const float &pfcandiso10pt0p7() { return ewk12ss.pfcandiso10pt0p7(); }
+	const float &pfcandpt10pt0p8() { return ewk12ss.pfcandpt10pt0p8(); }
+	const float &pfcandiso10pt0p8() { return ewk12ss.pfcandiso10pt0p8(); }
+	const float &pfcandpt10pt0p9() { return ewk12ss.pfcandpt10pt0p9(); }
+	const float &pfcandiso10pt0p9() { return ewk12ss.pfcandiso10pt0p9(); }
+	const float &pfcandpt10pt1p0() { return ewk12ss.pfcandpt10pt1p0(); }
+	const float &pfcandiso10pt1p0() { return ewk12ss.pfcandiso10pt1p0(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcand5() { return ewk12ss.pfcand5(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcand10() { return ewk12ss.pfcand10(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcanddir10() { return ewk12ss.pfcanddir10(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcandveto10() { return ewk12ss.pfcandveto10(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcandvetoL10() { return ewk12ss.pfcandvetoL10(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcandOS10() { return ewk12ss.pfcandOS10(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcandOS10looseZ() { return ewk12ss.pfcandOS10looseZ(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfcand5looseZ() { return ewk12ss.pfcand5looseZ(); }
+	const int &pfTau15_leadPtcandID() { return ewk12ss.pfTau15_leadPtcandID(); }
+	const int &pfTau_leadPtcandID() { return ewk12ss.pfTau_leadPtcandID(); }
+	const int &pfTauLoose_leadPtcandID() { return ewk12ss.pfTauLoose_leadPtcandID(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau15() { return ewk12ss.pfTau15(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau15_leadPtcand() { return ewk12ss.pfTau15_leadPtcand(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau() { return ewk12ss.pfTau(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau_leadPtcand() { return ewk12ss.pfTau_leadPtcand(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose() { return ewk12ss.pfTauLoose(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose_leadPtcand() { return ewk12ss.pfTauLoose_leadPtcand(); }
+	const float &scale1fb() { return ewk12ss.scale1fb(); }
+	const float &xsec() { return ewk12ss.xsec(); }
+	const unsigned int &nevts() { return ewk12ss.nevts(); }
 }
