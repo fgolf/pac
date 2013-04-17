@@ -57,5 +57,10 @@
 #pragma link C++ function ss::GetYieldsMap;
 #pragma link C++ function ss::PrintHiggsXsecTable;
 #pragma link C++ function ss::GetSystematicTypeFromName;
+#pragma link C++ function DileptonTriggerScaleFactor;
+#pragma link C++ function DileptonTriggerScaleFactorSystUnc;
+#pragma link C++ function DileptonTagAndProbeScaleFactorSystUnc;
+#pragma link C++ function TagAndProbeScaleFactor;
+#pragma link C++ function TagAndProbeScaleFactorSystUnc;
 
 #endif // __CINT__

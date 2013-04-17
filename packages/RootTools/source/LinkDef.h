@@ -79,6 +79,7 @@
 #pragma link C++ fucntion rt::MakeEfficiencyProjectionPlot;
 #pragma link C++ fucntion rt::MakeEfficienyPlot;
 #pragma link C++ fucntion rt::PrintFakeRateTable;
+#pragma link C++ fucntion rt::PrintFlipRateTable;
 #pragma link C++ fucntion rt::PrintFilesFromTChain;
 #pragma link C++ fucntion rt::CompareContentsOfTTrees;
 #pragma link C++ fucntion rt::MergeTChain;

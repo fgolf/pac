@@ -54,8 +54,8 @@ void SetScalingHistValues(TH2* h_scale, const FakeScalingStruct& fake_scale)
     {
         for (int yidx = 0; yidx < h_scale->GetNbinsY()+1; yidx++)
         {
-            h_scale->SetBinContent(xidx, yidx, fake_scale.sf);
-            h_scale->SetBinError(xidx, yidx, sqrt(pow(fake_scale.unc_stat,2) + pow(fake_scale.unc_syst,2)));
+            h_scale->SetBinContent(xidx, yidx, 1.0);
+            h_scale->SetBinError(xidx, yidx, 0.0);
         }
     }
     return;
@@ -67,6 +67,30 @@ TH2* ApplyScalingHist(TH2* h_unscaled, TH2* h_scale_factor, float lumi_scale)
     h_scaled->Scale(lumi_scale);
     h_scaled->Multiply(h_scale_factor);
     return h_scaled;
+}
+
+TH2* CreateAbove20CorrectionHist(TH2* h_template)
+{
+    TH2* h_scale = dynamic_cast<TH2*>(h_template->Clone("h_above20c"));
+    h_scale->Clear();
+    for (int xidx = 0; xidx < h_scale->GetNbinsX()+1; xidx++)
+    {
+        for (int yidx = 0; yidx < h_scale->GetNbinsY()+1; yidx++)
+        {
+            const float pt = h_scale->GetYaxis()->GetBinUpEdge(yidx);
+            if (pt > 20.0)
+            {
+                h_scale->SetBinContent(xidx, yidx, 1.0);
+                h_scale->SetBinError(xidx, yidx, 0.0);
+            }
+            else
+            {
+                h_scale->SetBinContent(xidx, yidx, 0.0);
+                h_scale->SetBinError(xidx, yidx, 0.0);
+            }
+        }
+    }
+    return h_scale;
 }
 
 int main(int argc, char* argv[])
@@ -219,10 +243,10 @@ try
         // ----------------------------------------------------------------------------------------------------- //
 
 
-        TH2* h_data_el_num       = dynamic_cast<TH2*>(hc_data[Form("h_el_num%s"      , jpt)]->Clone(Form("h_data_el_num%s", jpt)));
-        TH2* h_data_el_fo        = dynamic_cast<TH2*>(hc_data[Form("h_el_fo%s"       , jpt)]->Clone(Form("h_data_el_fo%s" , jpt)));
-        TH2* h_data_el_noiso_num = dynamic_cast<TH2*>(hc_data[Form("h_el_num%s_noiso", jpt)]->Clone(Form("h_data_el_num%s_noiso", jpt)));
-        TH2* h_data_el_noiso_fo  = dynamic_cast<TH2*>(hc_data[Form("h_el_fo%s_noiso" , jpt)]->Clone(Form("h_data_el_fo%s_noiso" , jpt)));
+        TH2* h_data_el_num       = dynamic_cast<TH2*>(hc_data[Form("h_el_num%s"      , jpt)]->Clone(Form("h_data_el_num%s_ewkcor"      , jpt)));
+        TH2* h_data_el_fo        = dynamic_cast<TH2*>(hc_data[Form("h_el_fo%s"       , jpt)]->Clone(Form("h_data_el_fo%s_ewkcor"       , jpt)));
+        TH2* h_data_el_noiso_num = dynamic_cast<TH2*>(hc_data[Form("h_el_num%s_noiso", jpt)]->Clone(Form("h_data_el_num%s_noiso_ewkcor", jpt)));
+        TH2* h_data_el_noiso_fo  = dynamic_cast<TH2*>(hc_data[Form("h_el_fo%s_noiso" , jpt)]->Clone(Form("h_data_el_fo%s_noiso_ewkcor" , jpt)));
 
         // create an artificial histogram for scaling
         TH2* h_ele_scaling = dynamic_cast<TH2*>(h_data_el_num->Clone(Form("h_el%s_scaling", jpt)));
@@ -253,10 +277,10 @@ try
         // correct muon fake rate
         // ----------------------------------------------------------------------------------------------------- //
 
-        TH2* h_data_mu_num     = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s"    , jpt)]->Clone());
-        TH2* h_data_mu_fo      = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s"     , jpt)]->Clone());
-        TH2* h_data_mu_iso_num = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s_iso", jpt)]->Clone());
-        TH2* h_data_mu_iso_fo  = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s_iso" , jpt)]->Clone());
+        TH2* h_data_mu_num     = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s"    , jpt)]->Clone(Form("h_data_mu_num%s_ewkcor"    ,jpt)));
+        TH2* h_data_mu_fo      = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s"     , jpt)]->Clone(Form("h_data_mu_fo%s_ewkcor"     ,jpt)));
+        TH2* h_data_mu_iso_num = dynamic_cast<TH2*>(hc_data[Form("h_mu_num%s_iso", jpt)]->Clone(Form("h_data_mu_num%s_iso_ewkcor",jpt)));
+        TH2* h_data_mu_iso_fo  = dynamic_cast<TH2*>(hc_data[Form("h_mu_fo%s_iso" , jpt)]->Clone(Form("h_data_mu_fo%s_iso_ewkcor" ,jpt)));
 
         // create an artificial histogram for scaling
         TH2* h_mu_scaling = dynamic_cast<TH2*>(h_data_mu_num->Clone(Form("h_mu%s_scaling", jpt)));
@@ -270,6 +294,11 @@ try
         TH2* h_mc_mu_iso_fo  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_mu_fo%s_iso" , jpt)]), h_mu_iso_scaling, mu_iso_lumi);
         h_mc_mu_iso_num->SetName(Form("h_mc_mu_iso_num%s", jpt));
         h_mc_mu_iso_fo ->SetName(Form("h_mc_mu_iso_fo%s" , jpt));
+
+        // only apply correction for iso trigger derived FR above 20 GeV --> stats too low below 20 GeV
+        TH2* h_above20c = CreateAbove20CorrectionHist(h_mu_iso_scaling);
+        h_mc_mu_iso_num->Multiply(h_above20c);
+        h_mc_mu_iso_fo->Multiply(h_above20c);
 
         // subtract contamination
         h_data_mu_num->Add(h_mc_mu_num, -1);
@@ -291,6 +320,7 @@ try
         // collect hists
         // ----------------------------------------------------------------------------------------------------- //
 
+        hc_new.Add(h_above20c);
         hc_new.Add(h_elfr_ewkcor);
         hc_new.Add(h_elfr_vs_pt_ewkcor);
         hc_new.Add(h_elfr_vs_eta_ewkcor);
@@ -307,10 +337,10 @@ try
         hc_new.Add(h_mufr_vs_eta_iso_ewkcor);
         hc_new.Add(h_ele_noiso_scaling);
         hc_new.Add(h_mu_iso_scaling);
-//         hc_new.Add(h_mc_mu_iso_num);
-//         hc_new.Add(h_mc_mu_iso_fo);
-//         hc_new.Add(h_data_mu_iso_num);
-//         hc_new.Add(h_data_mu_iso_fo);
+        hc_new.Add(h_mc_mu_iso_num);
+        hc_new.Add(h_mc_mu_iso_fo);
+        hc_new.Add(h_data_mu_iso_num);
+        hc_new.Add(h_data_mu_iso_fo);
 
     } // end ajetpt loop
 

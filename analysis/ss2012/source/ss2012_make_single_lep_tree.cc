@@ -550,7 +550,7 @@ try
     std::string output_file         = "";
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_26Feb2013.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_17Apr2013.root";
     std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02222013.root";
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";

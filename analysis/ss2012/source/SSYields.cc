@@ -371,11 +371,23 @@ namespace ss
     )
     {
         // hists  
-        rt::TH1Container hc = GetSampleHists(sample, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        pair<double, double> mm(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
-        pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(2), hc["h_flip_pred"]->GetBinError(2));
-        pair<double, double> em(hc["h_flip_pred"]->GetBinContent(3), hc["h_flip_pred"]->GetBinError(3));
-        pair<double, double> ll(hc["h_flip_pred"]->GetBinContent(4), hc["h_flip_pred"]->GetBinError(4));
+    	ss::SignalRegion::value_type signal_region_temp = signal_region; 
+        float scale = 1.0;
+        if (signal_region == SignalRegion::sr31)
+        {
+            scale = 0.5;
+            signal_region_temp = SignalRegion::sr30;
+        }
+        if (signal_region == SignalRegion::sr35)
+        {
+            scale = 0.5;
+            signal_region_temp = SignalRegion::sr34;
+        }
+        rt::TH1Container hc = GetSampleHists(sample, signal_region_temp, analysis_type, signal_region_type, charge_option, output_path);
+        pair<double, double> mm(scale * hc["h_flip_pred"]->GetBinContent(1), scale * hc["h_flip_pred"]->GetBinError(1));
+        pair<double, double> ee(scale * hc["h_flip_pred"]->GetBinContent(2), scale * hc["h_flip_pred"]->GetBinError(2));
+        pair<double, double> em(scale * hc["h_flip_pred"]->GetBinContent(3), scale * hc["h_flip_pred"]->GetBinError(3));
+        pair<double, double> ll(scale * hc["h_flip_pred"]->GetBinContent(4), scale * hc["h_flip_pred"]->GetBinError(4));
         Yield yield(ee, mm, em, ll);
     
         // done

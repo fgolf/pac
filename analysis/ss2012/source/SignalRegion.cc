@@ -2348,9 +2348,9 @@ namespace ss
     {
         switch(signal_region_type)
         {
-        case SignalRegionType::inclusive: return "inclusive"; break;
-        case SignalRegionType::exclusive: return "exclusive"; break;
-        default: {/*do nothing*/}
+            case SignalRegionType::inclusive: return "inclusive"; break;
+            case SignalRegionType::exclusive: return "exclusive"; break;
+            default: {/*do nothing*/}
         };
         throw std::domain_error("ERROR: ss::GetSignalRegionTypeName(): arguments out of bounds!");
     }

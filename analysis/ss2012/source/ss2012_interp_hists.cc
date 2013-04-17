@@ -25,7 +25,7 @@ try
     long number_of_events           = -1;
     std::string input_file          = "";
     std::string output_file         = "";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_26Feb2013.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_17Apr2013.root";
     std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02222013.root";
     std::string den_hist_file_name  = "";
     std::string sample_name         = "";

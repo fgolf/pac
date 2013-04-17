@@ -320,17 +320,17 @@ FRClosureBabyLooper::FRClosureBabyLooper
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c";
             break;
-        case AnalysisType::low_pt:
-            mufr_name = "h_mufr40c";
-            elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
-            break;
-        case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";    // need to update with ewk correction
-            elfr_name = "h_elfr40c_noiso";  // need to update with ewk correction
-            break;
         case AnalysisType::high_pt_eth:
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c";
+            break;
+        case AnalysisType::low_pt:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c_noiso";
+            break;
+        case AnalysisType::vlow_pt:
+            mufr_name = "h_mufr40c_iso";
+            elfr_name = "h_elfr40c_noiso";
             break;
         case AnalysisType::higgsino:
             mufr_name = "h_mufr40c";

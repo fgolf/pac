@@ -74,24 +74,24 @@ FRClosureLooper::FRClosureLooper
     switch (m_analysis_type)
     {
         case AnalysisType::high_pt:
-            mufr_name = "h_mufr40c_ewkcor";
-            elfr_name = "h_elfr40c_ewkcor";
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
             break;
         case AnalysisType::high_pt_eth:
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c";
             break;
         case AnalysisType::low_pt:
-            mufr_name = "h_mufr40c_ewkcor";
-            elfr_name = "h_elfr40c_noiso_ewkcor";
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c_noiso";
             break;
         case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";
-            elfr_name = "h_elfr40c_noiso_ewkcor";
+            mufr_name = "h_mufr40c_isoe";
+            elfr_name = "h_elfr40c_noiso";
             break;
         case AnalysisType::higgsino:
-            mufr_name = "h_mufr40c_ewkcor";
-            elfr_name = "h_elfr40c_ewkcor";
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
             break;
         default:
             mufr_name = "h_mufr40c";

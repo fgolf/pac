@@ -583,7 +583,7 @@ SSAnalysisLooper::SSAnalysisLooper
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";    // need to update with ewk correction
+            mufr_name = "h_mufr40c_iso_ewkcore";
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::high_pt_eth:
@@ -1902,6 +1902,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         if (not evt_isRealData() && (cms2_tag.version > 21))
         {
             // set initial values
+            m_evt.ht_jer        = m_evt.ht;
             m_evt.pfmet_jer     = met;
             m_evt.pfmet_jer_phi = met_phi;
             vector<LorentzVector> vjets_jer_p4  = m_evt.vjets_p4;

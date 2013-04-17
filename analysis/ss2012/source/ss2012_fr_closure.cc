@@ -35,7 +35,7 @@ try
     std::string output_file         = "";
     std::string input_file          = "";
     std::string ntuple_type_name    = "cms2";
-    std::string fake_rate_file_name = "plots/fake_rates/19Feb2013/ssFR_qcd_standard_19Feb2013.root";
+    std::string fake_rate_file_name = "plots/fake_rates/26Feb2013/ssFR_qcd_standard_26Feb2013.root";
     std::string fake_rate_hist_name = "h_mufr40c";
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";

@@ -41,6 +41,7 @@ lib ss2012_tools
        <header>AnalysisType.h
        <header>FakeRateType.h
        <header>SignalBinInfo.h
+       <header>ScaleFactors.h
        <header>SSYields.h
        <linkdef>LinkDef.h
     ]

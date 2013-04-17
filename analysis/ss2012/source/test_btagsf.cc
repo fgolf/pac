@@ -42,7 +42,7 @@ try
     const at::Sample::value_type sample = Sample::ttw;
     //chain.Add("output/ttw_5323.root");
     //chain.Add("babies/hpt/ttw.root");
-    chain.Add("output/ttw_full.root");
+    chain.Add("babies/hpt/ttw.root");
 
     //const bool is_fastsim = true;
     //const at::Sample::value_type sample = Sample::sbottomtop;
@@ -64,15 +64,19 @@ try
 //         int num_btags_sf_dn = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::down, "T1tttt", is_fastsim);  
 //         int num_btags_sf_up = MCBtagCount(TagType::CSVM, vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), ::YieldType::up  , "T1tttt", is_fastsim);  
         // new btag counts 
-        int num_btags_sf    = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::base); 
-        int num_btags_sf_dn = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::down);  
-        int num_btags_sf_up = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::up  );  
+//         int num_btags_sf    = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::base, evt()); 
+//         int num_btags_sf_dn = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::down, evt());  
+//         int num_btags_sf_up = MCBtagCount(vjets_p4(), vjets_btagged(), vjets_mcflavor_algo(), sample, is_fastsim, YieldType::up  , evt());  
 
         // fill
-        hc["h_nbtags"      ]->Fill(nbtags()       );
-        hc["h_nbtags_sf"   ]->Fill(num_btags_sf   );
-        hc["h_nbtags_sf_up"]->Fill(num_btags_sf_up);
-        hc["h_nbtags_sf_dn"]->Fill(num_btags_sf_dn);
+//         hc["h_nbtags"      ]->Fill(nbtags()       );
+//         hc["h_nbtags_sf"   ]->Fill(num_btags_sf   );
+//         hc["h_nbtags_sf_up"]->Fill(num_btags_sf_up);
+//         hc["h_nbtags_sf_dn"]->Fill(num_btags_sf_dn);
+        hc["h_nbtags"      ]->Fill(nbtags()              );
+        hc["h_nbtags_sf"   ]->Fill(nbtags_reweighted()   );
+        hc["h_nbtags_sf_up"]->Fill(nbtags_reweighted_up());
+        hc["h_nbtags_sf_dn"]->Fill(nbtags_reweighted_dn());
 
     } // end events
 
@@ -106,11 +110,11 @@ try
     hc.SetDrawOption("hist");
     hc["h_nbtags_sf_up"]->SetLineStyle(2);
     hc["h_nbtags_sf_dn"]->SetLineStyle(2);
-    rt::TH1Overlay overlay("# btagged-jets;# btags;Events", "lg::top sb::right");
-    overlay.Add(hc["h_nbtags"      ], "Unscaled"        , kBlack, 2, 20, 1);
-    overlay.Add(hc["h_nbtags_sf"   ], "SF Applied"      , kRed  , 2, 22, 1);
-    overlay.Add(hc["h_nbtags_sf_up"], "Uncertainty Up"  , kBlue , 2, 24, 2);
-    overlay.Add(hc["h_nbtags_sf_dn"], "Uncertainty Down", kRed  , 2, 26, 2);
+    rt::TH1Overlay overlay("CMS Simulation, #sqrt{s} = 8 TeV;# b-tagged jets;Events", "lg::top sb::off");
+    overlay.Add(hc["h_nbtags"      ], "Unscaled"        , kBlack, 2);
+    overlay.Add(hc["h_nbtags_sf"   ], "Scaled"          , kRed  , 2);
+    overlay.Add(hc["h_nbtags_sf_up"], "Uncertainty Up"  , kBlue , 2);
+    overlay.Add(hc["h_nbtags_sf_dn"], "Uncertainty Down", kRed  , 2);
 
 
     // same output
@@ -120,7 +124,7 @@ try
     //rt::Print(overlay, "plots/btagsf_sbottomtop/p_nbtags", "eps");
     hc.Write("plots/btagsf_ttw_new/btagsf_ttw.root"); 
     hc.Print("plots/btagsf_ttw_new", "eps"); 
-    rt::Print(overlay, "plots/btagsf_ttw_new/p_nbtags", "eps");
+    rt::Print(overlay, "plots/btagsf_ttw_new/p_nbtags", "pdf");
 }
 catch (std::exception& e)
 {

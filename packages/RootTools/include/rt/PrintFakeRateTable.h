@@ -7,6 +7,7 @@ class TH2;
 namespace rt
 {
     void PrintFakeRateTable(TH2* hist, std::ostream& out = std::cout);
+    void PrintFlipRateTable(TH2* hist, std::ostream& out = std::cout);
 
 } // namespace rt
 

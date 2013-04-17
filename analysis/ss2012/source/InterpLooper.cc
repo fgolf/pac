@@ -90,12 +90,16 @@ InterpLooper::InterpLooper
             elfr_name = "h_elfr40c";
             break;
         case AnalysisType::low_pt:
-            mufr_name = "h_mufr40c";
-            elfr_name = "h_elfr40c_noiso";
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";
-            elfr_name = "h_elfr40c_noiso";
+            mufr_name = "h_mufr40c_iso_ewkcor";
+            elfr_name = "h_elfr40c_noiso_ewkcor";
+            break;
+        case AnalysisType::higgsino:
+            mufr_name = "h_mufr40c_ewkcor";
+            elfr_name = "h_elfr40c_ewkcor";
             break;
         default:
             mufr_name = "h_mufr40c";
@@ -401,19 +405,6 @@ int InterpLooper::operator()(long event)
             const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
             const bool is_signal = (GetSampleInfo(m_sample).type == SampleType::susy); 
 
-            if (m_sample == Sample::ttjets)
-            {
-                if (event == 0)
-                {
-                    // this is ttjets where it is forced to decay to dileptons.
-                    // (/TTJets_FullLeptMGDecays_8TeV-madgraph/Summer12_DR53X-PU_S10_START53_V7A-v2/AODSIM)
-                    // (http://www.t2.ucsd.edu/tastwiki/bin/view/CMS/Summer12MonteCarlo53X_Slim_Winter13#Alternative_ttbar)
-                    // The # generated will need to have the BR factored out
-                    // this is done by multiplying by the full sigma*BR and dividing by BR(W --> lv)^2
-                    const float den = 12119013.0/(0.324*0.324); 
-                    rt::Fill2D(hc[sr+"nGenerated"], m0, m12, den);
-                }
-            }
             if (is_signal)
             {
                 rt::Fill2D(hc[sr+"nGenerated"], m0, m12, 1.0);
@@ -545,13 +536,6 @@ int InterpLooper::operator()(long event)
             if(is_os()) m_count_os[3] += 1.0;
         }
 
-        // at least passes baseline
-        if (not PassesSignalRegion(ss::SignalRegion::sr0, m_analysis_type, m_signal_region_type))
-        {
-            if (m_verbose) {cout << "fails the baseline selection" << endl;}
-            return 0;
-        }
-                
         // Weight Factors
         // ----------------------------------------------------------------------------------------------------------------------------//
 
@@ -617,7 +601,6 @@ int InterpLooper::operator()(long event)
                     rt::Fill2D(hc[sr+"nTrigEffUP"], m0, m12, evt_weight_trigeff_up);
                     rt::Fill2D(hc[sr+"nTrigEffDN"], m0, m12, evt_weight_trigeff_dn);
                 }
-
 
                 // JEC scale up/scale down
                 if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::JES_UP))

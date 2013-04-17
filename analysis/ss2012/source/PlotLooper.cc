@@ -123,7 +123,7 @@ PlotLooper::PlotLooper
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";
+            mufr_name = "h_mufr40c_iso_ewkcor";
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::higgsino:
