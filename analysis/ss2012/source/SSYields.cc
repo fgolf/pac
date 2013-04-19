@@ -126,6 +126,11 @@ namespace ss
     std::string Yield::em_pm() const {return rt::pm(em, dem, "1.2");}
     std::string Yield::ll_pm() const {return rt::pm(ll, dll, "1.2");}
 
+    std::string Yield::ee_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", ee, dee, see);}
+    std::string Yield::mm_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", mm, dmm, smm);}
+    std::string Yield::em_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", em, dem, sem);}
+    std::string Yield::ll_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", ll, dll, sll);}
+
     std::string Yield::GetLatex(const std::string& title, const std::string& latex, bool print_sys_err) const
     {
         string result;

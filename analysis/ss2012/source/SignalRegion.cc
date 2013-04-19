@@ -242,13 +242,62 @@ const ss::SignalRegionInfo s_HptInclSignalRegionInfos[] =
         // latex
         "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
-    {"sr29", "not used", "not used"},
-    {"sr30", "not used", "not used"},
-    {"sr31", "not used", "not used"},
-    {"sr32", "not used", "not used"},
-    {"sr33", "not used", "not used"},
-    {"sr34", "not used", "not used"},
-    {"sr35", "not used", "not used"}
+    {
+        // name
+        "sr29",
+        // title
+        "sr29: not used"
+        // latex
+        "sr29: not used"
+    },
+    {
+        // name
+        "sr30",
+        // title
+        "SSTop1: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr31",
+        // title
+        "SSTop1++: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}, ++$"
+    },
+    {
+        // name
+        "sr32",
+        // title
+        "sr32: # jets #geq 2, # btags #geq 0, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr33",
+        // title
+        "sr33: # jets #geq 2, # btags #geq 2, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr34",
+        // title
+        "SSTop2: # jets #geq 2, # btags = 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr35",
+        // title
+        "SSTop2++: # jets #geq 2, # btags = 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}, ++$"
+    }
 };
 
 // low pT, inclusive 
@@ -338,7 +387,7 @@ const ss::SignalRegionInfo s_LptInclSignalRegionInfos[] =
         // name
         "sr10",
         // title
-        "low igh p_{T} baseline: # jets #geq 2, # btags = 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        "low p_{T} baseline: # jets #geq 2, # btags = 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
         // latex
         "$\\#jets\\geq2,\\# btags=1,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
     },
@@ -486,66 +535,260 @@ const ss::SignalRegionInfo s_LptInclSignalRegionInfos[] =
         // latex
         "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
-    {
-        // name
-        "sr29",
-        // title
-        "sr29: not used"
-        // latex
-        "sr29: not used"
-    },
-    {
-        // name
-        "sr30",
-        // title
-        "SSTop1: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
-        // latex
-        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
-    },
-    {
-        // name
-        "sr31",
-        // title
-        "SSTop2: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++",
-        // latex
-        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}, ++$"
-    },
-    {
-        // name
-        "sr32",
-        // title
-        "sr32: # jets #geq 2, # btags #geq 0, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
-        // latex
-        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
-    },
-    {
-        // name
-        "sr33",
-        // title
-        "sr33: # jets #geq 2, # btags = 1, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
-        // latex
-        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
-    },
-    {
-        // name
-        "sr33",
-        // title
-        "sr33: # jets #geq 2, # btags = 1, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
-        // latex
-        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
-    },
-    {
-        // name
-        "sr34",
-        // title
-        "sr34: # jets #geq 2, # btags = 1, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV, ++",
-        // latex
-        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$, ++"
-    }
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
 };
 
 // very low pT, inclusive (same SRs as low pt)
-const ss::SignalRegionInfo (&s_VptInclSignalRegionInfos)[ss::SignalRegion::static_size] = s_LptInclSignalRegionInfos;
+// const ss::SignalRegionInfo (&s_VptInclSignalRegionInfos)[ss::SignalRegion::static_size] = s_LptInclSignalRegionInfos;
+const ss::SignalRegionInfo s_VptInclSignalRegionInfos[] = 
+{
+    {
+        // name
+        "sr0",
+        // title
+        "very low p_{T} baseline: # jets #geq 2, # btags #geq 0, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
+    },
+    { 
+        // name
+        "sr1",
+        // title
+        "sr1: # jets #geq 2, # btags #geq 0, H_{T} > 250 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr2",
+        // title
+        "sr2: # jets #geq 2, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr3",
+        // title
+        "sr3: # jets #geq 4, # btags #geq 0, H_{T} > 250 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr4",
+        // title
+        "sr4: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr5",
+        // title
+        "sr5: # jets #geq 2, # btags #geq 0, H_{T} > 250 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr6",
+        // title
+        "sr6: # jets #geq 2, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr7",
+        // title
+        "sr7: # jets #geq 4, # btags #geq 0, H_{T} > 250 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr8",
+        // title
+        "sr8: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr9",
+        // title
+        "sr9: not used"
+        // latex
+        "sr9: not used"
+    },
+    {
+        // name
+        "sr10",
+        // title
+        "very low p_{T} baseline: # jets #geq 2, # btags = 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
+    },
+    { 
+        // name
+        "sr11",
+        // title
+        "sr11: # jets #geq 2, # btags = 1, H_{T} > 250 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr12",
+        // title
+        "sr12: # jets #geq 2, # btags = 1, H_{T} > 400 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr13",
+        // title
+        "sr13: # jets #geq 4, # btags = 1, H_{T} > 250 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr14",
+        // title
+        "sr14: # jets #geq 4, # btags = 1, H_{T} > 400 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr15",
+        // title
+        "sr15: # jets #geq 2, # btags = 1, H_{T} > 250 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr16",
+        // title
+        "sr16: # jets #geq 2, # btags = 1, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr17",
+        // title
+        "sr17: # jets #geq 4, # btags = 1, H_{T} > 250 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr18",
+        // title
+        "sr18: # jets #geq 4, # btags = 1, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags=1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr19",
+        // title
+        "sr19: not used"
+        // latex
+        "sr19: not used"
+    },
+    {
+        // name
+        "sr20",
+        // title
+        "very low p_{T} baseline: # jets #geq 2, # btags #geq 2, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
+    },
+    { 
+        // name
+        "sr21",
+        // title
+        "sr21: # jets #geq 2, # btags #geq 2, H_{T} > 250 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr22",
+        // title
+        "sr22: # jets #geq 2, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr23",
+        // title
+        "sr23: # jets #geq 4, # btags #geq 2, H_{T} > 250 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr24",
+        // title
+        "sr24: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 50 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>50\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr25",
+        // title
+        "sr25: # jets #geq 2, # btags #geq 2, H_{T} > 250 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr26",
+        // title
+        "sr26: # jets #geq 2, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr27",
+        // title
+        "sr27: # jets #geq 4, # btags #geq 2, H_{T} > 250 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>250\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr28",
+        // title
+        "sr28: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
+};
+
 
 // HCP, inclusive
 const ss::SignalRegionInfo s_HcpInclSignalRegionInfos[] = 
@@ -950,13 +1193,62 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // latex
         "$#jets \\geq 4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
-    {"sr29", "not used", "not used"},
-    {"sr30", "not used", "not used"},
-    {"sr31", "not used", "not used"},
-    {"sr32", "not used", "not used"},
-    {"sr33", "not used", "not used"},
-    {"sr34", "not used", "not used"},
-    {"sr35", "not used", "not used"}
+    {
+        // name
+        "sr29",
+        // title
+        "sr29: not used"
+        // latex
+        "sr29: not used"
+    },
+    {
+        // name
+        "sr30",
+        // title
+        "SSTop1: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr31",
+        // title
+        "SSTop1++: # jets #geq 2, # btags #geq 2, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}, ++$"
+    },
+    {
+        // name
+        "sr32",
+        // title
+        "sr32: # jets #geq 2, # btags #geq 0, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq0,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr33",
+        // title
+        "sr33: # jets #geq 2, # btags #geq 2, H_{T} > 500 GeV, E_{T}^{miss} > 0 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq2,\\ H_T>500\\ \\text{GeV},\\ E_T^{miss}>0\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr34",
+        // title
+        "SSTop2: # jets #geq 2, # btags = 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
+    },
+    {
+        // name
+        "sr35",
+        // title
+        "SSTop2++: # jets #geq 2, # btags = 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV, ++",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}, ++$"
+    }
 };
 
 // low pT, exclusive
@@ -966,7 +1258,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr0",
         // title
-        "high p_{T} baseline: # jets #geq 2, # btags #geq 0, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        "low p_{T} baseline: # jets #geq 2, # btags #geq 0, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
         // latex
         "$\\#jets\\geq2,\\# btags=0,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
     },
@@ -1046,7 +1338,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr10",
         // title
-        "high p_{T} baseline: # jets #geq 2, # btags = 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        "low p_{T} baseline: # jets #geq 2, # btags = 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
         // latex
         "$\\#jets\\geq2,\\# btags = 1,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
     },
@@ -1126,7 +1418,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr20",
         // title
-        "high p_{T} baseline: # jets #geq 2, # btags #geq 2, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        "low p_{T} baseline: # jets #geq 2, # btags #geq 2, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
         // latex
         "$\\#jets\\geq2,\\# btags\\geq 2,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
     },
@@ -1204,7 +1496,250 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
 };
 
 // very low pT, exclusive
-const ss::SignalRegionInfo (&s_VptExclSignalRegionInfos)[ss::SignalRegion::static_size] = s_LptExclSignalRegionInfos;
+// const ss::SignalRegionInfo (&s_VptExclSignalRegionInfos)[ss::SignalRegion::static_size] = s_LptExclSignalRegionInfos;
+const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] = 
+{
+    {
+        // name
+        "sr0",
+        // title
+        "very low p_{T} baseline: # jets #geq 2, # btags #geq 0, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        // latex
+        "$\\#jets\\geq2,\\# btags=0,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
+    },
+    { 
+        // name
+        "sr1",
+        // title
+        "sr1: 2 #leq # jets < 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr2",
+        // title
+        "sr2: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr3",
+        // title
+        "sr3: # jets #geq 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr4",
+        // title
+        "sr4: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr5",
+        // title
+        "sr5: 2 #leq # jets < 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr6",
+        // title
+        "sr6: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr7",
+        // title
+        "sr7: # jets #geq 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr8",
+        // title
+        "sr8: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr9",
+        // title
+        "sr9: not used", 
+        // latex
+        "not used"
+    },
+    {
+        // name
+        "sr10",
+        // title
+        "very low p_{T} baseline: # jets #geq 2, # btags = 1, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        // latex
+        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
+    },
+    { 
+        // name
+        "sr11",
+        // title
+        "sr11: 2 #leq # jets < 4, # btags = 1, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=1,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr12",
+        // title
+        "sr12: 2 #leq # jets < 4, # btags = 1, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=1,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr13",
+        // title
+        "sr13: # jets #geq 4, # btags = 1, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=1,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr14",
+        // title
+        "sr14: # jets #geq 4, # btags = 1, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=1,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr15",
+        // title
+        "sr15: 2 #leq # jets < 4, # btags = 1, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=1,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr16",
+        // title
+        "sr6: 2 #leq # jets < 4, # btags = 1, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags=1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr17",
+        // title
+        "sr17: # jets #geq 4, # btags = 1, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=1,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr18",
+        // title
+        "sr18: # jets #geq 4, # btags = 1, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags=1,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr19",
+        // title
+        "sr19: not used", 
+        // latex
+        "not used"
+    },
+    {
+        // name
+        "sr20",
+        // title
+        "very low p_{T} baseline: # jets #geq 2, # btags #geq 2, H_{T} > 250 GeV (E_{T}^{miss} > 30 GeV if H_{T} < 500 GeV)",
+        // latex
+        "$\\#jets\\geq2,\\# btags\\geq 2,\\ H_T>250\\ \\text{GeV}\\ (E_T^{miss}>30\\ \\text{GeV}\\ \\text{if} \\ H_T>500\\ \\text{GeV})$"
+    },
+    { 
+        // name
+        "sr21",
+        // title
+        "sr21: 2 #leq # jets < 4, # btags #geq 2, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags\\geq 2,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr22",
+        // title
+        "sr22: 2 #leq # jets < 4, # btags #geq 2, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr23",
+        // title
+        "sr23: # jets #geq 4, # btags #geq 2, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags\\geq 2,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr24",
+        // title
+        "sr24: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr25",
+        // title
+        "sr25: 2 #leq # jets < 4, # btags #geq 2, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags\\geq 2,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr26",
+        // title
+        "sr6: 2 #leq # jets < 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
+        // latex
+        "$2 \\leq #jets<4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr27",
+        // title
+        "sr27: # jets #geq 4, # btags #geq 2, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags\\geq 2,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr28",
+        // title
+        "sr28: # jets #geq 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        // latex
+        "$#jets \\geq 4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
+    },
+    {"sr29", "not used", "not used"},
+    {"sr30", "not used", "not used"},
+    {"sr31", "not used", "not used"},
+    {"sr32", "not used", "not used"},
+    {"sr33", "not used", "not used"},
+    {"sr34", "not used", "not used"},
+    {"sr35", "not used", "not used"}
+};
+
 
 // HCP, exclusive
 const ss::SignalRegionInfo s_HcpExclSignalRegionInfos[] = 
@@ -1585,12 +2120,12 @@ namespace ss
                     case SignalRegion::sr27: return (baseline && nbtags>=2 && njets>=4 && ht>200 && met>120);
                     case SignalRegion::sr28: return (baseline && nbtags>=2 && njets>=4 && ht>400 && met>120);
                     case SignalRegion::sr29: return (false); // not used --> default is to fail
-                    case SignalRegion::sr30: return (false); // not used --> default is to fail
-                    case SignalRegion::sr31: return (false); // not used --> default is to fail
-                    case SignalRegion::sr32: return (false); // not used --> default is to fail
-                    case SignalRegion::sr33: return (false); // not used --> default is to fail
-                    case SignalRegion::sr34: return (false); // not used --> default is to fail
-                    case SignalRegion::sr35: return (false); // not used --> default is to fail
+                    case SignalRegion::sr30: return (njets>=2 && nbtags>=2 && ht>80  && met>30                );
+                    case SignalRegion::sr31: return (njets>=2 && nbtags>=2 && ht>80  && met>30 && ssb::is_pp());
+                    case SignalRegion::sr32: return (njets>=2 && nbtags>=0 && ht>500 && met>0                 );
+                    case SignalRegion::sr33: return (njets>=2 && nbtags>=2 && ht>500 && met>0                 );
+                    case SignalRegion::sr34: return (njets>=2 && nbtags==1 && ht>80  && met>30                );
+                    case SignalRegion::sr35: return (njets>=2 && nbtags==1 && ht>80  && met>30 && ssb::is_pp() );
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
             }
@@ -2058,35 +2593,42 @@ namespace ss
         {
             case AnalysisType::high_pt:
             case AnalysisType::high_pt_eth:
-                tree.SetAlias("sr0" , "nbs>=0 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"); 
-                tree.SetAlias("sr1" , "nbs>=0 && njets>=2 && ht > 200 && pfmet > 50"                ); 
-                tree.SetAlias("sr2" , "nbs>=0 && njets>=2 && ht > 400 && pfmet > 50"                ); 
-                tree.SetAlias("sr3" , "nbs>=0 && njets>=4 && ht > 200 && pfmet > 50"                ); 
-                tree.SetAlias("sr4" , "nbs>=0 && njets>=4 && ht > 400 && pfmet > 50"                ); 
-                tree.SetAlias("sr5" , "nbs>=0 && njets>=2 && ht > 200 && pfmet > 120"               ); 
-                tree.SetAlias("sr6" , "nbs>=0 && njets>=2 && ht > 400 && pfmet > 120"               ); 
-                tree.SetAlias("sr7" , "nbs>=0 && njets>=4 && ht > 200 && pfmet > 120"               ); 
-                tree.SetAlias("sr8" , "nbs>=0 && njets>=4 && ht > 400 && pfmet > 120"               ); 
-                tree.SetAlias("sr9" , "1==0"                                                           ); 
-                tree.SetAlias("sr10", "nbs==1 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"); 
-                tree.SetAlias("sr11", "nbs==1 && njets>=2 && ht > 200 && pfmet > 50"                ); 
-                tree.SetAlias("sr12", "nbs==1 && njets>=2 && ht > 400 && pfmet > 50"                ); 
-                tree.SetAlias("sr13", "nbs==1 && njets>=4 && ht > 200 && pfmet > 50"                ); 
-                tree.SetAlias("sr14", "nbs==1 && njets>=4 && ht > 400 && pfmet > 50"                ); 
-                tree.SetAlias("sr15", "nbs==1 && njets>=2 && ht > 200 && pfmet > 120"               ); 
-                tree.SetAlias("sr16", "nbs==1 && njets>=2 && ht > 400 && pfmet > 120"               ); 
-                tree.SetAlias("sr17", "nbs==1 && njets>=4 && ht > 200 && pfmet > 120"               ); 
-                tree.SetAlias("sr18", "nbs==1 && njets>=4 && ht > 400 && pfmet > 120"               ); 
-                tree.SetAlias("sr19", "1==0"                                                           ); 
-                tree.SetAlias("sr20", "nbs>=2 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"); 
-                tree.SetAlias("sr21", "nbs>=2 && njets>=2 && ht > 200 && pfmet > 50"                ); 
-                tree.SetAlias("sr22", "nbs>=2 && njets>=2 && ht > 400 && pfmet > 50"                ); 
-                tree.SetAlias("sr23", "nbs>=2 && njets>=4 && ht > 200 && pfmet > 50"                ); 
-                tree.SetAlias("sr24", "nbs>=2 && njets>=4 && ht > 400 && pfmet > 50"                ); 
-                tree.SetAlias("sr25", "nbs>=2 && njets>=2 && ht > 200 && pfmet > 120"               ); 
-                tree.SetAlias("sr26", "nbs>=2 && njets>=2 && ht > 400 && pfmet > 120"               ); 
-                tree.SetAlias("sr27", "nbs>=2 && njets>=4 && ht > 200 && pfmet > 120"               ); 
-                tree.SetAlias("sr28", "nbs>=2 && njets>=4 && ht > 400 && pfmet > 120"               ); 
+                tree.SetAlias("sr0" , "nbs>=0 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"          ); 
+                tree.SetAlias("sr1" , "nbs>=0 && njets>=2 && ht > 200 && pfmet > 50"                          ); 
+                tree.SetAlias("sr2" , "nbs>=0 && njets>=2 && ht > 400 && pfmet > 50"                          ); 
+                tree.SetAlias("sr3" , "nbs>=0 && njets>=4 && ht > 200 && pfmet > 50"                          ); 
+                tree.SetAlias("sr4" , "nbs>=0 && njets>=4 && ht > 400 && pfmet > 50"                          ); 
+                tree.SetAlias("sr5" , "nbs>=0 && njets>=2 && ht > 200 && pfmet > 120"                         ); 
+                tree.SetAlias("sr6" , "nbs>=0 && njets>=2 && ht > 400 && pfmet > 120"                         ); 
+                tree.SetAlias("sr7" , "nbs>=0 && njets>=4 && ht > 200 && pfmet > 120"                         ); 
+                tree.SetAlias("sr8" , "nbs>=0 && njets>=4 && ht > 400 && pfmet > 120"                         ); 
+                tree.SetAlias("sr9" , "1==0"                                                                  ); 
+                tree.SetAlias("sr10", "nbs==1 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"          ); 
+                tree.SetAlias("sr11", "nbs==1 && njets>=2 && ht > 200 && pfmet > 50"                          ); 
+                tree.SetAlias("sr12", "nbs==1 && njets>=2 && ht > 400 && pfmet > 50"                          ); 
+                tree.SetAlias("sr13", "nbs==1 && njets>=4 && ht > 200 && pfmet > 50"                          ); 
+                tree.SetAlias("sr14", "nbs==1 && njets>=4 && ht > 400 && pfmet > 50"                          ); 
+                tree.SetAlias("sr15", "nbs==1 && njets>=2 && ht > 200 && pfmet > 120"                         ); 
+                tree.SetAlias("sr16", "nbs==1 && njets>=2 && ht > 400 && pfmet > 120"                         ); 
+                tree.SetAlias("sr17", "nbs==1 && njets>=4 && ht > 200 && pfmet > 120"                         ); 
+                tree.SetAlias("sr18", "nbs==1 && njets>=4 && ht > 400 && pfmet > 120"                         ); 
+                tree.SetAlias("sr19", "1==0"                                                                  ); 
+                tree.SetAlias("sr20", "nbs>=2 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"          ); 
+                tree.SetAlias("sr21", "nbs>=2 && njets>=2 && ht > 200 && pfmet > 50"                          ); 
+                tree.SetAlias("sr22", "nbs>=2 && njets>=2 && ht > 400 && pfmet > 50"                          ); 
+                tree.SetAlias("sr23", "nbs>=2 && njets>=4 && ht > 200 && pfmet > 50"                          ); 
+                tree.SetAlias("sr24", "nbs>=2 && njets>=4 && ht > 400 && pfmet > 50"                          ); 
+                tree.SetAlias("sr25", "nbs>=2 && njets>=2 && ht > 200 && pfmet > 120"                         ); 
+                tree.SetAlias("sr26", "nbs>=2 && njets>=2 && ht > 400 && pfmet > 120"                         ); 
+                tree.SetAlias("sr27", "nbs>=2 && njets>=4 && ht > 200 && pfmet > 120"                         ); 
+                tree.SetAlias("sr28", "nbs>=2 && njets>=4 && ht > 400 && pfmet > 120"                         ); 
+                tree.SetAlias("sr29" , "(0==1)"                                                               ); 
+                tree.SetAlias("sr30" , "(nbs>=2 && (njets >= 2) && (ht > 80 ) && (pfmet >= 30))"              ); 
+                tree.SetAlias("sr31" , "(nbs>=2 && (njets >= 2) && (ht > 80 ) && (pfmet >= 30) && is_pp())"   ); 
+                tree.SetAlias("sr32" , "(nbs>=0 && (njets >= 2) && (ht > 500) && (pfmet >= 0 ))"              ); 
+                tree.SetAlias("sr33" , "(nbs>=2 && (njets >= 2) && (ht > 500) && (pfmet >= 0 ))"              ); 
+                tree.SetAlias("sr34" , "(nbs>=1 && (njets >= 2) && (ht > 80 ) && (pfmet >= 30))"              ); 
+                tree.SetAlias("sr35" , "(nbs>=1 && (njets >= 2) && (ht > 80 ) && (pfmet >= 30) && is_pp())"   ); 
                 break;
             case AnalysisType::low_pt:
             case AnalysisType::vlow_pt:

@@ -170,10 +170,10 @@ void PrintYields
         ("DF"                                     , yield_df.ee_pm()                  , yield_df.mm_pm()                  , yield_df.em_pm()                  , yield_df.ll_pm()                 ) 
         ("SC"                                     , yield_spil.ee_pm()                , yield_spil.mm_pm()                , yield_spil.em_pm()                , yield_spil.ll_pm()               ) 
         ("SF + DF"                                , yield_fake.ee_pm()                , yield_fake.mm_pm()                , yield_fake.em_pm()                , yield_fake.ll_pm()               ) 
-        ("SF + DF - SC"                           , yield_cfake.ee_pm()               , yield_cfake.mm_pm()               , yield_cfake.em_pm()               , yield_cfake.ll_pm()              ) 
-        ("Charge Flips"                           , yield_flip.ee_pm()                , yield_flip.mm_pm()                , yield_flip.em_pm()                , yield_flip.ll_pm()               ) 
-        ("MC Pred"                                , yield_rare.ee_pm()                , yield_rare.mm_pm()                , yield_rare.em_pm()                , yield_rare.ll_pm()               ) 
-        ("Total Pred"                             , yield_pred.ee_pm()                , yield_pred.mm_pm()                , yield_pred.em_pm()                , yield_pred.ll_pm()               ) 
+        ("SF + DF - SC"                           , yield_cfake.ee_syst_pm()          , yield_cfake.mm_syst_pm()          , yield_cfake.em_syst_pm()          , yield_cfake.ll_syst_pm()         ) 
+        ("Charge Flips"                           , yield_flip.ee_syst_pm()           , yield_flip.mm_syst_pm()           , yield_flip.em_syst_pm()           , yield_flip.ll_syst_pm()          ) 
+        ("MC Pred"                                , yield_rare.ee_syst_pm()           , yield_rare.mm_syst_pm()           , yield_rare.em_syst_pm()           , yield_rare.ll_syst_pm()          ) 
+        ("Total Pred"                             , yield_pred.ee_syst_pm()           , yield_pred.mm_syst_pm()           , yield_pred.em_syst_pm()           , yield_pred.ll_syst_pm()          ) 
         ("data"                                   , (int)yield_data.ee                , (int)yield_data.mm                , (int)yield_data.em                , (int)yield_data.ll               );
 
         // print it
@@ -415,29 +415,29 @@ void PrintSummaryYields
     "\\hline"                                                                                                                                                              ,  // 3 
     "\\nbtags                   & \\met                    & \\njets                    & \\Ht     & SR & Fake BG & Flip BG & Rare MC & Total BG & Observed \\\\ \\hline"  ,  // 4  \hline
     "\\multirow{9}{*}{$\\geq 0$} & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 0  &"                                                                  ,  // 5  \cline{2-5}
-    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-4}      & 200-400 & 1  &"                                                                   ,  // 6  \cline{4-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & 200-400 & 1  &"                                                                   ,  // 6  \cline{4-5}
     "                          &                         &                           & $>400$  & 2  &"                                                                     ,  // 7  \cline{3-5}
     "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 3  &"                                                                   ,  // 8  \cline{4-5}
     "                          &                         &                           & $>400$  & 4  &"                                                                     ,  // 9  \cline{2-5}
-    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-4}      & 200-400 & 5  &"                                                                   ,  // 10 \cline{4-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & 200-400 & 5  &"                                                                   ,  // 10 \cline{4-5}
     "                          &                         &                           & $>400$  & 6  &"                                                                     ,  // 11 \cline{3-5}
     "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 7  &"                                                                   ,  // 12 \cline{4-5}
     "                          &                         &                           & $>400$  & 8  &"                                                                     ,  // 13 \hline 
     "\\multirow{9}{*}{$=1$}     & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 10 &"                                                                   ,  // 14 \cline{2-5}
-    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-4}      & 200-400 & 11 &"                                                                   ,  // 15 \cline{4-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & 200-400 & 11 &"                                                                   ,  // 15 \cline{4-5}
     "                          &                         &                           & $>400$  & 12 &"                                                                     ,  // 16 \cline{3-5}
     "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 13 &"                                                                   ,  // 17 \cline{4-5}
     "                          &                         &                           & $>400$  & 14 &"                                                                     ,  // 18 \cline{2-5}
-    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-4}      & 200-400 & 15 &"                                                                   ,  // 19 \cline{4-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & 200-400 & 15 &"                                                                   ,  // 19 \cline{4-5}
     "                          &                         &                           & $>400$  & 16 &"                                                                     ,  // 20 \cline{3-5}
     "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 17 &"                                                                   ,  // 21 \cline{4-5}
     "                          &                         &                           & $>400$  & 18 &"                                                                     ,  // 22 \hline
     "\\multirow{9}{*}{$\\geq 2$} & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 20 &"                                                                  ,  // 23 \cline{2-5}
-    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-4}      & 200-400 & 21 &"                                                                   ,  // 24 \cline{4-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & 200-400 & 21 &"                                                                   ,  // 24 \cline{4-5}
     "                          &                         &                           & $>400$  & 22 &"                                                                     ,  // 25 \cline{3-5}
     "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 23 &"                                                                   ,  // 26 \cline{4-5}
     "                          &                         &                           & $>400$  & 24 &"                                                                     ,  // 27 \cline{2-5}
-    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-4}      & 200-400 & 25 &"                                                                   ,  // 28 \cline{4-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & 200-400 & 25 &"                                                                   ,  // 28 \cline{4-5}
     "                          &                         &                           & $>400$  & 26 &"                                                                     ,  // 29 \cline{3-5}
     "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 27 &"                                                                   ,  // 30 \cline{4-5}
     "                          &                         &                           & $>400$  & 28 &"                                                                     ,  // 31 \hline
@@ -496,10 +496,10 @@ void PrintSummaryYields
 
         // fill table
         t_yields.setCell(Form("SR %d", sr_num)                                     , row, 0);
-        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_cfake.ll, yield_cfake.tll()), row, 1);
-        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_flip.ll , yield_flip.tll() ), row, 2);
-        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_rare.ll , yield_rare.tll() ), row, 3);
-        t_yields.setCell(Form("%1.2f +/- %1.2f", yield_pred.ll , yield_pred.tll() ), row, 4);
+        t_yields.setCell(Form("%1.1f +/- %1.1f", yield_cfake.ll, yield_cfake.tll()), row, 1);
+        t_yields.setCell(Form("%1.1f +/- %1.1f", yield_flip.ll , yield_flip.tll() ), row, 2);
+        t_yields.setCell(Form("%1.1f +/- %1.1f", yield_rare.ll , yield_rare.tll() ), row, 3);
+        t_yields.setCell(Form("%1.1f +/- %1.1f", yield_pred.ll , yield_pred.tll() ), row, 4);
         t_yields.setCell(static_cast<int>(yield_data.ll)                           , row, 5);
 
         latex_row++;

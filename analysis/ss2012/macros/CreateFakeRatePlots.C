@@ -400,7 +400,7 @@ void PrintFakeRatePlotsEWKCor(const std::string& suffix = "png")
 	const std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 
     // Fake Rates
-    const float max = 1.0;
+    const float max = 0.5;
     const Color_t c20 = kRed;
     const Color_t c40 = kBlack;
     const Color_t c60 = kBlue;

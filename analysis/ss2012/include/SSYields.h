@@ -76,6 +76,11 @@ namespace ss
         std::string em_pm() const;
         std::string ll_pm() const;
 
+        std::string ee_syst_pm() const;
+        std::string mm_syst_pm() const;
+        std::string em_syst_pm() const;
+        std::string ll_syst_pm() const;
+
         std::string GetLatex(const std::string& title, const std::string& latex = "", bool print_sys_err = false) const;
         void Print(const std::string& title, bool print_sys_err = false) const;
     };

@@ -206,7 +206,7 @@ SingleLeptonTreeLooper::SingleLeptonTreeLooper
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::vlow_pt:
-            mufr_name = "h_mufr40c_iso";    // need to update with ewk correction
+            mufr_name = "h_mufr40c_iso_ewkcor";
             elfr_name = "h_elfr40c_noiso_ewkcor";
             break;
         case AnalysisType::high_pt_eth:

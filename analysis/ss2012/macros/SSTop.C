@@ -162,9 +162,10 @@ void PrintSystematics(const std::string& filename, const unsigned int sr_num, co
 
 void SSTop()
 {
-    const float scale = 1.0/(0.324*0.324);
-    PrintSystematics("plots/interp/sstop_new.root", 30, scale);
-    PrintSystematics("plots/interp/sstop_new.root", 34, scale);
+    //const float scale = 1.0/(0.324*0.324);
+    const float scale = 1.0;
+    PrintSystematics("plots/interp/sstop_powheg2.root", 30, scale);
+    PrintSystematics("plots/interp/sstop_powheg2.root", 34, scale);
 }
 
 void TTTT()
