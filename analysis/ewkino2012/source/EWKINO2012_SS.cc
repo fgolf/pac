@@ -427,6 +427,15 @@ namespace ewkino_ss {
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau_leadPtcand() { return ewk12ss.pfTau_leadPtcand(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose() { return ewk12ss.pfTauLoose(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose_leadPtcand() { return ewk12ss.pfTauLoose_leadPtcand(); }
+	const vector<float> &pfjets_beta() { return ewk12ss.pfjets_beta(); }
+	const vector<float> &pfjets_beta2() { return ewk12ss.pfjets_beta2(); }
+	const vector<float> &pfjets_beta_0p1() { return ewk12ss.pfjets_beta_0p1(); }
+	const vector<float> &pfjets_beta_0p2() { return ewk12ss.pfjets_beta_0p2(); }
+	const vector<float> &pfjets_beta2_0p1() { return ewk12ss.pfjets_beta2_0p1(); }
+	const vector<float> &pfjets_beta2_0p5() { return ewk12ss.pfjets_beta2_0p5(); }
+	const vector<float> &pfjets_mvaPUid() { return ewk12ss.pfjets_mvaPUid(); }
+	const vector<float> &pfjets_mva5xPUid() { return ewk12ss.pfjets_mva5xPUid(); }
+	const vector<float> &pfjets_mvaBeta() { return ewk12ss.pfjets_mvaBeta(); }
 	const float &scale1fb() { return ewk12ss.scale1fb(); }
 	const float &xsec() { return ewk12ss.xsec(); }
 	const unsigned int &nevts() { return ewk12ss.nevts(); }

@@ -1295,6 +1295,33 @@ protected:
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *pfTauLoose_leadPtcand_;
 	TBranch *pfTauLoose_leadPtcand_branch;
 	bool pfTauLoose_leadPtcand_isLoaded;
+	vector<float> *pfjets_beta_;
+	TBranch *pfjets_beta_branch;
+	bool pfjets_beta_isLoaded;
+	vector<float> *pfjets_beta2_;
+	TBranch *pfjets_beta2_branch;
+	bool pfjets_beta2_isLoaded;
+	vector<float> *pfjets_beta_0p1_;
+	TBranch *pfjets_beta_0p1_branch;
+	bool pfjets_beta_0p1_isLoaded;
+	vector<float> *pfjets_beta_0p2_;
+	TBranch *pfjets_beta_0p2_branch;
+	bool pfjets_beta_0p2_isLoaded;
+	vector<float> *pfjets_beta2_0p1_;
+	TBranch *pfjets_beta2_0p1_branch;
+	bool pfjets_beta2_0p1_isLoaded;
+	vector<float> *pfjets_beta2_0p5_;
+	TBranch *pfjets_beta2_0p5_branch;
+	bool pfjets_beta2_0p5_isLoaded;
+	vector<float> *pfjets_mvaPUid_;
+	TBranch *pfjets_mvaPUid_branch;
+	bool pfjets_mvaPUid_isLoaded;
+	vector<float> *pfjets_mva5xPUid_;
+	TBranch *pfjets_mva5xPUid_branch;
+	bool pfjets_mva5xPUid_isLoaded;
+	vector<float> *pfjets_mvaBeta_;
+	TBranch *pfjets_mvaBeta_branch;
+	bool pfjets_mvaBeta_isLoaded;
 	float	scale1fb_;
 	TBranch *scale1fb_branch;
 	bool scale1fb_isLoaded;
@@ -3437,6 +3464,51 @@ void Init(TTree *tree) {
 		pfTauLoose_leadPtcandID_branch = tree->GetBranch("pfTauLoose_leadPtcandID");
 		if (pfTauLoose_leadPtcandID_branch) {pfTauLoose_leadPtcandID_branch->SetAddress(&pfTauLoose_leadPtcandID_);}
 	}
+	pfjets_beta_branch = 0;
+	if (tree->GetBranch("pfjets_beta") != 0) {
+		pfjets_beta_branch = tree->GetBranch("pfjets_beta");
+		if (pfjets_beta_branch) {pfjets_beta_branch->SetAddress(&pfjets_beta_);}
+	}
+	pfjets_beta2_branch = 0;
+	if (tree->GetBranch("pfjets_beta2") != 0) {
+		pfjets_beta2_branch = tree->GetBranch("pfjets_beta2");
+		if (pfjets_beta2_branch) {pfjets_beta2_branch->SetAddress(&pfjets_beta2_);}
+	}
+	pfjets_beta_0p1_branch = 0;
+	if (tree->GetBranch("pfjets_beta_0p1") != 0) {
+		pfjets_beta_0p1_branch = tree->GetBranch("pfjets_beta_0p1");
+		if (pfjets_beta_0p1_branch) {pfjets_beta_0p1_branch->SetAddress(&pfjets_beta_0p1_);}
+	}
+	pfjets_beta_0p2_branch = 0;
+	if (tree->GetBranch("pfjets_beta_0p2") != 0) {
+		pfjets_beta_0p2_branch = tree->GetBranch("pfjets_beta_0p2");
+		if (pfjets_beta_0p2_branch) {pfjets_beta_0p2_branch->SetAddress(&pfjets_beta_0p2_);}
+	}
+	pfjets_beta2_0p1_branch = 0;
+	if (tree->GetBranch("pfjets_beta2_0p1") != 0) {
+		pfjets_beta2_0p1_branch = tree->GetBranch("pfjets_beta2_0p1");
+		if (pfjets_beta2_0p1_branch) {pfjets_beta2_0p1_branch->SetAddress(&pfjets_beta2_0p1_);}
+	}
+	pfjets_beta2_0p5_branch = 0;
+	if (tree->GetBranch("pfjets_beta2_0p5") != 0) {
+		pfjets_beta2_0p5_branch = tree->GetBranch("pfjets_beta2_0p5");
+		if (pfjets_beta2_0p5_branch) {pfjets_beta2_0p5_branch->SetAddress(&pfjets_beta2_0p5_);}
+	}
+	pfjets_mvaPUid_branch = 0;
+	if (tree->GetBranch("pfjets_mvaPUid") != 0) {
+		pfjets_mvaPUid_branch = tree->GetBranch("pfjets_mvaPUid");
+		if (pfjets_mvaPUid_branch) {pfjets_mvaPUid_branch->SetAddress(&pfjets_mvaPUid_);}
+	}
+	pfjets_mva5xPUid_branch = 0;
+	if (tree->GetBranch("pfjets_mva5xPUid") != 0) {
+		pfjets_mva5xPUid_branch = tree->GetBranch("pfjets_mva5xPUid");
+		if (pfjets_mva5xPUid_branch) {pfjets_mva5xPUid_branch->SetAddress(&pfjets_mva5xPUid_);}
+	}
+	pfjets_mvaBeta_branch = 0;
+	if (tree->GetBranch("pfjets_mvaBeta") != 0) {
+		pfjets_mvaBeta_branch = tree->GetBranch("pfjets_mvaBeta");
+		if (pfjets_mvaBeta_branch) {pfjets_mvaBeta_branch->SetAddress(&pfjets_mvaBeta_);}
+	}
 	scale1fb_branch = 0;
 	if (tree->GetBranch("scale1fb") != 0) {
 		scale1fb_branch = tree->GetBranch("scale1fb");
@@ -3884,6 +3956,15 @@ void GetEntry(unsigned int idx)
 		pfTau_leadPtcand_isLoaded = false;
 		pfTauLoose_isLoaded = false;
 		pfTauLoose_leadPtcand_isLoaded = false;
+		pfjets_beta_isLoaded = false;
+		pfjets_beta2_isLoaded = false;
+		pfjets_beta_0p1_isLoaded = false;
+		pfjets_beta_0p2_isLoaded = false;
+		pfjets_beta2_0p1_isLoaded = false;
+		pfjets_beta2_0p5_isLoaded = false;
+		pfjets_mvaPUid_isLoaded = false;
+		pfjets_mva5xPUid_isLoaded = false;
+		pfjets_mvaBeta_isLoaded = false;
 		scale1fb_isLoaded = false;
 		xsec_isLoaded = false;
 		nevts_isLoaded = false;
@@ -4318,6 +4399,15 @@ void LoadAllBranches()
 	if (pfTau_leadPtcand_branch != 0) pfTau_leadPtcand();
 	if (pfTauLoose_branch != 0) pfTauLoose();
 	if (pfTauLoose_leadPtcand_branch != 0) pfTauLoose_leadPtcand();
+	if (pfjets_beta_branch != 0) pfjets_beta();
+	if (pfjets_beta2_branch != 0) pfjets_beta2();
+	if (pfjets_beta_0p1_branch != 0) pfjets_beta_0p1();
+	if (pfjets_beta_0p2_branch != 0) pfjets_beta_0p2();
+	if (pfjets_beta2_0p1_branch != 0) pfjets_beta2_0p1();
+	if (pfjets_beta2_0p5_branch != 0) pfjets_beta2_0p5();
+	if (pfjets_mvaPUid_branch != 0) pfjets_mvaPUid();
+	if (pfjets_mva5xPUid_branch != 0) pfjets_mva5xPUid();
+	if (pfjets_mvaBeta_branch != 0) pfjets_mvaBeta();
 	if (scale1fb_branch != 0) scale1fb();
 	if (xsec_branch != 0) xsec();
 	if (nevts_branch != 0) nevts();
@@ -9861,6 +9951,123 @@ void LoadAllBranches()
 		}
 		return *pfTauLoose_leadPtcand_;
 	}
+	const vector<float> &pfjets_beta()
+	{
+		if (not pfjets_beta_isLoaded) {
+			if (pfjets_beta_branch != 0) {
+				pfjets_beta_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_beta_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_beta_isLoaded = true;
+		}
+		return *pfjets_beta_;
+	}
+	const vector<float> &pfjets_beta2()
+	{
+		if (not pfjets_beta2_isLoaded) {
+			if (pfjets_beta2_branch != 0) {
+				pfjets_beta2_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_beta2_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_beta2_isLoaded = true;
+		}
+		return *pfjets_beta2_;
+	}
+	const vector<float> &pfjets_beta_0p1()
+	{
+		if (not pfjets_beta_0p1_isLoaded) {
+			if (pfjets_beta_0p1_branch != 0) {
+				pfjets_beta_0p1_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_beta_0p1_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_beta_0p1_isLoaded = true;
+		}
+		return *pfjets_beta_0p1_;
+	}
+	const vector<float> &pfjets_beta_0p2()
+	{
+		if (not pfjets_beta_0p2_isLoaded) {
+			if (pfjets_beta_0p2_branch != 0) {
+				pfjets_beta_0p2_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_beta_0p2_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_beta_0p2_isLoaded = true;
+		}
+		return *pfjets_beta_0p2_;
+	}
+	const vector<float> &pfjets_beta2_0p1()
+	{
+		if (not pfjets_beta2_0p1_isLoaded) {
+			if (pfjets_beta2_0p1_branch != 0) {
+				pfjets_beta2_0p1_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_beta2_0p1_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_beta2_0p1_isLoaded = true;
+		}
+		return *pfjets_beta2_0p1_;
+	}
+	const vector<float> &pfjets_beta2_0p5()
+	{
+		if (not pfjets_beta2_0p5_isLoaded) {
+			if (pfjets_beta2_0p5_branch != 0) {
+				pfjets_beta2_0p5_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_beta2_0p5_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_beta2_0p5_isLoaded = true;
+		}
+		return *pfjets_beta2_0p5_;
+	}
+	const vector<float> &pfjets_mvaPUid()
+	{
+		if (not pfjets_mvaPUid_isLoaded) {
+			if (pfjets_mvaPUid_branch != 0) {
+				pfjets_mvaPUid_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_mvaPUid_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_mvaPUid_isLoaded = true;
+		}
+		return *pfjets_mvaPUid_;
+	}
+	const vector<float> &pfjets_mva5xPUid()
+	{
+		if (not pfjets_mva5xPUid_isLoaded) {
+			if (pfjets_mva5xPUid_branch != 0) {
+				pfjets_mva5xPUid_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_mva5xPUid_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_mva5xPUid_isLoaded = true;
+		}
+		return *pfjets_mva5xPUid_;
+	}
+	const vector<float> &pfjets_mvaBeta()
+	{
+		if (not pfjets_mvaBeta_isLoaded) {
+			if (pfjets_mvaBeta_branch != 0) {
+				pfjets_mvaBeta_branch->GetEntry(index);
+			} else { 
+				printf("branch pfjets_mvaBeta_branch does not exist!\n");
+				exit(1);
+			}
+			pfjets_mvaBeta_isLoaded = true;
+		}
+		return *pfjets_mvaBeta_;
+	}
 	float &scale1fb()
 	{
 		if (not scale1fb_isLoaded) {
@@ -10354,6 +10561,15 @@ namespace ewkino_ss {
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau_leadPtcand();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose_leadPtcand();
+	const vector<float> &pfjets_beta();
+	const vector<float> &pfjets_beta2();
+	const vector<float> &pfjets_beta_0p1();
+	const vector<float> &pfjets_beta_0p2();
+	const vector<float> &pfjets_beta2_0p1();
+	const vector<float> &pfjets_beta2_0p5();
+	const vector<float> &pfjets_mvaPUid();
+	const vector<float> &pfjets_mva5xPUid();
+	const vector<float> &pfjets_mvaBeta();
 	const float &scale1fb();
 	const float &xsec();
 	const unsigned int &nevts();
