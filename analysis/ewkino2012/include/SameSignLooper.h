@@ -105,6 +105,10 @@ private:
 
     float GetFakeRateValue(const int lep_id, const int lep_idx) const;
     float GetFlipRateValue(const int lep_id, const int lep_idx) const;
+
+    bool passesIsoTrkVeto();
+    bool passesTauVeto();
+    bool passesMVAJetId(LorentzVector p4, float mva_value, int tightness);
 };
 
 #endif // EWKINOSSANALYSISLOOPER_H 

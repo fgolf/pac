@@ -378,7 +378,7 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
         std::string temp_jec_string = rt::string_upper(apply_jec_unc);
         temp_jec_string = rt::string_remove_all(temp_jec_string, "::ALL");
 
-        std::string path = rt::getenv("CMS2_CORE");
+        std::string path = rt::getenv("CMS2CORE");
         if (!path.empty())
         {
             path += "/jetcorr/data";
@@ -1341,6 +1341,8 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
         }
 
+        assert(m_evt.vjets_p4.size() == jet_flags.size());
+
         // fill dijet_mass
         if (m_evt.vjets_p4.size() > 1)
         {
@@ -1593,29 +1595,8 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         float miniso10 = 999;
 
         std::vector<LorentzVector> goodLeptons;
-        goodLeptons.push_back(m_evt.lep1.p4);
-        goodLeptons.push_back(m_evt.lep2.p4);
-        int imaxpt = -1;
-        if (goodLeptons.size() == 1) imaxpt = 0;
-        else if (goodLeptons.size() > 1)
-        {                                                               
-            float max_pt = 0.0;
-            for (unsigned int index = 0; index < goodLeptons.size(); index++)
-            {
-                if (goodLeptons.at(index).pt() > max_pt)
-                {
-                    max_pt = goodLeptons.at(index).pt();
-                    imaxpt = index;
-                }
-            }
-        }
-
-        int imaxid = 0;
-        if (imaxpt == 0) imaxid = m_evt.lep1.pdgid;
-        if (imaxpt == 1) imaxid = m_evt.lep2.pdgid;
-
-        LorentzVector maxpt_p4(0,0,0,0);
-        if (imaxpt >= 0) maxpt_p4 = goodLeptons.at(imaxpt);
+        if (m_evt.lep1.p4.pt() > 0.01) goodLeptons.push_back(m_evt.lep1.p4);
+        if (m_evt.lep2.p4.pt() > 0.01) goodLeptons.push_back(m_evt.lep2.p4);
 
         for (unsigned int ipf = 0; ipf < cms2.pfcands_p4().size(); ipf++)
         {
@@ -1627,16 +1608,11 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             bool isGoodLepton = false;
             for (int ilep = 0; ilep < (int)goodLeptons.size(); ilep++)
             {
-                if (ROOT::Math::VectorUtil::DeltaR(cms2.pfcands_p4().at(ipf), goodLeptons.at(ilep) ) < 0.1) isGoodLepton = true;                    
-            }
-            bool isLeadLepton = false;
-            if (imaxpt >= 0)
-            {
-                isLeadLepton = (ROOT::Math::VectorUtil::DeltaR(cms2.pfcands_p4().at(ipf), goodLeptons.at(imaxpt)) < 0.1);
+                if (ROOT::Math::VectorUtil::DeltaR(cms2.pfcands_p4().at(ipf), goodLeptons.at(ilep)) < 0.1) isGoodLepton = true;                    
             }
 
-            /// this is with the OS requirement
-            float charge = (cms2.pfcands_particleId().at(ipf) * imaxid);
+            // this is with the OS requirement
+            float charge = (cms2.pfcands_particleId().at(ipf) * m_evt.lep1.charge);
             // charge < 0 is a SS , charge > 0 is a OS for e/mu; need to flip for pions
             if ((abs(cms2.pfcands_particleId().at(ipf)) != 11) && (abs(cms2.pfcands_particleId().at(ipf)) != 13)) charge *= (-1); 
 
@@ -1677,7 +1653,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 m_evt.trkreliso5loose = iso;
             }
 
-            if (cms2.pfcands_p4().at(ipf).pt() >= 5 && iso < m_evt.pfcandiso5looseZ && !isLeadLepton)
+            if (cms2.pfcands_p4().at(ipf).pt() >= 5 && iso < m_evt.pfcandiso5looseZ && !isGoodLepton)
             {
                 m_evt.pfcandiso5looseZ = iso;
                 m_evt.pfcanddz5looseZ  = mindz;
@@ -1686,7 +1662,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 m_evt.pfcandid5looseZ  = cms2.pfcands_particleId().at(ipf);
             }
 
-            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcandisoOS10looseZ && !isLeadLepton && charge > 0)
+            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcandisoOS10looseZ && !isGoodLepton && charge > 0)
             {
                 m_evt.pfcandisoOS10looseZ = iso;
                 m_evt.pfcanddzOS10looseZ  = mindz;
@@ -1700,7 +1676,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
             iso = myTrackIso.isoDir_dr03_dz005_pt00 / cms2.pfcands_p4().at(ipf).pt();
 
-            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcanddiriso10 && !isLeadLepton)
+            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcanddiriso10 && !isGoodLepton)
             {
                 m_evt.pfcanddiriso10 = iso;
                 m_evt.pfcanddirpt10  = cms2.pfcands_p4().at(ipf).pt();
@@ -1711,7 +1687,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             // with veto cone
             iso = myTrackIso.iso_dr0503_dz005_pt00 / cms2.pfcands_p4().at(ipf).pt();
 
-            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcandvetoiso10 && !isLeadLepton)
+            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcandvetoiso10 && !isGoodLepton)
             {
                 m_evt.pfcandvetoiso10 = iso;
                 m_evt.pfcandvetopt10  = cms2.pfcands_p4().at(ipf).pt();
@@ -1722,7 +1698,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             // with veto cone
             iso = myTrackIso.iso_dr01503_dz005_pt00 / cms2.pfcands_p4().at(ipf).pt();
 
-            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcandvetoLiso10 && !isLeadLepton)
+            if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < m_evt.pfcandvetoLiso10 && !isGoodLepton)
             {
                 m_evt.pfcandvetoLiso10 = iso;
                 m_evt.pfcandvetoLpt10  = cms2.pfcands_p4().at(ipf).pt();
@@ -1737,7 +1713,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             {
                 miniso10          = iso;
                 m_evt.trkpt10     = cms2.pfcands_p4().at(ipf).pt();
-                m_evt.mleptrk10   = (maxpt_p4 + cms2.pfcands_p4().at(ipf)).pt();
+                // m_evt.mleptrk10   = (maxpt_p4 + cms2.pfcands_p4().at(ipf)).pt();
                 m_evt.trkreliso10 = iso;
             }
 
@@ -1745,11 +1721,11 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             {
                 miniso5          = iso;
                 m_evt.trkpt5     = cms2.pfcands_p4().at(ipf).pt();
-                m_evt.mleptrk5   = (maxpt_p4 + cms2.pfcands_p4().at(ipf)).pt();
+                // m_evt.mleptrk5   = (maxpt_p4 + cms2.pfcands_p4().at(ipf)).pt();
                 m_evt.trkreliso5 = iso;
             }
 
-            if (isLeadLepton) continue;
+            if (isGoodLepton) continue;
 
             if (cms2.pfcands_p4().at(ipf).pt() >= 5 && iso < m_evt.pfcandiso5)
             {
@@ -1946,10 +1922,11 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             // if((taus_pf_charge().at(itau)*id1_)>0) continue;
 
             ///
-            bool isLeadLepton = false;
-            if (imaxid >= 0) (rt::DeltaR(cms2.taus_pf_p4().at(itau), goodLeptons.at(imaxpt)) < 0.4 );
+            bool isHypLepton = false;
+            if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep1.p4) < 0.4) isHypLepton = true;
+            if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep2.p4) < 0.4) isHypLepton = true;
 
-            if (isLeadLepton) continue;
+            if (isHypLepton) continue;
             if (!cms2.taus_pf_byDecayModeFinding().at(itau)) continue;
 
             // isolation Medium ; pt > 15
@@ -2017,6 +1994,82 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 m_evt.pfTauLoose_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
             }
         }        
+
+        //
+        // jet-PV matching
+        //
+        for (int pfjidx = 0; pfjidx < jet_flags.size(); pfjidx++)
+        {
+            if (jet_flags.at(pfjidx) == 0) continue;
+            m_evt.pfjets_beta     .push_back ( pfjet_beta( pfjidx, 1)       );
+            m_evt.pfjets_beta2    .push_back ( pfjet_beta( pfjidx, 2)       );
+            m_evt.pfjets_beta_0p1 .push_back ( pfjet_beta( pfjidx, 1, 0.1 ) );
+            m_evt.pfjets_beta_0p2 .push_back ( pfjet_beta( pfjidx, 1, 0.2 ) );
+            m_evt.pfjets_beta2_0p1.push_back ( pfjet_beta( pfjidx, 2, 0.1 ) );
+            m_evt.pfjets_beta2_0p5.push_back ( pfjet_beta( pfjidx, 2, 0.5 ) );
+
+            m_evt.pfjets_mvaPUid.push_back  ( cms2.pfjets_full53xmvavalue().at(pfjidx));
+            m_evt.pfjets_mva5xPUid.push_back( cms2.pfjets_full5xmvavalue() .at(pfjidx));
+            m_evt.pfjets_mvaBeta.push_back  ( cms2.pfjets_full53xmva_beta().at(pfjidx));
+        }
+
+        assert(m_evt.vjets_p4.size() == m_evt.pfjets_mva5xPUid.size());
+        
+        //
+        // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
+        //
+        int lep3idx = -1;
+        int lep3id  = 0;
+        float lep3pt = -999999.;
+        for (unsigned int el3idx = 0; el3idx < cms2.els_p4().size(); el3idx++)
+        {
+            if (cms2.els_p4().at(el3idx).pt() < 5.) continue;
+            if (rt::DeltaR(cms2.els_p4().at(el3idx),m_evt.lep1.p4) < 0.1) continue;
+            if (rt::DeltaR(cms2.els_p4().at(el3idx),m_evt.lep2.p4) < 0.1) continue;
+            if (cms2.els_p4().at(el3idx).pt() > lep3pt)
+            {
+                lep3idx = el3idx;
+                lep3id  = -11 * cms2.els_charge().at(el3idx);
+                lep3pt  = cms2.els_p4().at(el3idx).pt();
+            }
+        }
+
+        for (unsigned int mu3idx = 0; mu3idx < cms2.mus_p4().size(); mu3idx++)
+        {
+            if (cms2.mus_p4().at(mu3idx).pt() < 5.) continue;
+            if (rt::DeltaR(cms2.mus_p4().at(mu3idx),m_evt.lep1.p4) < 0.1) continue;
+            if (rt::DeltaR(cms2.mus_p4().at(mu3idx),m_evt.lep2.p4) < 0.1) continue;
+            if (cms2.mus_p4().at(mu3idx).pt() > lep3pt)
+            {
+                lep3idx = mu3idx;
+                lep3id  = -13 * cms2.mus_charge().at(mu3idx);
+                lep3pt  = cms2.mus_p4().at(mu3idx).pt();
+            }
+        }
+
+        if (lep3idx >= 0)
+        {
+            m_evt.lep3.FillCommon(lep3id, lep3idx);
+        }
+
+        //
+        // add branches for convenience
+        //
+        m_evt.passes_isotrk_veto = passesIsoTrkVeto();
+        m_evt.passes_tau_veto    = passesTauVeto();
+        int njets_pv_tmp0 = 0;
+        int njets_pv_tmp1 = 0;
+        int njets_pv_tmp2 = 0;
+        for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4.size(); jetpvidx++)
+        {
+            if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 0)) ++njets_pv_tmp0;
+            if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 1)) ++njets_pv_tmp1;
+            if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 2)) ++njets_pv_tmp2;
+        }
+
+        m_evt.njets_pv_tight0 = njets_pv_tmp0;
+        m_evt.njets_pv_tight1 = njets_pv_tmp1;
+        m_evt.njets_pv_tight2 = njets_pv_tmp2;
 
         // Fill the tree
         m_tree->Fill();
@@ -2145,4 +2198,87 @@ float EwkinoSSAnalysisLooper::GetFlipRateValue(const int lep_id, const int lep_i
     int pt_bin   = h_flip->GetYaxis()->FindBin(min(pt, max_pt));
     int eta_bin  = h_flip->GetXaxis()->FindBin(fabs(eta));
     return h_flip->GetBinContent(eta_bin, pt_bin);
+}
+
+bool EwkinoSSAnalysisLooper::passesIsoTrkVeto()
+{
+    //pass isolated track veto
+    //unfortunately changed default value to 9999.
+    // We want to check for the generic track only there is now good e/mu candidate
+    if (m_evt.pfcandptOS10looseZ < 9998. && abs(m_evt.pfcandid5looseZ) != 13 && abs(m_evt.pfcandid5looseZ) != 11 && m_evt.pfcandisoOS10looseZ < 0.1) return false;
+    if (m_evt.pfcandpt5looseZ    < 9998. && abs(m_evt.pfcandid5looseZ) == 13 && m_evt.pfcandiso5looseZ < 0.2) return false;
+    if (m_evt.pfcandpt5looseZ    < 9998. && abs(m_evt.pfcandid5looseZ) == 11 && m_evt.pfcandiso5looseZ < 0.2) return false;
+    return true;
+}
+
+bool EwkinoSSAnalysisLooper::passesTauVeto()
+{
+    if(m_evt.pfTau_leadPtcandID != -999999) return false;
+    return true;
+}
+bool EwkinoSSAnalysisLooper::passesMVAJetId(LorentzVector p4, float mva_value, int tightness)
+{
+    if (tightness < 0 || tightness > 2)
+    {
+        std::cout << "ERROR : tightness should be 0, 1, or 2. " << std::endl;
+        return false;
+    }
+
+    float fMVACut[3][4][4];
+
+    /*
+    // working points from full_53x_wp defined in 
+    // http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/CMG/CMGTools/External/python/JetIdParams_cfi.py?revision=1.12&view=markup
+
+    //Tight Id
+    fMVACut[0][0][0] = -0.83; fMVACut[0][0][1] = -0.81; fMVACut[0][0][2] = -0.74; fMVACut[0][0][3] = -0.81;
+    fMVACut[0][1][0] = -0.83; fMVACut[0][1][1] = -0.81; fMVACut[0][1][2] = -0.74; fMVACut[0][1][3] = -0.81;
+    fMVACut[0][2][0] = -0.38; fMVACut[0][2][1] = -0.32; fMVACut[0][2][2] = -0.14; fMVACut[0][2][3] = -0.48;
+    fMVACut[0][3][0] = -0.38; fMVACut[0][3][1] = -0.32; fMVACut[0][3][2] = -0.14; fMVACut[0][3][3] = -0.48;
+    //Medium id
+    fMVACut[1][0][0] = -0.83; fMVACut[1][0][1] = -0.92; fMVACut[1][0][2] = -0.90; fMVACut[1][0][3] = -0.92;
+    fMVACut[1][1][0] = -0.83; fMVACut[1][1][1] = -0.92; fMVACut[1][1][2] = -0.90; fMVACut[1][1][3] = -0.92;
+    fMVACut[1][2][0] = -0.40; fMVACut[1][2][1] = -0.49; fMVACut[1][2][2] = -0.50; fMVACut[1][2][3] = -0.65;
+    fMVACut[1][3][0] = -0.40; fMVACut[1][3][1] = -0.49; fMVACut[1][3][2] = -0.50; fMVACut[1][3][3] = -0.65;
+    //Loose Id 
+    fMVACut[2][0][0] = -0.95; fMVACut[2][0][1] = -0.96; fMVACut[2][0][2] = -0.94; fMVACut[2][0][3] = -0.95;
+    fMVACut[2][1][0] = -0.95; fMVACut[2][1][1] = -0.96; fMVACut[2][1][2] = -0.94; fMVACut[2][1][3] = -0.95;
+    fMVACut[2][2][0] = -0.80; fMVACut[2][2][1] = -0.74; fMVACut[2][2][2] = -0.68; fMVACut[2][2][3] = -0.77;
+    fMVACut[2][3][0] = -0.80; fMVACut[2][3][1] = -0.74; fMVACut[2][3][2] = -0.68; fMVACut[2][3][3] = -0.77;
+    */
+
+    // working points from full_5x_wp defined in 
+    // http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/CMG/CMGTools/External/python/JetIdParams_cfi.py?revision=1.12&view=markup
+    //Tight Id                                                                                                                                                                       
+    fMVACut[0][0][0] = -0.47; fMVACut[0][0][1] = -0.92; fMVACut[0][0][2] = -0.92; fMVACut[0][0][3] = -0.94;
+    fMVACut[0][1][0] = -0.47; fMVACut[0][1][1] = -0.92; fMVACut[0][1][2] = -0.92; fMVACut[0][1][3] = -0.94;
+    fMVACut[0][2][0] = +0.32; fMVACut[0][2][1] = -0.49; fMVACut[0][2][2] = -0.61; fMVACut[0][2][3] = -0.74;
+    fMVACut[0][3][0] = +0.32; fMVACut[0][3][1] = -0.49; fMVACut[0][3][2] = -0.61; fMVACut[0][3][3] = -0.74;
+    //Medium id
+    fMVACut[1][0][0] = -0.83; fMVACut[1][0][1] = -0.96; fMVACut[1][0][2] = -0.95; fMVACut[1][0][3] = -0.96;
+    fMVACut[1][1][0] = -0.83; fMVACut[1][1][1] = -0.96; fMVACut[1][1][2] = -0.95; fMVACut[1][1][3] = -0.96;
+    fMVACut[1][2][0] = -0.40; fMVACut[1][2][1] = -0.74; fMVACut[1][2][2] = -0.76; fMVACut[1][2][3] = -0.81;
+    fMVACut[1][3][0] = -0.40; fMVACut[1][3][1] = -0.74; fMVACut[1][3][2] = -0.76; fMVACut[1][3][3] = -0.81;
+    //Loose Id 
+    fMVACut[2][0][0] = -0.95; fMVACut[2][0][1] = -0.97; fMVACut[2][0][2] = -0.97; fMVACut[2][0][3] = -0.97;
+    fMVACut[2][1][0] = -0.95; fMVACut[2][1][1] = -0.97; fMVACut[2][1][2] = -0.97; fMVACut[2][1][3] = -0.97;
+    fMVACut[2][2][0] = -0.80; fMVACut[2][2][1] = -0.85; fMVACut[2][2][2] = -0.84; fMVACut[2][2][3] = -0.85;
+    fMVACut[2][3][0] = -0.80; fMVACut[2][3][1] = -0.85; fMVACut[2][3][2] = -0.84; fMVACut[2][3][3] = -0.85;
+
+
+    // pT categorization
+    int ptId = 0;
+    if (p4.pt() > 10 && p4.pt() < 20) ptId = 1;
+    if (p4.pt() > 20 && p4.pt() < 30) ptId = 2;
+    if (p4.pt() > 30                ) ptId = 3;
+
+    // eta categorization
+    int etaId = 0;
+    if (fabs(p4.eta()) > 2.5  && fabs(p4.eta()) < 2.75) etaId = 1;
+    if (fabs(p4.eta()) > 2.75 && fabs(p4.eta()) < 3.0 ) etaId = 2;
+    if (fabs(p4.eta()) > 3.0  && fabs(p4.eta()) < 5.0 ) etaId = 3;
+
+    // return  
+    if (mva_value > fMVACut[tightness][ptId][etaId]) return true;
+    return false;
 }
