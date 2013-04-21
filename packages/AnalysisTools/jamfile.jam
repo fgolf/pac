@@ -29,6 +29,7 @@ lib AnalysisTools
     ./source/FakeRateBinInfo.cc
     ./source/FlipRateBinInfo.cc
     ./source/PredSummary.cc
+    ./source/TrackIsoTools.cc
     ./source/CMS2Tag.cc
     [ rootcint Dict
         : # requirements
