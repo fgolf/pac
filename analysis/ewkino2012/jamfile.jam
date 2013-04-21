@@ -237,21 +237,21 @@ exe ewkino2012_ss_analysis
 #   : # usage-requirements
 #   ;
 
-# exe ss2012_merge_babies
-#   : # sources
-#     ./source/ss2012_merge_babies.cc
-#     # dependent packages
-#     ss2012_tools/<link>static
-#     /ROOT
-#     /MiniFWLite//libMiniFWLite/<link>shared
-#     /RootTools//RootTools/<link>static
-#     /boost//program_options/<link>static
-#   : # requirements
-#     <include>./include
-#     <include>./source
-#   : # default-build
-#   : # usage-requirements
-#   ;
+exe ewkino2012_merge_babies
+  : # sources
+    ./source/ewkino2012_merge_babies.cc
+    # dependent packages
+    ewkino2012_tools/<link>static
+    /ROOT
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
 
 # exe ss2012_create_fakerate
 #   : # sources
@@ -407,12 +407,12 @@ exe ewkino2012_ss_analysis
 # # install libs/exes
 # # -------------------------------------------------------------- #
 
-# default-install ss2012_tools : <link>shared ;
-# default-install ss2012_analysis ;
+default-install ewkino2012_tools : <link>shared ;
+default-install ewkino2012_ss_analysis ;
 # default-install ss2012_plots ;
 # default-install ss2012_event_list ;
 # default-install ss2012_skim ;
-# default-install ss2012_merge_babies ;
+default-install ewkino2012_merge_babies ;
 # #default-install ss2012_outreach ;
 # default-install ss2012_outreach_closure ;
 # default-install ss2012_quick_check ;
