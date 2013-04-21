@@ -13,9 +13,13 @@ namespace ewkino
         enum value_type
         {
             // inclusive
-            sr0  = 0,  // baseline:  #jets>=2, #btags==0
-            sr1  = 1,  // baseline + 50 < M_jj < 110
-
+            sr0  = 0,  // baseline:  SS (20/20), #jets>=2 (pt>30), #btags==0 (pt>30)
+            sr1  = 1,  // baseline + #jets==2,3
+            sr2  = 2,  // sr1 + MET>30
+            sr3  = 3,  // sr2 + 50 < M_jj < 110
+            sr4  = 4,  // sr3 + iso track veto (stop)
+            sr5  = 5,  // sr4 + tau veto (stop)
+            sr6  = 6,  // sr5 + require jet-PV matching
             // keep track of the size
             static_size
         };

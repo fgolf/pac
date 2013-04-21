@@ -21,9 +21,49 @@ const ewkino::SignalRegionInfo s_SsSignalRegionInfos[] =
         // name
         "sr1",
         // title
-        "sr1: # jets #geq 2, # btags #eq 0, 50 < M_{jj} < 110 GeV",
+        "sr1: # jets #eq 2 or 3, # btags #eq 0",
         // latex
-        "$\\#jets\\geq2,\\# btags=0,\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV}$"
+        "$\\#jets\\eq2 or 3,\\# btags=0$"
+    },
+    { 
+        // name
+        "sr2",
+        // title
+        "sr2: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV",
+        // latex
+        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr3",
+        // title
+        "sr3: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV",
+        // latex
+        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV}$"
+    },
+    { 
+        // name
+        "sr4",
+        // title
+        "sr4: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV, iso track veto",
+        // latex
+        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV},\\ \\textrm{iso track veto}$"
+    },
+    { 
+        // name
+        "sr5",
+        // title
+        "sr5: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV, iso track veto, tau veto",
+        // latex
+        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV},\\ \\textrm{iso track veto},\\ \\textrm{tau veto}$"
+    },
+    { 
+        // name
+        "sr5",
+        // title
+        "sr5: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV, iso track veto, tau veto, jet-PV matching",
+        // latex
+        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV},\\ \\textrm{iso track veto},\\ \\textrm{tau veto},\\ \\textrm{jet-PV matching}$"
     },
 };
 
@@ -190,14 +230,16 @@ namespace ewkino
         // ss
         if (anal_type==AnalysisType::ss)
         {
-            const bool baseline = (njets>=2 && nbtags==0);
+            const bool baseline = (njets>=2 && nbtags==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
 
             if (signal_region_type==SignalRegionType::inclusive)
             {
                 switch (signal_region)
                 {
                 case SignalRegion::sr0 : return (baseline);
-                case SignalRegion::sr1 : return (baseline && ewkino_ss::dijet_mass() > 50. && ewkino_ss::dijet_mass() < 110.);
+                case SignalRegion::sr1 : return (baseline && (njets == 2 || njets ==3));
+                case SignalRegion::sr2 : return (baseline && (njets == 2 || njets ==3) && ewkino_ss::pfmet() > 30.);
+                case SignalRegion::sr3 : return (baseline && (njets == 2 || njets ==3) && ewkino_ss::pfmet() > 30. && ewkino_ss::dijet_mass() > 50. && ewkino_ss::dijet_mass() < 120.);
                 };
             }
             return false;
@@ -263,8 +305,10 @@ namespace ewkino
         switch (anal_type)
         {
         case AnalysisType::ss:
-            tree.SetAlias("sr0" , "nbtags==0 && njets>=2"); 
-            tree.SetAlias("sr1" , "nbtags==0 && njets>=2 && dijet_mass > 50. && dijet_mass < 110.");
+            tree.SetAlias("sr0" , "lep_pt && nbtags==0 && njets>=2"); 
+            tree.SetAlias("sr1" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
+            tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30.");
+            tree.SetAlias("sr3" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30. && dijet_mass>50. && dijet_mass<120.");  
             break;
         case AnalysisType::static_size:
             /*do nothing*/
@@ -275,8 +319,10 @@ namespace ewkino
         switch (anal_type)
         {
         case AnalysisType::ss:
-            tree.SetAlias("sr0" , "nbtags==0 && njets>=2"); 
-            tree.SetAlias("sr1" , "nbtags==0 && njets>=2 && dijet_mass > 50. && dijet_mass < 110."); 
+            tree.SetAlias("sr0" , "lep_pt && nbtags==0 && njets>=2"); 
+            tree.SetAlias("sr1" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
+            tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30.");
+            tree.SetAlias("sr3" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30. && dijet_mass>50. && dijet_mass<120.");  
             break;
         case AnalysisType::static_size:
             /*do nothing*/
