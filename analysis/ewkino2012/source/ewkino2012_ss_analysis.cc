@@ -82,7 +82,7 @@ try
         ("apply_jec_unc" , po::value<std::string>(&apply_jec_unc)          , "apply JEC uncertainty using the specified global tag"                                  )
         ("jet_pt_cut"    , po::value<double>(&jet_pt_cut)                  , "jet pt threshold"                                                                      )
         ("run"           , po::value<int>(&run)                            , "select a specific run (negative numbers == all)"                                       )
-        ("lumi"          , po::value<int>(&lumi)                           , "select a specific lumi (negative numbers == all)"                                      )
+        ("ls"            , po::value<int>(&lumi)                           , "select a specific lumi (negative numbers == all)"                                      )
         ("event"         , po::value<int>(&event)                          , "select a specific event (negative numbers == all)"                                     )
         //("switchSigns"   , po::value<bool>(&switchSigns)                , "switch the meaning of SS and OS"                                                   )
         ;
