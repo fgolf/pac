@@ -330,6 +330,33 @@ public:
     LorentzVector pfTau_leadPtcand;
     LorentzVector pfTauLoose;
     LorentzVector pfTauLoose_leadPtcand;
+
+    //
+    // jet-vertex matching
+    //
+    vecd pfjets_beta;
+    vecd pfjets_beta2;
+    vecd pfjets_beta_0p1;
+    vecd pfjets_beta_0p2;
+    vecd pfjets_beta2_0p1;
+    vecd pfjets_beta2_0p5;
+    vecd pfjets_mvaPUid;
+    vecd pfjets_mva5xPUid;
+    vecd pfjets_mvaBeta;
+
+    //
+    // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
+    //
+    SingleLeptonTree lep3;
+
+    //
+    // add branches for convenience
+    //
+    bool passes_isotrk_veto;
+    bool passes_tau_veto;
+    int njets_pv_tight0;
+    int njets_pv_tight1;
+    int njets_pv_tight2;
 };
 
 #endif

@@ -2,17 +2,20 @@
 
 SameSignTree::SameSignTree ()
 {
+    lep3 = SingleLeptonTree("lep3_");
 }
 
 SameSignTree::SameSignTree (const std::string &prefix)
     : DileptonTree(prefix)
 {
+    lep3 = SingleLeptonTree("lep3_");
 }
 
 void SameSignTree::Reset()
 {
     event_info.Reset();
     DileptonTree::Reset();
+    lep3.Reset();
 
     selection                                = 0;
     is_good_lumi                             = true;
@@ -108,6 +111,11 @@ void SameSignTree::Reset()
     gen_dilep_dphi                           = -999999.0;
     gen_dilep_deta                           = -999999.0;
     gen_dilep_dr                             = -999999.0;
+    passes_isotrk_veto                       = false;
+    passes_tau_veto                          = false;
+    njets_pv_tight0                          = 0;
+    njets_pv_tight1                          = 0;
+    njets_pv_tight2                          = 0;
 
     vjets_p4.clear();
     vjets_p4_up.clear();
@@ -135,85 +143,85 @@ void SameSignTree::Reset()
     pfcandidOS10looseZ = -999999;  
     pfcandid5looseZ    = -999999;     
 
-    trkpt5              = -999999.;
-    mleptrk5            = -999999.;
-    trkreliso5          = -999999.;
-    trkpt10             = -999999.;
-    mleptrk10           = -999999.;
-    trkreliso10         = -999999.;
-    trkpt5loose         = -999999.;
-    trkreliso5loose     = -999999.;
-    trkpt10loose        = -999999.;
-    trkreliso10loose    = -999999.;
-    trkpt10pt0p1        = -999999.;
-    trkreliso10pt0p1    = -999999.;
-    trkpt10pt0p2        = -999999.;
-    trkreliso10pt0p2    = -999999.;
-    trkpt10pt0p3        = -999999.;
-    trkreliso10pt0p3    = -999999.;
-    trkpt10pt0p4        = -999999.;
-    trkreliso10pt0p4    = -999999.;
-    trkpt10pt0p5        = -999999.;
-    trkreliso10pt0p5    = -999999.;
-    trkpt10pt0p6        = -999999.;
-    trkreliso10pt0p6    = -999999.;
-    trkpt10pt0p7        = -999999.;
-    trkreliso10pt0p7    = -999999.;
-    trkpt10pt0p8        = -999999.;
-    trkreliso10pt0p8    = -999999.;
-    trkpt10pt0p9        = -999999.;
-    trkreliso10pt0p9    = -999999.;
-    trkpt10pt1p0        = -999999.;
-    trkreliso10pt1p0    = -999999.;
-    pfcandiso5          = -999999.;     
-    pfcandiso10         = -999999.;     
-    pfcanddiriso10      = -999999.;     
-    pfcandvetoiso10     = -999999.;     
-    pfcandvetoLiso10    = -999999.;     
-    pfcandisoOS10       = -999999.;     
-    pfcandisoOS10looseZ = -999999.;     
-    pfcandiso5looseZ    = -999999.;     
-    pfcandpt5           = -999999.;
-    pfcandpt10          = -999999.;
-    pfcanddirpt10       = -999999.;
-    pfcandvetopt10      = -999999.;
-    pfcandvetoLpt10     = -999999.;
-    pfcandptOS10        = -999999.;
-    pfcandptOS10looseZ  = -999999.;
-    pfcandpt5looseZ     = -999999.;
-    pfcanddz5           = -999999.;
-    pfcanddz10          = -999999.;
-    pfcanddirdz10       = -999999.;
-    pfcandvetodz10      = -999999.;
-    pfcandvetoLdz10     = -999999.;
-    pfcanddzOS10        = -999999.;
-    pfcanddzOS10looseZ  = -999999.;
-    pfcanddz5looseZ     = -999999.;
-    pfcandmindrj5       = -999999.;
-    pfcandmindrj10      = -999999.;
-    pfcanddirmindrj10   = -999999.;
-    pfcandvetomindrj10  = -999999.;
-    pfcandvetoLmindrj10 = -999999.;
-    pfcandpt10pt0p1     = -999999.;
-    pfcandiso10pt0p1    = -999999.;
-    pfcandpt10pt0p2     = -999999.;
-    pfcandiso10pt0p2    = -999999.;
-    pfcandpt10pt0p3     = -999999.;
-    pfcandiso10pt0p3    = -999999.;
-    pfcandpt10pt0p4     = -999999.;
-    pfcandiso10pt0p4    = -999999.;
-    pfcandpt10pt0p5     = -999999.;
-    pfcandiso10pt0p5    = -999999.;
-    pfcandpt10pt0p6     = -999999.;
-    pfcandiso10pt0p6    = -999999.;
-    pfcandpt10pt0p7     = -999999.;
-    pfcandiso10pt0p7    = -999999.;
-    pfcandpt10pt0p8     = -999999.;
-    pfcandiso10pt0p8    = -999999.;
-    pfcandpt10pt0p9     = -999999.;
-    pfcandiso10pt0p9    = -999999.;
-    pfcandpt10pt1p0     = -999999.;
-    pfcandiso10pt1p0    = -999999.;
+    trkpt5              = 999999.;
+    mleptrk5            = 999999.;
+    trkreliso5          = 999999.;
+    trkpt10             = 999999.;
+    mleptrk10           = 999999.;
+    trkreliso10         = 999999.;
+    trkpt5loose         = 999999.;
+    trkreliso5loose     = 999999.;
+    trkpt10loose        = 999999.;
+    trkreliso10loose    = 999999.;
+    trkpt10pt0p1        = 999999.;
+    trkreliso10pt0p1    = 999999.;
+    trkpt10pt0p2        = 999999.;
+    trkreliso10pt0p2    = 999999.;
+    trkpt10pt0p3        = 999999.;
+    trkreliso10pt0p3    = 999999.;
+    trkpt10pt0p4        = 999999.;
+    trkreliso10pt0p4    = 999999.;
+    trkpt10pt0p5        = 999999.;
+    trkreliso10pt0p5    = 999999.;
+    trkpt10pt0p6        = 999999.;
+    trkreliso10pt0p6    = 999999.;
+    trkpt10pt0p7        = 999999.;
+    trkreliso10pt0p7    = 999999.;
+    trkpt10pt0p8        = 999999.;
+    trkreliso10pt0p8    = 999999.;
+    trkpt10pt0p9        = 999999.;
+    trkreliso10pt0p9    = 999999.;
+    trkpt10pt1p0        = 999999.;
+    trkreliso10pt1p0    = 999999.;
+    pfcandiso5          = 999999.;     
+    pfcandiso10         = 999999.;     
+    pfcanddiriso10      = 999999.;     
+    pfcandvetoiso10     = 999999.;     
+    pfcandvetoLiso10    = 999999.;     
+    pfcandisoOS10       = 999999.;     
+    pfcandisoOS10looseZ = 999999.;     
+    pfcandiso5looseZ    = 999999.;     
+    pfcandpt5           = 999999.;
+    pfcandpt10          = 999999.;
+    pfcanddirpt10       = 999999.;
+    pfcandvetopt10      = 999999.;
+    pfcandvetoLpt10     = 999999.;
+    pfcandptOS10        = 999999.;
+    pfcandptOS10looseZ  = 999999.;
+    pfcandpt5looseZ     = 999999.;
+    pfcanddz5           = 999999.;
+    pfcanddz10          = 999999.;
+    pfcanddirdz10       = 999999.;
+    pfcandvetodz10      = 999999.;
+    pfcandvetoLdz10     = 999999.;
+    pfcanddzOS10        = 999999.;
+    pfcanddzOS10looseZ  = 999999.;
+    pfcanddz5looseZ     = 999999.;
+    pfcandmindrj5       = 999999.;
+    pfcandmindrj10      = 999999.;
+    pfcanddirmindrj10   = 999999.;
+    pfcandvetomindrj10  = 999999.;
+    pfcandvetoLmindrj10 = 999999.;
+    pfcandpt10pt0p1     = 999999.;
+    pfcandiso10pt0p1    = 999999.;
+    pfcandpt10pt0p2     = 999999.;
+    pfcandiso10pt0p2    = 999999.;
+    pfcandpt10pt0p3     = 999999.;
+    pfcandiso10pt0p3    = 999999.;
+    pfcandpt10pt0p4     = 999999.;
+    pfcandiso10pt0p4    = 999999.;
+    pfcandpt10pt0p5     = 999999.;
+    pfcandiso10pt0p5    = 999999.;
+    pfcandpt10pt0p6     = 999999.;
+    pfcandiso10pt0p6    = 999999.;
+    pfcandpt10pt0p7     = 999999.;
+    pfcandiso10pt0p7    = 999999.;
+    pfcandpt10pt0p8     = 999999.;
+    pfcandiso10pt0p8    = 999999.;
+    pfcandpt10pt0p9     = 999999.;
+    pfcandiso10pt0p9    = 999999.;
+    pfcandpt10pt1p0     = 999999.;
+    pfcandiso10pt1p0    = 999999.;
 
     pfcand5          = LorentzVector(0., 0., 0., 0.);
     pfcand10         = LorentzVector(0., 0., 0., 0.);
@@ -234,12 +242,23 @@ void SameSignTree::Reset()
     pfTau_leadPtcand      = LorentzVector(0., 0., 0., 0.);
     pfTauLoose            = LorentzVector(0., 0., 0., 0.);
     pfTauLoose_leadPtcand = LorentzVector(0., 0., 0., 0.);
+
+    pfjets_beta.clear();
+    pfjets_beta2.clear();
+    pfjets_beta_0p1.clear();
+    pfjets_beta_0p2.clear();
+    pfjets_beta2_0p1.clear();
+    pfjets_beta2_0p5.clear();
+    pfjets_mvaPUid.clear();
+    pfjets_mva5xPUid.clear();
+    pfjets_mvaBeta.clear();
 }
 
 void SameSignTree::SetBranches(TTree &tree)
 {
     event_info.SetBranches(tree);
     DileptonTree::SetBranches(tree);
+    lep3.SetBranches(tree);
 
     tree.Branch("selection"                , &selection                , "selection/i"                ); 
     tree.Branch("is_good_lumi"             , &is_good_lumi             , "is_good_lumi/O"             ); 
@@ -454,4 +473,18 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("pfTau_leadPtcand"         , "LorentzVector"           , &pfTau_leadPtcand            );
     tree.Branch("pfTauLoose"               , "LorentzVector"           , &pfTauLoose                  );
     tree.Branch("pfTauLoose_leadPtcand"    , "LorentzVector"           , &pfTauLoose_leadPtcand       );
+    tree.Branch("pfjets_beta"              , "vecd"                    , &pfjets_beta                 );
+    tree.Branch("pfjets_beta2"             , "vecd"                    , &pfjets_beta2                );
+    tree.Branch("pfjets_beta_0p1"          , "vecd"                    , &pfjets_beta_0p1             );
+    tree.Branch("pfjets_beta_0p2"          , "vecd"                    , &pfjets_beta_0p2             );
+    tree.Branch("pfjets_beta2_0p1"         , "vecd"                    , &pfjets_beta2_0p1            );
+    tree.Branch("pfjets_beta2_0p5"         , "vecd"                    , &pfjets_beta2_0p5            );
+    tree.Branch("pfjets_mvaPUid"           , "vecd"                    , &pfjets_mvaPUid              );
+    tree.Branch("pfjets_mva5xPUid"         , "vecd"                    , &pfjets_mva5xPUid            );
+    tree.Branch("pfjets_mvaBeta"           , "vecd"                    , &pfjets_mvaBeta              );
+    tree.Branch("passes_isotrk_veto"       , &passes_isotrk_veto       , "passes_isotrk_veto/O"       );
+    tree.Branch("passes_tau_veto"          , &passes_tau_veto          , "passes_tau_veto/O"          );
+    tree.Branch("njets_pv_tight0"          , &njets_pv_tight0          , "njets_pv_tight0/I"          );
+    tree.Branch("njets_pv_tight1"          , &njets_pv_tight1          , "njets_pv_tight1/I"          );
+    tree.Branch("njets_pv_tight2"          , &njets_pv_tight2          , "njets_pv_tight2/I"          );
 }
