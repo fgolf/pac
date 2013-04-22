@@ -149,10 +149,7 @@ namespace ss
                 //      gluino mass in [800,1400] GeV in steps of 50 GeV
                 //      sbottom mass in [500,mgluino-50] GeV in steps of 50 GeV
                 //      chargino mass = 300 GeV
-                //      gluino mass in [800, 1200] GeV with 25 GeV step
-                //      stop mass in [225, gluino -175] GeV with 25 GeV step
-                //      neutralino mass is fixed to 50 GeV
-                return MakeSignalBinInfo(25.0f, 800.0f, 1450.0f, 25.0f, 400.0f, 1400.0f);
+                return MakeSignalBinInfo(50.0f, 800.0f, 1450.0f, 50.0f, 400.0f, 1400.0f);
                 break;
             case Sample::tchiwh:
                 // /TChiwh-test/fgolf-TChiwh-test-6138c231f814ac3df24f1150dfcad736/USER
