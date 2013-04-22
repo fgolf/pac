@@ -138,8 +138,24 @@ namespace ss
                 // ~120k events per grid point
                 return MakeSignalBinInfo(25.0f, 800.0f, 1225.0f, 25.0f, 225.0f, 1050.0f);
                 break;
+            case Sample::t7tbw:
+                // /SMS-T7btw_2J_mGo-800to1400_mSbottom-400to1350_mChi-150_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM
+                // /SMS-T7btw_2J_mGo-800to1400_mSbottom-500to1350_mChi-300_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM
+                // plane is defined as follows:
+                //      gluino mass in [800,1400] GeV in steps of 50 GeV
+                //      sbottom mass in [400,mgluino-50] GeV in steps of 50 GeV
+                //      chargino mass = 150 GeV
+                // The second scan plane is defined as follows:
+                //      gluino mass in [800,1400] GeV in steps of 50 GeV
+                //      sbottom mass in [500,mgluino-50] GeV in steps of 50 GeV
+                //      chargino mass = 300 GeV
+                //      gluino mass in [800, 1200] GeV with 25 GeV step
+                //      stop mass in [225, gluino -175] GeV with 25 GeV step
+                //      neutralino mass is fixed to 50 GeV
+                return MakeSignalBinInfo(50.0f, 800.0f, 1450.0f, 50.0f, 400.0f, 1400.0f);
+                break;
             case Sample::tchiwh:
-                // /TChiwh-test/fgolf-TChiwh-test-6138c231f814ac3df24f1150dfcad736/USER 
+                // /TChiwh-test/fgolf-TChiwh-test-6138c231f814ac3df24f1150dfcad736/USER
                 // m_chargino: 150-300 
                 // m_lsp: 1-150 
                 // charginio mass is [150, 300] GeV with 50 GeV steps

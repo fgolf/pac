@@ -661,6 +661,25 @@ namespace at
         },
         {
             // name
+            "t7tbw", 
+            // title
+            "#tilde{g}#tilde{g} #rightarrow b#bar{b}t#bar{t}WW#tilde{#chi}^{0}#tilde{#chi}^{0}",
+            // latex 
+            "\\tilde{g}\\tilde{g} \\rightarrow b\\bar{b}t\\bar{t}WW\\tilde{\\chi}^{0}\\tilde{\\chi}^{0}",
+            // ntuple_path
+            // https://twiki.cern.ch/twiki/bin/view/CMS/SMST7btwMadgraph8TeV
+            "", // going straight to baby
+            // tag
+            "V05-03-28",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::t7tbw,
+            // color
+            kBlue
+        },
+        {
+            // name
             "sbottomtop", 
             // title
             "#tilde{b}#tilde{b}* #rightarrow t#bar{t}W^{+}W^{-}#tilde{#chi}^{0}#tilde{#chi}^{0}",
