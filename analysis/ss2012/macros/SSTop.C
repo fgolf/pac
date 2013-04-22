@@ -90,15 +90,15 @@ value_t IntegralAndError(TH1* hist)
 
 float GetSyst(const float num_up, const float num_dn, const float num)
 {
-    const float syst_up = 100*fabs(1.0 - num_up/num);
-    const float syst_dn = 100*fabs(1.0 - num_dn/num);
+    const float syst_up = 100*fabs(num_up - num)/num;
+    const float syst_dn = 100*fabs(num_dn - num)/num;
     const float syst    = std::max(syst_up, syst_dn);
     return syst;
 }
 
 float GetSyst(const float num_up, const float num)
 {
-    const float syst = 100*fabs(1.0 - num_up/num);
+    const float syst = 100*(num_up - num)/num;
     return syst;
 }
 
@@ -125,36 +125,48 @@ void PrintSystematics(const std::string& filename, const unsigned int sr_num, co
     eff_per.error   *= 100;
 
     // systematics (percentage) 
-    const float jer  = GetSyst(rt::Integral(hc[sr+"nJER"      ]), num.value); 
-    const float jes  = GetSyst(rt::Integral(hc[sr+"nJESUP"    ]), rt::Integral(hc[sr+"nJESDN"    ]), num.value); 
-    const float beff = GetSyst(rt::Integral(hc[sr+"nBTAUP"    ]), rt::Integral(hc[sr+"nBTADN"    ]), num.value); 
-    const float met  = GetSyst(rt::Integral(hc[sr+"nMETUP"    ]), rt::Integral(hc[sr+"nMETDN"    ]), num.value); 
-    const float lep  = GetSyst(rt::Integral(hc[sr+"nLepEffUP" ]), rt::Integral(hc[sr+"nLepEffDN" ]), num.value); 
-    const float trig = GetSyst(rt::Integral(hc[sr+"nTrigEffUP"]), rt::Integral(hc[sr+"nTrigEffDN"]), num.value); 
-    const float lumi  = 4.4;
-    const float pdf   = 2.0;
-    const float stat  = eff.error;
-    const float total = sqrt(pow(jes,2) + pow(jer,2) + pow(beff,2) + pow(met,2) + pow(lep,2) + pow(trig,2) + pow(lumi,2) + pow(pdf,2) + pow(stat,2));
+    const float jer     = GetSyst(rt::Integral(hc[sr+"nJER"      ]), num.value);
+    const float jes     = GetSyst(rt::Integral(hc[sr+"nJESUP"    ]), rt::Integral(hc[sr+"nJESDN"    ]), num.value);
+    const float jes_up  = GetSyst(rt::Integral(hc[sr+"nJESUP"    ]), num.value);
+    const float jes_dn  = GetSyst(rt::Integral(hc[sr+"nJESDN"    ]), num.value);
+    const float beff    = GetSyst(rt::Integral(hc[sr+"nBTAUP"    ]), rt::Integral(hc[sr+"nBTADN"    ]), num.value);
+    const float beff_up = GetSyst(rt::Integral(hc[sr+"nBTAUP"    ]), num.value);
+    const float beff_dn = GetSyst(rt::Integral(hc[sr+"nBTADN"    ]), num.value);
+    const float met     = GetSyst(rt::Integral(hc[sr+"nMETUP"    ]), rt::Integral(hc[sr+"nMETDN"    ]), num.value);
+    const float met_up  = GetSyst(rt::Integral(hc[sr+"nMETUP"    ]), num.value);
+    const float met_dn  = GetSyst(rt::Integral(hc[sr+"nMETDN"    ]), num.value);
+    const float lep     = GetSyst(rt::Integral(hc[sr+"nLepEffUP" ]), rt::Integral(hc[sr+"nLepEffDN" ]), num.value);
+    const float trig    = GetSyst(rt::Integral(hc[sr+"nTrigEffUP"]), rt::Integral(hc[sr+"nTrigEffDN"]), num.value);
+    const float lumi    = 4.4;
+    const float pdf     = 2.0;
+    const float stat    = eff.error;
+    const float total   = sqrt(pow(jes,2) + pow(jer,2) + pow(beff,2) + pow(met,2) + pow(lep,2) + pow(trig,2) + pow(lumi,2) + pow(pdf,2) + pow(stat,2));
 
     CTable t;
     t.useTitle();
     t.setTitle(Form("TTBar Acceptance SR %d", sr_num));
-    t.setTable() (                "value"  )
-        ("# generated"    , int(den)           )
-        ("# passing"      , pm(num, "1.0f")    )
-        ("acceptance"     , pm(eff, "1.5f")    )
-        ("acceptance"     , pm(eff    , "1.2e"))
-        ("acceptance (%)" , pm(eff_per, "1.5f"))
-        ("JES        (%)" , jes                )
-        ("JER        (%)" , jer                )
-        ("Btag       (%)" , beff               )
-        ("MET        (%)" , met                )
-        ("Trig       (%)" , trig               )
-        ("Lep        (%)" , lep                )
-        ("Lumi       (%)" , lumi               )
-        ("Pdf        (%)" , pdf                )
-        ("Stat       (%)" , Form("%1.2e", stat))
-        ("Total      (%)" , total              )
+    t.setTable() (                    "value"  , "rel unc (1 + dx)"  )
+        ("# generated"    , int(den)           , "NA"               )
+        ("# passing"      , pm(num, "1.0f")    , "NA"               )
+        ("acceptance"     , pm(eff, "1.5f")    , "NA"               )
+        ("acceptance"     , pm(eff    , "1.2e"), "NA"               )
+        ("acceptance (%)" , pm(eff_per, "1.5f"), "NA"               )
+        ("JES        (%)" , jes                , 1.0 + 0.01*jes     )
+        ("JES+       (%)" , jes_up             , 1.0 + 0.01*jes_up  )
+        ("JES-       (%)" , jes_dn             , 1.0 + 0.01*jes_dn  )
+        ("JER        (%)" , jer                , 1.0 + 0.01*jer     )
+        ("Btag       (%)" , beff               , 1.0 + 0.01*beff    )
+        ("Btag+      (%)" , beff_up            , 1.0 + 0.01*beff_up )
+        ("Btag-      (%)" , beff_dn            , 1.0 + 0.01*beff_dn )
+        ("MET        (%)" , met                , 1.0 + 0.01*met     )
+        ("MET+       (%)" , met_up             , 1.0 + 0.01*met_up  )
+        ("MET-       (%)" , met_dn             , 1.0 + 0.01*met_dn  )
+        ("Trig       (%)" , trig               , 1.0 + 0.01*trig    )
+        ("Lep        (%)" , lep                , 1.0 + 0.01*lep     )
+        ("Lumi       (%)" , lumi               , 1.0 + 0.01*lumi    )
+        ("Pdf        (%)" , pdf                , 1.0 + 0.01*pdf     )
+        ("Stat       (%)" , Form("%1.2e", stat), Form("%1.2e", stat))
+        ("Total      (%)" , total              , 1.0 + 0.01*total   )
         ;
     t.print();
     cout << endl;

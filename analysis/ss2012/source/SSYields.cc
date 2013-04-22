@@ -131,6 +131,11 @@ namespace ss
     std::string Yield::em_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", em, dem, sem);}
     std::string Yield::ll_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", ll, dll, sll);}
 
+    std::string Yield::ee_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+    std::string Yield::mm_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+    std::string Yield::em_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+    std::string Yield::ll_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+
     std::string Yield::GetLatex(const std::string& title, const std::string& latex, bool print_sys_err) const
     {
         string result;

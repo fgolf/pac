@@ -193,15 +193,15 @@ void FRClosureLooper::EndJob()
     // -----------------------------------------------------------------------------//
     at::FakeRatePrediction frp(h_mufr.get(), h_elfr.get());
     frp.ComputeAllFakePredictions
-        (
-            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
-            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
-            static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
-            static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
-            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"  ]),
-            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"  ]),
-            static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"  ])
-            );
+    (
+        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_ee"]),
+        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_mm"]),
+        static_cast<TH2F*>(hc["h_sf_elfo_pt_vs_eta_em"]),
+        static_cast<TH2F*>(hc["h_sf_mufo_pt_vs_eta_em"]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ee"  ]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"  ]),
+        static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"  ])
+    );
 
     // SF (raw)
     PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
@@ -310,12 +310,12 @@ void FRClosureLooper::EndJob()
     string f = "1.2";
     t_yields.setTable() (                        "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
                         ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f),  sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
-                        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),   				"NA",   				"NA",     sf.ll.str(f))
-                        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),   				"NA",   				"NA",     df.ll.str(f))
-                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),   				"NA",   				"NA",   pred.ll.str(f))
-                        ("obs"     ,           obs_ee,           obs_mm,           obs_em,   				"NA",   				"NA",           obs_ll)
-                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,   				"NA",   				"NA",         ll_ratio)
-                        ("(p-o)/o" ,         ee_rdiff,         mm_rdiff,         em_rdiff,   				"NA",   				"NA",         ll_rdiff)
+                        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),                  "NA",                   "NA",     sf.ll.str(f))
+                        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),                  "NA",                   "NA",     df.ll.str(f))
+                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),                  "NA",                   "NA",   pred.ll.str(f))
+                        ("obs"     ,           obs_ee,           obs_mm,           obs_em,                  "NA",                   "NA",           obs_ll)
+                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,                  "NA",                   "NA",         ll_ratio)
+                        ("(p-o)/p" ,         ee_rdiff,         mm_rdiff,         em_rdiff,                  "NA",                   "NA",         ll_rdiff)
                         ;
     t_yields.print();
     t_yields.printTex();
@@ -422,9 +422,9 @@ int FRClosureLooper::operator()(long event)
         // charge option (1 == ++, -1 == --)
         switch (m_charge_option)
         {
-        case  1: if (not is_pp()) return 0; break;
-        case -1: if (not is_mm()) return 0; break;
-        default: {/*do nothing*/}
+            case  1: if (not is_pp()) return 0; break;
+            case -1: if (not is_mm()) return 0; break;
+            default: {/*do nothing*/}
         }
 
         // two jet events

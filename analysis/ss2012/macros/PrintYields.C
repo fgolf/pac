@@ -18,7 +18,7 @@ void PrintYields
     const std::string& output_path, 
     const std::string& signal_region_name, 
     const std::string& analysis_type_name, 
-    const std::string& signal_region_type_name = "inclusive", 
+    const std::string& signal_region_type_name = "exclusive", 
     const int charge_option = 0, 
     bool print_latex = false,
     bool do_caption = false
@@ -188,7 +188,7 @@ void PrintSidebandContamination
     const std::string& output_path, 
     const std::string& signal_region_name, 
     const std::string& analysis_type_name, 
-    const std::string& signal_region_type_name = "inclusive", 
+    const std::string& signal_region_type_name = "exclusive", 
     int charge_option = 0, 
     bool print_latex = false,
     bool do_caption = false
@@ -312,7 +312,7 @@ void PrintETHCard
 (
     const std::string& output_path, 
     const std::string& analysis_type_name, 
-    const std::string& signal_region_type_name = "inclusive" 
+    const std::string& signal_region_type_name = "exclusive" 
 )
 {
     using namespace at;
@@ -549,11 +549,66 @@ void PrintSummaryYields
     }
 }
 
+// print the yields with relative errors on predictions
+void PrintCard
+(
+    const std::string& output_path, 
+    const std::string& signal_region_name, 
+    const std::string& analysis_type_name, 
+    const std::string& signal_region_type_name = "exclusive", 
+    const int charge_option = 0
+)
+{
+    using namespace at;
+
+    const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    const ss::SignalRegion::value_type signal_region          = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
+    const ss::SignalRegionInfo sr_info                        = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
+
+    // get the yields
+    std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    ss::Yield yield_data = m_yield["data"];
+    ss::Yield yield_rare = m_yield["rare"];
+/*     ss::Yield yield_mc   = m_yield["mc"  ]; */
+    ss::Yield yield_spil = m_fake ["rare"];
+/*     ss::Yield yield_sf   = ss::GetSFYield  (Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);  */
+/*     ss::Yield yield_df   = ss::GetDFYield  (Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);  */
+    ss::Yield yield_fake = ss::GetFakeYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+    ss::Yield yield_flip = ss::GetFlipYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path); 
+
+    // subtract the spillage from the rare MC
+    ss::Yield yield_cfake = (yield_fake - yield_spil);
+
+    // set systematic uncertainties
+    ss::SetSysUncertainties(yield_rare , rare_sys_unc);
+    ss::SetSysUncertainties(yield_cfake, fake_sys_unc);
+    ss::SetSysUncertainties(yield_flip , flip_sys_unc);
+
+    // total prediction
+    ss::Yield yield_pred = yield_rare;
+    yield_pred += yield_cfake;
+    yield_pred += yield_flip;
+
+    // make the table
+    CTable t_yields;
+    t_yields.useTitle();
+    t_yields.setTitle(Form("yields for SS 2012 %s (%s)", sr_info.name.c_str(), sr_info.title.c_str()));
+    t_yields.setTable()
+        (                                        "obs",                  "pred",                  "fakes",                  "rare",                  "flips")
+        ("value"                  , (int)yield_data.ll, yield_pred.ll_syst_pm(), yield_cfake.ll_syst_pm(), yield_rare.ll_syst_pm(),  yield_flip.ll_syst_pm())
+        ("rel unc factor (1 + dx)",                1.0, yield_pred.ll_rel_unc(), yield_cfake.ll_rel_unc(), yield_rare.ll_rel_unc(),  yield_flip.ll_rel_unc());
+
+    // print it
+    t_yields.print();
+}
+
 //#ifndef __CINT__
 //int main()
 //{
-//    PrintYields("test","sr0","high_pt","inclusive", 0, true, 0);
-//    PrintYields("test","sr0","high_pt","inclusive", 0, false, 0);
+//    PrintYields("test","sr0","high_pt","exclusive", 0, true, 0);
+//    PrintYields("test","sr0","high_pt","exclusive", 0, false, 0);
 //    return 0;
 //}
 //#endif
