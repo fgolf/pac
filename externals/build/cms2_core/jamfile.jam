@@ -33,6 +33,7 @@ lib cms2_core
     $(CMS2_CORE)/CORE/ttbarSelections.cc
     $(CMS2_CORE)/CORE/utilities.cc
    [ glob $(CMS2_CORE)/CORE/jetsmear/*.cc ]
+   [ glob $(CMS2_CORE)/CORE/MT2/*.cc ]
     # dependent packages
     /CMS2//cms2_header
     /ROOT
@@ -42,12 +43,14 @@ lib cms2_core
     <include>$(CMS2_CORE)/CORE
     <include>$(CMS2_CORE)/CORE/jetsmear
     <include>$(CMS2_CORE)/CORE/jetcorr
+    <include>$(CMS2_CORE)/CORE/MT2
   : # default-build
   : # usage-requirements
     <include>$(CMS2_CORE)
     <include>$(CMS2_CORE)/CORE
     <include>$(CMS2_CORE)/CORE/jetsmear
     <include>$(CMS2_CORE)/CORE/jetcorr
+    <include>$(CMS2_CORE)/CORE/MT2
   ;
 
 default-install /CMS2_CORE//cms2_core : <link>shared ;
