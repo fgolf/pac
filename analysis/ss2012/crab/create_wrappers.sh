@@ -14,8 +14,9 @@
 #     GT      - Global tag to use
 # "
 
-default_args="--anal_type vlow_pt --fr ssFR_data_ewkcor_26Feb2013.root --fl ssFL_data_standard_02222013.root --sparms 1 --isFastSim 1 --njets 0 --apply_jec_unc START52_V9"
-crab_dir="test_crab"
+default_args="--anal_type vlow_pt --fr ssFR_data_ewkcor_17Apr2013.root --fl ssFL_data_standard_02222013.root --sparms 1 --isFastSim 1 --njets 0 --apply_jec_unc START52_V9"
+#crab_dir="test_crab"
+crab_dir="/nfs-7/userdata/rwkelley/babies/ss2012/crab/22Apr2013"
 
 # T1tttt
 # --------------------------------------------------------------------- #
@@ -291,6 +292,39 @@ crab_dir="test_crab"
  "START52_V9A::All"
 
 #
+# T7btw
+# --------------------------------------------------------------------- #
+#
+# T7btw scan 1
+#https://cmsweb.cern.ch/das/request?input=dataset%3D%2FSMS-T7btw_2J_mGo-800to1400_mSbottom-400to1350_mChi-150_mLSP-50_TuneZ2star_8TeV-madgraph-tauola%2FSummer12-START53_V7C_FSIM-v1%2FAODSIM&instance=cms_dbs_prod_global
+./BatchProcessViaCrab.sh \
+ "/SMS-T7btw_2J_mGo-800to1400_mSbottom-400to1350_mChi-150_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM" \
+ "SMS-T7btw_2J_mGo-800to1400_mSbottom-400to1350_mChi-150_mLSP-50_TuneZ2star_8TeV-madgraph-tauola_Summer12-START53_V7C_FSIM-v1" \
+ "http://cmsdbsprod.cern.ch/cms_dbs_prod_global/servlet/DBSServlet" \
+ "ss2012_baby.root" \
+ "${crab_dir}" \
+ "--sample t7btw $default_args" \
+ 0 \
+ "V02-05-28" \
+ "\"mgluino\",\"msbottom\",\"mchargino\"" \
+ 1 \
+ "START52_V9A::All"
+
+# T7btw scan 2
+#https://cmsweb.cern.ch/das/request?input=dataset%3D%2FSMS-T7btw_2J_mGo-800to1400_mSbottom-500to1350_mChi-300_mLSP-50_TuneZ2star_8TeV-madgraph-tauola%2FSummer12-START53_V7C_FSIM-v1%2FAODSIM&instance=cms_dbs_prod_global
+./BatchProcessViaCrab.sh \
+ "/SMS-T7btw_2J_mGo-800to1400_mSbottom-500to1350_mChi-300_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM" \
+ "SMS-T7btw_2J_mGo-800to1400_mSbottom-500to1350_mChi-300_mLSP-50_TuneZ2star_8TeV-madgraph-tauola_Summer12-START53_V7C_FSIM-v1" \
+ "http://cmsdbsprod.cern.ch/cms_dbs_prod_global/servlet/DBSServlet" \
+ "ss2012_baby.root" \
+ "${crab_dir}" \
+ "--sample t7btw $default_args" \
+ 0 \
+ "V02-05-28" \
+ "\"mgluino\",\"msbottom\",\"mchargino\"" \
+ 1 \
+ "START52_V9A::All"
+#
 # TChiwh
 # --------------------------------------------------------------------- #
 #
@@ -307,3 +341,4 @@ crab_dir="test_crab"
  "\"mchargino\",\"mlsp\"" \
  1 \
  "START53_V7A::All"
+

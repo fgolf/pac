@@ -2002,7 +2002,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         //
         // jet-PV matching
         //
-        for (int pfjidx = 0; pfjidx < jet_flags.size(); pfjidx++)
+        for (size_t pfjidx = 0; pfjidx < jet_flags.size(); pfjidx++)
         {
             if (jet_flags.at(pfjidx) == 0) continue;
             m_evt.pfjets_beta     .push_back ( pfjet_beta( pfjidx, 1)       );

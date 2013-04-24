@@ -9,7 +9,7 @@
 #TAG=V02-05-09c # 04-04-2013
 #TAG=V02-05-09d # 04-06-2013
 #TAG=V02-05-09e # 04-09-2013
-TAG=V02-05-09f # 04-13-2013
+TAG=V02-05-09f # 04-16-2013
 
 #~/~/~/~~/~/~/~~/~/~/~~/~/~/~~/~/
 # DATA TAG V05-03-24 (slimCMS2) # 
@@ -121,12 +121,12 @@ TAG=V02-05-09f # 04-13-2013
 
 # full sim -- SM
 
-#RUNLIST="\"\"\"\""
-#ATYPE=vlow_pt
-#NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC
-#OUTPUT_PATH=babies/ss2012/$TAG/mc
-#OPTIONS="\"\"\"\""
-#
+RUNLIST="\"\"\"\""
+ATYPE=vlow_pt
+NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC
+OUTPUT_PATH=babies/ss2012/$TAG/mc
+OPTIONS="\"\"\"\""
+
 #CMS2TAG="V05-03-23"
 #CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 #./writeConfig.sh ttww     $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTWWJets_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/                                  $OUTPUT_PATH/TTWWJets_8TeV-madgraph_${CAMPAIGN}-v1
@@ -167,6 +167,10 @@ TAG=V02-05-09f # 04-13-2013
 #CMS2TAG="V05-03-25"
 #CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 #./writeConfig.sh ttjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_${CAMPAIGN}-v2/$CMS2TAG                    $OUTPUT_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_${CAMPAIGN}-v2
+#./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG                    $OUTPUT_PATH/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
+#./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG                    $OUTPUT_PATH/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
+#./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG                    $OUTPUT_PATH/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
+#./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG                    $OUTPUT_PATH/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
 #
 #CMS2TAG="V05-03-27"
 #CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
@@ -238,9 +242,14 @@ NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC
 OUTPUT_PATH=babies/ss2012/$TAG/mc_os
 OPTIONS="--apply_jec_unc#START52_V9#--switchSigns#1" 
 
+CMS2TAG="V05-03-25"
+CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
+./writeConfig.sh ttjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_${CAMPAIGN}-v2/$CMS2TAG  $OUTPUT_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_${CAMPAIGN}-v2
+./writeConfig.sh ttjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_${CAMPAIGN}-v1/$CMS2TAG  $OUTPUT_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_${CAMPAIGN}-v1
+
 CMS2TAG="V05-03-24"
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
-./writeConfig.sh ttdil $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_FullLeptMGDecays_8TeV-madgraph_${CAMPAIGN}-v2/$CMS2TAG/     $OUTPUT_PATH/TTJets_FullLeptMGDecays_8TeV-madgraph_${CAMPAIGN}-v2
+./writeConfig.sh ttdil $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_FullLeptMGDecays_8TeV-madgraph_${CAMPAIGN}-v2/$CMS2TAG/  $OUTPUT_PATH/TTJets_FullLeptMGDecays_8TeV-madgraph_${CAMPAIGN}-v2
 
 mkdir -p mc_os
 mv *.cmd mc_os/.

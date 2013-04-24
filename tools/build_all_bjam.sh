@@ -32,6 +32,7 @@ run_bjam $PAC/packages/RootTools
 run_bjam $PAC/packages/AnalysisTools
 run_bjam $PAC/packages/FGTools           
 run_bjam $PAC/analysis/ss2012
+run_bjam $PAC/analysis/ewkino2012
 run_bjam $PAC/analysis/FakeRateStudy2011 
 
 echo ""
