@@ -26,7 +26,7 @@
 #pragma link C++ struct ewkino::SignalRegion+;
 #pragma link C++ struct ewkino::AnalysisType+;
 #pragma link C++ struct ewkino_ss::Yield+;
-#pragma link C++ struct ewkino_ss::SignalBinInfo+;
+#pragma link C++ struct ewkino::SignalBinInfo+;
 
 // functions
 #pragma link C++ function ewkino::GetSignalRegionFromName;
