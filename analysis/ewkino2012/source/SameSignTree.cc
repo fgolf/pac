@@ -26,6 +26,7 @@ void SameSignTree::Reset()
     ttbar_bkdn                               = -999999;
     vtxw                                     = -999999.0;
     mt                                       = -999999.0;
+    mt2                                      = -999999.0;
     ht                                       = -999999.0;
     rho                                      = -999999.0;
     rho_iso                                  = -999999.0;
@@ -269,6 +270,7 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("ttbar_bkdn"               , &ttbar_bkdn               , "ttbar_bkdn/I"               ); 
     tree.Branch("vtxw"                     , &vtxw                     , "vtxw/F"                     ); 
     tree.Branch("mt"                       , &mt                       , "mt/F"                       ); 
+    tree.Branch("mt2"                      , &mt2                      , "mt2/F"                      ); 
     tree.Branch("ht"                       , &ht                       , "ht/F"                       ); 
     tree.Branch("rho"                      , &rho                      , "rho/F"                      ); 
     tree.Branch("rho_iso"                  , &rho_iso                  , "rho_iso/F"                  ); 

@@ -18,6 +18,7 @@
 #include "metSelections.h"
 #include "jetcorr/FactorizedJetCorrector.h"
 #include "jetcorr/JetCorrectionUncertainty.h"
+#include "MT2/MT2.h"
 
 // Tools
 #include "SameSignTree.h"
@@ -51,7 +52,6 @@ using namespace tas;
 using namespace std;
 using namespace at;
 using namespace ewkino;
-using namespace ewkino_ss;
 
 // get the best hyp
 struct HypInfo
@@ -503,8 +503,8 @@ void EwkinoSSAnalysisLooper::BookHists()
     // generated event count hist
     if (m_sparms)
     {
-        ewkino_ss::SignalBinInfo bin_info = ewkino_ss::GetSignalBinInfo(m_sample);
-        const std::string title = Form("# of Generated Events - %s", ewkino_ss::GetSignalBinHistLabel(m_sample).c_str());
+        ewkino::SignalBinInfo bin_info = ewkino::GetSignalBinInfo(m_sample);
+        const std::string title = Form("# of Generated Events - %s", ewkino::GetSignalBinHistLabel(m_sample).c_str());
         hc.Add(new TH2F("h_gen_count", title.c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     }
 }
@@ -954,7 +954,11 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         const float met_phi             = m_evt.event_info.pfmet_phi;
         
         // SS specific event level info
-        m_evt.mt           = rt::Mt(m_evt.lep1.p4, met, met_phi);  // calculated against the higher pT lepton
+        m_evt.mt           = min(rt::Mt(m_evt.lep1.p4, met, met_phi), rt::Mt(m_evt.lep2.p4, met, met_phi));  // calculated against the higher pT lepton
+        //
+        // to calculate MT2, need mass of invisible particle
+        //
+        m_evt.mt2          = MT2(met_phi, met, m_evt.lep1.p4, m_evt.lep2.p4);
         m_evt.no_extraz    = (not samesign::makesExtraZ(hyp_idx));
 
         if (not m_jet_corrector)

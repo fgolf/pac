@@ -70,6 +70,7 @@ public:
     int ttbar_bkdn;
     float vtxw;
     float mt;
+    float mt2;
     float ht;
     float rho;
     float rho_iso;
