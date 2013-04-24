@@ -436,6 +436,10 @@ void PlotLooper::EndJob()
     SetPredictionAndUncertainty(m_sample, hc, "ptjetlep"      ,"p_{T}^{jet}/p)_{T}^{lep} - 1 (X);p_{T}^{jet}/p)_{T}^{lep} - 1;Events" , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "drlep3rdlep"   ,"#DeltaR(lep, 3rd lep) (X);#DeltaR(lep,lep3);Events"                   , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "ml3l"          ,"M(lep, 3rd lep) (X);M(l,3l);Events"                                   , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_ht"        ,"H_{T};H_{T} (GeV) (X);Events"                                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_met"       ,"MET;E_{T}^{miss} (GeV) (X);Events"                                    , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_nbtags"    ,"# btags;# btags (X);Events"                                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_njets"     ,"# jets (X);# jets;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
 
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
     {
@@ -637,6 +641,12 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_pt1_mu%s"        , ns.c_str()), Form("Higher p_{T} muons%s;p_{T} (GeV);Events"                       , ts.c_str()), 20 , 0   , 200 ));
             hc.Add(new TH1F(Form("h_pt2_mu%s"        , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), 20 , 0   , 200 ));
 
+            // plots for the PAS
+            hc.Add(new TH1F(Form("h_pas_ht%s"    , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"     , ts.c_str()), 13 , 80.0 , 600.0));
+            hc.Add(new TH1F(Form("h_pas_met%s"   , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events", ts.c_str()), 10 , 0.0  , 250.0));
+            hc.Add(new TH1F(Form("h_pas_njets%s" , ns.c_str()), Form("# jets%s;# jets;Events"         , ts.c_str()), 7  , 2.0  , 9.0  ));
+            hc.Add(new TH1F(Form("h_pas_nbtags%s", ns.c_str()), Form("# btags%s;# btags;Events"       , ts.c_str()), 5  , 0.0  , 5.0  ));
+
             for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
             {
                 at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(i);
@@ -658,7 +668,7 @@ void PlotLooper::BookHists()
                 hc.Add(new TH1F(Form("h_njets%s%s"         , hn.c_str(), ns.c_str()), Form("# jets%s%s;# jets;Events"                  , ts.c_str(), ht.c_str()), 10 , -0.5, 9.5 ));
             }
         }
-
+            
         return;
     }
     catch (std::exception& e)
@@ -1082,6 +1092,12 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_met"   +hs+qs], pfmet()     , evt_weight);
         rt::Fill(hc["h_nbtags"+hs+qs], num_btags   , evt_weight);
         rt::Fill(hc["h_njets" +hs+qs], njets()     , evt_weight);
+
+        // PAS plots
+        rt::Fill(hc["h_pas_ht"    +qs], ht()     , evt_weight);
+        rt::Fill(hc["h_pas_met"   +qs], pfmet()  , evt_weight);
+        rt::Fill(hc["h_pas_njets" +qs], njets()  , evt_weight);
+        rt::Fill(hc["h_pas_nbtags"+qs], num_btags, evt_weight);
 
         // dilep
         hc["h_dilep_mass"+qs   ]->Fill(dilep_mass(), evt_weight);

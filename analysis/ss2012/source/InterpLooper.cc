@@ -414,8 +414,10 @@ int InterpLooper::operator()(long event)
                 if (event == 0)
                 {
                     // full the number of genrated events from the ntuple 
+                    // weight for W --> lnu branching fraction in FullLept decay sample
+                    const float w = (rt::string_contains(ssb::dataset().Data(), "TTJets_FullLeptMGDecays_8TeV-madgraph") ? 1.0/(0.324*0.324) : 1.0);
                     const float den = nevts(); 
-                    rt::Fill2D(hc[sr+"nGenerated"], m0, m12, den);
+                    rt::Fill2D(hc[sr+"nGenerated"], m0, m12, den*w);
                 }
             }
         }
@@ -587,8 +589,18 @@ int InterpLooper::operator()(long event)
 
         for (size_t i = 0; i != m_sr_nums.size(); i++)
         {
-            const ss::SignalRegion::value_type signal_region = static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i));
+            ss::SignalRegion::value_type signal_region = static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i));
             const string sr = GetSRLabel(signal_region); 
+
+            // hack for the ++ regions
+            if (m_sample == Sample::ttjets && signal_region == ss::SignalRegion::sr31)
+            {
+                signal_region = ss::SignalRegion::sr30;
+            }
+            else if (m_sample == Sample::ttjets && signal_region == ss::SignalRegion::sr35)
+            {
+                signal_region = ss::SignalRegion::sr34;
+            }
 
             if (is_ss()) 
             {
