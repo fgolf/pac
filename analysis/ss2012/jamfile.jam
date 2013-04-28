@@ -31,19 +31,19 @@ lib ss2012_tools
     ./source/SSYields.cc
     ./source/SignalBinInfo.cc
     [ rootcint Dict
-     : 
-       <include>./include
+     : # sources
+       ./include/HiggsXsec.h
+       ./include/AnalysisType.h
+       ./include/FakeRateType.h
+       ./include/SignalBinInfo.h
+       ./include/ScaleFactors.h
+       ./include/SSYields.h
+     : # requirements
        <include>$(ROOTTOOLS)/include
        <include>$(ANALYSISTOOLS)/include
+       <include>./include
        <include>./source
-       #<header>SignalRegion.h
-       <header>HiggsXsec.h
-       <header>AnalysisType.h
-       <header>FakeRateType.h
-       <header>SignalBinInfo.h
-       <header>ScaleFactors.h
-       <header>SSYields.h
-       <linkdef>LinkDef.h
+       <linkdef>./source/LinkDef.h
     ]
     # dependent packages
     ssb2012

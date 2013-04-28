@@ -29,17 +29,18 @@ lib ewkino2012_tools
     ./source/SSYields.cc
     ./source/SignalBinInfo.cc
     [ rootcint Dict
-     : 
+     : # sources
+       #./include/SignalRegion.h
+       ./include/AnalysisType.h
+       ./include/FakeRateType.h
+       ./include/SignalBinInfo.h
+       ./include/SSYields.h
+     : # requirements
        <include>./include
+       <include>./source
        <include>$(ROOTTOOLS)/include
        <include>$(ANALYSISTOOLS)/include
-       <include>./source
-       #<header>SignalRegion.h
-       <header>AnalysisType.h
-       <header>FakeRateType.h
-       <header>SignalBinInfo.h
-       <header>SSYields.h
-       <linkdef>LinkDef.h
+       <linkdef>./source/LinkDef.h
     ]
     # dependent packages
     ewkino2012

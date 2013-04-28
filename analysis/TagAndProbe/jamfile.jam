@@ -6,14 +6,15 @@ lib tp_tools
    ./source/LeptonTree.cc
    ./source/LeptonTreeWrapper.cc
    ./source/Measurement.cc
-	 ./source/PerformFits.cc
-	 ./source/RooCMSShape.cc
+   ./source/PerformFits.cc
+   ./source/RooCMSShape.cc
     [ rootcint Dict
-     : 
+     : # sources
+       ./include/RooCMSShape.h
+     : # requirements
        <include>./include
        <include>./source
-       <header>RooCMSShape.h
-       <linkdef>LinkDef.h
+       <linkdef>./source/LinkDef.h
     ]
    # dependent packages
    /ROOT
@@ -35,7 +36,7 @@ exe tp_make_plots
    #./source/PlotLooper.cc
    ./source/tp_make_plots.cc
    # dependent packages
-	 tp_tools/<link>static
+   tp_tools/<link>static
    /ROOT
    /RooFit
    /MiniFWLite//libMiniFWLite/<link>shared
@@ -53,9 +54,9 @@ exe tp_fit_plots
  : # sources
    ./source/tp_fit_plots.cc
    # dependent packages
-	 tp_tools/<link>static
+   tp_tools/<link>static
    /ROOT
-	 /RooFit
+   /RooFit
    /RootTools//RootTools/<link>static
    /SimpleTable//SimpleTable/<link>static
    #/AnalysisTools//AnalysisTools/<link>static
@@ -71,9 +72,9 @@ exe test_fits
  : # sources
    ./macros/FitMassPlots.C
    # dependent packages
-	 tp_tools/<link>static
+   tp_tools/<link>static
    /ROOT
-	 /RooFit
+   /RooFit
    /RootTools//RootTools/<link>static
    /SimpleTable//SimpleTable/<link>static
    #/AnalysisTools//AnalysisTools/<link>static
@@ -88,9 +89,9 @@ exe test_fits
 # : # sources
 #   ./macros/SystFits.C
 #   # dependent packages
-#	 tp_tools/<link>static
+#  tp_tools/<link>static
 #   /ROOT
-#	 /RooFit
+#  /RooFit
 #   /RootTools//RootTools/<link>static
 #   /SimpleTable//SimpleTable/<link>static
 #   #/AnalysisTools//AnalysisTools/<link>static

@@ -5,15 +5,17 @@ lib libMiniFWLite
     #$(MINIFWLITE_PATH)/TaSBanner.cc
     [
       rootcint Dict
-        : # requirements
+        : # sources
+          $(MINIFWLITE_PATH)/DataFormats.h
+          $(MINIFWLITE_PATH)/Wrapper.h
+          $(MINIFWLITE_PATH)/EDProduct.h
+        : # requriements
+          <include>$(ROOT_PATH)/include
           <include>$(MINIFWLITE_PATH)
-          <header>DataFormats.h
-          <header>Wrapper.h
-          <header>EDProduct.h
+          <linkdef>$(MINIFWLITE_PATH)/MiniFWLiteLinkDef.h
+          <header>TBits.h
           <header>Math/LorentzVector.h
           <header>Math/PositionVector3D.h
-          <header>TBits.h
-          <linkdef>MiniFWLiteLinkDef.h
     ]
     # dependent packages
     /ROOT

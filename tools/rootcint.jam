@@ -4,6 +4,7 @@ import feature ;
 import property-set ;
 import generate ;
 import "class" : new ;
+import path ;
 
 feature.feature header  : : free ;
 feature.feature linkdef : : free ;
@@ -16,7 +17,7 @@ actions rootcint-action
     #echo $(<)
 
     #echo ----- rootcint: Command -----
-    #echo rootcint -v3 -f $(<) -c $(>)
+    echo rootcint -v3 -f $(<) -c $(>)
     rootcint -v3 -f $(<) -c $(>)
 }
 
@@ -24,14 +25,28 @@ rule rootcint-command ( target : sources * : properties * )
 {
     local ps = [ property-set.create $(properties) ] ;
     local defines  = [ $(ps).get <define>  ] ;
+    local linkdef  = [ $(ps).get <linkdef> ] ;
     local includes = [ $(ps).get <include> ] ;
     local headers  = [ $(ps).get <header>  ] ;
-    local linkdefs = [ $(ps).get <linkdef> ] ;
+    if $(linkdef) != ""
+    {
+      local linkdef_tmp = [ path.basename $(linkdef) ] ;
+    }
+    else
+    {
+      local linkdef_tmp ;
+    }
+
+    for local source in $(sources)
+    {
+      local source_tmp = [ path.basename $(source) ] ;
+      if $(source_tmp) != $(linkdef_tmp) { headers += $(source_tmp) ; }
+    }
 
     local defines-list  = -D$(defines:J=" -D") ;
     local includes-list = -I$(includes:J=" -I") ;
 
-    local args = $(defines-list) $(includes-list) $(headers) $(linkdefs) ;
+    local args = $(defines-list) $(includes-list) $(headers) $(linkdef_tmp) ;
     rootcint-action $(target) : $(args) ;
 }
 
@@ -42,9 +57,12 @@ rule rootcint-generating-rule ( project name : property-set : sources * )
     return $(result) ;
 }
 
-rule rootcint ( name : requirements * )
+rule rootcint ( name : sources * : requirements * )
 {
-    return [ generate.generate $(name) : : $(requirements) <generating-rule>@rootcint.rootcint-generating-rule ] ;
+    local ps = [ property-set.create $(requirements) ] ;
+    local linkdefs = [ $(ps).get <linkdef> ] ;
+
+    return [ generate.generate $(name) : $(sources) $(linkdefs) : $(includes-list) $(requirements) <generating-rule>@rootcint.rootcint-generating-rule ] ;
 }
 
 IMPORT $(__name__) : rootcint                 : : rootcint                          ;

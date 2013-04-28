@@ -5,9 +5,10 @@ lib cms2_frb
   : # sources
     $(CMS2_FRB)/myBabyMaker.cc
     [ rootcint Dict
-        : # requirements
-          <include>$(CMS2_FRB)
-          <header>myBabyMaker.h
+      : # requirements
+        $(CMS2_FRB)/myBabyMaker.h
+      : # requirements
+        <include>$(CMS2_FRB)
     ]
     # dependent packages
     /ROOT

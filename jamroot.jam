@@ -101,10 +101,6 @@ local cms2_frb_tag = FakeRate19March2013 ;
 path-constant CMS2_FRB : ./externals/source/cms2_frb/$(cms2_frb_tag) ;
 use-project /CMS2_FRB  : ./externals/build/cms2_frb ;
 
-# Tag and Probe 
-#path-constant TAP_PATH   : ./externals/source/TagAndProbeStudy/TagAndProbe ;
-#use-project /TagAndProbe : ./externals/build/TagAndProbe  ;
-
 # reusable packages 
 # ----------------------------------------------------------------------#
 

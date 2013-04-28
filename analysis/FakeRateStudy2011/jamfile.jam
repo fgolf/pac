@@ -5,13 +5,13 @@ lib fake_rate_tools
     ./source/FakeRateScanChain.cc
     ./source/FakeRateBaby.cc
     ./source/Sample.cc
-    [
-      rootcint Dict
-        : # requirements
-          <include>./include
-          <include>./source
-          <header>Sample.h
-          <linkdef>LinkDef.h
+    [ rootcint Dict
+      : # sources
+        ./include/Sample.h
+      : # requirements
+        <include>./include
+        <include>./source
+        <linkdef>./source/LinkDef.h
     ]
     # dependent packages
     /ROOT

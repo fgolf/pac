@@ -4,12 +4,14 @@ lib SimpleTable
   : # sources
     $(SIMPLETABLE_PATH)/CNumBase.cpp
     $(SIMPLETABLE_PATH)/CTable.cpp
-    [ rootcint Dict
-        : # requirements
+    [
+      rootcint Dict
+        : # sources
+          $(SIMPLETABLE_PATH)/CTable.h
+          $(SIMPLETABLE_PATH)/CNumBase.h
+        : # requriements
           <include>$(SIMPLETABLE_PATH)
-          <header>CTable.h
-          <header>CNumBase.h
-          <linkdef>LinkDef.h
+          <linkdef>$(SIMPLETABLE_PATH)/LinkDef.h
     ]
     # dependent packages
     /ROOT

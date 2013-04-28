@@ -5,85 +5,88 @@ import os ;
 
 # static version
 lib RootTools
-    : # sources
-      ./source/MiscTools.cc
-      ./source/FillHist.cc
-      ./source/TH1Container.cc
-      ./source/TH1Overlay.cc
-      ./source/Keyboard.cc
-      ./source/PrintFakeRateTable.cc
-      ./source/DrawAllBranches.cc
-      ./source/MergeTChain.cc
-      ./source/is_equal.cc
-      ./source/is_zero.cc
-      ./source/TDRStyle.cc
-      ./source/CompareContentsOfTTrees.cc
-      /ROOT
-      /boost//headers          
-      /boost//filesystem
-      /boost//regex
-      /SimpleTable//SimpleTable
-    : # requirements 
-      <include>./include
-      <include>./source 
-      <link>static
-    : # default-build
-    : # usage-requirements
-      <include>./include
-      <include>./source 
-    ;
+  : # sources
+    ./source/MiscTools.cc
+    ./source/FillHist.cc
+    ./source/TH1Container.cc
+    ./source/TH1Overlay.cc
+    ./source/Keyboard.cc
+    ./source/PrintFakeRateTable.cc
+    ./source/DrawAllBranches.cc
+    ./source/MergeTChain.cc
+    ./source/is_equal.cc
+    ./source/is_zero.cc
+    ./source/TDRStyle.cc
+    ./source/CompareContentsOfTTrees.cc
+    /ROOT
+    /boost//headers          
+    /boost//filesystem
+    /boost//regex
+    /SimpleTable//SimpleTable
+  : # requirements 
+    <include>./include
+    <include>./source 
+    <link>static
+  : # default-build
+  : # usage-requirements
+    <include>./include
+    <include>./source 
+  ;
 
 # shared (interactive version)
 lib RootTools
-    : # sources
-      ./source/MiscTools.cc
-      ./source/FillHist.cc
-      ./source/TH1Container.cc
-      ./source/TH1Overlay.cc
-      ./source/Keyboard.cc
-      ./source/PrintFakeRateTable.cc
-      ./source/DrawAllBranches.cc
-      ./source/MergeTChain.cc
-      ./source/is_equal.cc
-      ./source/is_zero.cc
-      ./source/TDRStyle.cc
-      ./source/CompareContentsOfTTrees.cc
-      [ rootcint Dict
-          : # requirements
-            <define>__RTINT__
-            <include>./include
-            <include>./source
-            <include>$(SIMPLETABLE_PATH)/.
-            <header>CTable.h
-            <header>rt/MiscTools.h
-            <header>rt/FillHist.h
-            <header>rt/TH1Container.h
-            <header>rt/TH1Overlay.h
-            <header>rt/PrintFakeRateTable.h
-            <header>rt/DrawAllBranches.h
-            <header>rt/MergeTChain.h
-            <header>rt/CompareContentsOfTTrees.h
-            <header>rt/is_equal.h
-            <header>rt/TDRStyle.h
-            <header>rt/is_zero.h
-            <linkdef>LinkDef.h
-      ]
-      # dependent packages
-      /ROOT
-      /boost//headers/<link>shared          
-      /boost//filesystem/<link>shared
-      /boost//regex/<link>shared
-      /SimpleTable//SimpleTable/<link>shared
-    : # requirements 
-      <define>__RTINT__
-      <include>./include
-      <include>./source 
-      <link>shared
-    : # default-build
-    : # usage-requirements
-      <include>./include
-      <include>./source 
-    ;
+  : # sources
+    ./source/MiscTools.cc
+    ./source/FillHist.cc
+    ./source/TH1Container.cc
+    ./source/TH1Overlay.cc
+    ./source/Keyboard.cc
+    ./source/PrintFakeRateTable.cc
+    ./source/DrawAllBranches.cc
+    ./source/MergeTChain.cc
+    ./source/is_equal.cc
+    ./source/is_zero.cc
+    ./source/TDRStyle.cc
+    ./source/CompareContentsOfTTrees.cc
+    [ rootcint Dict
+      : # sources
+        $(SIMPLETABLE_PATH)/CTable.h
+        ./include/rt/MiscTools.h
+        ./include/rt/FillHist.h
+        ./include/rt/TH1Container.h
+        ./include/rt/TH1Overlay.h
+        ./include/rt/PrintFakeRateTable.h
+        ./include/rt/DrawAllBranches.h
+        ./include/rt/MergeTChain.h
+        ./include/rt/CompareContentsOfTTrees.h
+        ./include/rt/is_equal.h
+        ./include/rt/TDRStyle.h
+        ./include/rt/is_zero.h
+      : # requirements
+        <define>__RTINT__
+        <include>./include
+        <include>./include/rt
+        <include>./source
+        <include>$(SIMPLETABLE_PATH)/.
+        <linkdef>./source/LinkDef.h
+    ]
+    # dependent packages
+    /ROOT
+    /boost//headers/<link>shared          
+    /boost//filesystem/<link>shared
+    /boost//regex/<link>shared
+    /SimpleTable//SimpleTable/<link>shared
+  : # requirements 
+    <define>__RTINT__
+    <include>./include
+    <include>./include/rt
+    <include>./source 
+    <link>shared
+  : # default-build
+  : # usage-requirements
+    <include>./include
+    <include>./source 
+  ;
 
 exe merge_tchain
     : # sources

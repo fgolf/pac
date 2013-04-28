@@ -32,17 +32,19 @@ lib AnalysisTools
     ./source/TrackIsoTools.cc
     ./source/CMS2Tag.cc
     [ rootcint Dict
-        : # requirements
-          #<define>__RTINT__
-          <include>./include
-          <include>./source
-          <header>at/Sample.h
-          <header>at/DileptonHypType.h
-          <header>at/DileptonChargeType.h
-          <header>at/FakeRateBinInfo.h
-          <header>at/FlipRateBinInfo.h
-          <header>at/YieldType.h
-          <linkdef>LinkDef.h
+      : # source
+        ./include/at/Sample.h
+        ./include/at/DileptonHypType.h
+        ./include/at/DileptonChargeType.h
+        ./include/at/FakeRateBinInfo.h
+        ./include/at/FlipRateBinInfo.h
+        ./include/at/YieldType.h
+      : # requirements
+        #<define>__RTINT__
+        <include>./include
+        <include>./include/at
+        <include>./source
+        <linkdef>./source/LinkDef.h
     ]
     # dependent packages
     /ROOT
@@ -52,6 +54,7 @@ lib AnalysisTools
     /boost//headers
     /boost//filesystem
   : # requirements 
+    <include>./include/at
     <include>./include
     <include>./source 
   : # default-build
