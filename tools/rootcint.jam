@@ -17,7 +17,7 @@ actions rootcint-action
     #echo $(<)
 
     #echo ----- rootcint: Command -----
-    echo rootcint -v3 -f $(<) -c $(>)
+    #echo rootcint -v3 -f $(<) -c $(>)
     rootcint -v3 -f $(<) -c $(>)
 }
 
