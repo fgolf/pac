@@ -661,7 +661,7 @@ namespace at
         },
         {
             // name
-            "t7tbw", 
+            "t7btw", 
             // title
             "#tilde{g}#tilde{g} #rightarrow b#bar{b}t#bar{t}WW#tilde{#chi}^{0}#tilde{#chi}^{0}",
             // latex 
@@ -674,7 +674,7 @@ namespace at
             // SampleType 
             SampleType::susy,
             // Sample
-            Sample::t7tbw,
+            Sample::t7btw,
             // color
             kBlue
         },

@@ -46,7 +46,7 @@ namespace at
             t6ttww_x05,
             t6ttww_x08,
             t5tttt,
-            t7tbw,
+            t7btw,
             sbottomtop,
             glusbottom,
             glustop,

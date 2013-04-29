@@ -138,7 +138,7 @@ namespace ss
                 // ~120k events per grid point
                 return MakeSignalBinInfo(25.0f, 800.0f, 1225.0f, 25.0f, 225.0f, 1050.0f);
                 break;
-            case Sample::t7tbw:
+            case Sample::t7btw:
                 // /SMS-T7btw_2J_mGo-800to1400_mSbottom-400to1350_mChi-150_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM
                 // /SMS-T7btw_2J_mGo-800to1400_mSbottom-500to1350_mChi-300_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM
                 // plane is defined as follows:
