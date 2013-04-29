@@ -9,11 +9,11 @@ TTbarBreakDown::value_type GetTTbarBreakDown(at::Sample::value_type sample, int 
     // not ttjets
     if
     (
-        sample != Sample::ttjets        || 
-        sample != Sample::ttdil         || 
-        sample != Sample::ttslq         || 
-        sample != Sample::ttslb         || 
-        sample != Sample::ttslo         || 
+        sample != Sample::ttjets && 
+        sample != Sample::ttdil  && 
+        sample != Sample::ttslq  && 
+        sample != Sample::ttslb  && 
+        sample != Sample::ttslo  && 
         sample != Sample::ttotr
     )
     {
