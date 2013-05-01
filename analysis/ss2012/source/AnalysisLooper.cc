@@ -1586,53 +1586,6 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
         }
 
-        // Gen level info
-        // NOTE: we fill the gen block if and only if BOTH leptons are matched 
-        if (!evt_isRealData())
-        {
-            // gen Lep p4
-            std::pair<GenParticleStruct, GenParticleStruct> gen_hyp = efftools::getGenHyp(/*pt1=*/mu_min_pt, /*pt2=*/el_min_pt, DileptonChargeType::SS);
-            if (gen_hyp.first.idx_!=999999 && gen_hyp.second.idx_!=999999)
-            {
-                m_evt.is_gen_mm = gen_hyp.first.id_>0 && gen_hyp.second.id_>0;
-                m_evt.is_gen_pp = gen_hyp.first.id_<0 && gen_hyp.second.id_<0;
-
-                // gen HT
-                m_evt.gen_ht = efftools::getGenHT(/*pt_cut=*/m_jet_pt_cut, /*eta_cut=*/2.4);
-
-                // gen b quarks
-                std::vector<LorentzVector> gen_bjets = efftools::getGenBjets(/*pt_cut=*/m_jet_pt_cut, /*eta_cut=*/2.4);
-                m_evt.gen_nbtags = gen_bjets.size();
-                m_evt.vgenb_p4   = gen_bjets;
-
-                // gen jets 
-                std::vector<LorentzVector> gen_jets = efftools::getGenJets(/*pt_cut=*/m_jet_pt_cut, /*eta_cut=*/2.4);
-                m_evt.gen_njets   = gen_jets.size();
-                m_evt.vgenjets_p4 = gen_jets;
-
-                // gen dilep hyp
-                m_evt.gen_lep1_p4    = (abs(gen_hyp.first.id_) == 15) ? cms2.genps_lepdaughter_p4().at(gen_hyp.first.idx_).at(gen_hyp.first.didx_) : cms2.genps_p4().at(gen_hyp.first.idx_);
-                m_evt.gen_lep1_pdgid = (abs(gen_hyp.first.id_) == 15) ? gen_hyp.first.did_ : gen_hyp.first.id_;
-
-                m_evt.gen_lep2_p4    = (abs(gen_hyp.second.id_) == 15) ? cms2.genps_lepdaughter_p4().at(gen_hyp.second.idx_).at(gen_hyp.second.didx_) : cms2.genps_p4().at(gen_hyp.second.idx_);
-                m_evt.gen_lep2_pdgid = (abs(gen_hyp.second.id_) == 15) ? gen_hyp.second.did_ : gen_hyp.second.id_;
-
-                m_evt.gen_dilep_p4 = m_evt.gen_lep1_p4 + m_evt.gen_lep2_p4;
-                m_evt.gen_dilep_mass = m_evt.gen_dilep_p4.mass();
-
-                if (abs(m_evt.gen_lep1_pdgid*m_evt.gen_lep2_pdgid) == 121)
-                    m_evt.gen_dilep_type = at::DileptonHypType::EE;
-                else if (abs(m_evt.gen_lep1_pdgid*m_evt.gen_lep2_pdgid) == 169)
-                    m_evt.gen_dilep_type = at::DileptonHypType::MUMU;
-                else if (abs(m_evt.gen_lep1_pdgid*m_evt.gen_lep2_pdgid) == 143)
-                    m_evt.gen_dilep_type = at::DileptonHypType::EMU;
-
-                m_evt.gen_dilep_dphi = rt::DeltaPhi(m_evt.gen_lep1_p4, m_evt.gen_lep2_p4);
-                m_evt.gen_dilep_deta = rt::DeltaEta(m_evt.gen_lep1_p4, m_evt.gen_lep2_p4);
-                m_evt.gen_dilep_dr   = rt::DeltaR(m_evt.gen_lep1_p4, m_evt.gen_lep2_p4);
-            }
-        }
-        
         // classification
         m_evt.is_ss       = (charge_type==DileptonChargeType::SS);
         m_evt.is_sf       = (charge_type==DileptonChargeType::SF);
