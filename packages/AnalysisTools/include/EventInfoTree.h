@@ -69,6 +69,14 @@ public:
     float kfactor;
     float gen_met;
     float gen_met_phi;
+    int gen_nleps;
+    int gen_nels;
+    int gen_nmus;
+    int gen_ntaus;
+    int gen_nleps_with_fromtau;
+    int gen_nels_with_fromtau;
+    int gen_nmus_with_fromtau;
+    int gen_ntaus_with_fromtau;
 };
 
 #endif
