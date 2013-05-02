@@ -49,7 +49,7 @@ namespace at
 		cout << "TTree " << m_tree->GetName() << " has " << m_tree->GetEntries() << " entries" << endl;
         m_hist_container.Write(m_root_file.get());
         m_root_file->cd();
-        m_tree->Write();
+        m_tree->Write("", TObject::kOverwrite);
 
         // write output
         if (m_print)

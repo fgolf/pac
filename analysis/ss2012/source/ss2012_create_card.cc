@@ -251,11 +251,11 @@ try
         info.signal_name = rt::string_upper(signal_region_name);
         info.obs         = static_cast<unsigned int>(yield_data.ll);
         info.fake        = yield_cfake.ll;
-        info.fake_unc    = 1.0 + (yield_cfake.tll() - yield_cfake.ll)/yield_cfake.ll;
+        info.fake_unc    = 1.0 + yield_cfake.tll()/yield_cfake.ll;
         info.flip        = yield_flip.ll;
-        info.flip_unc    = 1.0 + (yield_flip.tll() - yield_flip.ll)/yield_flip.ll;
+        info.flip_unc    = 1.0 + yield_flip.tll()/yield_flip.ll;
         info.rare        = yield_rare.ll;
-        info.rare_unc    = 1.0 + (yield_rare.tll() - yield_rare.ll)/yield_rare.ll;
+        info.rare_unc    = 1.0 + yield_rare.tll()/yield_rare.ll;
 
         // systematics (percentage) 
         const std::string sr = GetSRLabel(signal_region);
@@ -275,13 +275,6 @@ try
         info.beff_dn_unc     = GetSyst(rt::Integral(hc[sr+"nBTADN"    ]), num);
         card_infos.push_back(info);
 
-//         CTable t_yields;
-//         t_yields.useTitle();
-//         t_yields.setTitle(Form("yields for SS 2012 %s (%s)", sr_info.name.c_str(), sr_info.title.c_str()));
-//         t_yields.setTable()
-//             (                                        "obs",                  "pred",                  "fakes",                  "rare",                  "flips")
-//             ("value"                  , (int)yield_data.ll, yield_pred.ll_syst_pm(), yield_cfake.ll_syst_pm(), yield_rare.ll_syst_pm(),  yield_flip.ll_syst_pm())
-//             ("rel unc factor (1 + dx)",                1.0, yield_pred.ll_rel_unc(), yield_cfake.ll_rel_unc(), yield_rare.ll_rel_unc(),  yield_flip.ll_rel_unc());
 
         // print it
 //         t_yields.print();

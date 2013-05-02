@@ -119,10 +119,6 @@ void SameSignTree::Reset()
     presel                                   = false;
     gen_nbtags                               = -999999;
     gen_njets                                = -999999;
-    gen_nleps                                = -999999;
-    gen_nmus                                 = -999999;
-    gen_nels                                 = -999999;
-    gen_ntaus                                = -999999;
     gen_ht                                   = -999999.0;
     lep1_nearbjet_p4                         = LorentzVector(0, 0, 0, 0);
     lep1_nearjet_p4                          = LorentzVector(0, 0, 0, 0);
@@ -301,10 +297,6 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("is_gen_mm"                                , &is_gen_mm                                , "is_gen_mm/O"                                ); 
     tree.Branch("gen_nbtags"                               , &gen_nbtags                               , "gen_nbtags/I"                               ); 
     tree.Branch("gen_njets"                                , &gen_njets                                , "gen_njets/I"                                ); 
-    tree.Branch("gen_nleps"                                , &gen_nleps                                , "gen_nleps/I"                                ); 
-    tree.Branch("gen_nmus"                                 , &gen_nmus                                 , "gen_nmus/I"                                 ); 
-    tree.Branch("gen_nels"                                 , &gen_nels                                 , "gen_nels/I"                                 ); 
-    tree.Branch("gen_ntaus"                                , &gen_ntaus                                , "gen_ntaus/I"                                ); 
     tree.Branch("gen_ht"                                   , &gen_ht                                   , "gen_ht/F"                                   ); 
     tree.Branch("lep1_nearbjet_p4"                         , "LorentzVector"                           , &lep1_nearbjet_p4                            ); 
     tree.Branch("lep1_nearjet_p4"                          , "LorentzVector"                           , &lep1_nearjet_p4                             ); 

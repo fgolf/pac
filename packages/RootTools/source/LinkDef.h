@@ -84,6 +84,7 @@
 #pragma link C++ fucntion rt::CompareContentsOfTTrees;
 #pragma link C++ fucntion rt::MergeTChain;
 #pragma link C++ fucntion rt::pm;
+#pragma link C++ fucntion rt::fmt;
 #pragma link C++ fucntion rt::Print;
 #pragma link C++ fucntion rt::Print<rt::TH1Overlay>;
 #pragma link C++ fucntion rt::Print<rt::TH1Overlay*>;

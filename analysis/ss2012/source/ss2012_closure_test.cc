@@ -31,6 +31,7 @@ try
     std::string analysis_type_name  = "high_pt";
     bool exclusive                  = false;
     bool do_scale_factors           = true;
+    bool do_scale1fb                = false;
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
     int charge_option               = 0;
@@ -55,6 +56,7 @@ try
         ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                  )
         ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                      )
         ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
+        ("do_1fb"   , po::value<bool>(&do_scale1fb)               , "use the scale1fb (default is false)"                       )
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                )
         ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
         ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
@@ -79,15 +81,15 @@ try
     }
 
     // check that input file exists and is specified
-    if (!input_file.empty())
-    { 
-        if (!rt::exists(input_file))
-        {
-            cout << "ERROR: ss2012_plots: input file " << input_file << " not found" << endl;
-            cout << desc << "\n";
-            return 1;
-        }
-    }
+    //if (!input_file.empty())
+    //{ 
+    //    if (!rt::exists(input_file))
+    //    {
+    //        cout << "ERROR: ss2012_plots: input file " << input_file << " not found" << endl;
+    //        cout << desc << "\n";
+    //        return 1;
+    //    }
+    //}
 
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
@@ -118,8 +120,9 @@ try
         }
         else
         {
-            chain = new TChain("tree");
-            chain->Add(input_file.c_str());
+            //chain = new TChain("tree");
+            //chain->Add(input_file.c_str());
+            chain = rt::CreateTChainFromCommaSeperatedList(input_file, "tree");
             if (output_file.empty())
             {
                 output_file = "plots/test/test.root";
@@ -144,14 +147,18 @@ try
             //                     case at::Sample::ttslo: input_file = Form("babies/%s/ttslo.root", ati.short_name.c_str()); break;
             //                     default: {/*do nothing*/}
             //                 }
+            chain = new TChain("tree");
+            chain->Add(input_file.c_str());
+        }
+        else
+        {
+            chain = rt::CreateTChainFromCommaSeperatedList(input_file, "tree");
         }
         if (output_file.empty())
         {
             output_file = Form("plots/closure_test/%s/%s.root", signal_region_info.name.c_str(), sample_name.c_str());
         }
-        chain = new TChain("tree");
-        chain->Add(input_file.c_str());
-        cout << input_file << endl;
+        cout << "input file(s) = " << input_file << endl;
     }
 
     // scan the chain
@@ -170,6 +177,7 @@ try
             mufr_hist_name,
             elfr_hist_name,
             do_scale_factors,
+            do_scale1fb,
             num_btags,
             num_jets,
             charge_option,

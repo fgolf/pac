@@ -6,19 +6,51 @@
 #include <utility>
 #include <string>
 
-/* float DileptonTagAndProbeScaleFactor */
-/* ( */
-/*     const int l1_id,  */
-/*     const float l1_pt,  */
-/*     const float l1_eta,  */
-/*     const int l2_id,  */
-/*     const float l2_pt,  */
-/*     const float l2_eta  */
-/* ); */
+void Acceptance(const std::string& filename, const float den_sf = 1.0)
+{
+    TChain ch_ttjets_os("tree");
+    ch_ttjets_os.Add(filename.c_str());
+    ss::SetSignalRegionAliases(ch_ttjets_os, ss::AnalysisType::high_pt, /*do btag sf=*/true);
+    //ss::SetSignalRegionAliases(ch_ttjets_os, ss::AnalysisType::high_pt, /*do btag sf=*/false);
+
+    // generated
+/*     ch_ttjets_os.Draw("nevts>>h_ngen", "", "goff", 1); */
+/*     TH1F* h_ngen = dynamic_cast<TH1F*>(gDirectory->Get("h_ngen")); */
+/*     const float den = h_ngen->GetMean() * den_sf; */
+     const float den = 21675970 + 6414753; 
+
+    // passing
+    //TCut acceptance = "(is_ss && ex_sr30 && lep_is_fromw)*sf_dilepeff*sf_dileptrig";
+    TCut acceptance = "(is_ss && ex_sr30)*sf_dilepeff*sf_dileptrig";
+    ch_ttjets_os.Draw("1>>h_npass", acceptance, "goff");
+    TH1F* h_pass = dynamic_cast<TH1F*>(gDirectory->Get("h_npass"));
+    const std::pair<float, float> num = rt::IntegralAndError(h_pass);
+
+    // acceptance
+    const float num_value = num.first;
+    const float num_error = num.second;
+    const float acc_value = num_value/den;
+    const float acc_error = num_error/den;
+    const std::pair<float, float> acc      = std::make_pair(acc_value, acc_error);
+    const std::pair<float, float> acc_perc = std::make_pair(100*acc_value, 100*acc_error);
+
+    CTable t;
+    t.useTitle();
+    t.setTitle("TTBar Acceptance");
+    t.setTable()    (                      "value")
+        ("# generated"   , den                    )
+        ("# passing"     , rt::pm(num     , "1.5"))
+        ("acceptance"    , rt::pm(acc     , "1.5"))
+        ("acceptance (%)", rt::pm(acc_perc, "1.5"))
+        ;
+   t.print();
+}
+
+
 void LeptonSystematics()
 {
     TChain ch_ttjets_os("tree");
-    ch_ttjets_os.Add("babies/mc_os/ttjets_os.root");
+    ch_ttjets_os.Add("babies/mc_os/ttjets_os_new.root");
     ss::SetSignalRegionAliases(ch_ttjets_os, ss::AnalysisType::high_pt, /*do btag sf=*/true);
 
     TChain ch_data("tree");
@@ -37,6 +69,7 @@ void LeptonSystematics()
     ch_ttjets_os.Draw("1>>h_npass", acceptance, "goff");
     TH1F* h_pass = dynamic_cast<TH1F*>(gDirectory->Get("h_npass"));
     const std::pair<float, float> num = rt::IntegralAndError(h_pass);
+
     ch_ttjets_os.Draw("1>>h_ll_syst", "(is_ss && ex_sr30 && lep_is_fromw)*DileptonTagAndProbeScaleFactorSystUnc(l1_id, l1_pt, l1_eta, l2_id, l2_pt, l2_eta)", "goff");
     TH1F* h_ll_syst = dynamic_cast<TH1F*>(gDirectory->Get("h_ll_syst"));
     const std::pair<float, float> ll_syst = rt::IntegralAndError(h_ll_syst);
@@ -46,8 +79,8 @@ void LeptonSystematics()
     const float num_error = 100*num.second;
     const float acc_value = num_value/den;
     const float acc_error = num_error/den;
-    const float ll_syst_error = ll_syst.first/(h_ll_syst->GetEntries());
-    const std::pair<float, float> acc = std::make_pair(acc_value, acc_error); 
+/*     const float ll_syst_error = ll_syst.first/(h_ll_syst->GetEntries()); */
+    const std::pair<float, float> acc = std::make_pair(acc_value, acc_error);
 
     CTable t;
     t.useTitle();

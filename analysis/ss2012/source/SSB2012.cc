@@ -22,6 +22,14 @@ namespace ssb {
 	const float &gen_met_phi() { return samesignbtag.gen_met_phi(); }
 	const TString &dataset() { return samesignbtag.dataset(); }
 	const TString &filename() { return samesignbtag.filename(); }
+	const int &gen_nleps() { return samesignbtag.gen_nleps(); }
+	const int &gen_nels() { return samesignbtag.gen_nels(); }
+	const int &gen_nmus() { return samesignbtag.gen_nmus(); }
+	const int &gen_ntaus() { return samesignbtag.gen_ntaus(); }
+	const int &gen_nleps_with_fromtau() { return samesignbtag.gen_nleps_with_fromtau(); }
+	const int &gen_nels_with_fromtau() { return samesignbtag.gen_nels_with_fromtau(); }
+	const int &gen_nmus_with_fromtau() { return samesignbtag.gen_nmus_with_fromtau(); }
+	const int &gen_ntaus_with_fromtau() { return samesignbtag.gen_ntaus_with_fromtau(); }
 	const bool &filt_csc() { return samesignbtag.filt_csc(); }
 	const bool &filt_hbhe() { return samesignbtag.filt_hbhe(); }
 	const bool &filt_hcallaser() { return samesignbtag.filt_hcallaser(); }
@@ -205,8 +213,8 @@ namespace ssb {
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_sc_p4() { return samesignbtag.lep2_sc_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_gfit_p4() { return samesignbtag.lep2_gfit_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &dilep_p4() { return samesignbtag.dilep_p4(); }
-	const bool &is_os() { return samesignbtag.is_os(); }
-	const bool &is_ss() { return samesignbtag.is_ss(); }
+	const bool &os() { return samesignbtag.os(); }
+	const bool &ss() { return samesignbtag.ss(); }
 	const bool &mm() { return samesignbtag.mm(); }
 	const bool &ee() { return samesignbtag.ee(); }
 	const bool &em() { return samesignbtag.em(); }
@@ -292,6 +300,9 @@ namespace ssb {
 	const float &pfmet_uncl_dn() { return samesignbtag.pfmet_uncl_dn(); }
 	const float &pfmet_uncl_up() { return samesignbtag.pfmet_uncl_up(); }
 	const float &sf_dileptrig() { return samesignbtag.sf_dileptrig(); }
+	const float &sf_dileptrig_hpt() { return samesignbtag.sf_dileptrig_hpt(); }
+	const float &sf_dileptrig_lpt() { return samesignbtag.sf_dileptrig_lpt(); }
+	const float &sf_dileptrig_vpt() { return samesignbtag.sf_dileptrig_vpt(); }
 	const float &sf_dilepeff() { return samesignbtag.sf_dilepeff(); }
 	const float &sparm0() { return samesignbtag.sparm0(); }
 	const float &sparm1() { return samesignbtag.sparm1(); }
@@ -303,8 +314,10 @@ namespace ssb {
 	const TString &sparm3_name() { return samesignbtag.sparm3_name(); }
 	const bool &is_pp() { return samesignbtag.is_pp(); }
 	const bool &is_mm() { return samesignbtag.is_mm(); }
+	const bool &is_ss() { return samesignbtag.is_ss(); }
 	const bool &is_sf() { return samesignbtag.is_sf(); }
 	const bool &is_df() { return samesignbtag.is_df(); }
+	const bool &is_os() { return samesignbtag.is_os(); }
 	const bool &no_extraz() { return samesignbtag.no_extraz(); }
 	const bool &no_extrag() { return samesignbtag.no_extrag(); }
 	const bool &clean() { return samesignbtag.clean(); }
@@ -316,10 +329,6 @@ namespace ssb {
 	const bool &is_gen_mm() { return samesignbtag.is_gen_mm(); }
 	const int &gen_nbtags() { return samesignbtag.gen_nbtags(); }
 	const int &gen_njets() { return samesignbtag.gen_njets(); }
-	const int &gen_nleps() { return samesignbtag.gen_nleps(); }
-	const int &gen_nmus() { return samesignbtag.gen_nmus(); }
-	const int &gen_nels() { return samesignbtag.gen_nels(); }
-	const int &gen_ntaus() { return samesignbtag.gen_ntaus(); }
 	const float &gen_ht() { return samesignbtag.gen_ht(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearbjet_p4() { return samesignbtag.lep1_nearbjet_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4() { return samesignbtag.lep1_nearjet_p4(); }

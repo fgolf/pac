@@ -194,10 +194,6 @@ public:
     int gen_nbtags; 
     int gen_njets; 
     float gen_ht;
-    int gen_nleps;
-    int gen_nels;
-    int gen_nmus;
-    int gen_ntaus;
 
     //
     // reco lepton 1 info

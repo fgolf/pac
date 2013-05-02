@@ -24,6 +24,7 @@ typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > v
 
 using namespace std;
 using namespace at;
+using namespace rt;
 using namespace ss;
 
 // construct:
@@ -39,6 +40,7 @@ FRClosureLooper::FRClosureLooper
     const std::string& mufr_hist_name,
     const std::string& elfr_hist_name,
     bool do_scale_factors,
+    bool do_scale1fb,
     unsigned int num_btags,
     unsigned int num_jets,
     int charge_option,
@@ -51,6 +53,7 @@ FRClosureLooper::FRClosureLooper
     , m_is_data(at::SampleIsData(sample))
     , m_do_vtx_reweight(not vtxreweight_file_name.empty())
     , m_do_scale_factors(do_scale_factors)
+    , m_do_scale1fb(do_scale1fb)
     , m_nbtags(num_btags)
     , m_njets(num_jets)
     , m_charge_option(charge_option)
@@ -263,10 +266,10 @@ void FRClosureLooper::EndJob()
     PredSummary pred = fake;
     
     // ratio of pred/obs
-    int obs_ee = static_cast<int>(yield_ss[0]);
-    int obs_mm = static_cast<int>(yield_ss[1]);
-    int obs_em = static_cast<int>(yield_ss[2]);
-    int obs_ll = static_cast<int>(yield_ss[3]);
+    float obs_ee = yield_ss[0];
+    float obs_mm = yield_ss[1];
+    float obs_em = yield_ss[2];
+    float obs_ll = yield_ss[3];
 
     float obs_ee_error = yield_ss_error[0];
     float obs_mm_error = yield_ss_error[1];
@@ -308,12 +311,13 @@ void FRClosureLooper::EndJob()
     t_yields.useTitle();
     t_yields.setTitle(Form("closure test table (%s)", sr_info.title.c_str()));
     string f = "1.2";
+    string o = (m_do_scale1fb ? "1.2f" : "1.0f");
     t_yields.setTable() (                        "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
                         ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f),  sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
                         ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),                  "NA",                   "NA",     sf.ll.str(f))
                         ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),                  "NA",                   "NA",     df.ll.str(f))
                         ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),                  "NA",                   "NA",   pred.ll.str(f))
-                        ("obs"     ,           obs_ee,           obs_mm,           obs_em,                  "NA",                   "NA",           obs_ll)
+                        ("obs"     ,   fmt(obs_ee, o),    fmt(obs_mm,o),    fmt(obs_em,o),                  "NA",                   "NA",    fmt(obs_ll,o))
                         ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,                  "NA",                   "NA",         ll_ratio)
                         ("(p-o)/p" ,         ee_rdiff,         mm_rdiff,         em_rdiff,                  "NA",                   "NA",         ll_rdiff)
                         ;
@@ -447,20 +451,64 @@ int FRClosureLooper::operator()(long event)
 
         // ttbar breakdown 
         const TTbarBreakDown::value_type ttbar_breakdown = GetTTbarBreakDown(m_sample, lep1_is_fromw(), lep2_is_fromw()); 
-        switch (m_sample)
+        const at::Sample::value_type ntuple_sample       = static_cast<at::Sample::value_type>(sample());
+        const std::string ntuple_sample_name             = at::GetSampleInfo(static_cast<at::Sample::value_type>(sample())).name;
+        switch (ntuple_sample)
         {
-            case at::Sample::ttdil: if (ttbar_breakdown != TTbarBreakDown::TTDIL) return 0; break; 
-            case at::Sample::ttotr: if (ttbar_breakdown != TTbarBreakDown::TTOTR) return 0; break;
-            case at::Sample::ttslb: if (ttbar_breakdown != TTbarBreakDown::TTSLB) return 0; break;
-            case at::Sample::ttslo: if (ttbar_breakdown != TTbarBreakDown::TTSLO) return 0; break;
+            case at::Sample::ttdil: if (ttbar_breakdown != TTbarBreakDown::TTDIL) {return 0;} break; 
+            case at::Sample::ttotr: if (ttbar_breakdown != TTbarBreakDown::TTOTR) {return 0;} break;
+            case at::Sample::ttslb: if (ttbar_breakdown != TTbarBreakDown::TTSLB) {return 0;} break;
+            case at::Sample::ttslo: if (ttbar_breakdown != TTbarBreakDown::TTSLO) {return 0;} break;
             default: {/*do nothing*/}
+        }
+
+        // letpon info
+        const bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
+        const bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
+        const bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
+        const bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
+
+        if (ntuple_sample == at::Sample::ttdil)
+        {
+            if (not (0 < gen_dilep_type() && gen_dilep_type() < 4))
+            {
+                return 0;
+            }
+
+            const int fo_id                  = (not_fromw_l1 ? lep1_pdgid() : lep2_pdgid() );
+            const LorentzVector& fo_p4       = (not_fromw_l1 ? lep1_p4()    : lep2_p4()    );
+            const int real_id                = (fromw_l1    ? lep1_pdgid()  : lep2_pdgid() );
+            const LorentzVector& real_p4     = (fromw_l1    ? lep1_p4()     : lep2_p4()    );
+            const int real_gen_id            = (fromw_l1    ? lep1_mc3id()  : lep2_mc3id() );
+            const LorentzVector& real_gen_p4 = (fromw_l1    ? lep1_mc3p4()  : lep2_mc3p4() );
+
+            float dr1 = rt::DeltaR(real_gen_p4, gen_lep1_p4()); 
+            float dr2 = rt::DeltaR(real_gen_p4, gen_lep2_p4()); 
+
+            int first_gen_id  = gen_lep1_pdgid();
+            int second_gen_id = gen_lep2_pdgid();
+            //if (dr1 < dr2) 
+            //{
+            //    first_gen_id  = gen_lep1_pdgid();
+            //    second_gen_id = gen_lep2_pdgid();
+            //}
+            //else
+            //{
+            //    first_gen_id  = gen_lep2_pdgid();
+            //    second_gen_id = gen_lep1_pdgid();
+            //}
+            if (real_id != first_gen_id)
+            {
+                cout << "messed up!" << endl;
+            }
+            cout << Form("sample %s l1 %d l1g %d 1st %d 2nd %d", ntuple_sample_name.c_str(), real_id, real_gen_id, first_gen_id, second_gen_id) << endl;
         }
 
         // Weight Factors
         // ----------------------------------------------------------------------------------------------------------------------------//
 
         // scale
-        float evt_weight = 1.0;
+        float evt_weight = (m_do_scale1fb ? scale1fb() : 1.0);
         if (m_do_vtx_reweight)
         {
            evt_weight = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
@@ -472,11 +520,6 @@ int FRClosureLooper::operator()(long event)
         // name and title suffixes
         const string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
         const string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
-
-        const bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
-        const bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
-        const bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
-        const bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
 
         // SS
         if (is_ss())

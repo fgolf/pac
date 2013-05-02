@@ -2,7 +2,7 @@
 
 out_name=AN_draft_19p5fb_v4
 lumi=19.5
-sr=-1
+sr=2
 nev=-1
 #options="--no_hist"
 options=""

@@ -1,24 +1,22 @@
 imax 2 number of search regions
-jmax * number of backgrounds ('*' = automatic)
-kmax * number of nuisance parameters (sources of systematical uncertainties)
+jmax *  number of backgrounds ('*' = automatic)
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
 ------------
-       bin   SR31  SR35
-observation    25    92
+       bin       SR1       SR2
+observation      25        92
 ------------
-       bin                SR31      SR31      SR31      SR31        SR35      SR35      SR35      SR35
-   process              signal      fake      rare      flip      signal      fake      rare      flip
-   process                   0         1         2         3           0         1         2         3
-      rate              0.0513      7.852    12.81      0.52      0.0845    54.857    30.491      1.120
+       bin              SR1             SR1             SR1             SR1             SR2             SR2             SR2             SR2
+   process              signal          fake            rare            flip            signal          fake            rare            flip
+   process              0               1               2               3               0               1               2               3
+      rate              0.051285        7.852           12.815          0.517           0.084435        54.857          30.491          1.12
  ### Error Matrix
-------------
-FakeSys          lnN         -      1.52         -         -          -       1.50         -         -
-RareMCSys        lnN         -         -      1.51         -          -          -      1.50         -
-FlipSys          lnN         -         -         -      1.30          -          -         -      1.30
-TriggerSys       lnN        1.06       -         -         -         1.06        -         -         -
-LepIdSys         lnN       1.103       -         -         -        1.103        -         -         -
-ISRFSRPDF        lnN        1.02       -         -         -         1.02        -         -         -
-jSys             lnN 0.970/1.032       -         -         -  0.974/1.026        -         -         -
-mSys             lnN 0.997/1.005       -         -         -  0.997/1.004        -         -         -
-bSys             lnN 0.954/1.048       -         -         -  1.003/0.993        -         -         -
-JERSys           lnN       1.001       -         -         -         1.00        -         -         -
-Lumi             lnN       1.044       -         -         -        1.044        -         -         -
+FakeSys       lnN         -             1.51821         -               -               -               1.50307         -               -
+RareMCSys     lnN         -             -               1.51003         -               -               -               1.50234         -
+FlipSys       lnN         -             -               -               1.29981         -               -               -               1.3
+TriggerSys    lnN       1.06            -               -               -               1.06            -               -               -
+LepIdSys      lnN       1.1             -               -               -               1.1             -               -               -
+LumiSys       lnN       1.04            -               -               -               1.04            -               -               -
+JERSys        lnN       1.0014          -               -               -               1.001           -               -               -
+bSys          lnN       0.954/1.048     -               -               -               1.004/0.993     -               -               -
+mSys          lnN       0.997/1.005     -               -               -               0.997/1.004     -               -               -
+jSys          lnN       0.970/1.032     -               -               -               0.974/1.026     -               -               -

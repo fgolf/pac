@@ -489,7 +489,6 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
         m_evt.gen_ht      = efftools::getGenHT(m_jet_pt_cut, 2.4);
         m_evt.gen_nbtags  = m_evt.vgenb_p4.size();
         m_evt.gen_njets   = m_evt.vgenjets_p4.size();
-        m_evt.gen_nleps   = leptonGenpCount_lepTauDecays(m_evt.gen_nels, m_evt.gen_nmus, m_evt.gen_ntaus);
         
         // require standard cleaning 
         if (!cleaning_standardNovember2011()) 

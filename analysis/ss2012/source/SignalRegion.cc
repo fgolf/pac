@@ -1173,7 +1173,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr26",
         // title
-        "sr6: 2 #leq # jets < 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
+        "sr26: 2 #leq # jets < 4, # btags #geq 2, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags\\geq 2,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },

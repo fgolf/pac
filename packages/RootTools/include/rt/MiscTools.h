@@ -271,6 +271,7 @@ namespace rt
 
     // Add Hists and return new hist (client is owner of the TH1*)
     TH1* AddHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "");
+    TH1* AddHists(TH1* h1, TH1* h2, TH1* h3, const std::string& name, const std::string& title = "");
 
     // Subtract Hists and return new hist (client is owner of the TH1*)
     TH1* SubtractHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "");
@@ -414,6 +415,9 @@ namespace rt
 
     // helper functions for OS operations (uses c++ name conventions)
     // -------------------------------------------------------------------------------------------------//
+
+    // format the float to a string 
+    std::string fmt(const float value, const std::string& format = "1.2f");
 
     // get an environment variable
     std::string getenv(const std::string& name);

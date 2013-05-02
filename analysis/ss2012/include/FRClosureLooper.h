@@ -28,6 +28,7 @@ public:
         const std::string& mufr_hist_name = "",
         const std::string& elfr_hist_name = "",
         bool do_scale_factors = true,
+        bool do_scale1fb = false,
         unsigned int num_btags = 0,
         unsigned int num_jets = 0,
         int charge_option = 0,
@@ -53,6 +54,7 @@ private:
     bool m_is_data;
     bool m_do_vtx_reweight;
     bool m_do_scale_factors;
+    bool m_do_scale1fb;
     unsigned int m_nbtags;
     unsigned int m_njets;
     int m_charge_option;
