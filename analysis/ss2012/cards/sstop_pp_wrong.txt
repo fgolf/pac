@@ -11,9 +11,9 @@ process                 0           1           2           3           0       
 rate                    0.05028     12.405      12.815      1.408       0.08064     90.074      30.491      3.217
 ### Error Matrix
 ------------
-FakeSys          lnN    -           1.514       -           -           -           1.503       -           -
-RareMCSys        lnN    -           -           1.510       -           -           -           1.502       -
-FlipSys          lnN    -           -           -           1.305       -           -           -           1.304
+FakeSys          lnN    -           0.514       -           -           -           0.503       -           -
+RareMCSys        lnN    -           -           0.510       -           -           -           0.502       -
+FlipSys          lnN    -           -           -           0.305       -           -           -           0.304
 TriggerSys       lnN    1.060       -           -           -           1.060       -           -           -
 LepIdSys         lnN    1.104       -           -           -           1.104       -           -           -
 ISRFSRPDF        lnN    1.020       -           -           -           1.020       -           -           -
