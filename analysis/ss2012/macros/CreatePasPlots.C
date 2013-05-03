@@ -116,11 +116,7 @@ void CreatePasPlots
     }
     std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}%s", lumi, charge_title.c_str());
 
-    // overlays
-    map<string, rt::TH1Overlay> p;
-    rt::TH1Overlay::profile_marker_size_default = 10.0;
-
-    // for pass
+    // for PAS
     rt::TH1Container hc_result;
     hc_result += GetPasPlots(hc_data, hc_mc, "pas_met"   , "MET");
     hc_result += GetPasPlots(hc_data, hc_mc, "pas_ht"    , "HT" );

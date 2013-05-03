@@ -491,3 +491,60 @@ void FakeRateEWK(const std::string& suffix = "png")
 }
 
 
+void FakeRateQCDMetCompare(const std::string& suffix = "png")
+{
+    rt::TH1Container hc1("plots/fake_rates/03May2013/ssFR_qcd_standard_03May2013.root");
+    rt::TH1Container hc2("plots/fake_rates/03May2013_invertedmet/ssFR_qcd_standard_03May2013_invertedmet.root");
+    hc1.List();
+    hc2.List();
+    string path = "plots/fake_rates/qcd_met_compare";
+    //hc.List();
+
+    // set style
+    rt::SetTDRStyle();
+    hc1.SetMarkerSize(1.5);
+    hc2.SetMarkerSize(1.5);
+    gStyle->SetTitleBorderSize(0);
+    float max = 0.5;
+
+    map<string, TH1Overlay> p;
+
+    // muons
+    p["p_mufr40c_vs_pt_met_compare"] = TH1Overlay("Muon FR (away jet p_{T} > 40 GeV);p_{T} (GeV);TL ratio", "sb::off lg::top"); 
+    p["p_mufr40c_vs_pt_met_compare"].Add(hc1["h_mufr40c_vs_pt"], "MET < 20 GeV"  , kBlue, 2, 20);
+    p["p_mufr40c_vs_pt_met_compare"].Add(hc2["h_mufr40c_vs_pt"], "MET > 20 GeV"  , kRed , 2, 22);
+    p["p_mufr40c_vs_pt_met_compare"].SetYAxisRange(0, max);
+    p["p_mufr40c_vs_pt_met_compare"].SetLegendOption("p");
+    p["p_mufr40c_vs_pt_met_compare"].SetLegendTextSize(0.042);
+    p["p_mufr40c_vs_pt_met_compare"].AddText("Muons", 0.25, 0.835);
+
+    p["p_mufr40c_vs_eta_met_compare"] = TH1Overlay("Muon FR (away jet p_{T} > 40 GeV);|#eta|;TL ratio", "sb::off lg::top"); 
+    p["p_mufr40c_vs_eta_met_compare"].Add(hc1["h_mufr40c_vs_eta"], "MET < 20 GeV"  , kBlue, 2, 20);
+    p["p_mufr40c_vs_eta_met_compare"].Add(hc2["h_mufr40c_vs_eta"], "MET > 20 GeV"  , kRed , 2, 22);
+    p["p_mufr40c_vs_eta_met_compare"].SetYAxisRange(0, max);
+    p["p_mufr40c_vs_eta_met_compare"].SetLegendOption("p");
+    p["p_mufr40c_vs_eta_met_compare"].SetLegendTextSize(0.042);
+    p["p_mufr40c_vs_eta_met_compare"].AddText("Muons", 0.25, 0.835);
+
+    // electrons
+    p["p_elfr40c_vs_pt_met_compare"] = TH1Overlay("Electron FR (away jet p_{T} > 40 GeV);p_{T} (GeV);TL ratio", "sb::off lg::top"); 
+    p["p_elfr40c_vs_pt_met_compare"].Add(hc1["h_elfr40c_vs_pt"], "MET < 20 GeV"  , kBlue, 2, 20);
+    p["p_elfr40c_vs_pt_met_compare"].Add(hc2["h_elfr40c_vs_pt"], "MET > 20 GeV"  , kRed , 2, 22);
+    p["p_elfr40c_vs_pt_met_compare"].SetYAxisRange(0, max);
+    p["p_elfr40c_vs_pt_met_compare"].SetLegendOption("p");
+    p["p_elfr40c_vs_pt_met_compare"].SetLegendTextSize(0.042);
+    p["p_elfr40c_vs_pt_met_compare"].AddText("Electrons", 0.25, 0.835);
+
+    p["p_elfr40c_vs_eta_met_compare"] = TH1Overlay("Electron FR (away jet p_{T} > 40 GeV);|#eta|;TL ratio", "sb::off lg::top"); 
+    p["p_elfr40c_vs_eta_met_compare"].Add(hc1["h_elfr40c_vs_eta"], "MET < 20 GeV"  , kBlue, 2, 20);
+    p["p_elfr40c_vs_eta_met_compare"].Add(hc2["h_elfr40c_vs_eta"], "MET > 20 GeV"  , kRed , 2, 22);
+    p["p_elfr40c_vs_eta_met_compare"].SetYAxisRange(0, max);
+    p["p_elfr40c_vs_eta_met_compare"].SetLegendOption("p");
+    p["p_elfr40c_vs_eta_met_compare"].SetLegendTextSize(0.042);
+    p["p_elfr40c_vs_eta_met_compare"].AddText("Electrons", 0.25, 0.835);
+
+    // print
+    rt::Print(p, path, suffix);
+}
+
+

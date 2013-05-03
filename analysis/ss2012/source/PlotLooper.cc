@@ -436,18 +436,18 @@ void PlotLooper::EndJob()
     SetPredictionAndUncertainty(m_sample, hc, "ptjetlep"          ,"p_{T}^{jet}/p)_{T}^{lep} - 1 (X);p_{T}^{jet}/p)_{T}^{lep} - 1;Events" , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "drlep3rdlep"       ,"#DeltaR(lep, 3rd lep) (X);#DeltaR(lep,lep3);Events"                   , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "ml3l"              ,"M(lep, 3rd lep) (X);M(l,3l);Events"                                   , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_ht"            ,"H_{T};H_{T} (GeV) (X);Events"                                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_met"           ,"MET;E_{T}^{miss} (GeV) (X);Events"                                    , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_nbtags"        ,"# btags;# btags (X);Events"                                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_njets"         ,"# jets (X);# jets;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_ht"      ,"H_{T};H_{T} (GeV) (X);Events"                                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_met"     ,"MET;E_{T}^{miss} (GeV) (X);Events"                                    , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_nbtags"  ,"# btags;# btags (X);Events"                                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_njets"   ,"# jets (X);# jets;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_ht"     ,"H_{T};H_{T} (GeV) (X);Events"                                         , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_met"    ,"MET;E_{T}^{miss} (GeV) (X);Events"                                    , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_nbtags" ,"# btags;# btags (X);Events"                                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
-    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_njets"  ,"# jets (X);# jets;Events"                                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_ht"            ,"H_{T};H_{T} (GeV);Events"                                             , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_met"           ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_nbtags"        ,"# btags;# btags;Events"                                               , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_njets"         ,"# jets;# jets;Events"                                                 , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_ht"      ,"H_{T};H_{T} (GeV);Events"                                             , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_met"     ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_nbtags"  ,"# btags;# btags;Events"                                               , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_njets"   ,"# jets;# jets;Events"                                                 , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_ht"     ,"H_{T};H_{T} (GeV);Events"                                             , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_met"    ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_nbtags" ,"# btags;# btags;Events"                                               , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_njets"  ,"# jets;# jets;Events"                                                 , 0.0, 0.0, 0.0, m_sf_flip);
 
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
     {

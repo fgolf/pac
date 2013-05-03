@@ -559,39 +559,73 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     hc_dy.Add(rt::MakeEfficiencyPlot(hc_dy["h_reco_el_id_vs_pt_barrel_endcap" ], hc_dy["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
     hc_tt.Add(rt::MakeEfficiencyPlot(hc_tt["h_reco_el_id_vs_pt_barrel_endcap" ], hc_tt["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
 
+    rt::MaskHist2D(hc_dy["h_reco_el_mask"], "x", 1.444, 1.566);
+    rt::MaskHist2D(hc_dy["h_mc_el_mask"  ], "x", 1.444, 1.566);
+    rt::MaskHist2D(hc_tt["h_reco_el_mask"], "x", 1.444, 1.566);
+    rt::MaskHist2D(hc_tt["h_mc_el_mask"  ], "x", 1.444, 1.566);
+    hc_dy.Add(rt::MakeEfficiencyProjectionPlot(hc_dy["h_reco_el" ], hc_dy["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-40 bin);|#eta|", 30, 40));
+    hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el" ], hc_tt["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-40 bin);|#eta|", 30, 40));
+    hc_dy.Add(dynamic_cast<TH1*>(hc_dy["h_reco_el"]->Clone("h_reco_el_mask")));
+    hc_dy.Add(dynamic_cast<TH1*>(hc_dy["h_mc_el"  ]->Clone("h_mc_el_mask"  )));
+    hc_tt.Add(dynamic_cast<TH1*>(hc_tt["h_reco_el"]->Clone("h_reco_el_mask")));
+    hc_tt.Add(dynamic_cast<TH1*>(hc_tt["h_mc_el"  ]->Clone("h_mc_el_mask"  )));
+    rt::MaskHist2D(hc_dy["h_reco_el_mask"], "y", 30, 40);
+    rt::MaskHist2D(hc_dy["h_mc_el_mask"  ], "y", 30, 40);
+    rt::MaskHist2D(hc_tt["h_reco_el_mask"], "y", 30, 40);
+    rt::MaskHist2D(hc_tt["h_mc_el_mask"  ], "y", 30, 40);
+    hc_dy.Add(rt::MakeEfficiencyProjectionPlot(hc_dy["h_reco_el_mask" ], hc_dy["h_mc_el_mask"], "x", "h_eff_el_vs_eta_zoom2", "electron efficiency (not 30-40 bin);|#eta|"));
+    hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el_mask" ], hc_tt["h_mc_el_mask"], "x", "h_eff_el_vs_eta_zoom2", "electron efficiency (not 30-40 bin);|#eta|"));
+
     // overlay
     CreateOverlay(p, "h_mc_el_vs_pt_barrel_endcap"     , hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
     CreateOverlay(p, "h_reco_el_id_vs_pt_barrel_endcap", hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
-    CreateOverlay(p, "h_eff_el_id_vs_pt_barrel_endcap" , hc_dy, hc_tt, "electrons");
+    CreateOverlay(p, "h_eff_el_id_vs_pt_barrel_endcap" , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 2);
+    CreateOverlay(p, "h_eff_el_vs_eta_zoom1"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 2);
+    CreateOverlay(p, "h_eff_el_vs_eta_zoom2"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 2);
 
-    // mu eff vs eta 
-    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    // eff vs eta 
+    p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"] = rt::TH1Overlay("matched electron", "sb::off lg::bottom_right");
     p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].Add(hc_dy["h_reco_el_id_vs_pt_barrel"], "DY barrel");
     p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].Add(hc_dy["h_reco_el_id_vs_pt_endcap"], "DY endcap");
     p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].SetLegendOption("p");
     p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].SetLegendTextSize(0.042);
     p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
 
-    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"] = rt::TH1Overlay("electron MC", "sb::off lg::bottom_right");
     p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].Add(hc_dy["h_mc_el_vs_pt_barrel"], "DY barrel");
     p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].Add(hc_dy["h_mc_el_vs_pt_endcap"], "DY endcap");
     p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].SetLegendOption("p");
     p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].SetLegendTextSize(0.042);
     p["p_mc_el_vs_pt_dy_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
 
-    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"] = rt::TH1Overlay("matched electron", "sb::off lg::bottom_right");
     p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].Add(hc_tt["h_reco_el_id_vs_pt_barrel"], "tt barrel");
     p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].Add(hc_tt["h_reco_el_id_vs_pt_endcap"], "tt endcap");
     p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].SetLegendOption("p");
     p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].SetLegendTextSize(0.042);
     p["p_reco_el_id_vs_pt_tt_reco_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
 
-    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"] = rt::TH1Overlay("", "sb::off lg::bottom_right");
+    p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"] = rt::TH1Overlay("electron MC", "sb::off lg::bottom_right");
     p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].Add(hc_tt["h_mc_el_vs_pt_barrel"], "tt barrel");
     p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].Add(hc_tt["h_mc_el_vs_pt_endcap"], "tt endcap");
     p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].SetLegendOption("p");
     p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].SetLegendTextSize(0.042);
     p["p_mc_el_vs_pt_tt_barrrel_endcap_compare"].AddText("electrons", 0.25, 0.235);
+
+    p["p_reco_el_vs_pt_compare"] = rt::TH1Overlay("matched electron", "sb::off lg::bottom_right");
+    p["p_reco_el_vs_pt_compare"].Add(hc_dy["h_reco_el_vs_pt"], "DY");
+    p["p_reco_el_vs_pt_compare"].Add(hc_tt["h_reco_el_vs_pt"], "tt");
+    p["p_reco_el_vs_pt_compare"].SetLegendOption("p");
+    p["p_reco_el_vs_pt_compare"].SetLegendTextSize(0.042);
+    p["p_reco_el_vs_pt_compare"].AddText("electrons", 0.25, 0.235);
+
+    p["p_mc_el_vs_pt_compare"] = rt::TH1Overlay("MC electron", "sb::off lg::bottom_right");
+    p["p_mc_el_vs_pt_compare"].Add(hc_dy["h_mc_el_vs_pt"], "DY");
+    p["p_mc_el_vs_pt_compare"].Add(hc_tt["h_mc_el_vs_pt"], "tt");
+    p["p_mc_el_vs_pt_compare"].SetLegendOption("p");
+    p["p_mc_el_vs_pt_compare"].SetLegendTextSize(0.042);
+    p["p_mc_el_vs_pt_compare"].AddText("electrons", 0.25, 0.235);
+
 
 
     CreateOverlay(p, "h_eff_el_vs_eta"           , hc_dy, hc_tt, "electrons");

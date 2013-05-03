@@ -50,6 +50,12 @@ std::string GetSRLabel(ss::SignalRegion::value_type sr)
     return Form((sr < 10 ? "SR0%u_" : "SR%u_"), sr_num);
 }
 
+const float GetValueFromScanHist(TH1* const hist, const float sparm0, const float sparm1)
+{
+    TH2* const h2 = dynamic_cast<TH2*>(hist);
+    return rt::GetBinContent2D(h2, sparm0, sparm1);
+}
+
 
 int main(int argc, char* argv[])
 try
@@ -79,6 +85,10 @@ try
     float rare_sys_unc              = 0.5;
     float lumi                      = 1.0;
     bool verbose                    = false;
+    float sparm0                    = -999999.0;
+    float sparm1                    = -999999.0;
+    float sparm2                    = -999999.0;
+    float sparm3                    = -999999.0;
     int run                         = -1;
     int ls                          = -1;
     int event                       = -1;
@@ -101,6 +111,10 @@ try
         ("fr_unc"    , po::value<float>(&fake_sys_unc)                 , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc))
         ("fl_unc"    , po::value<float>(&flip_sys_unc)                 , Form("systematic uncertainty for flip prediction (default is %f)", flip_sys_unc))
         ("rare_unc"  , po::value<float>(&rare_sys_unc)                 , Form("systematic uncertainty for MC prediction (default is %f)", rare_sys_unc)  )
+        ("sparm0"    , po::value<float>(&sparm0)                       , "sparm0 is required to be this value"                                           )
+        ("sparm1"    , po::value<float>(&sparm1)                       , "sparm1 is required to be this value"                                           )
+        ("sparm2"    , po::value<float>(&sparm2)                       , "sparm2 is required to be this value"                                           )
+        ("sparm3"    , po::value<float>(&sparm3)                       , "sparm3 is required to be this value"                                           )
         ("lumi"      , po::value<float>(&lumi)                         , "luminosity"                                                                    )
         ("excl"      , po::value<bool>(&exclusive)                     , "use exclusive signal region"                                                   )
         ("verbose"   , po::value<bool>(&verbose)                       , "verbosity"                                                                     )
@@ -155,6 +169,10 @@ try
         cout << "verbose             :\t" << verbose             << endl;
         cout << "run                 :\t" << run                 << endl;
         cout << "ls                  :\t" << ls                  << endl;
+        cout << "sparm0              :\t" << sparm0              << endl;
+        cout << "sparm1              :\t" << sparm1              << endl;
+        cout << "sparm2              :\t" << sparm2              << endl;
+        cout << "sparm3              :\t" << sparm3              << endl;
         cout << "event               :\t" << event               << endl;
     }
 
@@ -259,6 +277,22 @@ try
 
         // systematics (percentage) 
         const std::string sr = GetSRLabel(signal_region);
+
+//         if (m_use_ra5)
+//         {
+//             info.lep_unc     = GetValueFromScanHist(hc[sr+"_leptonSystematic"], sparm0, sparm1);
+//             info.lep_unc     = 777.0;
+//             info.trig_unc    = 777.0;
+//             info.jer_unc     = 777.0;
+//             info.jes_up_unc  = 777.0;
+//             info.jes_dn_unc  = 777.0;
+//             info.met_up_unc  = 777.0;
+//             info.met_dn_unc  = 777.0;
+//             info.beff_up_unc = 777.0;
+//             info.beff_dn_unc = 777.0;
+//         }
+//         else
+//         {
         const float num      = rt::Integral(hc[sr+"nPassing"]);
         const float den      = rt::Integral(hc[sr+"nGenerated"]) * ngen_sf;
         info.acc             = lumi*(num/den);
@@ -273,6 +307,7 @@ try
         info.met_dn_unc      = GetSyst(rt::Integral(hc[sr+"nMETDN"    ]), num);
         info.beff_up_unc     = GetSyst(rt::Integral(hc[sr+"nBTAUP"    ]), num);
         info.beff_dn_unc     = GetSyst(rt::Integral(hc[sr+"nBTADN"    ]), num);
+//         }
         card_infos.push_back(info);
 
 

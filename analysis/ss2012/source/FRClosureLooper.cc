@@ -249,14 +249,14 @@ void FRClosureLooper::EndJob()
     // Fakes 
     PredSummary fake = frp.GetFakePrediction();
     hc.Add(new TH1F("h_fake_pred", "fake prediction", 4, 0, 4));
-    hc["h_fake_pred"]->SetBinContent(1, fake.ee.value);
-    hc["h_fake_pred"]->SetBinContent(2, fake.mm.value);
-    hc["h_fake_pred"]->SetBinContent(3, fake.em.value);
-    hc["h_fake_pred"]->SetBinContent(4, fake.ll.value);
-    hc["h_fake_pred"]->SetBinError(1, fake.ee.error);
-    hc["h_fake_pred"]->SetBinError(2, fake.mm.error);
-    hc["h_fake_pred"]->SetBinError(3, fake.em.error);
-    hc["h_fake_pred"]->SetBinError(4, fake.ll.error);
+    hc["h_fake_pred"]->SetBinContent(1, sf_raw.ee.value);
+    hc["h_fake_pred"]->SetBinContent(2, sf_raw.mm.value);
+    hc["h_fake_pred"]->SetBinContent(3, sf_raw.em.value);
+    hc["h_fake_pred"]->SetBinContent(4, sf_raw.ll.value);
+    hc["h_fake_pred"]->SetBinError(1, sf_raw.ee.error);
+    hc["h_fake_pred"]->SetBinError(2, sf_raw.mm.error);
+    hc["h_fake_pred"]->SetBinError(3, sf_raw.em.error);
+    hc["h_fake_pred"]->SetBinError(4, sf_raw.ll.error);
 
     // MC pred (hard coded from ICHEP) 
     PredSummary mc(Pred(00.0, 0.0), Pred(11.3, 0.3), Pred(00.0, 0.0));
@@ -312,14 +312,20 @@ void FRClosureLooper::EndJob()
     t_yields.setTitle(Form("closure test table (%s)", sr_info.title.c_str()));
     string f = "1.2";
     string o = (m_do_scale1fb ? "1.2f" : "1.0f");
-    t_yields.setTable() (                        "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
-                        ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f),  sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
-                        ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),                  "NA",                   "NA",     sf.ll.str(f))
-                        ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),                  "NA",                   "NA",     df.ll.str(f))
-                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),                  "NA",                   "NA",   pred.ll.str(f))
-                        ("obs"     ,   fmt(obs_ee, o),    fmt(obs_mm,o),    fmt(obs_em,o),                  "NA",                   "NA",    fmt(obs_ll,o))
-                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,                  "NA",                   "NA",         ll_ratio)
-                        ("(p-o)/p" ,         ee_rdiff,         mm_rdiff,         em_rdiff,                  "NA",                   "NA",         ll_rdiff)
+//     t_yields.setTable() (                        "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
+//                         ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f),  sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
+//                         ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),                  "NA",                   "NA",     sf.ll.str(f))
+//                         ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),                  "NA",                   "NA",     df.ll.str(f))
+//                         ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),                  "NA",                   "NA",   pred.ll.str(f))
+//                         ("obs"     ,   fmt(obs_ee, o),    fmt(obs_mm,o),    fmt(obs_em,o),                  "NA",                   "NA",    fmt(obs_ll,o))
+//                         ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,                  "NA",                   "NA",         ll_ratio)
+//                         ("(p-o)/p" ,         ee_rdiff,         mm_rdiff,         em_rdiff,                  "NA",                   "NA",         ll_rdiff)
+//                         ;
+    t_yields.setTable() (                        "ee",              "mm",            "em",           "ll")
+                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f), pred.ll.str(f))
+                        ("obs"     ,   fmt(obs_ee, o),    fmt(obs_mm,o),    fmt(obs_em,o),  fmt(obs_ll,o))
+                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,       ll_ratio)
+                        ("(p-o)/p" ,         ee_rdiff,         mm_rdiff,         em_rdiff,       ll_rdiff)
                         ;
     t_yields.print();
     t_yields.printTex();
@@ -400,12 +406,17 @@ int FRClosureLooper::operator()(long event)
             m_scale1fb = scale1fb();
         }
 
-        // require only one gen lepton at status 3
-        // if (gen_nleps() > 1) return 0;
-
         // selections 
         // ---------------------------------------------------------------------------------------------------------------------------- //
 
+        // only one gen level lepton
+        // only keep events with one real status 3 lepton
+        //if (gen_nleps()!=1)
+        if (gen_nleps_with_fromtau()!=1)
+        {
+            return 0;
+        }
+        
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
         if (is_ss()) {charge_type = DileptonChargeType::SS;}
@@ -443,6 +454,18 @@ int FRClosureLooper::operator()(long event)
             return 0;
         }
 
+        // hack the ht cut
+        //if (ht() > 200)
+        //{
+        //    return 0;
+        //}
+
+        // hack the met cut
+        //if (pfmet() > 50)
+        //{
+        //    return 0;
+        //}
+
         // passes signal region
         if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type))
         {
@@ -467,42 +490,6 @@ int FRClosureLooper::operator()(long event)
         const bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
         const bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
         const bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
-
-        if (ntuple_sample == at::Sample::ttdil)
-        {
-            if (not (0 < gen_dilep_type() && gen_dilep_type() < 4))
-            {
-                return 0;
-            }
-
-            const int fo_id                  = (not_fromw_l1 ? lep1_pdgid() : lep2_pdgid() );
-            const LorentzVector& fo_p4       = (not_fromw_l1 ? lep1_p4()    : lep2_p4()    );
-            const int real_id                = (fromw_l1    ? lep1_pdgid()  : lep2_pdgid() );
-            const LorentzVector& real_p4     = (fromw_l1    ? lep1_p4()     : lep2_p4()    );
-            const int real_gen_id            = (fromw_l1    ? lep1_mc3id()  : lep2_mc3id() );
-            const LorentzVector& real_gen_p4 = (fromw_l1    ? lep1_mc3p4()  : lep2_mc3p4() );
-
-            float dr1 = rt::DeltaR(real_gen_p4, gen_lep1_p4()); 
-            float dr2 = rt::DeltaR(real_gen_p4, gen_lep2_p4()); 
-
-            int first_gen_id  = gen_lep1_pdgid();
-            int second_gen_id = gen_lep2_pdgid();
-            //if (dr1 < dr2) 
-            //{
-            //    first_gen_id  = gen_lep1_pdgid();
-            //    second_gen_id = gen_lep2_pdgid();
-            //}
-            //else
-            //{
-            //    first_gen_id  = gen_lep2_pdgid();
-            //    second_gen_id = gen_lep1_pdgid();
-            //}
-            if (real_id != first_gen_id)
-            {
-                cout << "messed up!" << endl;
-            }
-            cout << Form("sample %s l1 %d l1g %d 1st %d 2nd %d", ntuple_sample_name.c_str(), real_id, real_gen_id, first_gen_id, second_gen_id) << endl;
-        }
 
         // Weight Factors
         // ----------------------------------------------------------------------------------------------------------------------------//
