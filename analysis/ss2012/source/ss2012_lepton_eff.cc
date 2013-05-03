@@ -200,7 +200,7 @@ int LeptonEff::operator() (long event)
         }
         if (l2_is_el && not l2_is_crack)
         {
-            hc["h_mc_el"       ]->Fill(l2_eta, l1_pt);
+            hc["h_mc_el"       ]->Fill(l2_eta, l2_pt);
             hc["h_mc_el_vs_pt" ]->Fill(l2_pt );
             hc["h_mc_el_vs_eta"]->Fill(l2_eta);
             if (l2_is_barrel) {hc["h_mc_el_vs_pt_barrel" ]->Fill(l2_pt);}
@@ -216,7 +216,7 @@ int LeptonEff::operator() (long event)
         }
         if (l2_is_mu)
         {
-            hc["h_mc_mu"       ]->Fill(l2_eta, l1_pt);
+            hc["h_mc_mu"       ]->Fill(l2_eta, l2_pt);
             hc["h_mc_mu_vs_pt" ]->Fill(l2_pt );
             hc["h_mc_mu_vs_eta"]->Fill(l2_eta);
             if (l2_is_barrel) {hc["h_mc_mu_vs_pt_barrel" ]->Fill(l2_pt);}
