@@ -30,12 +30,12 @@ try
     std::string sample_name         = "";
     std::string analysis_type_name  = "high_pt";
     bool exclusive                  = false;
-    bool do_scale_factors           = true;
+    bool do_scale_factors           = false;
     bool do_scale1fb                = false;
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
     float met_cut                   = 0;
-    float ht_cut                    = 2;
+    float ht_cut                    = 0;
     int charge_option               = 0;
     unsigned int signal_region_num  = 0;
     float lumi                      = 1.0;
@@ -59,7 +59,7 @@ try
         ("met"      , po::value<float>(&met_cut)                  , "met to cut on"                                             )
         ("ht"       , po::value<float>(&ht_cut)                   , "ht to cut on"                                              )
         ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                      )
-        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
+        //("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
         ("do_1fb"   , po::value<bool>(&do_scale1fb)               , "use the scale1fb (default is false)"                       )
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                )
         ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")

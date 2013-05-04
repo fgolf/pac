@@ -122,7 +122,7 @@ FRClosureLooper::FRClosureLooper
     cout << "nbtags >= " << m_nbtags << endl;
     cout << "njets  >= " << m_njets  << endl;
     cout << "met    >= " << m_met_cut << endl;
-    cout << "htt    >= " << m_ht_cut << endl;
+    cout << "ht     >= " << m_ht_cut << endl;
 
     // begin job
     BeginJob();
