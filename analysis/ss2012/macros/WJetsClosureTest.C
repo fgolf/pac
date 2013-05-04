@@ -126,12 +126,12 @@ void WJetsClosureTest(const std::string& filename)
     t.setTitle("W+jets closure test results");
     t.useTitle();
     t.setTable()
-        (                        "ee" , "mm"              , "em"              ,              "ll")
-        ("obs"    , (int)obs_ee.value , (int)obs_mm.value , (int)obs_em.value , (int)obs_ll.value)
-        ("SF raw" , (int)sf_ee        , (int)sf_mm        , (int)sf_em        , (int)sf_ll       )
-        ("SF pred", pm(pred_sf_ee)    , pm(pred_sf_mm)    , pm(pred_sf_em)    , pm(pred_sf_ll)   )
-        ("p/o"    , pm(ratio_ee)      , pm(ratio_mm)      , pm(ratio_em)      , pm(ratio_ll)     )
-        ("(p-o)/p", pm(rdiff_ee)      , pm(rdiff_mm)      , pm(rdiff_em)      , pm(rdiff_ll)     )
+        (                         "ee" , "mm"              , "em"              ,              "ll")
+        ("FO count", (int)sf_ee        , (int)sf_mm        , (int)sf_em        , (int)sf_ll       )
+        ("pred"    , pm(pred_sf_ee)    , pm(pred_sf_mm)    , pm(pred_sf_em)    , pm(pred_sf_ll)   )
+        ("obs"     , (int)obs_ee.value , (int)obs_mm.value , (int)obs_em.value , (int)obs_ll.value)
+        ("p/o"     , pm(ratio_ee)      , pm(ratio_mm)      , pm(ratio_em)      , pm(ratio_ll)     )
+        ("(p-o)/p" , pm(rdiff_ee)      , pm(rdiff_mm)      , pm(rdiff_em)      , pm(rdiff_ll)     )
         ;
     t.print();
 }
