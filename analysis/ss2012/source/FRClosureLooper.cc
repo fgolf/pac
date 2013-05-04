@@ -31,21 +31,23 @@ using namespace ss;
 FRClosureLooper::FRClosureLooper
 (
     const std::string& root_file_name,
-    at::Sample::value_type sample,
-    SignalRegion::value_type signal_region,
-    AnalysisType::value_type analysis_type,
-    SignalRegionType::value_type signal_region_type,
+    const at::Sample::value_type sample,
+    const SignalRegion::value_type signal_region,
+    const AnalysisType::value_type analysis_type,
+    const SignalRegionType::value_type signal_region_type,
     const std::string& vtxreweight_file_name,
     const std::string& fake_rate_file_name,
     const std::string& mufr_hist_name,
     const std::string& elfr_hist_name,
-    bool do_scale_factors,
-    bool do_scale1fb,
-    unsigned int num_btags,
-    unsigned int num_jets,
-    int charge_option,
-    float lumi,
-    bool verbose
+    const bool do_scale_factors,
+    const bool do_scale1fb,
+    const unsigned int num_btags,
+    const unsigned int num_jets,
+    const float met_cut,
+    const float ht_cut,
+    const int charge_option,
+    const float lumi,
+    const bool verbose
     )
     : at::AnalysisWithHist(root_file_name, false, "")
     , m_lumi(lumi)
@@ -56,6 +58,8 @@ FRClosureLooper::FRClosureLooper
     , m_do_scale1fb(do_scale1fb)
     , m_nbtags(num_btags)
     , m_njets(num_jets)
+    , m_met_cut(met_cut)
+    , m_ht_cut(ht_cut)
     , m_charge_option(charge_option)
     , m_sample(sample)
     , m_signal_region(signal_region)
@@ -114,9 +118,11 @@ FRClosureLooper::FRClosureLooper
     cout << "using el FR hist : " << h_elfr->GetName() << endl;
 
     // number of jets/btags
-    cout << "Cutting on the number of jets/btags" << endl;
+    cout << "Cutting on the number of jets/btags/met/ht (in addition to whatever is in the SR cut)" << endl;
     cout << "nbtags >= " << m_nbtags << endl;
     cout << "njets  >= " << m_njets  << endl;
+    cout << "met    >= " << m_met_cut << endl;
+    cout << "htt    >= " << m_ht_cut << endl;
 
     // begin job
     BeginJob();
@@ -412,10 +418,10 @@ int FRClosureLooper::operator()(long event)
         // only one gen level lepton
         // only keep events with one real status 3 lepton
         //if (gen_nleps()!=1)
-        if (gen_nleps_with_fromtau()!=1)
-        {
-            return 0;
-        }
+        //if (gen_nleps_with_fromtau()!=1)
+        //{
+        //    return 0;
+        //}
         
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
@@ -443,31 +449,32 @@ int FRClosureLooper::operator()(long event)
         }
 
         // two jet events
-        if (njets() < 2)
+        if (njets() < static_cast<int>(m_njets))
         {
             return 0;
         }
 
         // # btagged jets
-        if (nbtags() < static_cast<int>(m_nbtags))
+        const int num_btags = (is_real_data() ? nbtags() : nbtags_reweighted());
+        if (num_btags < static_cast<int>(m_nbtags))
         {
             return 0;
         }
 
-        // hack the ht cut
-        //if (ht() > 200)
-        //{
-        //    return 0;
-        //}
+        // ht cut
+        if (ht() < m_ht_cut)
+        {
+            return 0;
+        }
 
-        // hack the met cut
-        //if (pfmet() > 50)
-        //{
-        //    return 0;
-        //}
+        // met cut
+        if (pfmet() < m_met_cut)
+        {
+            return 0;
+        }
 
         // passes signal region
-        if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type))
+        if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*do_btag_sf=*/true))
         {
             return 0;
         }

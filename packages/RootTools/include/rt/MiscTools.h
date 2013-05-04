@@ -286,6 +286,9 @@ namespace rt
     // rel diff = (h1 - h2)/h1
     TH1* RelativeDiffHists(TH1* h1, TH1* h2, const std::string& name, const std::string& title = "");
 
+    // mask off all values that are in the range and set the values to zero 
+    void MaskHist2D(TH1* h1, std::string axis_label, const float low, const float high);
+
     // set statbox position
     void SetStatBoxPosition(TH1* hist_ptr, float x1 = 0.8, float y1 = 0.8, float x2 = 1.0, float y2 = 1.0);
 

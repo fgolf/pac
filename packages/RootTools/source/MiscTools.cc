@@ -1083,8 +1083,10 @@ namespace rt
         int last_bin  = yaxis->GetNbins()+1;
         if (high > low)
         {
-            first_bin = yaxis->FindBin(low);    
-            last_bin  = yaxis->FindBin(high);    
+            first_bin = yaxis->FindBin(low+0.00001);    
+            last_bin  = yaxis->FindBin(high-0.00001);    
+//             cout << "x1 = " << yaxis->GetBinCenter(first_bin) << endl;
+//             cout << "x2 = " << yaxis->GetBinCenter(last_bin) << endl;
         }
 
         string hist_name  = name.empty() ? string(hist->GetName()) + "_proj" + axis : name;
@@ -1337,14 +1339,61 @@ namespace rt
             throw runtime_error("rt::RelativeDiffHist: at least one of the Histograms are NULL");
         }
 
+        TH1* h_unity  = dynamic_cast<TH1*>(h1->Clone("h_unity"));
+        if (not h_unity->GetSumw2())
+        {
+            h_unity->Sumw2();
+        }
+        h_unity->Divide(h_unity, h_unity, 1.0, 1.0, "B"); // zero outs the error
         TH1* h_result = dynamic_cast<TH1*>(h1->Clone(name.c_str()));
         if (not title.empty())
         {
             h_result->SetTitle(title.c_str());
         }
-        h_result->Add(h1, h2, 1.0, -1.0);
-        h_result->Divide(h1);
+        h_result->Divide(h2, h1, 1.0, 1.0);
+        h_result->Add(h_unity, h_result, 1.0, -1.0);
         return h_result;
+    }
+
+    // mask off all values that are in the range and set the values to zero 
+    void MaskHist2D(TH1* hist, std::string axis_label, const float low, const float high)
+    {
+        // check that hists are valid
+        if (!hist)
+        {
+            throw runtime_error("rt::MaskHist2D: Histograms are NULL");
+        }
+        if (!dynamic_cast<TH2*>(hist))
+        {
+            throw runtime_error("rt::MaskHist2D: Histograms is not 2D");
+        }
+
+        // check that axis is setup to an one of the apppriate values
+        axis_label = string_lower(axis_label);
+        if (axis_label != "x" && axis_label != "y") 
+        {
+            throw runtime_error("rt::MaskHist2D: Invalid axis choice (\"X\" or \"Y\")");
+        }
+
+        for (int xbin = 1; xbin != hist->GetXaxis()->GetNbins()+1; xbin++)
+        {
+            const float xvalue = hist->GetXaxis()->GetBinCenter(xbin);
+            for (int ybin = 1; ybin != hist->GetYaxis()->GetNbins()+1; ybin++)
+            {
+                const float yvalue = hist->GetYaxis()->GetBinCenter(ybin);
+                if (axis_label == "x" && low <= xvalue && xvalue <= high)
+                {
+                    hist->SetBinContent(xbin, ybin, 0.0f);
+                    hist->SetBinError(xbin, ybin, 0.0f);
+                }
+                if (axis_label == "y" && low <= yvalue && yvalue <= high)
+                {
+                    hist->SetBinContent(xbin, ybin, 0.0f);
+                    hist->SetBinError(xbin, ybin, 0.0f);
+                }
+            }
+        }
+        return;
     }
 
     // copy the index.php file to dirname

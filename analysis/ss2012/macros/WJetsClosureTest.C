@@ -13,9 +13,6 @@ struct value_t
     value_t() : value(0.0f), error(0.0f) {}
     value_t(const float v, const float e) : value(v), error(e) {}
 
-    // methods:
-//    std::string str(const std::string& precision = "1.2") const {return rt::pm(value, error, precision);}
-
     // members:
     float value;
     float error;
@@ -37,16 +34,18 @@ value_t IntegralAndError(TH1* hist)
 void WJetsClosureTest(const std::string& filename)
 {
     // get the Chain
-    TChain e1("tree");
-    e1.Add(filename.c_str());
+    //TChain& e1("tree");
+    //e1.Add(filename.c_str());
+    TChain* chain = rt::CreateTChainFromCommaSeperatedList(filename, "tree");
+    TChain& e1 = *chain;
     ss::SetSignalRegionAliases(e1, ss::AnalysisType::high_pt, /*beff_sf=*/false);
     cout << e1.GetEntries() << endl;
 /*     e1.GetListOfBranches()->ls(); */
 /*     e1.SetAlias("sf_matched", "((lep1_is_fromw>0 && lep2_is_fromw<1) || (lep2_is_fromw>0 && lep1_is_fromw<1))"); */
 
     // alias
-    e1.SetAlias("obs"       , "gen_nleps==1 && (lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num)");
-    e1.SetAlias("sf_matched", "gen_nleps==1 && (lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo)");
+    e1.SetAlias("obs"       , "gen_nleps_with_fromtau==1 && njets>=2 && (lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num)");
+    e1.SetAlias("sf_matched", "gen_nleps_with_fromtau==1 && njets>=2 && (lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo)");
 /*     e1.SetAlias("df_matched", "(lep1_is_fromw<1 && lep2_is_fromw<1)"); */
 
     // observed
@@ -134,4 +133,7 @@ void WJetsClosureTest(const std::string& filename)
         ("(p-o)/p" , pm(rdiff_ee)      , pm(rdiff_mm)      , pm(rdiff_em)      , pm(rdiff_ll)     )
         ;
     t.print();
+
+    // cleanup
+    delete chain;
 }

@@ -106,6 +106,7 @@
 #pragma link C++ fucntion rt::AddHists;
 #pragma link C++ fucntion rt::SubtractHists;
 #pragma link C++ fucntion rt::RelativeDiffHists;
+#pragma link C++ fucntion rt::MaskHist2D;
 
 // constructors
 #pragma link C++ function rt::TH1Container::TH1Container;

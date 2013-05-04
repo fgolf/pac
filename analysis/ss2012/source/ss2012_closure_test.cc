@@ -34,6 +34,8 @@ try
     bool do_scale1fb                = false;
     unsigned int num_btags          = 0;
     unsigned int num_jets           = 2;
+    float met_cut                   = 0;
+    float ht_cut                    = 2;
     int charge_option               = 0;
     unsigned int signal_region_num  = 0;
     float lumi                      = 1.0;
@@ -54,6 +56,8 @@ try
         ("vtx_file" , po::value<std::string>(&vtxreweight_file)   , "ROOT file for the vertex reweight (ignored for data)"      )
         ("nbtags"   , po::value<unsigned int>(&num_btags)         , "number of btags to cut on"                                 )
         ("njets"    , po::value<unsigned int>(&num_jets)          , "number of jets to cut on"                                  )
+        ("met"      , po::value<float>(&met_cut)                  , "met to cut on"                                             )
+        ("ht"       , po::value<float>(&ht_cut)                   , "ht to cut on"                                              )
         ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                      )
         ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
         ("do_1fb"   , po::value<bool>(&do_scale1fb)               , "use the scale1fb (default is false)"                       )
@@ -180,6 +184,8 @@ try
             do_scale1fb,
             num_btags,
             num_jets,
+            met_cut,
+            ht_cut,
             charge_option,
             lumi,
             verbose

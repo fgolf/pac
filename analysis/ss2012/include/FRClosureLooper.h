@@ -19,22 +19,24 @@ public:
     FRClosureLooper
     (
         const std::string& root_file_name,
-        at::Sample::value_type sample,
-        ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
-        ss::AnalysisType::value_type analysis_type = ss::AnalysisType::high_pt,
-        ss::SignalRegionType::value_type signal_region_type = ss::SignalRegionType::inclusive,
+        const at::Sample::value_type sample,
+        const ss::SignalRegion::value_type signal_region = ss::SignalRegion::sr0,
+        const ss::AnalysisType::value_type analysis_type = ss::AnalysisType::high_pt,
+        const ss::SignalRegionType::value_type signal_region_type = ss::SignalRegionType::inclusive,
         const std::string& vtxreweight_file_name = "",
         const std::string& fake_rate_file_name = "",
         const std::string& mufr_hist_name = "",
         const std::string& elfr_hist_name = "",
-        bool do_scale_factors = true,
-        bool do_scale1fb = false,
-        unsigned int num_btags = 0,
-        unsigned int num_jets = 0,
-        int charge_option = 0,
-        float lumi = 1.0,
-        bool verbose = false
-        );
+        const bool do_scale_factors = true,
+        const bool do_scale1fb = false,
+        const unsigned int num_btags = 0,
+        const unsigned int num_jets = 2,
+        const float met_cut = -99999,
+        const float ht_cut = -99999,
+        const int charge_option = 0,
+        const float lumi = 1.0,
+        const bool verbose = false
+    );
 
     // destroy:
     ~FRClosureLooper();
@@ -57,6 +59,8 @@ private:
     bool m_do_scale1fb;
     unsigned int m_nbtags;
     unsigned int m_njets;
+    float m_met_cut;
+    float m_ht_cut;
     int m_charge_option;
     at::Sample::value_type m_sample;
     ss::SignalRegion::value_type m_signal_region;
