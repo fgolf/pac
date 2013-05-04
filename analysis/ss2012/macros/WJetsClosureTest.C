@@ -34,19 +34,13 @@ value_t IntegralAndError(TH1* hist)
 void WJetsClosureTest(const std::string& filename)
 {
     // get the Chain
-    //TChain& e1("tree");
-    //e1.Add(filename.c_str());
     TChain* chain = rt::CreateTChainFromCommaSeperatedList(filename, "tree");
     TChain& e1 = *chain;
     ss::SetSignalRegionAliases(e1, ss::AnalysisType::high_pt, /*beff_sf=*/false);
-    cout << e1.GetEntries() << endl;
-/*     e1.GetListOfBranches()->ls(); */
-/*     e1.SetAlias("sf_matched", "((lep1_is_fromw>0 && lep2_is_fromw<1) || (lep2_is_fromw>0 && lep1_is_fromw<1))"); */
 
     // alias
     e1.SetAlias("obs"       , "gen_nleps==1 && njets>=0 && (lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num)");
     e1.SetAlias("sf_matched", "gen_nleps==1 && njets>=0 && (lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo)");
-/*     e1.SetAlias("df_matched", "(lep1_is_fromw<1 && lep2_is_fromw<1)"); */
 
     // observed
     e1.Draw("1>>h_obs_ee", "ee && obs", "goff");
@@ -105,9 +99,9 @@ void WJetsClosureTest(const std::string& filename)
 
     // ratio
     // (p)/o
-    cout << "pred ee:\t" << pm(pred_sf_ee) << endl;
-    cout << "pred mm:\t" << pm(pred_sf_mm) << endl;
-    cout << "pred em:\t" << pm(pred_sf_em) << endl;
+    //cout << "pred ee:\t" << pm(pred_sf_ee) << endl;
+    //cout << "pred mm:\t" << pm(pred_sf_mm) << endl;
+    //cout << "pred em:\t" << pm(pred_sf_em) << endl;
     const value_t ratio_ee(pred_sf_ee.value/obs_ee.value, (pred_sf_ee.value/obs_ee.value) * sqrt(pow(pred_sf_ee.error/pred_sf_ee.value, 2) + pow(obs_ee.error/obs_ee.value, 2)));
     const value_t ratio_mm(pred_sf_mm.value/obs_mm.value, (pred_sf_mm.value/obs_mm.value) * sqrt(pow(pred_sf_mm.error/pred_sf_mm.value, 2) + pow(obs_mm.error/obs_mm.value, 2)));
     const value_t ratio_em(pred_sf_em.value/obs_em.value, (pred_sf_em.value/obs_em.value) * sqrt(pow(pred_sf_em.error/pred_sf_em.value, 2) + pow(obs_em.error/obs_em.value, 2)));
