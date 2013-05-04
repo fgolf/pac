@@ -44,8 +44,8 @@ void WJetsClosureTest(const std::string& filename)
 /*     e1.SetAlias("sf_matched", "((lep1_is_fromw>0 && lep2_is_fromw<1) || (lep2_is_fromw>0 && lep1_is_fromw<1))"); */
 
     // alias
-    e1.SetAlias("obs"       , "gen_nleps_with_fromtau==1 && njets>=0 && (lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num)");
-    e1.SetAlias("sf_matched", "gen_nleps_with_fromtau==1 && njets>=0 && (lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo)");
+    e1.SetAlias("obs"       , "gen_nleps==1 && njets>=0 && (lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num)");
+    e1.SetAlias("sf_matched", "gen_nleps==1 && njets>=0 && (lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo)");
 /*     e1.SetAlias("df_matched", "(lep1_is_fromw<1 && lep2_is_fromw<1)"); */
 
     // observed
