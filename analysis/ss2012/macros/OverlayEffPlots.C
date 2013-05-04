@@ -497,14 +497,17 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
 /*     OverlayMuonEffPlots(tex, suffix); */
 /*     return; */
 
-	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M_v2.root");
-	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M_v2.root");
+	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M_v3.root");
+	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M_v3.root");
+/* 	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M_v2.root"); */
+/* 	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M_v2.root"); */
 /* 	rt::TH1Container hc_dy("plots/mceff/dy/plots_1M.root"); */
 /* 	rt::TH1Container hc_tt("plots/mceff/ttjets/plots_1M.root"); */
 /* 	rt::TH1Container hc_dy("plots/mceff/dy/plots_test.root"); */
 /* 	rt::TH1Container hc_tt("plots/mceff/dy/plots_test.root"); */
     rt::TH1Container hc;
-    std::string path = "plots/mceff/overlay2";
+/*     std::string path = "plots/mceff/overlay2"; */
+    std::string path = "plots/mceff/overlay3";
 
 
 	std::map<std::string, rt::TH1Overlay> p;
@@ -559,29 +562,29 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     hc_dy.Add(rt::MakeEfficiencyPlot(hc_dy["h_reco_el_id_vs_pt_barrel_endcap" ], hc_dy["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
     hc_tt.Add(rt::MakeEfficiencyPlot(hc_tt["h_reco_el_id_vs_pt_barrel_endcap" ], hc_tt["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
 
-    rt::MaskHist2D(hc_dy["h_reco_el_mask"], "x", 1.444, 1.566);
-    rt::MaskHist2D(hc_dy["h_mc_el_mask"  ], "x", 1.444, 1.566);
-    rt::MaskHist2D(hc_tt["h_reco_el_mask"], "x", 1.444, 1.566);
-    rt::MaskHist2D(hc_tt["h_mc_el_mask"  ], "x", 1.444, 1.566);
-    hc_dy.Add(rt::MakeEfficiencyProjectionPlot(hc_dy["h_reco_el" ], hc_dy["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-40 bin);|#eta|", 30, 40));
-    hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el" ], hc_tt["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-40 bin);|#eta|", 30, 40));
-    hc_dy.Add(dynamic_cast<TH1*>(hc_dy["h_reco_el"]->Clone("h_reco_el_mask")));
-    hc_dy.Add(dynamic_cast<TH1*>(hc_dy["h_mc_el"  ]->Clone("h_mc_el_mask"  )));
-    hc_tt.Add(dynamic_cast<TH1*>(hc_tt["h_reco_el"]->Clone("h_reco_el_mask")));
-    hc_tt.Add(dynamic_cast<TH1*>(hc_tt["h_mc_el"  ]->Clone("h_mc_el_mask"  )));
-    rt::MaskHist2D(hc_dy["h_reco_el_mask"], "y", 30, 40);
-    rt::MaskHist2D(hc_dy["h_mc_el_mask"  ], "y", 30, 40);
-    rt::MaskHist2D(hc_tt["h_reco_el_mask"], "y", 30, 40);
-    rt::MaskHist2D(hc_tt["h_mc_el_mask"  ], "y", 30, 40);
-    hc_dy.Add(rt::MakeEfficiencyProjectionPlot(hc_dy["h_reco_el_mask" ], hc_dy["h_mc_el_mask"], "x", "h_eff_el_vs_eta_zoom2", "electron efficiency (not 30-40 bin);|#eta|"));
-    hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el_mask" ], hc_tt["h_mc_el_mask"], "x", "h_eff_el_vs_eta_zoom2", "electron efficiency (not 30-40 bin);|#eta|"));
+/*     rt::MaskHist2D(hc_dy["h_reco_el"], "x", 1.444, 1.566); */
+/*     rt::MaskHist2D(hc_dy["h_mc_el"  ], "x", 1.444, 1.566); */
+/*     rt::MaskHist2D(hc_tt["h_reco_el"], "x", 1.444, 1.566); */
+/*     rt::MaskHist2D(hc_tt["h_mc_el"  ], "x", 1.444, 1.566); */
+    hc_dy.Add(rt::MakeEfficiencyProjectionPlot(hc_dy["h_reco_el" ], hc_dy["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-50 bin);|#eta|", 30, 50));
+    hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el" ], hc_tt["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-50 bin);|#eta|", 30, 50));
+    hc_dy.Add(dynamic_cast<TH1*>(hc_dy["h_reco_el"]->Clone("h_reco_el_mask2")));
+    hc_dy.Add(dynamic_cast<TH1*>(hc_dy["h_mc_el"  ]->Clone("h_mc_el_mask2"  )));
+    hc_tt.Add(dynamic_cast<TH1*>(hc_tt["h_reco_el"]->Clone("h_reco_el_mask2")));
+    hc_tt.Add(dynamic_cast<TH1*>(hc_tt["h_mc_el"  ]->Clone("h_mc_el_mask2"  )));
+    rt::MaskHist2D(hc_dy["h_reco_el_mask2"], "y", 30, 50);
+    rt::MaskHist2D(hc_dy["h_mc_el_mask2"  ], "y", 30, 50);
+    rt::MaskHist2D(hc_tt["h_reco_el_mask2"], "y", 30, 50);
+    rt::MaskHist2D(hc_tt["h_mc_el_mask2"  ], "y", 30, 50);
+    hc_dy.Add(rt::MakeEfficiencyProjectionPlot(hc_dy["h_reco_el_mask2"], hc_dy["h_mc_el_mask2"], "x", "h_eff_el_vs_eta_zoom2", "electron efficiency (not 30-50 bin);|#eta|"));
+    hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el_mask2"], hc_tt["h_mc_el_mask2"], "x", "h_eff_el_vs_eta_zoom2", "electron efficiency (not 30-50 bin);|#eta|"));
 
     // overlay
     CreateOverlay(p, "h_mc_el_vs_pt_barrel_endcap"     , hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
     CreateOverlay(p, "h_reco_el_id_vs_pt_barrel_endcap", hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
-    CreateOverlay(p, "h_eff_el_id_vs_pt_barrel_endcap" , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 2);
-    CreateOverlay(p, "h_eff_el_vs_eta_zoom1"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 2);
-    CreateOverlay(p, "h_eff_el_vs_eta_zoom2"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 2);
+    CreateOverlay(p, "h_eff_el_id_vs_pt_barrel_endcap" , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 1.1);
+    CreateOverlay(p, "h_eff_el_vs_eta_zoom1"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 1.1);
+    CreateOverlay(p, "h_eff_el_vs_eta_zoom2"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 1.1);
 
     // eff vs eta 
     p["p_reco_el_id_vs_pt_dy_reco_barrrel_endcap_compare"] = rt::TH1Overlay("matched electron", "sb::off lg::bottom_right");
@@ -626,7 +629,37 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     p["p_mc_el_vs_pt_compare"].SetLegendTextSize(0.042);
     p["p_mc_el_vs_pt_compare"].AddText("electrons", 0.25, 0.235);
 
+/* 	std::string plot_title = "CMS Simulation, #sqrt{s} = 8 TeV"; */
 
+    p["p_eff_el_rel_diff_vs_pt_compare"] = rt::TH1Overlay("(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY};p_{T} (GeV)", "sb::off lg::top_right");
+    p["p_eff_el_rel_diff_vs_pt_compare"].Add(hc["h_eff_el_rel_diff_vs_pt_barrel"], "barrel", kBlue, 2, 20);
+    p["p_eff_el_rel_diff_vs_pt_compare"].Add(hc["h_eff_el_rel_diff_vs_pt_endcap"], "endcap", kRed , 2, 22);
+    p["p_eff_el_rel_diff_vs_pt_compare"].SetYAxisRange(-0.20, 0.10);
+    p["p_eff_el_rel_diff_vs_pt_compare"].SetLegendOption("p");
+    p["p_eff_el_rel_diff_vs_pt_compare"].SetLegendTextSize(0.042);
+    p["p_eff_el_rel_diff_vs_pt_compare"].AddText("electrons", 0.55, 0.835);
+
+    p["p_eff_el_rel_diff_vs_eta"] = rt::TH1Overlay("(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY};|#eta|", "sb::off lg::off");
+    p["p_eff_el_rel_diff_vs_eta"].Add(hc["h_eff_el_rel_diff_vs_eta"], "", kBlue, 2, 20);
+    p["p_eff_el_rel_diff_vs_eta"].SetYAxisRange(0.00, 0.10);
+    p["p_eff_el_rel_diff_vs_eta"].SetLegendOption("p");
+    p["p_eff_el_rel_diff_vs_eta"].SetLegendTextSize(0.042);
+    p["p_eff_el_rel_diff_vs_eta"].AddText("electrons", 0.55, 0.835);
+
+    p["p_eff_mu_rel_diff_vs_pt_compare"] = rt::TH1Overlay("(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY};p_{T} (GeV)", "sb::off lg::top_right");
+    p["p_eff_mu_rel_diff_vs_pt_compare"].Add(hc["h_eff_mu_rel_diff_vs_pt_barrel"], "barrel", kBlue, 2, 20);
+    p["p_eff_mu_rel_diff_vs_pt_compare"].Add(hc["h_eff_mu_rel_diff_vs_pt_endcap"], "endcap", kRed , 2, 22);
+    p["p_eff_mu_rel_diff_vs_pt_compare"].SetYAxisRange(-0.15, 0.0);
+    p["p_eff_mu_rel_diff_vs_pt_compare"].SetLegendOption("p");
+    p["p_eff_mu_rel_diff_vs_pt_compare"].SetLegendTextSize(0.042);
+    p["p_eff_mu_rel_diff_vs_pt_compare"].AddText("muons", 0.55, 0.835);
+
+    p["p_eff_mu_rel_diff_vs_eta"] = rt::TH1Overlay("(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY};|#eta|", "sb::off lg::off");
+    p["p_eff_mu_rel_diff_vs_eta"].Add(hc["h_eff_mu_rel_diff_vs_eta"], "", kBlue, 2, 20);
+    p["p_eff_mu_rel_diff_vs_eta"].SetYAxisRange(0.00, 0.10);
+    p["p_eff_mu_rel_diff_vs_eta"].SetLegendOption("p");
+    p["p_eff_mu_rel_diff_vs_eta"].SetLegendTextSize(0.042);
+    p["p_eff_mu_rel_diff_vs_eta"].AddText("muons", 0.55, 0.835);
 
     CreateOverlay(p, "h_eff_el_vs_eta"           , hc_dy, hc_tt, "electrons");
     CreateOverlay(p, "h_eff_el_vs_eta"           , hc_dy, hc_tt, "electrons");
@@ -654,6 +687,20 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     CreateOverlay(p, "h_eff_mu_iso_vs_pt"        , hc_dy, hc_tt, "muons");
     CreateOverlay(p, "h_eff_mu_iso_vs_pt_barrel" , hc_dy, hc_tt, "muons");
     CreateOverlay(p, "h_eff_mu_iso_vs_pt_endcap" , hc_dy, hc_tt, "muons");
+
+    // table
+    CTable t_el_rdiff = rt::CreateTableFromHist(hc["h_eff_el_rel_diff"],"(eff DY - eff ttbar)/eff DY", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
+    CTable t_mu_rdiff = rt::CreateTableFromHist(hc["h_eff_mu_rel_diff"],"(eff DY - eff ttbar)/eff DY", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
+    if (tex)
+    {
+        t_el_rdiff.printTex();
+        t_mu_rdiff.printTex();
+    }
+    else
+    {
+        t_el_rdiff.print();
+        t_mu_rdiff.print();
+    }
 
     // print
     if (suffix=="all")
