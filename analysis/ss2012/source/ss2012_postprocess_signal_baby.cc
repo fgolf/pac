@@ -190,10 +190,16 @@ try
     TBranch* b2 = clone->Branch("xsec"    , const_cast<float*>       (&xsec    ), "xsec/F"    ); 
     TBranch* b3 = clone->Branch("nevts"   , const_cast<unsigned int*>(&nevts   ), "nevts/i"   ); 
 
-    for (size_t i = 0, nentries = clone->GetEntries(); i != nentries; i++) 
+    // counts
+    const size_t num_events_chain = clone->GetEntries();
+    size_t i_permilleOld          = 0;
+    size_t num_events_total       = 0;
+
+    for (size_t i = 0; i != num_events_chain; i++) 
     {
         // get the current TTree entry
         clone->GetEntry(i);
+        num_events_total++;
 
         // set the values
         switch (sample)
@@ -212,6 +218,15 @@ try
                 break;
             default:
                 {/* do nothing */}
+        }
+
+        // pogress
+        size_t i_permille = static_cast<size_t>(floor(1000 * num_events_total / float(num_events_chain)));
+        if (i_permille != i_permilleOld)
+        {
+            printf("  \015\033[32m ---> \033[1m\033[31m%4.1f%%" "\033[0m\033[32m <---\033[0m\015", i_permille/10.0);
+            fflush(stdout);
+            i_permilleOld = i_permille;
         }
 
         // fill the branches
