@@ -78,6 +78,7 @@ private:
     ss::SignalRegionType::value_type m_signal_region_type;
     at::FakeRateBinInfo m_fr_bin_info;
     at::FlipRateBinInfo m_fl_bin_info;
+    bool m_is_fast_sim;
 
     // fake/flip rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;

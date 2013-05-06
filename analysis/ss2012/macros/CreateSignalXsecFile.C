@@ -205,6 +205,53 @@ void CreateSignalXsecFile()
     SetBinContent(hc["h_xsec_t5tttt"] , 1200 , 0.00440078  , 31.7987 ); 
     SetBinContent(hc["h_xsec_t5tttt"] , 1225 , 0.00357858  , 32.5751 ); 
 
+    // T5tttt (sbottom pair production -- T5lnu)
+    // --------------------------------------------------------------------------------- //
+    // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
+    bin_info = ss::GetSignalBinInfo(at::Sample::t5lnu);
+    hc.Add(new  TH1F("h_xsec_t5lnu", "Cross Section T5lnu;m_{#tilde{g}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    SetBinContent(hc["h_xsec_t5lnu"] , 400  , 18.8721     , 15.0928 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 425  , 12.8817     , 14.8223 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 450  , 8.93257     , 15.0053 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 475  , 6.31553     , 15.3793 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 500  , 4.52485     , 15.7449 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 525  , 3.27008     , 16.1175 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 550  , 2.38869     , 16.4895 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 575  , 1.76075     , 16.8606 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 600  , 1.31429     , 17.2269 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 625  , 0.985407    , 17.5919 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 650  , 0.744472    , 18.0043 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 675  , 0.56624     , 18.3422 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 700  , 0.433971    , 18.6986 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 725  , 0.33408     , 19.0508 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 750  , 0.258598    , 19.4346 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 775  , 0.201354    , 19.7494 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 800  , 0.157399    , 20.1277 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 825  , 0.123451    , 20.6589 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 850  , 0.0966803   , 21.2994 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 875  , 0.0762312   , 22.019  ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 900  , 0.060276    , 22.6836 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 925  , 0.0478794   , 23.4801 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 950  , 0.0381246   , 24.1578 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 975  , 0.0304177   , 24.9003 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1000 , 0.0243547   , 25.6713 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1025 , 0.0195439   , 26.3787 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1050 , 0.0156931   , 26.929  ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1075 , 0.0126249   , 27.6365 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1100 , 0.0101744   , 28.3906 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1125 , 0.00823026  , 29.2287 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1150 , 0.00666673  , 30.0712 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1175 , 0.0054104   , 30.9359 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1200 , 0.00440078  , 31.7987 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1225 , 0.00357858  , 32.5751 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1250 , 0.00291565  , 33.6088 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1275 , 0.00238091  , 34.3786 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1300 , 0.00194443  , 35.3454 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1325 , 0.00158945  , 36.3322 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1350 , 0.00129951  , 37.0468 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1375 , 0.00106538  , 38.1495 ); 
+    SetBinContent(hc["h_xsec_t5lnu"] , 1400 , 0.000871201 , 38.9186 ); 
+
     // TChiwz (chargino-neutralino production -- TChiwz)
     //https://twiki.cern.ch/twiki/pub/CMS/EwkinoSignalmodels/8TeVc1pn2_finer.xsec
     //https://twiki.cern.ch/twiki/pub/CMS/EwkinoSignalmodels/8TeVc1pn2_finer.xsec

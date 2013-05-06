@@ -2,6 +2,7 @@
 #define SYSTEMATICTYPE_H
 
 #include <string>
+#include "at/Sample.h"
 
 namespace ss
 {
@@ -33,7 +34,9 @@ namespace ss
         int& njets,
         int& nbtags,
         const bool do_beff_sf = true,
-        const SystematicType::value_type syst_type = SystematicType::None
+        const SystematicType::value_type syst_type = SystematicType::None,
+        const at::Sample::value_type sample = at::Sample::data,
+        const bool is_fast_sim = false
     );
 
 } // namespace ss

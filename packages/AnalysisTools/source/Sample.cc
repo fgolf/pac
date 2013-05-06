@@ -661,6 +661,44 @@ namespace at
         },
         {
             // name
+            "t5lnu", 
+            // title
+            "#tilde{g}#tilde{g} qq'll#nu#nu#tilde{#chi}^{0}#tilde{#chi}^{0} (#tilde{g} #rigtharrow qq'#tilde{#chi}^{#pm}, #tilde{#chi}^{#pm} #rightarrow W^{#pm}#tilde{#chi}^{0})",
+            // latex 
+            "\\tilde{g}\\tilde{g} qq'\\ell\\ell\\nu\\nu\\tilde{\\chi}^{0}\\tilde{\\chi}^{0} (\\tilde{g} \\rigtharrow qq'\\tilde{\\chi}^{\\pm}, \\tilde{\\chi}^{\\pm} \\rightarrow W^{\\pm}\\tilde{\\chi}^{0})",
+            // ntuple_path
+            // https://twiki.cern.ch/twiki/bin/view/CMS/SMST5lnuMadgraph8TeV/
+            "", // going straight to baby
+            // tag
+            "V05-03-28",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::t5lnu,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "t5vv", 
+            // title
+            "#tilde{g}#tilde{g} (#tilde{g} #rigtharrow q#bar{q}#tilde{#chi}, #tilde{#chi}^{#pm} #rightarrow W^{#pm}#tilde{#chi}^{0}_{1} or #tilde{#chi}^{0}_{2} #rightarrow Z#tilde{#chi}^{0}_{1})",
+            // latex 
+            "\\tilde{g}\\tilde{g} (\\tilde{g} \\rigtharrow q\\bar{q}\\tilde{\\chi}, \\tilde{\\chi}^{\\pm} \\rightarrow W^{\\pm}\\tilde{\\chi}^{0}_{1} or \\tilde{\\chi}^{0}_{2} \\rightarrow Z\\tilde{\\chi}^{0}_{1})",
+            // ntuple_path
+            // https://twiki.cern.ch/twiki/bin/view/CMS/SMST5VVMadgraph8TeV 
+            "", // going straight to baby
+            // tag
+            "V05-03-28",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::t5vv,
+            // color
+            kBlue
+        },
+        {
+            // name
             "t7btw", 
             // title
             "#tilde{g}#tilde{g} #rightarrow b#bar{b}t#bar{t}WW#tilde{#chi}^{0}#tilde{#chi}^{0}",

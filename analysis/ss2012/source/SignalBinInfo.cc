@@ -121,7 +121,7 @@ namespace ss
                 // chargino mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 200.0f, 725.0f, 25.0f, 25.0f, 300.0f);
+                return MakeSignalBinInfo(25.0f, 200.0f, 725.0f, 25.0f, 25.0f, 500.0f);
                 break;
             case Sample::t5tttt:
                 // /SMS-T5tttt_mGo-800to1200_mStop-225to1025_mLSP_50_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER
@@ -137,6 +137,15 @@ namespace ss
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
                 return MakeSignalBinInfo(25.0f, 800.0f, 1225.0f, 25.0f, 225.0f, 1050.0f);
+                break;
+            case Sample::t5lnu:
+                // /SMS-T5lnuPlusPlus_mGo-400to1400_mLSP_300to1300_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER 
+                // The scan is performed in the space:
+                // gluino mass in [400, 1400] GeV with 25 GeV step
+                // LSP mass in [0, mGluino-100] GeV with 25 GeV step
+                // m_chipm = x * m_chi0 + (1 - x)*m_glu, x = 0.8
+                //~12k events per grid point
+                return MakeSignalBinInfo(25.0f, 400.0f, 1425.0f, 25.0f, 300.0f, 1325.0f);
                 break;
             case Sample::t7btw:
                 // /SMS-T7btw_2J_mGo-800to1400_mSbottom-400to1350_mChi-150_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM
@@ -174,7 +183,11 @@ namespace ss
         {
             case Sample::t1tttt:                       return title + ";m_{#tilde{g}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"         ; break;
             case Sample::t1tttt_scans:                 return title + ";m_{#tilde{g}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"         ; break;
+            case Sample::t5tttt:                       return title + ";m_{#tilde{g}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"         ; break;
+            case Sample::t5lnu:                        return title + ";m_{#tilde{g}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"         ; break;
             case Sample::sbottomtop:                   return title + ";m_{#tilde{b}} (GeV); m_{#tilde{#chi}^{#pm}} (GeV)"       ; break;
+            case Sample::t6ttww_x08:                   return title + ";m_{#tilde{b}} (GeV); m_{#tilde{#chi}^{#pm}} (GeV)"       ; break;
+            case Sample::t6ttww_x05:                   return title + ";m_{#tilde{b}} (GeV); m_{#tilde{#chi}^{#pm}} (GeV)"       ; break;
             case Sample::tchiwh:                       return title + ";m_{#tilde{#chi}^{#pm}} (GeV); m_{#tilde{#chi}^{0}} (GeV)"; break;
             default:                                   return title + ";m_{0} (GeV); m_{12} (GeV)"                               ; break;
         }

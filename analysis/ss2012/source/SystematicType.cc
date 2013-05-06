@@ -1,9 +1,11 @@
 #include "SystematicType.h"
 #include "SSB2012.h"
-#include "rt/RootTools.h"
 #include <string>
 #include <stdexcept>
 #include "TString.h" 
+#include "rt/RootTools.h"
+#include "at/MCBtagCount.h"
+#include "at/YieldType.h"
 
 namespace ss
 {
@@ -33,7 +35,9 @@ namespace ss
         int& njets,
         int& nbtags,
         const bool do_beff_sf,
-        const SystematicType::value_type syst_type
+        const SystematicType::value_type syst_type,
+        const at::Sample::value_type sample,
+        const bool is_fast_sim
     )
     {
         if (not ssb::is_real_data())
@@ -80,13 +84,15 @@ namespace ss
                     met    = ssb::pfmet();
                     ht     = ssb::ht();
                     njets  = ssb::njets();
-                    nbtags = ssb::nbtags_reweighted_up(); // reweighted # btags (random #) scaling up B-tag efficiency
+                    //nbtags = ssb::nbtags_reweighted_up(); // reweighted # btags (random #) scaling up B-tag efficiency
+                    nbtags = at::MCBtagCount(ssb::vjets_p4(), ssb::vjets_btagged(), ssb::vjets_mcflavor_algo(), sample, is_fast_sim, at::YieldType::up, ssb::evt());
                     break;
                 case SystematicType::BEFF_DN:
                     met    = ssb::pfmet();
                     ht     = ssb::ht();
                     njets  = ssb::njets();
-                    nbtags = ssb::nbtags_reweighted_dn(); // reweighted # btags (random #) scaling down B-tag efficiency
+                    //nbtags = ssb::nbtags_reweighted_dn(); // reweighted # btags (random #) scaling down B-tag efficiency
+                    nbtags = at::MCBtagCount(ssb::vjets_p4(), ssb::vjets_btagged(), ssb::vjets_mcflavor_algo(), sample, is_fast_sim, at::YieldType::down, ssb::evt());
                     break;
                 default:
                     throw std::invalid_argument("[ss::GetReweightedKinematicVariables] Error: SystematicType invalid");

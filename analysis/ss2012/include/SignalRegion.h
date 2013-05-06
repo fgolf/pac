@@ -2,6 +2,7 @@
 #define SIGNALREGIONS_H
 
 #include <string>
+#include "at/Sample.h"
 #include "at/YieldType.h"
 #include "AnalysisType.h"
 #include "SystematicType.h"
@@ -112,7 +113,9 @@ namespace ss
         const AnalysisType::value_type& anal_type,
         const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive,
         const bool do_beff_sf = true, // applied for MC only
-        const SystematicType::value_type& syst_type = SystematicType::None
+        const SystematicType::value_type& syst_type = SystematicType::None,
+        const at::Sample::value_type sample = at::Sample::data,
+        const bool is_fast_sim = false
     );
 
     // passes signal region

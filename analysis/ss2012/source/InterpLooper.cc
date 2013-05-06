@@ -140,6 +140,16 @@ InterpLooper::InterpLooper
     //if (not h_den) {throw std::runtime_error("ERROR: InterpLooper: h_den doesn't exist");}
     //h_den->SetDirectory(0);
 
+    // determine if fastsim
+    if (at::GetSampleInfo(m_sample).type == at::SampleType::susy)
+    {
+        m_is_fast_sim = true;
+    }
+    else
+    {
+        m_is_fast_sim = false;
+    }
+
     // begin job
     BeginJob();
 }
@@ -325,7 +335,7 @@ int InterpLooper::operator()(long event)
             cout << endl;
         }
 
-        float mchi, m0, m12, mlsp;
+        float mglu, mchi, m0, m12, mlsp, x;
         switch(m_sample)
         {
             case Sample::ttjets:
@@ -343,6 +353,22 @@ int InterpLooper::operator()(long event)
                 m12  = sparm1();
                 mchi = sparm1();
                 mlsp = sparm2();
+                break;
+            case Sample::t6ttww_x05:
+                mglu = sparm0();
+                m0   = sparm0();
+                m12  = sparm1();
+                x    = sparm2();
+                mlsp = sparm1();
+                mchi = sparm3();
+                break;
+            case Sample::t6ttww_x08:
+                mglu = sparm0();
+                m0   = sparm0();
+                m12  = sparm1();
+                x    = sparm2();
+                mlsp = sparm1();
+                mchi = sparm3();
                 break;
             case Sample::glusbottom:
                 m0   = sparm0();
@@ -632,17 +658,17 @@ int InterpLooper::operator()(long event)
                 }
 
                 // Btag scale up/down
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_UP))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::MET_UP, m_sample, m_is_fast_sim))
                 {
                     rt::Fill2D(hc[sr+"nBTAUP"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_DN))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::MET_DN, m_sample, m_is_fast_sim))
                 {
                     rt::Fill2D(hc[sr+"nBTADN"], m0, m12, evt_weight);
                 }
 
-                // Btag scale up/down
+                // MET scale up/down
                 if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::MET_UP))
                 {
                     rt::Fill2D(hc[sr+"nMETUP"], m0, m12, evt_weight);

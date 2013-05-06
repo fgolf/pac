@@ -2460,7 +2460,9 @@ namespace ss
         const AnalysisType::value_type& anal_type,
         const SignalRegionType::value_type& signal_region_type,
         const bool do_beff_sf,
-        const SystematicType::value_type& syst_type
+        const SystematicType::value_type& syst_type,
+        const at::Sample::value_type sample,
+        const bool is_fast_sim
     )
     {
         // lepton pt cuts
