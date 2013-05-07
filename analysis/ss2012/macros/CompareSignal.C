@@ -110,7 +110,7 @@ void CompareSignal(const std::string& file1, const std::string& file2, const std
         const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(sr_num)); 
 
         PrintPlots(sr+"nGenerated"     , hc1, hc2, path, suffix, draw_option, "1.0f");
-        PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.1f");
+        PrintPlots(sr+"nPassing"       , hc1, hc2, path, suffix, draw_option, "1.1f", 0.00, 1600);
         PrintPlots(sr+"effNormNice"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12);
         PrintPlots(sr+"effNormNicePerc", hc1, hc2, path, suffix, draw_option, "1.3f", 0.00, 0.12);
         PrintPlots(sr+"effErrJESUP"    , hc1, hc2, path, suffix, draw_option, "1.3f", 0.75, 1.25);
