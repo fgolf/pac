@@ -418,10 +418,10 @@ int FRClosureLooper::operator()(long event)
         // only one gen level lepton
         // only keep events with one real status 3 lepton
         //if (gen_nleps()!=1)
-        //if (gen_nleps_with_fromtau()!=1)
-        //{
-        //    return 0;
-        //}
+        if (gen_nleps_with_fromtau()!=1)
+        {
+            return 0;
+        }
         
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;

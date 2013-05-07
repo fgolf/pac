@@ -39,8 +39,8 @@ void WJetsClosureTest(const std::string& filename)
     ss::SetSignalRegionAliases(e1, ss::AnalysisType::high_pt, /*beff_sf=*/false);
 
     // alias
-    e1.SetAlias("obs"       , "gen_nleps==1 && njets>=0 && (lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num)");
-    e1.SetAlias("sf_matched", "gen_nleps==1 && njets>=0 && (lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo)");
+    e1.SetAlias("obs"       , "gen_nleps==1 && njets>=2 && (lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num)");
+    e1.SetAlias("sf_matched", "gen_nleps==1 && njets>=2 && (lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo)");
 
     // observed
     e1.Draw("1>>h_obs_ee", "ee && obs", "goff");

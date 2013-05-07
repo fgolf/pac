@@ -143,7 +143,7 @@ namespace ss
                 // The scan is performed in the space:
                 // gluino mass in [400, 1400] GeV with 25 GeV step
                 // LSP mass in [0, mGluino-100] GeV with 25 GeV step
-                // m_chipm = x * m_chi0 + (1 - x)*m_glu, x = 0.8
+                // m_chi_pm = x * m_chi0 + (1 - x)*m_glu, x = 0.8
                 //~12k events per grid point
                 return MakeSignalBinInfo(25.0f, 400.0f, 1425.0f, 25.0f, 300.0f, 1325.0f);
                 break;
