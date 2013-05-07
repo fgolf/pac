@@ -18,7 +18,7 @@ namespace rt
         chain->Merge(merged_file.c_str(), option.c_str());
         chain->Merge(merged_file.c_str(), option.c_str());
         cout << "complete." << endl; 
-        delete merge;
+        delete chain;
     }
 
 } // namespace rt
