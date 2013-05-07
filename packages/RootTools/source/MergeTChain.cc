@@ -14,10 +14,11 @@ namespace rt
         cout << Form("merging %s to %s", input_path.c_str(), merged_file.c_str()) << endl;
         rt::mkdir(rt::dirname(merged_file), /*force=*/true);
         TTree::SetMaxTreeSize(5368709120); // 5GB
-        TChain chain(tree_name.c_str()); 
-        chain.Add(input_path.c_str()); 
-        chain.Merge(merged_file.c_str(), option.c_str());
+        TChain* chain = rt::CreateTChainFromCommaSeperatedList(input_path, tree_name);
+        chain->Merge(merged_file.c_str(), option.c_str());
+        chain->Merge(merged_file.c_str(), option.c_str());
         cout << "complete." << endl; 
+        delete merge;
     }
 
 } // namespace rt
