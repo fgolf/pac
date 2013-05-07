@@ -50,7 +50,6 @@ lib RootTools
     ./source/CompareContentsOfTTrees.cc
     [ rootcint Dict
       : # sources
-        $(SIMPLETABLE_PATH)/CTable.h
         ./include/rt/MiscTools.h
         ./include/rt/FillHist.h
         ./include/rt/TH1Container.h
