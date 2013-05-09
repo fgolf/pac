@@ -38,29 +38,29 @@ void CreateHtVsMetPlot
     ss::SetSignalRegionAliases(e1, at, /*apply beff sf*/false);
 
     // book
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_em = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njge4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_em = new TH2F("h2_ht_vs_pfmet_baseline_njge4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njge4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_em = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njge4_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_em = new TH2F("h2_ht_vs_pfmet_baseline_njge4_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_ee = new TH2F("h2_ht_vs_pfmet_baseline_njge4_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
 
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_nb0 = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_nb0", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_nb1 = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_nb1", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njlt4_nb2 = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_nb2", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_nb0 = new TH2F("h2_ht_vs_pfmet_baseline_njge4_nb0", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_nb1 = new TH2F("h2_ht_vs_pfmet_baseline_njge4_nb1", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_njge4_nb2 = new TH2F("h2_ht_vs_pfmet_baseline_njge4_nb2", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_nb0 = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_nb0", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_nb1 = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_nb1", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njlt4_nb2 = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_nb2", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_nb0 = new TH2F("h2_ht_vs_pfmet_baseline_njge4_nb0", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_nb1 = new TH2F("h2_ht_vs_pfmet_baseline_njge4_nb1", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_njge4_nb2 = new TH2F("h2_ht_vs_pfmet_baseline_njge4_nb2", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
 
-    TH2F* h2_ht_vs_pfmet_baseline_nb0_mm = new TH2F("h2_ht_vs_pfmet_baseline_nb0_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb0_em = new TH2F("h2_ht_vs_pfmet_baseline_nb0_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb0_ee = new TH2F("h2_ht_vs_pfmet_baseline_nb0_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb1_mm = new TH2F("h2_ht_vs_pfmet_baseline_nb1_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb1_em = new TH2F("h2_ht_vs_pfmet_baseline_nb1_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb1_ee = new TH2F("h2_ht_vs_pfmet_baseline_nb1_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb2_mm = new TH2F("h2_ht_vs_pfmet_baseline_nb2_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb2_em = new TH2F("h2_ht_vs_pfmet_baseline_nb2_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
-    TH2F* h2_ht_vs_pfmet_baseline_nb2_ee = new TH2F("h2_ht_vs_pfmet_baseline_nb2_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 550, 0, 550);
+    TH2F* h2_ht_vs_pfmet_baseline_nb0_mm = new TH2F("h2_ht_vs_pfmet_baseline_nb0_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb0_em = new TH2F("h2_ht_vs_pfmet_baseline_nb0_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb0_ee = new TH2F("h2_ht_vs_pfmet_baseline_nb0_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb1_mm = new TH2F("h2_ht_vs_pfmet_baseline_nb1_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb1_em = new TH2F("h2_ht_vs_pfmet_baseline_nb1_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb1_ee = new TH2F("h2_ht_vs_pfmet_baseline_nb1_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb2_mm = new TH2F("h2_ht_vs_pfmet_baseline_nb2_mm", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb2_em = new TH2F("h2_ht_vs_pfmet_baseline_nb2_em", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
+    TH2F* h2_ht_vs_pfmet_baseline_nb2_ee = new TH2F("h2_ht_vs_pfmet_baseline_nb2_ee", Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi), 1500, 0, 1500, 600, 0, 600);
 
     // slection
     TCut selection = Form("is_ss && lep_pt && %s", sr_info.name.c_str());
@@ -275,7 +275,7 @@ void CreateHtVsMetPlot
     l4->AddEntry(h2_ht_vs_pfmet_baseline_njge4_nb2, "# btags #geq 2, # jets #geq 4"     , "p");
 
     // cut out region
-    const int n1 = 12;
+    const int n1 = 14;
     const float ht_baseline = at==ss::AnalysisType::high_pt ? 80.0 : 250;
     float x1[n1], y1[n1];
     for (Int_t i=0;i<n1;i++)

@@ -233,6 +233,7 @@ float DileptonTriggerScaleFactor
 // returns pair<float, float> where 
 //      first  = scale factor 
 //      second = uncertainty 
+// analysis type value: 0 high pt, 1 low pt, 2 vlow pt
 // MC used: /TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/Summer12_DR53X-PU_S10_START53_V7A-v1/AODSIM
 std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsigned int analysis_type)
 {
@@ -273,9 +274,15 @@ std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsi
             case 26 : N_ttbar_SRn = 1895.01   ; break;
             case 27 : N_ttbar_SRn = 4222.36   ; break;
             case 28 : N_ttbar_SRn = 6200.34   ; break;
+            case 30 : N_ttbar_SRn = 205259.69 ; break;
+            case 31 : N_ttbar_SRn = 205259.69 ; break;
+            case 32 : N_ttbar_SRn = 51566.34  ; break;
+            case 33 : N_ttbar_SRn = 19195.63  ; break;
+            case 34 : N_ttbar_SRn = 574963.12 ; break;
+            case 35 : N_ttbar_SRn = 574963.12 ; break;
             default : 
-                std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
-                return std::make_pair(-999999.0 , -999999.0); 
+                      std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
+                      return std::make_pair(-999999.0 , -999999.0); 
         }
 
         // return the scale factor 
@@ -321,8 +328,55 @@ std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsi
             case 27 : N_ttbar_SRn = 3844.01   ; break; 
             case 28 : N_ttbar_SRn = 6200.34   ; break; 
             default : 
-                std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
-                return std::make_pair(-999999.0 , -999999.0); 
+                      std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
+                      return std::make_pair(-999999.0 , -999999.0); 
+        }
+
+        // return the scale factor 
+        const float sf_value = N_ttbar_SRn / N_ttbar_SR0;
+        const float sf_error = sqrt(sf_value * (1.0 - sf_value) / N_ttbar_SR0);
+        return std::make_pair(sf_value, sf_error);
+    }
+    // very low pT results
+    else if (analysis_type == 2)
+    {
+        // number passing ttbar events for Signal Region 0
+        const float N_ttbar_SR0 = 312383.12;
+
+        // number passing ttbar events for Signal Region sr_num 
+        float N_ttbar_SRn = -999999.0;
+        switch (sr_num)
+        {
+            case 0  : N_ttbar_SRn = 312383.12 ; break; 
+            case 1  : N_ttbar_SRn = 63861.72  ; break; 
+            case 2  : N_ttbar_SRn = 11143.52  ; break; 
+            case 3  : N_ttbar_SRn = 58841.65  ; break; 
+            case 4  : N_ttbar_SRn = 38384.17  ; break; 
+            case 5  : N_ttbar_SRn = 21909.01  ; break; 
+            case 6  : N_ttbar_SRn = 7998.78   ; break; 
+            case 7  : N_ttbar_SRn = 11577.39  ; break; 
+            case 8  : N_ttbar_SRn = 16657.09  ; break; 
+            case 10 : N_ttbar_SRn = 147874.94 ; break; 
+            case 11 : N_ttbar_SRn = 31529.23  ; break; 
+            case 12 : N_ttbar_SRn = 5626.79   ; break; 
+            case 13 : N_ttbar_SRn = 26851.46  ; break; 
+            case 14 : N_ttbar_SRn = 17304.34  ; break; 
+            case 15 : N_ttbar_SRn = 11225.76  ; break; 
+            case 16 : N_ttbar_SRn = 4015.82   ; break; 
+            case 17 : N_ttbar_SRn = 5583.87   ; break; 
+            case 18 : N_ttbar_SRn = 7625.88   ; break; 
+            case 20 : N_ttbar_SRn = 108305.35 ; break; 
+            case 21 : N_ttbar_SRn = 19509.91  ; break; 
+            case 22 : N_ttbar_SRn = 3088.90   ; break; 
+            case 23 : N_ttbar_SRn = 22842.32  ; break; 
+            case 24 : N_ttbar_SRn = 15404.18  ; break; 
+            case 25 : N_ttbar_SRn = 4641.87   ; break; 
+            case 26 : N_ttbar_SRn = 1895.01   ; break; 
+            case 27 : N_ttbar_SRn = 3844.01   ; break; 
+            case 28 : N_ttbar_SRn = 6200.34   ; break; 
+            default : 
+                      std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
+                      return std::make_pair(-999999.0 , -999999.0); 
         }
 
         // return the scale factor 
