@@ -211,6 +211,7 @@ void FRClosureLooper::EndJob()
         static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_mm"  ]),
         static_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_em"  ])
     );
+    PredSummary sf_count = frp.GetSingleFakeCount();
 
     // SF (raw)
     PredSummary sf_raw = frp.GetSingleFakePredictionRaw();
@@ -228,59 +229,65 @@ void FRClosureLooper::EndJob()
     hc["h_sf_pred_raw"]->SetBinError(5, sf_raw.em_mufo.error);
     hc["h_sf_pred_raw"]->SetBinError(6, sf_raw.em_elfo.error);
 
-    // DF
-    PredSummary df = frp.GetDoubleFakePrediction();
-    hc.Add(new TH1F("h_df_pred", "DF prediction", 4, 0, 4));
-    hc["h_df_pred"]->SetBinContent(1, df.ee.value);
-    hc["h_df_pred"]->SetBinContent(2, df.mm.value);
-    hc["h_df_pred"]->SetBinContent(3, df.em.value);
-    hc["h_df_pred"]->SetBinContent(4, df.ll.value);
-    hc["h_df_pred"]->SetBinError(1, df.ee.error);
-    hc["h_df_pred"]->SetBinError(2, df.mm.error);
-    hc["h_df_pred"]->SetBinError(3, df.em.error);
-    hc["h_df_pred"]->SetBinError(4, df.ll.error);
+    //// DF
+    //PredSummary df = frp.GetDoubleFakePrediction();
+    //hc.Add(new TH1F("h_df_pred", "DF prediction", 4, 0, 4));
+    //hc["h_df_pred"]->SetBinContent(1, df.ee.value);
+    //hc["h_df_pred"]->SetBinContent(2, df.mm.value);
+    //hc["h_df_pred"]->SetBinContent(3, df.em.value);
+    //hc["h_df_pred"]->SetBinContent(4, df.ll.value);
+    //hc["h_df_pred"]->SetBinError(1, df.ee.error);
+    //hc["h_df_pred"]->SetBinError(2, df.mm.error);
+    //hc["h_df_pred"]->SetBinError(3, df.em.error);
+    //hc["h_df_pred"]->SetBinError(4, df.ll.error);
+    //PredSummary df_count = frp.GetDoubleFakeCount();
 
-    // SF 
-    PredSummary sf = frp.GetSingleFakePrediction();
-    hc.Add(new TH1F("h_sf_pred", "SF prediction", 4, 0, 4));
-    hc["h_sf_pred"]->SetBinContent(1, sf.ee.value);
-    hc["h_sf_pred"]->SetBinContent(2, sf.mm.value);
-    hc["h_sf_pred"]->SetBinContent(3, sf.em.value);
-    hc["h_sf_pred"]->SetBinContent(4, sf.ll.value);
-    hc["h_sf_pred"]->SetBinError(1, sf.ee.error);
-    hc["h_sf_pred"]->SetBinError(2, sf.mm.error);
-    hc["h_sf_pred"]->SetBinError(3, sf.em.error);
-    hc["h_sf_pred"]->SetBinError(4, sf.ll.error);
+    //// SF 
+    //PredSummary sf = frp.GetSingleFakePrediction();
+    //hc.Add(new TH1F("h_sf_pred", "SF prediction", 4, 0, 4));
+    //hc["h_sf_pred"]->SetBinContent(1, sf.ee.value);
+    //hc["h_sf_pred"]->SetBinContent(2, sf.mm.value);
+    //hc["h_sf_pred"]->SetBinContent(3, sf.em.value);
+    //hc["h_sf_pred"]->SetBinContent(4, sf.ll.value);
+    //hc["h_sf_pred"]->SetBinError(1, sf.ee.error);
+    //hc["h_sf_pred"]->SetBinError(2, sf.mm.error);
+    //hc["h_sf_pred"]->SetBinError(3, sf.em.error);
+    //hc["h_sf_pred"]->SetBinError(4, sf.ll.error);
 
     // Fakes 
-    PredSummary fake = frp.GetFakePrediction();
-    hc.Add(new TH1F("h_fake_pred", "fake prediction", 4, 0, 4));
-    hc["h_fake_pred"]->SetBinContent(1, sf_raw.ee.value);
-    hc["h_fake_pred"]->SetBinContent(2, sf_raw.mm.value);
-    hc["h_fake_pred"]->SetBinContent(3, sf_raw.em.value);
-    hc["h_fake_pred"]->SetBinContent(4, sf_raw.ll.value);
-    hc["h_fake_pred"]->SetBinError(1, sf_raw.ee.error);
-    hc["h_fake_pred"]->SetBinError(2, sf_raw.mm.error);
-    hc["h_fake_pred"]->SetBinError(3, sf_raw.em.error);
-    hc["h_fake_pred"]->SetBinError(4, sf_raw.ll.error);
+    //PredSummary fake = frp.GetFakePrediction();
+    //hc.Add(new TH1F("h_fake_pred", "fake prediction", 4, 0, 4));
+    //hc["h_fake_pred"]->SetBinContent(1, sf_raw.ee.value);
+    //hc["h_fake_pred"]->SetBinContent(2, sf_raw.mm.value);
+    //hc["h_fake_pred"]->SetBinContent(3, sf_raw.em.value);
+    //hc["h_fake_pred"]->SetBinContent(4, sf_raw.ll.value);
+    //hc["h_fake_pred"]->SetBinError(1, sf_raw.ee.error);
+    //hc["h_fake_pred"]->SetBinError(2, sf_raw.mm.error);
+    //hc["h_fake_pred"]->SetBinError(3, sf_raw.em.error);
+    //hc["h_fake_pred"]->SetBinError(4, sf_raw.ll.error);
 
     // MC pred (hard coded from ICHEP) 
     PredSummary mc(Pred(00.0, 0.0), Pred(11.3, 0.3), Pred(00.0, 0.0));
 
     // total prediciton
     //PredSummary pred = fake + mc;
-    PredSummary pred = fake;
+    //PredSummary pred = fake;
+    PredSummary pred = sf_raw;  // not doing DFs
     
     // ratio of pred/obs
-    float obs_ee = yield_ss[0];
-    float obs_mm = yield_ss[1];
-    float obs_em = yield_ss[2];
-    float obs_ll = yield_ss[3];
+    float obs_ee       = yield_ss[0];
+    float obs_mm       = yield_ss[1];
+    float obs_em       = yield_ss[2];
+    float obs_ll       = yield_ss[3];
+    float obs_em_efake = rt::Integral(hc["h_yield_em_efake"]);
+    float obs_em_mfake = rt::Integral(hc["h_yield_em_mfake"]);
 
-    float obs_ee_error = yield_ss_error[0];
-    float obs_mm_error = yield_ss_error[1];
-    float obs_em_error = yield_ss_error[2];
-    float obs_ll_error = yield_ss_error[3];
+    float obs_ee_error       = yield_ss_error[0];
+    float obs_mm_error       = yield_ss_error[1];
+    float obs_em_error       = yield_ss_error[2];
+    float obs_ll_error       = yield_ss_error[3];
+    float obs_em_efake_error = rt::IntegralAndError(hc["h_yield_em_efake"]).second;
+    float obs_em_mfake_error = rt::IntegralAndError(hc["h_yield_em_mfake"]).second;
 
     float ee_ratio_value = pred.ee.value/obs_ee;
     float ee_ratio_error = ee_ratio_value * sqrt(pow(pred.ee.error/pred.ee.value, 2) + pow(obs_ee_error/obs_ee, 2));
@@ -303,6 +310,20 @@ void FRClosureLooper::EndJob()
     float em_rdiff_error = (obs_em/pred.em.value) * sqrt(pow(pred.em.error/pred.em.value, 2) + pow(obs_em_error/obs_em, 2));
     string em_rdiff      = rt::pm(em_rdiff_value, em_rdiff_error); 
 
+    float em_efake_ratio_value = pred.em_elfo.value/obs_em_efake;
+    float em_efake_ratio_error = em_efake_ratio_value * sqrt(pow(pred.em_elfo.error/pred.em_elfo.value, 2) + pow(obs_em_efake_error/obs_em_efake, 2));
+    string em_efake_ratio      = rt::pm(em_efake_ratio_value, em_efake_ratio_error);
+    float em_efake_rdiff_value = (pred.em_elfo.value - obs_em_efake)/pred.em_elfo.value; 
+    float em_efake_rdiff_error = (obs_em_efake/pred.em_elfo.value) * sqrt(pow(pred.em_elfo.error/pred.em_elfo.value, 2) + pow(obs_em_efake_error/obs_em_efake, 2));
+    string em_efake_rdiff      = rt::pm(em_efake_rdiff_value, em_efake_rdiff_error); 
+
+    float em_mfake_ratio_value = pred.em_mufo.value/obs_em_mfake;
+    float em_mfake_ratio_error = em_mfake_ratio_value * sqrt(pow(pred.em_mufo.error/pred.em_mufo.value, 2) + pow(obs_em_mfake_error/obs_em_mfake, 2));
+    string em_mfake_ratio      = rt::pm(em_mfake_ratio_value, em_mfake_ratio_error);
+    float em_mfake_rdiff_value = (pred.em_mufo.value - obs_em_mfake)/pred.em_mufo.value; 
+    float em_mfake_rdiff_error = (obs_em_mfake/pred.em_mufo.value) * sqrt(pow(pred.em_mufo.error/pred.em_mufo.value, 2) + pow(obs_em_mfake_error/obs_em_mfake, 2));
+    string em_mfake_rdiff      = rt::pm(em_mfake_rdiff_value, em_mfake_rdiff_error); 
+
     float ll_ratio_value = pred.ll.value/obs_ll;
     float ll_ratio_error = ll_ratio_value * sqrt(pow(pred.ll.error/pred.ll.value, 2) + pow(obs_ll_error/obs_ll, 2));
     string ll_ratio      = rt::pm(ll_ratio_value, ll_ratio_error);
@@ -318,20 +339,12 @@ void FRClosureLooper::EndJob()
     t_yields.setTitle(Form("closure test table (%s)", sr_info.title.c_str()));
     string f = "1.2";
     string o = (m_do_scale1fb ? "1.2f" : "1.0f");
-//     t_yields.setTable() (                        "ee",              "mm",             "em",        "em (el fake)",        "em (mu fake)",             "ll")
-//                         ("SF raw"  , sf_raw.ee.str(f), sf_raw.mm.str(f), sf_raw.em.str(f), sf_raw.em_elfo.str(f),  sf_raw.em_mufo.str(f), sf_raw.ll.str(f))
-//                         ("SF"      ,     sf.ee.str(f),     sf.mm.str(f),     sf.em.str(f),                  "NA",                   "NA",     sf.ll.str(f))
-//                         ("DF"      ,     df.ee.str(f),     df.mm.str(f),     df.em.str(f),                  "NA",                   "NA",     df.ll.str(f))
-//                         ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f),                  "NA",                   "NA",   pred.ll.str(f))
-//                         ("obs"     ,   fmt(obs_ee, o),    fmt(obs_mm,o),    fmt(obs_em,o),                  "NA",                   "NA",    fmt(obs_ll,o))
-//                         ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,                  "NA",                   "NA",         ll_ratio)
-//                         ("(p-o)/p" ,         ee_rdiff,         mm_rdiff,         em_rdiff,                  "NA",                   "NA",         ll_rdiff)
-//                         ;
-    t_yields.setTable() (                        "ee",              "mm",            "em",           "ll")
-                        ("pred"    ,   pred.ee.str(f),   pred.mm.str(f),   pred.em.str(f), pred.ll.str(f))
-                        ("obs"     ,   fmt(obs_ee, o),    fmt(obs_mm,o),    fmt(obs_em,o),  fmt(obs_ll,o))
-                        ("pred/obs",         ee_ratio,         mm_ratio,         em_ratio,       ll_ratio)
-                        ("(p-o)/p" ,         ee_rdiff,         mm_rdiff,         em_rdiff,       ll_rdiff)
+    t_yields.setTable() (                              "ee",                   "mm",                   "em",               "em (e fake)",               "em (m fake)",                   "ll")
+                        ("SF count", (int)sf_count.ee.value, (int)sf_count.mm.value, (int)sf_count.em.value, (int)sf_count.em_elfo.value, (int)sf_count.em_mufo.value, (int)sf_count.ll.value)
+                        ("pred"    ,         pred.ee.str(f),         pred.mm.str(f),         pred.em.str(f),         pred.em_elfo.str(f),         pred.em_mufo.str(f),         pred.ll.str(f))
+                        ("obs"     ,         fmt(obs_ee, o),          fmt(obs_mm,o),          fmt(obs_em,o),         fmt(obs_em_efake,o),         fmt(obs_em_mfake,o),          fmt(obs_ll,o))
+                        ("pred/obs",               ee_ratio,               mm_ratio,               em_ratio,              em_efake_ratio,              em_mfake_ratio,               ll_ratio)
+                        ("(p-o)/p" ,               ee_rdiff,               mm_rdiff,               em_rdiff,              em_efake_rdiff,              em_mfake_rdiff,               ll_rdiff)
                         ;
     t_yields.print();
     t_yields.printTex();
@@ -348,14 +361,17 @@ void FRClosureLooper::BookHists()
 
         hc.Add(new TH1F("h_lumi"   , "integrated lumi used for these plots", 10000, 0, 100));
 
+        hc.Add(new TH1F("h_yield_em_efake", "yields_em_efake;yield;Events", 3, -0.5, 2.5));
+        hc.Add(new TH1F("h_yield_em_mfake", "yields_em_mfake;yield;Events", 3, -0.5, 2.5));
+
         // basic yield plots
         for (size_t i = 0; i != at::DileptonHypType::static_size; i++)
         {
             at::DileptonHypType::value_type hyp_type = static_cast<at::DileptonHypType::value_type>(i);
 
             // name and title suffixes
-            string ns = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
-            string ts = Form(" (%s)",  GetDileptonHypTypeTitle(hyp_type).c_str());
+            string ns = Form("_%s"  , GetDileptonHypTypeName(hyp_type).c_str() );
+            string ts = Form(" (%s)", GetDileptonHypTypeTitle(hyp_type).c_str());
 
             // yields
             hc.Add(new TH1F(Form("h_yield%s", ns.c_str()), Form("yields%s;yield;Events", ts.c_str()), 5, 0, 5));
@@ -520,6 +536,11 @@ int FRClosureLooper::operator()(long event)
         {
             rt::Fill(hc["h_yield_ll"], 1, evt_weight);
             rt::Fill(hc["h_yield"+hs], 1, evt_weight);
+            if (em())
+            {
+                if ((not_fromw_l1 && abs(lep1_pdgid())==11) || (not_fromw_l2 && abs(lep2_pdgid())==11)) {rt::Fill(hc["h_yield_em_efake"], 1, evt_weight);}
+                if ((not_fromw_l1 && abs(lep1_pdgid())==13) || (not_fromw_l2 && abs(lep2_pdgid())==13)) {rt::Fill(hc["h_yield_em_mfake"], 1, evt_weight);}
+            }
         }
 
         // SF 

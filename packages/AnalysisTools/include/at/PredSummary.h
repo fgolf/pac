@@ -4,6 +4,8 @@
 #include <string>
 #include <utility>
 
+class TH1;
+
 namespace at
 {
     // struct to hold the value/error of the pred
@@ -29,6 +31,7 @@ namespace at
     Pred operator-(const Pred& lhs, const Pred& rhs);
     Pred operator+(const Pred& lhs, const Pred& rhs);
     std::ostream& operator << (std::ostream& os, const Pred& p);
+    Pred GetPredFromHist(TH1* h);
 
     // struct to hold the different channels
     // ----------------------------------------------------//

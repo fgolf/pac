@@ -1,5 +1,6 @@
 #include "at/PredSummary.h"
 #include "rt/RootTools.h"
+#include "TH1.h"
 
 using namespace rt;
 using namespace std;
@@ -80,7 +81,6 @@ namespace at
         return pm(value, error, format_string); 
     }
 
-
     // non member methods
     bool is_empty(const Pred& pred)
     {
@@ -107,6 +107,12 @@ namespace at
     {
         os << Form("%1.3f +/- %1.3f", p.value, p.error);
         return os;
+    }
+
+    Pred GetPredFromHist(TH1* h)
+    {
+        const std::pair<float, float> p = rt::IntegralAndError(h);
+        return Pred(p.first, p.second);
     }
 
     // FakeRateSummary implementation

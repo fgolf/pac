@@ -41,12 +41,16 @@ void WJetsClosureTest(const std::string& filename)
     // wjets sample uses older tag; gen_nleps == gen_nleps_with_fromtau
 
     // alias
-    e1.SetAlias("samesign"  , "lep1_charge==lep2_charge");
+    e1.SetAlias("samesign"   , "lep1_charge==lep2_charge");
     e1.SetAlias("el_fake"    , "((lep1_is_fromw==1 && abs(lep2_pdgid)==11) || (lep2_is_fromw==1 && abs(lep1_pdgid)==11))");
     e1.SetAlias("mu_fake"    , "((lep1_is_fromw==1 && abs(lep2_pdgid)==13) || (lep2_is_fromw==1 && abs(lep1_pdgid)==13))");
     e1.SetAlias("real_is_num", "((lep1_is_fromw==1 && lep1_is_num) || (lep2_is_fromw==1 && lep2_is_num))");
-    e1.SetAlias("obs"        , "gen_nleps_with_fromtau==1 && njets>=2 && samesign && ((lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num))");
-    e1.SetAlias("sf_matched" , "gen_nleps_with_fromtau==1 && njets>=2 && samesign && ((lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo))");
+/*     e1.SetAlias("obs"        , "gen_nleps_with_fromtau==1 && ((lep1_is_fromw>0 && lep1_is_num && lep2_is_num) || (lep2_is_fromw>0 && lep2_is_num && lep1_is_num))"); */
+/*     e1.SetAlias("sf_matched" , "gen_nleps_with_fromtau==1 && njets>=2 && samesign && pfmet > 30 && ((lep1_is_fromw<1 && lep1_is_fo) || (lep2_is_fromw<1 && lep2_is_fo))"); */
+    e1.SetAlias("obs"        , "is_ss");
+    e1.SetAlias("sf_matched" , "is_sf");
+
+    //tree.Draw("dilep_type>>hpred(4,-0.5,3.5)","is_sf*(lep1_is_fo*lep1_wfr/(1-lep1_wfr) + lep2_is_fo*lep2_wfr/(1-lep2_wfr))","texte")
 
     // observed
     e1.Draw("1>>h_obs_ee", "ee && obs", "goff");

@@ -207,7 +207,7 @@ namespace at
                     bin2 = h_mufr->GetBin(xbin2, ybin2);
                 }
 
-                Float_t nFOs = foHist->GetBinContent(xbin, ybin);    // number of denominator not numerator objects for this eta, pt bin
+                Float_t nFOs  = foHist->GetBinContent(xbin, ybin);    // number of denominator not numerator objects for this eta, pt bin
                 Float_t nFOsError = foHist->GetBinError(xbin, ybin); // number error on number of of denominator not numerator objects for this eta, pt bin
                 Float_t FRvalue1 = 0.0;                              // get value of fake rate 1 for this eta, pt bin
                 Float_t FRerror1 = 0.0;                              // get error on fake rate 1 for this eta, pt bin
@@ -318,6 +318,11 @@ namespace at
         return Pred(pred_total, pred_error_total);
     }
 
+    PredSummary FakeRatePrediction::GetSingleFakeCount() const
+    {
+        return sf_count;
+    }
+
     PredSummary FakeRatePrediction::GetSingleFakePredictionRaw() const
     {
         return sf_raw;
@@ -326,6 +331,11 @@ namespace at
     PredSummary FakeRatePrediction::GetSingleFakePrediction() const
     {
         return sf;
+    }
+
+    PredSummary FakeRatePrediction::GetDoubleFakeCount() const
+    {
+        return df_count;
     }
 
     PredSummary FakeRatePrediction::GetDoubleFakePrediction() const
@@ -354,13 +364,26 @@ namespace at
         {
             throw std::runtime_error("ERROR - at::FakeRatePrediction::ComputeAllFakePredictions: one or more histograms are NULL");
         }
+
+        // SF count
+        Pred sf_count_ee = GetPredFromHist(h_sf_ee);
+        Pred sf_count_mm = GetPredFromHist(h_sf_mm);
+        Pred sf_count_em = GetPredFromHist(h_sf_em);
+        Pred sf_count_me = GetPredFromHist(h_sf_me);
+        sf_count = PredSummary(sf_count_ee, sf_count_mm, sf_count_em, sf_count_me);
+
         // SF raw
         Pred ee = SingleFakePrediction(h_sf_ee, FakeRateType::E , DileptonHypType::EE  );
         Pred mm = SingleFakePrediction(h_sf_mm, FakeRateType::MU, DileptonHypType::MUMU);
         Pred em = SingleFakePrediction(h_sf_em, FakeRateType::E , DileptonHypType::EMU );
         Pred me = SingleFakePrediction(h_sf_me, FakeRateType::MU, DileptonHypType::EMU );
-        //em += me;
         sf_raw = PredSummary(ee, mm, em, me);
+
+        // DF count
+        Pred df_count_ee = GetPredFromHist(h_df_ee);
+        Pred df_count_mm = GetPredFromHist(h_df_mm);
+        Pred df_count_em = GetPredFromHist(h_df_em);
+        df_count = PredSummary(df_count_ee, df_count_mm, df_count_em);
 
         // DF
         ee = DoubleFakePrediction(h_df_ee, FakeRateType::EE  );

@@ -506,8 +506,7 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
 /* 	rt::TH1Container hc_dy("plots/mceff/dy/plots_test.root"); */
 /* 	rt::TH1Container hc_tt("plots/mceff/dy/plots_test.root"); */
     rt::TH1Container hc;
-/*     std::string path = "plots/mceff/overlay2"; */
-    std::string path = "plots/mceff/overlay3";
+    std::string path = "plots/mceff/overlay";
 
 
 	std::map<std::string, rt::TH1Overlay> p;
@@ -556,16 +555,16 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
 
     // cross check
     hc_dy.Add(rt::AddHists(hc_dy["h_reco_el_id_vs_pt_barrel"], hc_dy["h_reco_el_id_vs_pt_endcap"], "h_reco_el_id_vs_pt_barrel_endcap", "sum N barrel + endcap"));
-    hc_dy.Add(rt::AddHists(hc_dy["h_mc_el_vs_pt_barrel"     ], hc_dy["h_mc_el_vs_pt_endcap"     ], "h_mc_el_vs_pt_barrel_endcap"        , "sum D barrel + endcap"));
+    hc_dy.Add(rt::AddHists(hc_dy["h_mc_el_vs_pt_barrel"     ], hc_dy["h_mc_el_vs_pt_endcap"     ], "h_mc_el_vs_pt_barrel_endcap"     , "sum D barrel + endcap"));
     hc_tt.Add(rt::AddHists(hc_tt["h_reco_el_id_vs_pt_barrel"], hc_tt["h_reco_el_id_vs_pt_endcap"], "h_reco_el_id_vs_pt_barrel_endcap", "sum N barrel + endcap"));
-    hc_tt.Add(rt::AddHists(hc_tt["h_mc_el_vs_pt_barrel"     ], hc_tt["h_mc_el_vs_pt_endcap"     ], "h_mc_el_vs_pt_barrel_endcap"        , "sum D barrel + endcap"));
+    hc_tt.Add(rt::AddHists(hc_tt["h_mc_el_vs_pt_barrel"     ], hc_tt["h_mc_el_vs_pt_endcap"     ], "h_mc_el_vs_pt_barrel_endcap"     , "sum D barrel + endcap"));
     hc_dy.Add(rt::MakeEfficiencyPlot(hc_dy["h_reco_el_id_vs_pt_barrel_endcap" ], hc_dy["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
     hc_tt.Add(rt::MakeEfficiencyPlot(hc_tt["h_reco_el_id_vs_pt_barrel_endcap" ], hc_tt["h_mc_el_vs_pt_barrel_endcap"], "h_eff_el_id_vs_pt_barrel_endcap" , "electron ID efficiency;p_{T} (GeV)" ));
 
-/*     rt::MaskHist2D(hc_dy["h_reco_el"], "x", 1.444, 1.566); */
-/*     rt::MaskHist2D(hc_dy["h_mc_el"  ], "x", 1.444, 1.566); */
-/*     rt::MaskHist2D(hc_tt["h_reco_el"], "x", 1.444, 1.566); */
-/*     rt::MaskHist2D(hc_tt["h_mc_el"  ], "x", 1.444, 1.566); */
+    rt::MaskHist2D(hc_dy["h_reco_el"], "x", 1.444, 1.566);
+    rt::MaskHist2D(hc_dy["h_mc_el"  ], "x", 1.444, 1.566);
+    rt::MaskHist2D(hc_tt["h_reco_el"], "x", 1.444, 1.566);
+    rt::MaskHist2D(hc_tt["h_mc_el"  ], "x", 1.444, 1.566);
     hc_dy.Add(rt::MakeEfficiencyProjectionPlot(hc_dy["h_reco_el" ], hc_dy["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-50 bin);|#eta|", 30, 50));
     hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el" ], hc_tt["h_mc_el"], "x", "h_eff_el_vs_eta_zoom1", "electron efficiency (30-50 bin);|#eta|", 30, 50));
     hc_dy.Add(dynamic_cast<TH1*>(hc_dy["h_reco_el"]->Clone("h_reco_el_mask2")));
@@ -580,8 +579,8 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     hc_tt.Add(rt::MakeEfficiencyProjectionPlot(hc_tt["h_reco_el_mask2"], hc_tt["h_mc_el_mask2"], "x", "h_eff_el_vs_eta_zoom2", "electron efficiency (not 30-50 bin);|#eta|"));
 
     // overlay
-    CreateOverlay(p, "h_mc_el_vs_pt_barrel_endcap"     , hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
-    CreateOverlay(p, "h_reco_el_id_vs_pt_barrel_endcap", hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right", 1, -1);
+    CreateOverlay(p, "h_mc_el_vs_pt_barrel_endcap"     , hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right");
+    CreateOverlay(p, "h_reco_el_id_vs_pt_barrel_endcap", hc_dy, hc_tt, "electrons", "sb::off dt::norm lg::top_right");
     CreateOverlay(p, "h_eff_el_id_vs_pt_barrel_endcap" , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 1.1);
     CreateOverlay(p, "h_eff_el_vs_eta_zoom1"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 1.1);
     CreateOverlay(p, "h_eff_el_vs_eta_zoom2"           , hc_dy, hc_tt, "electrons", "sb::off lg::bottom", 0, 1.1);
@@ -634,7 +633,7 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     p["p_eff_el_rel_diff_vs_pt_compare"] = rt::TH1Overlay("(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY};p_{T} (GeV)", "sb::off lg::top_right");
     p["p_eff_el_rel_diff_vs_pt_compare"].Add(hc["h_eff_el_rel_diff_vs_pt_barrel"], "barrel", kBlue, 2, 20);
     p["p_eff_el_rel_diff_vs_pt_compare"].Add(hc["h_eff_el_rel_diff_vs_pt_endcap"], "endcap", kRed , 2, 22);
-    p["p_eff_el_rel_diff_vs_pt_compare"].SetYAxisRange(-0.20, 0.10);
+    p["p_eff_el_rel_diff_vs_pt_compare"].SetYAxisRange(-0.10, 0.20);
     p["p_eff_el_rel_diff_vs_pt_compare"].SetLegendOption("p");
     p["p_eff_el_rel_diff_vs_pt_compare"].SetLegendTextSize(0.042);
     p["p_eff_el_rel_diff_vs_pt_compare"].AddText("electrons", 0.55, 0.835);
@@ -649,7 +648,7 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     p["p_eff_mu_rel_diff_vs_pt_compare"] = rt::TH1Overlay("(#varepsilon_{DY} - #varepsilon_{t#bar{t}})/#varepsilon_{DY};p_{T} (GeV)", "sb::off lg::top_right");
     p["p_eff_mu_rel_diff_vs_pt_compare"].Add(hc["h_eff_mu_rel_diff_vs_pt_barrel"], "barrel", kBlue, 2, 20);
     p["p_eff_mu_rel_diff_vs_pt_compare"].Add(hc["h_eff_mu_rel_diff_vs_pt_endcap"], "endcap", kRed , 2, 22);
-    p["p_eff_mu_rel_diff_vs_pt_compare"].SetYAxisRange(-0.15, 0.0);
+    p["p_eff_mu_rel_diff_vs_pt_compare"].SetYAxisRange(0.00, 0.20);
     p["p_eff_mu_rel_diff_vs_pt_compare"].SetLegendOption("p");
     p["p_eff_mu_rel_diff_vs_pt_compare"].SetLegendTextSize(0.042);
     p["p_eff_mu_rel_diff_vs_pt_compare"].AddText("muons", 0.55, 0.835);
@@ -689,6 +688,10 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     CreateOverlay(p, "h_eff_mu_iso_vs_pt_endcap" , hc_dy, hc_tt, "muons");
 
     // table
+    CTable t1 = rt::CreateTableFromHist(hc["h_eff_el_rel_diff"       ],"(eff DY - eff ttbar)/eff DY all", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");
+    CTable t2 = rt::CreateTableFromHist(hc["h_eff_el_rel_diff_vs_eta"],"(eff DY - eff ttbar)/eff DY BAR", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");
+    CTable t3 = rt::CreateTableFromHist(hc["h_eff_el_rel_diff_vs_pt" ],"(eff DY - eff ttbar)/eff DY EC" , "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");
+
     CTable t_el_rdiff = rt::CreateTableFromHist(hc["h_eff_el_rel_diff"],"(eff DY - eff ttbar)/eff DY", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
     CTable t_mu_rdiff = rt::CreateTableFromHist(hc["h_eff_mu_rel_diff"],"(eff DY - eff ttbar)/eff DY", "$\\eta$", "$p_{T}$", "", "GeV", "1.3", "1.2", "1.0");                                                                         
     if (tex)
@@ -700,6 +703,9 @@ void OverlayEffPlots(const bool tex = false, const std::string& suffix = "png")
     {
         t_el_rdiff.print();
         t_mu_rdiff.print();
+        t1.print();
+        t2.print();
+        t3.print();
     }
 
     // print
