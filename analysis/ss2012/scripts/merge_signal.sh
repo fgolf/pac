@@ -2,7 +2,7 @@
 
 verbose=0
 njets=2
-tag=V02-05-09d
+tag=V02-05-13
 path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
 
 # make the output dirs
@@ -16,16 +16,19 @@ function post_process
 	local at=$1
     local sample=$2
     local path=$3
-    cmd="ss2012_postprocess_signal_baby --sample $sample --input \"${input_path}/${path}/*.root\" --output \"${output_path}/${sample}.root\""
+    cmd="ss2012_postprocess_signal_baby --sample $sample --input \"${input_path}/${path}/res/*.root\" --output \"${output_path}/${sample}.root\""
     echo $cmd
-    echo $cmd > logs/${tag}/${sample}_${tag}_baby_merge.log 2>&1 &
-    eval $cmd >> logs/${tag}/${sample}_${tag}_baby_merge.log 2>&1 &
+    #echo $cmd > logs/${tag}/${sample}_${tag}_baby_merge.log 2>&1 &
+    #eval $cmd >> logs/${tag}/${sample}_${tag}_baby_merge.log 2>&1 &
 }
 
-input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/mc
-output_path=$path/signal
-post_process vlow_pt t1tttt     SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1 
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/mc
+#post_process vlow_pt t1tttt     SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1 
 #post_process vlow_pt sbottomtop SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph_Summer12-START52_V9_FSIM
+
+input_path=/nfs-7/userdata/rwkelley/babies/ss2012/crab/22Apr2013
+output_path=$path/signal
+post_process vlow_pt t6ttww_x08 SMS-T6ttWW_mSbottom-200to700_mChargino-30to600_mLSP_25to475_x08_8TeV-Madgraph_Summer12-START52_V9_FSIM_UFL
 
 #input_path=/nfs-7/userdata/rwkelley/babies/cms2_V05-03-23_ss2012_V02-05-01
 #output_path=$path/signal

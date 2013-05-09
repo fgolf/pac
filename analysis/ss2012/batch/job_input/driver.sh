@@ -29,7 +29,7 @@ fi
 
 # hard coded values
 # -------------------------- #
-fake_rate_file="ssFR_data_ewkcor_26Feb2013.root"
+fake_rate_file="ssFR_data_ewkcor_17Apr2013.root"
 flip_rate_file="ssFL_data_standard_02222013.root"
 njets=0
 nev=-1

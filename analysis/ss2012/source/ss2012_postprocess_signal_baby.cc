@@ -105,6 +105,7 @@ try
     {
         case Sample::t1tttt:     break;
         case Sample::sbottomtop: break;
+        case Sample::t6ttww_x08: break;
         case Sample::tchiwh:     break;
         default: 
             cout << "[ss2012_postprocess_signal_baby] Error: Sample " << sample_name << " is not supported" << endl;

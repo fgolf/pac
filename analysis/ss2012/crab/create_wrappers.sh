@@ -196,8 +196,8 @@ crab_dir="/nfs-7/userdata/rwkelley/babies/ss2012/crab/22Apr2013"
 # T6ttWW scan3 (x = 0.8)
 # https://cmsweb.cern.ch/das/request?input=dataset%3D%2FSMS-T6ttWW_mSbottom-200to700_mChargino-30to600_mLSP_25to475_x08_8TeV-Madgraph%2FSummer12-START52_V9_FSIM_UFL%2FUSER&instance=cms_dbs_ph_analysis_01
 ./BatchProcessViaCrab.sh \
- "/SMS-T6ttWW_mSbottom-200to700_mChargino-50to600_mLSP_25to300_x08_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER" \
- "SMS-T6ttWW_mSbottom-200to700_mChargino-50to600_mLSP_25to300_x08_8TeV-Madgraph_Summer12-START52_V9_FSIM_UFL" \
+ "/SMS-T6ttWW_mSbottom-200to700_mChargino-30to600_mLSP_25to475_x08_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER" \
+ "SMS-T6ttWW_mSbottom-200to700_mChargino-30to600_mLSP_25to475_x08_8TeV-Madgraph_Summer12-START52_V9_FSIM_UFL" \
  "http://cmsdbsprod.cern.ch/cms_dbs_ph_analysis_01/servlet/DBSServlet" \
  "ss2012_baby.root" \
  "${crab_dir}" \
@@ -325,6 +325,24 @@ crab_dir="/nfs-7/userdata/rwkelley/babies/ss2012/crab/22Apr2013"
  1 \
  "START52_V9A::All"
 #
+#
+# T5lnu
+# --------------------------------------------------------------------- #
+#
+# https://cmsweb.cern.ch/das/request?input=dataset%3D%2FSMS-T5lnuPlusPlus_mGo-400to1400_mLSP_300to1300_8TeV-Madgraph%2FSummer12-START52_V9_FSIM_UFL%2FUSER&instance=cms_dbs_ph_analysis_01
+./BatchProcessViaCrab.sh \
+ "/SMS-T5lnuPlusPlus_mGo-400to1400_mLSP_300to1300_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER" \
+ "SMS-T5lnuPlusPlus_mGo-400to1400_mLSP_300to1300_8TeV-Madgraph_Summer12-START52_V9_FSIM_UFL" \
+ "http://cmsdbsprod.cern.ch/cms_dbs_ph_analysis_01/servlet/DBSServlet" \
+ "ss2012_baby.root" \
+ "${crab_dir}" \
+ "--sample t5lnu $default_args" \
+ 1 \
+ "V02-05-28" \
+ "\"mgluino\",\"mlsp\",\"x\",\"mchargino\"" \
+ 1 \
+ "START52_V9A::All"
+
 # TChiwh
 # --------------------------------------------------------------------- #
 #

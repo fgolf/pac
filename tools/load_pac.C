@@ -49,6 +49,10 @@
     gSystem->AddIncludePath(Form("-I%s/externals/source/cms2_core/%s/CORE", pac_path.c_str(), cms2core.c_str()));
     gSystem->Load(Form("%s/libcms2_core.so", pac_path.c_str()));
 
+    // Ian's Simple table
+    gSystem->AddIncludePath("-I$PAC/externals/source/SimpleTable");
+    gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
+
     // RootTools
     gSystem->AddIncludePath("-D'__RTINT__'");
     gSystem->AddIncludePath("-I$PAC/packages/RootTools/include");
@@ -56,7 +60,6 @@
     gSystem->AddIncludePath("-I$BOOST_CURRENT/boost");
     gSystem->Load(Form("%s/libboost_system.so"    , pac_path.c_str()));
     gSystem->Load(Form("%s/libboost_filesystem.so", pac_path.c_str()));
-    gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
     gSystem->Load(Form("%s/libRootTools.so"       , pac_path.c_str()));
 
     // AnalysisTools
@@ -68,10 +71,6 @@
     gSystem->AddIncludePath("-I$PAC/analysis/ss2012/include");
     gSystem->Load(Form("%s/libssb2012.so"     , pac_path.c_str()));
     gSystem->Load(Form("%s/libss2012_tools.so", pac_path.c_str()));
-
-    // Ian's Simple table
-    gSystem->AddIncludePath("-I$PAC/externals/source/SimpleTable");
-    gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
 
     // load mini FW lite
     if (!cmssw)

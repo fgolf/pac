@@ -562,7 +562,7 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
             if (lt_isFromW < 1 && ll_isFromW < 1) continue;
 
             // skip events if both leptons are prompt
-            if (lt_isFromW > 0 && lt_isFromW > 0) continue;
+            if (lt_isFromW > 0 && ll_isFromW > 0) continue;
 
             // skip event if non-prompt lepton fails denominator
             if (m_analysis_type == AnalysisType::high_pt_eth)
