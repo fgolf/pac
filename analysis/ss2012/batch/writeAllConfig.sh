@@ -14,7 +14,8 @@
 #TAG=V02-05-13a # 04-29-2013
 #TAG=V02-05-13b # 05-01-2013
 #TAG=V02-05-14 # 05-02-2013
-TAG=vince_test
+TAG=V02-05-15 # 05-08-2013
+#TAG=vince_test
 
 #~/~/~/~~/~/~/~~/~/~/~~/~/~/~~/~/
 # DATA TAG V05-03-24 (slimCMS2) # 
@@ -23,95 +24,95 @@ TAG=vince_test
 # high pT
 # ---------------------------------------------------------#
 
-#RUNLIST="\"\"\"\""
-#SAMPLE=data
-#ATYPE=high_pt
-#OPTIONS="\"\"\"\""
-#NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24
-#
-## Double Mu
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012B-13Jul2012-v4_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012B-13Jul2012-v4_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012A-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012C-24Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012C-PromptReco-v2_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012D-PromptReco-v1_AOD
-#
-## Double Ele
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012B-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012A-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012C-24Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012C-PromptReco-v2_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012D-PromptReco-v1_AOD
-#
-## MuEG
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012B-13Jul2012-v1_AOD/merged            babies/ss2012/$TAG/$ATYPE/MuEG_Run2012B-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012A-13Jul2012-v1_AOD/merged            babies/ss2012/$TAG/$ATYPE/MuEG_Run2012A-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012A-recover-06Aug2012-v1_AOD/merged    babies/ss2012/$TAG/$ATYPE/MuEG_Run2012A-recover-06Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012C-24Aug2012-v1_AOD/merged            babies/ss2012/$TAG/$ATYPE/MuEG_Run2012C-24Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012C-PromptReco-v2_AOD/merged           babies/ss2012/$TAG/$ATYPE/MuEG_Run2012C-PromptReco-v2_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012D-PromptReco-v1_AOD/merged           babies/ss2012/$TAG/$ATYPE/MuEG_Run2012D-PromptReco-v1_AOD
-#
-#mkdir -p $ATYPE
-#mv *.cmd $ATYPE/.
-#
-## low pT
-## ---------------------------------------------------------#
-#
-#RUNLIST="\"\"\"\""
-#SAMPLE=data
-#ATYPE=low_pt
-#OPTIONS="\"\"\"\""
-#NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24
-#
-## Double Mu
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012B-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-recover-06Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-24Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-PromptReco-v2_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012D-PromptReco-v1_AOD
-#
-## Double Ele
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012B-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-24Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-PromptReco-v2_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012D-PromptReco-v1_AOD
-#
-#
-#mkdir -p $ATYPE
-#mv *.cmd $ATYPE/.
-#
-### very low pT
-## ---------------------------------------------------------#
-#
-#RUNLIST="\"\"\"\""
-#SAMPLE=data
-#ATYPE=vlow_pt
-#OPTIONS="\"\"\"\""
-#NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24
-#
-## Double Mu
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012B-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-recover-06Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-24Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-PromptReco-v2_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012D-PromptReco-v1_AOD
-#
-## Double Ele
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012B-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-13Jul2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-24Aug2012-v1_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-PromptReco-v2_AOD
-#./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012D-PromptReco-v1_AOD
-#
-#mkdir -p $ATYPE
-#mv *.cmd $ATYPE/.
+RUNLIST="\"\"\"\""
+SAMPLE=data
+ATYPE=high_pt
+OPTIONS="\"\"\"\""
+NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24
+
+# Double Mu
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012B-13Jul2012-v4_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012B-13Jul2012-v4_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012A-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012C-24Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012C-PromptReco-v2_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleMu_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleMu_Run2012D-PromptReco-v1_AOD
+
+# Double Ele
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012B-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012A-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012C-24Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012C-PromptReco-v2_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DoubleElectron_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/DoubleElectron_Run2012D-PromptReco-v1_AOD
+
+# MuEG
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012B-13Jul2012-v1_AOD/merged            babies/ss2012/$TAG/$ATYPE/MuEG_Run2012B-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012A-13Jul2012-v1_AOD/merged            babies/ss2012/$TAG/$ATYPE/MuEG_Run2012A-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012A-recover-06Aug2012-v1_AOD/merged    babies/ss2012/$TAG/$ATYPE/MuEG_Run2012A-recover-06Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012C-24Aug2012-v1_AOD/merged            babies/ss2012/$TAG/$ATYPE/MuEG_Run2012C-24Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012C-PromptReco-v2_AOD/merged           babies/ss2012/$TAG/$ATYPE/MuEG_Run2012C-PromptReco-v2_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuEG_Run2012D-PromptReco-v1_AOD/merged           babies/ss2012/$TAG/$ATYPE/MuEG_Run2012D-PromptReco-v1_AOD
+
+mkdir -p $ATYPE
+mv *.cmd $ATYPE/.
+
+# low pT
+# ---------------------------------------------------------#
+
+RUNLIST="\"\"\"\""
+SAMPLE=data
+ATYPE=low_pt
+OPTIONS="\"\"\"\""
+NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24
+
+# Double Mu
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012B-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-recover-06Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-24Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-PromptReco-v2_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012D-PromptReco-v1_AOD
+
+# Double Ele
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012B-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-24Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-PromptReco-v2_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012D-PromptReco-v1_AOD
+
+
+mkdir -p $ATYPE
+mv *.cmd $ATYPE/.
+
+## very low pT
+# ---------------------------------------------------------#
+
+RUNLIST="\"\"\"\""
+SAMPLE=data
+ATYPE=vlow_pt
+OPTIONS="\"\"\"\""
+NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24
+
+# Double Mu
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012B-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/MuHad_Run2012A-recover-06Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-24Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012C-PromptReco-v2_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/MuHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/MuHad_Run2012D-PromptReco-v1_AOD
+
+# Double Ele
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012B-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012B-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-13Jul2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-13Jul2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/merged babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-24Aug2012-v1_AOD/merged         babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-24Aug2012-v1_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012C-PromptReco-v2_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012C-PromptReco-v2_AOD
+./writeConfig.sh $SAMPLE $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ElectronHad_Run2012D-PromptReco-v1_AOD/merged        babies/ss2012/$TAG/$ATYPE/ElectronHad_Run2012D-PromptReco-v1_AOD
+
+mkdir -p $ATYPE
+mv *.cmd $ATYPE/.
 
 #~/~/~/~~/~/~/~~/~/~/~~/~/~/~~/~/
 # MC TAG V05-03-23 (slimCMS2)   # 
@@ -193,7 +194,7 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 ./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-250To300_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-250To300_8TeV-madgraph_${CAMPAIGN}-v1
 ./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-300To400_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-300To400_8TeV-madgraph_${CAMPAIGN}-v1
 ./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-400ToInf_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-400ToInf_8TeV-madgraph_${CAMPAIGN}-v1
-./writeConfig.sh dy            $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DYToMuMu_M-20_CT10_TuneZ2star_v2_8TeV-powheg-pythia6_${CAMPAIGN}-v1/$CMS2TAG/    $OUTPUT_PATH/DDYToMuMu_M-20_CT10_TuneZ2star_v2_8TeV-powheg-pythia6_${CAMPAIGN}-v1
+#./writeConfig.sh dy            $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/DYToMuMu_M-20_CT10_TuneZ2star_v2_8TeV-powheg-pythia6_${CAMPAIGN}-v1/$CMS2TAG/    $OUTPUT_PATH/DYToMuMu_M-20_CT10_TuneZ2star_v2_8TeV-powheg-pythia6_${CAMPAIGN}-v1
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7C
 ./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-200To250_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-200To250_8TeV-madgraph_${CAMPAIGN}-v1
 #./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-150To200_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-150To200_8TeV-madgraph_${CAMPAIGN}-v1
