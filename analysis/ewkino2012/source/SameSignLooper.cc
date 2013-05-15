@@ -1345,7 +1345,17 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             m_evt.vjets_p4_dn  = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1); 
         }
 
+        vecd tmp_vjets_bdisc;
+        for (unsigned int jidx = 0; jidx < jet_flags.size(); jidx++)
+        {
+            if (!jet_flags.at(jidx)) continue;
+            tmp_vjets_bdisc.push_back(cms2.pfjets_combinedSecondaryVertexBJetTag().at(jidx));
+        }
+
+        m_evt.vjets_bdisc = tmp_vjets_bdisc;
+        
         assert(m_evt.vjets_p4.size() == jet_flags.size());
+        assert(m_evt.vjets_bdisc.size() == m_evt.vjets_p4.size());
 
         // fill dijet_mass
         if (m_evt.vjets_p4.size() > 1)
