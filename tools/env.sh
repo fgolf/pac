@@ -28,6 +28,10 @@ alias cdpac="cd $PAC"
 export CMS2CORE_TAG=ss2012_V02-05-12
 export CMS2CORE=$PAC/externals/source/cms2_core/$CMS2CORE_TAG/CORE
 
+#set the path to CMS2 FRB
+export CMS2FRB_TAG=FakeRate14May2013
+export CMS2FRB=$PAC/externals/source/cms2_frb/$CMS2FRB_TAG/
+
 # convenience
 export AT=$PAC/packages/AnalysisTools
 export RT=$PAC/packages/RootTools
