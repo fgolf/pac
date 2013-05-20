@@ -241,45 +241,45 @@ std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsi
     if (analysis_type == 0)
     {
         // number passing ttbar events for Signal Region 0
-        const float N_ttbar_SR0 = 751250.62;
+        const float N_ttbar_SR0 = 765814.06;
 
         // number passing ttbar events for Signal Region sr_num 
         float N_ttbar_SRn = -999999.0;
         switch (sr_num)
         {
-            case 0  : N_ttbar_SRn = 751250.62 ; break;
-            case 1  : N_ttbar_SRn = 135849.73 ; break;
-            case 2  : N_ttbar_SRn = 11143.52  ; break;
-            case 3  : N_ttbar_SRn = 72756.26  ; break;
-            case 4  : N_ttbar_SRn = 38384.17  ; break;
-            case 5  : N_ttbar_SRn = 36759.14  ; break;
-            case 6  : N_ttbar_SRn = 7998.78   ; break;
-            case 7  : N_ttbar_SRn = 12780.68  ; break;
-            case 8  : N_ttbar_SRn = 16657.09  ; break;
-            case 10 : N_ttbar_SRn = 372659.00 ; break;
-            case 11 : N_ttbar_SRn = 67766.82  ; break;
-            case 12 : N_ttbar_SRn = 5626.79   ; break;
-            case 13 : N_ttbar_SRn = 33315.69  ; break;
-            case 14 : N_ttbar_SRn = 17304.34  ; break;
-            case 15 : N_ttbar_SRn = 18976.98  ; break;
-            case 16 : N_ttbar_SRn = 4015.82   ; break;
-            case 17 : N_ttbar_SRn = 6182.02   ; break;
-            case 18 : N_ttbar_SRn = 7625.88   ; break;
-            case 20 : N_ttbar_SRn = 207860.59 ; break;
-            case 21 : N_ttbar_SRn = 39718.86  ; break;
-            case 22 : N_ttbar_SRn = 3088.90   ; break;
-            case 23 : N_ttbar_SRn = 27836.15  ; break;
-            case 24 : N_ttbar_SRn = 15404.18  ; break;
-            case 25 : N_ttbar_SRn = 7249.26   ; break;
-            case 26 : N_ttbar_SRn = 1895.01   ; break;
-            case 27 : N_ttbar_SRn = 4222.36   ; break;
-            case 28 : N_ttbar_SRn = 6200.34   ; break;
-            case 30 : N_ttbar_SRn = 205259.69 ; break;
-            case 31 : N_ttbar_SRn = 205259.69 ; break;
-            case 32 : N_ttbar_SRn = 51566.34  ; break;
-            case 33 : N_ttbar_SRn = 19195.63  ; break;
-            case 34 : N_ttbar_SRn = 574963.12 ; break;
-            case 35 : N_ttbar_SRn = 574963.12 ; break;
+            case 0  : N_ttbar_SRn = 765814.06 ; break;
+            case 1  : N_ttbar_SRn = 138496.48 ; break;
+            case 2  : N_ttbar_SRn = 11352.13  ; break;
+            case 3  : N_ttbar_SRn = 74148.16  ; break;
+            case 4  : N_ttbar_SRn = 39103.90  ; break;
+            case 5  : N_ttbar_SRn = 37455.95  ; break;
+            case 6  : N_ttbar_SRn = 8142.28   ; break;
+            case 7  : N_ttbar_SRn = 13021.80  ; break;
+            case 8  : N_ttbar_SRn = 16958.17  ; break;
+            case 10 : N_ttbar_SRn = 379888.03 ; break;
+            case 11 : N_ttbar_SRn = 69087.73  ; break;
+            case 12 : N_ttbar_SRn = 5731.75   ; break;
+            case 13 : N_ttbar_SRn = 33950.84  ; break;
+            case 14 : N_ttbar_SRn = 17628.79  ; break;
+            case 15 : N_ttbar_SRn = 19335.24  ; break;
+            case 16 : N_ttbar_SRn = 4087.10   ; break;
+            case 17 : N_ttbar_SRn = 6300.05   ; break;
+            case 18 : N_ttbar_SRn = 7762.02   ; break;
+            case 20 : N_ttbar_SRn = 211825.67 ; break;
+            case 21 : N_ttbar_SRn = 40484.23  ; break;
+            case 22 : N_ttbar_SRn = 3146.72   ; break;
+            case 23 : N_ttbar_SRn = 28366.49  ; break;
+            case 24 : N_ttbar_SRn = 15690.63  ; break;
+            case 25 : N_ttbar_SRn = 7382.87   ; break;
+            case 26 : N_ttbar_SRn = 1929.73   ; break;
+            case 27 : N_ttbar_SRn = 4300.23   ; break;
+            case 28 : N_ttbar_SRn = 6313.33   ; break;
+            case 30 : N_ttbar_SRn = 209175.67 ; break;
+            case 31 : N_ttbar_SRn = 209175.67 ; break;
+            case 32 : N_ttbar_SRn = 52516.80  ; break;
+            case 33 : N_ttbar_SRn = 19546.44  ; break;
+            case 34 : N_ttbar_SRn = 586052.12 ; break;
+            case 35 : N_ttbar_SRn = 586052.12 ; break;
             default : 
                       std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
                       return std::make_pair(-999999.0 , -999999.0); 
@@ -294,39 +294,39 @@ std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsi
     else if (analysis_type == 1)
     {
         // number passing ttbar events for Signal Region 0
-        const float N_ttbar_SR0 = 312383.12;
+        const float N_ttbar_SR0 = 350696.59;
 
         // number passing ttbar events for Signal Region sr_num 
         float N_ttbar_SRn = -999999.0;
         switch (sr_num)
         {
-            case 0  : N_ttbar_SRn = 312383.12 ; break; 
-            case 1  : N_ttbar_SRn = 63861.72  ; break; 
-            case 2  : N_ttbar_SRn = 11143.52  ; break; 
-            case 3  : N_ttbar_SRn = 58841.65  ; break; 
-            case 4  : N_ttbar_SRn = 38384.17  ; break; 
-            case 5  : N_ttbar_SRn = 21909.01  ; break; 
-            case 6  : N_ttbar_SRn = 7998.78   ; break; 
-            case 7  : N_ttbar_SRn = 11577.39  ; break; 
-            case 8  : N_ttbar_SRn = 16657.09  ; break; 
-            case 10 : N_ttbar_SRn = 147874.94 ; break; 
-            case 11 : N_ttbar_SRn = 31529.23  ; break; 
-            case 12 : N_ttbar_SRn = 5626.79   ; break; 
-            case 13 : N_ttbar_SRn = 26851.46  ; break; 
-            case 14 : N_ttbar_SRn = 17304.34  ; break; 
-            case 15 : N_ttbar_SRn = 11225.76  ; break; 
-            case 16 : N_ttbar_SRn = 4015.82   ; break; 
-            case 17 : N_ttbar_SRn = 5583.87   ; break; 
-            case 18 : N_ttbar_SRn = 7625.88   ; break; 
-            case 20 : N_ttbar_SRn = 108305.35 ; break; 
-            case 21 : N_ttbar_SRn = 19509.91  ; break; 
-            case 22 : N_ttbar_SRn = 3088.90   ; break; 
-            case 23 : N_ttbar_SRn = 22842.32  ; break; 
-            case 24 : N_ttbar_SRn = 15404.18  ; break; 
-            case 25 : N_ttbar_SRn = 4641.87   ; break; 
-            case 26 : N_ttbar_SRn = 1895.01   ; break; 
-            case 27 : N_ttbar_SRn = 3844.01   ; break; 
-            case 28 : N_ttbar_SRn = 6200.34   ; break; 
+            case 0  : N_ttbar_SRn = 350696.59 ; break; 
+            case 1  : N_ttbar_SRn = 71646.70  ; break; 
+            case 2  : N_ttbar_SRn = 12293.04  ; break; 
+            case 3  : N_ttbar_SRn = 66772.94  ; break; 
+            case 4  : N_ttbar_SRn = 42921.61  ; break; 
+            case 5  : N_ttbar_SRn = 25738.51  ; break; 
+            case 6  : N_ttbar_SRn = 8977.41   ; break; 
+            case 7  : N_ttbar_SRn = 14350.30  ; break; 
+            case 8  : N_ttbar_SRn = 19529.59  ; break; 
+            case 10 : N_ttbar_SRn = 165850.39 ; break; 
+            case 11 : N_ttbar_SRn = 35337.00  ; break; 
+            case 12 : N_ttbar_SRn = 6223.78   ; break; 
+            case 13 : N_ttbar_SRn = 30400.45  ; break; 
+            case 14 : N_ttbar_SRn = 19329.94  ; break; 
+            case 15 : N_ttbar_SRn = 13152.16  ; break; 
+            case 16 : N_ttbar_SRn = 4501.07   ; break; 
+            case 17 : N_ttbar_SRn = 6895.11   ; break; 
+            case 18 : N_ttbar_SRn = 8922.83   ; break; 
+            case 20 : N_ttbar_SRn = 122273.79 ; break; 
+            case 21 : N_ttbar_SRn = 22117.01  ; break; 
+            case 22 : N_ttbar_SRn = 3417.46   ; break; 
+            case 23 : N_ttbar_SRn = 26074.65  ; break; 
+            case 24 : N_ttbar_SRn = 17306.83  ; break; 
+            case 25 : N_ttbar_SRn = 5601.37   ; break; 
+            case 26 : N_ttbar_SRn = 2157.63   ; break; 
+            case 27 : N_ttbar_SRn = 4841.90   ; break; 
+            case 28 : N_ttbar_SRn = 7341.33   ; break; 
             default : 
                       std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
                       return std::make_pair(-999999.0 , -999999.0); 
@@ -341,39 +341,39 @@ std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsi
     else if (analysis_type == 2)
     {
         // number passing ttbar events for Signal Region 0
-        const float N_ttbar_SR0 = 312383.12;
+        const float N_ttbar_SR0 = 355516.16;
 
         // number passing ttbar events for Signal Region sr_num 
         float N_ttbar_SRn = -999999.0;
         switch (sr_num)
         {
-            case 0  : N_ttbar_SRn = 312383.12 ; break; 
-            case 1  : N_ttbar_SRn = 63861.72  ; break; 
-            case 2  : N_ttbar_SRn = 11143.52  ; break; 
-            case 3  : N_ttbar_SRn = 58841.65  ; break; 
-            case 4  : N_ttbar_SRn = 38384.17  ; break; 
-            case 5  : N_ttbar_SRn = 21909.01  ; break; 
-            case 6  : N_ttbar_SRn = 7998.78   ; break; 
-            case 7  : N_ttbar_SRn = 11577.39  ; break; 
-            case 8  : N_ttbar_SRn = 16657.09  ; break; 
-            case 10 : N_ttbar_SRn = 147874.94 ; break; 
-            case 11 : N_ttbar_SRn = 31529.23  ; break; 
-            case 12 : N_ttbar_SRn = 5626.79   ; break; 
-            case 13 : N_ttbar_SRn = 26851.46  ; break; 
-            case 14 : N_ttbar_SRn = 17304.34  ; break; 
-            case 15 : N_ttbar_SRn = 11225.76  ; break; 
-            case 16 : N_ttbar_SRn = 4015.82   ; break; 
-            case 17 : N_ttbar_SRn = 5583.87   ; break; 
-            case 18 : N_ttbar_SRn = 7625.88   ; break; 
-            case 20 : N_ttbar_SRn = 108305.35 ; break; 
-            case 21 : N_ttbar_SRn = 19509.91  ; break; 
-            case 22 : N_ttbar_SRn = 3088.90   ; break; 
-            case 23 : N_ttbar_SRn = 22842.32  ; break; 
-            case 24 : N_ttbar_SRn = 15404.18  ; break; 
-            case 25 : N_ttbar_SRn = 4641.87   ; break; 
-            case 26 : N_ttbar_SRn = 1895.01   ; break; 
-            case 27 : N_ttbar_SRn = 3844.01   ; break; 
-            case 28 : N_ttbar_SRn = 6200.34   ; break; 
+            case 0  : N_ttbar_SRn = 355516.16 ; break; 
+            case 1  : N_ttbar_SRn = 72456.09  ; break; 
+            case 2  : N_ttbar_SRn = 12417.48  ; break; 
+            case 3  : N_ttbar_SRn = 67650.02  ; break; 
+            case 4  : N_ttbar_SRn = 43429.74  ; break; 
+            case 5  : N_ttbar_SRn = 26354.46  ; break; 
+            case 6  : N_ttbar_SRn = 9161.57   ; break; 
+            case 7  : N_ttbar_SRn = 14815.27  ; break; 
+            case 8  : N_ttbar_SRn = 20039.05  ; break; 
+            case 10 : N_ttbar_SRn = 168105.98 ; break; 
+            case 11 : N_ttbar_SRn = 35735.58  ; break; 
+            case 12 : N_ttbar_SRn = 6281.94   ; break; 
+            case 13 : N_ttbar_SRn = 30794.53  ; break; 
+            case 14 : N_ttbar_SRn = 19552.91  ; break; 
+            case 15 : N_ttbar_SRn = 13455.14  ; break; 
+            case 16 : N_ttbar_SRn = 4588.36   ; break; 
+            case 17 : N_ttbar_SRn = 7114.00   ; break; 
+            case 18 : N_ttbar_SRn = 9147.92   ; break; 
+            case 20 : N_ttbar_SRn = 124032.30 ; break; 
+            case 21 : N_ttbar_SRn = 22393.74  ; break; 
+            case 22 : N_ttbar_SRn = 3462.88   ; break; 
+            case 23 : N_ttbar_SRn = 26427.00  ; break; 
+            case 24 : N_ttbar_SRn = 17534.63  ; break; 
+            case 25 : N_ttbar_SRn = 5758.05   ; break; 
+            case 26 : N_ttbar_SRn = 2215.24   ; break; 
+            case 27 : N_ttbar_SRn = 5008.78   ; break; 
+            case 28 : N_ttbar_SRn = 7548.44   ; break; 
             default : 
                       std::cout << Form("[ss::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
                       return std::make_pair(-999999.0 , -999999.0); 
@@ -394,7 +394,7 @@ std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsi
 // apply the scale factor to the TTGamma prediciton for SR0
 // inputs:
 //      sr_num        = SignalRegion Number: 0 - 35 (9, 19, 29 excluded) 
-//      analysis_type = 0 --> high_pt anlysis, 1 --> low_pt analysis 
+//      analysis_type = 0 --> high_pt anlysis, 1 --> low_pt analysis,  2 --> vlow_pt analysis 
 //      N_ttg_SR0     = predictions for TTGamma sample in baseline 
 // returns pair<float, float> where 
 //      first  = predictions for TTGamma in SR sr_num 

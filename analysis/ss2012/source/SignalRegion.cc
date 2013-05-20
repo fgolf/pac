@@ -973,7 +973,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr1",
         // title
-        "sr1: 2 #leq # jets < 4, # btags #geq 0, 200 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr1: 2 #leq # jets < 4, # btags = 0, 200 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\#btags\\geq 0,\\ 200 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -981,7 +981,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr2",
         // title
-        "sr2: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr2: 2 #leq # jets < 4, # btags = 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\#btags\\geq 0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -989,7 +989,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr3",
         // title
-        "sr3: # jets #geq 4, # btags #geq 0, 200 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr3: # jets #geq 4, # btags = 0, 200 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$#jets \\geq 4,\\#btags\\geq 0,\\ 200 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -997,7 +997,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr4",
         // title
-        "sr4: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr4: # jets #geq 4, # btags = 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$#jets \\geq 4,\\#btags\\geq 0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1005,7 +1005,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr5",
         // title
-        "sr5: 2 #leq # jets < 4, # btags #geq 0, 200 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr5: 2 #leq # jets < 4, # btags = 0, 200 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\#btags\\geq 0,\\ 200 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1013,7 +1013,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr6",
         // title
-        "sr6: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
+        "sr6: 2 #leq # jets < 4, # btags = 0, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\#btags\\geq 0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1021,7 +1021,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr7",
         // title
-        "sr7: # jets #geq 4, # btags #geq 0, 200 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr7: # jets #geq 4, # btags = 0, 200 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\#btags\\geq 0,\\ 200 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1029,7 +1029,7 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr8",
         // title
-        "sr8: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr8: # jets #geq 4, # btags = 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\#btags\\geq 0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1266,7 +1266,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr1",
         // title
-        "sr1: 2 #leq # jets < 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr1: 2 #leq # jets < 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1274,7 +1274,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr2",
         // title
-        "sr2: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr2: 2 #leq # jets < 4, # btags = 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1282,7 +1282,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr3",
         // title
-        "sr3: # jets #geq 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr3: # jets #geq 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1290,7 +1290,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr4",
         // title
-        "sr4: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr4: # jets #geq 4, # btags = 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1298,7 +1298,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr5",
         // title
-        "sr5: 2 #leq # jets < 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr5: 2 #leq # jets < 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1306,7 +1306,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr6",
         // title
-        "sr6: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
+        "sr6: 2 #leq # jets < 4, # btags = 0, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1314,7 +1314,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr7",
         // title
-        "sr7: # jets #geq 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr7: # jets #geq 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1322,7 +1322,7 @@ const ss::SignalRegionInfo s_LptExclSignalRegionInfos[] =
         // name
         "sr8",
         // title
-        "sr8: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr8: # jets #geq 4, # btags = 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1511,7 +1511,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr1",
         // title
-        "sr1: 2 #leq # jets < 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr1: 2 #leq # jets < 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1519,7 +1519,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr2",
         // title
-        "sr2: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr2: 2 #leq # jets < 4, # btags = 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1527,7 +1527,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr3",
         // title
-        "sr3: # jets #geq 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr3: # jets #geq 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1535,7 +1535,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr4",
         // title
-        "sr4: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
+        "sr4: # jets #geq 4, # btags = 0, H_{T} > 400 GeV, 50 GeV < E_{T}^{miss} < 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ H_T>400\\ \\text{GeV},50\\ \\text{GeV}<E_T^{miss}<120\\ \\text{GeV}$"
     },
@@ -1543,7 +1543,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr5",
         // title
-        "sr5: 2 #leq # jets < 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr5: 2 #leq # jets < 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1551,7 +1551,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr6",
         // title
-        "sr6: 2 #leq # jets < 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
+        "sr6: 2 #leq # jets < 4, # btags = 0, H_{T} > 400 GeV, E_{T}^{miss} . 120 GeV",
         // latex
         "$2 \\leq #jets<4,\\# btags=0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1559,7 +1559,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr7",
         // title
-        "sr7: # jets #geq 4, # btags #geq 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr7: # jets #geq 4, # btags = 0, 250 GeV < H_{T} < 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ 250 \\text{GeV}\\ <H_T<400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1567,7 +1567,7 @@ const ss::SignalRegionInfo s_VptExclSignalRegionInfos[] =
         // name
         "sr8",
         // title
-        "sr8: # jets #geq 4, # btags #geq 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
+        "sr8: # jets #geq 4, # btags = 0, H_{T} > 400 GeV, E_{T}^{miss} > 120 GeV",
         // latex
         "$#jets \\geq 4,\\# btags=0,\\ H_T>400\\ \\text{GeV},\\ E_T^{miss}>120\\ \\text{GeV}$"
     },
@@ -1865,8 +1865,6 @@ const ss::SignalRegionInfo s_HiggsinoExclSignalRegionInfos[] =
     {"sr35", "not used", "not used"}
 };
 
-
-
 // check that the SignalRegionInfoArray is the same size as the enum
 // fails at compile time if it does
 #define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
@@ -2134,14 +2132,14 @@ namespace ss
                 switch (signal_region)
                 {
                     case SignalRegion::sr0 : return (baseline);
-                    case SignalRegion::sr1 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                    case SignalRegion::sr2 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                    case SignalRegion::sr3 : return (baseline && nbtags>=0 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
-                    case SignalRegion::sr4 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                    case SignalRegion::sr5 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
-                    case SignalRegion::sr6 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                    case SignalRegion::sr7 : return (baseline && nbtags>=0 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
-                    case SignalRegion::sr8 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr1 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr2 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr3 : return (baseline && nbtags==0 && (njets >= 4             ) && (200 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr4 : return (baseline && nbtags==0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr5 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr6 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr7 : return (baseline && nbtags==0 && (njets >= 4             ) && (200 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr8 : return (baseline && nbtags==0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
                     case SignalRegion::sr9 : return (false); // not used --> default is to fail
                     case SignalRegion::sr10: return (baseline && nbtags==1);
                     case SignalRegion::sr11: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (200 < ht && ht < 400) && (50 < met && met < 120));
@@ -2228,14 +2226,14 @@ namespace ss
                 switch (signal_region)
                 {
                     case SignalRegion::sr0 : return (baseline);
-                    case SignalRegion::sr1 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                    case SignalRegion::sr2 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
-                    case SignalRegion::sr3 : return (baseline && nbtags>=0 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
-                    case SignalRegion::sr4 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
-                    case SignalRegion::sr5 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
-                    case SignalRegion::sr6 : return (baseline && nbtags>=0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
-                    case SignalRegion::sr7 : return (baseline && nbtags>=0 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
-                    case SignalRegion::sr8 : return (baseline && nbtags>=0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr1 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr2 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr3 : return (baseline && nbtags==0 && (njets >= 4             ) && (250 < ht && ht < 400) && (50 < met && met < 120));
+                    case SignalRegion::sr4 : return (baseline && nbtags==0 && (njets >= 4             ) && (ht > 400            ) && (50 < met && met < 120));
+                    case SignalRegion::sr5 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr6 : return (baseline && nbtags==0 && (2 <= njets && njets < 4) && (ht > 400            ) && (met > 120            ));
+                    case SignalRegion::sr7 : return (baseline && nbtags==0 && (njets >= 4             ) && (250 < ht && ht < 400) && (met > 120            ));
+                    case SignalRegion::sr8 : return (baseline && nbtags==0 && (njets >= 4             ) && (ht > 400            ) && (met > 120            ));
                     case SignalRegion::sr9 : return (false); // not used --> default is to fail
                     case SignalRegion::sr10: return (baseline && nbtags==1);
                     case SignalRegion::sr11: return (baseline && nbtags==1 && (2 <= njets && njets < 4) && (250 < ht && ht < 400) && (50 < met && met < 120));
@@ -2596,14 +2594,14 @@ namespace ss
             case AnalysisType::high_pt:
             case AnalysisType::high_pt_eth:
                 tree.SetAlias("sr0" , " nbs>=0 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"      ); 
-                tree.SetAlias("sr1" , " nbs>=0 && njets>=2 && ht > 200 && pfmet > 50"                      ); 
-                tree.SetAlias("sr2" , " nbs>=0 && njets>=2 && ht > 400 && pfmet > 50"                      ); 
-                tree.SetAlias("sr3" , " nbs>=0 && njets>=4 && ht > 200 && pfmet > 50"                      ); 
-                tree.SetAlias("sr4" , " nbs>=0 && njets>=4 && ht > 400 && pfmet > 50"                      ); 
-                tree.SetAlias("sr5" , " nbs>=0 && njets>=2 && ht > 200 && pfmet > 120"                     ); 
-                tree.SetAlias("sr6" , " nbs>=0 && njets>=2 && ht > 400 && pfmet > 120"                     ); 
-                tree.SetAlias("sr7" , " nbs>=0 && njets>=4 && ht > 200 && pfmet > 120"                     ); 
-                tree.SetAlias("sr8" , " nbs>=0 && njets>=4 && ht > 400 && pfmet > 120"                     ); 
+                tree.SetAlias("sr1" , " nbs==0 && njets>=2 && ht > 200 && pfmet > 50"                      ); 
+                tree.SetAlias("sr2" , " nbs==0 && njets>=2 && ht > 400 && pfmet > 50"                      ); 
+                tree.SetAlias("sr3" , " nbs==0 && njets>=4 && ht > 200 && pfmet > 50"                      ); 
+                tree.SetAlias("sr4" , " nbs==0 && njets>=4 && ht > 400 && pfmet > 50"                      ); 
+                tree.SetAlias("sr5" , " nbs==0 && njets>=2 && ht > 200 && pfmet > 120"                     ); 
+                tree.SetAlias("sr6" , " nbs==0 && njets>=2 && ht > 400 && pfmet > 120"                     ); 
+                tree.SetAlias("sr7" , " nbs==0 && njets>=4 && ht > 200 && pfmet > 120"                     ); 
+                tree.SetAlias("sr8" , " nbs==0 && njets>=4 && ht > 400 && pfmet > 120"                     ); 
                 tree.SetAlias("sr9" , "1==0"                                                               ); 
                 tree.SetAlias("sr10", " nbs==1 && njets>=2 && ht > 80 && (ht < 500 ? pfmet > 30 : 1)"      ); 
                 tree.SetAlias("sr11", " nbs==1 && njets>=2 && ht > 200 && pfmet > 50"                      ); 

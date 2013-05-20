@@ -494,11 +494,10 @@ namespace ss
         m["wh_zh_tth_htt"] = GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
         // handle ttg differently --> apply SF (until we get a larger dataset)
-        if (
-            (0 < signal_region && signal_region < 29) and 
-            (analysis_type == ss::AnalysisType::high_pt or analysis_type == ss::AnalysisType::low_pt or analysis_type == ss::AnalysisType::vlow_pt) and
-            (signal_region_type == ss::SignalRegionType::exclusive)
-        )
+        const bool apply_ttg_sf = (((0 < signal_region && signal_region < 36 and analysis_type == ss::AnalysisType::high_pt) or 
+                                    (0 < signal_region && signal_region < 29 and (analysis_type == ss::AnalysisType::low_pt or analysis_type == ss::AnalysisType::vlow_pt))) and
+                                   (signal_region_type == ss::SignalRegionType::exclusive));
+        if (apply_ttg_sf)
         {
             const ss::Yield ttg_sr0 = GetYield(option, Sample::ttg, ss::SignalRegion::sr0, analysis_type, signal_region_type, charge_option, output_path);
             const ss::Yield ttg_srn = GetYield(option, Sample::ttg, signal_region        , analysis_type, signal_region_type, charge_option, output_path);

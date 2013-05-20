@@ -24,6 +24,7 @@
 
 // classes or structs
 #pragma link C++ struct ss::SignalRegion+;
+#pragma link C++ struct ss::SignalRegionType+;
 #pragma link C++ struct ss::AnalysisType+;
 #pragma link C++ struct ss::SystematicType+;
 #pragma link C++ struct ss::Yield+;

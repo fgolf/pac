@@ -71,7 +71,7 @@ void CreateTTGammaScaleFactor
 
     // ttgamma baby
     TChain ch_ttj("tree");
-    ch_ttj.Add("babies/singlelep/ttjets_vpt_small.root");
+    ch_ttj.Add("babies/singlelep/ttjets_vpt_v2.root");
     rt::PrintFilesFromTChain(ch_ttj);
 
     SetSignalRegionAliases(ch_ttg, anal_type, /*do_btag_sf=*/true);
@@ -93,7 +93,6 @@ void CreateTTGammaScaleFactor
     std::string lep_sel     = "(lep_is_fromw==1) && (lep_is_num) && (min_pt)";
     std::string is_ss       = "is_ss && lep_pt";
     std::string ss_scale    = "scale1fb*19.5*lep1_sf_lepeff*lep2_sf_lepeff*sf_dileptrig";
-    //std::string lep_scale   = "scale1fb*19.5*sf_lepeff*sf_trig";
     std::string lep_scale   = Form("%f*lep_sf_lepeff*lep_sf_trig", ttj_weight);
 
     TCut ttg_sel = Form("%s && %s", is_ss.c_str(), ss_matched.c_str());
@@ -265,7 +264,8 @@ void TestTTGammaScaleFactor(const ss::AnalysisType::value_type anal_type = ss::A
         {
             continue;
         }
+        const std::pair<float, float> ttg_sf    = TTGammaScaleFactor(sr_num, anal_type);
         const std::pair<float, float> N_ttg_SRn = ApplyTTGammaScaleFactor(sr_num, anal_type, N_ttg_SR0.value, N_ttg_SR0.error);
-        cout << "N_ttg_SR" << sr_num << " = " << rt::pm(N_ttg_SRn) << endl;
+        cout << "N_ttg_SR" << sr_num << " = (" << rt::pm(ttg_sf, "1.4") << ") * (" << pm(N_ttg_SR0) << ") = " << rt::pm(N_ttg_SRn) << endl;
     }
 }
