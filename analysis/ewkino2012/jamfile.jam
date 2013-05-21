@@ -329,23 +329,23 @@ exe ewkino2012_merge_babies
 #   : # usage-requirements
 #   ;
 
-# exe ss2012_postprocess_signal_baby
-#   : # sources
-#     ./source/ss2012_postprocess_signal_baby.cc
-#     ss2012_tools/<link>static
-#     # dependent packages
-#     /ROOT
-#     /RootTools//RootTools/<link>static
-#     /MiniFWLite//libMiniFWLite/<link>shared
-#     /AnalysisTools//AnalysisTools/<link>static
-#     /boost//program_options/<link>static
-#     /boost//headers/<link>static
-#   : # requirements
-#     <include>./include
-#     <include>./source
-#   : # default-build
-#   : # usage-requirements
-#   ;
+exe ewkino2012_postprocess_signal_baby
+  : # sources
+    ./source/ewkino2012_postprocess_signal_baby.cc
+    ewkino2012_tools/<link>static
+    # dependent packages
+    /ROOT
+    /RootTools//RootTools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /boost//program_options/<link>static
+    /boost//headers/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
 
 # exe ss2012_fr_closure
 #   : # sources
@@ -421,7 +421,7 @@ default-install ewkino2012_merge_babies ;
 # default-install ss2012_create_fakerate ;
 # default-install ss2012_make_fr_from_hists ;
 # default-install ss2012_closure_test ;
-# default-install ss2012_postprocess_signal_baby ;
+default-install ewkino2012_postprocess_signal_baby ;
 # default-install ss2012_interp_hists ;
 # default-install ss2012_fr_closure ;
 # default-install test_frb ;
