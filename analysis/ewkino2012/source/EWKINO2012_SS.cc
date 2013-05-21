@@ -14,14 +14,19 @@ namespace ewkino_ss {
 	const float &uncorpfmet_phi() { return ewk12ss.uncorpfmet_phi(); }
 	const float &pu_nvtxs() { return ewk12ss.pu_nvtxs(); }
 	const float &pu_ntrueint() { return ewk12ss.pu_ntrueint(); }
-	const float &scale1fb() { return ewk12ss.scale1fb(); }
-	const float &xsec() { return ewk12ss.xsec(); }
-	const unsigned int &nevts() { return ewk12ss.nevts(); }
 	const float &kfactor() { return ewk12ss.kfactor(); }
 	const float &gen_met() { return ewk12ss.gen_met(); }
 	const float &gen_met_phi() { return ewk12ss.gen_met_phi(); }
 	const TString &dataset() { return ewk12ss.dataset(); }
 	const TString &filename() { return ewk12ss.filename(); }
+	const int &gen_nleps() { return ewk12ss.gen_nleps(); }
+	const int &gen_nels() { return ewk12ss.gen_nels(); }
+	const int &gen_nmus() { return ewk12ss.gen_nmus(); }
+	const int &gen_ntaus() { return ewk12ss.gen_ntaus(); }
+	const int &gen_nleps_with_fromtau() { return ewk12ss.gen_nleps_with_fromtau(); }
+	const int &gen_nels_with_fromtau() { return ewk12ss.gen_nels_with_fromtau(); }
+	const int &gen_nmus_with_fromtau() { return ewk12ss.gen_nmus_with_fromtau(); }
+	const int &gen_ntaus_with_fromtau() { return ewk12ss.gen_ntaus_with_fromtau(); }
 	const bool &filt_csc() { return ewk12ss.filt_csc(); }
 	const bool &filt_hbhe() { return ewk12ss.filt_hbhe(); }
 	const bool &filt_hcallaser() { return ewk12ss.filt_hcallaser(); }
@@ -365,10 +370,6 @@ namespace ewkino_ss {
 	const bool &is_gen_pp() { return ewk12ss.is_gen_pp(); }
 	const bool &is_gen_mm() { return ewk12ss.is_gen_mm(); }
 	const int &gen_njets() { return ewk12ss.gen_njets(); }
-	const int &gen_nleps() { return ewk12ss.gen_nleps(); }
-	const int &gen_nmus() { return ewk12ss.gen_nmus(); }
-	const int &gen_nels() { return ewk12ss.gen_nels(); }
-	const int &gen_ntaus() { return ewk12ss.gen_ntaus(); }
 	const float &gen_ht() { return ewk12ss.gen_ht(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearjet_p4() { return ewk12ss.lep1_nearjet_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_nearlep_p4() { return ewk12ss.lep1_nearlep_p4(); }
@@ -408,6 +409,8 @@ namespace ewkino_ss {
 	const int &gen_lep1_pdgid() { return ewk12ss.gen_lep1_pdgid(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep2_p4() { return ewk12ss.gen_lep2_p4(); }
 	const int &gen_lep2_pdgid() { return ewk12ss.gen_lep2_pdgid(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep3_p4() { return ewk12ss.gen_lep3_p4(); }
+	const int &gen_lep3_pdgid() { return ewk12ss.gen_lep3_pdgid(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_dilep_p4() { return ewk12ss.gen_dilep_p4(); }
 	const int &gen_dilep_type() { return ewk12ss.gen_dilep_type(); }
 	const float &gen_dilep_mass() { return ewk12ss.gen_dilep_mass(); }
@@ -532,4 +535,8 @@ namespace ewkino_ss {
 	const int &njets_pv_tight0() { return ewk12ss.njets_pv_tight0(); }
 	const int &njets_pv_tight1() { return ewk12ss.njets_pv_tight1(); }
 	const int &njets_pv_tight2() { return ewk12ss.njets_pv_tight2(); }
+	const float &scale1fb() { return ewk12ss.scale1fb(); }
+	const float &xsec() { return ewk12ss.xsec(); }
+	const unsigned int &nevts() { return ewk12ss.nevts(); }
+	const float &br() { return ewk12ss.br(); }
 }
