@@ -80,10 +80,6 @@ void SameSignTree::Reset()
     presel                                   = false;
     gen_nbtags                               = -999999;
     gen_njets                                = -999999;
-    gen_nleps                                = -999999;
-    gen_nmus                                 = -999999;
-    gen_nels                                 = -999999;
-    gen_ntaus                                = -999999;
     gen_ht                                   = -999999.0;
     lep1_nearjet_p4                          = LorentzVector(0, 0, 0, 0);
     lep1_nearlep_p4                          = LorentzVector(0, 0, 0, 0);
@@ -106,6 +102,8 @@ void SameSignTree::Reset()
     gen_lep1_pdgid                           = -999999;
     gen_lep2_p4                              = LorentzVector(0, 0, 0, 0);
     gen_lep2_pdgid                           = -999999;
+    gen_lep3_p4                              = LorentzVector(0, 0, 0, 0);
+    gen_lep3_pdgid                           = -999999;
     gen_dilep_p4                             = LorentzVector(0, 0, 0, 0);
     gen_dilep_type                           = at::DileptonHypType::static_size;
     gen_dilep_mass                           = -999999.0;
@@ -322,10 +320,6 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("is_gen_pp"                , &is_gen_pp                , "is_gen_pp/O"                ); 
     tree.Branch("is_gen_mm"                , &is_gen_mm                , "is_gen_mm/O"                ); 
     tree.Branch("gen_njets"                , &gen_njets                , "gen_njets/I"                ); 
-    tree.Branch("gen_nleps"                , &gen_nleps                , "gen_nleps/I"                ); 
-    tree.Branch("gen_nmus"                 , &gen_nmus                 , "gen_nmus/I"                 ); 
-    tree.Branch("gen_nels"                 , &gen_nels                 , "gen_nels/I"                 ); 
-    tree.Branch("gen_ntaus"                , &gen_ntaus                , "gen_ntaus/I"                ); 
     tree.Branch("gen_ht"                   , &gen_ht                   , "gen_ht/F"                   ); 
     tree.Branch("lep1_nearjet_p4"          , "LorentzVector"           , &lep1_nearjet_p4             ); 
     tree.Branch("lep1_nearlep_p4"          , "LorentzVector"           , &lep1_nearlep_p4             ); 
@@ -365,6 +359,8 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("gen_lep1_pdgid"           , &gen_lep1_pdgid           , "gen_lep1_pdgid/I"           ); 
     tree.Branch("gen_lep2_p4"              , "LorentzVector"           , &gen_lep2_p4                 ); 
     tree.Branch("gen_lep2_pdgid"           , &gen_lep2_pdgid           , "gen_lep2_pdgid/I"           ); 
+    tree.Branch("gen_lep3_p4"              , "LorentzVector"           , &gen_lep3_p4                 ); 
+    tree.Branch("gen_lep3_pdgid"           , &gen_lep3_pdgid           , "gen_lep3_pdgid/I"           ); 
     tree.Branch("gen_dilep_p4"             , "LorentzVector"           , &gen_dilep_p4                ); 
     tree.Branch("gen_dilep_type"           , &gen_dilep_type           , "gen_dilep_type/I"           ); 
     tree.Branch("gen_dilep_mass"           , &gen_dilep_mass           , "gen_dilep_mass/F"           ); 
@@ -489,4 +485,27 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("njets_pv_tight0"          , &njets_pv_tight0          , "njets_pv_tight0/I"          );
     tree.Branch("njets_pv_tight1"          , &njets_pv_tight1          , "njets_pv_tight1/I"          );
     tree.Branch("njets_pv_tight2"          , &njets_pv_tight2          , "njets_pv_tight2/I"          );
+}
+
+void SameSignTree::SetBitMask ()
+{
+    selection = 0;
+
+    if (lep1.is_num)                 (selection | Selection::Lep1FullSelection);
+    if (lep1.is_fo)                  (selection | Selection::Lep1FakeSelection);
+    if (lep2.is_num)                 (selection | Selection::Lep2FullSelection);
+    if (lep2.is_fo)                  (selection | Selection::Lep2FakeSelection);
+    if (lep3.p4.pt() > 5)            (selection | Selection::Lep3Pt5);
+    if (lep3.p4.pt() > 10)           (selection | Selection::Lep3Pt10);
+    if (no_extraz)                   (selection | Selection::PassesExtraZVeto);
+    if (njets > 1)                   (selection | Selection::TwoJets);
+    if (njets > 2)                   (selection | Selection::ThreeJets);
+    if (nbtags == 0)                 (selection | Selection::ZeroBtags);
+    if (trig_mm | trig_em | trig_ee) (selection | Selection::Trigger);
+    if (dijet_mass < 120)            (selection | Selection::DijetMass);
+    if (passes_tau_veto)             (selection | Selection::TauVeto);
+    if (passes_isotrk_veto)          (selection | Selection::IsoTrackVeto);
+    if (dilep_type == at::DileptonHypType::EE && dilep_p4.mass () > 76 && dilep_p4.mass () < 106) (selection | Selection::ZeeVeto);
+
+    return;
 }

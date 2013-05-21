@@ -415,13 +415,22 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
     for (size_t i = 0; i != m_count_nobtag_df.size(); i++) {m_count_nobtag_df[i]=0.0;}
     for (size_t i = 0; i != m_count_nobtag_os.size(); i++) {m_count_nobtag_os[i]=0.0;}
 
+    cout << "sample: " << m_sample << endl;
+    cout << "analysis: " << m_analysis_type << endl;
+    cout << __LINE__ << endl;
+    cout.flush();
+
     // set the fake rate histograms
     std::auto_ptr<TFile> fake_rate_file(rt::OpenRootFile(fake_rate_file_name));
     cout << "using FR file : " << fake_rate_file->GetName() << endl;
     string mufr_name = "";
     string elfr_name = "";
-    switch (m_analysis_type)
+
+    if (m_sample == at::SampleType::data)
     {
+        std::cout << __LINE__ << std::endl;
+        switch (m_analysis_type)
+        {
         case AnalysisType::ss:
             mufr_name = "h_mufr40c_ewkcor";
             elfr_name = "h_elfr40c_ewkcor";
@@ -430,7 +439,26 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
             mufr_name = "h_mufr40c";
             elfr_name = "h_elfr40c";
             break;
+        }
     }
+    else
+    {
+        std::cout << __LINE__ << std::endl;
+        switch (m_analysis_type)
+        {
+        case AnalysisType::ss:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+        default:
+            mufr_name = "h_mufr40c";
+            elfr_name = "h_elfr40c";
+            break;
+        }
+    }
+
+    std::cout << __LINE__ << std::endl;
+
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
     if (not h_mufr) {throw std::runtime_error(Form("ERROR: EwkinoSSAnalysisLooper: %s doesn't exist", mufr_name.c_str()));}
@@ -687,13 +715,47 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 m_evt.gen_dilep_dphi = rt::DeltaPhi(p41, p42); 
                 m_evt.gen_dilep_deta = rt::DeltaEta(p41, p42); 
                 m_evt.gen_dilep_dr   = rt::DeltaR(p41, p42); 
+
+                //
+                // store info for third gen lepton, if it exists
+                //
+                for (unsigned int gidx = 0; gidx < cms2.genps_p4().size(); gidx++)
+                {
+                    if (gidx == idx1 || gidx == idx2) continue;
+                    if (cms2.genps_status().at(gidx) != 3) continue;
+                    if (cms2.genps_p4().at(gidx).pt() < m_evt.gen_lep3_p4.pt()) continue;
+                    unsigned int gid = abs(cms2.genps_id().at(gidx));
+                    if (gid != 11 && gid != 13 && gid != 15) continue;
+                    if (gid == 15)
+                    {
+                        float pt = -999.;
+                        int good_idx = -1;
+                        for (unsigned int didx = 0; didx < cms2.genps_lepdaughter_p4().at(gidx).size(); didx++)
+                        {
+                            unsigned int did = abs(cms2.genps_lepdaughter_id().at(gidx).at(didx));
+                            if (did != 11 && did != 13) continue;
+                            if (cms2.genps_lepdaughter_p4().at(gidx).at(didx).pt() > pt)
+                            {
+                                pt = cms2.genps_lepdaughter_p4().at(gidx).at(didx).pt();
+                                good_idx = didx;
+                            }
+                        }
+                        if (good_idx >= 0)
+                        {
+                            m_evt.gen_lep3_pdgid = cms2.genps_lepdaughter_id().at(gidx).at(good_idx);
+                            m_evt.gen_lep3_p4    = cms2.genps_lepdaughter_p4().at(gidx).at(good_idx);
+                        }
+                    }
+
+                    m_evt.gen_lep3_pdgid = cms2.genps_id().at(gidx);
+                    m_evt.gen_lep3_p4    = cms2.genps_p4().at(gidx);
+                }
             }
 
             // gen jets
             m_evt.vgenjets_p4 = efftools::getGenJets(m_jet_pt_cut, 2.4);
             m_evt.gen_ht      = efftools::getGenHT(m_jet_pt_cut, 2.4);
             m_evt.gen_njets   = m_evt.vgenjets_p4.size();
-            m_evt.gen_nleps   = leptonGenpCount_lepTauDecays(m_evt.gen_nels, m_evt.gen_nmus, m_evt.gen_ntaus);
         }
         
 
@@ -882,6 +944,9 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 // ttbar breakdown: ttdil = 0, ttotr = 1, ttslb = 2, ttslo = 3, not set = 4
                 m_evt.ttbar_bkdn = GetTTbarBreakDown(m_sample, m_evt.lep1.is_fromw, m_evt.lep2.is_fromw); 
             }
+
+            // set the selection bit mask
+            m_evt.SetBitMask();
 
             // fill the tree with what we have
             m_tree->Fill();
@@ -1354,8 +1419,8 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
         m_evt.vjets_bdisc = tmp_vjets_bdisc;
         
-        assert(m_evt.vjets_p4.size() == jet_flags.size());
-        assert(m_evt.vjets_bdisc.size() == m_evt.vjets_p4.size());
+        // assert(m_evt.vjets_p4.size() == jet_flags.size());
+        // assert(m_evt.vjets_bdisc.size() == m_evt.vjets_p4.size());
 
         // fill dijet_mass
         if (m_evt.vjets_p4.size() > 1)
@@ -2027,7 +2092,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             m_evt.pfjets_mvaBeta.push_back  ( cms2.pfjets_full53xmva_beta().at(pfjidx));
         }
 
-        assert(m_evt.vjets_p4.size() == m_evt.pfjets_mva5xPUid.size());
+        // assert(m_evt.vjets_p4.size() == m_evt.pfjets_mva5xPUid.size());
         
         //
         // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
@@ -2061,10 +2126,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             }
         }
 
-        if (lep3idx >= 0)
-        {
-            m_evt.lep3.FillCommon(lep3id, lep3idx);
-        }
+        m_evt.lep3.FillCommon(lep3id, lep3idx);
 
         //
         // add branches for convenience
@@ -2084,6 +2146,8 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         m_evt.njets_pv_tight0 = njets_pv_tmp0;
         m_evt.njets_pv_tight1 = njets_pv_tmp1;
         m_evt.njets_pv_tight2 = njets_pv_tmp2;
+
+        
 
         // Fill the tree
         m_tree->Fill();

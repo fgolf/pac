@@ -65,7 +65,6 @@ private:
     bool m_sparms;
     int  m_jetMetScale;
     bool m_is_fast_sim;
-    bool m_use_el_eta;
     bool m_filter_bad_runs;
     bool m_sync_print;
     bool m_verbose;

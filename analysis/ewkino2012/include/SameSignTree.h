@@ -23,19 +23,21 @@ struct SameSignTree : public DileptonTree
     {
         enum value_type
         {
-            Baseline          = 1UL<<0,  	// passes baseline selection, to be defined
-            GoodLumi          = 1UL<<1,  	// passes good run list
-            BasicCleaning     = 1UL<<2,  	// passes cleaning_standardNovember2011()
-            VertexMatched     = 1UL<<3,  	// leptons matched to vertex
-            Lep1FullSelection = 1UL<<4,  	// lepton 1 passes the full analysis selection
-            Lep1FakeSelection = 1UL<<5,  	// lepon 1 passes the FO selection
-            Lep2FullSelection = 1UL<<6,  	// lepton 2 passes the full analysis selection
-            Lep2FakeSelection = 1UL<<7,  	// lepton 2 passes the FO selection
-            PassesExtraZVeto  = 1UL<<8,  	// hypothesis passes extra Z veto
-            TwoJets           = 1UL<<9,  	// at least 2 jets passing selections
-            ThreeJets         = 1UL<<10, 	// at least 2 jets passing selections
-            ZeroBtags         = 1UL<<11, 	// at least 3 btags passing selections
-            Trigger           = 1UL<<12, 	// passes trigger (always true for MC)
+            Lep1FullSelection = 1UL<<0,  	// lepton 1 passes the full analysis selection
+            Lep1FakeSelection = 1UL<<1,  	// lepon 1 passes the FO selection
+            Lep2FullSelection = 1UL<<2,  	// lepton 2 passes the full analysis selection
+            Lep2FakeSelection = 1UL<<3,  	// lepton 2 passes the FO selection
+            Lep3Pt5           = 1UL<<4,         // event has no third lepton with pt > 5 GeV
+            Lep3Pt10          = 1UL<<5,         // event has no third lepton with pt > 10 GeV
+            PassesExtraZVeto  = 1UL<<6,  	// hypothesis passes extra Z veto
+            TwoJets           = 1UL<<7,  	// at least 2 jets passing selections
+            ThreeJets         = 1UL<<8, 	// at least 3 jets passing selections
+            ZeroBtags         = 1UL<<9, 	// 0 jet passing CVS medium working point
+            Trigger           = 1UL<<10, 	// passes trigger (always true for MC)
+            DijetMass         = 1UL<<11,        // di-jet mass < 120 GeV
+            TauVeto           = 1UL<<12,        // no hadronic tau
+            IsoTrackVeto      = 1UL<<13,        // no isolated track
+            ZeeVeto           = 1UL<<14,        // veto ee events with 76 < M_ee < 106 GeV
             static_size
         };
     };
@@ -51,8 +53,11 @@ struct SameSignTree : public DileptonTree
     void SetBranches(TTree& tree);
     void SetAliases(TTree& tree) const;
 
-    // method to tell where it passes a selection
+    // method to tell whether it passes a selection
     bool PassSelection(const SameSignTree::Selection& sel) const;
+
+    // set event level selection bit mask
+    void SetBitMask ();
 
 public:
 
@@ -139,10 +144,6 @@ public:
     int gen_nbtags; 
     int gen_njets; 
     float gen_ht;
-    int gen_nleps;
-    int gen_nels;
-    int gen_nmus;
-    int gen_ntaus;
 
     //
     // reco lepton 1 info
@@ -201,6 +202,12 @@ public:
     //
     LorentzVector gen_lep2_p4;
     int gen_lep2_pdgid;
+
+    //
+    // gen lep3 info
+    //
+    LorentzVector gen_lep3_p4;
+    int gen_lep3_pdgid;
     
     //
     // gen dilep hyp info
