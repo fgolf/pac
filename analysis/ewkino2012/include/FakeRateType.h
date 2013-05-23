@@ -34,7 +34,7 @@ namespace ewkino
     FakeRateTypeInfo GetFakeRateTypeInfo(const std::string& analysis_type_name);
 
     // get the fake rate binning
-    at::FakeRateBinInfo GetFakeRateBinInfo(bool use_eth_binning);
+    at::FakeRateBinInfo GetFakeRateBinInfo(const FakeRateType::value_type& fr_type);
 
 } // namespace ewkino
 
