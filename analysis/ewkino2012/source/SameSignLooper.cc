@@ -1466,20 +1466,56 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             }
         }
 
-        //SetBtagDiscriminator(m_evt.bjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
-        //SetBtagDiscriminator(m_evt.vjets_p4, m_evt.bjets_csv, JETS_BTAG_CSVM);
+        // set the seed
+        const unsigned int seed = evt_event();
+
+        // calculate the "reweighted" MC btag yields
+        if (not evt_isRealData() && (cms2_tag.version > 21))
+        {
+            // # btags reweighted
+            m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+
+            // # btags reweighted and JES +/-
+            m_evt.nbtags_reweighted_jec_up = at::MCBtagCount(m_evt.vjets_p4_up, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nbtags_reweighted_jec_dn = at::MCBtagCount(m_evt.vjets_p4_dn, m_evt.vjets_btagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+        }
+
+        // scale the JER 
+        if (not evt_isRealData() && (cms2_tag.version > 21))
+        {
+            // set initial values
+            m_evt.ht_jer        = m_evt.ht;
+            m_evt.pfmet_jer     = met;
+            m_evt.pfmet_jer_phi = met_phi;
+            vector<LorentzVector> vjets_jer_p4  = m_evt.vjets_p4;
+            vector<LorentzVector> tmp_vbjets_p4;
+            for (unsigned int ib = 0; ib < m_evt.vjets_p4.size(); ib++)
+            {
+                if (m_evt.vjets_btagged.at(ib)) tmp_vbjets_p4.push_back(m_evt.vjets_p4.at(ib));
+            }
+            vector<LorentzVector> vbjets_jer_p4 = tmp_vbjets_p4;
+
+            // update the values by scaling the JER
+            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_jer_phi, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/40, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
+            vector<LorentzVector> vbjets_reweighted_jer_p4 = at::RecountedBjets(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            samesign::smearJETScaleJets(vbjets_jer_p4, seed);
+            samesign::smearJETScaleJets(vbjets_reweighted_jer_p4, seed);
+
+            // set the branches 
+            m_evt.njets_jer             = vjets_jer_p4.size();
+            m_evt.nbtags_jer            = vbjets_jer_p4.size();
+            m_evt.nbtags_reweighted_jer = vbjets_reweighted_jer_p4.size();
+        }
+
+        // scale the unclustered MET
+        m_evt.pfmet_uncl_up = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/1 , /*scale=*/0.1);
+        m_evt.pfmet_uncl_dn = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/-1, /*scale=*/0.1);
 
         m_evt.jets_dr12  = (m_evt.njets>=2 ) ? rt::DeltaR(m_evt.vjets_p4.at(0) , m_evt.vjets_p4.at(1) ) : -999999.0;
-
-        // get the list of selected jets with lower pT theshold
-        //vector<LorentzVector> temp_jets_p4 = tas::pfjets_p4();
-        //vector<float>& temp_jets_csv = pfjets_combinedSecondaryVertexBJetTag();
-        //vector<LorentzVector> temp_jets_p4  = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/20.0, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-        //vector<float> temp_jets_csv;
-        //SetBtagDiscriminator(temp_jets_p4, temp_jets_csv, JETS_BTAG_CSVM);
         
-        vector<LorentzVector> temp_jets_p4 = m_evt.vjets_p4;  
-        //vector<float> temp_jets_csv        = m_evt.vjets_csv;
+        vector<LorentzVector> temp_jets_p4 = m_evt.vjets_p4;
 
         // get the untagged jets
         vector<LorentzVector> temp_jets_nontagged_p4;

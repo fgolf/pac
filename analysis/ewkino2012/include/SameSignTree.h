@@ -70,7 +70,6 @@ public:
     int charge_type;
     int njets;
     int nbtags;
-    int nbtags_reweighted;
     int nbtags_loose;
     int ttbar_bkdn;
     float vtxw;
@@ -96,6 +95,7 @@ public:
     int njets_up;
     int nbtags_dn;
     int nbtags_up;
+    int nbtags_reweighted;
     int nbtags_reweighted_dn;
     int nbtags_reweighted_up;
     int nbtags_reweighted_jec_up;
@@ -106,6 +106,18 @@ public:
     float pfmet_up;
     float pfmet_phi_dn;
     float pfmet_phi_up;
+    float pfmet_uncl_up;
+    float pfmet_uncl_dn;
+
+    //
+    // for JER systematics
+    //
+    int njets_jer;
+    int nbtags_jer;
+    int nbtags_reweighted_jer;    
+    float ht_jer;
+    float pfmet_jer;
+    float pfmet_jer_phi;
 
     //
     // susy parameters
@@ -178,6 +190,9 @@ public:
     vecLorentzVector vjets_mc3p4;
     vecLorentzVector vgenjets_p4;
     vecLorentzVector vjets_nearjet_p4;
+    std::vector<bool> vjets_btagged;
+    std::vector<bool> vjets_btagged_up;
+    std::vector<bool> vjets_btagged_dn;
     float jets_dr12;
     vecd vjets_nearjet_dr;
     veci vjets_mcflavor_phys;
