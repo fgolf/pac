@@ -1,69 +1,38 @@
 #include "SignalRegion.h"
 #include "AnalysisType.h"
+#include "SystematicType.h"
 #include "EWKINO2012_SS.h"
 #include <stdexcept>
 
 // inclusive signal regions infos
 // ---------------------------------------------------------------------------------------------- //
 
-// high pT, inclusive
-const ewkino::SignalRegionInfo s_SsSignalRegionInfos[] = 
+// SS, inclusive
+const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] = 
 {
     {
         // name
         "sr0",
         // title
-        "baseline: # jets #geq 2, # btags #eq 0",
+        "baseline",
         // latex
-        "$\\#jets\\geq2,\\# btags=0$"
+        "baseline"
     },
     { 
         // name
         "sr1",
         // title
-        "sr1: # jets #eq 2 or 3, # btags #eq 0",
+        "sr1: baseline + iso track veto + tau veto + jet-PV matching",
         // latex
-        "$\\#jets\\eq2 or 3,\\# btags=0$"
+        "SR1"
     },
     { 
         // name
         "sr2",
         // title
-        "sr2: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV",
+        "sr2: sr1 + mjj < 120 GeV",
         // latex
-        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV}$"
-    },
-    { 
-        // name
-        "sr3",
-        // title
-        "sr3: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV",
-        // latex
-        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV}$"
-    },
-    { 
-        // name
-        "sr4",
-        // title
-        "sr4: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV, iso track veto",
-        // latex
-        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV},\\ \\textrm{iso track veto}$"
-    },
-    { 
-        // name
-        "sr5",
-        // title
-        "sr5: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV, iso track veto, tau veto",
-        // latex
-        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV},\\ \\textrm{iso track veto},\\ \\textrm{tau veto}$"
-    },
-    { 
-        // name
-        "sr5",
-        // title
-        "sr5: # jets #eq 2 or 3, # btags #eq 0, MET > 30 GeV, 50 < M_{jj} < 110 GeV, iso track veto, tau veto, jet-PV matching",
-        // latex
-        "$\\#jets\\eq2 or 3,\\# btags=0,\\ MET \\gt \\text{GeV},\\ 50 \\lt M_{jj} \\lt 110 \\text{GeV},\\ \\textrm{iso track veto},\\ \\textrm{tau veto},\\ \\textrm{jet-PV matching}$"
+        "SR1 + $M_{jj} < 120$ GeV"
     },
 };
 
@@ -71,7 +40,7 @@ const ewkino::SignalRegionInfo s_SsSignalRegionInfos[] =
 // fails at compile time if it does
 #define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
 #define STATIC_ASSERT(expr) typedef char my_static_assert[(expr) ? 1 : -1]
-STATIC_ASSERT(ARRAY_SIZE(s_SsSignalRegionInfos)      == ewkino::SignalRegion::static_size);
+STATIC_ASSERT(ARRAY_SIZE(s_SsInclSignalRegionInfos)      == ewkino::SignalRegion::static_size);
 
 namespace ewkino
 {
@@ -81,7 +50,7 @@ namespace ewkino
         const std::string& signal_region_name,
         const std::string& analysis_type_name,
         const std::string& signal_region_type_name
-        )
+    )
     {
         using namespace std;
         const AnalysisType::value_type analysis_type          = GetAnalysisTypeFromName(analysis_type_name); 
@@ -91,7 +60,7 @@ namespace ewkino
         {
             if (analysis_type==AnalysisType::ss && signal_region_type==SignalRegionType::inclusive)
             {
-                if (string(s_SsSignalRegionInfos[i].name) == signal_region_name)
+                if (string(s_SsInclSignalRegionInfos[i].name) == signal_region_name)
                 {
                     signal_region = static_cast<SignalRegion::value_type>(i);
                     break;
@@ -114,9 +83,9 @@ namespace ewkino
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type analysis_type,
         const SignalRegionType::value_type& signal_region_type
-        )
+    )
     {
-        if (analysis_type==AnalysisType::ss     && signal_region_type==SignalRegionType::inclusive) {return s_SsSignalRegionInfos[signal_region];}
+        if (analysis_type==AnalysisType::ss && signal_region_type==SignalRegionType::inclusive) {return s_SsInclSignalRegionInfos[signal_region];}
 
         // if we get here, then the arguments were out of bounds
         throw std::domain_error("ERROR: ewkino::GetSignalRegionInfo(): arguments out of bounds!");
@@ -127,7 +96,7 @@ namespace ewkino
         const std::string& signal_region_name,
         const std::string& analysis_type_name,
         const std::string& signal_region_type_name
-        )
+    )
     {
         const AnalysisType::value_type analysis_type          = GetAnalysisTypeFromName(analysis_type_name); 
         const SignalRegionType::value_type signal_region_type = GetSignalRegionTypeFromName(signal_region_type_name); 
@@ -138,117 +107,83 @@ namespace ewkino
     // passes signal region
     bool PassesSignalRegion
     (
+        const float met,
+        const float ht,
+        const int njets,
+        const int nbtags,
+        const float l1_pt,
+        const float l2_pt,
+        const int l1_id,
+        const int l2_id,
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type& anal_type,
-        const SignalRegionType::value_type& signal_region_type,
-        const at::YieldType::value_type& jec_yield_type,
-        const at::YieldType::value_type& btag_yield_type,
-        const bool do_btag_sf
-        )
+        const SignalRegionType::value_type& signal_region_type
+    )
     {
         switch(anal_type)
         {
-        case AnalysisType::ss:
-            if (max(ewkino_ss::lep1_pdgid(),ewkino_ss::lep2_pdgid()) < 20.0) return false;
-            if (min(ewkino_ss::lep1_pdgid(),ewkino_ss::lep2_pdgid()) < 20.0) return false;
-            break;
-        default:
-            return false;
+            case AnalysisType::ss:
+                if (l1_pt < 20.0) return false;
+                if (l2_pt < 20.0) return false;
+                break;
+            default:
+                return false;
         }
 
-        // kinematic variables that define the signal region
-        int njets   = -1;
-        float ht    = -1;
-        float met   = -1;
-        int nbtags  = -1;
-
-        // apply the btag scale factor
-        switch(anal_type)
-        {
-        case AnalysisType::ss:
-            if (not ewkino_ss::is_real_data() && do_btag_sf)
-            {
-                nbtags = ewkino_ss::nbtags_reweighted();
-            }
-            if (ewkino_ss::is_real_data())
-            {
-                // jet scale up/down
-                switch(jec_yield_type)
-                {
-                case at::YieldType::up:
-                    njets  = ewkino_ss::njets_up();
-                    nbtags = ewkino_ss::nbtags_reweighted_jec_up();
-                    ht     = ewkino_ss::ht_up();
-                    met    = ewkino_ss::pfmet_up();
-                    break;
-                case at::YieldType::down:
-                    njets  = ewkino_ss::njets_dn();
-                    nbtags = ewkino_ss::nbtags_reweighted_jec_dn();
-                    ht     = ewkino_ss::ht_dn();
-                    met    = ewkino_ss::pfmet_dn();
-                    break;
-                case at::YieldType::base:
-                    njets  = ewkino_ss::njets();
-                    nbtags = (do_btag_sf ? ewkino_ss::nbtags_reweighted() : ewkino_ss::nbtags());
-                    ht     = ewkino_ss::ht();
-                    met    = ewkino_ss::pfmet();
-                    break;
-                default:
-                    njets  = ewkino_ss::njets();
-                    nbtags = (do_btag_sf ? ewkino_ss::nbtags_reweighted() : ewkino_ss::nbtags());
-                    ht     = ewkino_ss::ht();
-                    met    = ewkino_ss::pfmet();
-                    break;
-                }
-            }
-            if (not ewkino_ss::is_real_data())
-            {
- 
-                // btag scale up/down
-                // this will overide the nbtags setting above
-                switch(btag_yield_type)
-                {
-                case at::YieldType::up:
-                    nbtags = ewkino_ss::nbtags_reweighted_up();
-                    break;
-                case at::YieldType::down:
-                    nbtags = ewkino_ss::nbtags_reweighted_dn();
-                    break;
-                case at::YieldType::base:
-                    nbtags = (do_btag_sf ? ewkino_ss::nbtags_reweighted() : ewkino_ss::nbtags());
-                    break;
-                default:
-                    nbtags = (do_btag_sf ? ewkino_ss::nbtags_reweighted() : ewkino_ss::nbtags());
-                    break;
-                }
-            }
-            break;
-        default:
-            return false;
-        } // end anal_type switch
-
-        // ss
+        // high pt
         if (anal_type==AnalysisType::ss)
         {
-            const bool baseline = (njets>=2 && nbtags==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
+            const bool baseline = ((ewkino_ss::njets()==2 || ewkino_ss::njets()==3) && ewkino_ss::nbtags()==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
+            const bool pass_sr1 = (baseline && ewkino_ss::passes_isotrk_veto() && ewkino_ss::passes_tau_veto() && (ewkino_ss::njets_pv_tight0() == 2 || ewkino_ss::njets_pv_tight0()==3));
+            const bool pass_sr2 = (pass_sr1 && ewkino_ss::dijet_mass() < 120.);
 
             if (signal_region_type==SignalRegionType::inclusive)
             {
                 switch (signal_region)
                 {
                 case SignalRegion::sr0 : return (baseline);
-                case SignalRegion::sr1 : return (baseline && (njets == 2 || njets ==3));
-                case SignalRegion::sr2 : return (baseline && (njets == 2 || njets ==3) && ewkino_ss::pfmet() > 30.);
-                case SignalRegion::sr3 : return (baseline && (njets == 2 || njets ==3) && ewkino_ss::pfmet() > 30. && ewkino_ss::dijet_mass() > 50. && ewkino_ss::dijet_mass() < 120.);
+                case SignalRegion::sr1 : return (pass_sr1);
+                case SignalRegion::sr2 : return (pass_sr2);
                 };
             }
+
             return false;
         }
+        
         return false;
     }
 
+    // passes signal region
+    bool PassesSignalRegion
+    (
+        const SignalRegion::value_type& signal_region,
+        const AnalysisType::value_type& anal_type,
+        const SignalRegionType::value_type& signal_region_type,
+        const bool do_beff_sf,
+        const SystematicType::value_type& syst_type,
+        const at::Sample::value_type sample,
+        const bool is_fast_sim
+    )
+    {
+        // lepton pt cuts
+        const unsigned int l1_id = abs(ewkino_ss::lep1_pdgid());
+        const unsigned int l2_id = abs(ewkino_ss::lep2_pdgid());
+        const float l1_pt        = ewkino_ss::lep1_p4().pt();
+        const float l2_pt        = ewkino_ss::lep2_p4().pt();
+
+        // kinematic variables that define the signal region
+        float met   = -999999;
+        float ht    = -999999;
+        int nbtags  = -999999;
+        int njets   = -999999;
+        ewkino::GetReweightedKinematicVariables(met, ht, njets, nbtags, do_beff_sf, syst_type, sample, is_fast_sim);
+
+        // call main fucntion with this ht/met/njets/nbtags
+        return PassesSignalRegion(met, ht, njets, nbtags, l1_pt, l2_pt, l1_id, l2_id, signal_region, anal_type, signal_region_type);
+    }
+
     // set aliases for TTree
-    void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type)
+    void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf)
     {
 
         // kinematic variable aliases
@@ -274,17 +209,37 @@ namespace ewkino
         tree.SetAlias("fl2"    , "lep2_wflip/(1.0-lep2_wflip)"); 
         tree.SetAlias("l2_dz"  , "fabs(lep2_dz)"              ); 
 
+        // truth matched
+        tree.SetAlias("is_ss_mc3"   , "lep1_mc3id*lep2_mc3id>0"             );
+        tree.SetAlias("lep_is_fromw", "lep1_is_fromw==1 && lep2_is_fromw==1");
+        tree.SetAlias("mc_matched"  , "is_ss_mc3 && lep_is_fromw"           );
+
+        // fake rates
         tree.SetAlias("sfw", "l1_fo*fr1 + l2_fo*fr2");
         tree.SetAlias("dfw", "fr1*fr2");
+
+        // scale factors
+        tree.SetAlias("sf", "sf_dileptrig*sf_lepeff");
+
+        // do btag scale factor
+        if (do_btag_sf)
+        {
+            tree.SetAlias("nbs", "nbtags_reweighted");
+        }
+        else
+        {
+            tree.SetAlias("nbs", "nbtags");
+        }
 
         // lepton cuts
         switch (anal_type)
         {
-        case AnalysisType::ss:
-            tree.SetAlias("lep_pt", "lep1_p4.pt()>20 && lep2_p4.pt()>20");
-            break;
-            /*do nothing*/
-            break;
+            case AnalysisType::ss:
+                tree.SetAlias("lep_pt", "lep1_p4.pt()>20 && lep2_p4.pt()>20");
+                break;
+            case AnalysisType::static_size:
+                /*do nothing*/
+                break;
         }
         tree.SetAlias("l1_d0_cut", "(l1_id==11 ? 0.01 : 0.005)"); 
         tree.SetAlias("l2_d0_cut", "(l2_id==11 ? 0.01 : 0.005)"); 
@@ -293,46 +248,39 @@ namespace ewkino
         // trigger
         switch (anal_type)
         {
-        case AnalysisType::ss:
-            tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
-            break;
-        case AnalysisType::static_size:
-            /*do nothing*/
-            break;
+            case AnalysisType::ss:
+                tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
+                break;
+            case AnalysisType::static_size:
+                /*do nothing*/
+                break;
         }
 
         // inclusive
         switch (anal_type)
         {
-        case AnalysisType::ss:
-            tree.SetAlias("sr0" , "lep_pt && nbtags==0 && njets>=2"); 
-            tree.SetAlias("sr1" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
-            tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30.");
-            tree.SetAlias("sr3" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30. && dijet_mass>50. && dijet_mass<120.");  
-            break;
-        case AnalysisType::static_size:
-            /*do nothing*/
-            break;
+            case AnalysisType::ss:
+                tree.SetAlias("sr0" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
+                tree.SetAlias("sr1" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
+                tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120."); 
+                break;
+            case AnalysisType::static_size:
+                /*do nothing*/
+                break;
         }
 
         // exclusive
         switch (anal_type)
         {
-        case AnalysisType::ss:
-            tree.SetAlias("sr0" , "lep_pt && nbtags==0 && njets>=2"); 
-            tree.SetAlias("sr1" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
-            tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30.");
-            tree.SetAlias("sr3" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && pfmet>30. && dijet_mass>50. && dijet_mass<120.");  
-            break;
-        case AnalysisType::static_size:
-            /*do nothing*/
-            break;
+            case AnalysisType::static_size:
+                /*do nothing*/
+                break;
         }
     }
 
-    void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type)
+    void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf)
     {
-        SetSignalRegionAliases(*tree, anal_type);
+        SetSignalRegionAliases(*tree, anal_type, do_btag_sf);
     }
 
     // Get the name of the SignalRegionTyp
@@ -340,9 +288,9 @@ namespace ewkino
     {
         switch(signal_region_type)
         {
-        case SignalRegionType::inclusive: return "inclusive"; break;
-        case SignalRegionType::exclusive: return "exclusive"; break;
-        default: {/*do nothing*/}
+            case SignalRegionType::inclusive: return "inclusive"; break;
+            case SignalRegionType::exclusive: return "exclusive"; break;
+            default: {/*do nothing*/}
         };
         throw std::domain_error("ERROR: ewkino::GetSignalRegionTypeName(): arguments out of bounds!");
     }
