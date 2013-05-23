@@ -358,7 +358,7 @@ namespace at
     // minmax_option: mean 0: min -1, max +1
     float GetScaleFactorLight(float jet_pt, float jet_eta, const int unc_option) 
     {
-        static const float ptmin = 800;
+        static const float ptmin = 20;
         static const float ptmax = 800;
     
         // eta between 0 and 0.8
