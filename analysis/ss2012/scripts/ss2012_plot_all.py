@@ -92,6 +92,12 @@ parser.add_option("--verbose"    , action="store_true"  , dest="verbose"    , de
 
 (options, args) = parser.parse_args()
 
+
+if (options.excl):
+	signal_region_type = "exclusive"
+else:
+	signal_region_type = "inclusive"
+
 # make the histograms for a particular sample and signal region
 # ---------------------------------------------------------------------------------- #
 
@@ -99,11 +105,11 @@ def make_hist(signal_region, sample):
 
 	# check signal region
 	if (options.excl):
-		signal_region_type = "exclusive"
+		#signal_region_type = "exclusive"
 		if (signal_region < excl_signal_regions[0] or signal_region > excl_signal_regions[-1]):
 			raise Error("signal region %d not supported. exiting" % signal_region)
 	else:
-		signal_region_type = "inclusive"
+		#signal_region_type = "inclusive"
 		if (signal_region < incl_signal_regions[0] or signal_region > incl_signal_regions[-1]):
 			raise Error("signal region %d not supported. exiting" % signal_region)
 
@@ -258,6 +264,29 @@ def print_summary_table():
 	if (not options.test):
 		os.system(cmd)
 		
+# print a very simple yield table with format:
+# n_search_region oberved_yield total_predicted_yield total_predicted_yield_uncertainty fake_yields fake_yields_uncertainty rare_yields rare_yields_uncertainty chargeflip_yields chargeflip_yields_uncertainty     
+# ---------------------------------------------------------------------------------- #
+
+def print_yield_and_predictions():
+	print "printing yield and prediction tables"
+
+	# table directory
+	table_path = "tables/%s" % options.out_name 
+	if not os.path.isdir(table_path):
+		print "%s does not exist -- creating" % table_path
+   		if (not options.test):
+			os.makedirs(table_path)
+
+	# text file
+	text_name  = "%s/yields_and_pred_%s_%s.txt" % (table_path, options.anal_type, options.out_name)
+	cmd = "root -b -q -l \"macros/PrintYieldAndPredictionsWrapper.C (\\\"%s\\\", \\\"%s\\\", \\\"%s\\\", \\\"%s\\\");\" " % (options.out_name, options.anal_type, signal_region_type, text_name)
+	if (options.verbose):
+		print cmd
+	if (not options.test):
+		os.system(cmd)
+		os.system("cat %s" % text_name)
+
 
 # "main program" 
 # ---------------------------------------------------------------------------------- #
@@ -276,6 +305,7 @@ def main():
 						do_append = (sr != excl_signal_regions[0])
 						print_yield_table(sr, do_append)
 				#print_summary_table()
+				print_yield_and_predictions()
 			else:
 				print "making plots for all inclusive signal regions"
 				for sr in incl_signal_regions:
@@ -287,6 +317,7 @@ def main():
 						do_append = (sr != incl_signal_regions[0])
 						print_yield_table(sr, do_append)
 				#print_summary_table()
+				print_yield_and_predictions()
 		else:	
 			sr = int(options.sr)
 			print "making plots for signal region %d..." % sr

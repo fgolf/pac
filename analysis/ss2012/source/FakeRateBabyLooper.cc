@@ -580,7 +580,12 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // qcd muon cuts (for the different qcd samples)
         const bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
         const bool qcd_mu_high = rt::string_contains(current_file_name, "MuEnrichedPt_15") && pt() >= 16.0; 
+        const bool qcd_el      = not (qcd_mu_low or qcd_mu_high); 
         if (is_mu && is_qcd && not (qcd_mu_low || qcd_mu_high))
+        {
+            return 0;
+        }
+        else if (is_el && is_qcd && not qcd_el)
         {
             return 0;
         }
@@ -588,10 +593,10 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         // check the charge
         switch (m_charge)
         {
-        case  1: if (id()>0) {return 0;} break; // 11/13   --> e-/mu- (reject)
-        case -1: if (id()<0) {return 0;} break; // -11/-13 --> e+/mu+ (reject)
-        case  0: /*do nothing*/ break;
-        default: /*do nothing*/ break;
+            case  1: if (id()>0) {return 0;} break; // 11/13   --> e-/mu- (reject)
+            case -1: if (id()<0) {return 0;} break; // -11/-13 --> e+/mu+ (reject)
+            case  0: /*do nothing*/ break;
+            default: /*do nothing*/ break;
         };
 
         // pT cut
@@ -775,7 +780,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // vertex reweight for ttbar
-        float evt_weight = (is_data ? 1. : (weight() * m_lumi));
+        float evt_weight = (is_data ? 1.0 : (weight() * m_lumi));
 
         // isolation
         float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area

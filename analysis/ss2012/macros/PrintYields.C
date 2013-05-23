@@ -1,3 +1,4 @@
+#include <fstream>
 #include "rt/RootTools.h"
 #include "at/Sample.h"
 #include "SignalRegion.h"
@@ -408,38 +409,40 @@ void PrintSummaryYields
     t_yields.setColLabel("Total BG"   , 4);
     t_yields.setColLabel("Event Yield", 5);
 
+    const std::string ht = (analysis_type == ss::AnalysisType::high_pt ? "200" : "250");
+
     std::string latex[] = {
     "\\begin{table}"                                                                                                                                                       ,  // 0 
     "\\begin{center}"                                                                                                                                                      ,  // 1 
     "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}"                                                                                                                              ,  // 2 
     "\\hline"                                                                                                                                                              ,  // 3 
     "\\nbtags                   & \\met                    & \\njets                    & \\Ht     & SR & Fake BG & Flip BG & Rare MC & Total BG & Observed \\\\ \\hline"  ,  // 4  \hline
-    "\\multirow{9}{*}{$\\geq 0$} & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 0  &"                                                                  ,  // 5  \cline{2-5}
-    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & 200-400 & 1  &"                                                                   ,  // 6  \cline{4-5}
+    "$\\geq 0$                  & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 0  &"                                                                   ,  // 5  \hline 
+    "\\multirow{8}{*}{$= 0$}   & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & "+ht+"-400 & 1  &"                                                                ,  // 6  \cline{4-5}
     "                          &                         &                           & $>400$  & 2  &"                                                                     ,  // 7  \cline{3-5}
-    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 3  &"                                                                   ,  // 8  \cline{4-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & "+ht+"-400 & 3  &"                                                                ,  // 8  \cline{4-5}
     "                          &                         &                           & $>400$  & 4  &"                                                                     ,  // 9  \cline{2-5}
-    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & 200-400 & 5  &"                                                                   ,  // 10 \cline{4-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & "+ht+"-400 & 5  &"                                                                ,  // 10 \cline{4-5}
     "                          &                         &                           & $>400$  & 6  &"                                                                     ,  // 11 \cline{3-5}
-    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 7  &"                                                                   ,  // 12 \cline{4-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & "+ht+"-400 & 7  &"                                                                ,  // 12 \cline{4-5}
     "                          &                         &                           & $>400$  & 8  &"                                                                     ,  // 13 \hline 
     "\\multirow{9}{*}{$=1$}     & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 10 &"                                                                   ,  // 14 \cline{2-5}
-    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & 200-400 & 11 &"                                                                   ,  // 15 \cline{4-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & "+ht+"-400 & 11 &"                                                                ,  // 15 \cline{4-5}
     "                          &                         &                           & $>400$  & 12 &"                                                                     ,  // 16 \cline{3-5}
-    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 13 &"                                                                   ,  // 17 \cline{4-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & "+ht+"-400 & 13 &"                                                                ,  // 17 \cline{4-5}
     "                          &                         &                           & $>400$  & 14 &"                                                                     ,  // 18 \cline{2-5}
-    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & 200-400 & 15 &"                                                                   ,  // 19 \cline{4-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & "+ht+"-400 & 15 &"                                                                ,  // 19 \cline{4-5}
     "                          &                         &                           & $>400$  & 16 &"                                                                     ,  // 20 \cline{3-5}
-    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 17 &"                                                                   ,  // 21 \cline{4-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & "+ht+"-400 & 17 &"                                                                ,  // 21 \cline{4-5}
     "                          &                         &                           & $>400$  & 18 &"                                                                     ,  // 22 \hline
     "\\multirow{9}{*}{$\\geq 2$} & 30 if $\\Ht<500$ else 0  & 2                         & 80      & 20 &"                                                                  ,  // 23 \cline{2-5}
-    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & 200-400 & 21 &"                                                                   ,  // 24 \cline{4-5}
+    "                          & \\multirow{4}{*}{50-120} & \\multirow{2}{*}{2-3}      & "+ht+"-400 & 21 &"                                                                ,  // 24 \cline{4-5}
     "                          &                         &                           & $>400$  & 22 &"                                                                     ,  // 25 \cline{3-5}
-    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 23 &"                                                                   ,  // 26 \cline{4-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & "+ht+"-400 & 23 &"                                                                ,  // 26 \cline{4-5}
     "                          &                         &                           & $>400$  & 24 &"                                                                     ,  // 27 \cline{2-5}
-    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & 200-400 & 25 &"                                                                   ,  // 28 \cline{4-5}
+    "                          & \\multirow{4}{*}{$>120$} & \\multirow{2}{*}{2-3}      & "+ht+"-400 & 25 &"                                                                ,  // 28 \cline{4-5}
     "                          &                         &                           & $>400$  & 26 &"                                                                     ,  // 29 \cline{3-5}
-    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & 200-400 & 27 &"                                                                   ,  // 30 \cline{4-5}
+    "                          &                         & \\multirow{2}{*}{$\\geq 4$} & "+ht+"-400 & 27 &"                                                                ,  // 30 \cline{4-5}
     "                          &                         &                           & $>400$  & 28 &"                                                                     ,  // 31 \hline
     "\\end{tabular}"                                                                                                                                                       ,  // 32
     Form("\\label{tab:%s_%s_yield_summary}", at_info.short_name.c_str(), signal_region_type_name.c_str())                                                                  ,  // 33
@@ -507,7 +510,7 @@ void PrintSummaryYields
     }
 
     latex[4 ].append("\\hline"      ); 
-    latex[5 ].append("\\cline{2-5}" ); 
+    latex[5 ].append("\\hline"      ); 
     latex[6 ].append("\\cline{4-5}" ); 
     latex[7 ].append("\\cline{3-5}" ); 
     latex[8 ].append("\\cline{4-5}" ); 
@@ -602,6 +605,98 @@ void PrintCard
 
     // print it
     t_yields.print();
+}
+
+
+// print the yields in the following format
+// n_search_region oberved_yield total_predicted_yield total_predicted_yield_uncertainty fake_yields fake_yields_uncertainty rare_yields rare_yields_uncertainty chargeflip_yields chargeflip_yields_uncertainty     
+void PrintYieldAndPredictions
+(
+    const std::string& output_path, 
+    const std::string& analysis_type_name, 
+    const std::string& signal_region_type_name = "exclusive",
+    const std::string& output_file_name = ""
+)
+{
+    using namespace at;
+
+    const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name);
+    // can be paramerized if needed (for now hard coded)
+    const int charge_option = 0; 
+
+    // output
+    std::ostream* os_ptr = NULL;
+    if (output_file_name.empty())
+    {
+        os_ptr = &std::cout;
+    }
+    else
+    {
+        os_ptr = new std::ofstream(output_file_name.c_str(), std::ofstream::out);
+    }
+
+    //for (size_t sr_num = 0; sr_num != ss::SignalRegion::static_size; sr_num++)
+    const size_t num_signal_regions = (analysis_type == ss::AnalysisType::high_pt ? 35 : 28);
+    for (size_t sr_num = 0; sr_num != num_signal_regions+1; sr_num++)
+    {
+        // skip 9 and 19 and 29
+        if (sr_num == 9 || sr_num == 19 || sr_num == 29)
+        {
+            continue;
+        }
+
+        const string signal_region_name    = Form("sr%lu", sr_num);
+        const ss::SignalRegion::value_type signal_region = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name); 
+        const ss::SignalRegionInfo sr_info = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
+
+        // get the yields
+        std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        ss::Yield yield_data = m_yield["data"];
+        ss::Yield yield_rare = m_yield["rare"];
+        ss::Yield yield_spil = m_fake ["rare"];
+        ss::Yield yield_fake = ss::GetFakeYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        ss::Yield yield_flip = ss::GetFlipYield(Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path); 
+
+        // subtract the spillage from the rare MC
+        ss::Yield yield_cfake = (yield_fake - yield_spil);
+
+        // set systematic uncertainties
+        ss::SetSysUncertainties(yield_rare , rare_sys_unc);
+        ss::SetSysUncertainties(yield_cfake, fake_sys_unc);
+        ss::SetSysUncertainties(yield_flip , flip_sys_unc);
+
+        // total prediction
+        ss::Yield yield_pred = yield_rare;
+        yield_pred += yield_cfake;
+        yield_pred += yield_flip;
+
+        // print the table
+        const string sr_name = Form((sr_num < 10 ? "SR0%lu" : "SR%lu"), sr_num);
+        const string line = Form("%lu\t%1.0f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f\t%1.3f",
+                sr_num,
+                yield_data.ll,
+                yield_pred.ll,
+                yield_pred.tll(),
+                yield_cfake.ll,
+                yield_cfake.tll(),
+                yield_rare.ll,
+                yield_rare.tll(),
+                yield_flip.ll,
+                yield_flip.tll()
+        );
+        std::ostream& out = *os_ptr;
+        out << line << endl;
+
+    }
+
+    // cleanup
+    if (not output_file_name.empty())
+    {
+        dynamic_cast<std::ofstream*>(os_ptr)->close();
+        delete os_ptr;
+    }
 }
 
 //#ifndef __CINT__

@@ -111,13 +111,11 @@ try
     // -------------------------------------------------------------------------------------------------//
 
     long number_of_events           = -1;
-    std::string input_label         = "";
     std::string output_file         = "";
     std::string syst_file           = "";
     std::string yield_file          = "";
     std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_17Apr2013.root";
     std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02222013.root";
-    std::string den_hist_file_name  = "";
     std::string analysis_type_name  = "high_pt";
     std::string sr_string           = "-1";
     bool exclusive                  = true;
@@ -126,7 +124,6 @@ try
     float flip_sys_unc              = 0.3;
     float rare_sys_unc              = 0.5;
     float lumi                      = 1.0;
-    bool use_ra5                    = false;
     bool verbose                    = false;
     float sparm0                    = -999999.0;
     float sparm1                    = -999999.0;
@@ -140,15 +137,12 @@ try
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help"      , "print this menu")
-        ("label"     , po::value<std::string>(&input_label)->required(), "REQUIRED: name of input label to get the root files: plots/<label>/..."         )
-        //         ("sample"    , po::value<std::string>(&sample_name)->required(), "REQUIRED: name of input sample (from at/Sample.h)"                             )
         ("syst"      , po::value<std::string>(&syst_file)->required()  , "REQUIRED: file containting systematics"                                         )
-        ("yield"     , po::value<std::string>(&yield_file)             , "file to get the yields and predictions (if blank, use label to get yields/pred)")
+        ("yield"     , po::value<std::string>(&yield_file)->required() , "REQUIRED: file to get the yields and predictions"                               )
         ("output"    , po::value<std::string>(&output_file)            , "name of output root file"                                                       )
         ("anal_type" , po::value<std::string>(&analysis_type_name)     , "name of analysis type (from AnalysisType.h)"                                    )
         ("fr_file"   , po::value<std::string>(&fake_rate_file_name)    , Form("fake rate file name (default: %s)", fake_rate_file_name.c_str())           )
         ("fl_file"   , po::value<std::string>(&flip_rate_file_name)    , Form("flip rate file name (default: %s)", flip_rate_file_name.c_str())           )
-        ("den_file"  , po::value<std::string>(&den_hist_file_name)     , Form("den count file name (default: %s)", input_label.c_str())                   )
         ("sr"        , po::value<std::string>(&sr_string)              , "comma seperated list of SRs to run on (any < 0 means all -- default)"           )
         ("ngen_sf"   , po::value<float>(&ngen_sf)                      , Form("scale factor for the # generated events (default is %f)", ngen_sf)         )
         ("fr_unc"    , po::value<float>(&fake_sys_unc)                 , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc) )
@@ -161,7 +155,6 @@ try
         ("sparm3"    , po::value<float>(&sparm3)                       , "sparm3 is required to be this value"                                            )
         ("lumi"      , po::value<float>(&lumi)                         , "luminosity"                                                                     )
         ("excl"      , po::value<bool>(&exclusive)                     , "use exclusive signal region"                                                    )
-        ("use_ra5"   , po::value<bool>(&use_ra5)                       , "use ra5 ntuple files from marc"                                                 )
         ("verbose"   , po::value<bool>(&verbose)                       , "verbosity"                                                                      )
         ;
 
@@ -195,14 +188,11 @@ try
     if (verbose)
     {
         cout << "inputs:" << endl;
-        cout << "input_label         :\t" << input_label         << endl;
-        //     cout << "sample_name         :\t" << sample_name         << endl;
         cout << "output_file         :\t" << output_file         << endl;
         cout << "syst_file           :\t" << syst_file           << endl;
         cout << "analysis_type_name  :\t" << analysis_type_name  << endl;
         cout << "fake_rate_file_name :\t" << fake_rate_file_name << endl;
         cout << "flip_rate_file_name :\t" << flip_rate_file_name << endl;
-        cout << "den_hist_file_name  :\t" << den_hist_file_name  << endl;
         cout << "number_of_events    :\t" << number_of_events    << endl;
         cout << "sr                  :\t" << sr_string           << endl;
         cout << "ngen_sf             :\t" << ngen_sf             << endl;
@@ -233,7 +223,13 @@ try
     }
 
     // check that input file exists and is specified
-    if (!yield_file.empty())
+    if (yield_file.empty())
+    { 
+        cout << "[ss2012_create_card] ERROR: yield/pred file " << yield_file << " not specified" << endl;
+        cout << desc << "\n";
+        return 1;
+    }
+    else 
     { 
         if (!rt::exists(syst_file))
         {
@@ -288,14 +284,6 @@ try
         }
     }
 
-    //cout << yield_infos.size() << endl;
-    //for (size_t i = 0; i != yield_infos.size(); i++)
-    //{
-    //    const yield_info_t& yi = yield_infos.at(i);
-    //    cout << yi.sr_num << "\t" << yi.yield << endl; 
-    //}
-
-
     // info 
     const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
     const ss::SignalRegionType::value_type signal_region_type = (exclusive ? SignalRegionType::exclusive : SignalRegionType::inclusive);
@@ -307,113 +295,40 @@ try
         const std::string signal_region_name = Form("sr%d", sr_nums.at(i));
         const ss::SignalRegion::value_type signal_region = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name);
         const ss::SignalRegionInfo sr_info               = ss::GetSignalRegionInfo(signal_region, analysis_type, signal_region_type);
-        const int charge_option = 0;
 
         // info object
         card_info_t info;
+        yield_info_t yi = *std::find_if(yield_infos.begin(), yield_infos.end(), CompareSR(sr_nums.at(i)));
 
-        // get the yields and predictions
-        if (yield_file.empty())
-        {
-            // get the yields
-            std::map<std::string, ss::Yield> m_yield = GetYieldsMap("ss"  , signal_region, analysis_type, signal_region_type, charge_option, input_label);
-            std::map<std::string, ss::Yield> m_fake  = GetYieldsMap("fake", signal_region, analysis_type, signal_region_type, charge_option, input_label);
-            ss::Yield yield_data = m_yield["data"];
-            ss::Yield yield_rare = m_yield["rare"];
-            ss::Yield yield_spil = m_fake ["rare"];
-            ss::Yield yield_fake = ss::GetFakeYield(at::Sample::data, signal_region, analysis_type, signal_region_type, charge_option, input_label);
-            ss::Yield yield_flip = ss::GetFlipYield(at::Sample::data, signal_region, analysis_type, signal_region_type, charge_option, input_label); 
-
-            // subtract the spillage from the rare MC
-            ss::Yield yield_cfake = (yield_fake - yield_spil);
-
-            // set systematic uncertainties
-            ss::SetSysUncertainties(yield_rare , rare_sys_unc);
-            ss::SetSysUncertainties(yield_cfake, fake_sys_unc);
-            ss::SetSysUncertainties(yield_flip , flip_sys_unc);
-
-            // total prediction
-            ss::Yield yield_pred = yield_rare;
-            yield_pred += yield_cfake;
-            yield_pred += yield_flip;
-
-            // make the card
-            info.signal_name = rt::string_upper(signal_region_name);
-            info.obs         = static_cast<unsigned int>(yield_data.ll);
-            info.fake        = yield_cfake.ll;
-            info.fake_unc    = 1.0 + yield_cfake.tll()/yield_cfake.ll;
-            info.flip        = yield_flip.ll;
-            info.flip_unc    = 1.0 + yield_flip.tll()/yield_flip.ll;
-            info.rare        = yield_rare.ll;
-            info.rare_unc    = 1.0 + yield_rare.tll()/yield_rare.ll;
-        }
-        else
-        {
-            yield_info_t yi = *std::find_if(yield_infos.begin(), yield_infos.end(), CompareSR(sr_nums.at(i)));
-
-            // make the card
-            info.signal_name = rt::string_upper(signal_region_name);
-            info.obs         = yi.yield;
-            info.fake        = yi.fake;
-            info.fake_unc    = 1.0 + yi.fake_unc/yi.fake;
-            info.flip        = yi.flip;
-            info.flip_unc    = 1.0 + yi.flip_unc/yi.flip;
-            info.rare        = yi.rare;
-            info.rare_unc    = 1.0 + yi.rare_unc/yi.rare;
-        }
+        // make the card
+        info.signal_name = rt::string_upper(signal_region_name);
+        info.obs         = yi.yield;
+        info.fake        = yi.fake;
+        info.fake_unc    = 1.0 + yi.fake_unc/yi.fake;
+        info.flip        = yi.flip;
+        info.flip_unc    = 1.0 + yi.flip_unc/yi.flip;
+        info.rare        = yi.rare;
+        info.rare_unc    = 1.0 + yi.rare_unc/yi.rare;
 
         // systematics (percentage) 
         const std::string sr = GetSRLabel(signal_region);
         rt::TH1Container hc(syst_file);
         //hc.List();
 
-       info.trig_unc    = 1.06;
-       info.pdf_unc     = 1.02;
-       info.lumi_unc    = 1.044;
-        if (use_ra5)
-        {
-            info.acc         = lumi*GetValueFromScanHist(hc[sr+"effNormNice"], sparm0, sparm1);
-            info.lep_unc     = 1.0 + GetValueFromScanHist(hc[sr+"leptonSystematic"], sparm0, sparm1);
-            info.jer_unc     = GetValueFromScanHist(hc[sr+"effErrJER"  ], sparm0, sparm1);
-            info.jes_up_unc  = GetValueFromScanHist(hc[sr+"effErrJESUP"], sparm0, sparm1);
-            info.jes_dn_unc  = GetValueFromScanHist(hc[sr+"effErrJESDN"], sparm0, sparm1);
-            info.met_up_unc  = GetValueFromScanHist(hc[sr+"effErrMETUP"], sparm0, sparm1);
-            info.met_dn_unc  = GetValueFromScanHist(hc[sr+"effErrMETDN"], sparm0, sparm1);
-            info.beff_up_unc = GetValueFromScanHist(hc[sr+"effErrBTAUP"], sparm0, sparm1);
-            info.beff_dn_unc = GetValueFromScanHist(hc[sr+"effErrBTADN"], sparm0, sparm1);
-            info.stat_unc    = 1.0 + GetValueFromScanHist(hc[sr+"effErrStat" ], sparm0, sparm1);
-        }
-        else
-        {
-            const float num      = rt::Integral(hc[sr+"nPassing"]);
-            const float den      = rt::Integral(hc[sr+"nGenerated"]) * ngen_sf;
-            info.acc             = lumi*(num/den);
-            //info.trig_unc        = GetSyst(rt::Integral(hc[sr+"nTrigEffUP"]), num);
-            info.lep_unc         = GetSyst(rt::Integral(hc[sr+"nLepEffUP" ]), num);
-            info.jer_unc         = GetSyst(rt::Integral(hc[sr+"nJER"      ]), num);
-            info.jes_up_unc      = GetSyst(rt::Integral(hc[sr+"nJESUP"    ]), num);
-            info.jes_dn_unc      = GetSyst(rt::Integral(hc[sr+"nJESDN"    ]), num);
-            info.met_up_unc      = GetSyst(rt::Integral(hc[sr+"nMETUP"    ]), num);
-            info.met_dn_unc      = GetSyst(rt::Integral(hc[sr+"nMETDN"    ]), num);
-            info.beff_up_unc     = GetSyst(rt::Integral(hc[sr+"nBTAUP"    ]), num);
-            info.beff_dn_unc     = GetSyst(rt::Integral(hc[sr+"nBTADN"    ]), num);
-            info.stat_unc        = 1.0 + rt::GetClopperPearsonUncertainty(num, den)/num; 
-            //info.acc         = lumi*GetValueFromScanHist(hc[sr+"effNormNice"], sparm0, sparm1);
-            //info.lep_unc     = 1.0 + GetValueFromScanHist(hc[sr+"effErrLepEffUP"], sparm0, sparm1);
-            //info.jer_unc     = GetValueFromScanHist(hc[sr+"effErrJER"  ], sparm0, sparm1);
-            //info.jes_up_unc  = GetValueFromScanHist(hc[sr+"effErrJESUP"], sparm0, sparm1);
-            //info.jes_dn_unc  = GetValueFromScanHist(hc[sr+"effErrJESDN"], sparm0, sparm1);
-            //info.met_up_unc  = GetValueFromScanHist(hc[sr+"effErrMETUP"], sparm0, sparm1);
-            //info.met_dn_unc  = GetValueFromScanHist(hc[sr+"effErrMETDN"], sparm0, sparm1);
-            //info.beff_up_unc = GetValueFromScanHist(hc[sr+"effErrBTAUP"], sparm0, sparm1);
-            //info.beff_dn_unc = GetValueFromScanHist(hc[sr+"effErrBTADN"], sparm0, sparm1);
-            //info.stat_unc    = 1.0 + GetValueFromScanHist(hc[sr+"effErrStat" ], sparm0, sparm1);
-        }
+        info.trig_unc    = 1.06;
+        info.pdf_unc     = 1.02;
+        info.lumi_unc    = 1.044;
+        info.acc         = lumi*GetValueFromScanHist(hc[sr+"effNormNice"], sparm0, sparm1);
+        info.jer_unc     = GetValueFromScanHist(hc[sr+"effErrJER"  ], sparm0, sparm1);
+        info.jes_up_unc  = GetValueFromScanHist(hc[sr+"effErrJESUP"], sparm0, sparm1);
+        info.jes_dn_unc  = GetValueFromScanHist(hc[sr+"effErrJESDN"], sparm0, sparm1);
+        info.met_up_unc  = GetValueFromScanHist(hc[sr+"effErrMETUP"], sparm0, sparm1);
+        info.met_dn_unc  = GetValueFromScanHist(hc[sr+"effErrMETDN"], sparm0, sparm1);
+        info.beff_up_unc = GetValueFromScanHist(hc[sr+"effErrBTAUP"], sparm0, sparm1);
+        info.beff_dn_unc = GetValueFromScanHist(hc[sr+"effErrBTADN"], sparm0, sparm1);
+        info.lep_unc     = 1.0 + GetValueFromScanHist(hc[sr+"leptonSystematic"], sparm0, sparm1);
+        info.stat_unc    = 1.0 + GetValueFromScanHist(hc[sr+"effErrStat" ], sparm0, sparm1);
         card_infos.push_back(info);
-
-
-        // print it
-        //         t_yields.print();
     }
 
     const std::string header = "imax %lu number of search regions\n"
@@ -528,15 +443,19 @@ try
     card.append(jer_sys);
     card.append(lumi_sys);
     card.append(stat_sys);
-    // "------------\n"
-    // "       bin                SR31      SR31      SR31      SR31        SR35      SR35      SR35      SR35\n"
-    // "   process              signal      fake      rare      flip      signal      fake      rare      flip\n"
-    // "   process                   0         1         2         3           0         1         2         3\n"
-    // "      rate              0.0511      12.41    12.81      1.41      0.0846     90.07     30.49      3.22\n"
-    // " ### Error Matrix\n"
-    //     );
 
-    cout << card << endl;
+    // print it
+    if (output_file.empty())
+    {
+        cout << card << endl;
+    }
+    else
+    {
+        rt::mkdir(rt::dirname(output_file), /*force=*/true);
+        std::ofstream out(output_file.c_str(), std::ofstream::out);
+        out << card << endl;
+        out.close();
+    }
 
     // done 
     return 0;

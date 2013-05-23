@@ -473,6 +473,7 @@ int FRClosureLooper::operator()(long event)
         // # btagged jets
         const int num_btags = (is_real_data() ? nbtags() : nbtags_reweighted());
         if (num_btags < static_cast<int>(m_nbtags))
+        //if (num_btags != 0)
         {
             return 0;
         }

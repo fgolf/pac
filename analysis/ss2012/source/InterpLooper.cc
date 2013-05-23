@@ -239,7 +239,6 @@ void InterpLooper::BookHists()
         for (size_t i = 0; i != m_sr_nums.size(); i++)
         {
             const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
-//             cout << i << "\t" << m_sr_nums.at(i) << "\t" << sr << endl;
 
             hc.Add(new TH2F((sr+"nGenerated"         ).c_str(), (sr+"nGenerated "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nPassing"           ).c_str(), (sr+"nPassing "           +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
@@ -248,10 +247,7 @@ void InterpLooper::BookHists()
             hc.Add(new TH2F((sr+"nSF"                ).c_str(), (sr+"nSF "                +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nDF"                ).c_str(), (sr+"nDF "                +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nFakes"             ).c_str(), (sr+"nFakes "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));    
-            hc.Add(new TH2F((sr+"nLepEffUP"          ).c_str(), (sr+"nLepEffUP "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"nLepEffDN"          ).c_str(), (sr+"nLepEffDN "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"nTrigEffUP"         ).c_str(), (sr+"nTrigEffUP "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"nTrigEffDN"         ).c_str(), (sr+"nTrigEffDN "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"nLepEff"            ).c_str(), (sr+"nLepEff "            +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJESUP"             ).c_str(), (sr+"nJESUP "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJESDN"             ).c_str(), (sr+"nJESDN "             +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"nJER"               ).c_str(), (sr+"nJER "               +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
@@ -269,34 +265,10 @@ void InterpLooper::BookHists()
             hc.Add(new TH2F((sr+"effErrMET"          ).c_str(), (sr+"effErrMET "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrMETUP"        ).c_str(), (sr+"effErrMETUP "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrMETDN"        ).c_str(), (sr+"effErrMETDN "        +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"effErrLepEff"       ).c_str(), (sr+"effErrLepEff "       +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"effErrLepEffUP"     ).c_str(), (sr+"effErrLepEffUP "     +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"effErrLepEffDN"     ).c_str(), (sr+"effErrLepEffDN "     +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"effErrTrigEff"      ).c_str(), (sr+"effErrTrigEff "      +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"effErrTrigEffUP"    ).c_str(), (sr+"effErrTrigEffUP "    +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
-            hc.Add(new TH2F((sr+"effErrTrigEffDN"    ).c_str(), (sr+"effErrTrigEffDN "    +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
+            hc.Add(new TH2F((sr+"leptonSystematic"   ).c_str(), (sr+"leptonSystematic "   +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrTot"          ).c_str(), (sr+"effErrTot "          +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
             hc.Add(new TH2F((sr+"effErrStat"         ).c_str(), (sr+"effErrStat "         +bin_label).c_str(), bi.nbinsx, bi.xmin, bi.xmax, bi.nbinsy, bi.ymin, bi.ymax));
         }
-
-//   KEY: TH2D	SR28_effErrMET;1	SR28_effErrMET
-// *  KEY: TH2D	SR28_effErrJES;1	SR28_effErrJES
-//   KEY: TH2D	SR28_effErrJER;1	SR28_effErrJER
-// *  KEY: TH2D	SR28_effErrBTA;1	SR28_effErrBTA
-//   KEY: TH2D	SR28_effErrTot;1	SR28_effErrTot
-//   KEY: TH2D	SR28_effErrStat;1	SR28_effErrStat
-// *  KEY: TH2D	SR28_effNormNice;1	SR28_effNormNice
-//   KEY: TH2D	SR28_effNormNicePerc;1	SR28_effNormNicePerc
-//   KEY: TH2D	SR28_effErrMETUP;1	SR28_effErrMETUP
-//   KEY: TH2D	SR28_effErrMETDN;1	SR28_effErrMETDN
-// *  KEY: TH2D	SR28_effErrJESUP;1	SR28_effErrJESUP
-// *  KEY: TH2D	SR28_effErrJESDN;1	SR28_effErrJESDN
-// *  KEY: TH2D	SR28_effErrBTAUP;1	SR28_effErrBTAUP
-// *  KEY: TH2D	SR28_effErrBTADN;1	SR28_effErrBTADN
-// *  KEY: TH2D	SR28_nGenerated;1	SR28_nGenerated
-// *  KEY: TH2D	SR28_nPassing;1	SR28_nPassing
-        
-
         return;
     }
     catch (std::exception& e)
@@ -521,13 +493,7 @@ int InterpLooper::operator()(long event)
         }
 
         // only keep MC matched events (MC only)
-        //const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1) && (lep1_mc3id()*lep2_mc3id()>0));
         const bool true_ss_event = ((lep1_is_fromw()==1) && (lep2_is_fromw()==1));
-        //const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (lep1_mcid()*lep2_mcid()>0));
-        //const bool lep1_matched  = (abs(lep1_mc3id())==11 or abs(lep1_mc3id())==13 or abs(lep1_mc3id())==15);
-        //const bool lep2_matched  = (abs(lep2_mc3id())==11 or abs(lep2_mc3id())==13 or abs(lep2_mc3id())==15);
-        //const bool leps_ss_gen   = (lep1_matched && lep2_matched && lep1_mc3id()*lep2_mc3id()>0);
-        //const bool true_ss_event = ((lep1_is_fromw()>0) && (lep2_is_fromw()>0) && (leps_ss_gen));
         if (not true_ss_event)
         {
             if (m_verbose) {cout << "failing MC truth matching" << endl;}
@@ -580,11 +546,7 @@ int InterpLooper::operator()(long event)
         evt_weight *= vtxw;
 
         // apply scale factors
-        float evt_weight_lepeff_up  = 0.0;
-        float evt_weight_lepeff_dn  = 0.0;
-        float evt_weight_trigeff_up = 0.0;
-        float evt_weight_trigeff_dn = 0.0;
-
+        float evt_weight_lepeff = 0.0;
         if (m_do_scale_factors && not is_real_data())
         {
             // lepton efficiencies
@@ -597,17 +559,10 @@ int InterpLooper::operator()(long event)
 
             // lepton efficiency systematic uncertainties
             const float lep_eff_syst_unc = DileptonTagAndProbeScaleFactorSystUnc(lep1_pdgid(), lep1_p4().pt(), eta1, lep2_pdgid(), lep2_p4().pt(), eta2);
-            evt_weight_lepeff_up = evt_weight * (1.0 + lep_eff_syst_unc); 
-            evt_weight_lepeff_dn = evt_weight * (1.0 - lep_eff_syst_unc); 
-
-            // trigger efficiency systematic uncertainties
-            const float trig_eff_syst_unc = DileptonTriggerScaleFactorSystUnc();
-            evt_weight_trigeff_up = evt_weight * (1.0 + trig_eff_syst_unc); 
-            evt_weight_trigeff_dn = evt_weight * (1.0 - trig_eff_syst_unc); 
+            evt_weight_lepeff = evt_weight * (1.0 + lep_eff_syst_unc); 
 
             if (m_verbose) {cout << "applying event weight          = " << evt_weight << endl;}
-            if (m_verbose) {cout << Form("applying event weight lep  %f * (1 +/- %f) = %f / %f", evt_weight,  lep_eff_syst_unc,  evt_weight_lepeff_up,  evt_weight_lepeff_dn)  << endl;}
-            if (m_verbose) {cout << Form("applying event weight trig %f * (1 +/- %f) = %f / %f", evt_weight, trig_eff_syst_unc, evt_weight_trigeff_up, evt_weight_trigeff_dn)  << endl;}
+            if (m_verbose) {cout << Form("applying event weight lep  %f * (1 + %f) = %f", evt_weight,  lep_eff_syst_unc,  evt_weight_lepeff)  << endl;}
         }
 
         // Fill hists
@@ -633,11 +588,8 @@ int InterpLooper::operator()(long event)
                 // scaled numerator counts
                 if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::None))
                 {
-                    rt::Fill2D(hc[sr+"nPassing"  ], m0, m12, evt_weight           );
-                    rt::Fill2D(hc[sr+"nLepEffUP" ], m0, m12, evt_weight_lepeff_up );
-                    rt::Fill2D(hc[sr+"nLepEffDN" ], m0, m12, evt_weight_lepeff_dn );
-                    rt::Fill2D(hc[sr+"nTrigEffUP"], m0, m12, evt_weight_trigeff_up);
-                    rt::Fill2D(hc[sr+"nTrigEffDN"], m0, m12, evt_weight_trigeff_dn);
+                    rt::Fill2D(hc[sr+"nPassing"  ], m0, m12, evt_weight       );
+                    rt::Fill2D(hc[sr+"nLepEff"   ], m0, m12, evt_weight_lepeff);
                 }
 
                 // JEC scale up/scale down
@@ -658,12 +610,12 @@ int InterpLooper::operator()(long event)
                 }
 
                 // Btag scale up/down
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::MET_UP, m_sample, m_is_fast_sim))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_UP, m_sample, m_is_fast_sim))
                 {
                     rt::Fill2D(hc[sr+"nBTAUP"], m0, m12, evt_weight);
                 }
 
-                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::MET_DN, m_sample, m_is_fast_sim))
+                if (PassesSignalRegion(signal_region, m_analysis_type, m_signal_region_type, m_do_beff_sf, ss::SystematicType::BEFF_DN, m_sample, m_is_fast_sim))
                 {
                     rt::Fill2D(hc[sr+"nBTADN"], m0, m12, evt_weight);
                 }
@@ -915,62 +867,20 @@ void InterpLooper::SetLepEffSystematic()
             for (unsigned int iy = 1; iy < nbinsy; iy++) 
             {
                 const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
-                const float num_up   = hc[sr+"nLepEffUP" ]->GetBinContent(ix, iy);
-                const float num_down = hc[sr+"nLepEffDN" ]->GetBinContent(ix, iy);            
+                const float num_up   = hc[sr+"nLepEff"   ]->GetBinContent(ix, iy);
                 const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
 
-                float lepeff_syst_up = 0.0f;
-                float lepeff_syst_dn = 0.0f;
+                float lepeff_syst = 0.0f;
                 if (den > 0 && num > 0) 
                 {
-                    lepeff_syst_up = (num_up-num  ) / num;
-                    lepeff_syst_dn = (num_down-num) / num;
-                    hc[sr+"effErrLepEffUP"]->SetBinContent(ix, iy, 1.0 + lepeff_syst_up);
-                    hc[sr+"effErrLepEffDN"]->SetBinContent(ix, iy, 1.0 + lepeff_syst_dn);
+                    lepeff_syst = (num_up - num) / num;
+                    hc[sr+"leptonSystematic"]->SetBinContent(ix, iy, lepeff_syst);
                 }
-                hc[sr+"effErrLepEff"]->SetBinContent(ix, iy, std::max(fabs(lepeff_syst_up), fabs(lepeff_syst_dn)));
             }
         }
     } // end sr loop
     return;
 }
-
-void InterpLooper::SetTrigEffSystematic()
-{
-    // convenience alias
-    rt::TH1Container& hc = m_hist_container;
-
-    for (size_t i = 0; i != m_sr_nums.size(); i++)
-    {
-        const string sr = GetSRLabel(static_cast<ss::SignalRegion::value_type>(m_sr_nums.at(i))); 
-
-        unsigned int nbinsx = hc[sr+"nPassing"]->GetNbinsX()+1;
-        unsigned int nbinsy = hc[sr+"nPassing"]->GetNbinsY()+1;
-        for (unsigned int ix = 1; ix < nbinsx; ix++) 
-        {
-            for (unsigned int iy = 1; iy < nbinsy; iy++) 
-            {
-                const float num      = hc[sr+"nPassing"  ]->GetBinContent(ix, iy);
-                const float num_up   = hc[sr+"nTrigEffUP"]->GetBinContent(ix, iy);
-                const float num_down = hc[sr+"nTrigEffDN"]->GetBinContent(ix, iy);            
-                const float den      = hc[sr+"nGenerated"]->GetBinContent(ix, iy);
-
-                float trigeff_syst_up = 0.0f;
-                float trigeff_syst_dn = 0.0f;
-                if (den > 0 && num > 0) 
-                {
-                    trigeff_syst_up = (num_up-num  ) / num;
-                    trigeff_syst_dn = (num_down-num) / num;
-                    hc[sr+"effErrTrigEffUP"]->SetBinContent(ix, iy, 1.0 + trigeff_syst_up);
-                    hc[sr+"effErrTrigEffDN"]->SetBinContent(ix, iy, 1.0 + trigeff_syst_dn);
-                }
-                hc[sr+"effErrTrigEff"]->SetBinContent(ix, iy, std::max(fabs(trigeff_syst_up), fabs(trigeff_syst_dn)));
-            }
-        }
-    } // end sr loop
-    return;
-}
-
 
 void InterpLooper::SetJERSystematic()
 {
@@ -1087,13 +997,11 @@ void InterpLooper::SetTotalSystematic()
     SetMETSystematic();
     SetBtagSystematic();
     SetLepEffSystematic();
-    SetTrigEffSystematic();
 
     // taken as constant
-    const double lumi = 0.045;
-//     const double lep  = 0.05; // not doing low pT analysis yet
-//     const double trig = 0.06; // not doing low pT analysis yet
-    const double pdf  = 0.02;
+    const double lumi_syst = 0.044;
+    const double trig_syst = 0.06; // not doing low pT analysis yet
+    const double pdf_syst  = 0.02;
 
     for (size_t i = 0; i != m_sr_nums.size(); i++)
     {
@@ -1110,15 +1018,14 @@ void InterpLooper::SetTotalSystematic()
                 {
                     const float num        = hc[sr+"nPassing"]->GetBinContent(ix, iy);
                     //const float eff        = num/den;
-                    const float jes_syst   = hc[sr+"effErrJES"    ]->GetBinContent(ix, iy);
-                    const float jer_syst   = hc[sr+"effErrJER"    ]->GetBinContent(ix, iy);
-                    const float met_syst   = hc[sr+"effErrMET"    ]->GetBinContent(ix, iy);
-                    const float btag_syst  = hc[sr+"effErrBTA"    ]->GetBinContent(ix, iy);
-                    const float lep_syst   = hc[sr+"effErrLepEff" ]->GetBinContent(ix, iy);
-                    const float trig_syst  = hc[sr+"effErrTrigEff"]->GetBinContent(ix, iy);
-                    const float syst_error = std::sqrt(pow(lumi, 2) + pow(lep_syst, 2) + pow(trig_syst, 2) + pow(pdf, 2) + pow(jes_syst, 2) + pow(jer_syst, 2) + pow(met_syst, 2) + pow(btag_syst, 2));
+                    const float jes_syst   = hc[sr+"effErrJES"       ]->GetBinContent(ix, iy);
+                    const float jer_syst   = hc[sr+"effErrJER"       ]->GetBinContent(ix, iy);
+                    const float met_syst   = hc[sr+"effErrMET"       ]->GetBinContent(ix, iy);
+                    const float btag_syst  = hc[sr+"effErrBTA"       ]->GetBinContent(ix, iy);
+                    const float lep_syst   = hc[sr+"leptonSystematic"]->GetBinContent(ix, iy);
+                    const float syst_error = std::sqrt(pow(lumi_syst, 2) + pow(lep_syst, 2) + pow(trig_syst, 2) + pow(pdf_syst, 2) + pow(jes_syst, 2) + pow(jer_syst, 2) + pow(met_syst, 2) + pow(btag_syst, 2));
                     //const float stat_error = (num > 0 ? sqrt(eff*(1.0-eff)/den) : 0); 
-                    const float stat_error = rt::GetClopperPearsonUncertainty(static_cast<int>(num), static_cast<int>(den));
+                    const float stat_error = (rt::GetClopperPearsonUncertainty(static_cast<int>(num), static_cast<int>(den))) / num;
                     hc[sr+"effErrTot" ]->SetBinContent(ix, iy, syst_error);
                     hc[sr+"effErrStat"]->SetBinContent(ix, iy, stat_error);
                     if (m_verbose) {cout << "jes, btag, total: " << jes_syst << ", " << btag_syst << ", " << syst_error << endl;}

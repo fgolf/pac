@@ -71,6 +71,7 @@ namespace ss
                 // m_lsp: 0-850
                 // return MakeSignalBinInfo(25.0f, 325.0f, 1225.0f, 25.0f, 0.0f, 875.f);
                 return MakeSignalBinInfo(25.0f, 400.0f, 1425.0f, 25.0f, 0.0f, 1225.0f);  // use the same binning for both t1tttt scans
+                //return MakeSignalBinInfo(25.0f, 800.0f, 1525.0f, 25.0f, 250.0f, 1150.0f);
                 break;
             case Sample::t1tttt_scans:
                 // using same binning for all the mass poonts points
@@ -88,7 +89,7 @@ namespace ss
                 // LSP mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 400.0f, 1425.0f, 25.0f, 0.0f, 1225.0f);
+                return MakeSignalBinInfo(25.0f, 800.0f, 1525.0f, 25.0f, 250.0f, 1150.0f);
                 break;
             case Sample::sbottomtop:
                 // /SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph/Summer12-START52_V9_FSIM/USER
