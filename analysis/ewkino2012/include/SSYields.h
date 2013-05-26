@@ -1,5 +1,5 @@
-#ifndef SS_YIELDS_H
-#define SS_YIELDS_H
+#ifndef EWKINO_SS_YIELDS_H
+#define EWKINO_SS_YIELDS_H
 
 #include <string>
 #include "rt/TH1Container.h"
@@ -207,5 +207,5 @@ ewkino_ss::Yield operator+(const ewkino_ss::Yield& y1, const ewkino_ss::Yield& y
 ewkino_ss::Yield operator*(float scale, const ewkino_ss::Yield& y);
 
 
-#endif // SS_YIELDS_H
+#endif // EWKINO_SS_YIELDS_H
 
