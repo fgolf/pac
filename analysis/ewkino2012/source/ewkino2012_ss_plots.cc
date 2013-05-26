@@ -68,8 +68,8 @@ int main(int argc, char* argv[])
         ("sparm1"   , po::value<float>(&sparm1)                               , "sparm1 value is required"                                                      )
         ("sf_flip"  , po::value<float>(&sf_flip)                              , Form("scale factor for flips (default is %f)", sf_flip)                         )
         ("fr_unc"   , po::value<float>(&fake_sys_unc)                         , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc))
-        ("fl_unc"   , po::value<float>(&flip_sys_unc)                         , Form("systematic uncertainty for flip prediction (default is %f)", fake_sys_unc))
-        ("mc_unc"   , po::value<float>(&mc_sys_unc)                           , Form("systematic uncertainty for MC prediction (default is %f)", fake_sys_unc)  )
+        ("fl_unc"   , po::value<float>(&flip_sys_unc)                         , Form("systematic uncertainty for flip prediction (default is %f)", flip_sys_unc))
+        ("mc_unc"   , po::value<float>(&mc_sys_unc)                           , Form("systematic uncertainty for MC prediction (default is %f)", mc_sys_unc)    )
         ("lumi"     , po::value<float>(&lumi)                                 , "luminosity"                                                                    )
         ("charge"   , po::value<int>(&charge_option)                          , "charge option (1 is ++ events, -1 is -- events, 0 is both)"                    )
         ("verbose"  , po::value<bool>(&verbose)                               , "verbosity"                                                                     )
@@ -183,7 +183,10 @@ int main(int argc, char* argv[])
         if (input_file.empty())
         {
             const string short_name = ati.short_name.c_str();
-            input_file = Form("babies/%s/%s.root", (is_signal ? "signal" : short_name.c_str()), sample_name.c_str());
+            if (is_signal)
+                input_file = Form("babies/%s/signal/%s.root", short_name.c_str(), sample_name.c_str());
+            else
+                input_file = Form("babies/%s/%s.root", short_name.c_str(), sample_name.c_str());                
             switch (sample)
             {
                 case at::Sample::ttdil: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break; 
