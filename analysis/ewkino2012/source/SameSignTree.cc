@@ -143,6 +143,8 @@ void SameSignTree::Reset()
     vjets_momid.clear();
     vjets_mc3p4.clear();
     vjets_bdisc.clear();
+    vjets_bdisc_up.clear();
+    vjets_bdisc_dn.clear();
 
     pfcandid5          = -999999;     
     pfcandid10         = -999999;     
@@ -377,6 +379,8 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("vjets_nearjet_p4"         , "vecLorentzVector"        , &vjets_nearjet_p4            ); 
     tree.Branch("vjets_nearjet_dr"         , "vecd"                    , &vjets_nearjet_dr            ); 
     tree.Branch("vjets_bdisc"              , "vecd"                    , &vjets_bdisc                 );
+    tree.Branch("vjets_bdisc_up"           , "vecd"                    , &vjets_bdisc_up              );
+    tree.Branch("vjets_bdisc_dn"           , "vecd"                    , &vjets_bdisc_dn              );
     tree.Branch("gen_lep1_p4"              , "LorentzVector"           , &gen_lep1_p4                 ); 
     tree.Branch("gen_lep1_pdgid"           , &gen_lep1_pdgid           , "gen_lep1_pdgid/I"           ); 
     tree.Branch("gen_lep2_p4"              , "LorentzVector"           , &gen_lep2_p4                 ); 

@@ -202,6 +202,8 @@ public:
     veci vjets_mcflavor_phys_dn;
     veci vjets_mcflavor_algo_dn;
     vecd vjets_bdisc;
+    vecd vjets_bdisc_up;
+    vecd vjets_bdisc_dn;
     veci vjets_momid;
     veci vjets_mc3id;
     float dijet_mass;
