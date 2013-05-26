@@ -64,7 +64,7 @@ try
         ("output", po::value<std::string>(&output_file)->required() , "REQUIRED: output ntuple file"                                     )
         ("sample", po::value<std::string>(&sample_name)->required() , "REQUIRED: sample to post process (at/Sample.h)"                   )
         ("xsec"  , po::value<std::string>(&xsec_file)               , "cross section file path (data/xsec/susy_xsec.root)"               )
-        ("br"    , po::value<float>(&branching_ratio)               , "branching ratio, if sample has already been decayed"              )
+        ("br"    , po::value<float>(&branching_ratio)               , "branching ratio, if sample has already been decayed (default: 1.)")
         ;
 
     // parse it
@@ -133,7 +133,7 @@ try
 
     TH1F* h_xsec = rt::GetHistFromRootFile<TH1F>(xsec_file, Form("h_xsec_%s", sample_name.c_str()));
     h_xsec->SetName("h_xsec");
-    //cout << Form("nx %d, x- %f, x+ %f, ny %d, y- %f, y+ %f", bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax) << endl;
+    cout << Form("nx %d, x- %f, x+ %f, ny %d, y- %f, y+ %f", bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax) << endl;
 
     TH2F h_scale1fb("h_scale1fb", Form("# Scale to 1 fb^{-1} - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
     for (int xbin = 1; xbin != h_scale1fb.GetNbinsX()+1; xbin++)
@@ -163,7 +163,6 @@ try
     chain.SetBranchStatus("xsec"    , 0);
     chain.SetBranchStatus("nevts"   , 0); 
     chain.SetBranchStatus("scale1fb", 0);
-    chain.SetBranchStatus("br"      , 0);
 
     // clone it
     TFile output(output_file.c_str(), "RECREATE");
@@ -204,7 +203,20 @@ try
         clone->GetEntry(i);
         num_events_total++;
 
-        // pogress
+        // set the values
+        switch (sample)
+        {
+            case at::Sample::tchiwh:
+                // m_gluino vs m_lsp
+                xsec     = rt::GetBinContent1D(h_xsec, sparm0);
+                scale1fb = rt::GetBinContent2D(&h_scale1fb, sparm0, sparm1);
+                nevts    = static_cast<unsigned int>(rt::GetBinContent2D(&h_gen_count, sparm0, sparm1));
+                break;
+            default:
+                {/* do nothing */}
+        }
+
+        // progress
         size_t i_permille = static_cast<size_t>(floor(1000 * num_events_total / float(num_events_chain)));
         if (i_permille != i_permilleOld)
         {
