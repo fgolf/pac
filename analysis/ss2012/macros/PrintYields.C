@@ -688,7 +688,6 @@ void PrintYieldAndPredictions
         );
         std::ostream& out = *os_ptr;
         out << line << endl;
-
     }
 
     // cleanup

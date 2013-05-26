@@ -1772,14 +1772,23 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         // check that the jets are the same size
         if ((vjets_all_cor_p4.size() != jet_flags.size()) || (vjets_all_cor_p4.size() != bjet_flags.size()))
         {
+            cout << "vjets_all_cor_p4.size() = " << vjets_all_cor_p4.size() << endl;
+            cout << "bjet_flags.size() = "       << jet_flags.size()        << endl;
+            cout << "jet_flags.size() = "        << bjet_flags.size()       << endl;
             throw std::runtime_error("[SSAnalysisLooper]: ERROR - vjets_all_cor_p4 must be same size as jet_flags and bjet_flags"); 
         }
         if ((vjets_all_cor_p4_up.size() != jet_flags_up.size()) || (vjets_all_cor_p4_up.size() != bjet_flags_up.size()))
         {
+            cout << "vjets_all_cor_p4_up.size() = " << vjets_all_cor_p4_up.size() << endl;
+            cout << "bjet_flags_up.size() = "       << jet_flags_up.size()        << endl;
+            cout << "jet_flags_up.size() = "        << bjet_flags_up.size()       << endl;
             throw std::runtime_error("[SSAnalysisLooper]: ERROR - vjets_all_cor_p4_up must be same size as jet_flags_up and bjet_flags_up"); 
         }
         if ((vjets_all_cor_p4_dn.size() != jet_flags_dn.size()) || (vjets_all_cor_p4_dn.size() != bjet_flags_dn.size()))
         {
+            cout << "vjets_all_cor_p4_dn.size() = " << vjets_all_cor_p4_dn.size() << endl;
+            cout << "bjet_flags_dn.size() = "       << jet_flags_dn.size()        << endl;
+            cout << "jet_flags_dn.size() = "        << bjet_flags_dn.size()       << endl;
             throw std::runtime_error("[SSAnalysisLooper]: ERROR - vjets_all_cor_p4_dn must be same size as jet_flags_dn and bjet_flags_dn"); 
         }
 
@@ -1859,7 +1868,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         // sort jet stuff by pt
         SortJetInfo(m_evt.vjets_p4   , m_evt.vjets_btagged   , m_evt.vjets_mcflavor_algo   , m_evt.vjets_mcflavor_phys   );
         SortJetInfo(m_evt.vjets_p4_up, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_up, m_evt.vjets_mcflavor_phys_up);
-        SortJetInfo(m_evt.vjets_p4_dn, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_dn, m_evt.vjets_mcflavor_phys_dn);
+        SortJetInfo(m_evt.vjets_p4_dn, m_evt.vjets_btagged_dn, m_evt.vjets_mcflavor_algo_dn, m_evt.vjets_mcflavor_phys_dn);
 
         std::sort(m_evt.vbjets_p4.begin()   , m_evt.vbjets_p4.begin()   , at::SortByPt<LorentzVector>());
         std::sort(m_evt.vbjets_p4_up.begin(), m_evt.vbjets_p4_up.begin(), at::SortByPt<LorentzVector>());

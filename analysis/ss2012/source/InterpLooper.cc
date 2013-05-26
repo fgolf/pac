@@ -196,19 +196,13 @@ void InterpLooper::EndJob()
     t_counts.print();
 }
 
-const size_t max_sr = 1;
+// const size_t max_sr = 1;
 
 std::string GetSRLabel(ss::SignalRegion::value_type sr)
 {
     const unsigned int sr_num = static_cast<unsigned int>(sr);
     return Form((sr < 10 ? "SR0%u_" : "SR%u_"), sr_num);
 }
-
-//const std::tr1::array<int, 27> sr_nums = {{ 0,  1,  2,  3,  4,  5,  6,  7,  8, 
-//                                           10, 11, 12, 13, 14, 15, 16, 17, 18,
-//                                           20, 21, 22, 23, 24, 25, 26, 27, 28}};
-//
-// const std::tr1::array<int, 3> sr_nums = {{ 0,  1,  21}}; 
 
 // book hists 
 void InterpLooper::BookHists()
