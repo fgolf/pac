@@ -1,5 +1,5 @@
-#ifndef EWKINO_SS_YIELDS_H
-#define EWKINO_SS_YIELDS_H
+#ifndef SS_YIELDS_H
+#define SS_YIELDS_H
 
 #include <string>
 #include "rt/TH1Container.h"
@@ -76,6 +76,16 @@ namespace ewkino_ss
         std::string em_pm() const;
         std::string ll_pm() const;
 
+        std::string ee_syst_pm() const;
+        std::string mm_syst_pm() const;
+        std::string em_syst_pm() const;
+        std::string ll_syst_pm() const;
+
+        std::string ee_rel_unc() const;
+        std::string mm_rel_unc() const;
+        std::string em_rel_unc() const;
+        std::string ll_rel_unc() const;
+
         std::string GetLatex(const std::string& title, const std::string& latex = "", bool print_sys_err = false) const;
         void Print(const std::string& title, bool print_sys_err = false) const;
     };
@@ -92,79 +102,79 @@ namespace ewkino_ss
     // container getter 
     rt::TH1Container GetSampleHists
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     );
 
     // get the SS yields per sample
     Yield GetSSYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     );
     
     // get the fake yields per sample
     Yield GetDFYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     );
 
     // get the fake yields per sample
     Yield GetSFYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     );
 
     // get the fake yields per sample
     Yield GetFakeYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     );
     
     // get the fake yields per sample
     Yield GetFlipYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     );
 
     // get the yields per sample (switch to determine if signal or bg prediction)
     Yield GetYield
     (
-    	std::string option, 
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        std::string option, 
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     );
 
     // return a map of all the Yields for data and MC
@@ -176,6 +186,17 @@ namespace ewkino_ss
         const ewkino::SignalRegionType::value_type signal_region_type, 
         const int charge_option = 0, 
         const std::string& output_path = "test"
+    );
+
+    std::map<std::string, ewkino_ss::Yield> GetYieldsMap
+    (
+        const std::string& option,
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const bool mc_only,
+        const int charge_option = 0, 
+        const std::string& output_path = "test"        
     );
 
 } // namespace ss

@@ -4,6 +4,7 @@
 #include <cmath>
 #include "TString.h" 
 #include "rt/RootTools.h" 
+#include "ScaleFactors.h"
 
 using namespace std;
 
@@ -125,6 +126,16 @@ namespace ewkino_ss
     std::string Yield::em_pm() const {return rt::pm(em, dem, "1.2");}
     std::string Yield::ll_pm() const {return rt::pm(ll, dll, "1.2");}
 
+    std::string Yield::ee_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", ee, dee, see);}
+    std::string Yield::mm_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", mm, dmm, smm);}
+    std::string Yield::em_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", em, dem, sem);}
+    std::string Yield::ll_syst_pm() const {return Form("%1.2f +/- %1.2f +/- %1.2f", ll, dll, sll);}
+
+    std::string Yield::ee_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+    std::string Yield::mm_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+    std::string Yield::em_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+    std::string Yield::ll_rel_unc() const {return Form("%1.2f", 1.0 + tee()/ee);}
+
     std::string Yield::GetLatex(const std::string& title, const std::string& latex, bool print_sys_err) const
     {
         string result;
@@ -233,12 +244,12 @@ namespace ewkino_ss
     // container getter 
     rt::TH1Container GetSampleHists
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     )
     {
         // charge option (1 == ++, -1 == --)
@@ -250,31 +261,31 @@ namespace ewkino_ss
             default: {/*do nothing*/}
         }
 
-    	const std::string& sample_name             = at::GetSampleInfo(sample).name;
-    	const std::string& analysis_type_name      = ewkino::GetAnalysisTypeInfo(analysis_type).name;
-    	const std::string& signal_region_type_name = ewkino::GetSignalRegionTypeName(signal_region_type);
-    	const std::string& signal_region_name      = ewkino::GetSignalRegionInfo(signal_region, analysis_type, signal_region_type).name;
+        const std::string& sample_name             = at::GetSampleInfo(sample).name;
+        const std::string& analysis_type_name      = ewkino::GetAnalysisTypeInfo(analysis_type).name;
+        const std::string& signal_region_type_name = ewkino::GetSignalRegionTypeName(signal_region_type);
+        const std::string& signal_region_name      = ewkino::GetSignalRegionInfo(signal_region, analysis_type, signal_region_type).name;
     
         // hists  
         rt::TH1Container hc(Form("plots/%s/%s/%s/%s/%s%s.root",
-    							  output_path.c_str(),
-    							  analysis_type_name.c_str(),
-    							  signal_region_type_name.c_str(),
-    							  signal_region_name.c_str(),
-    							  sample_name.c_str(),
-    							  charge_stem.c_str()));
+                                  output_path.c_str(),
+                                  analysis_type_name.c_str(),
+                                  signal_region_type_name.c_str(),
+                                  signal_region_name.c_str(),
+                                  sample_name.c_str(),
+                                  charge_stem.c_str()));
         return hc;
     }
 
     // get the yields per sample
     Yield GetSSYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     )
     {
         // hists  
@@ -292,12 +303,12 @@ namespace ewkino_ss
     // get the fake yields per sample
     Yield GetDFYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     )
     {
         // hists  
@@ -315,12 +326,12 @@ namespace ewkino_ss
     // get the fake yields per sample
     Yield GetSFYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     )
     {
         // hists  
@@ -338,12 +349,12 @@ namespace ewkino_ss
     // get the fake yields per sample
     Yield GetFakeYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     )
     {
         // hists  
@@ -361,20 +372,22 @@ namespace ewkino_ss
     // get the fake yields per sample
     Yield GetFlipYield
     (
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     )
     {
         // hists  
-        rt::TH1Container hc = GetSampleHists(sample, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        pair<double, double> mm(hc["h_flip_pred"]->GetBinContent(1), hc["h_flip_pred"]->GetBinError(1));
-        pair<double, double> ee(hc["h_flip_pred"]->GetBinContent(2), hc["h_flip_pred"]->GetBinError(2));
-        pair<double, double> em(hc["h_flip_pred"]->GetBinContent(3), hc["h_flip_pred"]->GetBinError(3));
-        pair<double, double> ll(hc["h_flip_pred"]->GetBinContent(4), hc["h_flip_pred"]->GetBinError(4));
+        ewkino::SignalRegion::value_type signal_region_temp = signal_region; 
+        float scale = 1.0;
+        rt::TH1Container hc = GetSampleHists(sample, signal_region_temp, analysis_type, signal_region_type, charge_option, output_path);
+        pair<double, double> mm(scale * hc["h_flip_pred"]->GetBinContent(1), scale * hc["h_flip_pred"]->GetBinError(1));
+        pair<double, double> ee(scale * hc["h_flip_pred"]->GetBinContent(2), scale * hc["h_flip_pred"]->GetBinError(2));
+        pair<double, double> em(scale * hc["h_flip_pred"]->GetBinContent(3), scale * hc["h_flip_pred"]->GetBinError(3));
+        pair<double, double> ll(scale * hc["h_flip_pred"]->GetBinContent(4), scale * hc["h_flip_pred"]->GetBinError(4));
         Yield yield(ee, mm, em, ll);
     
         // done
@@ -384,13 +397,13 @@ namespace ewkino_ss
     // get the yields per sample (switch to determine if signal or bg prediction)
     Yield GetYield
     (
-    	std::string option, 
-    	const at::Sample::value_type sample, 
-    	const ewkino::SignalRegion::value_type signal_region, 
-    	const ewkino::AnalysisType::value_type analysis_type, 
-    	const ewkino::SignalRegionType::value_type signal_region_type, 
-    	const int charge_option, 
-    	const std::string& output_path
+        std::string option, 
+        const at::Sample::value_type sample, 
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
     )
     {
         option = rt::string_lower(option);
@@ -411,6 +424,7 @@ namespace ewkino_ss
         const ewkino::SignalRegion::value_type signal_region, 
         const ewkino::AnalysisType::value_type analysis_type, 
         const ewkino::SignalRegionType::value_type signal_region_type, 
+        const bool mc_only,
         const int charge_option, 
         const std::string& output_path
     )
@@ -419,7 +433,8 @@ namespace ewkino_ss
         std::map<std::string, ewkino_ss::Yield> m;
     
         // data
-        m["data"] = GetYield(option, Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        if (!mc_only)
+            m["data"] = GetYield(option, Sample::data, signal_region, analysis_type, signal_region_type, charge_option, output_path);
     
         // for display only
         m["ttdil"  ] = GetYield(option, Sample::ttdil  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
@@ -429,94 +444,151 @@ namespace ewkino_ss
         m["t_schan"] = GetYield(option, Sample::t_schan, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["t_tchan"] = GetYield(option, Sample::t_tchan, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["t_tw"   ] = GetYield(option, Sample::t_tw   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["dy"     ] = GetYield(option, Sample::dy     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        // m["dy"     ] = GetYield(option, Sample::dy     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["dyjets"     ] = GetYield(option, Sample::dyjets     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wjets"  ] = GetYield(option, Sample::wjets  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["ww"     ] = GetYield(option, Sample::ww     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
     
         // to include in prediction
         // wgstar;
-        //m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+//         //m["wgstar"]  = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wgstar"] += GetYield(option, Sample::wgstar2m, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wgstar"] += GetYield(option, Sample::wgstar2t, signal_region, analysis_type, signal_region_type, charge_option, output_path);
     
         // wwqq;
         m["wwqq"] += GetYield(option, Sample::wmwmqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["wwqq"] += GetYield(option, Sample::wpwpqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+
+        // wh_zh_tth;
+        // m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_hww, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        // m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_hzz, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        // m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
                                     
         // the rest of the rare MC
-        m["wgstar2e"] = GetYield(option, Sample::wgstar2e, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wgstar2m"] = GetYield(option, Sample::wgstar2m, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wgstar2t"] = GetYield(option, Sample::wgstar2t, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wmwmqq"  ] = GetYield(option, Sample::wmwmqq  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wpwpqq"  ] = GetYield(option, Sample::wpwpqq  , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wz"      ] = GetYield(option, Sample::wz      , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["zz"      ] = GetYield(option, Sample::zz      , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttg"     ] = GetYield(option, Sample::ttg     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttw"     ] = GetYield(option, Sample::ttw     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttz"     ] = GetYield(option, Sample::ttz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["tbz"     ] = GetYield(option, Sample::tbz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ttww"    ] = GetYield(option, Sample::ttww    , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wwg"     ] = GetYield(option, Sample::wwg     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["www"     ] = GetYield(option, Sample::www     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wwz"     ] = GetYield(option, Sample::wwz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["wzz"     ] = GetYield(option, Sample::wzz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["zzz"     ] = GetYield(option, Sample::zzz     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        m["ww_ds"   ] = GetYield(option, Sample::ww_ds   , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        // m["wgstar2e"     ] = GetYield(option, Sample::wgstar2e     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wgstar2m"     ] = GetYield(option, Sample::wgstar2m     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wgstar2t"     ] = GetYield(option, Sample::wgstar2t     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wmwmqq"       ] = GetYield(option, Sample::wmwmqq       , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wpwpqq"       ] = GetYield(option, Sample::wpwpqq       , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wz"           ] = GetYield(option, Sample::wz           , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["zz"           ] = GetYield(option, Sample::zz           , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ttw"          ] = GetYield(option, Sample::ttw          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ttz"          ] = GetYield(option, Sample::ttz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["tbz"          ] = GetYield(option, Sample::tbz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ttww"         ] = GetYield(option, Sample::ttww         , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wwg"          ] = GetYield(option, Sample::wwg          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["www"          ] = GetYield(option, Sample::www          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wwz"          ] = GetYield(option, Sample::wwz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wzz"          ] = GetYield(option, Sample::wzz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["zzz"          ] = GetYield(option, Sample::zzz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["ww_ds"        ] = GetYield(option, Sample::ww_ds        , signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        // m["wh_zh_tth_hww"] = GetYield(option, Sample::wh_zh_tth_hww, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        // m["wh_zh_tth_hzz"] = GetYield(option, Sample::wh_zh_tth_hzz, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        // m["wh_zh_tth_htt"] = GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+
+        // handle ttg differently --> apply SF (until we get a larger dataset)
+        const bool apply_ttg_sf = true;
+
+        if (apply_ttg_sf)
+        {
+            const ewkino_ss::Yield ttg_sr0 = GetYield(option, Sample::ttg, ewkino::SignalRegion::sr0, analysis_type, signal_region_type, charge_option, output_path);
+            const ewkino_ss::Yield ttg_srn = GetYield(option, Sample::ttg, signal_region        , analysis_type, signal_region_type, charge_option, output_path);
+            m["ttg"] = ewkino_ss::Yield();
+
+            // assign value
+            m["ttg"].ee = (ttg_sr0.ee > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).first : ttg_srn.ee);
+            m["ttg"].em = (ttg_sr0.em > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).first : ttg_srn.em);
+            m["ttg"].mm = (ttg_sr0.mm > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).first : ttg_srn.mm);
+            m["ttg"].ll = (ttg_sr0.ll > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).first : ttg_srn.ll);
+
+            // assign uncertainty
+            m["ttg"].dee = (ttg_sr0.ee > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ee, ttg_sr0.dee).second : ttg_srn.dee);
+            m["ttg"].dem = (ttg_sr0.em > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.em, ttg_sr0.dem).second : ttg_srn.dem);
+            m["ttg"].dmm = (ttg_sr0.mm > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.mm, ttg_sr0.dmm).second : ttg_srn.dmm);
+            m["ttg"].dll = (ttg_sr0.ll > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).second : ttg_srn.dll);
+        }
+        else
+        {
+            m["ttg"] = GetYield(option, Sample::ttg, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        }
     
         // want the total of the MC
         ewkino_ss::Yield yield_mc;
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttdil"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslb"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslo"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttotr"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_schan"]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tchan"]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tw"   ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["dy"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wjets"  ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar" ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwqq"   ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wz"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zz"     ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttg"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttw"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["tbz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttww"   ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwg"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["www"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wzz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zzz"    ]); 
-        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww_ds"  ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttdil"        ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslb"        ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttslo"        ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttotr"        ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_schan"      ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tchan"      ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["t_tw"         ]); 
+        // yield_mc = AddUncertaintiesAbsolute(yield_mc, m["dy"           ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["dyjets"           ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wjets"        ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww"           ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar2m"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wgstar2t"     ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwqq"         ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wz"           ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zz"           ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttg"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttw"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttz"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["tbz"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ttww"         ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwg"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["www"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wwz"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wzz"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zzz"          ]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww_ds"        ]); 
+        // yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_hww"]); 
+        // yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_hzz"]); 
+        // yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_htt"]); 
         m["mc"] = yield_mc;
     
      
         // want the rare MC only for the prediction
         ewkino_ss::Yield yield_rare;
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar"]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwqq"  ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wz"    ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zz"    ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttg"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttw"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["tbz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttww"  ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwg"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["www"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wzz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zzz"   ]); 
-        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ww_ds" ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar2m"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wgstar2t"     ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwqq"         ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wz"           ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zz"           ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttg"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttw"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttz"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["tbz"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ttww"         ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwg"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["www"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wwz"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wzz"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zzz"          ]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ww_ds"        ]); 
+        // yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_hww"]); 
+        // yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_hzz"]); 
+        // yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_htt"]); 
         m["rare"] = yield_rare;
      
         // done
         return m;
     }
-} // namespace ss
 
+    std::map<std::string, ewkino_ss::Yield> GetYieldsMap
+    (
+        const std::string& option,
+        const ewkino::SignalRegion::value_type signal_region, 
+        const ewkino::AnalysisType::value_type analysis_type, 
+        const ewkino::SignalRegionType::value_type signal_region_type, 
+        const int charge_option, 
+        const std::string& output_path
+    )
+    {
+        bool mc_only = false;
+        return GetYieldsMap (option, signal_region, analysis_type, signal_region_type, mc_only, charge_option, output_path);
+    }
+
+} // namespace ewkino_ss
 
 // non-member methods
 ewkino_ss::Yield operator*(float scale, const ewkino_ss::Yield& y)
