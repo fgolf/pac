@@ -1857,7 +1857,9 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         }
 
         // sort jet stuff by pt
-        SortJetInfo(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_evt.vjets_mcflavor_phys);
+        SortJetInfo(m_evt.vjets_p4   , m_evt.vjets_btagged   , m_evt.vjets_mcflavor_algo   , m_evt.vjets_mcflavor_phys   );
+        SortJetInfo(m_evt.vjets_p4_up, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_up, m_evt.vjets_mcflavor_phys_up);
+        SortJetInfo(m_evt.vjets_p4_dn, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_dn, m_evt.vjets_mcflavor_phys_dn);
 
         std::sort(m_evt.vbjets_p4.begin()   , m_evt.vbjets_p4.begin()   , at::SortByPt<LorentzVector>());
         std::sort(m_evt.vbjets_p4_up.begin(), m_evt.vbjets_p4_up.begin(), at::SortByPt<LorentzVector>());
