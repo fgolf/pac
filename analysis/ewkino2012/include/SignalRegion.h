@@ -18,7 +18,7 @@ namespace ewkino
             sr0  = 0,  // baseline:  SS (20/20), #btags==0 (pt>30), #jets==2,3
             sr1  = 1,  // baseline + iso track veto (stop), tau veto (stop), jet-PV matching
             sr2  = 2,  // sr1 + mjj < 120
-
+            sr3  = 3,  // sr2 + veto 76 < M_ee < 106
             // keep track of the size
             static_size
         };

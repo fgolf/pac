@@ -3,6 +3,7 @@
 #include "SystematicType.h"
 #include "EWKINO2012_SS.h"
 #include <stdexcept>
+#include "at/DileptonHypType.h"
 
 // inclusive signal regions infos
 // ---------------------------------------------------------------------------------------------- //
@@ -33,6 +34,14 @@ const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] =
         "sr2: sr1 + mjj < 120 GeV",
         // latex
         "SR1 + $M_{jj} < 120$ GeV"
+    },
+    { 
+        // name
+        "sr3",
+        // title
+        "sr3: sr2 + not 76 < mee < 106 GeV",
+        // latex
+        "SR2 + $M_{ee} < 76 || M_{ee} > 106$ GeV"
     },
 };
 
@@ -130,12 +139,14 @@ namespace ewkino
                 return false;
         }
 
-        // high pt
+        // SS WH
         if (anal_type==AnalysisType::ss)
         {
-            const bool baseline = ((ewkino_ss::njets()==2 || ewkino_ss::njets()==3) && ewkino_ss::nbtags()==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
-            const bool pass_sr1 = (baseline && ewkino_ss::passes_isotrk_veto() && ewkino_ss::passes_tau_veto() && (ewkino_ss::njets_pv_tight0() == 2 || ewkino_ss::njets_pv_tight0()==3));
-            const bool pass_sr2 = (pass_sr1 && ewkino_ss::dijet_mass() < 120.);
+            const bool baseline      = ((ewkino_ss::njets()==2 || ewkino_ss::njets()==3) && ewkino_ss::nbtags()==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
+            const bool pass_zee_veto = (not (ewkino_ss::dilep_type() == at::DileptonHypType::EE && ewkino_ss::dilep_mass() > 76. && ewkino_ss::dilep_mass() < 106.));
+            const bool pass_sr1      = (baseline && ewkino_ss::passes_isotrk_veto() && ewkino_ss::passes_tau_veto() && (ewkino_ss::njets_pv_tight0() == 2 || ewkino_ss::njets_pv_tight0()==3));
+            const bool pass_sr2      = (pass_sr1 && ewkino_ss::dijet_mass() < 120.);
+            const bool pass_sr3      = (pass_sr2 && pass_zee_veto);
 
             if (signal_region_type==SignalRegionType::inclusive)
             {
@@ -144,6 +155,7 @@ namespace ewkino
                 case SignalRegion::sr0 : return (baseline);
                 case SignalRegion::sr1 : return (pass_sr1);
                 case SignalRegion::sr2 : return (pass_sr2);
+                case SignalRegion::sr3 : return (pass_sr3);
                 };
             }
 
@@ -245,6 +257,8 @@ namespace ewkino
         tree.SetAlias("l2_d0_cut", "(l2_id==11 ? 0.01 : 0.005)"); 
         tree.SetAlias("lep_d0", "((is_ss || is_os) && (l1_d0<l1_d0_cut) && (l2_d0_cut)) || ((is_sf) && (l1_num ? l1_d0<l1_d0_cut : l2_d0<l2_d0_cut)");
 
+        tree.SetAlias("pass_zee_veto", "!(dilep_type==3 && dilep_mass>76. && dilep_mass<106.)");
+
         // trigger
         switch (anal_type)
         {
@@ -262,7 +276,8 @@ namespace ewkino
             case AnalysisType::ss:
                 tree.SetAlias("sr0" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
                 tree.SetAlias("sr1" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
-                tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120."); 
+                tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120.");
+                tree.SetAlias("sr3" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120. && pass_zee_veto");
                 break;
             case AnalysisType::static_size:
                 /*do nothing*/
