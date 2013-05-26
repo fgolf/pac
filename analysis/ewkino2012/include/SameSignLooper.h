@@ -96,6 +96,20 @@ private:
     // struct to hold tree values
     SameSignTree m_evt;
 
+    // struct for sorting
+    struct SortByPt 
+    {
+        bool operator () (const LorentzVector& lhs, const LorentzVector& rhs) 
+        {
+            return lhs.pt() > rhs.pt();
+        }
+        
+        bool operator () (const std::pair<LorentzVector, int>& lhs, const std::pair<LorentzVector, int>& rhs) 
+        {
+            return lhs.first.pt() > rhs.first.pt();
+        }
+    };
+
 private:
     // methods:
     bool IsNumerator(const int lep_id, const int lep_idx);
@@ -108,6 +122,9 @@ private:
     bool passesIsoTrkVeto();
     bool passesTauVeto();
     bool passesMVAJetId(LorentzVector p4, float mva_value, int tightness);
+
+    std::vector<int> getJetMcAlgoMatch(const unsigned int best_hyp_idx, int systFlag, bool sort_by_pt = true);
+    std::vector<int> getJetMcPhysMatch(const unsigned int best_hyp_idx, int systFlag, bool sort_by_pt = true);
 };
 
 #endif // EWKINOSSANALYSISLOOPER_H 
