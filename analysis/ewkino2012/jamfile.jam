@@ -143,25 +143,6 @@ exe ewkino2012_ss_plots
 # #  : # usage-requirements
 # #  ;
 
-# exe ss2012_event_list_eth
-#   : # sources
-#     ./source/ss2012_event_list_eth.cc
-#     # dependent packages
-#     /ROOT
-#     ss2012_tools/<link>static
-#     /MiniFWLite//libMiniFWLite/<link>shared
-#     /AnalysisTools//AnalysisTools/<link>static
-#     /RootTools//RootTools/<link>static
-#     /boost//program_options/<link>static
-#     /SimpleTable//SimpleTable/<link>static
-#   : # requirements
-#     <define>__NON_ROOT_BUILD__
-#     <include>./include
-#     <include>./source
-#   : # default-build
-#   : # usage-requirements
-#   ;
-
 # exe ss2012_event_list
 #   : # sources
 #     ./source/ss2012_event_list.cc
@@ -181,25 +162,25 @@ exe ewkino2012_ss_plots
 #   : # usage-requirements
 #   ;
 
-# exe ss2012_closure_test
-#   : # sources
-#     ./source/ss2012_closure_test.cc
-#     ./source/FRClosureLooper.cc
-#     # dependent packages
-#     /ROOT
-#     ss2012_tools/<link>static
-#     /MiniFWLite//libMiniFWLite/<link>shared
-#     /AnalysisTools//AnalysisTools/<link>static
-#     /RootTools//RootTools/<link>static
-#     /boost//program_options/<link>static
-#     /SimpleTable//SimpleTable/<link>static
-#   : # requirements
-#     <define>__NON_ROOT_BUILD__
-#     <include>./include
-#     <include>./source
-#   : # default-build
-#   : # usage-requirements
-#   ;
+exe ewkino2012_ss_closure_test
+  : # sources
+    ./source/ewkino2012_ss_closure_test.cc
+    ./source/FRClosureLooper.cc
+    # dependent packages
+    /ROOT
+    ewkino2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
 
 # exe ss2012_outreach_closure
 #   : # sources
@@ -421,7 +402,7 @@ default-install ewkino2012_merge_babies ;
 # default-install ss2012_lepton_eff ;
 default-install ewkino2012_ss_create_fakerate ;
 default-install ewkino2012_ss_make_fr_from_hists ;
-# default-install ss2012_closure_test ;
+default-install ewkino2012_ss_closure_test ;
 default-install ewkino2012_postprocess_signal_baby ;
 # default-install ss2012_interp_hists ;
 # default-install ss2012_fr_closure ;
