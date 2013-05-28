@@ -417,7 +417,6 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
 
     cout << "sample: " << m_sample << endl;
     cout << "analysis: " << m_analysis_type << endl;
-    cout << __LINE__ << endl;
     cout.flush();
 
     // set the fake rate histograms
@@ -428,7 +427,6 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
 
     if (m_sample == at::Sample::data)
     {
-        std::cout << __LINE__ << std::endl;
         switch (m_analysis_type)
         {
         case AnalysisType::ss:
@@ -443,7 +441,6 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
     }
     else
     {
-        std::cout << __LINE__ << std::endl;
         switch (m_analysis_type)
         {
         case AnalysisType::ss:
@@ -456,8 +453,6 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
             break;
         }
     }
-
-    std::cout << __LINE__ << std::endl;
 
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
@@ -1384,8 +1379,15 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         vector<bool> bjet_flags;
         vector<bool> bjet_flags_up;
         vector<bool> bjet_flags_dn;
+        vector<LorentzVector> all_jet_p4s;
+        vector<LorentzVector> all_jet_p4s_up;
+        vector<LorentzVector> all_jet_p4s_dn;
+        bool sort_all_jet_pts = false;
         if (not m_jet_corrector)
         {
+            all_jet_p4s           = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, m_jetMetScale, sort_all_jet_pts);
+            all_jet_p4s_up        = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, 1, sort_all_jet_pts);
+            all_jet_p4s_dn        = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, -1, sort_all_jet_pts);
             m_evt.vjets_p4        = samesign::getJets           (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             jet_flags             = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
             jet_flags_up          = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
@@ -1402,6 +1404,9 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         }
         else
         {
+            all_jet_p4s           = samesign::getJets(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, m_jetMetScale, sort_all_jet_pts);
+            all_jet_p4s_up        = samesign::getJets(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, 1, sort_all_jet_pts);
+            all_jet_p4s_dn        = samesign::getJets(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, -1, sort_all_jet_pts);
             m_evt.vjets_p4        = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             jet_flags             = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
             jet_flags_up          = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
@@ -1425,25 +1430,9 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         assert(m_evt.vjets_bdisc_up.size() == m_evt.vjets_p4_up.size());
         assert(m_evt.vjets_bdisc_dn.size() == m_evt.vjets_p4_dn.size());
 
-        //
-        // now, figure out which jets are good (jet_flags == 1)
-        // and store the corresponds bjet_flag
-        //
-        for (unsigned int jidx = 0; jidx < jet_flags.size(); jidx++)
-        {
-            if (!jet_flags.at(jidx)) continue;
-            m_evt.vjets_btagged.push_back(bjet_flags.at(jidx));
-        }
-        for (unsigned int jidx = 0; jidx < jet_flags_up.size(); jidx++)
-        {
-            if (!jet_flags_up.at(jidx)) continue;
-            m_evt.vjets_btagged_up.push_back(bjet_flags_up.at(jidx));
-        }
-        for (unsigned int jidx = 0; jidx < jet_flags_dn.size(); jidx++)
-        {
-            if (!jet_flags_dn.at(jidx)) continue;
-            m_evt.vjets_btagged_dn.push_back(bjet_flags_dn.at(jidx));
-        }
+        m_evt.vjets_btagged    = sortBtaggedFlags(all_jet_p4s, jet_flags   , bjet_flags   );
+        m_evt.vjets_btagged_up = sortBtaggedFlags(all_jet_p4s, jet_flags_up, bjet_flags_up);
+        m_evt.vjets_btagged_dn = sortBtaggedFlags(all_jet_p4s, jet_flags_dn, bjet_flags_dn);
 
         assert(m_evt.vjets_p4.size() == m_evt.vjets_btagged.size());
         assert(m_evt.vjets_p4_up.size() == m_evt.vjets_btagged_up.size());
@@ -1459,7 +1448,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         //cout << jet_flags.size() << "\t" << bjet_flags.size() << endl;
         // jet btag flag and mc flavor matching
         const CMS2Tag cms2_tag = at::GetCMS2Tag();
-        if (cms2_tag.version > 21)
+        if (cms2_tag.version > 21 && not evt_isRealData())
         {
             m_evt.vjets_mcflavor_phys = getJetMcPhysMatch(hyp_idx, /*systFlag=*/0, /*sort_by_pt=*/true);
             m_evt.vjets_mcflavor_algo = getJetMcAlgoMatch(hyp_idx, /*systFlag=*/0, /*sort_by_pt=*/true);
@@ -1470,41 +1459,6 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             m_evt.vjets_mcflavor_phys_dn = getJetMcPhysMatch(hyp_idx, /*systFlag=*/-1, /*sort_by_pt=*/true);
             m_evt.vjets_mcflavor_algo_dn = getJetMcAlgoMatch(hyp_idx, /*systFlag=*/-1, /*sort_by_pt=*/true);
         }
-/*
-        for (size_t jidx = 0; jidx != jet_flags.size(); jidx++)
-        {
-            // jets
-            if (not jet_flags.at(jidx)) {continue;}
-            if (not evt_isRealData() && (cms2_tag.version > 21))
-            {
-                m_evt.vjets_mcflavor_phys.push_back(pfjets_mcflavorPhys().at(jidx));
-                m_evt.vjets_mcflavor_algo.push_back(pfjets_mcflavorAlgo().at(jidx));
-            }
-        }
-
-        // jet btag flag amd mc flavor matching (JES +/-)
-        for (size_t jidx = 0; jidx != jet_flags_up.size(); jidx++)
-        {
-            // jets
-            if (not jet_flags_up.at(jidx)) {continue;}
-            if (not evt_isRealData() && (cms2_tag.version > 21))
-            {
-                m_evt.vjets_mcflavor_phys_up.push_back(pfjets_mcflavorPhys().at(jidx));
-                m_evt.vjets_mcflavor_algo_up.push_back(pfjets_mcflavorAlgo().at(jidx));
-            }
-        }
-
-        for (size_t jidx = 0; jidx != jet_flags_dn.size(); jidx++)
-        {
-            // jets
-            if (not jet_flags_dn.at(jidx)) {continue;}
-            if (not evt_isRealData() && (cms2_tag.version > 21))
-            {
-                m_evt.vjets_mcflavor_phys_dn.push_back(pfjets_mcflavorPhys().at(jidx));
-                m_evt.vjets_mcflavor_algo_dn.push_back(pfjets_mcflavorAlgo().at(jidx));
-            }
-        }
-*/
 
         assert(m_evt.vjets_mcflavor_algo.size() == m_evt.vjets_p4.size());
         assert(m_evt.vjets_mcflavor_algo_up.size() == m_evt.vjets_p4_up.size());
@@ -2554,6 +2508,30 @@ std::vector<int> EwkinoSSAnalysisLooper::getJetMcPhysMatch(const unsigned int be
     for (unsigned int idx = 0; idx < tmp_p4_match.size(); idx++)
     {
         ret.push_back(tmp_p4_match.at(idx).second);
+    }
+
+    return ret;
+}
+
+std::vector<bool> EwkinoSSAnalysisLooper::sortBtaggedFlags(const std::vector<LorentzVector>& all_jet_p4s, const std::vector<bool>& all_jet_flags, const std::vector<bool>& all_bjet_flags)
+{
+    // some sanity checks
+    assert(all_jet_p4s.size() == all_jet_flags.size());
+    assert(all_jet_flags.size() == all_bjet_flags.size());
+
+    std::vector<std::pair<LorentzVector, bool> > tmp_p4_flags;
+    for (unsigned int idx = 0; idx < all_jet_flags.size(); idx++)
+    {
+        if (!all_jet_flags.at(idx)) continue;
+        tmp_p4_flags.push_back(std::make_pair(all_jet_p4s.at(idx), all_bjet_flags.at(idx)));
+    }
+
+    sort(tmp_p4_flags.begin(), tmp_p4_flags.end(), SortByPt());
+    
+    std::vector<bool> ret;    
+    for(unsigned int idx = 0; idx < tmp_p4_flags.size(); idx++)
+    {
+        ret.push_back(tmp_p4_flags.at(idx).second);
     }
 
     return ret;

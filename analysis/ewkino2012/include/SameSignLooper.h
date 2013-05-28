@@ -108,6 +108,11 @@ private:
         {
             return lhs.first.pt() > rhs.first.pt();
         }
+
+        bool operator () (const std::pair<LorentzVector, bool>& lhs, const std::pair<LorentzVector, bool>& rhs) 
+        {
+            return lhs.first.pt() > rhs.first.pt();
+        }
     };
 
 private:
@@ -125,6 +130,8 @@ private:
 
     std::vector<int> getJetMcAlgoMatch(const unsigned int best_hyp_idx, int systFlag, bool sort_by_pt = true);
     std::vector<int> getJetMcPhysMatch(const unsigned int best_hyp_idx, int systFlag, bool sort_by_pt = true);
+
+    std::vector<bool> sortBtaggedFlags(const std::vector<LorentzVector>& all_jet_p4s, const std::vector<bool>& all_jet_flags, const std::vector<bool>& all_bjet_flags);
 };
 
 #endif // EWKINOSSANALYSISLOOPER_H 
