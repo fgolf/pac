@@ -32,6 +32,7 @@ lib cms2_core
     $(CMS2_CORE)/CORE/triggerUtils.cc
     $(CMS2_CORE)/CORE/ttbarSelections.cc
     $(CMS2_CORE)/CORE/utilities.cc
+    $(CMS2_CORE)/CORE/osSelections.cc
    [ glob $(CMS2_CORE)/CORE/jetsmear/*.cc ]
    [ glob $(CMS2_CORE)/CORE/MT2/*.cc ]
     # dependent packages
