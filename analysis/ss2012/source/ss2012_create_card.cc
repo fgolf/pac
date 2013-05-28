@@ -55,7 +55,9 @@ std::string GetSRLabel(ss::SignalRegion::value_type sr)
 const float GetValueFromScanHist(TH1* const hist, const float sparm0, const float sparm1)
 {
     TH2* const h2 = dynamic_cast<TH2*>(hist);
-    return rt::GetBinContent2D(h2, sparm0, sparm1);
+    const float value = rt::GetBinContent2D(h2, sparm0, sparm1);
+    if (rt::is_zero(value)) {return 1.0;}
+    else {return value;}
 }
 
 struct yield_info_t
