@@ -28,8 +28,11 @@ void CreateAllCards
 
     const size_t nbinsx = bin_info.nbinsx;
     const size_t nbinsy = bin_info.nbinsy;
-/*     const size_t nbinsx = 1; */
-/*     const size_t nbinsy = 1; */
+    const float xmin    = bin_info.xmin;
+    const float ymin    = bin_info.ymin + bin_info.offset;
+    const float xmax    = bin_info.xmax - bin_info.xwidth;
+    const float ymax    = bin_info.ymax;
+    const float m       = (ymax - ymin)/(xmax - xmin);
 
     for (size_t xbin = 0; xbin != nbinsx; xbin++)
     {
@@ -37,10 +40,12 @@ void CreateAllCards
         {
             const float sparm0 = bin_info.xmin + xbin*bin_info.xwidth;
             const float sparm1 = bin_info.ymin + ybin*bin_info.ywidth;
-            const float diff   = bin_info.xmin - bin_info.ymin;
+            const float x      = bin_info.xmin + xbin*bin_info.xwidth;
+            const float y      = bin_info.ymin + (ybin+1)*bin_info.ywidth;
+            const float cond   = m*(x - xmin) + ymin;
 
             // boundary conditions
-            if (sparm1 > (sparm0 - diff)) {continue;}
+            if (y > cond) {continue;}
 
             const string output_file = (output_file_stem.empty() ? "\"\"" : Form("cards/%s/%s_p%1.0f_p%1.0f.txt", output_file_stem.c_str(), output_file_stem.c_str(), sparm0, sparm1));
 

@@ -17,7 +17,8 @@ namespace ss
             const float x_max,
             const unsigned int y_num_bins,
             const float y_min,
-            const float y_max
+            const float y_max,
+            const float offset
         );
 
         // members:
@@ -29,6 +30,7 @@ namespace ss
         float ymin; 
         float ymax;
         float ywidth;
+        float offset;
     };
 
     // non-member methods:
@@ -41,7 +43,8 @@ namespace ss
         const float x_max,
         const float y_bin_width,
         const float y_min,
-        const float y_max
+        const float y_max,
+        const float offset
     );
 
     // return the binning info for a specific signal sample 
