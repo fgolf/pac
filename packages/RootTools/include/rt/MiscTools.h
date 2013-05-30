@@ -342,6 +342,8 @@ namespace rt
     // get the bin content with float values
     double GetBinContent1D(TH1* h, const float x);
     double GetBinContent2D(TH2* h, const float x, const float y);
+    double GetBinError1D(TH1* h, const float x);
+    double GetBinError2D(TH2* h, const float x, const float y);
 
     // create a CTable from a hist (1D and 2D only)                            
     CTable CreateTableFromHist                                                 

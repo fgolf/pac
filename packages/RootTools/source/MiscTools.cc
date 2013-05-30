@@ -173,7 +173,7 @@ namespace rt
         return;
     }
 
-    // calculate the integral 1D hist
+    // find the bin content  
     double GetBinContent1D(TH1* hist_ptr, const float x)
     {
         if (!hist_ptr)
@@ -184,7 +184,7 @@ namespace rt
         return hist_ptr->GetBinContent(bin);
     }
 
-    // calculate the integral 1D hist
+    //  find the bin content 
     double GetBinContent2D(TH2* hist_ptr, const float x, const float y)
     {
         if (!hist_ptr)
@@ -194,6 +194,29 @@ namespace rt
         int xbin = hist_ptr->GetXaxis()->FindBin(x);
         int ybin = hist_ptr->GetYaxis()->FindBin(y);
         return hist_ptr->GetBinContent(xbin, ybin);
+    }
+
+    // find the bin error 
+    double GetBinError1D(TH1* hist_ptr, const float x)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::GetBinError1D() -- hist pointer is NULL!");
+        }
+        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        return hist_ptr->GetBinError(bin);
+    }
+
+    //  find the bin error
+    double GetBinError2D(TH2* hist_ptr, const float x, const float y)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::GetBinError1D() -- hist pointer is NULL!");
+        }
+        int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        return hist_ptr->GetBinError(xbin, ybin);
     }
 
     // calculate the integral and error
