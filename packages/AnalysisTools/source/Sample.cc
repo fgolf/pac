@@ -1104,9 +1104,9 @@ namespace at
             // title
             "tchiwh", 
             // latex
-            "\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H", 
+            "$\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H$", 
             // ntuple_path
-            "TChiwh-test",
+            "TChiwh",
             // tag
             "V05-03-27",
             // SampleType 
@@ -1114,7 +1114,43 @@ namespace at
             // Sample
             Sample::tchiwh,
             // color
-            kBlue
+            kBlack
+        },
+        {
+            // name
+            "tchiwh_150_1", 
+            // title
+            "tchiwh, mchi = 150 GeV, mlsp = 0. GeV", 
+            // latex
+            "$\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H, M_{\\Chi} = 150 GeV, M_{LSP} = 0 GeV$",
+            // ntuple_path
+            "TChiwh",
+            // tag
+            "V05-03-27",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::tchiwh_150_1,
+            // color
+            kBlack
+        },
+        {
+            // name
+            "tchiwh_200_1", 
+            // title
+            "tchiwh, mchi = 200 GeV, mlsp = 0. GeV",
+            // latex
+            "$\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H, M_{\\Chi} = 200 GeV, M_{LSP} = 0 GeV$",
+            // ntuple_path
+            "TChiwh",
+            // tag
+            "V05-03-27",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::tchiwh_200_1,
+            // color
+            kBlack
         },
         {
             // name
@@ -1169,7 +1205,100 @@ namespace at
             Sample::wh_zh_tth_hww,
             // color
             kBlue
-        }
+        },
+        {
+            // name
+            "dy1j", 
+            // title
+            "DY #rightarrow ll", 
+            // latex
+            "$DY \\rightarrow \\ell \\ell$", 
+            // ntuple_path
+            "DY1JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-25",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::dy1j,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "dy2j", 
+            // title
+            "DY #rightarrow ll", 
+            // latex
+            "$DY \\rightarrow \\ell \\ell$", 
+            // ntuple_path
+            "DY2JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7C-v1", 
+            // tag
+            "V05-03-25",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::dy2j,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "dy3j", 
+            // title
+            "DY #rightarrow ll", 
+            // latex
+            "$DY \\rightarrow \\ell \\ell$", 
+            // ntuple_path
+            "DY3JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-25",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::dy3j,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "dy4j", 
+            // title
+            "DY #rightarrow ll", 
+            // latex
+            "$DY \\rightarrow \\ell \\ell$", 
+            // ntuple_path
+            "DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-23",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::dy4j,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "dyjets", 
+            // title
+            "DY #rightarrow ll, [1-4] jets", 
+            // latex
+            "$DY \\rightarrow \\ell \\ell, [1-4] jets$", 
+            // ntuple_path
+            "DY1JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1," 
+            "DY2JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7C-v1," 
+            "DY3JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1,"
+            "DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            // tag
+            "V05-03-23",
+            // SampleType 
+            SampleType::bkgd,
+            // Sample
+            Sample::dyjets,
+            // color
+            kBlue
+        },
     };
 
     // check that the SampleInfoArray is the same size as the enum
