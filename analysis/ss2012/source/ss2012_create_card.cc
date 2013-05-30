@@ -95,9 +95,9 @@ std::istream& operator >> (std::istream& in, yield_info_t& yi)
 
 struct CompareSR
 {
-    CompareSR(const int sr_num) : m_sr_num(sr_num) {}
+    CompareSR(const unsigned int sr_num) : m_sr_num(sr_num) {}
     bool operator () (const yield_info_t& yi) {return (yi.sr_num==m_sr_num);}
-    const int m_sr_num;
+    const unsigned int m_sr_num;
 };
 
 int main(int argc, char* argv[])

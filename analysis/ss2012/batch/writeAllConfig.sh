@@ -134,7 +134,7 @@ ATYPE=vlow_pt
 NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC
 OUTPUT_PATH=babies/ss2012/$TAG/mc
 #OPTIONS="\"\"\"\""
-OPTIONS="--apply_jec_unc#START52_V9"
+OPTIONS="--apply_jec_unc#START53_V7A"
 
 CMS2TAG="V05-03-23"
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
@@ -201,9 +201,9 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7C
 ./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-200To250_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-200To250_8TeV-madgraph_${CAMPAIGN}-v1
 #./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-150To200_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-150To200_8TeV-madgraph_${CAMPAIGN}-v1
 
-CMS2TAG="V05-03-13_slim"
-CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
-./writeConfig.sh wjets $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_${CAMPAIGN}-v1/$CMS2TAG/ $OUTPUT_PATH/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_${CAMPAIGN}-v1
+#CMS2TAG="V05-03-13_slim"
+#CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
+#./writeConfig.sh wjets $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_${CAMPAIGN}-v1/$CMS2TAG/ $OUTPUT_PATH/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_${CAMPAIGN}-v1
 
 #CMS2TAG="V05-03-20_slim"
 #CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
