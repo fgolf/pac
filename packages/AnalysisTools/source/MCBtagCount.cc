@@ -358,8 +358,8 @@ namespace at
     // minmax_option: mean 0: min -1, max +1
     float GetScaleFactorLight(float jet_pt, float jet_eta, const int unc_option) 
     {
-        static const float ptmin = 20;
-        static const float ptmax = 800;
+        static const float ptmin = 20.0;
+        static const float ptmax = 800.0;
     
         // eta between 0 and 0.8
         static TF1 LightSFeta0mean("SFlight"   , "((1.06238+(0.00198635*x))+(-4.89082e-06*(x*x)))+(3.29312e-09*(x*(x*x)))" , ptmin, ptmax);
