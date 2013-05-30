@@ -113,8 +113,8 @@ void CreateLimitTextFile
             LimitInfo limit_info;
             limit_info.sparm0        = sparm0;
             limit_info.sparm1        = sparm1;
-            limit_info.xsec          = rt::GetBinContent1D(h_xsec, sparm0);
-            limit_info.xsec_err      = rt::GetBinError1D(h_xsec, sparm0);
+            limit_info.xsec          = 1000.0 * rt::GetBinContent1D(h_xsec, sparm0); // fb
+            limit_info.xsec_err      = 1000.0 * rt::GetBinError1D(h_xsec, sparm0);   // fb
             limit_info.obs           = 0.0;
             limit_info.obs_err       = 0.0;
             limit_info.exp           = 0.0;
@@ -225,45 +225,60 @@ void CreateLimitHists
     SignalBinInfo bin_info = GetSignalBinInfo(sample);
     const size_t nbinsx = bin_info.nbinsx;
     const size_t nbinsy = bin_info.nbinsy;
-    const float xmin    = bin_info.xmin;
-    const float ymin    = bin_info.ymin + bin_info.offset;
-    const float xmax    = bin_info.xmax - bin_info.xwidth;
-    const float ymax    = bin_info.ymax;
-    const float m       = (ymax - ymin)/(xmax - xmin);
+/*     const float xmin    = bin_info.xmin; */
+/*     const float ymin    = bin_info.ymin + bin_info.offset; */
+/*     const float xmax    = bin_info.xmax - bin_info.xwidth; */
+/*     const float ymax    = bin_info.ymax; */
+/*     const float m       = (ymax - ymin)/(xmax - xmin); */
 
     // book hists
     rt::TH1Container hc;
-    hc.Add(new TH2F("h_xsec_limit_obs"          , Form("Observed xsec at 95%% CL %s"         , ss::GetSignalBinHistLabel(sample).c_str()), nbinsx, xmin, xmax, nbinsy, ymin, ymax));
-    hc.Add(new TH2F("h_xsec_limit_exp"          , Form("Expected xsec at 95%% CL %s"         , ss::GetSignalBinHistLabel(sample).c_str()), nbinsx, xmin, xmax, nbinsy, ymin, ymax));
-    hc.Add(new TH2F("h_xsec_limit_exp_1sigma_up", Form("Expected xsec + #sigma at 95%% CL %s", ss::GetSignalBinHistLabel(sample).c_str()), nbinsx, xmin, xmax, nbinsy, ymin, ymax));
-    hc.Add(new TH2F("h_xsec_limit_exp_1sigma_dn", Form("Expected xsec - #sigma at 95%% CL %s", ss::GetSignalBinHistLabel(sample).c_str()), nbinsx, xmin, xmax, nbinsy, ymin, ymax));
+    hc.Add(new TH2I("h_xsec_exclusion"          , Form("xsec exlusion %s"                    , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc.Add(new TH2F("h_xsec_theory"             , Form("theoretical xsec %s"                 , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc.Add(new TH2F("h_xsec_limit_obs"          , Form("Observed xsec at 95%% CL %s"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc.Add(new TH2F("h_xsec_limit_exp"          , Form("Expected xsec at 95%% CL %s"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc.Add(new TH2F("h_xsec_limit_exp_1sigma_up", Form("Expected xsec + #sigma at 95%% CL %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc.Add(new TH2F("h_xsec_limit_exp_1sigma_dn", Form("Expected xsec - #sigma at 95%% CL %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
     // fill hists
-    for (size_t xbin = 0; xbin != nbinsx; xbin++)
+    for (size_t xbin = 1; xbin != nbinsx+1; xbin++)
     {
-        for (size_t ybin = 0; ybin != nbinsy; ybin++)
+        for (size_t ybin = 1; ybin != nbinsy+1; ybin++)
         {
-            const float sparm0 = bin_info.xmin + xbin*bin_info.xwidth;
-            const float sparm1 = bin_info.ymin + ybin*bin_info.ywidth;
-            const float x      = bin_info.xmin + xbin*bin_info.xwidth;
-            const float y      = bin_info.ymin + (ybin+1)*bin_info.ywidth;
-            const float cond   = m*(x - xmin) + ymin;
-
-            // boundary conditions
-            if (y > cond) {continue;}
+            const float sparm0 = hc["h_xsec_limit_obs"]->GetXaxis()->GetBinLowEdge(xbin);
+            const float sparm1 = hc["h_xsec_limit_obs"]->GetYaxis()->GetBinLowEdge(ybin);
 
             // store the output
-            const LimitInfo& limit_info = *std::find_if(limit_infos.begin(), limit_infos.end(), SelectBySparms(sparm0, sparm1));
+            std::vector<LimitInfo>::const_iterator limit_iter = std::find_if(limit_infos.begin(), limit_infos.end(), SelectBySparms(sparm0, sparm1));
+            if (limit_iter != limit_infos.end())
+            {
+                const LimitInfo& limit_info = *limit_iter;
 
-            // set hists
-            hc["h_xsec_limit_obs"          ]->SetBinContent(xbin+1, ybin+1, limit_info.obs          );
-            hc["h_xsec_limit_obs"          ]->SetBinError  (xbin+1, ybin+1, limit_info.obs_err      );
-            hc["h_xsec_limit_exp"          ]->SetBinContent(xbin+1, ybin+1, limit_info.exp          );
-            hc["h_xsec_limit_exp_1sigma_up"]->SetBinContent(xbin+1, ybin+1, limit_info.exp_1sigma_up);
-            hc["h_xsec_limit_exp_1sigma_dn"]->SetBinContent(xbin+1, ybin+1, limit_info.exp_1sigma_dn);
+                // set hists
+                hc["h_xsec_theory"             ]->SetBinContent(xbin, ybin, limit_info.xsec    );
+                hc["h_xsec_theory"             ]->SetBinError  (xbin, ybin, limit_info.xsec_err);
+                hc["h_xsec_limit_obs"          ]->SetBinContent(xbin, ybin, limit_info.obs          );
+                hc["h_xsec_limit_obs"          ]->SetBinError  (xbin, ybin, limit_info.obs_err      );
+                hc["h_xsec_limit_exp"          ]->SetBinContent(xbin, ybin, limit_info.exp          );
+                hc["h_xsec_limit_exp_1sigma_up"]->SetBinContent(xbin, ybin, limit_info.exp_1sigma_up);
+                hc["h_xsec_limit_exp_1sigma_dn"]->SetBinContent(xbin, ybin, limit_info.exp_1sigma_dn);
+                hc["h_xsec_exclusion"          ]->SetBinContent(xbin, ybin, static_cast<int>(limit_info.xsec > limit_info.exp));
+            }
         }
     }
 
     // same
     hc.Write(output_file);
+}
+
+// print the files for viewing
+void PrintLimitHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
+{
+    rt::TH1Container hc(input_file);
+    gStyle->SetPadRightMargin(0.15);
+    hc.SetStats(false);
+    hc.SetOption("colz");
+    hc["h_xsec_exclusion"]->SetOption("text");
+    rt::mkdir(output_path, /*force=*/true);
+    hc.Print(output_path, suffix);
 }

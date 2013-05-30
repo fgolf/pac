@@ -177,12 +177,6 @@ void SameSignTree::Reset()
     vbjets_p4_dn.clear();
     vbjets_nearjet_p4.clear();
     vbjets_nearjet_dr.clear();
-    vbjets_mcflavor_phys.clear();
-    vbjets_mcflavor_algo.clear();
-    vbjets_mcflavor_phys_up.clear();
-    vbjets_mcflavor_algo_up.clear();
-    vbjets_mcflavor_phys_dn.clear();
-    vbjets_mcflavor_algo_dn.clear();
     vbjets_mc3id.clear();
     vbjets_momid.clear();
     vbjets_mc3p4.clear();
@@ -343,12 +337,6 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("vbjets_p4"                                , "vecLorentzVector"                        , &vbjets_p4                                   ); 
     tree.Branch("vbjets_p4_up"                             , "vecLorentzVector"                        , &vbjets_p4_up                                ); 
     tree.Branch("vbjets_p4_dn"                             , "vecLorentzVector"                        , &vbjets_p4_dn                                ); 
-    tree.Branch("vbjets_mcflavor_phys"                     , "veci"                                    , &vbjets_mcflavor_phys                        ); 
-    tree.Branch("vbjets_mcflavor_algo"                     , "veci"                                    , &vbjets_mcflavor_algo                        ); 
-    tree.Branch("vbjets_mcflavor_phys_up"                  , "veci"                                    , &vbjets_mcflavor_phys_up                     ); 
-    tree.Branch("vbjets_mcflavor_algo_up"                  , "veci"                                    , &vbjets_mcflavor_algo_up                     ); 
-    tree.Branch("vbjets_mcflavor_phys_dn"                  , "veci"                                    , &vbjets_mcflavor_phys_dn                     ); 
-    tree.Branch("vbjets_mcflavor_algo_dn"                  , "veci"                                    , &vbjets_mcflavor_algo_dn                     ); 
     tree.Branch("vbjets_mc3p4"                             , "vecLorentzVector"                        , &vbjets_mc3p4                                ); 
     tree.Branch("vbjets_nearjet_p4"                        , "vecLorentzVector"                        , &vbjets_nearjet_p4                           ); 
     tree.Branch("vbjets_nearjet_dr"                        , "vecd"                                    , &vbjets_nearjet_dr                           ); 

@@ -262,12 +262,6 @@ public:
     vecLorentzVector vbjets_mc3p4;
     vecLorentzVector vbjets_nearjet_p4;
     vecd vbjets_nearjet_dr;
-    veci vbjets_mcflavor_phys;
-    veci vbjets_mcflavor_algo;
-    veci vbjets_mcflavor_phys_up;
-    veci vbjets_mcflavor_algo_up;
-    veci vbjets_mcflavor_phys_dn;
-    veci vbjets_mcflavor_algo_dn;
     veci vbjets_mc3id;
     veci vbjets_momid;
     float bjets_dr12;
