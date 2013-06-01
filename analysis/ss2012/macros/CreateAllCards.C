@@ -29,9 +29,9 @@ void CreateAllCards
     const size_t nbinsx = bin_info.nbinsx;
     const size_t nbinsy = bin_info.nbinsy;
     const float xmin    = bin_info.xmin;
-    const float ymin    = bin_info.ymin + bin_info.offset;
-    const float xmax    = bin_info.xmax - bin_info.xwidth;
-    const float ymax    = bin_info.ymax;
+    const float xmax    = bin_info.xmax;
+    const float ymin    = bin_info.ymin + bin_info.ywidth + bin_info.offset;
+    const float ymax    = bin_info.ymax + bin_info.ywidth;
     const float m       = (ymax - ymin)/(xmax - xmin);
 
     for (size_t xbin = 0; xbin != nbinsx; xbin++)
