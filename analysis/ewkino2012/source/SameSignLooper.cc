@@ -1385,9 +1385,9 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         bool sort_all_jet_pts = false;
         if (not m_jet_corrector)
         {
-            all_jet_p4s           = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, m_jetMetScale, sort_all_jet_pts);
-            all_jet_p4s_up        = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, 1, sort_all_jet_pts);
-            all_jet_p4s_dn        = samesign::getJets(hyp_idx, jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, -1, sort_all_jet_pts);
+            all_jet_p4s           = samesign::getAllCorrectedJets(jet_type, m_jetMetScale, sort_all_jet_pts);
+            all_jet_p4s_up        = samesign::getAllCorrectedJets(jet_type, 1, sort_all_jet_pts);
+            all_jet_p4s_dn        = samesign::getAllCorrectedJets(jet_type, -1, sort_all_jet_pts);
             m_evt.vjets_p4        = samesign::getJets           (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             jet_flags             = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
             jet_flags_up          = samesign::getJetFlags       (hyp_idx, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
@@ -1404,9 +1404,9 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         }
         else
         {
-            all_jet_p4s           = samesign::getJets(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, m_jetMetScale, sort_all_jet_pts);
-            all_jet_p4s_up        = samesign::getJets(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, 1, sort_all_jet_pts);
-            all_jet_p4s_dn        = samesign::getJets(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.0, /*jet_pt>*/-9999., /*|eta|<*/9999., /*mu_minpt=*/9999., /*ele_minpt=*/9999., 1.0, -1, sort_all_jet_pts);
+            all_jet_p4s           = samesign::getAllCorrectedJets(jet_type, m_jet_corrector.get(), m_jetMetScale, sort_all_jet_pts);
+            all_jet_p4s_up        = samesign::getAllCorrectedJets(jet_type, m_jet_corrector.get(), 1, sort_all_jet_pts);
+            all_jet_p4s_dn        = samesign::getAllCorrectedJets(jet_type, m_jet_corrector.get(), -1, sort_all_jet_pts);
             m_evt.vjets_p4        = samesign::getJets           (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
             jet_flags             = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
             jet_flags_up          = samesign::getJetFlags       (hyp_idx, m_jet_corrector.get(), jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1 );
@@ -1430,9 +1430,9 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         assert(m_evt.vjets_bdisc_up.size() == m_evt.vjets_p4_up.size());
         assert(m_evt.vjets_bdisc_dn.size() == m_evt.vjets_p4_dn.size());
 
-        m_evt.vjets_btagged    = sortBtaggedFlags(all_jet_p4s, jet_flags   , bjet_flags   );
-        m_evt.vjets_btagged_up = sortBtaggedFlags(all_jet_p4s, jet_flags_up, bjet_flags_up);
-        m_evt.vjets_btagged_dn = sortBtaggedFlags(all_jet_p4s, jet_flags_dn, bjet_flags_dn);
+        m_evt.vjets_btagged    = samesign::getSortedBtaggedFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+        m_evt.vjets_btagged_up = samesign::getSortedBtaggedFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1);
+        m_evt.vjets_btagged_dn = samesign::getSortedBtaggedFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
 
         assert(m_evt.vjets_p4.size() == m_evt.vjets_btagged.size());
         assert(m_evt.vjets_p4_up.size() == m_evt.vjets_btagged_up.size());
@@ -1450,14 +1450,28 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         const CMS2Tag cms2_tag = at::GetCMS2Tag();
         if (cms2_tag.version > 21 && not evt_isRealData())
         {
-            m_evt.vjets_mcflavor_phys = getJetMcPhysMatch(hyp_idx, /*systFlag=*/0, /*sort_by_pt=*/true);
-            m_evt.vjets_mcflavor_algo = getJetMcAlgoMatch(hyp_idx, /*systFlag=*/0, /*sort_by_pt=*/true);
+            if (not m_jet_corrector)
+            {
+                m_evt.vjets_mcflavor_phys = samesign::getJetMcPhysMatch(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+                m_evt.vjets_mcflavor_algo = samesign::getJetMcAlgoMatch(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
 
-            m_evt.vjets_mcflavor_phys_up = getJetMcPhysMatch(hyp_idx, /*systFlag=*/1, /*sort_by_pt=*/true);
-            m_evt.vjets_mcflavor_algo_up = getJetMcAlgoMatch(hyp_idx, /*systFlag=*/1, /*sort_by_pt=*/true);
+                m_evt.vjets_mcflavor_phys_up = samesign::getJetMcPhysMatch(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1);
+                m_evt.vjets_mcflavor_algo_up = samesign::getJetMcAlgoMatch(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1);
 
-            m_evt.vjets_mcflavor_phys_dn = getJetMcPhysMatch(hyp_idx, /*systFlag=*/-1, /*sort_by_pt=*/true);
-            m_evt.vjets_mcflavor_algo_dn = getJetMcAlgoMatch(hyp_idx, /*systFlag=*/-1, /*sort_by_pt=*/true);
+                m_evt.vjets_mcflavor_phys_dn = samesign::getJetMcPhysMatch(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+                m_evt.vjets_mcflavor_algo_dn = samesign::getJetMcAlgoMatch(hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+            }
+            else
+            {
+                m_evt.vjets_mcflavor_phys = samesign::getJetMcPhysMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+                m_evt.vjets_mcflavor_algo = samesign::getJetMcAlgoMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
+
+                m_evt.vjets_mcflavor_phys_up = samesign::getJetMcPhysMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1);
+                m_evt.vjets_mcflavor_algo_up = samesign::getJetMcAlgoMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1);
+
+                m_evt.vjets_mcflavor_phys_dn = samesign::getJetMcPhysMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+                m_evt.vjets_mcflavor_algo_dn = samesign::getJetMcAlgoMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
+            }
         }
 
         assert(m_evt.vjets_mcflavor_algo.size() == m_evt.vjets_p4.size());
@@ -2028,103 +2042,121 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         double ptTauMax15=0.;
 
 
-        for (unsigned int itau = 0; itau < cms2.taus_pf_p4().size(); itau++)
+        if (cms2_tag.version > 13)
         {
-            if(cms2.taus_pf_p4().at(itau).pt() < 15) continue;
-            // /// Use only OS charge
-            // if((taus_pf_charge().at(itau)*id1_)>0) continue;
-
-            ///
-            bool isHypLepton = false;
-            if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep1.p4) < 0.4) isHypLepton = true;
-            if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep2.p4) < 0.4) isHypLepton = true;
-
-            if (isHypLepton) continue;
-            if (!cms2.taus_pf_byDecayModeFinding().at(itau)) continue;
-
-            // isolation Medium ; pt > 15
-            if (cms2.taus_pf_byMediumIsolationMVA2().at(itau))
+            for (unsigned int itau = 0; itau < cms2.taus_pf_p4().size(); itau++)
             {
-                if (cms2.taus_pf_p4().at(itau).pt() > ptTauMax15)
+                if(cms2.taus_pf_p4().at(itau).pt() < 15) continue;
+                // /// Use only OS charge
+                // if((taus_pf_charge().at(itau)*id1_)>0) continue;
+
+                ///
+                bool isHypLepton = false;
+                if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep1.p4) < 0.4) isHypLepton = true;
+                if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep2.p4) < 0.4) isHypLepton = true;
+
+                if (isHypLepton) continue;
+                if (!cms2.taus_pf_byDecayModeFinding().at(itau)) continue;
+
+                // isolation Medium ; pt > 15
+                if (cms2.taus_pf_byMediumIsolationMVA2().at(itau))
                 {
-                    ptTauMax15 = cms2.taus_pf_p4().at(itau).pt();
-                    indexTauMax15 = itau;
-                }	
+                    if (cms2.taus_pf_p4().at(itau).pt() > ptTauMax15)
+                    {
+                        ptTauMax15 = cms2.taus_pf_p4().at(itau).pt();
+                        indexTauMax15 = itau;
+                    }	
+                }
+
+                if (cms2.taus_pf_p4().at(itau).pt() < 20) continue;
+
+                // isolation Medium ; pt > 20    
+                if (cms2.taus_pf_byMediumIsolationMVA2().at(itau))
+                {
+                    if (cms2.taus_pf_p4().at(itau).pt() > ptTauMax)
+                    {
+                        ptTauMax = cms2.taus_pf_p4().at(itau).pt();
+                        indexTauMax = itau;
+                    }	
+                }
+
+                // isolation Loose ; pt > 20
+                if (taus_pf_byLooseIsolationMVA2().at(itau))
+                {
+                    if (taus_pf_p4().at(itau).pt() > ptTauLooseMax)
+                    {
+                        ptTauLooseMax = cms2.taus_pf_p4().at(itau).pt();
+                        indexTauLooseMax = itau;
+                    }	
+                }
             }
 
-            if (cms2.taus_pf_p4().at(itau).pt() < 20) continue;
-
-            // isolation Medium ; pt > 20    
-            if (cms2.taus_pf_byMediumIsolationMVA2().at(itau))
+            if (indexTauMax15 != -1)
             {
-                if (cms2.taus_pf_p4().at(itau).pt() > ptTauMax)
+                m_evt.pfTau15 = cms2.taus_pf_p4().at(indexTauMax15);
+                if (cms2.taus_pf_pfcandIndicies().at(indexTauMax15).size() > 0)
                 {
-                    ptTauMax = cms2.taus_pf_p4().at(itau).pt();
-                    indexTauMax = itau;
-                }	
+                    int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax15).at(0);
+                    m_evt.pfTau15_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
+                    m_evt.pfTau15_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
+                }
             }
 
-            // isolation Loose ; pt > 20
-            if (taus_pf_byLooseIsolationMVA2().at(itau))
+            if (indexTauMax!=-1)
             {
-                if (taus_pf_p4().at(itau).pt() > ptTauLooseMax)
+                m_evt.pfTau = cms2.taus_pf_p4().at(indexTauMax);
+                if (cms2.taus_pf_pfcandIndicies().at(indexTauMax).size() > 0)
                 {
-                    ptTauLooseMax = cms2.taus_pf_p4().at(itau).pt();
-                    indexTauLooseMax = itau;
-                }	
+                    int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax).at(0);
+                    m_evt.pfTau_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
+                    m_evt.pfTau_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
+                }
+            }
+
+            if (indexTauLooseMax != -1)
+            {
+                m_evt.pfTauLoose = cms2.taus_pf_p4().at(indexTauLooseMax);
+                if (cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).size() > 0)
+                {
+                    int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).at(0);
+                    m_evt.pfTauLoose_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
+                    m_evt.pfTauLoose_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
+                }
             }
         }
-
-        if (indexTauMax15 != -1)
-        {
-            m_evt.pfTau15 = cms2.taus_pf_p4().at(indexTauMax15);
-            if (cms2.taus_pf_pfcandIndicies().at(indexTauMax15).size() > 0)
-            {
-                int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax15).at(0);
-                m_evt.pfTau15_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
-                m_evt.pfTau15_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
-            }
-        }
-
-        if (indexTauMax!=-1)
-        {
-            m_evt.pfTau = cms2.taus_pf_p4().at(indexTauMax);
-            if (cms2.taus_pf_pfcandIndicies().at(indexTauMax).size() > 0)
-            {
-                int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax).at(0);
-                m_evt.pfTau_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
-                m_evt.pfTau_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
-            }
-        }
-
-        if (indexTauLooseMax != -1)
-        {
-            m_evt.pfTauLoose = cms2.taus_pf_p4().at(indexTauLooseMax);
-            if (cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).size() > 0)
-            {
-                int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).at(0);
-                m_evt.pfTauLoose_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
-                m_evt.pfTauLoose_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
-            }
-        }        
 
         //
         // jet-PV matching
         //
-        for (size_t pfjidx = 0; pfjidx < jet_flags.size(); pfjidx++)
+        if (cms2_tag.version > 13)
         {
-            if (jet_flags.at(pfjidx) == 0) continue;
-            m_evt.pfjets_beta     .push_back ( pfjet_beta( pfjidx, 1)       );
-            m_evt.pfjets_beta2    .push_back ( pfjet_beta( pfjidx, 2)       );
-            m_evt.pfjets_beta_0p1 .push_back ( pfjet_beta( pfjidx, 1, 0.1 ) );
-            m_evt.pfjets_beta_0p2 .push_back ( pfjet_beta( pfjidx, 1, 0.2 ) );
-            m_evt.pfjets_beta2_0p1.push_back ( pfjet_beta( pfjidx, 2, 0.1 ) );
-            m_evt.pfjets_beta2_0p5.push_back ( pfjet_beta( pfjidx, 2, 0.5 ) );
-
-            m_evt.pfjets_mvaPUid.push_back  ( cms2.pfjets_full53xmvavalue().at(pfjidx));
-            m_evt.pfjets_mva5xPUid.push_back( cms2.pfjets_full5xmvavalue() .at(pfjidx));
-            m_evt.pfjets_mvaBeta.push_back  ( cms2.pfjets_full53xmva_beta().at(pfjidx));
+            m_evt.pfjets_mvaPUid   = sortJetValues(jet_flags, all_jet_p4s, cms2.pfjets_full53xmvavalue());
+            m_evt.pfjets_mva5xPUid = sortJetValues(jet_flags, all_jet_p4s, cms2.pfjets_full5xmvavalue() );
+            m_evt.pfjets_mvaBeta   = sortJetValues(jet_flags, all_jet_p4s, cms2.pfjets_full53xmva_beta());
         }
+
+        vecd tmp_pfjets_beta;
+        vecd tmp_pfjets_beta2;
+        vecd tmp_pfjets_beta_0p1;
+        vecd tmp_pfjets_beta_0p2;
+        vecd tmp_pfjets_beta2_0p1;
+        vecd tmp_pfjets_beta2_0p5;
+        for (size_t pfjidx = 0; pfjidx < all_jet_p4s.size(); pfjidx++)
+        {
+            tmp_pfjets_beta     .push_back ( pfjet_beta( pfjidx, 1)       );
+            tmp_pfjets_beta2    .push_back ( pfjet_beta( pfjidx, 2)       );
+            tmp_pfjets_beta_0p1 .push_back ( pfjet_beta( pfjidx, 1, 0.1 ) );
+            tmp_pfjets_beta_0p2 .push_back ( pfjet_beta( pfjidx, 1, 0.2 ) );
+            tmp_pfjets_beta2_0p1.push_back ( pfjet_beta( pfjidx, 2, 0.1 ) );
+            tmp_pfjets_beta2_0p5.push_back ( pfjet_beta( pfjidx, 2, 0.5 ) );
+        }
+
+        m_evt.pfjets_beta      = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta     );
+        m_evt.pfjets_beta2     = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta2    );
+        m_evt.pfjets_beta_0p1  = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta_0p1 );
+        m_evt.pfjets_beta_0p2  = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta_0p2 );
+        m_evt.pfjets_beta2_0p1 = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta2_0p1);
+        m_evt.pfjets_beta2_0p5 = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta2_0p5);        
 
         // assert(m_evt.vjets_p4.size() == m_evt.pfjets_mva5xPUid.size());
         
@@ -2170,18 +2202,19 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         int njets_pv_tmp0 = 0;
         int njets_pv_tmp1 = 0;
         int njets_pv_tmp2 = 0;
-        for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4.size(); jetpvidx++)
+        if (cms2_tag.version > 13)
         {
-            if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 0)) ++njets_pv_tmp0;
-            if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 1)) ++njets_pv_tmp1;
-            if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 2)) ++njets_pv_tmp2;
+            for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4.size(); jetpvidx++)
+            {
+                if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 0)) ++njets_pv_tmp0;
+                if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 1)) ++njets_pv_tmp1;
+                if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 2)) ++njets_pv_tmp2;
+            }
         }
 
         m_evt.njets_pv_tight0 = njets_pv_tmp0;
         m_evt.njets_pv_tight1 = njets_pv_tmp1;
         m_evt.njets_pv_tight2 = njets_pv_tmp2;
-
-        
 
         // Fill the tree
         m_tree->Fill();
@@ -2395,143 +2428,24 @@ bool EwkinoSSAnalysisLooper::passesMVAJetId(LorentzVector p4, float mva_value, i
     return false;
 }
 
-std::vector<int> EwkinoSSAnalysisLooper::getJetMcAlgoMatch(const unsigned int best_hyp_idx, int systFlag, bool sort_by_pt)
+std::vector<float> EwkinoSSAnalysisLooper::sortJetValues(const std::vector<bool>& all_jet_flags, const std::vector<LorentzVector>& all_jet_p4s, const std::vector<float>& vals_to_sort)
 {
-    //
-    // this is kind of a hacky way to do it
-    // but for now, just copy over what we
-    // have from above
-    //
-    float mu_min_pt = 0.0;
-    float el_min_pt = 0.0;
-    switch(m_analysis_type)
-    {
-    case AnalysisType::ss:
-        mu_min_pt = 20.0;
-        el_min_pt = 20.0;
-        break;
-    default:
-        mu_min_pt = 20.0;
-        el_min_pt = 20.0;
-        break;
-    }
+    assert(all_jet_flags.size() == all_jet_p4s.size());
+    assert(all_jet_flags.size() == vals_to_sort.size());    
 
-    JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
-
-    //
-    // get appropriate jet flags
-    //
-    std::vector<LorentzVector> tmp_jet_p4s = samesign::getJets(best_hyp_idx, jet_type,/*deltaR=*/0.4, m_jet_pt_cut, /*max_eta=*/2.4, mu_min_pt, el_min_pt, /*rescale=*/1.0, systFlag, /*sort_by_pt=*/false);
-    std::vector<bool> tmp_jet_flags = samesign::getJetFlags(best_hyp_idx, jet_type, /*deltaR=*/0.4, m_jet_pt_cut, /*max_eta=*/2.4, mu_min_pt, el_min_pt, /*rescale=*/1.0, systFlag);
-
-    assert(tmp_jet_flags.size() == pfjets_mcflavorAlgo().size());
-
-    std::vector<std::pair<LorentzVector, int> > tmp_p4_match;
-    unsigned int good_jidx = 0;
-    for (unsigned int jidx = 0; jidx < tmp_jet_flags.size(); jidx++)
-    {
-        if (!tmp_jet_flags.at(jidx)) continue;
-        tmp_p4_match.push_back(std::make_pair(tmp_jet_p4s.at(good_jidx), pfjets_mcflavorAlgo().at(jidx)));
-        good_jidx++;
-    }
-
-    if (systFlag == 0)
-        assert(tmp_p4_match.size() == m_evt.vjets_p4.size());
-    else if (systFlag == 1)
-        assert(tmp_p4_match.size() == m_evt.vjets_p4_up.size());
-    else
-        assert(tmp_p4_match.size() == m_evt.vjets_p4_dn.size());
-
-    if (sort_by_pt)
-        sort(tmp_p4_match.begin(), tmp_p4_match.end(), SortByPt());
-
-    std::vector<int> ret;
-    for (unsigned int idx = 0; idx < tmp_p4_match.size(); idx++)
-    {
-        ret.push_back(tmp_p4_match.at(idx).second);
-    }
-
-    return ret;
-}
-
-std::vector<int> EwkinoSSAnalysisLooper::getJetMcPhysMatch(const unsigned int best_hyp_idx, int systFlag, bool sort_by_pt)
-{
-    //
-    // this is kind of a hacky way to do it
-    // but for now, just copy over what we
-    // have from above
-    //
-    float mu_min_pt = 0.0;
-    float el_min_pt = 0.0;
-    switch(m_analysis_type)
-    {
-    case AnalysisType::ss:
-        mu_min_pt = 20.0;
-        el_min_pt = 20.0;
-        break;
-    default:
-        mu_min_pt = 20.0;
-        el_min_pt = 20.0;
-        break;
-    }
-
-    JetType jet_type = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
-
-    //
-    // get appropriate jet flags
-    //
-    std::vector<LorentzVector> tmp_jet_p4s = samesign::getJets(best_hyp_idx, jet_type,/*deltaR=*/0.4, m_jet_pt_cut, /*max_eta=*/2.4, mu_min_pt, el_min_pt, /*rescale=*/1.0, systFlag, /*sort_by_pt=*/false);
-    std::vector<bool> tmp_jet_flags = samesign::getJetFlags(best_hyp_idx, jet_type, /*deltaR=*/0.4, m_jet_pt_cut, /*max_eta=*/2.4, mu_min_pt, el_min_pt, /*rescale=*/1.0, systFlag);
-
-    assert(tmp_jet_flags.size() == pfjets_mcflavorPhys().size());
-
-    std::vector<std::pair<LorentzVector, int> > tmp_p4_match;
-    unsigned int good_jidx = 0;
-    for (unsigned int jidx = 0; jidx < tmp_jet_flags.size(); jidx++)
-    {
-        if (!tmp_jet_flags.at(jidx)) continue;
-        tmp_p4_match.push_back(std::make_pair(tmp_jet_p4s.at(good_jidx), pfjets_mcflavorPhys().at(jidx)));
-        good_jidx++;
-    }
-
-    if (systFlag == 0)
-        assert(tmp_p4_match.size() == m_evt.vjets_p4.size());
-    else if (systFlag == 1)
-        assert(tmp_p4_match.size() == m_evt.vjets_p4_up.size());
-    else
-        assert(tmp_p4_match.size() == m_evt.vjets_p4_dn.size());
-
-    if (sort_by_pt)
-        sort(tmp_p4_match.begin(), tmp_p4_match.end(), SortByPt());
-
-    std::vector<int> ret;
-    for (unsigned int idx = 0; idx < tmp_p4_match.size(); idx++)
-    {
-        ret.push_back(tmp_p4_match.at(idx).second);
-    }
-
-    return ret;
-}
-
-std::vector<bool> EwkinoSSAnalysisLooper::sortBtaggedFlags(const std::vector<LorentzVector>& all_jet_p4s, const std::vector<bool>& all_jet_flags, const std::vector<bool>& all_bjet_flags)
-{
-    // some sanity checks
-    assert(all_jet_p4s.size() == all_jet_flags.size());
-    assert(all_jet_flags.size() == all_bjet_flags.size());
-
-    std::vector<std::pair<LorentzVector, bool> > tmp_p4_flags;
+    std::vector<std::pair<LorentzVector, float> > tmp_vec_p4_val;
     for (unsigned int idx = 0; idx < all_jet_flags.size(); idx++)
     {
         if (!all_jet_flags.at(idx)) continue;
-        tmp_p4_flags.push_back(std::make_pair(all_jet_p4s.at(idx), all_bjet_flags.at(idx)));
+        tmp_vec_p4_val.push_back(std::make_pair(all_jet_p4s.at(idx), vals_to_sort.at(idx)));
     }
 
-    sort(tmp_p4_flags.begin(), tmp_p4_flags.end(), SortByPt());
-    
-    std::vector<bool> ret;    
-    for(unsigned int idx = 0; idx < tmp_p4_flags.size(); idx++)
+    sort(tmp_vec_p4_val.begin(), tmp_vec_p4_val.end(), SortByPt());
+
+    std::vector<float> ret;
+    for (unsigned int idx = 0; idx < tmp_vec_p4_val.size(); idx++)
     {
-        ret.push_back(tmp_p4_flags.at(idx).second);
+        ret.push_back(tmp_vec_p4_val.at(idx).second);
     }
 
     return ret;
