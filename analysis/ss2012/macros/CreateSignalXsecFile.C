@@ -6,7 +6,7 @@
 using namespace std;
 using namespace at;
 
-void SetBinContent(TH1* h, const float bin_value, const float xsec, const float xsec_unc_perc)
+void SetBinContent(TH1* h, const float bin_value, const float xsec, const float xsec_unc_perc = 0.0)
 {
     int bin = h->FindBin(bin_value + 0.00001);
     h->SetBinContent(bin, xsec);
@@ -268,4 +268,114 @@ void CreateSignalXsecFile()
     
     // done
     hc.Write("data/xsec/susy_xsec.root");
+}
+
+// hard coded script to produce the xsec histogrmas (14 TeV)
+void CreateSignalXsecFile14TeV()
+{
+    rt::TH1Container hc;
+
+    // sbottomtop (sbottom pair production -- T6ttWW)
+    // --------------------------------------------------------------------------------- //
+    // https://twiki.cern.ch/twiki/pub/CMS/SMST6ttWWMadgraph8TeV/Sbottom_8TeV_25GeV.txt
+    ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(at::Sample::sbottomtop);
+    hc.Add(new TH1F ("h_xsec_sbottomtop", "Cross Section sbottom pair (T6ttWW) #sqrt{s} = 14 TeV;m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    SetBinContent(hc["h_xsec_sbottomtop"] , 325 , 6.510e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 350 , 4.410e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 375 , 3.070e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 400 , 2.180e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 425 , 1.570e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 450 , 1.140e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 475 , 8.470e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 500 , 6.340e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 525 , 4.800e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 550 , 3.670e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 575 , 2.830e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 600 , 2.220e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 625 , 1.730e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 650 , 1.360e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 675 , 1.080e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 700 , 8.640e-02); 
+
+    // T1tttt (sbottom pair production -- T1tttt)
+    // --------------------------------------------------------------------------------- //
+    // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
+    bin_info = ss::GetSignalBinInfo(at::Sample::t1tttt);
+    hc.Add(new  TH1F("h_xsec_t1tttt", "Cross Section T1tttt #sqrt{s} = 14 ;m_{#tilde{g}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
+    SetBinContent(hc["h_xsec_t1tttt"] , 200  , 3.940e+03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 225  , 2.230e+03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 250  , 1.320e+03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 275  , 8.180e+02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 300  , 5.240e+02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 325  , 3.460e+02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 350  , 2.340e+02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 375  , 1.610e+02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 400  , 1.140e+02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 425  , 8.140e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 450  , 5.920e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 475  , 4.360e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 500  , 3.260e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 525  , 2.460e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 550  , 1.870e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 575  , 1.440e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 600  , 1.120e+01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 625  , 8.740e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 650  , 6.880e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 675  , 5.460e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 700  , 4.350e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 725  , 3.490e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 750  , 2.820e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 775  , 2.280e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 800  , 1.860e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 825  , 1.520e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 850  , 1.250e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 875  , 1.030e+00); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 900  , 8.560e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 925  , 7.110e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 950  , 5.930e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 975  , 4.960e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1000 , 4.160e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1025 , 3.500e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1050 , 2.950e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1075 , 2.500e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1100 , 2.120e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1125 , 1.800e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1150 , 1.530e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1175 , 1.310e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1200 , 1.120e-01); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1225 , 9.600e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1250 , 8.240e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1275 , 7.090e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1300 , 6.100e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1325 , 5.270e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1350 , 4.550e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1375 , 3.940e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1400 , 3.420e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1425 , 2.960e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1450 , 2.580e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1475 , 2.240e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1500 , 1.950e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1525 , 1.700e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1550 , 1.490e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1575 , 1.300e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1600 , 1.140e-02); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1625 , 9.960e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1650 , 8.730e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1675 , 7.660e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1700 , 6.730e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1725 , 5.920e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1750 , 5.200e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1775 , 4.580e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1800 , 4.040e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1825 , 3.560e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1850 , 3.140e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1875 , 2.770e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1900 , 2.450e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1925 , 2.160e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1950 , 1.910e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 1975 , 1.690e-03); 
+    SetBinContent(hc["h_xsec_t1tttt"] , 2000 , 1.500e-03); 
+    
+    // done
+    hc.Write("data/xsec/susy_xsec_14tev.root");
 }

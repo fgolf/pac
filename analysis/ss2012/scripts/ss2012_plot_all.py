@@ -279,7 +279,7 @@ def print_yield_and_predictions():
 			os.makedirs(table_path)
 
 	# text file
-	text_name  = "%s/yields_and_pred_%s_%s.txt" % (table_path, options.anal_type, options.out_name)
+	text_name  = "%s/yields_and_pred_%s_%s_%s.txt" % (table_path, options.anal_type, signal_region_type, options.out_name)
 	cmd = "root -b -q -l \"macros/PrintYieldAndPredictionsWrapper.C (\\\"%s\\\", \\\"%s\\\", \\\"%s\\\", \\\"%s\\\");\" " % (options.out_name, options.anal_type, signal_region_type, text_name)
 	if (options.verbose):
 		print cmd

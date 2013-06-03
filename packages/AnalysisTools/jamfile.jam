@@ -30,6 +30,7 @@ lib AnalysisTools
     ./source/FlipRateBinInfo.cc
     ./source/PredSummary.cc
     ./source/TrackIsoTools.cc
+    ./source/Significance.cc
     ./source/CMS2Tag.cc
     [ rootcint Dict
       : # source
@@ -39,6 +40,7 @@ lib AnalysisTools
         ./include/at/FakeRateBinInfo.h
         ./include/at/FlipRateBinInfo.h
         ./include/at/YieldType.h
+        ./include/at/Significance.h
       : # requirements
         #<define>__RTINT__
         <include>./include

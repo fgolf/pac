@@ -345,6 +345,14 @@ namespace rt
     double GetBinError1D(TH1* h, const float x);
     double GetBinError2D(TH2* h, const float x, const float y);
 
+    // set the bin content with float values
+    void SetBinContent1D(TH1* h, const float x, const float value);
+    void SetBinContent1D(TH1* h, const float x, const float value, const float error);
+    void SetBinContent2D(TH1* h, const float x, const float y, const float value);
+    void SetBinContent2D(TH1* h, const float x, const float y, const float value, const float error);
+    void SetBinContent2D(TH2* h, const float x, const float y, const float value);
+    void SetBinContent2D(TH2* h, const float x, const float y, const float value, const float error);
+
     // create a CTable from a hist (1D and 2D only)                            
     CTable CreateTableFromHist                                                 
     (                                                                          

@@ -60,7 +60,6 @@ void CreateSignficanceHists
     const size_t nbinsx = bin_info.nbinsx;
     const size_t nbinsy = bin_info.nbinsy;
     const float xmin    = bin_info.xmin;
-    const float xmin    = bin_info.xmin;
     const float xmax    = bin_info.xmax;
     const float ymin    = bin_info.ymin + bin_info.ywidth + bin_info.offset;
     const float ymax    = bin_info.ymax + bin_info.ywidth;

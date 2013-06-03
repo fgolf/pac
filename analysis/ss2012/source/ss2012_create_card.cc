@@ -272,7 +272,7 @@ try
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
 
-    // use pred file if yield type isn't empty
+    // yield and predictions 
     vector<yield_info_t> yield_infos;
     if (not yield_file.empty())
     {

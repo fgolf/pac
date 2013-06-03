@@ -219,6 +219,93 @@ namespace rt
         return hist_ptr->GetBinError(xbin, ybin);
     }
 
+    // set the bin content  
+    void SetBinContent1D(TH1* hist_ptr, const float x, const float value)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent1D() -- hist pointer is NULL!");
+        }
+        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        hist_ptr->SetBinContent(bin, value);
+    }
+
+    // set the bin content  
+    void SetBinContent1D(TH1* hist_ptr, const float x, const float value, const float error)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent1D() -- hist pointer is NULL!");
+        }
+        int bin = hist_ptr->GetXaxis()->FindBin(x);
+        hist_ptr->SetBinContent(bin, value);
+        hist_ptr->SetBinError(bin, error);
+    }
+
+    // set the bin content 
+    void SetBinContent2D(TH1* hist_ptr, const float x, const float y, const float value)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent2D() -- hist pointer is NULL!");
+        }
+        if (TH2* h = dynamic_cast<TH2*>(hist_ptr))
+        {
+            int xbin = h->GetXaxis()->FindBin(x);
+            int ybin = h->GetYaxis()->FindBin(y);
+            h->SetBinContent(xbin, ybin, value);
+        }
+        else
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent2D() -- hist pointer is not 2D!");
+        }
+    }
+
+    // set the bin content 
+    void SetBinContent2D(TH1* hist_ptr, const float x, const float y, const float value, const float error)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent2D() -- hist pointer is NULL!");
+        }
+        if (TH2* h = dynamic_cast<TH2*>(hist_ptr))
+        {
+            int xbin = h->GetXaxis()->FindBin(x);
+            int ybin = h->GetYaxis()->FindBin(y);
+            h->SetBinContent(xbin, ybin, value);
+            h->SetBinError(xbin, ybin, error);
+        }
+        else
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent2D() -- hist pointer is not 2D!");
+        }
+    }
+
+    // set the bin content 
+    void SetBinContent2D(TH2* hist_ptr, const float x, const float y, const float value)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent2D() -- hist pointer is NULL!");
+        }
+        int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        hist_ptr->SetBinContent(xbin, ybin, value);
+    }
+
+    // set the bin content 
+    void SetBinContent2D(TH2* hist_ptr, const float x, const float y, const float value, const float error)
+    {
+        if (!hist_ptr)
+        {
+            throw std::runtime_error("ERROR: rt::SetBinContent1D() -- hist pointer is NULL!");
+        }
+        int xbin = hist_ptr->GetXaxis()->FindBin(x);
+        int ybin = hist_ptr->GetYaxis()->FindBin(y);
+        hist_ptr->SetBinContent(xbin, ybin, value);
+        hist_ptr->SetBinError(xbin, ybin, error);
+    }
+
     // calculate the integral and error
     std::pair<double, double> IntegralAndError(TH1* hist_ptr, const std::string& option)
     {
