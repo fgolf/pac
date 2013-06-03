@@ -2,7 +2,7 @@
 
 verbose=0
 njets=2
-tag=v4
+tag=v6
 analysis=ss
 path=/nfs-7/userdata/${USER}/babies/ewkino2012/$analysis/$tag/
 
@@ -65,7 +65,6 @@ function merge2
 
 input_path=/hadoop/cms/store/user/${USER}/babies/ewkino2012/$analysis/${tag}/mc
 output_path=$path
-merge ss wjets          WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss wz             WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss zz             ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss ww             WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
