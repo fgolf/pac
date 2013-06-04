@@ -189,10 +189,8 @@ int main(int argc, char* argv[])
                 input_file = Form("babies/%s/%s.root", short_name.c_str(), sample_name.c_str());                
             switch (sample)
             {
-                case at::Sample::ttdil: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break; 
-                case at::Sample::ttotr: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break;
-                case at::Sample::ttslb: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break;
-                case at::Sample::ttslo: input_file = Form("babies/%s/ttjets.root", short_name.c_str()); break;
+                case at::Sample::ttslb: input_file = Form("babies/%s/ttslq.root", short_name.c_str()); break;
+                case at::Sample::ttslo: input_file = Form("babies/%s/ttslq.root", short_name.c_str()); break;
                 default: {/*do nothing*/}
             }
             if (verbose) {cout << "input file is " << input_file << endl;}
