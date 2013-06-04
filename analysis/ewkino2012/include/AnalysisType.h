@@ -12,8 +12,6 @@ namespace ewkino
         enum value_type
         {
             ss,
-            llbb,
-            lnbb,
             static_size
         };
     };

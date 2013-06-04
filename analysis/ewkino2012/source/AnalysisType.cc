@@ -16,26 +16,6 @@ ewkino::AnalysisTypeInfo s_AnalysisTypeInfos[] =
         // latex title
         "ss"
     },
-    {
-        // name
-        "llbb", 
-        // short name
-        "llbb", 
-        // ROOT title
-        "Z#rightarrow ll, H#rightarrow bb",
-        // latex title
-        "Z$\\rightarrow\\ell\\ell$, H$\\rightarrow b\\overline{b}$"
-    },
-    {
-        // name
-        "lnbb", 
-        // short name
-        "lnbb", 
-        // ROOT title
-        "W#rightarrow l#nu, H#rightarrow bb",
-        // latex title
-        "W$\\rightarrow\\ell\\nu$, H$\\rightarrow b\\overline{b}$"
-    },
 };
 
 // check that the AnalysisTypeInfoArray is the same size as the enum
