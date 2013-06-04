@@ -123,9 +123,9 @@ void PrintYieldsMC
         latex.append(Form("%s \\\\\n", m_yield["zzz"          ].GetLatex("zzz"          , GetSampleInfo(Sample::zzz          ).latex, /*print_sys_error*/false).c_str()));
         latex.append(Form("%s \\\\\n", m_yield["wwqq"         ].GetLatex("wwqq"         , GetSampleInfo(Sample::wwqq         ).latex, /*print_sys_error*/false).c_str()));
         latex.append(Form("%s \\\\\n", m_yield["ww_ds"        ].GetLatex("ww_ds"        , GetSampleInfo(Sample::ww_ds        ).latex, /*print_sys_error*/false).c_str()));
-        // latex.append(Form("%s \\\\\n", m_yield["wh_zh_tth_hww"].GetLatex("wh_zh_tth_hww", GetSampleInfo(Sample::wh_zh_tth_hww).latex, /*print_sys_error*/false).c_str()));
-        // latex.append(Form("%s \\\\\n", m_yield["wh_zh_tth_hzz"].GetLatex("wh_zh_tth_hzz", GetSampleInfo(Sample::wh_zh_tth_hzz).latex, /*print_sys_error*/false).c_str()));
-        // latex.append(Form("%s \\\\\n", m_yield["wh_zh_tth_htt"].GetLatex("wh_zh_tth_htt", GetSampleInfo(Sample::wh_zh_tth_htt).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wh_zh_tth_hww"].GetLatex("wh_zh_tth_hww", GetSampleInfo(Sample::wh_zh_tth_hww).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wh_zh_tth_hzz"].GetLatex("wh_zh_tth_hzz", GetSampleInfo(Sample::wh_zh_tth_hzz).latex, /*print_sys_error*/false).c_str()));
+        latex.append(Form("%s \\\\\n", m_yield["wh_zh_tth_htt"].GetLatex("wh_zh_tth_htt", GetSampleInfo(Sample::wh_zh_tth_htt).latex, /*print_sys_error*/false).c_str()));
         latex.append("\\hline\\hline\n");
         latex.append(Form("%s \\\\\n", yield_mc.GetLatex                ("mc"           , "Total MC"                                , /*print_sys_error*/false).c_str()));
         latex.append("\\hline\n");                                
@@ -184,9 +184,9 @@ void PrintYieldsMC
             (GetSampleInfo(Sample::wpwpqq       ).name, m_yield["wpwpqq"       ] .ee_pm() , m_yield["wpwpqq"       ] .mm_pm() , m_yield["wpwpqq"       ] .em_pm() , m_yield["wpwpqq"       ] .ll_pm())
             (GetSampleInfo(Sample::wmwmqq       ).name, m_yield["wmwmqq"       ] .ee_pm() , m_yield["wmwmqq"       ] .mm_pm() , m_yield["wmwmqq"       ] .em_pm() , m_yield["wmwmqq"       ] .ll_pm())
             (GetSampleInfo(Sample::ww_ds        ).name, m_yield["ww_ds"        ] .ee_pm() , m_yield["ww_ds"        ] .mm_pm() , m_yield["ww_ds"        ] .em_pm() , m_yield["ww_ds"        ] .ll_pm())
-            // (GetSampleInfo(Sample::wh_zh_tth_hww).name, m_yield["wh_zh_tth_hww"] .ee_pm() , m_yield["wh_zh_tth_hww"] .mm_pm() , m_yield["wh_zh_tth_hww"] .em_pm() , m_yield["wh_zh_tth_hww"] .ll_pm())
-            // (GetSampleInfo(Sample::wh_zh_tth_hzz).name, m_yield["wh_zh_tth_hzz"] .ee_pm() , m_yield["wh_zh_tth_hzz"] .mm_pm() , m_yield["wh_zh_tth_hzz"] .em_pm() , m_yield["wh_zh_tth_hzz"] .ll_pm())
-            // (GetSampleInfo(Sample::wh_zh_tth_htt).name, m_yield["wh_zh_tth_htt"] .ee_pm() , m_yield["wh_zh_tth_htt"] .mm_pm() , m_yield["wh_zh_tth_htt"] .em_pm() , m_yield["wh_zh_tth_htt"] .ll_pm())
+            (GetSampleInfo(Sample::wh_zh_tth_hww).name, m_yield["wh_zh_tth_hww"] .ee_pm() , m_yield["wh_zh_tth_hww"] .mm_pm() , m_yield["wh_zh_tth_hww"] .em_pm() , m_yield["wh_zh_tth_hww"] .ll_pm())
+            (GetSampleInfo(Sample::wh_zh_tth_hzz).name, m_yield["wh_zh_tth_hzz"] .ee_pm() , m_yield["wh_zh_tth_hzz"] .mm_pm() , m_yield["wh_zh_tth_hzz"] .em_pm() , m_yield["wh_zh_tth_hzz"] .ll_pm())
+            (GetSampleInfo(Sample::wh_zh_tth_htt).name, m_yield["wh_zh_tth_htt"] .ee_pm() , m_yield["wh_zh_tth_htt"] .mm_pm() , m_yield["wh_zh_tth_htt"] .em_pm() , m_yield["wh_zh_tth_htt"] .ll_pm())
             ("Total MC"                               , yield_mc.ee_pm()                  , yield_mc.mm_pm()                  , yield_mc.em_pm()                  , yield_mc.ll_pm()                 ) 
             ("MC Pred"                                , yield_rare.ee_syst_pm()           , yield_rare.mm_syst_pm()           , yield_rare.em_syst_pm()           , yield_rare.ll_syst_pm()          )            
             ("Total Pred"                             , yield_pred.ee_syst_pm()           , yield_pred.mm_syst_pm()           , yield_pred.em_syst_pm()           , yield_pred.ll_syst_pm()          );
