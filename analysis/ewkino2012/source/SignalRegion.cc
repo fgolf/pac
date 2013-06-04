@@ -142,8 +142,9 @@ namespace ewkino
         // SS WH
         if (anal_type==AnalysisType::ss)
         {
-            const bool baseline      = ((ewkino_ss::njets()==2 || ewkino_ss::njets()==3) && ewkino_ss::nbtags()==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
+            const bool baseline      = (ewkino_ss::nbtags()==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
             const bool pass_zee_veto = (not (ewkino_ss::dilep_type() == at::DileptonHypType::EE && ewkino_ss::dilep_mass() > 76. && ewkino_ss::dilep_mass() < 106.));
+            const bool pass_sr0      = (baseline && (ewkino_ss::njets()==2 || ewkino_ss::njets()==3));
             const bool pass_sr1      = (baseline && ewkino_ss::passes_isotrk_veto() && ewkino_ss::passes_tau_veto() && (ewkino_ss::njets_pv_tight0() == 2 || ewkino_ss::njets_pv_tight0()==3));
             const bool pass_sr2      = (pass_sr1 && ewkino_ss::dijet_mass() < 120.);
             const bool pass_sr3      = (pass_sr2 && pass_zee_veto);
@@ -275,9 +276,9 @@ namespace ewkino
         {
             case AnalysisType::ss:
                 tree.SetAlias("sr0" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
-                tree.SetAlias("sr1" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
-                tree.SetAlias("sr2" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120.");
-                tree.SetAlias("sr3" , "lep_pt && nbtags==0 && (njets==2 || njets==3) && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120. && pass_zee_veto");
+                tree.SetAlias("sr1" , "lep_pt && nbtags==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
+                tree.SetAlias("sr2" , "lep_pt && nbtags==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120.");
+                tree.SetAlias("sr3" , "lep_pt && nbtags==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120. && pass_zee_veto");
                 break;
             case AnalysisType::static_size:
                 /*do nothing*/
