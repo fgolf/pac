@@ -99,4 +99,7 @@ merge ss dy3j           DY3JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X
 merge ss dy4j           DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge2 ss dyjets        "${input_path}/DY1JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/DY2JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7C-v1/*.root,${input_path}/DY3JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/DY4JetsToLL_M-50_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
 merge2 ss wjets         "${input_path}/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
+merge ss wh_zh_tth_hzz WH_ZH_TTH_HToZZ_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ss wh_zh_tth_hww WH_ZH_TTH_HToWW_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ss wh_zh_tth_htt WH_ZH_TTH_HToTauTau_M-125_lepdecay_8TeV-pythia6-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1 
 #
