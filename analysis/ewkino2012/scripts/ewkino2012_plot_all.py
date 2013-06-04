@@ -44,11 +44,11 @@ samples = [
 	"t_schan",
 	"t_tchan",
 	"t_tw",
+	"wh_zh_tth_hww",
+	"wh_zh_tth_hzz",
+	"wh_zh_tth_htt"
         # "tchiwh-150-1",
         # "tchiwh-200-1",
-	# "wh_zh_tth_hww",
-	# "wh_zh_tth_hzz",
-	# "wh_zh_tth_htt",
         ]
 
 # supported signal regions
@@ -88,6 +88,7 @@ parser.add_option("--verbose"         , action="store_true"  , dest="verbose"   
 parser.add_option("--mc_only"         , action="store_true"  , dest="mc_only"         , default=False , help="do not run on data"                              )
 parser.add_option("--combine_signals" , action="store_true"  , dest="combine_signals" , default=False , help="combine signals"                                 )
 parser.add_option("--combine_bkgds"   , action="store_true"  , dest="combine_bkgds"   , default=False , help="combine backgrounds"                             )
+parser.add_option("--do_sf"           , action="store_false" , dest="do_sf"           , default=True  , help="apply mc scale factors"                          )
 
 (options, args) = parser.parse_args()
 
@@ -162,7 +163,8 @@ def make_hist(signal_region, sample):
 	cmd += " --fr_file %s"                        % str(options.fr_file)
 	cmd += " --fl_file %s"                        % str(options.fl_file)
 	cmd += " --charge %d"                         % int(options.charge)
-	cmd += " --anal_type %s"                      % options.anal_type 
+	cmd += " --anal_type %s"                      % options.anal_type
+        cmd += " --do_sf %d"                          % int(options.do_sf)
 
         if (is_signal):
                 if (len(sample_list) >= 2):
