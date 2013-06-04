@@ -990,7 +990,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // no W (MET and m_T cuts)
-        float mt_cut = ((m_fr_type == ss::FakeRateType::eth) ? 25. : 20.);
+        // float mt_cut = ((m_fr_type == ss::FakeRateType::eth) ? 20. : 25.);
+        float mt_cut = 20.;
         if (pfmet()>20 || pfmt()>mt_cut)
         {
             if (m_verbose) {cout << "fails no W cut" << endl;}
