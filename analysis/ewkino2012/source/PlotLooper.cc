@@ -751,21 +751,21 @@ int PlotLooper::operator()(long event)
         }
 
         // passes signal region
-        if (not PassesSignalRegion(m_signal_region, m_analysis_type))
+        if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, m_do_scale_factors))
         {
             if (m_verbose) {cout << "failing signal region cut" << endl;}
             return 0;
         }
 
         // if the value of m_m_sparm0 negative, this check is skipped
-        if (m_sparm0 >= 0.0f && not rt::is_equal(m_sparm0, sparm0()))
+        if (is_signal_mc && m_sparm0 >= 0.0f && not rt::is_equal(m_sparm0, sparm0()))
         {
             if (m_verbose) {cout << Form("fails the sparm0 check: %s, %1.2f != %1.2f", sparm0_name().Data(), m_sparm0, sparm0()) << endl;}
             return 0;
         }
 
         // if the value of m_sparm1 is negative, this check is skipped
-        if (m_sparm1 >= 0.0f && not rt::is_equal(m_sparm1, sparm1()))
+        if (is_signal_mc && m_sparm1 >= 0.0f && not rt::is_equal(m_sparm1, sparm1()))
         {
             if (m_verbose) {cout << Form("fails the sparm1 check: %s, %1.2f != %1.2f", sparm1_name().Data(), m_sparm1, sparm1()) << endl;}
             return 0;
@@ -774,10 +774,6 @@ int PlotLooper::operator()(long event)
         // ttbar breakdown 
         switch (m_sample)
         {
-            //case at::Sample::ttdil: if (ttbar_bkdn() != TTbarBreakDown::TTDIL) result = false; break; 
-            //case at::Sample::ttotr: if (ttbar_bkdn() != TTbarBreakDown::TTOTR) result = false; break;
-            //case at::Sample::ttslb: if (ttbar_bkdn() != TTbarBreakDown::TTSLB) result = false; break;
-            //case at::Sample::ttslo: if (ttbar_bkdn() != TTbarBreakDown::TTSLO) result = false; break;
             case at::Sample::ttdil:
                 if (GetTTbarBreakDown(m_sample, lep1_is_fromw(), lep2_is_fromw()) != TTbarBreakDown::TTDIL)
                 {
@@ -945,13 +941,6 @@ int PlotLooper::operator()(long event)
                 rt::Fill2D(hc["h_os_pt2_vs_eta2_mm"], fabs(l2_p4.eta()), l2_p4.pt(), weight);
             }
         }
-
-        //// dont't fill hists for MC if they are not truth matched (SS or DF only)
-        //if ((not is_real_data()) && (not is_mc_matched) && (is_sf() || is_df()))
-        //{
-        //    if (m_verbose) {cout << "leptons failing truth matching (MC only)" << endl;}
-        //    //return 0;
-        //}
 
         // fake rate and flip factor for kinematic plots
         float fr1 = 0.0;
@@ -1236,4 +1225,3 @@ at::FlipRateBinInfo PlotLooper::GetFlipRateBinInfo() const
 
     return tmp;
 }
-
