@@ -788,7 +788,16 @@ namespace rt
             return;
         }
         hist_ptr->Draw(option.c_str());
-        c1.Print((dir_name + "/" + (file_name.empty() ? hist_ptr->GetName() : file_name) + "." + suffix).c_str());
+        std::string output_file_name = "";
+        if (file_name.empty())
+        {
+            output_file_name = Form("%s/%s.%s", dir_name.c_str(), hist_ptr->GetName(), suffix.c_str());
+        }
+        else
+        {
+            output_file_name = Form("%s/%s.%s", dir_name.c_str(), file_name.c_str(), suffix.c_str());
+        }
+        c1.Print(output_file_name.c_str());
         rt::CopyIndexPhp(dir_name);
         return;
     }
