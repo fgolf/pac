@@ -43,7 +43,7 @@ struct SelectBySparms
 };
 
 
-void CreateSignficanceHists
+void CreateSignificanceHists
 (
     const at::Sample::value_type sample,
     const std::string& input_file_path,
@@ -146,7 +146,7 @@ void CreateSignficanceHists
     hc.Write(output_file);
 }
 
-void PrintSignficanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
+void PrintSignificanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
 {
     rt::TH1Container hc(input_file);
     gStyle->SetPadRightMargin(0.15);

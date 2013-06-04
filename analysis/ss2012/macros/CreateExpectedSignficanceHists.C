@@ -2,12 +2,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <iostream>
 
 #include "rt/RootTools.h"
 #include "at/Sample.h"
 #include "at/Significance.h"
 #include "SignalBinInfo.h"
 #include "SignalRegion.h"
+
+using namespace std;
 
 struct yield_info_t
 {
@@ -80,7 +84,7 @@ float GetValueFromScanHist(TH1* const hist, const float sparm0, const float spar
 
 // compute the significance
 // using inclusive yields
-void CreateExpectedSignficanceHists
+void CreateExpectedSignificanceHists
 (
     const at::Sample::value_type sample,
     const std::string& interp_file,
@@ -145,8 +149,8 @@ void CreateExpectedSignficanceHists
     const std::string sample_name = at::GetSampleInfo(sample).name;
     rt::TH1Container hc_xsec("data/xsec/susy_xsec.root");
     rt::TH1Container hc_xsec_14tev("data/xsec/susy_xsec_14tev.root");
-    TH1* h_xsec_8tev  = hc_xsec[Form("h_xsec_%s", sample_name.c_str())]; 
-    TH1* h_xsec_14tev = hc_xsec[Form("h_xsec_%s", sample_name.c_str())]; 
+    TH1* h_xsec_8tev  = hc_xsec      [Form("h_xsec_%s", sample_name.c_str())]; 
+    TH1* h_xsec_14tev = hc_xsec_14tev[Form("h_xsec_%s", sample_name.c_str())]; 
 
     // calculate the significance 
     // ------------------------------------------------------------------------------ //
@@ -156,10 +160,10 @@ void CreateExpectedSignficanceHists
 
     // resulting histograms
     rt::TH1Container hc_sig;
-    hc_sig.Add(new TH2F("h_sig"           , Form("Expected Significance %s"     , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_nsigma"        , Form("N Sigma %s"                   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr"   , Form("Best Signal Region (sig)%s"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_nsigma_best_sr", Form("Best Signal Region (nsigma)%s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_8tev"           , Form("Expected Significance (8 TeV) %s"     , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_nsigma_8tev"        , Form("N Sigma (8 TeV) %s"                   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_8tev"   , Form("Best Signal Region (sig) (8 TeV) %s"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_nsigma_best_sr_8tev", Form("Best Signal Region (nsigma) (8 TeV) %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
     hc_sig.Add(new TH2F("h_sig_14tev"           , Form("Expected Significance (14 TeV) %s"     , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     hc_sig.Add(new TH2F("h_nsigma_14tev"        , Form("N Sigma (14 TeV) %s"                   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
@@ -203,6 +207,7 @@ void CreateExpectedSignficanceHists
 
             // boundary conditions
             if (y > cond) {continue;}
+/*             if (not (rt::is_equal(sparm0, 600.0f) && rt::is_equal(sparm1, 150.0f))) {continue;} */
 /*             cout << sparm0 << "\t" << sparm1 << "\t" << xbin << "\t" << ybin << endl; */
 
             // store the best SR per sparm
@@ -218,9 +223,10 @@ void CreateExpectedSignficanceHists
                 const std::string sr = GetSRLabel(sr_num);
                 const std::string h_sig_sr_name = Form("h_sig_sr%d", sr_num);
                 const std::string h_num_sr_name = Form("h_num_sr%d", sr_num);
+/*                 if (sr_num != 28) {continue;} */
 
                 // yield_info object
-                yield_info_t yi = *std::find_if(yield_infos.begin(), yield_infos.end(), CompareSR(sr_num));
+                const yield_info_t& yi = *std::find_if(yield_infos.begin(), yield_infos.end(), CompareSR(sr_num));
 
                 // 8 TeV significane
                 // -----------------------------// 
@@ -231,11 +237,17 @@ void CreateExpectedSignficanceHists
                 const float n_bkgd_8tev        = yi.pred;
                 const float unc_bkgd_8tev      = yi.pred_unc;
                 const float frac_unc_bkgd_8tev = yi.pred_unc / yi.pred;
+                const int n_exp_8tev           = static_cast<int>(n_signal_8tev + n_bkgd_8tev);
 
                 // signficance
-                const float sig_8tev    = at::SimpleSignficance(n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev);
-                const float nsigma_8tev = at::NSigma(n_bkgd_8tev, n_signal_8tev + n_bkgd_8tev, frac_unc_bkgd_8tev);
-/*                 const float nsigma_8tev = 9999.0; */
+                const float sig_8tev    = at::SimpleSignificance(n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev);
+/*                 const float nsigma_8tev = at::NSigma(n_bkgd_8tev, n_exp_8tev, frac_unc_bkgd_8tev); */
+                const float nsigma_8tev = 9999.0;
+                cout << "n_signal_8tev      = " << n_signal_8tev      << endl;
+                cout << "n_bkgd_8tev        = " << n_bkgd_8tev        << endl;
+                cout << "unc_bkgd_8tev      = " << unc_bkgd_8tev      << endl;
+                cout << "frac_unc_bkgd_8tev = " << frac_unc_bkgd_8tev << endl;
+                cout << "sig 8 = " << sig_8tev << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
 
                 // save the significance
 /*                 rt::SetBinContent2D(hc_sig[h_sig_sr_name], sparm0, sparm1, sig     ); */
@@ -246,16 +258,16 @@ void CreateExpectedSignficanceHists
                 {
                     best_sr_sig_8tev = std::make_pair(sig_8tev, sr_num);
                 }
-                rt::SetBinContent2D(hc_sig["h_sig"        ], sparm0, sparm1, best_sr_sig_8tev.first );
-                rt::SetBinContent2D(hc_sig["h_sig_best_sr"], sparm0, sparm1, best_sr_sig_8tev.second);
+                rt::SetBinContent2D(hc_sig["h_sig_8tev"        ], sparm0, sparm1, best_sr_sig_8tev.first );
+                rt::SetBinContent2D(hc_sig["h_sig_best_sr_8tev"], sparm0, sparm1, best_sr_sig_8tev.second);
 
                 // test for the best SR nsigma (overwrite all results);
                 if (best_sr_nsigma_8tev.first < nsigma_8tev)
                 {
                     best_sr_nsigma_8tev = std::make_pair(nsigma_8tev, sr_num);
                 }
-                rt::SetBinContent2D(hc_sig["h_nsigma"        ], sparm0, sparm1, best_sr_nsigma_8tev.first );
-                rt::SetBinContent2D(hc_sig["h_nsigma_best_sr"], sparm0, sparm1, best_sr_nsigma_8tev.second);
+                rt::SetBinContent2D(hc_sig["h_nsigma_8tev"        ], sparm0, sparm1, best_sr_nsigma_8tev.first );
+                rt::SetBinContent2D(hc_sig["h_nsigma_best_sr_8tev"], sparm0, sparm1, best_sr_nsigma_8tev.second);
 
                 // 14 TeV significane
                 // -----------------------------// 
@@ -271,7 +283,7 @@ void CreateExpectedSignficanceHists
                 // susy: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SUSYCrossSectionsForProjections
                 const float xsec_ttbar_8tev     = 1000.0 * 234; // fb
                 const float xsec_ttbar_14tev    = 1000.0 * 965; // fb
-                const float xsec_ttw_8tev       = 1000.0 * (0.161 + 0.71);  // fb
+                const float xsec_ttw_8tev       = 1000.0 * (0.161 + 0.071);  // fb
                 const float xsec_ttw_14tev      = 1000.0 * (0.507 + 0.262); // fb
                 const float scale_ttbar         = xsec_ttbar_14tev/xsec_ttbar_8tev;
                 const float scale_ttw           = xsec_ttw_14tev/xsec_ttw_8tev;
@@ -280,17 +292,19 @@ void CreateExpectedSignficanceHists
                 const float n_bkgd_14tev        = scale_lumi*(scale_ttbar * yi.fake + scale_ttbar * yi.flip + scale_ttw *yi.rare);
                 const float unc_bkgd_14tev      = scale_lumi*sqrt(pow(scale_ttbar * yi.fake_unc,2) + pow(scale_ttbar * yi.flip_unc, 2) + pow(scale_ttw * yi.rare_unc, 2));
                 const float frac_unc_bkgd_14tev = unc_bkgd_14tev / n_bkgd_14tev;
+                const int n_exp_14tev           = static_cast<int>(n_signal_14tev + n_bkgd_14tev);
 
                 // signficance
-/*                 const float nsigma_14tev = 9999.0; */
-/*                 cout << "n_signal_14tev      = " << n_signal_14tev      << endl;  */
-/*                 cout << "n_bkgd_14tev        = " << n_bkgd_14tev        << endl;  */
-/*                 cout << "unc_bkgd_14tev      = " << unc_bkgd_14tev      << endl;  */
-/*                 cout << "frac_unc_bkgd_14tev = " << frac_unc_bkgd_14tev << endl;  */
-                const float sig_14tev    = at::SimpleSignficance(n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev);
-                const float nsigma_14tev = at::NSigma(n_bkgd_14tev, n_signal_14tev + n_bkgd_14tev, frac_unc_bkgd_14tev);
-                cout << "nsigma    = " << nsigma_8tev  << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
-                cout << "nsigma 14 = " << nsigma_14tev << endl;
+                const float sig_14tev    = at::SimpleSignificance(n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev);
+/*                 const float nsigma_14tev = at::NSigma(n_bkgd_14tev, n_exp_14tev, frac_unc_bkgd_14tev); */
+                const float nsigma_14tev = 9999.0;
+                cout << "n_signal_14tev      = " << n_signal_14tev      << endl;
+                cout << "n_bkgd_14tev        = " << n_bkgd_14tev        << endl;
+                cout << "unc_bkgd_14tev      = " << unc_bkgd_14tev      << endl;
+                cout << "frac_unc_bkgd_14tev = " << frac_unc_bkgd_14tev << endl;
+                cout << "scale_ttbar         = " << scale_ttbar         << endl;
+                cout << "scale_ttw           = " << scale_ttw           << endl;
+                cout << "sig 14 = " << sig_14tev << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
 
                 // test for the best SR sig (overwrite all results);
                 if (best_sr_sig_14tev.first < sig_14tev)
@@ -312,21 +326,30 @@ void CreateExpectedSignficanceHists
         } // end ybin loop 
     } // end xbin loop 
 
+    // divide 14/8
+    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev"], hc_sig["h_sig_8tev"], "h_sig_ratio", Form("Expected Significance ratio (14/8) %s", ss::GetSignalBinHistLabel(sample).c_str())));
+
     // write the histogram
     hc_sig.Write(output_file);
 }
 
-void PrintExpectedSignficanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
+void PrintExpectedSignificanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
 {
     rt::TH1Container hc(input_file);
-    gStyle->SetPadRightMargin(0.15);
-    gStyle->SetPaintTextFormat("1.0f");
     hc.SetStats(false);
-    hc.SetOption("colz");
-    hc["h_sig_best_sr"         ]->SetOption("text");
-    hc["h_nsigma_best_sr"      ]->SetOption("text");
-    hc["h_sig_best_sr_14tev"   ]->SetOption("text");
-    hc["h_nsigma_best_sr_14tev"]->SetOption("text");
-    rt::mkdir(output_path, /*force=*/true);
-    hc.Print(output_path, suffix);
+
+    gStyle->SetPaintTextFormat("1.0f");
+    rt::Print(hc["h_sig_best_sr_8tev" ], output_path, suffix, "h_sig_best_sr_8tev" , "text", false);
+    rt::Print(hc["h_sig_best_sr_14tev"], output_path, suffix, "h_sig_best_sr_14tev", "text", false);
+
+    gStyle->SetPaintTextFormat("1.1f");
+    rt::Print(hc["h_sig_8tev" ], output_path, suffix, "h_sig_8tev" , "text", false);
+    rt::Print(hc["h_sig_14tev"], output_path, suffix, "h_sig_14tev", "text", false);
+    rt::Print(hc["h_sig_ratio"], output_path, suffix, "h_sig_ratio", "text", false);
+
+//     hc.SetOption("colz");
+//     gStyle->SetPadRightMargin(0.15);
+//     gStyle->SetPaintTextFormat("1.1f");
+//     rt::mkdir(output_path, /*force=*/true);
+//     hc.Print(output_path, suffix);
 }

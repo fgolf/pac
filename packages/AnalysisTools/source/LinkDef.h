@@ -42,7 +42,7 @@
 #pragma link C++ function at::GetNtuplePath;
 #pragma link C++ function at::GetNtupleTypeFromName;
 #pragma link C++ function at::test_paths;
-#pragma link C++ function at::SimpleSignficance;
+#pragma link C++ function at::SimpleSignificance;
 #pragma link C++ function at::NSigma;
 
 #endif // __CINT__

@@ -6,9 +6,9 @@ namespace at
 {
     // return the simple signifcance 
     // note: uncertainty is absolute
-    float SimpleSignficance(const float N_sig, const float N_bkgd, const float unc_bkgd)
+    float SimpleSignificance(const float N_sig, const float N_bkgd, const float abs_unc_bkgd)
     {
-        return N_sig / sqrt(N_bkgd + unc_bkgd*unc_bkgd);
+        return N_sig / sqrt(N_bkgd + abs_unc_bkgd*abs_unc_bkgd);
     }
 
 //--------------------------------------------------------------------------------------------
