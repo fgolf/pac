@@ -169,6 +169,9 @@ void CreateExpectedSignificanceHists
     hc_sig.Add(new TH2F("h_nsigma_14tev"        , Form("N Sigma (14 TeV) %s"                   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     hc_sig.Add(new TH2F("h_sig_best_sr_14tev"   , Form("Best Signal Region (sig) (14 TeV) %s"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     hc_sig.Add(new TH2F("h_nsigma_best_sr_14tev", Form("Best Signal Region (nsigma) (14 TeV) %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+
+    hc_sig.Add(new TH2F("h_sig_14tev_opt"         , Form("Expected Significance (14 TeV, optimistic) %s"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_14tev_opt" , Form("Best Signal Region (sig) (14 TeV, optimistic) %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     //for (size_t i = 0; i != sr_nums.size(); i++)
     //{
     //    const unsigned int sr_num = sr_nums.at(i);
@@ -211,10 +214,11 @@ void CreateExpectedSignificanceHists
 /*             cout << sparm0 << "\t" << sparm1 << "\t" << xbin << "\t" << ybin << endl; */
 
             // store the best SR per sparm
-            std::pair<float, unsigned int> best_sr_sig_8tev(-99999.0, 0);
-            std::pair<float, unsigned int> best_sr_nsigma_8tev(-99999.0, 0);
-            std::pair<float, unsigned int> best_sr_sig_14tev(-99999.0, 0);
-            std::pair<float, unsigned int> best_sr_nsigma_14tev(-99999.0, 0);
+            std::pair<float, unsigned int> best_sr_sig_8tev            (-99999.0, 0);
+            std::pair<float, unsigned int> best_sr_nsigma_8tev         (-99999.0, 0);
+            std::pair<float, unsigned int> best_sr_sig_14tev           (-99999.0, 0);
+            std::pair<float, unsigned int> best_sr_nsigma_14tev        (-99999.0, 0);
+            std::pair<float, unsigned int> best_sr_sig_14tev_optimistic(-99999.0, 0);
 
             // loop over signal regions
             for (size_t k = 0; k != sr_nums.size(); k++)
@@ -228,6 +232,7 @@ void CreateExpectedSignificanceHists
                 // yield_info object
                 const yield_info_t& yi = *std::find_if(yield_infos.begin(), yield_infos.end(), CompareSR(sr_num));
 
+                // -----------------------------// 
                 // 8 TeV significane
                 // -----------------------------// 
 
@@ -253,7 +258,7 @@ void CreateExpectedSignificanceHists
 /*                 rt::SetBinContent2D(hc_sig[h_sig_sr_name], sparm0, sparm1, sig     ); */
 /*                 rt::SetBinContent2D(hc_sig[h_num_sr_name], sparm0, sparm1, n_signal); */
 
-                // test for the best SR sig (overwrite all results);
+                // test for the best SR sig (overwrite old results);
                 if (best_sr_sig_8tev.first < sig_8tev)
                 {
                     best_sr_sig_8tev = std::make_pair(sig_8tev, sr_num);
@@ -261,7 +266,7 @@ void CreateExpectedSignificanceHists
                 rt::SetBinContent2D(hc_sig["h_sig_8tev"        ], sparm0, sparm1, best_sr_sig_8tev.first );
                 rt::SetBinContent2D(hc_sig["h_sig_best_sr_8tev"], sparm0, sparm1, best_sr_sig_8tev.second);
 
-                // test for the best SR nsigma (overwrite all results);
+                // test for the best SR nsigma (overwrite old results);
                 if (best_sr_nsigma_8tev.first < nsigma_8tev)
                 {
                     best_sr_nsigma_8tev = std::make_pair(nsigma_8tev, sr_num);
@@ -269,6 +274,7 @@ void CreateExpectedSignificanceHists
                 rt::SetBinContent2D(hc_sig["h_nsigma_8tev"        ], sparm0, sparm1, best_sr_nsigma_8tev.first );
                 rt::SetBinContent2D(hc_sig["h_nsigma_best_sr_8tev"], sparm0, sparm1, best_sr_nsigma_8tev.second);
 
+                // -----------------------------// 
                 // 14 TeV significane
                 // -----------------------------// 
 
@@ -306,7 +312,7 @@ void CreateExpectedSignificanceHists
                 cout << "scale_ttw           = " << scale_ttw           << endl;
                 cout << "sig 14 = " << sig_14tev << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
 
-                // test for the best SR sig (overwrite all results);
+                // test for the best SR sig (overwrite old results);
                 if (best_sr_sig_14tev.first < sig_14tev)
                 {
                     best_sr_sig_14tev = std::make_pair(sig_14tev, sr_num);
@@ -314,7 +320,7 @@ void CreateExpectedSignificanceHists
                 rt::SetBinContent2D(hc_sig["h_sig_14tev"        ], sparm0, sparm1, best_sr_sig_14tev.first );
                 rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev"], sparm0, sparm1, best_sr_sig_14tev.second);
 
-                // test for the best SR nsigma (overwrite all results);
+                // test for the best SR nsigma (overwrite old results);
                 if (best_sr_nsigma_14tev.first < nsigma_14tev)
                 {
                     best_sr_nsigma_14tev = std::make_pair(nsigma_14tev, sr_num);
@@ -322,12 +328,47 @@ void CreateExpectedSignificanceHists
                 rt::SetBinContent2D(hc_sig["h_nsigma_14tev"        ], sparm0, sparm1, best_sr_nsigma_14tev.first );
                 rt::SetBinContent2D(hc_sig["h_nsigma_best_sr_14tev"], sparm0, sparm1, best_sr_nsigma_14tev.second);
 
+                // -----------------------------// 
+                // 14 TeV significane -- optimistic scenario
+                // -----------------------------// 
+
+                // Rare Prediction Uncertainty:
+                // Assume the statistical uncertainty on the rare MC is negligable
+                // Assume the systematic uncertainty on the rare MC is improved to 30%
+                const float rare_unc_optimistic = 0.30 * yi.rare;
+
+                // Fake Prediction Uncertainty:
+                // Assume the stastical unc on the FR is constant (time driven by pre-scaled triggers).  Assume its about 15%. 
+                // Assume the stastical unc on the SB count is reduced with more statistics (reduced by factor of sqrt(300/19.5) ~ 8).
+                // --> call statistical on the fake prediction about 20%.
+                // Assume the systematic uncertainty on the fake is improved to 40%
+                const float fake_unc_optimistic = sqrt(0.40*0.40 + 0.20*0.20) * yi.fake;
+
+                // scale background unc
+                const float unc_bkgd_14tev_optimistic = scale_lumi*sqrt(pow(scale_ttbar * fake_unc_optimistic,2) + pow(scale_ttbar * yi.flip_unc, 2) + pow(scale_ttw * rare_unc_optimistic, 2));
+                cout << "fake_unc_optimistic       = " << fake_unc_optimistic        << endl;
+                cout << "rare_unc_optimistic       = " << rare_unc_optimistic        << endl;
+                cout << "unc_bkgd_14tev_optimistic = " << unc_bkgd_14tev_optimistic  << endl;
+
+                // significance
+                const float sig_14tev_optimistic = at::SimpleSignificance(n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev_optimistic);
+
+                // test for the best SR sig (overwrite old results);
+                if (best_sr_sig_14tev_optimistic.first < sig_14tev_optimistic)
+                {
+                    best_sr_sig_14tev_optimistic = std::make_pair(sig_14tev_optimistic, sr_num);
+                }
+                rt::SetBinContent2D(hc_sig["h_sig_14tev_opt"        ], sparm0, sparm1, best_sr_sig_14tev_optimistic.first );
+                rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev_opt"], sparm0, sparm1, best_sr_sig_14tev_optimistic.second);
+                cout << "sig 14 = " << sig_14tev_optimistic << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
+
             } // end signal region loop
         } // end ybin loop 
     } // end xbin loop 
 
     // divide 14/8
-    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev"], hc_sig["h_sig_8tev"], "h_sig_ratio", Form("Expected Significance ratio (14/8) %s", ss::GetSignalBinHistLabel(sample).c_str())));
+    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev"    ], hc_sig["h_sig_8tev"], "h_sig_ratio"    , Form("Expected Significance ratio (14/8) %s"           , ss::GetSignalBinHistLabel(sample).c_str())));
+    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev_opt"], hc_sig["h_sig_8tev"], "h_sig_ratio_opt", Form("Expected Significance ratio (14 optimistic/8) %s", ss::GetSignalBinHistLabel(sample).c_str())));
 
     // write the histogram
     hc_sig.Write(output_file);
@@ -343,9 +384,11 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
     rt::Print(hc["h_sig_best_sr_14tev"], output_path, suffix, "h_sig_best_sr_14tev", "text", false);
 
     gStyle->SetPaintTextFormat("1.1f");
-    rt::Print(hc["h_sig_8tev" ], output_path, suffix, "h_sig_8tev" , "text", false);
-    rt::Print(hc["h_sig_14tev"], output_path, suffix, "h_sig_14tev", "text", false);
-    rt::Print(hc["h_sig_ratio"], output_path, suffix, "h_sig_ratio", "text", false);
+    rt::Print(hc["h_sig_8tev"     ], output_path, suffix, "h_sig_8tev"     , "text", false);
+    rt::Print(hc["h_sig_14tev"    ], output_path, suffix, "h_sig_14tev"    , "text", false);
+    rt::Print(hc["h_sig_ratio"    ], output_path, suffix, "h_sig_ratio"    , "text", false);
+    rt::Print(hc["h_sig_14tev_opt"], output_path, suffix, "h_sig_14tev_opt", "text", false);
+    rt::Print(hc["h_sig_ratio_opt"], output_path, suffix, "h_sig_ratio_opt", "text", false);
 
 //     hc.SetOption("colz");
 //     gStyle->SetPadRightMargin(0.15);
