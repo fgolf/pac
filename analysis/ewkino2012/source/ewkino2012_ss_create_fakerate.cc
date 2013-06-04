@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     bool apply_tight_d0_cut    = true;
     float lumi		           = 1.0;
     int charge                 = 0;
-    std::string fr_type_name   = "hpt";
+    std::string fr_type_name   = "ss";
     float away_jet_pt          = -1.;
     float away_jet_dphi        = -1.;
     float mu_iso_denom         = 0.4;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         ("charge"        , po::value<int>(&charge)                 , "-1: +ve, -1: -ve, 0: both"                        )
         ("verbose"       , po::value<bool>(&verbose)               , "verbosity"                                        )
         ("tight_ip"      , po::value<bool>(&apply_tight_d0_cut)    , "apply tight d0 cut (default is true)"             )
-        ("fr_type"       , po::value<std::string>(&fr_type_name)   , "fake rate type name: hpt(default), eth, truncated")
+        ("fr_type"       , po::value<std::string>(&fr_type_name)   , "fake rate type name: ss(default)"                 )
         ("jet_pt"        , po::value<float>(&away_jet_pt)          , "minimum away jet pt cut"                          )
         ("jet_dphi"      , po::value<float>(&away_jet_dphi)        , "minimum away jet dphi cut"                        )
         ("mu_iso"        , po::value<float>(&mu_iso_denom)         , "muon isolation extrapolation"                     )
@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
     // -------------------------------------------------------------------------------------------------//
 
     // directories
-    std::string analysis_path = rt::getenv("PAC") + "/analysis/ss2012";
+    std::string analysis_path = rt::getenv("PAC") + "/analysis/ewkino2012";
     root_file_name = rt::string_contains(root_file_name, ".root") ? rt::string_remove_all(root_file_name, ".root") : root_file_name;
     std::string root_base_name = rt::basename(root_file_name);
     std::string full_output_path = Form("%s/plots/fake_rates/%s/%s.root", analysis_path.c_str(), root_base_name.c_str(), root_file_name.c_str()); 
