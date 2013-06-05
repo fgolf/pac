@@ -2517,7 +2517,7 @@ namespace ss
         tree.SetAlias("dfw", "fr1*fr2");
 
         // scale factors
-        tree.SetAlias("sf", "sf_dileptrig*sf_lepeff");
+        tree.SetAlias("sf", "sf_dileptrig*sf_dilepeff");
 
         // do btag scale factor
         if (do_btag_sf)
