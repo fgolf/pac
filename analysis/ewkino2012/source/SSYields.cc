@@ -460,9 +460,9 @@ namespace ewkino_ss
         m["wwqq"] += GetYield(option, Sample::wpwpqq, signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
         // wh_zh_tth;
-        // m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_hww, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        // m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_hzz, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        // m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_hww, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_hzz, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wh_zh_tth"] += GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
                                     
         // the rest of the rare MC
         // m["wgstar2e"     ] = GetYield(option, Sample::wgstar2e     , signal_region, analysis_type, signal_region_type, charge_option, output_path);
@@ -482,9 +482,9 @@ namespace ewkino_ss
         m["wzz"          ] = GetYield(option, Sample::wzz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["zzz"          ] = GetYield(option, Sample::zzz          , signal_region, analysis_type, signal_region_type, charge_option, output_path);
         m["ww_ds"        ] = GetYield(option, Sample::ww_ds        , signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        // m["wh_zh_tth_hww"] = GetYield(option, Sample::wh_zh_tth_hww, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        // m["wh_zh_tth_hzz"] = GetYield(option, Sample::wh_zh_tth_hzz, signal_region, analysis_type, signal_region_type, charge_option, output_path);
-        // m["wh_zh_tth_htt"] = GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wh_zh_tth_hww"] = GetYield(option, Sample::wh_zh_tth_hww, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wh_zh_tth_hzz"] = GetYield(option, Sample::wh_zh_tth_hzz, signal_region, analysis_type, signal_region_type, charge_option, output_path);
+        m["wh_zh_tth_htt"] = GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
         // handle ttg differently --> apply SF (until we get a larger dataset)
         const bool apply_ttg_sf = true;
@@ -541,9 +541,9 @@ namespace ewkino_ss
         yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wzz"          ]); 
         yield_mc = AddUncertaintiesAbsolute(yield_mc, m["zzz"          ]); 
         yield_mc = AddUncertaintiesAbsolute(yield_mc, m["ww_ds"        ]); 
-        // yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_hww"]); 
-        // yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_hzz"]); 
-        // yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_htt"]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_hww"]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_hzz"]); 
+        yield_mc = AddUncertaintiesAbsolute(yield_mc, m["wh_zh_tth_htt"]); 
         m["mc"] = yield_mc;
     
      
@@ -565,9 +565,9 @@ namespace ewkino_ss
         yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wzz"          ]); 
         yield_rare = AddUncertaintiesAbsolute(yield_rare, m["zzz"          ]); 
         yield_rare = AddUncertaintiesAbsolute(yield_rare, m["ww_ds"        ]); 
-        // yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_hww"]); 
-        // yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_hzz"]); 
-        // yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_htt"]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_hww"]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_hzz"]); 
+        yield_rare = AddUncertaintiesAbsolute(yield_rare, m["wh_zh_tth_htt"]); 
         m["rare"] = yield_rare;
      
         // done

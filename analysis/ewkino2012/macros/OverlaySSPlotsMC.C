@@ -39,7 +39,7 @@ const std::string bkgds_all[] = {
     // "dy",
     "dyjets",
     "wjets",
-    "ttjets",
+    // "ttjets",
     "ttdil",
     "ttotr",
     "ttslb",
@@ -47,9 +47,9 @@ const std::string bkgds_all[] = {
     "t_schan",
     "t_tchan",
     "t_tw",
-    // "wh_zh_tth_hww",
-    // "wh_zh_tth_hzz",
-    // "wh_zh_tth_htt",
+    "wh_zh_tth_hww",
+    "wh_zh_tth_hzz",
+    "wh_zh_tth_htt"
 };
 
 // const Int_t colors[] = {2,3,4,5,6,7,8,9,28,30,38,40,41,42,46,102,152,103,153,104,154,105,155,106,156,107,157,108,158,109,159};

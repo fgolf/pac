@@ -40,9 +40,9 @@ const std::string bkgds_all[] = {
     "t_schan",
     "t_tchan",
     "t_tw",
-    // "wh_zh_tth_hww",
-    // "wh_zh_tth_hzz",
-    // "wh_zh_tth_htt",
+    "wh_zh_tth_hww",
+    "wh_zh_tth_hzz",
+    "wh_zh_tth_htt"
 };
 
 // print the yields
