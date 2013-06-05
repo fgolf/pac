@@ -153,7 +153,7 @@ namespace ewkino
             {
                 switch (signal_region)
                 {
-                case SignalRegion::sr0 : return (baseline);
+                case SignalRegion::sr0 : return (pass_sr0);
                 case SignalRegion::sr1 : return (pass_sr1);
                 case SignalRegion::sr2 : return (pass_sr2);
                 case SignalRegion::sr3 : return (pass_sr3);
@@ -275,10 +275,10 @@ namespace ewkino
         switch (anal_type)
         {
             case AnalysisType::ss:
-                tree.SetAlias("sr0" , "lep_pt && nbtags==0 && (njets==2 || njets==3)"); 
-                tree.SetAlias("sr1" , "lep_pt && nbtags==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
-                tree.SetAlias("sr2" , "lep_pt && nbtags==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120.");
-                tree.SetAlias("sr3" , "lep_pt && nbtags==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3) && dijet_mass<120. && pass_zee_veto");
+                tree.SetAlias("sr0" , "lep_pt && nbs==0 && (njets==2 || njets==3)"); 
+                tree.SetAlias("sr1" , "lep_pt && nbs==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
+                tree.SetAlias("sr2" , "sr1 && dijet_mass<120.");
+                tree.SetAlias("sr3" , "sr2 && pass_zee_veto");
                 break;
             case AnalysisType::static_size:
                 /*do nothing*/
