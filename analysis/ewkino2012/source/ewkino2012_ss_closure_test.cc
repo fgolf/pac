@@ -23,7 +23,7 @@ try
     long number_of_events           = -1;
     std::string input_file          = "";
     std::string output_file         = "";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_26Feb2013.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_qcd_standard_v14May2013.root";
     std::string mufr_hist_name      = "h_mufr40c";
     std::string elfr_hist_name      = "h_elfr40c";
     std::string vtxreweight_file    = "";
@@ -59,7 +59,7 @@ try
         ("met"      , po::value<float>(&met_cut)                  , "met to cut on"                                             )
         ("ht"       , po::value<float>(&ht_cut)                   , "ht to cut on"                                              )
         ("sr"       , po::value<unsigned int>(&signal_region_num) , "signal region number"                                      )
-        //("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
+        ("do_sf"    , po::value<bool>(&do_scale_factors)          , "use the scale factors (default is true)"                   )
         ("do_1fb"   , po::value<bool>(&do_scale1fb)               , "use the scale1fb (default is false)"                       )
         ("lumi"     , po::value<float>(&lumi)                     , "luminosity"                                                )
         ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
@@ -85,15 +85,15 @@ try
     }
 
     // check that input file exists and is specified
-    //if (!input_file.empty())
-    //{ 
-    //    if (!rt::exists(input_file))
-    //    {
-    //        cout << "ERROR: ss2012_plots: input file " << input_file << " not found" << endl;
-    //        cout << desc << "\n";
-    //        return 1;
-    //    }
-    //}
+    if (!input_file.empty())
+    { 
+       if (!rt::exists(input_file))
+       {
+           cout << "ERROR: ewkino2012_ss_closure_test: input file " << input_file << " not found" << endl;
+           cout << desc << "\n";
+           return 1;
+       }
+    }
 
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
@@ -118,14 +118,12 @@ try
     {
         if (input_file.empty())
         {
-            cout << "ERROR: ss2012_plots: input file or sample not found -- specify one or the other" << endl; 
+            cout << "ERROR: ewkino2012_ss_closure_test: input file or sample not found -- specify one or the other" << endl; 
             cout << desc << "\n";
             return 1;
         }
         else
         {
-            //chain = new TChain("tree");
-            //chain->Add(input_file.c_str());
             chain = rt::CreateTChainFromCommaSeperatedList(input_file, "tree");
             if (output_file.empty())
             {
@@ -142,15 +140,15 @@ try
         if (input_file.empty())
         {
             input_file = Form("babies/%s/%s.root", ati.short_name.c_str(), sample_name.c_str());
-            //                 // special case for ttbar breakdown
-            //                 switch (sample)
-            //                 {
-            //                     case at::Sample::ttdil: input_file = Form("babies/%s/ttdil.root", ati.short_name.c_str()); break; 
-            //                     case at::Sample::ttotr: input_file = Form("babies/%s/ttotr.root", ati.short_name.c_str()); break;
-            //                     case at::Sample::ttslb: input_file = Form("babies/%s/ttslb.root", ati.short_name.c_str()); break;
-            //                     case at::Sample::ttslo: input_file = Form("babies/%s/ttslo.root", ati.short_name.c_str()); break;
-            //                     default: {/*do nothing*/}
-            //                 }
+            // special case for ttbar breakdown
+            switch (sample)
+            {
+            case at::Sample::ttdil: input_file = Form("babies/%s/ttdil.root", ati.short_name.c_str()); break; 
+            case at::Sample::ttotr: input_file = Form("babies/%s/ttotr.root", ati.short_name.c_str()); break;
+            case at::Sample::ttslb: input_file = Form("babies/%s/ttslq.root", ati.short_name.c_str()); break;
+            case at::Sample::ttslo: input_file = Form("babies/%s/ttslq.root", ati.short_name.c_str()); break;
+            default: {/*do nothing*/}
+            }
             chain = new TChain("tree");
             chain->Add(input_file.c_str());
         }
