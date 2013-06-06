@@ -14,6 +14,7 @@
 #include <vector>
 #include "TH2F.h"
 #include "FakeRateType.h"
+#include "EWKINO2012_SS.h"
 
 class PlotLooper : public at::AnalysisWithHist
 {
@@ -98,6 +99,8 @@ private:
     float GetFlipRateValue(int lep_id, float pt, float eta) const; 
     float GetFlipRateError(int lep_id, float pt, float eta) const; 
     at::FlipRateBinInfo GetFlipRateBinInfo() const;
+
+    bool passesMVAJetId(LorentzVector p4, float mva_value, int tightness);    
 };
 
 #endif // PLOTLOOPER_HPP
