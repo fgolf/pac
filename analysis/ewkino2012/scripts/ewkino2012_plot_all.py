@@ -36,7 +36,6 @@ samples = [
 	# "dy",
 	"dyjets",
 	"wjets",
-	"ttjets",
 	"ttdil",
 	"ttotr",
 	"ttslb",
@@ -47,15 +46,13 @@ samples = [
 	"wh_zh_tth_hww",
 	"wh_zh_tth_hzz",
 	"wh_zh_tth_htt"
-        # "tchiwh-150-1",
-        # "tchiwh-200-1",
         ]
 
 # supported signal regions
 # ---------------------------------------------------------------------------------- #
 
-incl_signal_regions = [ 0,  1,  2, 3]
-excl_signal_regions = [ 0,  1,  2, 3]
+incl_signal_regions = [ 0, 1,  2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+excl_signal_regions = [ 0, 1,  2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
 # parse inputs
 # ---------------------------------------------------------------------------------- #
@@ -89,6 +86,7 @@ parser.add_option("--mc_only"         , action="store_true"  , dest="mc_only"   
 parser.add_option("--combine_signals" , action="store_true"  , dest="combine_signals" , default=False , help="combine signals"                                 )
 parser.add_option("--combine_bkgds"   , action="store_true"  , dest="combine_bkgds"   , default=False , help="combine backgrounds"                             )
 parser.add_option("--do_sf"           , action="store_false" , dest="do_sf"           , default=True  , help="apply mc scale factors"                          )
+parser.add_option("--print_evt_list"  , action="store_true"  , dest="print_evt_list"  , default=False , help="print evt,ls,run for is_ss events to file"       )
 
 (options, args) = parser.parse_args()
 
@@ -165,6 +163,10 @@ def make_hist(signal_region, sample):
 	cmd += " --charge %d"                         % int(options.charge)
 	cmd += " --anal_type %s"                      % options.anal_type
         cmd += " --do_sf %d"                          % int(options.do_sf)
+
+        if (options.print_evt_list):
+                event_list_file = "logs/%s/%s_event_list.log" % (signal_region_stem, sample)
+                cmd += " --evt_list %s" % str(event_list_file)
 
         if (is_signal):
                 if (len(sample_list) >= 2):
