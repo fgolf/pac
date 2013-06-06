@@ -4,6 +4,7 @@
 #include "EWKINO2012_SS.h"
 #include <stdexcept>
 #include "at/DileptonHypType.h"
+#include "rt/RootTools.h"
 
 // inclusive signal regions infos
 // ---------------------------------------------------------------------------------------------- //
@@ -42,6 +43,70 @@ const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] =
         "sr3: sr2 + not 76 < mee < 106 GeV",
         // latex
         "SR2 + $M_{ee} < 76 || M_{ee} > 106$ GeV"
+    },
+    { 
+        // name
+        "sr4",
+        // title
+        "sr4: sr3 + njets==2",
+        // latex
+        "SR3 + njets==2"
+    },
+    { 
+        // name
+        "sr5",
+        // title
+        "sr5: sr3 + no loose btags",
+        // latex
+        "SR3 + no loose btags"
+    },
+    { 
+        // name
+        "sr6",
+        // title
+        "sr6: sr5 + HT < 200 GeV + met > 30 GeV",
+        // latex
+        "SR5 + $H_{T} < 200$ GeV + met $> 30$ GeV"
+    },
+    { 
+        // name
+        "sr7",
+        // title
+        "sr7: sr6 + no third muon",
+        // latex
+        "SR6 + no third muon"
+    },
+    { 
+        // name
+        "sr8",
+        // title
+        "sr8: sr7 + |#Delta#eta_{ll}| < 2.0",
+        // latex
+        "SR7 + $\\abs{\\Delta\\eta_{\\ell\\ell}} < 2.0$"
+    },
+    { 
+        // name
+        "sr9",
+        // title
+        "sr9: sr8 + max(pt1,pt2)>30 GeV",
+        // latex
+        "SR8 + max$(p^{l1}_{T},p^{l2}_{T}) > 30$ GeV"
+    },
+    { 
+        // name
+        "sr10",
+        // title
+        "sr10: sr9 + HT < 160 GeV",
+        // latex
+        "SR9 + $H_{T} < 160$ GeV"
+    },
+    { 
+        // name
+        "sr11",
+        // title
+        "sr11: sr10 + pfmet > 90 GeV",
+        // latex
+        "SR10 + $met > 90$ GeV"
     },
 };
 
@@ -148,6 +213,14 @@ namespace ewkino
             const bool pass_sr1      = (baseline && ewkino_ss::passes_isotrk_veto() && ewkino_ss::passes_tau_veto() && (ewkino_ss::njets_pv_tight0() == 2 || ewkino_ss::njets_pv_tight0()==3));
             const bool pass_sr2      = (pass_sr1 && ewkino_ss::dijet_mass() < 120.);
             const bool pass_sr3      = (pass_sr2 && pass_zee_veto);
+            const bool pass_sr4      = (pass_sr3 && ewkino_ss::njets_pv_tight0()==2);
+            const bool pass_sr5      = (pass_sr3 && ewkino_ss::nbtags_loose()==0);
+            const bool pass_sr6      = (pass_sr5 && ewkino_ss::ht() < 200 && ewkino_ss::pfmet() > 30);
+            const bool pass_sr7      = (pass_sr6 && not ((abs(ewkino_ss::lep3_pdgid())==13 && ewkino_ss::lep3_p4().pt()>5.) || (abs(ewkino_ss::lep3_pdgid())==11 && ewkino_ss::lep3_p4().pt()>10.)));
+            const bool pass_sr8      = (pass_sr7 && (rt::DeltaEta(ewkino_ss::lep1_p4(), ewkino_ss::lep2_p4()) < 2.0));
+            const bool pass_sr9      = (pass_sr8 && (ewkino_ss::lep1_p4().pt()>30. || ewkino_ss::lep2_p4().pt()>30.));
+            const bool pass_sr10     = (pass_sr9 && ewkino_ss::ht() < 160);
+            const bool pass_sr11     = (pass_sr10 && ewkino_ss::pfmet() > 90);
 
             if (signal_region_type==SignalRegionType::inclusive)
             {
@@ -157,6 +230,14 @@ namespace ewkino
                 case SignalRegion::sr1 : return (pass_sr1);
                 case SignalRegion::sr2 : return (pass_sr2);
                 case SignalRegion::sr3 : return (pass_sr3);
+                case SignalRegion::sr4 : return (pass_sr4);
+                case SignalRegion::sr5 : return (pass_sr5);
+                case SignalRegion::sr6 : return (pass_sr6);
+                case SignalRegion::sr7 : return (pass_sr7);
+                case SignalRegion::sr8 : return (pass_sr8);
+                case SignalRegion::sr9 : return (pass_sr9);
+                case SignalRegion::sr10 : return (pass_sr10);
+                case SignalRegion::sr11 : return (pass_sr11);
                 };
             }
 
@@ -222,6 +303,9 @@ namespace ewkino
         tree.SetAlias("fl2"    , "lep2_wflip/(1.0-lep2_wflip)"); 
         tree.SetAlias("l2_dz"  , "fabs(lep2_dz)"              ); 
 
+        tree.SetAlias("l3_id", "lep3_pdgid"  );
+        tree.SetAlias("l3_pt", "lep3_p4.pt()");
+
         // truth matched
         tree.SetAlias("is_ss_mc3"   , "lep1_mc3id*lep2_mc3id>0"             );
         tree.SetAlias("lep_is_fromw", "lep1_is_fromw==1 && lep2_is_fromw==1");
@@ -279,6 +363,14 @@ namespace ewkino
                 tree.SetAlias("sr1" , "lep_pt && nbs==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
                 tree.SetAlias("sr2" , "sr1 && dijet_mass<120.");
                 tree.SetAlias("sr3" , "sr2 && pass_zee_veto");
+                tree.SetAlias("sr4" , "sr3 && njets_pv_tight0==2");
+                tree.SetAlias("sr5" , "sr3 && nbtags_loose==2");
+                tree.SetAlias("sr6" , "sr5 && ht < 200 && pfmet > 30");
+                tree.SetAlias("sr7" , "sr6 && !((abs(l3_id)==13) && l3_pt>5) && !((abs(l3_id)==11) && l3_pt>15)");
+                tree.SetAlias("sr8" , "sr7 && abs(l1_eta-l2_eta) < 2.0");
+                tree.SetAlias("sr9" , "sr8 && max(l1_pt,l2_pt)>30.");
+                tree.SetAlias("sr10" , "sr9 && pfmet > 90");
+                tree.SetAlias("sr11" , "sr10 && ht < 160");
                 break;
             case AnalysisType::static_size:
                 /*do nothing*/

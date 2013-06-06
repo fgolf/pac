@@ -19,6 +19,14 @@ namespace ewkino
             sr1  = 1,  // baseline + iso track veto (stop), tau veto (stop), jet-PV matching
             sr2  = 2,  // sr1 + mjj < 120
             sr3  = 3,  // sr2 + veto 76 < M_ee < 106
+            sr4  = 4,  // sr3 + exactly 2 jets
+            sr5  = 5,  // sr3 + no loose btags
+            sr6  = 6,  // sr5 + ht < 200 && pfmet > 30
+            sr7  = 7,  // sr6 + no third muon w/ pt > 5
+            sr8  = 8,  // sr7 + |deta(lep1,lep2)| < 2.0
+            sr9  = 9,  // sr8 + max(pt1,pt2) > 30
+            sr10 = 10,  // sr9 + ht < 160
+            sr11 = 11,  // sr10 + pfmet > 90
             // keep track of the size
             static_size
         };
