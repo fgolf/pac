@@ -409,6 +409,8 @@ void PlotLooper::EndJob()
     SetPredictionAndUncertainty(m_sample, hc, "pt3_mu"            ,"Extra muon p_{T} (X);p_{T} (GeV);Events"                              , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "dilep_pt"          ,"dilepton p_{T} (X);p^{ll}_{T} (GeV);Events"                           , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "dilep_eta"         ,"dilepton #eta;#eta_{ll};Events"                                       , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "dijet_pt_mass"     ,"dijet p_{T}/mass;p^{jj}_{T}/M_{jj};Events"                            , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "max_mt"            ,"max m_{T};m_{T} (GeV) (X);Events"                                     , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_ht"            ,"H_{T};H_{T} (GeV);Events"                                             , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_met"           ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_njets"         ,"# jets;# jets;Events"                                                 , 0.0, 0.0, 0.0, m_sf_flip);
@@ -621,7 +623,9 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_pt3_el%s"        , ns.c_str()), Form("Extra electron p_{T}%s;p_{T} (GeV);Events"                     , ts.c_str()), 25 , 0   , 50  ));
             hc.Add(new TH1F(Form("h_pt3_mu%s"        , ns.c_str()), Form("Extra muon p_{T}%s;p_{T} (GeV);Events"                         , ts.c_str()), 25 , 0   , 50  ));
             hc.Add(new TH1F(Form("h_dilep_pt%s"      , ns.c_str()), Form("dilepton p_{T}%s;p^{ll}_{T} (GeV);Events"                      , ts.c_str()), 25 , 0   , 100 ));
-            hc.Add(new TH1F(Form("h_dilep_eta%s"     , ns.c_str()), Form("dilepton #eta%s;#eta_{ll};Events"                              , ts.c_str()), 25 , 0   , 2.5  ));
+            hc.Add(new TH1F(Form("h_dilep_eta%s"     , ns.c_str()), Form("dilepton #eta%s;#eta_{ll};Events"                              , ts.c_str()), 25 , 0   , 2.5 ));
+            hc.Add(new TH1F(Form("h_dijet_pt_mass%s" , ns.c_str()), Form("dijet p_{T}/mass%s;p^{jJ}_{T}/M_{jj};Events"                   , ts.c_str()), 30 , 0   , 3.0 ));            
+            hc.Add(new TH1F(Form("h_max_mt%s"        , ns.c_str()), Form("max m_{T}%s;m_{T} (GeV);Events"                                , ts.c_str()), 20 , 0   , 200 ));
 
             hc.Add(new TH1F(Form("h_minjpt_jjpt%s"   , ns.c_str()), Form("min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T}%s;min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T};Events", ts.c_str()), 40 , 0   , 4 ));
 
@@ -648,6 +652,7 @@ void PlotLooper::BookHists()
                 hc.Add(new TH1F(Form("h_lep1_mt%s%s"       , hn.c_str(), ns.c_str()), Form("lep1 m_{T}%s%s;m_{T} (GeV);Events"         , ts.c_str(), ht.c_str()), 20 , 0   , 200 ));
                 hc.Add(new TH1F(Form("h_lep2_mt%s%s"       , hn.c_str(), ns.c_str()), Form("lep2 m_{T}%s%s;m_{T} (GeV);Events"         , ts.c_str(), ht.c_str()), 20 , 0   , 200 ));
                 hc.Add(new TH1F(Form("h_pt3%s%s"           , hn.c_str(), ns.c_str()), Form("Third lepton p_{T}%s%s;p_{T} (GeV);Events" , ts.c_str(), ht.c_str()), 25 , 0   , 50  ));
+                hc.Add(new TH1F(Form("h_max_mt%s%s"        , hn.c_str(), ns.c_str()), Form("max m_{T}%s%s;m_{T} (GeV);Events"          , ts.c_str(), ht.c_str()), 20 , 0   , 200 ));
             }
         }
             
@@ -1028,6 +1033,7 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_njets"  +qs], njets()     , evt_weight);
         rt::Fill(hc["h_lep1_mt"+qs], lep1_mt()  , evt_weight);
         rt::Fill(hc["h_lep2_mt"+qs], lep2_mt()  , evt_weight);
+        rt::Fill(hc["h_max_mt" +qs], std::max(lep1_mt(),lep2_mt()), evt_weight);
 
         rt::Fill(hc["h_pt1"    +hs+qs], p41.pt()    , evt_weight);
         rt::Fill(hc["h_pt2"    +hs+qs], p42.pt()    , evt_weight);
@@ -1037,6 +1043,7 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_njets"  +hs+qs], njets()     , evt_weight);
         rt::Fill(hc["h_lep1_mt"+hs+qs], lep1_mt()  , evt_weight);
         rt::Fill(hc["h_lep2_mt"+hs+qs], lep2_mt()  , evt_weight);
+        rt::Fill(hc["h_max_mt" +hs+qs], std::max(lep1_mt(),lep2_mt()), evt_weight);
 
         LorentzVector dilep_p4 = lep1_p4() + lep2_p4();
         rt::Fill(hc["h_dilep_pt"+qs], dilep_p4.pt(), evt_weight);
@@ -1128,6 +1135,7 @@ int PlotLooper::operator()(long event)
             rt::Fill(hc["h_dijet_dphi"+qs], rt::DeltaPhi(matched_jets_p4.at(0), matched_jets_p4.at(1)), evt_weight);
             rt::Fill(hc["h_dijet_deta"+qs], rt::DeltaEta(matched_jets_p4.at(0), matched_jets_p4.at(1)), evt_weight);
             rt::Fill(hc["h_dijet_dr"+qs], rt::DeltaR(matched_jets_p4.at(0), matched_jets_p4.at(1)), evt_weight);
+            rt::Fill(hc["h_dijet_pt_mass"+qs], dijet_p4.pt()/dijet_p4.mass(), evt_weight);
 
             //
             // fill min(jet1 pt, jet2 pt) / pt(jj)
