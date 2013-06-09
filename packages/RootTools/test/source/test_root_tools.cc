@@ -1,6 +1,6 @@
 #if !defined(__CINT__) || defined(__MAKECINT__)
-#include "rt/MiscTools.hpp"
-#include "rt/TH1Container.hpp"
+#include "rt/MiscTools.h"
+#include "rt/TH1Container.h"
 #include <iostream>
 #include "TSystem.h"
 #include "TH1D.h"

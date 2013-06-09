@@ -35,8 +35,8 @@ using namespace boost;
 namespace rt
 {
 
-// non members helpers
-// ---------------------------------------------------------------------------------------- //
+    // non members helpers
+    // ---------------------------------------------------------------------------------------- //
 
     std::string UniqueHistName()
     {
@@ -45,7 +45,7 @@ namespace rt
     }
 
 
-// simple Rectangle 
+    // simple Rectangle 
     struct Rectangle
     {
         double x1;
@@ -55,7 +55,7 @@ namespace rt
     };
 
 
-// simple 2D Point 
+    // simple 2D Point 
     struct Point
     {
         double x;
@@ -94,7 +94,7 @@ namespace rt
     {
         //upper right corner (short name for clarity in the array);
         static Point c = {1.0 - gStyle->GetPadRightMargin(), 1.0 - gStyle->GetPadTopMargin()};
-    
+
         //offset (short name for clarity in the array);
         static Point o = {(c.x - gStyle->GetPadLeftMargin())/4.0, (c.y - gStyle->GetPadBottomMargin())/4.0 };
 
@@ -104,14 +104,14 @@ namespace rt
         {
             return default_placement;
         }
-    
+
         const Rectangle s_cell_array[4][4] =
-            {
-                { {c.x-4*o.x,c.y-1*o.y,c.x-3*o.x,c.y-0*o.y}, {c.x-3*o.x,c.y-1*o.y,c.x-2*o.x,c.y-0*o.y}, {c.x-2*o.x,c.y-1*o.y,c.x-1*o.x,c.y-0*o.y}, {c.x-1*o.x,c.y-1*o.y,c.x-0*o.x,c.y-0*o.y} },
-                { {c.x-4*o.x,c.y-2*o.y,c.x-3*o.x,c.y-1*o.y}, {c.x-3*o.x,c.y-2*o.y,c.x-2*o.x,c.y-1*o.y}, {c.x-2*o.x,c.y-2*o.y,c.x-1*o.x,c.y-1*o.y}, {c.x-1*o.x,c.y-2*o.y,c.x-0*o.x,c.y-1*o.y} },
-                { {c.x-4*o.x,c.y-3*o.y,c.x-3*o.x,c.y-2*o.y}, {c.x-3*o.x,c.y-3*o.y,c.x-2*o.x,c.y-2*o.y}, {c.x-2*o.x,c.y-3*o.y,c.x-1*o.x,c.y-2*o.y}, {c.x-1*o.x,c.y-3*o.y,c.x-0*o.x,c.y-2*o.y} },
-                { {c.x-4*o.x,c.y-4*o.y,c.x-3*o.x,c.y-3*o.y}, {c.x-3*o.x,c.y-4*o.y,c.x-2*o.x,c.y-3*o.y}, {c.x-2*o.x,c.y-4*o.y,c.x-1*o.x,c.y-3*o.y}, {c.x-1*o.x,c.y-4*o.y,c.x-0*o.x,c.y-3*o.y} }
-            };
+        {
+            { {c.x-4*o.x,c.y-1*o.y,c.x-3*o.x,c.y-0*o.y}, {c.x-3*o.x,c.y-1*o.y,c.x-2*o.x,c.y-0*o.y}, {c.x-2*o.x,c.y-1*o.y,c.x-1*o.x,c.y-0*o.y}, {c.x-1*o.x,c.y-1*o.y,c.x-0*o.x,c.y-0*o.y} },
+            { {c.x-4*o.x,c.y-2*o.y,c.x-3*o.x,c.y-1*o.y}, {c.x-3*o.x,c.y-2*o.y,c.x-2*o.x,c.y-1*o.y}, {c.x-2*o.x,c.y-2*o.y,c.x-1*o.x,c.y-1*o.y}, {c.x-1*o.x,c.y-2*o.y,c.x-0*o.x,c.y-1*o.y} },
+            { {c.x-4*o.x,c.y-3*o.y,c.x-3*o.x,c.y-2*o.y}, {c.x-3*o.x,c.y-3*o.y,c.x-2*o.x,c.y-2*o.y}, {c.x-2*o.x,c.y-3*o.y,c.x-1*o.x,c.y-2*o.y}, {c.x-1*o.x,c.y-3*o.y,c.x-0*o.x,c.y-2*o.y} },
+            { {c.x-4*o.x,c.y-4*o.y,c.x-3*o.x,c.y-3*o.y}, {c.x-3*o.x,c.y-4*o.y,c.x-2*o.x,c.y-3*o.y}, {c.x-2*o.x,c.y-4*o.y,c.x-1*o.x,c.y-3*o.y}, {c.x-1*o.x,c.y-4*o.y,c.x-0*o.x,c.y-3*o.y} }
+        };
 
         if ((i < 4) && (j < 4))
         {
@@ -126,101 +126,101 @@ namespace rt
     }
 
 
-//static const Rectangle GetDefaultRectangle()
-//{
-//    return GetCellRectangle(0, 0, /*is_default=*/true);
-//}
+    //static const Rectangle GetDefaultRectangle()
+    //{
+    //    return GetCellRectangle(0, 0, /*is_default=*/true);
+    //}
 
 
     static int GetCellLayoutIndex(StatBoxPlacement::value_type placement, int i, int j)
     {
         const int s_cell_array[StatBoxPlacement::static_size][4][4] =
+        {
+            // top_left
             {
-                // top_left
-                {
-                    { 0,  2,  6, 11},
-                    { 1,  3,  7, 12},
-                    { 4,  5, 10, 14},
-                    { 8,  9, 13, 15}
-                },
-                // top_right
-                {
-                    {11,  6,  1,  0},
-                    {12,  7,  3,  2},
-                    {14, 10,  5,  4},
-                    {15, 13,  9,  8}
-                },
-                // top_middle
-                {
-                    { 4,  1,   0,   2},
-                    { 8,  6,   5,   3},
-                    {12, 10,   9,   7},
-                    {15, 14,  13,  11}
-                },
-                // top_middle_left
-                {
-                    {0,  3,  7,  11},
-                    {1,  5,  9,  12},
-                    {2,  6, 10,  14},
-                    {4,  8, 13,  15}
-                },
-                // top_middle_right
-                {
-                    {11,  7,  3,  0},
-                    {12,  9,  5,  1},
-                    {14, 10,  6,  2},
-                    {15, 13,  8,  4}
-                },
-                // top
-                {
-                    { 3,  2,  1,  0},
-                    { 7,  6,  5,  4},
-                    {11, 10,  9,  8},
-                    {15, 14, 13, 12}
-                },
-                // right
-                {
-                    {12,  8,  4,  0},
-                    {13,  9,  5,  1},
-                    {14, 10,  6,  2},
-                    {15, 11,  7,  3}
-                },
-                // left
-                {
-                    {0,  4,  8, 12},
-                    {2,  5,  9, 13},
-                    {3,  6, 10, 14},
-                    {3,  7, 11, 15}
-                },
-                // bottom_left
-                {
-                    {6,  9,  11,  15},
-                    {4,  5,  10,  14},
-                    {1,  3,   8,  13},
-                    {0,  2,   7,  12}
-                },
-                // bottom_right
-                {
-                    {15,  11,  9,  6},
-                    {14,  10,  5,  4},
-                    {13,  8,   3,  1},
-                    {12,  7,   2,  0}
-                },
-                // bottom_middle
-                {
-                    {15,  12, 13, 14},
-                    {11,  8,   9, 10},
-                    { 7,  2,   3,  6},
-                    { 5,  0,   1,  4}
-                },
-                // bottom
-                {
-                    {12,  13, 14, 15},
-                    {8,   9,  10, 11},
-                    {4,   5,   6,  7},
-                    {0,   1,   2,  3}
-                }
-            };
+                { 0,  2,  6, 11},
+                { 1,  3,  7, 12},
+                { 4,  5, 10, 14},
+                { 8,  9, 13, 15}
+            },
+            // top_right
+            {
+                {11,  6,  1,  0},
+                {12,  7,  3,  2},
+                {14, 10,  5,  4},
+                {15, 13,  9,  8}
+            },
+            // top_middle
+            {
+                { 4,  1,   0,   2},
+                { 8,  6,   5,   3},
+                {12, 10,   9,   7},
+                {15, 14,  13,  11}
+            },
+            // top_middle_left
+            {
+                {0,  3,  7,  11},
+                {1,  5,  9,  12},
+                {2,  6, 10,  14},
+                {4,  8, 13,  15}
+            },
+            // top_middle_right
+            {
+                {11,  7,  3,  0},
+                {12,  9,  5,  1},
+                {14, 10,  6,  2},
+                {15, 13,  8,  4}
+            },
+            // top
+            {
+                { 3,  2,  1,  0},
+                { 7,  6,  5,  4},
+                {11, 10,  9,  8},
+                {15, 14, 13, 12}
+            },
+            // right
+            {
+                {12,  8,  4,  0},
+                {13,  9,  5,  1},
+                {14, 10,  6,  2},
+                {15, 11,  7,  3}
+            },
+            // left
+            {
+                {0,  4,  8, 12},
+                {2,  5,  9, 13},
+                {3,  6, 10, 14},
+                {3,  7, 11, 15}
+            },
+            // bottom_left
+            {
+                {6,  9,  11,  15},
+                {4,  5,  10,  14},
+                {1,  3,   8,  13},
+                {0,  2,   7,  12}
+            },
+            // bottom_right
+            {
+                {15,  11,  9,  6},
+                {14,  10,  5,  4},
+                {13,  8,   3,  1},
+                {12,  7,   2,  0}
+            },
+            // bottom_middle
+            {
+                {15,  12, 13, 14},
+                {11,  8,   9, 10},
+                { 7,  2,   3,  6},
+                { 5,  0,   1,  4}
+            },
+            // bottom
+            {
+                {12,  13, 14, 15},
+                {8,   9,  10, 11},
+                {4,   5,   6,  7},
+                {0,   1,   2,  3}
+            }
+        };
         // this array designates the layout order for each placement option
         // if this fails, you updated the enum without updating this too
         TH1OVERLAY_STATIC_ASSERT(StatBoxPlacement::static_size == 12);
@@ -232,7 +232,7 @@ namespace rt
         else
         {
             std::cerr << "Invalid layout index\t" << placement << " >= " 
-                      << StatBoxPlacement::static_size << "\ti = " << i << "\tj =" << j << std::endl;
+                << StatBoxPlacement::static_size << "\ti = " << i << "\tj =" << j << std::endl;
             return -1;
         }
     }
@@ -257,13 +257,13 @@ namespace rt
     }
 
 
-//static bool IsStatBoxUsingCell(StatBoxPlacement::value_type StatBoxPlacement, int statbox_count, int i, int j)
-//{
-//    return
-//        (StatBoxPlacement != StatBoxPlacement::Disabled)
-//        ? GetCellLayoutIndex(StatBoxPlacement, i, j) < statbox_count
-//        : false;
-//}
+    //static bool IsStatBoxUsingCell(StatBoxPlacement::value_type StatBoxPlacement, int statbox_count, int i, int j)
+    //{
+    //    return
+    //        (StatBoxPlacement != StatBoxPlacement::Disabled)
+    //        ? GetCellLayoutIndex(StatBoxPlacement, i, j) < statbox_count
+    //        : false;
+    //}
 
 
     static const Rectangle GetStatBoxRectangle(StatBoxPlacement::value_type StatBoxPlacement, int statbox_index)
@@ -275,10 +275,10 @@ namespace rt
     }
 
 
-// declare data structures
-// ---------------------------------------------------------------------------------------- //
+    // declare data structures
+    // ---------------------------------------------------------------------------------------- //
 
-// histogram attributes structure
+    // histogram attributes structure
     struct HistAttributes
     {
         HistAttributes();
@@ -287,11 +287,11 @@ namespace rt
         HistAttributes(TH1* h, const std::string& l, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
         HistAttributes(TH1* h, bool d, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
         HistAttributes(TH1* h, bool d, const std::string& l, Color_t c = -1, Width_t w = -1, Style_t s = -1, Style_t f = -1);
-    
+
         // member funtions
         void SetAttributes(float min = 1, float max = -1, bool is_stack = false, bool is_norm = false);
         void SetProfileAttributes(Style_t profile_marker_style, float profile_marker_size);
-    
+
         // data members
         shared_ptr<TH1> hist;
         string          legend_value;
@@ -305,12 +305,12 @@ namespace rt
 
     HistAttributes::HistAttributes()
         : hist()
-        , legend_value("")
-        , color(gStyle->GetHistLineColor())
-        , width(gStyle->GetHistLineWidth())
-        , style(gStyle->GetHistLineStyle())
-        , fill (gStyle->GetHistFillStyle())
-        , nostack(false)
+          , legend_value("")
+          , color(gStyle->GetHistLineColor())
+          , width(gStyle->GetHistLineWidth())
+          , style(gStyle->GetHistLineStyle())
+          , fill (gStyle->GetHistFillStyle())
+          , nostack(false)
     {
     }
 
@@ -322,50 +322,50 @@ namespace rt
 
     HistAttributes::HistAttributes(TH1* h, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-        , legend_value("")
-        , color(c != -1 ? c : h->GetLineColor())
-        , width(w != -1 ? w : h->GetLineWidth())
-        , style(s != -1 ? s : h->GetLineStyle())
-        , fill (f != -1 ? f : h->GetFillStyle())
-        , nostack(false)
-    {
-    }
+          , legend_value("")
+          , color(c != -1 ? c : h->GetLineColor())
+              , width(w != -1 ? w : h->GetLineWidth())
+              , style(s != -1 ? s : h->GetLineStyle())
+              , fill (f != -1 ? f : h->GetFillStyle())
+              , nostack(false)
+              {
+              }
 
 
     HistAttributes::HistAttributes(TH1* h, const string& l, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-        , legend_value(l)
-        , color(c != -1 ? c : h->GetLineColor()) 
-        , width(w != -1 ? w : h->GetLineWidth())
-        , style(s != -1 ? s : h->GetLineStyle())
-        , fill (f != -1 ? f : h->GetFillStyle())
-        , nostack(false)
-    {
-    }
+          , legend_value(l)
+          , color(c != -1 ? c : h->GetLineColor()) 
+              , width(w != -1 ? w : h->GetLineWidth())
+              , style(s != -1 ? s : h->GetLineStyle())
+              , fill (f != -1 ? f : h->GetFillStyle())
+              , nostack(false)
+              {
+              }
 
 
     HistAttributes::HistAttributes(TH1* h, bool d, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-        , legend_value("")
-        , color(c != -1 ? c : h->GetLineColor())
-        , width(w != -1 ? w : h->GetLineWidth())
-        , style(s != -1 ? s : h->GetLineStyle())
-        , fill (s != -1 ? f : h->GetFillStyle())
-        , nostack(d)
-    {
-    }
+          , legend_value("")
+          , color(c != -1 ? c : h->GetLineColor())
+              , width(w != -1 ? w : h->GetLineWidth())
+              , style(s != -1 ? s : h->GetLineStyle())
+              , fill (s != -1 ? f : h->GetFillStyle())
+              , nostack(d)
+              {
+              }
 
 
     HistAttributes::HistAttributes(TH1* h, bool d, const string& l, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-        , legend_value(l)
-        , color(c != -1 ? c : h->GetLineColor()) 
-        , width(w != -1 ? w : h->GetLineWidth())
-        , style(s != -1 ? s : h->GetLineStyle())
-        , fill (s != -1 ? f : h->GetFillStyle())
-        , nostack(d)
-    {
-    }
+          , legend_value(l)
+          , color(c != -1 ? c : h->GetLineColor()) 
+              , width(w != -1 ? w : h->GetLineWidth())
+              , style(s != -1 ? s : h->GetLineStyle())
+              , fill (s != -1 ? f : h->GetFillStyle())
+              , nostack(d)
+              {
+              }
 
 
     void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_norm)
@@ -424,20 +424,20 @@ namespace rt
     }
 
 
-// Pointer to implementation structure
+    // Pointer to implementation structure
     struct TH1Overlay::impl
     {
         // construct
         impl();
         impl
-        (
-            const string& title,
-            StatBoxPlacement::value_type sb_place,
-            LegendPlacement::value_type leg_place,
-            DrawType::value_type DrawType
+            (
+             const string& title,
+             StatBoxPlacement::value_type sb_place,
+             LegendPlacement::value_type leg_place,
+             DrawType::value_type DrawType
             );
         impl(const string& title, const string& option);
-    
+
         // Overlay data
         string title;
         string option;  // for a presistent drawing option
@@ -450,7 +450,7 @@ namespace rt
         float yaxis_max;
         float xaxis_min;
         float xaxis_max;
-    
+
         // constants 
         float   legend_width;
         float   legend_height_per_entry;
@@ -460,14 +460,14 @@ namespace rt
         Color_t statbox_fill_color;
         float   profile_marker_size;
         Style_t profile_marker_style;
-    
+
         // holds the drawable things
         shared_ptr<THStack> hist_stack;
         vector<HistAttributes> hist_vec;
         shared_ptr<TLegend> legend;
-	vector<shared_ptr<TLatex> > text_vector;
-	vector<shared_ptr<TLine> > line_vector;
-    
+        vector<shared_ptr<TLatex> > text_vector;
+        vector<shared_ptr<TLine> > line_vector;
+
         // handle the colors
         Color_t unique_hist_color(Color_t color);
         bool is_hist_color_used(Color_t color);
@@ -476,84 +476,84 @@ namespace rt
 
     TH1Overlay::impl::impl()
         : title("")
-        , option("")
-        , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
-        , LegendPlacement(LegendPlacement::LegendPlacementDefault)
-        , DrawType(DrawType::DrawTypeDefault)
-        , logx(false)
-        , logy(false)
-        , yaxis_min(1.0)
-        , yaxis_max(-1.0)
-        , xaxis_min(1.0)
-        , xaxis_max(-1.0)
-        , legend_width(TH1Overlay::legend_width_default)
-        , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
-        , legend_offset(TH1Overlay::legend_offset_default)
-        , legend_text_size(TH1Overlay::legend_text_size_default)
-        , legend_option(TH1Overlay::legend_option_default)
-        , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
-        , profile_marker_size(TH1Overlay::profile_marker_size_default)
-        , profile_marker_style(TH1Overlay::profile_marker_style_default)
-        , hist_stack(new THStack) 
-        , legend(new TLegend) 
+          , option("")
+          , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
+          , LegendPlacement(LegendPlacement::LegendPlacementDefault)
+          , DrawType(DrawType::DrawTypeDefault)
+          , logx(false)
+          , logy(false)
+          , yaxis_min(1.0)
+          , yaxis_max(-1.0)
+          , xaxis_min(1.0)
+          , xaxis_max(-1.0)
+          , legend_width(TH1Overlay::legend_width_default)
+          , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
+          , legend_offset(TH1Overlay::legend_offset_default)
+          , legend_text_size(TH1Overlay::legend_text_size_default)
+          , legend_option(TH1Overlay::legend_option_default)
+          , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
+          , profile_marker_size(TH1Overlay::profile_marker_size_default)
+          , profile_marker_style(TH1Overlay::profile_marker_style_default)
+          , hist_stack(new THStack) 
+          , legend(new TLegend) 
     {
     }
 
 
     TH1Overlay::impl::impl
-    (
-        const string& title,
-        StatBoxPlacement::value_type sb_place,
-        LegendPlacement::value_type leg_place,
-        DrawType::value_type DrawType
+        (
+         const string& title,
+         StatBoxPlacement::value_type sb_place,
+         LegendPlacement::value_type leg_place,
+         DrawType::value_type DrawType
         )
         : title(title)
-        , option("")
-        , StatBoxPlacement(sb_place)
-        , LegendPlacement(leg_place)
-        , DrawType(DrawType)
-        , logx(false)
-        , logy(false)
-        , yaxis_min(1.0)
-        , yaxis_max(-1.0) 
-        , xaxis_min(1.0)
-        , xaxis_max(-1.0) 
-        , legend_width(TH1Overlay::legend_width_default)
-        , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
-        , legend_offset(TH1Overlay::legend_offset_default)
-        , legend_text_size(TH1Overlay::legend_text_size_default)
-        , legend_option(TH1Overlay::legend_option_default)
-        , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
-        , profile_marker_size(TH1Overlay::profile_marker_size_default)
-        , profile_marker_style(TH1Overlay::profile_marker_style_default)
-        , hist_stack(new THStack)
-        , legend(new TLegend) 
+          , option("")
+          , StatBoxPlacement(sb_place)
+          , LegendPlacement(leg_place)
+          , DrawType(DrawType)
+          , logx(false)
+          , logy(false)
+          , yaxis_min(1.0)
+          , yaxis_max(-1.0) 
+          , xaxis_min(1.0)
+          , xaxis_max(-1.0) 
+          , legend_width(TH1Overlay::legend_width_default)
+          , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
+          , legend_offset(TH1Overlay::legend_offset_default)
+          , legend_text_size(TH1Overlay::legend_text_size_default)
+          , legend_option(TH1Overlay::legend_option_default)
+          , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
+          , profile_marker_size(TH1Overlay::profile_marker_size_default)
+          , profile_marker_style(TH1Overlay::profile_marker_style_default)
+          , hist_stack(new THStack)
+          , legend(new TLegend) 
     {
     }
 
 
     TH1Overlay::impl::impl(const string& title, const string& option)
         : title(title)
-        , option(option)
-        , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
-        , LegendPlacement(LegendPlacement::LegendPlacementDefault)
-        , DrawType(DrawType::DrawTypeDefault)
-        , logx(false)
-        , logy(false)
-        , yaxis_min(1.0)
-        , yaxis_max(-1.0) 
-        , xaxis_min(1.0)
-        , xaxis_max(-1.0) 
-        , legend_width(TH1Overlay::legend_width_default)
-        , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
-        , legend_offset(TH1Overlay::legend_offset_default)
-        , legend_text_size(TH1Overlay::legend_text_size_default)
-        , legend_option(TH1Overlay::legend_option_default)
-        , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
-        , profile_marker_size(TH1Overlay::profile_marker_size_default)
-        , profile_marker_style(TH1Overlay::profile_marker_style_default)
-        , hist_stack(new THStack)
-        , legend(new TLegend) 
+          , option(option)
+          , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
+          , LegendPlacement(LegendPlacement::LegendPlacementDefault)
+          , DrawType(DrawType::DrawTypeDefault)
+          , logx(false)
+          , logy(false)
+          , yaxis_min(1.0)
+          , yaxis_max(-1.0) 
+          , xaxis_min(1.0)
+          , xaxis_max(-1.0) 
+          , legend_width(TH1Overlay::legend_width_default)
+          , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
+          , legend_offset(TH1Overlay::legend_offset_default)
+          , legend_text_size(TH1Overlay::legend_text_size_default)
+          , legend_option(TH1Overlay::legend_option_default)
+          , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
+          , profile_marker_size(TH1Overlay::profile_marker_size_default)
+          , profile_marker_style(TH1Overlay::profile_marker_style_default)
+          , hist_stack(new THStack)
+          , legend(new TLegend) 
     {
     }
 
@@ -561,7 +561,7 @@ namespace rt
     Color_t TH1Overlay::impl::unique_hist_color(Color_t color)
     {
         static std::vector<Color_t> color_array;
-    
+
         if (color_array.empty())
         {
 #if ROOT_VERSION_CODE <= ROOT_VERSION(5,15,0)
@@ -587,7 +587,7 @@ namespace rt
             color_array.push_back(kGreen-9);
 #endif
         }
-    
+
         for (std::size_t i = 0, j = color_array.size(); i < j; ++i)
         {
             if (!this->is_hist_color_used(color_array[i]))
@@ -614,8 +614,8 @@ namespace rt
     }
 
 
-// static public constants
-// ---------------------------------------------------------------------------------------- //
+    // static public constants
+    // ---------------------------------------------------------------------------------------- //
 
     float       TH1Overlay::legend_width_default            = 0.295;
     float       TH1Overlay::legend_height_per_entry_default = 0.065;
@@ -627,8 +627,8 @@ namespace rt
     Style_t     TH1Overlay::profile_marker_style_default    = 20;
 
 
-// constructors
-// ---------------------------------------------------------------------------------------- //
+    // constructors
+    // ---------------------------------------------------------------------------------------- //
 
     TH1Overlay::TH1Overlay()
         : m_pimpl(new TH1Overlay::impl)
@@ -643,10 +643,10 @@ namespace rt
 
     TH1Overlay::TH1Overlay(const TH1Overlay& rhs)
         : m_pimpl(new TH1Overlay::impl())
-//    : m_pimpl(new TH1Overlay::impl(rhs.GetTitle(), 
-//                                   rhs.GetStatBoxPlacement(),
-//                                   rhs.GetLegendPlacement(),
-//                                   rhs.GetDrawType())) 
+          //    : m_pimpl(new TH1Overlay::impl(rhs.GetTitle(), 
+          //                                   rhs.GetStatBoxPlacement(),
+          //                                   rhs.GetLegendPlacement(),
+          //                                   rhs.GetDrawType())) 
     {
         // copy everything except map (should probably make an copy constructor for impl)
         SetTitle(rhs.GetTitle());
@@ -669,14 +669,14 @@ namespace rt
         // copy the map
         for 
             (
-                vector<HistAttributes>::const_iterator iter = rhs.m_pimpl->hist_vec.begin();
-                iter != rhs.m_pimpl->hist_vec.end(); 
-                iter++
-                )
-        {
-            const HistAttributes& ha = *iter;
-            Add(ha.hist.get(), ha.nostack, ha.legend_value, ha.color, ha.width, ha.style, ha.fill);
-        }
+             vector<HistAttributes>::const_iterator iter = rhs.m_pimpl->hist_vec.begin();
+             iter != rhs.m_pimpl->hist_vec.end(); 
+             iter++
+            )
+            {
+                const HistAttributes& ha = *iter;
+                Add(ha.hist.get(), ha.nostack, ha.legend_value, ha.color, ha.width, ha.style, ha.fill);
+            }
 
         // copy the text
         for (size_t i = 0; i != rhs.m_pimpl->text_vector.size(); i++)
@@ -710,15 +710,15 @@ namespace rt
 
 
     TH1Overlay::TH1Overlay
-    (
-        const string& title,
-        StatBoxPlacement::value_type sb_place,
-        LegendPlacement::value_type leg_place,
-        DrawType::value_type DrawType
+        (
+         const string& title,
+         StatBoxPlacement::value_type sb_place,
+         LegendPlacement::value_type leg_place,
+         DrawType::value_type DrawType
         )
         : m_pimpl(new TH1Overlay::impl(title, sb_place, leg_place, DrawType))
-    {
-    }
+        {
+        }
 
     TH1Overlay::TH1Overlay(const string& title, const string& option)
         : m_pimpl(new TH1Overlay::impl(title, option))
@@ -726,8 +726,8 @@ namespace rt
     }
 
 
-// members 
-// ---------------------------------------------------------------------------------------- //
+    // members 
+    // ---------------------------------------------------------------------------------------- //
 
     void TH1Overlay::Add(TH1* h, bool no_stack, const string& legend_value, Color_t c, Width_t w, Style_t s, Style_t f)
     {
@@ -735,7 +735,7 @@ namespace rt
         {
             TH1* temp_hist = dynamic_cast<TH1*>(h->Clone());
             temp_hist->SetDirectory(0);
-        
+
             Color_t color = c != -1 ? c : m_pimpl->unique_hist_color(h->GetLineColor());
             m_pimpl->hist_vec.push_back(HistAttributes(temp_hist, no_stack, legend_value, color, w, s, f));
         }
@@ -777,36 +777,36 @@ namespace rt
 
     void TH1Overlay::AddText(const TLatex& text)
     {
-	m_pimpl->text_vector.push_back(boost::shared_ptr<TLatex>(dynamic_cast<TLatex*>(text.Clone())));
-	m_pimpl->text_vector.back()->SetNDC(); 
+        m_pimpl->text_vector.push_back(boost::shared_ptr<TLatex>(dynamic_cast<TLatex*>(text.Clone())));
+        m_pimpl->text_vector.back()->SetNDC(); 
     }
 
     void TH1Overlay::AddText(const TLatex* text)
     {
-	m_pimpl->text_vector.push_back(boost::shared_ptr<TLatex>(dynamic_cast<TLatex*>(text->Clone())));
-	m_pimpl->text_vector.back()->SetNDC(); 
+        m_pimpl->text_vector.push_back(boost::shared_ptr<TLatex>(dynamic_cast<TLatex*>(text->Clone())));
+        m_pimpl->text_vector.back()->SetNDC(); 
     }
 
     void TH1Overlay::AddText(const std::string& text, float x, float y, float text_size)
     {
-	m_pimpl->text_vector.push_back(boost::shared_ptr<TLatex>(new TLatex(x, y, text.c_str())));
-	m_pimpl->text_vector.back()->SetNDC(); 
-	m_pimpl->text_vector.back()->SetTextSize(text_size); 
+        m_pimpl->text_vector.push_back(boost::shared_ptr<TLatex>(new TLatex(x, y, text.c_str())));
+        m_pimpl->text_vector.back()->SetNDC(); 
+        m_pimpl->text_vector.back()->SetTextSize(text_size); 
     }
 
     void TH1Overlay::AddLine(const TLine& line)
     {
-	m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(dynamic_cast<TLine*>(line.Clone())));
+        m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(dynamic_cast<TLine*>(line.Clone())));
     }
 
     void TH1Overlay::AddLine(const TLine* line)
     {
-	m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(dynamic_cast<TLine*>(line->Clone())));
+        m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(dynamic_cast<TLine*>(line->Clone())));
     }
 
     void TH1Overlay::AddLine(float x1, float y1, float x2, float y2, Color_t c)
     {
-	m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(new TLine(x1, y1, x2, y2)));
+        m_pimpl->line_vector.push_back(boost::shared_ptr<TLine>(new TLine(x1, y1, x2, y2)));
         m_pimpl->line_vector.back()->SetLineColor(c);
     }
 
@@ -851,31 +851,28 @@ namespace rt
     {
         cout << "TH1Overlay::List(): listing all histograms in the overlay" << endl;
         cout <<  "  " << setw(15) << left << "Hist Type" << "\t" << setw(15) << left 
-             << "Hist Name" << "\t" << "Hist Title" << endl; 
+            << "Hist Name" << "\t" << "Hist Title" << endl; 
         cout <<  "-----------------------------------------------------------------------" << endl; 
-        for 
-            (
-                vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin();
-                iter != m_pimpl->hist_vec.end(); 
-                iter++
-                )
+        for (vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin(); iter != m_pimpl->hist_vec.end(); iter++)
         {
             const shared_ptr<TH1>& hist = iter->hist;
-            cout <<  "  " << setw(15) << left << hist->ClassName() << "\t" << setw(15) << left << hist->GetName() 
-                 << "\t" << hist->GetTitle() << endl;
+            cout <<  "  " << setw(15) << left << hist->ClassName() << "\t" << setw(15) << left << hist->GetName() << "\t" << hist->GetTitle() << endl;
         }
     }
 
 
-// set the THStack
-    void TH1Overlay::BuildStack(bool is_stack, bool is_norm)
+    // set the THStack
+    void TH1Overlay::BuildStack()
     {
+        const bool is_norm  = (m_pimpl->DrawType == DrawType::normalize);
+        const bool is_stack = (m_pimpl->DrawType == DrawType::stack or m_pimpl->DrawType == DrawType::stack_norm);
+
         // clear the old plots
         if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
         {
             m_pimpl->hist_stack->GetHists()->Clear();
         }
-    
+
         // set the THSTack title
         if (Empty())
         {
@@ -902,29 +899,38 @@ namespace rt
                 m_pimpl->hist_stack->SetTitle(temp_string.c_str());
             }
         }
-    
+
+        // determine the stack overall normalization
+        float stack_total = 0.0;
+        for (vector<HistAttributes>::iterator iter = m_pimpl->hist_vec.begin(); iter != m_pimpl->hist_vec.end(); ++iter)
+        {
+            // only count hist that are in the stack
+            if (iter->nostack) {continue;}
+            stack_total += iter->hist->Integral(); 
+        }
+
         // Fill the THSsack
         double max_height = 0.0;
         double min_height = 0.0;
         size_t hist_index = 0;
-        for 
-            (
-                vector<HistAttributes>::reverse_iterator iter = m_pimpl->hist_vec.rbegin();
-                iter != m_pimpl->hist_vec.rend();
-                ++iter
-                )
+        for (vector<HistAttributes>::reverse_iterator iter = m_pimpl->hist_vec.rbegin(); iter != m_pimpl->hist_vec.rend(); ++iter)
         {
             if (!iter->hist)
             {
                 cerr << "TH1Overlay::BuildStack(): Trying to add NULL histogram.  Spipping!" << endl;
                 continue;
             }
-        
+
             // set the attributes 
             iter->SetAttributes(m_pimpl->yaxis_min, m_pimpl->yaxis_max, is_stack, is_norm);
 
             // special treament for profile hists
             iter->SetProfileAttributes(m_pimpl->profile_marker_style, m_pimpl->profile_marker_size);
+
+            if (is_stack and !iter->nostack and m_pimpl->DrawType == DrawType::stack_norm)
+            {
+                iter->hist->Scale(1.0/stack_total);
+            }
 
             // get the maximum value
             max_height = std::max(max_height, GetHistMaximumValue(iter->hist.get(), /*include_error=*/true));
@@ -935,7 +941,6 @@ namespace rt
             {
                 if (!iter->nostack)
                 {
-                    //m_pimpl->hist_stack->Add(iter->hist.get(), (m_pimpl->option + "hist").c_str());
                     m_pimpl->hist_stack->Add(iter->hist.get(), (m_pimpl->option + "hist" + iter->hist->GetDrawOption()).c_str());
                 }
             }
@@ -955,6 +960,7 @@ namespace rt
                 rt::Scale(hist_ptr, 1.0);
             }
         }
+
         // set the y axis boundaries
         if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
         {
@@ -973,21 +979,18 @@ namespace rt
 
         // this is a kludge to get the annoying THStack's blank histogram from showing up
         m_pimpl->hist_stack->Draw("goff");
-   	//if (m_pimpl->xaxis_min < m_pimpl->xaxis_max)
-   	//{
-   	//	m_pimpl->hist_stack->GetHistogram()->GetXaxis()->SetRangeUser(m_pimpl->yaxis_min, m_pimpl->yaxis_min);
-   	//}
         if (m_pimpl->hist_stack->GetHistogram())
         {
             m_pimpl->hist_stack->GetHistogram()->SetLineColor(gStyle->GetFrameLineColor());
             m_pimpl->hist_stack->GetHistogram()->SetLineWidth(gStyle->GetFrameLineWidth());
             m_pimpl->hist_stack->GetHistogram()->SetLineStyle(gStyle->GetFrameLineStyle());
         }
+
         return;
     }
 
 
-// buld the Legend
+    // buld the Legend
     void TH1Overlay::BuildLegend()
     {
         Rectangle pos = { 0.1, 0.1, 0.6, 0.9 };
@@ -995,68 +998,68 @@ namespace rt
 
         switch (m_pimpl->LegendPlacement)
         {
-        case LegendPlacement::top: 
-            pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y1 = (1.0 - gStyle->GetPadTopMargin()) - height;
-            pos.x2 = 0.5 + m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
-            break;
-        case LegendPlacement::top_left: 
-            pos.x1 = gStyle->GetPadLeftMargin() + m_pimpl->legend_offset;
-            pos.y1 = (1.0 - gStyle->GetPadTopMargin()) - height;
-            pos.x2 = gStyle->GetPadLeftMargin() + m_pimpl->legend_width;
-            pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
-            break;
-        case LegendPlacement::top_right:
-            pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*5.0 - m_pimpl->legend_width;
-            pos.y1 = (1.0 - gStyle->GetPadTopMargin()) - height;
-            pos.x2 = (1.0 - gStyle->GetPadRightMargin()) + m_pimpl->legend_offset*5.0;
-            pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
-            break;
-        case LegendPlacement::right:
-            pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*5.0 - m_pimpl->legend_width;
-            pos.y1 = 0.8 - gStyle->GetPadTopMargin() - height;
-            pos.x2 = (1.0 - gStyle->GetPadRightMargin()) + m_pimpl->legend_offset*5.0;
-            pos.y2 = 0.8 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
-            break;
-        case LegendPlacement::left:
-            pos.x1 = gStyle->GetPadLeftMargin() + m_pimpl->legend_offset;
-            pos.y1 = 0.9 - gStyle->GetPadTopMargin() - height;
-            pos.x2 = gStyle->GetPadLeftMargin() + m_pimpl->legend_width;
-            pos.y2 = 0.9 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
-            break;
-        case LegendPlacement::top_middle_right:
-            pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y1 = 0.8 - gStyle->GetPadTopMargin() - height;
-            pos.x2 = 0.5 + m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y2 = 0.8 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
-            break;
-        case LegendPlacement::bottom_left:
-            pos.x1 = gStyle->GetPadLeftMargin() + m_pimpl->legend_offset;
-            pos.y1 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset;
-            pos.x2 = gStyle->GetPadLeftMargin() + m_pimpl->legend_width;
-            pos.y2 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset + height;
-            break;
-        case LegendPlacement::bottom_right:
-            pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) - m_pimpl->legend_offset - m_pimpl->legend_width;
-            pos.y1 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset;
-            pos.x2 = (1.0 - gStyle->GetPadRightMargin()) - m_pimpl->legend_offset;
-            pos.y2 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset + height;
-            break;
-        case LegendPlacement::bottom:
-            pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y1 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset;
-            pos.x2 = 0.5 + m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
-            pos.y2 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset + height;
-            break;
-        case LegendPlacement::disabled:
-            pos.x1 = 0.0;
-            pos.y1 = 0.0;
-            pos.x2 = 0.0;
-            pos.y2 = 0.0;
-            break;
-        default:
-            break;
+            case LegendPlacement::top: 
+                pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
+                pos.y1 = (1.0 - gStyle->GetPadTopMargin()) - height;
+                pos.x2 = 0.5 + m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
+                pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
+                break;
+            case LegendPlacement::top_left: 
+                pos.x1 = gStyle->GetPadLeftMargin() + m_pimpl->legend_offset;
+                pos.y1 = (1.0 - gStyle->GetPadTopMargin()) - height;
+                pos.x2 = gStyle->GetPadLeftMargin() + m_pimpl->legend_width;
+                pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
+                break;
+            case LegendPlacement::top_right:
+                pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*5.0 - m_pimpl->legend_width;
+                pos.y1 = (1.0 - gStyle->GetPadTopMargin()) - height;
+                pos.x2 = (1.0 - gStyle->GetPadRightMargin()) + m_pimpl->legend_offset*5.0;
+                pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
+                break;
+            case LegendPlacement::right:
+                pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*5.0 - m_pimpl->legend_width;
+                pos.y1 = 0.8 - gStyle->GetPadTopMargin() - height;
+                pos.x2 = (1.0 - gStyle->GetPadRightMargin()) + m_pimpl->legend_offset*5.0;
+                pos.y2 = 0.8 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
+                break;
+            case LegendPlacement::left:
+                pos.x1 = gStyle->GetPadLeftMargin() + m_pimpl->legend_offset;
+                pos.y1 = 0.9 - gStyle->GetPadTopMargin() - height;
+                pos.x2 = gStyle->GetPadLeftMargin() + m_pimpl->legend_width;
+                pos.y2 = 0.9 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
+                break;
+            case LegendPlacement::top_middle_right:
+                pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
+                pos.y1 = 0.8 - gStyle->GetPadTopMargin() - height;
+                pos.x2 = 0.5 + m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
+                pos.y2 = 0.8 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset;
+                break;
+            case LegendPlacement::bottom_left:
+                pos.x1 = gStyle->GetPadLeftMargin() + m_pimpl->legend_offset;
+                pos.y1 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset;
+                pos.x2 = gStyle->GetPadLeftMargin() + m_pimpl->legend_width;
+                pos.y2 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset + height;
+                break;
+            case LegendPlacement::bottom_right:
+                pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) - m_pimpl->legend_offset - m_pimpl->legend_width;
+                pos.y1 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset;
+                pos.x2 = (1.0 - gStyle->GetPadRightMargin()) - m_pimpl->legend_offset;
+                pos.y2 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset + height;
+                break;
+            case LegendPlacement::bottom:
+                pos.x1 = 0.5 - m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
+                pos.y1 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset;
+                pos.x2 = 0.5 + m_pimpl->legend_width/2.0 + m_pimpl->legend_offset*2.5;
+                pos.y2 = gStyle->GetPadBottomMargin() + m_pimpl->legend_offset + height;
+                break;
+            case LegendPlacement::disabled:
+                pos.x1 = 0.0;
+                pos.y1 = 0.0;
+                pos.x2 = 0.0;
+                pos.y2 = 0.0;
+                break;
+            default:
+                break;
         };
 
         m_pimpl->legend->SetX1NDC(pos.x1);
@@ -1070,15 +1073,10 @@ namespace rt
         m_pimpl->legend->SetBorderSize(0);
         m_pimpl->legend->SetTextSize(m_pimpl->legend_text_size);
 
-        for 
-            (
-                vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin();
-                iter != m_pimpl->hist_vec.end(); 
-                iter++
-                )
+        for (vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin(); iter != m_pimpl->hist_vec.end(); iter++)
         {
             const HistAttributes& hist_att = *iter;
-            if (m_pimpl->DrawType==DrawType::stack && hist_att.nostack)
+            if ((m_pimpl->DrawType==DrawType::stack or m_pimpl->DrawType==DrawType::stack_norm) && hist_att.nostack)
             {
                 if (hist_att.fill>3000)  // hack for the pred fill 
                 {
@@ -1089,7 +1087,7 @@ namespace rt
                     m_pimpl->legend->AddEntry(hist_att.hist.get(), hist_att.legend_value.c_str(), "lep"); 
                 }
             }
-            else if (m_pimpl->DrawType==DrawType::stack && !hist_att.nostack)
+            else if ((m_pimpl->DrawType==DrawType::stack or m_pimpl->DrawType==DrawType::stack_norm) && not hist_att.nostack)
             {
                 m_pimpl->legend->AddEntry(hist_att.hist.get(), hist_att.legend_value.c_str(), "f"); 
             }
@@ -1100,27 +1098,27 @@ namespace rt
         } 
     }
 
-// draw the texts
+    // draw the texts
     void TH1Overlay::DrawText()
     {
-	for (size_t i = 0; i != m_pimpl->text_vector.size(); i++)
-	{
+        for (size_t i = 0; i != m_pimpl->text_vector.size(); i++)
+        {
             m_pimpl->text_vector.at(i)->Draw();
-	}
+        }
     }
 
 
-// draw the lines
+    // draw the lines
     void TH1Overlay::DrawLines()
     {
-	for (size_t i = 0; i != m_pimpl->line_vector.size(); i++)
-	{
+        for (size_t i = 0; i != m_pimpl->line_vector.size(); i++)
+        {
             m_pimpl->line_vector.at(i)->Draw();
-	}
+        }
     }
 
 
-// draw the Legend
+    // draw the Legend
     void TH1Overlay::DrawLegend() const
     {
         if (!m_pimpl->hist_vec.empty() && m_pimpl->LegendPlacement != LegendPlacement::disabled)
@@ -1130,7 +1128,7 @@ namespace rt
     }
 
 
-// set the log values
+    // set the log values
     void TH1Overlay::SetLog()
     {
         if (m_pimpl->logy)
@@ -1149,63 +1147,63 @@ namespace rt
         size_t hist_index = 0;
         for 
             (
-                vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin();
-                iter != m_pimpl->hist_vec.end(); 
-                iter++
-                )
-        {
-            const shared_ptr<TH1>& hist_ptr = iter->hist;
-
-            // check if disabled
-            if(m_pimpl->StatBoxPlacement == StatBoxPlacement::disabled)
+             vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin();
+             iter != m_pimpl->hist_vec.end(); 
+             iter++
+            )
             {
-                hist_ptr->SetStats(false);
-            }
-            else
-            {
-                hist_ptr->SetStats(true);
-                hist_ptr->GetPainter()->PaintStat(gStyle->GetOptStat(),0);
+                const shared_ptr<TH1>& hist_ptr = iter->hist;
 
-                if(TPaveStats *statbox = dynamic_cast<TPaveStats*>(hist_ptr->FindObject("stats")))
+                // check if disabled
+                if(m_pimpl->StatBoxPlacement == StatBoxPlacement::disabled)
                 {
-                    statbox->SetFillColor(m_pimpl->statbox_fill_color);
-                    statbox->SetLineColor(iter->color);
-                    statbox->SetLineWidth(iter->width);
-                    statbox->SetLineStyle(iter->style);
-
-                    const Rectangle r = GetStatBoxRectangle(m_pimpl->StatBoxPlacement, hist_index);
-                    statbox->SetX1NDC(r.x1);
-                    statbox->SetY1NDC(r.y1);
-                    statbox->SetX2NDC(r.x2);
-                    statbox->SetY2NDC(r.y2);
-                    statbox->Draw("same");
+                    hist_ptr->SetStats(false);
                 }
+                else
+                {
+                    hist_ptr->SetStats(true);
+                    hist_ptr->GetPainter()->PaintStat(gStyle->GetOptStat(),0);
+
+                    if(TPaveStats *statbox = dynamic_cast<TPaveStats*>(hist_ptr->FindObject("stats")))
+                    {
+                        statbox->SetFillColor(m_pimpl->statbox_fill_color);
+                        statbox->SetLineColor(iter->color);
+                        statbox->SetLineWidth(iter->width);
+                        statbox->SetLineStyle(iter->style);
+
+                        const Rectangle r = GetStatBoxRectangle(m_pimpl->StatBoxPlacement, hist_index);
+                        statbox->SetX1NDC(r.x1);
+                        statbox->SetY1NDC(r.y1);
+                        statbox->SetX2NDC(r.x2);
+                        statbox->SetY2NDC(r.y2);
+                        statbox->Draw("same");
+                    }
+                }
+                hist_index++;
             }
-            hist_index++;
-        }
     }
 
 
-// draw the list of non stacked hists
+    // draw the list of non stacked hists
     void TH1Overlay::DrawNonStackedHists(const string& option)
     {
         double max_height = m_pimpl->hist_stack ? m_pimpl->hist_stack->GetMaximum() : 0.0;
         double min_height = m_pimpl->hist_stack ? m_pimpl->hist_stack->GetMinimum() : 0.0;
         vector< shared_ptr<TH1> > hists_to_draw;
-        for 
-            (
-                vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin();
-                iter != m_pimpl->hist_vec.end(); 
-                iter++
-                )
+        for (vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin();iter != m_pimpl->hist_vec.end();iter++)
         {
-            max_height = std::max(max_height, GetHistMaximumValue(iter->hist.get(), /*include_error=*/true));
-            min_height = std::min(min_height, GetHistMinimumValue(iter->hist.get(), /*include_error=*/true));
-            if (m_pimpl->DrawType==DrawType::stack && iter->nostack)
+            if ((m_pimpl->DrawType==DrawType::stack or m_pimpl->DrawType==DrawType::stack_norm) && iter->nostack)
             {
+                if (m_pimpl->DrawType==DrawType::stack_norm)
+                {
+                    rt::Scale(iter->hist.get(), 1.0);
+                }
+                max_height = std::max(max_height, GetHistMaximumValue(iter->hist.get(), /*include_error=*/true));
+                min_height = std::min(min_height, GetHistMinimumValue(iter->hist.get(), /*include_error=*/true));
                 hists_to_draw.push_back(iter->hist);
             }
         }
+        const bool stack_is_full = (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty());
         if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
         {
             m_pimpl->hist_stack->SetMinimum(min_height);
@@ -1213,35 +1211,42 @@ namespace rt
         }
         for (size_t i = 0; i != hists_to_draw.size(); ++i)
         {
+            std::string temp_option;
             if (hists_to_draw[i]->GetFillStyle()>3000) // hack for the pred fill overlay
             {
                 hists_to_draw[i]->SetFillColor(kBlack);
                 hists_to_draw[i]->SetLineWidth(1);
-                hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same E2").c_str());  
+                temp_option += "E2";
             }
-            else
+            if (stack_is_full)
             {
-                hists_to_draw[i]->Draw((option + string(hists_to_draw[i]->GetOption()) + "same").c_str());  
+                temp_option += " same ";
             }
+            temp_option += option + string(hists_to_draw[i]->GetOption());
+            hists_to_draw[i]->Draw(temp_option.c_str());  
         }
     }
 
 
     string TH1Overlay::ProcessOptionString(const std::string& option)
     {
-	// start with the original string
+        // start with the original string
         string filtered_option(option);
 
-	// remove whitepsace
+        // remove whitepsace
         filtered_option.erase(std::remove_if(filtered_option.begin(), filtered_option.end(), is_space), filtered_option.end());
-    
+
         // draw type 
         static vector< pair<DrawType::value_type, string> > DrawType_options;
         if (DrawType_options.empty())
         {
-            DrawType_options.push_back(pair<DrawType::value_type, string>(DrawType::none     , "dt::none" ));
-            DrawType_options.push_back(pair<DrawType::value_type, string>(DrawType::stack    , "dt::stack"));
-            DrawType_options.push_back(pair<DrawType::value_type, string>(DrawType::normalize, "dt::norm" ));
+            // the order matters because it does a search on the string.
+            // If the string is subset of another string then it should be before.
+            // (example: "dt::stack" is subset of "dt::stack_norm")
+            DrawType_options.push_back(pair<DrawType::value_type, string>(DrawType::none      , "dt::none"      ));
+            DrawType_options.push_back(pair<DrawType::value_type, string>(DrawType::stack_norm, "dt::stack_norm"));
+            DrawType_options.push_back(pair<DrawType::value_type, string>(DrawType::stack     , "dt::stack"     ));
+            DrawType_options.push_back(pair<DrawType::value_type, string>(DrawType::normalize , "dt::norm"      ));
         }
         for (size_t i = 0; i < DrawType_options.size(); i++) 
         {
@@ -1333,77 +1338,91 @@ namespace rt
     }
 
 
-// draw functions
+    // draw functions
     void TH1Overlay::DrawRegular(const std::string& option)
     {
         BuildLegend();
-        BuildStack(/*is_stack = */false, /*is_norm = */false);
+        BuildStack();
         m_pimpl->hist_stack->Draw(("nostack"+option).c_str());
         SetLog();
         DrawLegend();
         DrawStatBoxes();
-	DrawText();
-	DrawLines();
+        DrawText();
+        DrawLines();
     }
 
 
     void TH1Overlay::DrawStacked(const std::string& option)
     {
         BuildLegend();
-        BuildStack(/*is_stack = */true, /*is_norm = */false);
+        BuildStack();
         DrawNonStackedHists(option);
         SetLog();
         DrawLegend();
         DrawStatBoxes();
-	DrawText();
-	DrawLines();
+        DrawText();
+        DrawLines();
+    }
+
+
+    void TH1Overlay::DrawStackedNormalized(const std::string& option)
+    {
+        BuildLegend();
+        BuildStack();
+        DrawNonStackedHists(option);
+        SetLog();
+        DrawLegend();
+        DrawStatBoxes();
+        DrawText();
+        DrawLines();
     }
 
 
     void TH1Overlay::DrawNormalized(const std::string& option)
     {
         BuildLegend();
-        BuildStack(/*is_stack = */false, /*is_norm = */true);
+        BuildStack();
         m_pimpl->hist_stack->Draw(("nostack"+option).c_str());
         SetLog();
         DrawLegend();
         DrawStatBoxes();
-	DrawText();
-	DrawLines();
+        DrawText();
+        DrawLines();
     }
 
 
-// draw plots
+    // draw plots
     void TH1Overlay::Draw(const std::string& option)
     {
         if (Empty()) return;
         string processed_option = ProcessOptionString(option + m_pimpl->option);
         switch(m_pimpl->DrawType)
         {
-        case     (DrawType::none     ): DrawRegular(processed_option);    break;
-        case     (DrawType::stack    ): DrawStacked(processed_option);    break;
-        case     (DrawType::normalize): DrawNormalized(processed_option); break;
-        default                       : DrawRegular(processed_option);    break;
+            case     (DrawType::none      ): DrawRegular(processed_option);           break;
+            case     (DrawType::stack     ): DrawStacked(processed_option);           break;
+            case     (DrawType::stack_norm): DrawStackedNormalized(processed_option); break;
+            case     (DrawType::normalize ): DrawNormalized(processed_option);        break;
+            default                        : DrawRegular(processed_option);           break;
         };
         gPad->Update();
     }
 
 
-// properties
-// -------------------------------------------------------------------------------------------------//
+    // properties
+    // -------------------------------------------------------------------------------------------------//
 
-// range
+    // range
     void TH1Overlay::SetYAxisRange(double min, double max)
     {
         m_pimpl->yaxis_min = min;
         m_pimpl->yaxis_max = max;
     }
 
-//void TH1Overlay::SetXAxisRange(double min, double max)
-//{
-//    m_pimpl->xaxis_min = min;
-//    m_pimpl->xaxis_max = max;
-//}
+    //void TH1Overlay::SetXAxisRange(double min, double max)
+    //{
+    //    m_pimpl->xaxis_min = min;
+    //    m_pimpl->xaxis_max = max;
+    //}
 
     double TH1Overlay::GetYAxisMax() const
     {
@@ -1417,7 +1436,7 @@ namespace rt
     }
 
 
-// title
+    // title
     void TH1Overlay::SetTitle(const std::string& title)
     {
         m_pimpl->title = title;
@@ -1430,7 +1449,7 @@ namespace rt
     }
 
 
-// option
+    // option
     void TH1Overlay::SetOption(const std::string& option)
     {
         m_pimpl->option = option;
@@ -1443,7 +1462,7 @@ namespace rt
     }
 
 
-// draw type
+    // draw type
     void TH1Overlay::SetDrawType(DrawType::value_type DrawType)
     {
         m_pimpl->DrawType = DrawType;
@@ -1456,7 +1475,7 @@ namespace rt
     }
 
 
-// legend placement
+    // legend placement
     void TH1Overlay::SetLegendPlacement(LegendPlacement::value_type LegendPlacement)
     {
         m_pimpl->LegendPlacement = LegendPlacement;
@@ -1469,7 +1488,7 @@ namespace rt
     }
 
 
-// legend width
+    // legend width
     void TH1Overlay::SetLegendWidth(float width)
     {
         m_pimpl->legend_width = width;
@@ -1482,7 +1501,7 @@ namespace rt
     }
 
 
-// legend height per entry
+    // legend height per entry
     void TH1Overlay::SetLegendHeightPerEntry(float height)
     {
         m_pimpl->legend_height_per_entry = height;
@@ -1495,7 +1514,7 @@ namespace rt
     }
 
 
-// legend offset
+    // legend offset
     void TH1Overlay::SetLegendOffset(float offset)
     {
         m_pimpl->legend_offset = offset;
@@ -1508,7 +1527,7 @@ namespace rt
     }
 
 
-// legend text size
+    // legend text size
     void TH1Overlay::SetLegendTextSize(float text_size)
     {
         m_pimpl->legend_text_size = text_size;
@@ -1521,7 +1540,7 @@ namespace rt
     }
 
 
-// legend option
+    // legend option
     void TH1Overlay::SetLegendOption(const string& option)
     {
         m_pimpl->legend_option = option;
@@ -1534,7 +1553,7 @@ namespace rt
     }
 
 
-// statbox placement
+    // statbox placement
     void TH1Overlay::SetStatBoxPlacement(StatBoxPlacement::value_type StatBoxPlacement)
     {
         m_pimpl->StatBoxPlacement = StatBoxPlacement;
@@ -1547,7 +1566,7 @@ namespace rt
     }
 
 
-// statbox fill color
+    // statbox fill color
     void TH1Overlay::SetStatBoxFillColor(Color_t color)
     {
         m_pimpl->statbox_fill_color = color;
@@ -1560,7 +1579,7 @@ namespace rt
     }
 
 
-// log y 
+    // log y 
     void TH1Overlay::SetLogy(bool value)
     {
         m_pimpl->logy = value;
@@ -1573,7 +1592,7 @@ namespace rt
     }
 
 
-// log y 
+    // log y 
     void TH1Overlay::SetLogx(bool value)
     {
         m_pimpl->logx = value;
@@ -1586,8 +1605,8 @@ namespace rt
     }
 
 
-// methods
-// -------------------------------------------------------------------------------------------------//
+    // methods
+    // -------------------------------------------------------------------------------------------------//
 
     size_t TH1Overlay::Size() const
     {
@@ -1605,8 +1624,8 @@ namespace rt
         rt::Print(const_cast<TH1Overlay*>(this), file_name, suffix, option); 
     }
 
-// related methods
-// -------------------------------------------------------------------------------------------------//
+    // related methods
+    // -------------------------------------------------------------------------------------------------//
 
     void SetLogy(std::map<std::string, rt::TH1Overlay>& overlay_map, bool set_logy)
     {
@@ -1616,7 +1635,7 @@ namespace rt
             p.SetLogy(set_logy);
         }
     }
-   
+
     void SetLogy(std::vector<rt::TH1Overlay>& overlay_map, bool set_logy)
     {
         for (std::vector<rt::TH1Overlay>::iterator iter = overlay_map.begin(); iter != overlay_map.end(); iter++)
@@ -1634,7 +1653,7 @@ namespace rt
             p.SetOption(option);
         }
     }
-   
+
     void SetOption(std::vector<rt::TH1Overlay>& overlay_map, const std::string& option)
     {
         for (std::vector<rt::TH1Overlay>::iterator iter = overlay_map.begin(); iter != overlay_map.end(); iter++)
@@ -1643,7 +1662,7 @@ namespace rt
             p.SetOption(option);
         }
     }
-    
-// -------------------------------------------------------------------------------------------------//
+
+    // -------------------------------------------------------------------------------------------------//
 
 } // namespace rt

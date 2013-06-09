@@ -2,7 +2,7 @@
 
 #exe create_tree
 #    : # sources
-#    ./source/create_tree.cpp
+#    ./source/create_tree.cc
 #    /ROOT
 #    /PYTHIA8
 #    : # requirements
@@ -12,11 +12,11 @@
 
 exe test_root_tools
     : # sources
-    ./source/test_root_tools.cpp
+    ./source/test_root_tools.cc
     /ROOT
     /boost//headers
     #..//RootTools/<link>static
-    /RootTools//RootToolsStatic/<link>static
+    /RootTools//RootTools/<link>static
     : # requirements
     : # default-build
     : # usage-requirements
@@ -24,10 +24,10 @@ exe test_root_tools
 
 exe test_overlay
     : # sources
-    ./source/test_overlay.cpp
+    ./source/test_overlay.cc
     /ROOT
     /boost//headers
-    /RootTools//RootToolsStatic/<link>static
+    /RootTools//RootTools/<link>static
     : # requirements
     : # default-build
     : # usage-requirements
@@ -35,17 +35,8 @@ exe test_overlay
 
 exe test_character_from_keyboard
     : # sources
-    ./source/test_keyboard.cpp
-    /RootTools//RootToolsStatic/<link>static
-    : # requirements
-    : # default-build
-    : # usage-requirements
-    ;
-
-exe test_gaus_double
-    : # sources
-    ./source/test_gaus_double.cpp
-    #/RootTools//RootToolsStatic/<link>static
+    ./source/test_keyboard.cc
+    /RootTools//RootTools/<link>static
     : # requirements
     : # default-build
     : # usage-requirements
@@ -54,4 +45,3 @@ exe test_gaus_double
 default-install test_root_tools ;
 default-install test_overlay ;
 default-install test_character_from_keyboard ;
-default-install test_gaus_double ;

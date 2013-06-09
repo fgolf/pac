@@ -16,8 +16,7 @@
 // TODO
 // 1.  automate the legend width
 // 2.  automate the legend text size
-// 3.  stat box 
-// 5.  combined stat box
+// 3.  combined stat box
 // ---------------------------------------------------------------------------------------- //
 
 // uses ROOT name convecntions for classes and functions
@@ -29,9 +28,10 @@ namespace rt
     {
         enum value_type
         {
-            none,
-            normalize,
-            stack,
+            none,        // (option string: "dt::none"      ) simple overly of all histograms
+            normalize,   // (option string: "dt::norm"      ) normalize all histograms and overlay them
+            stack,       // (option string: "dt::stack"     ) stacked plot 
+            stack_norm,  // (option string: "dt::stack_norm") stacked plot where the stack is normalized to one
             static_size,
     
             DrawTypeDefault = none
@@ -139,6 +139,7 @@ namespace rt
         void DrawRegular(const std::string& option = "");
         void DrawNormalized(const std::string& option = "");
         void DrawStacked(const std::string& option = "");
+        void DrawStackedNormalized(const std::string& option = "");
     
         //properties
         void SetYAxisRange(double min, double max);
@@ -221,7 +222,7 @@ namespace rt
     
         // implementation functions
         void BuildLegend();
-        void BuildStack(bool is_stack, bool is_norm);
+        void BuildStack();
         void DrawNonStackedHists(const std::string& option);
         void DrawLegend() const;
         void DrawStatBoxes();

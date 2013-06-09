@@ -1,5 +1,5 @@
 #if !defined(__CINT__) || defined(__MAKECINT__)
-#include "rt/keyboard.hpp"
+#include "rt/keyboard.h"
 #include <iostream>
 #endif
 
