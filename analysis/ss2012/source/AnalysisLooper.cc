@@ -2077,36 +2077,36 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         LorentzVector el3_medium_p4(0, 0, 0, 0);
         LorentzVector el3_loose_p4(0, 0, 0, 0);
         LorentzVector el3_ssv7_p4(0, 0, 0, 0);
-        for (size_t el3idx = 0; el3idx != els_p4().size(); el3idx++)
+        for (size_t el_idx = 0; el_idx != els_p4().size(); el_idx++)
         {
-            const LorentzVector& el_p4 = els_p4().at(el3idx);
+            const LorentzVector& el_p4 = els_p4().at(el_idx);
 
-            if (el_p4.pt() < el_min_pt)             {continue;}
-            if (lep1_is_el and el3_idx == lep1_idx) {continue;}
-            if (lep2_is_el and el3_idx == lep2_idx) {continue;}
+            if (el_p4.pt() < el_min_pt)            {continue;}
+            if (lep1_is_el and el_idx == lep1_idx) {continue;}
+            if (lep2_is_el and el_idx == lep2_idx) {continue;}
 
             // set 3rd electron vars
             if (el_p4.pt() > el3_pt)
             {
-                el3_idx = el3idx;
-                el3_id  = -11 * els_charge().at(el3idx);
+                el3_idx = el_idx;
+                el3_id  = -11 * els_charge().at(el_idx);
                 el3_pt  = el_p4.pt();
             }
 
             // medium WP
-            if (pass_electronSelection(el3_idx, electronSelection_pog_medium) and (el_p4.pt() > el3_medium_p4.pt()))
+            if (pass_electronSelection(el_idx, electronSelection_pog_medium) and (el_p4.pt() > el3_medium_p4.pt()))
             {
                 el3_medium_p4 = el_p4; 
             }
 
             // loose WP
-            if (pass_electronSelection(el3_idx, electronSelection_pog_loose) and (el_p4.pt() > el3_loose_p4.pt()))
+            if (pass_electronSelection(el_idx, electronSelection_pog_loose) and (el_p4.pt() > el3_loose_p4.pt()))
             {
                 el3_loose_p4 = el_p4; 
             }
 
             // full ss2012 selection
-            if (samesign::isGoodLepton(11, el3_idx) and (el_p4.pt() > el3_ssv7_p4.pt()))
+            if (samesign::isGoodLepton(11, el_idx) and (el_p4.pt() > el3_ssv7_p4.pt()))
             {
                 el3_ssv7_p4 = el_p4; 
             }
@@ -2138,36 +2138,36 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         LorentzVector mu3_tight_p4(0, 0, 0, 0);
         LorentzVector mu3_loose_p4(0, 0, 0, 0);
         LorentzVector mu3_ssv5_p4(0, 0, 0, 0);
-        for (size_t mu3idx = 0; mu3idx != mus_p4().size(); mu3idx++)
+        for (size_t mu_idx = 0; mu_idx != mus_p4().size(); mu_idx++)
         {
-            const LorentzVector& mu_p4 = mus_p4().at(mu3idx);
+            const LorentzVector& mu_p4 = mus_p4().at(mu_idx);
 
             if (mu_p4.pt() < mu_min_pt)             {continue;}
-            if (lep1_is_mu and mu3_idx == lep1_idx) {continue;}
-            if (lep2_is_mu and mu3_idx == lep2_idx) {continue;}
+            if (lep1_is_mu and mu_idx == lep1_idx) {continue;}
+            if (lep2_is_mu and mu_idx == lep2_idx) {continue;}
 
             // set 3rd muon vars
             if (mu_p4.pt() > mu3_pt)
             {
-                mu3_idx = mu3idx;
-                mu3_id  = -13 * mus_charge().at(mu3idx);
+                mu3_idx = mu_idx;
+                mu3_id  = -13 * mus_charge().at(mu_idx);
                 mu3_pt  = mu_p4.pt();
             }
 
             // tight WP
-            if (passes_muid_wp2012(mu3_idx, mu2012_tightness::TIGHT) and (mu_p4.pt() > mu3_tight_p4.pt()))
+            if (passes_muid_wp2012(mu_idx, mu2012_tightness::TIGHT) and (mu_p4.pt() > mu3_tight_p4.pt()))
             {
                 mu3_tight_p4 = mu_p4; 
             }
 
             // loose WP
-            if (passes_muid_wp2012(mu3_idx, mu2012_tightness::LOOSE) and (mu_p4.pt() > mu3_loose_p4.pt()))
+            if (passes_muid_wp2012(mu_idx, mu2012_tightness::LOOSE) and (mu_p4.pt() > mu3_loose_p4.pt()))
             {
                 mu3_loose_p4 = mu_p4; 
             }
 
             // full ss2012 selection
-            if (samesign::isGoodLepton(13, mu3_idx) and (mu_p4.pt() > mu3_ssv5_p4.pt()))
+            if (samesign::isGoodLepton(13, mu_idx) and (mu_p4.pt() > mu3_ssv5_p4.pt()))
             {
                 mu3_ssv5_p4 = mu_p4; 
             }
