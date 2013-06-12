@@ -140,14 +140,14 @@ def make_hist(signal_region, sample):
 	cmd += " --output plots/%s/%s/%s/%s/%s" % (options.out_name, options.anal_type, signal_region_type, signal_region_stem, root_file_name)
 	
 	# options
-	cmd += " --nev %s"                            % int(options.nev)
-	cmd += " --nbtags %s"                         % int(options.nbtags)
-	cmd += " --njets %s"                          % int(options.njets)
-	cmd += " --fr_file %s"                        % str(options.fr_file)
-	cmd += " --fl_file %s"                        % str(options.fl_file)
-	cmd += " --charge %d"                         % int(options.charge)
-	cmd += " --ht %1.3f"                          % float(options.min_ht)
-	cmd += " --anal_type %s"                      % options.anal_type 
+	cmd += " --nev %s"        % int(options.nev)
+	cmd += " --nbtags %s"     % int(options.nbtags)
+	cmd += " --njets %s"      % int(options.njets)
+	cmd += " --fr_file %s"    % str(options.fr_file)
+	cmd += " --fl_file %s"    % str(options.fl_file)
+	cmd += " --charge %d"     % int(options.charge)
+	cmd += " --ht %1.3f"      % float(options.min_ht)
+	cmd += " --anal_type %s"  % options.anal_type 
 	if (options.excl):
 		cmd += " --excl 1"
 	else:

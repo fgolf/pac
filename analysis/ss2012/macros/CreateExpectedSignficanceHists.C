@@ -10,6 +10,10 @@
 #include "at/Significance.h"
 #include "SignalBinInfo.h"
 #include "SignalRegion.h"
+#include "TGraph.h"
+#include "TROOT.h"
+#include "TList.h"
+#include "TLegend.h"
 
 using namespace std;
 
@@ -81,6 +85,33 @@ float GetValueFromScanHist(TH1* const hist, const float sparm0, const float spar
     if (rt::is_zero(value)) {return 1.0;}
     else {return value;}
 }
+
+// simple class to hold the sign info
+struct SRInfo
+{
+    // construct
+    SRInfo()
+        : sr(-1)
+        , sig(-9999)
+        , s(-9999)
+        , b(-9999)
+        , b_unc(-9999)
+    {}
+    SRInfo(const unsigned int sr_, const float sig_, const float s_, const float b_, const float db_) 
+        : sr(sr_)
+        , sig(sig_)
+        , s(s_)
+        , b(b_)
+        , b_unc(db_)
+    {}
+
+    // members
+    int sr;
+    float sig;
+    float s;
+    float b;
+    float b_unc;
+};
 
 // compute the significance
 // using inclusive yields
@@ -160,31 +191,33 @@ void CreateExpectedSignificanceHists
 
     // resulting histograms
     rt::TH1Container hc_sig;
-    hc_sig.Add(new TH2F("h_sig_8tev"           , Form("Expected Significance (8 TeV) %s"     , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_nsigma_8tev"        , Form("N Sigma (8 TeV) %s"                   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr_8tev"   , Form("Best Signal Region (sig) (8 TeV) %s"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_nsigma_best_sr_8tev", Form("Best Signal Region (nsigma) (8 TeV) %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_s_8tev"             , Form("Signal yield (8 TeV) %s;significance"          , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_8tev"             , Form("Background estimate (8 TeV) %s;significance"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_8tev"           , Form("Expected Significance (8 TeV) %s;significance" , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_8tev"   , Form("Best Signal Region (sig) (8 TeV) %s;best SR"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
-    hc_sig.Add(new TH2F("h_sig_14tev"           , Form("Expected Significance (14 TeV) %s"     , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_nsigma_14tev"        , Form("N Sigma (14 TeV) %s"                   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr_14tev"   , Form("Best Signal Region (sig) (14 TeV) %s"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_nsigma_best_sr_14tev", Form("Best Signal Region (nsigma) (14 TeV) %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_s_8tev_opt"           , Form("Signal yield (8 TeV, optimistic) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_8tev_opt"           , Form("Background estimate (8 TeV, optimistic) %s;significance"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_8tev_opt"         , Form("Expected Significance (8 TeV, optimistic) %s;significance", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_8tev_opt" , Form("Best Signal Region (sig) (8 TeV, optimistic) %s;best SR"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
-    hc_sig.Add(new TH2F("h_sig_14tev_opt"         , Form("Expected Significance (14 TeV, optimistic) %s"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr_14tev_opt" , Form("Best Signal Region (sig) (14 TeV, optimistic) %s", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_s_14tev"             , Form("Signal yield (14 TeV) %s;significance"          , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_14tev"             , Form("Background estimate (14 TeV) %s;significance"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_14tev"           , Form("Expected Significance (14 TeV) %s;significance" , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_14tev"   , Form("Best Signal Region (sig) (14 TeV) %s;best SR"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+
+    hc_sig.Add(new TH2F("h_s_14tev_opt"           , Form("Signal yield (14 TeV, optimistic) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_14tev_opt"           , Form("Background estimate (14 TeV, optimistic) %s;significance"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_14tev_opt"         , Form("Expected Significance (14 TeV, optimistic) %s;significance", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_14tev_opt" , Form("Best Signal Region (sig) (14 TeV, optimistic) %s;best SR"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     //for (size_t i = 0; i != sr_nums.size(); i++)
     //{
     //    const unsigned int sr_num = sr_nums.at(i);
     //    hc_sig.Add(new TH2F(Form("h_num_sr%d"   , sr_num), Form("Number of expected events SR%d %s", sr_num, ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     //    hc_sig.Add(new TH2F(Form("h_sig_sr%d"   , sr_num), Form("Expected Significance SR%d %s"    , sr_num, ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    //    hc_sig.Add(new TH2F(Form("h_nsigma_sr%d", sr_num), Form("N Sigma SR%d %s"                  , sr_num, ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     //}
 
     // looper over sparms
-/*     int xbin = 1; */
-/*     int ybin = 1; */
-/*     const float sparm0 = 650.0; */
-/*     const float sparm1 = 150.0; */
     const size_t nbinsx = bin_info.nbinsx;
     const size_t nbinsy = bin_info.nbinsy;
     const float xmin    = bin_info.xmin;
@@ -214,11 +247,10 @@ void CreateExpectedSignificanceHists
 /*             cout << sparm0 << "\t" << sparm1 << "\t" << xbin << "\t" << ybin << endl; */
 
             // store the best SR per sparm
-            std::pair<float, unsigned int> best_sr_sig_8tev            (-99999.0, 0);
-            std::pair<float, unsigned int> best_sr_nsigma_8tev         (-99999.0, 0);
-            std::pair<float, unsigned int> best_sr_sig_14tev           (-99999.0, 0);
-            std::pair<float, unsigned int> best_sr_nsigma_14tev        (-99999.0, 0);
-            std::pair<float, unsigned int> best_sr_sig_14tev_optimistic(-99999.0, 0);
+            SRInfo best_sr_sig_8tev;
+            SRInfo best_sr_sig_8tev_optimistic;
+            SRInfo best_sr_sig_14tev;
+            SRInfo best_sr_sig_14tev_optimistic;
 
             // loop over signal regions
             for (size_t k = 0; k != sr_nums.size(); k++)
@@ -242,37 +274,59 @@ void CreateExpectedSignificanceHists
                 const float n_bkgd_8tev        = yi.pred;
                 const float unc_bkgd_8tev      = yi.pred_unc;
                 const float frac_unc_bkgd_8tev = yi.pred_unc / yi.pred;
-                const int n_exp_8tev           = static_cast<int>(n_signal_8tev + n_bkgd_8tev);
+                cout << "xsec_8tev = " << xsec_8tev << endl;
 
                 // signficance
                 const float sig_8tev    = at::SimpleSignificance(n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev);
-/*                 const float nsigma_8tev = at::NSigma(n_bkgd_8tev, n_exp_8tev, frac_unc_bkgd_8tev); */
-                const float nsigma_8tev = 9999.0;
                 cout << "n_signal_8tev      = " << n_signal_8tev      << endl;
                 cout << "n_bkgd_8tev        = " << n_bkgd_8tev        << endl;
                 cout << "unc_bkgd_8tev      = " << unc_bkgd_8tev      << endl;
                 cout << "frac_unc_bkgd_8tev = " << frac_unc_bkgd_8tev << endl;
                 cout << "sig 8 = " << sig_8tev << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
 
-                // save the significance
-/*                 rt::SetBinContent2D(hc_sig[h_sig_sr_name], sparm0, sparm1, sig     ); */
-/*                 rt::SetBinContent2D(hc_sig[h_num_sr_name], sparm0, sparm1, n_signal); */
+                // test for the best SR sig (overwrite old results);
+                if (best_sr_sig_8tev.sig < sig_8tev)
+                {
+                    best_sr_sig_8tev = SRInfo(sr_num, sig_8tev, n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev);
+                }
+                rt::SetBinContent2D(hc_sig["h_sig_8tev"        ], sparm0, sparm1, best_sr_sig_8tev.sig);
+                rt::SetBinContent2D(hc_sig["h_sig_best_sr_8tev"], sparm0, sparm1, best_sr_sig_8tev.sr );
+                rt::SetBinContent2D(hc_sig["h_s_8tev"          ], sparm0, sparm1, best_sr_sig_8tev.s  );
+                rt::SetBinContent2D(hc_sig["h_b_8tev"          ], sparm0, sparm1, best_sr_sig_8tev.b  , best_sr_sig_8tev.b_unc);
+
+                // -----------------------------// 
+                // 8 TeV significane -- optimistic scenario
+                // -----------------------------// 
+
+                // Rare Prediction Uncertainty:
+                // Assume the statistical uncertainty on the rare MC is negligable
+                // Assume the systematic uncertainty on the rare MC is improved to 30%
+                const float rare_unc_8tev_optimistic = 0.30 * yi.rare;
+
+                // Fake Prediction Uncertainty:
+                // Assume the systematic uncertainty on the fake is improved to 40% (from 50%)
+                // The uncertainty is dominated by the statistcal term --> scale the total uncertainty by 0.8
+                const float fake_unc_8tev_optimistic = 0.80 * yi.fake_unc;
+
+                // scale background unc
+                const float unc_bkgd_8tev_optimistic = sqrt(pow(fake_unc_8tev_optimistic,2) + pow(yi.flip_unc, 2) + pow(rare_unc_8tev_optimistic, 2));
+                cout << "fake_unc_8tev_optimistic       = " << fake_unc_8tev_optimistic        << endl;
+                cout << "rare_unc_8tev_optimistic       = " << rare_unc_8tev_optimistic        << endl;
+                cout << "unc_bkgd_8tev_optimistic  = " << unc_bkgd_8tev_optimistic  << endl;
+
+                // significance
+                const float sig_8tev_optimistic = at::SimpleSignificance(n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev_optimistic);
 
                 // test for the best SR sig (overwrite old results);
-                if (best_sr_sig_8tev.first < sig_8tev)
+                if (best_sr_sig_8tev_optimistic.sig < sig_8tev_optimistic)
                 {
-                    best_sr_sig_8tev = std::make_pair(sig_8tev, sr_num);
+                    best_sr_sig_8tev_optimistic = SRInfo(sr_num, sig_8tev_optimistic, n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev_optimistic);
                 }
-                rt::SetBinContent2D(hc_sig["h_sig_8tev"        ], sparm0, sparm1, best_sr_sig_8tev.first );
-                rt::SetBinContent2D(hc_sig["h_sig_best_sr_8tev"], sparm0, sparm1, best_sr_sig_8tev.second);
-
-                // test for the best SR nsigma (overwrite old results);
-                if (best_sr_nsigma_8tev.first < nsigma_8tev)
-                {
-                    best_sr_nsigma_8tev = std::make_pair(nsigma_8tev, sr_num);
-                }
-                rt::SetBinContent2D(hc_sig["h_nsigma_8tev"        ], sparm0, sparm1, best_sr_nsigma_8tev.first );
-                rt::SetBinContent2D(hc_sig["h_nsigma_best_sr_8tev"], sparm0, sparm1, best_sr_nsigma_8tev.second);
+                rt::SetBinContent2D(hc_sig["h_sig_8tev_opt"        ], sparm0, sparm1, best_sr_sig_8tev_optimistic.sig);
+                rt::SetBinContent2D(hc_sig["h_sig_best_sr_8tev_opt"], sparm0, sparm1, best_sr_sig_8tev_optimistic.sr );
+                rt::SetBinContent2D(hc_sig["h_s_8tev_opt"          ], sparm0, sparm1, best_sr_sig_8tev_optimistic.s  );
+                rt::SetBinContent2D(hc_sig["h_b_8tev_opt"          ], sparm0, sparm1, best_sr_sig_8tev_optimistic.b  , best_sr_sig_8tev_optimistic.b_unc);
+                cout << "sig 8 = " << sig_8tev_optimistic << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
 
                 // -----------------------------// 
                 // 14 TeV significane
@@ -293,17 +347,13 @@ void CreateExpectedSignificanceHists
                 const float xsec_ttw_14tev      = 1000.0 * (0.507 + 0.262); // fb
                 const float scale_ttbar         = xsec_ttbar_14tev/xsec_ttbar_8tev;
                 const float scale_ttw           = xsec_ttw_14tev/xsec_ttw_8tev;
-/*                 const float scale_susy          = xsec_14tev/xsec_8tev; */
                 const float scale_lumi          = lumi_14tev/lumi_8tev;
                 const float n_bkgd_14tev        = scale_lumi*(scale_ttbar * yi.fake + scale_ttbar * yi.flip + scale_ttw *yi.rare);
                 const float unc_bkgd_14tev      = scale_lumi*sqrt(pow(scale_ttbar * yi.fake_unc,2) + pow(scale_ttbar * yi.flip_unc, 2) + pow(scale_ttw * yi.rare_unc, 2));
                 const float frac_unc_bkgd_14tev = unc_bkgd_14tev / n_bkgd_14tev;
-                const int n_exp_14tev           = static_cast<int>(n_signal_14tev + n_bkgd_14tev);
 
                 // signficance
                 const float sig_14tev    = at::SimpleSignificance(n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev);
-/*                 const float nsigma_14tev = at::NSigma(n_bkgd_14tev, n_exp_14tev, frac_unc_bkgd_14tev); */
-                const float nsigma_14tev = 9999.0;
                 cout << "n_signal_14tev      = " << n_signal_14tev      << endl;
                 cout << "n_bkgd_14tev        = " << n_bkgd_14tev        << endl;
                 cout << "unc_bkgd_14tev      = " << unc_bkgd_14tev      << endl;
@@ -313,20 +363,14 @@ void CreateExpectedSignificanceHists
                 cout << "sig 14 = " << sig_14tev << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
 
                 // test for the best SR sig (overwrite old results);
-                if (best_sr_sig_14tev.first < sig_14tev)
+                if (best_sr_sig_14tev.sig < sig_14tev)
                 {
-                    best_sr_sig_14tev = std::make_pair(sig_14tev, sr_num);
+                    best_sr_sig_14tev = SRInfo(sr_num, sig_14tev, n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev);
                 }
-                rt::SetBinContent2D(hc_sig["h_sig_14tev"        ], sparm0, sparm1, best_sr_sig_14tev.first );
-                rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev"], sparm0, sparm1, best_sr_sig_14tev.second);
-
-                // test for the best SR nsigma (overwrite old results);
-                if (best_sr_nsigma_14tev.first < nsigma_14tev)
-                {
-                    best_sr_nsigma_14tev = std::make_pair(nsigma_14tev, sr_num);
-                }
-                rt::SetBinContent2D(hc_sig["h_nsigma_14tev"        ], sparm0, sparm1, best_sr_nsigma_14tev.first );
-                rt::SetBinContent2D(hc_sig["h_nsigma_best_sr_14tev"], sparm0, sparm1, best_sr_nsigma_14tev.second);
+                rt::SetBinContent2D(hc_sig["h_sig_14tev"        ], sparm0, sparm1, best_sr_sig_14tev.sig);
+                rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev"], sparm0, sparm1, best_sr_sig_14tev.sr );
+                rt::SetBinContent2D(hc_sig["h_s_14tev"          ], sparm0, sparm1, best_sr_sig_14tev.s  );
+                rt::SetBinContent2D(hc_sig["h_b_14tev"          ], sparm0, sparm1, best_sr_sig_14tev.b  , best_sr_sig_14tev.b_unc);
 
                 // -----------------------------// 
                 // 14 TeV significane -- optimistic scenario
@@ -335,31 +379,33 @@ void CreateExpectedSignificanceHists
                 // Rare Prediction Uncertainty:
                 // Assume the statistical uncertainty on the rare MC is negligable
                 // Assume the systematic uncertainty on the rare MC is improved to 30%
-                const float rare_unc_optimistic = 0.30 * yi.rare;
+                const float rare_unc_14tev_optimistic = 0.30 * yi.rare;
 
                 // Fake Prediction Uncertainty:
                 // Assume the stastical unc on the FR is constant (time driven by pre-scaled triggers).  Assume its about 15%. 
                 // Assume the stastical unc on the SB count is reduced with more statistics (reduced by factor of sqrt(300/19.5) ~ 8).
                 // --> call statistical on the fake prediction about 20%.
                 // Assume the systematic uncertainty on the fake is improved to 40%
-                const float fake_unc_optimistic = sqrt(0.40*0.40 + 0.20*0.20) * yi.fake;
+                const float fake_unc_14tev_optimistic = sqrt(0.40*0.40 + 0.20*0.20) * yi.fake;
 
                 // scale background unc
-                const float unc_bkgd_14tev_optimistic = scale_lumi*sqrt(pow(scale_ttbar * fake_unc_optimistic,2) + pow(scale_ttbar * yi.flip_unc, 2) + pow(scale_ttw * rare_unc_optimistic, 2));
-                cout << "fake_unc_optimistic       = " << fake_unc_optimistic        << endl;
-                cout << "rare_unc_optimistic       = " << rare_unc_optimistic        << endl;
-                cout << "unc_bkgd_14tev_optimistic = " << unc_bkgd_14tev_optimistic  << endl;
+                const float unc_bkgd_14tev_optimistic = scale_lumi*sqrt(pow(scale_ttbar * fake_unc_14tev_optimistic,2) + pow(scale_ttbar * yi.flip_unc, 2) + pow(scale_ttw * rare_unc_14tev_optimistic, 2));
+                cout << "fake_unc_optimistic       = " << fake_unc_14tev_optimistic << endl;
+                cout << "rare_unc_optimistic       = " << rare_unc_14tev_optimistic << endl;
+                cout << "unc_bkgd_14tev_optimistic = " << unc_bkgd_14tev_optimistic << endl;
 
                 // significance
                 const float sig_14tev_optimistic = at::SimpleSignificance(n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev_optimistic);
 
                 // test for the best SR sig (overwrite old results);
-                if (best_sr_sig_14tev_optimistic.first < sig_14tev_optimistic)
+                if (best_sr_sig_14tev_optimistic.sig < sig_14tev_optimistic)
                 {
-                    best_sr_sig_14tev_optimistic = std::make_pair(sig_14tev_optimistic, sr_num);
+                    best_sr_sig_14tev_optimistic = SRInfo(sr_num, sig_14tev_optimistic, n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev_optimistic);
                 }
-                rt::SetBinContent2D(hc_sig["h_sig_14tev_opt"        ], sparm0, sparm1, best_sr_sig_14tev_optimistic.first );
-                rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev_opt"], sparm0, sparm1, best_sr_sig_14tev_optimistic.second);
+                rt::SetBinContent2D(hc_sig["h_sig_14tev_opt"        ], sparm0, sparm1, best_sr_sig_14tev_optimistic.sig);
+                rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev_opt"], sparm0, sparm1, best_sr_sig_14tev_optimistic.sr );
+                rt::SetBinContent2D(hc_sig["h_s_14tev_opt"          ], sparm0, sparm1, best_sr_sig_14tev_optimistic.s  );
+                rt::SetBinContent2D(hc_sig["h_b_14tev_opt"          ], sparm0, sparm1, best_sr_sig_14tev_optimistic.b  , best_sr_sig_8tev_optimistic.b_unc);
                 cout << "sig 14 = " << sig_14tev_optimistic << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
 
             } // end signal region loop
@@ -367,32 +413,161 @@ void CreateExpectedSignificanceHists
     } // end xbin loop 
 
     // divide 14/8
-    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev"    ], hc_sig["h_sig_8tev"], "h_sig_ratio"    , Form("Expected Significance ratio (14/8) %s"           , ss::GetSignalBinHistLabel(sample).c_str())));
-    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev_opt"], hc_sig["h_sig_8tev"], "h_sig_ratio_opt", Form("Expected Significance ratio (14 optimistic/8) %s", ss::GetSignalBinHistLabel(sample).c_str())));
+    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev"    ], hc_sig["h_sig_8tev"], "h_sig_ratio_14tev"    , Form("Expected Significance ratio (14/8) %s;ratio"           , ss::GetSignalBinHistLabel(sample).c_str())));
+    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_14tev_opt"], hc_sig["h_sig_8tev"], "h_sig_ratio_14tev_opt", Form("Expected Significance ratio (14 optimistic/8) %s;ratio", ss::GetSignalBinHistLabel(sample).c_str())));
+    hc_sig.Add(rt::DivideHists(hc_sig["h_sig_8tev_opt" ], hc_sig["h_sig_8tev"], "h_sig_ratio_8tev_opt" , Form("Expected Significance ratio (8 optimistic/8) %s;ratio" , ss::GetSignalBinHistLabel(sample).c_str())));
 
     // write the histogram
     hc_sig.Write(output_file);
+}
+
+TGraph* GetContourTGraph(TH1* hist, const double level = 5.0)
+{
+    TCanvas c("c_GetContourTGraph_temp", "c_GetContourTGraph_temp");
+    const float min   = hist->GetMinimum();
+    const float max   = hist->GetMaximum();
+    double contours[] = {min, level, max};
+    hist->SetContour(2, contours);
+    hist->Draw("CONT Z LIST");
+    c.Update();
+
+    TObjArray* array = dynamic_cast<TObjArray*>(gROOT->GetListOfSpecials()->FindObject("contours"));
+    TList *list      = dynamic_cast<TList*>(array->First());
+    TGraph* curve    = dynamic_cast<TGraph*>(list->First()->Clone()); 
+
+    // reset the contours
+    hist->SetContour(static_cast<int>(max-min)+1);
+    return curve;
+}
+
+void PrintSignificancePlot(TH1* hist, const std::string& output_file_name)
+{
+    // Draw the hist and curve
+    gStyle->SetPadRightMargin(0.15);
+    gStyle->SetPaintTextFormat("1.1f");
+    TGraph* curve = GetContourTGraph(hist, 5.0);
+    TCanvas c("c_PrintSignificancePlot_temp", "c_PrintSignificancePlot_temp");
+    hist->Draw("colz");
+    curve->SetLineWidth(3);
+    curve->Draw("C");
+
+    // Draw the legend
+    TLegend leg(0.15, 0.75, 0.5, 0.89);
+    leg.AddEntry(curve, "5#sigma signficance", "L");
+    leg.SetFillColor(0);  // 0 makes it the background clear on the pad
+    leg.SetFillStyle(0);
+    leg.SetBorderSize(0);
+    leg.Draw();
+
+    c.Print(output_file_name.c_str());
 }
 
 void PrintExpectedSignificanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
 {
     rt::TH1Container hc(input_file);
     hc.SetStats(false);
-
-    gStyle->SetPaintTextFormat("1.0f");
-    rt::Print(hc["h_sig_best_sr_8tev" ], output_path, suffix, "h_sig_best_sr_8tev" , "text", false);
-    rt::Print(hc["h_sig_best_sr_14tev"], output_path, suffix, "h_sig_best_sr_14tev", "text", false);
+    TCanvas c1("c1", "c1");
 
     gStyle->SetPaintTextFormat("1.1f");
-    rt::Print(hc["h_sig_8tev"     ], output_path, suffix, "h_sig_8tev"     , "text", false);
-    rt::Print(hc["h_sig_14tev"    ], output_path, suffix, "h_sig_14tev"    , "text", false);
-    rt::Print(hc["h_sig_ratio"    ], output_path, suffix, "h_sig_ratio"    , "text", false);
-    rt::Print(hc["h_sig_14tev_opt"], output_path, suffix, "h_sig_14tev_opt", "text", false);
-    rt::Print(hc["h_sig_ratio_opt"], output_path, suffix, "h_sig_ratio_opt", "text", false);
+    rt::Print(hc["h_s_8tev"             ], output_path, suffix, "h_s_8tev_text"             , "text", false);
+    rt::Print(hc["h_b_8tev"             ], output_path, suffix, "h_b_8tev_text"             , "text", false);
+    rt::Print(hc["h_sig_8tev"           ], output_path, suffix, "h_sig_8tev_text"           , "text", false);
+    rt::Print(hc["h_sig_8tev_opt"       ], output_path, suffix, "h_sig_8tev_opt_text"       , "text", false);
+    rt::Print(hc["h_s_8tev_opt"         ], output_path, suffix, "h_s_8tev_opt_text"         , "text", false);
+    rt::Print(hc["h_b_8tev_opt"         ], output_path, suffix, "h_b_8tev_opt_text"         , "text", false);
+    gStyle->SetPaintTextFormat("1.0f");
+    rt::Print(hc["h_sig_14tev"          ], output_path, suffix, "h_sig_14tev_text"          , "text", false);
+    rt::Print(hc["h_s_14tev"            ], output_path, suffix, "h_s_14tev_text"            , "text", false);
+    rt::Print(hc["h_b_14tev"            ], output_path, suffix, "h_b_14tev_text"            , "text", false);
+    rt::Print(hc["h_sig_ratio_14tev"    ], output_path, suffix, "h_sig_ratio_14tev_text"    , "text", false);
+    rt::Print(hc["h_s_14tev_opt"        ], output_path, suffix, "h_s_14tev_opt_text"        , "text", false);
+    rt::Print(hc["h_b_14tev_opt"        ], output_path, suffix, "h_b_14tev_opt_text"        , "text", false);
+    rt::Print(hc["h_sig_14tev_opt"      ], output_path, suffix, "h_sig_14tev_opt_text"      , "text", false);
+    rt::Print(hc["h_sig_ratio_14tev_opt"], output_path, suffix, "h_sig_ratio_14tev_opt_text", "text", false);
 
-//     hc.SetOption("colz");
-//     gStyle->SetPadRightMargin(0.15);
-//     gStyle->SetPaintTextFormat("1.1f");
-//     rt::mkdir(output_path, /*force=*/true);
-//     hc.Print(output_path, suffix);
+    gStyle->SetPadRightMargin(0.15);
+    gStyle->SetPaintTextFormat("1.0f");
+    hc["h_sig_best_sr_8tev"     ]->GetZaxis()->SetRangeUser(17, 29);
+    hc["h_sig_best_sr_8tev_opt" ]->GetZaxis()->SetRangeUser(18, 29);
+    hc["h_sig_best_sr_14tev"    ]->GetZaxis()->SetRangeUser(23, 29);
+    hc["h_sig_best_sr_14tev_opt"]->GetZaxis()->SetRangeUser(23, 29);
+    hc["h_sig_best_sr_8tev"     ]->SetContour(29-17);
+    hc["h_sig_best_sr_8tev_opt" ]->SetContour(29-18);
+    hc["h_sig_best_sr_14tev"    ]->SetContour(29-23);
+    hc["h_sig_best_sr_14tev_opt"]->SetContour(29-23);
+    rt::Print(hc["h_sig_best_sr_8tev"     ], output_path, suffix, "h_sig_best_sr_8tev"     , "text colz", false);
+    rt::Print(hc["h_sig_best_sr_8tev_opt" ], output_path, suffix, "h_sig_best_sr_8tev_opt" , "text colz", false);
+    rt::Print(hc["h_sig_best_sr_14tev"    ], output_path, suffix, "h_sig_best_sr_14tev"    , "text colz", false);
+    rt::Print(hc["h_sig_best_sr_14tev_opt"], output_path, suffix, "h_sig_best_sr_14tev_opt", "text colz", false);
+
+    rt::Print(hc["h_sig_8tev"           ], output_path, suffix, "h_sig_8tev_col"           , "colz", false);
+    rt::Print(hc["h_sig_8tev_opt"       ], output_path, suffix, "h_sig_8tev_opt_col"       , "colz", false);
+    rt::Print(hc["h_sig_14tev"          ], output_path, suffix, "h_sig_14tev_col"          , "colz", false);
+    rt::Print(hc["h_sig_ratio_14tev"    ], output_path, suffix, "h_sig_ratio_14tev_col"    , "colz", false);
+    rt::Print(hc["h_sig_14tev_opt"      ], output_path, suffix, "h_sig_14tev_opt_col"      , "colz", false);
+    rt::Print(hc["h_sig_ratio_14tev_opt"], output_path, suffix, "h_sig_ratio_14tev_opt_col", "colz", false);
+
+    // pretty versions
+    PrintSignificancePlot(hc["h_sig_8tev"     ], Form("%s/h_sig_8tev_curve.%s"     , output_path.c_str(), suffix.c_str()));
+    PrintSignificancePlot(hc["h_sig_8tev_opt" ], Form("%s/h_sig_8tev_opt_curve.%s" , output_path.c_str(), suffix.c_str()));
+    PrintSignificancePlot(hc["h_sig_14tev"    ], Form("%s/h_sig_14tev_curve.%s"    , output_path.c_str(), suffix.c_str()));
+    PrintSignificancePlot(hc["h_sig_14tev_opt"], Form("%s/h_sig_14tev_opt_curve.%s", output_path.c_str(), suffix.c_str()));
+
+    // summary plot
+    TGraph* curve_8tev = GetContourTGraph(hc["h_sig_8tev"]);
+    curve_8tev->SetLineWidth(3);
+    curve_8tev->SetLineColor(kBlack);
+    curve_8tev->SetLineStyle(1);
+
+    TGraph* curve_8tev_opt = GetContourTGraph(hc["h_sig_8tev_opt"]);
+    curve_8tev_opt->SetLineWidth(3);
+    curve_8tev_opt->SetLineColor(kGreen+2);
+    curve_8tev_opt->SetLineStyle(2);
+
+    TGraph* curve_14tev = GetContourTGraph(hc["h_sig_14tev"]);
+    curve_14tev->SetLineWidth(3);
+    curve_14tev->SetLineColor(kRed);
+    curve_14tev->SetLineStyle(3);
+
+    TGraph* curve_14tev_opt = GetContourTGraph(hc["h_sig_14tev_opt"]);
+    curve_14tev_opt->SetLineWidth(3);
+    curve_14tev_opt->SetLineColor(kBlue);
+    curve_14tev_opt->SetLineStyle(4);
+
+    gStyle->SetPadRightMargin(0.10);
+    TH1* h_temp = dynamic_cast<TH1*>(hc["h_sig_8tev"]->Clone("h_temp"));
+    h_temp->SetTitle("Expected 5#sigma discovery reach");
+    h_temp->Draw("axis");
+    curve_8tev->Draw("C");
+    curve_8tev_opt->Draw("C");
+    curve_14tev->Draw("C");
+    curve_14tev_opt->Draw("C");
+
+    TLegend leg(0.15, 0.70, 0.5, 0.89);
+    leg.AddEntry(curve_8tev     , "20 fb^{-1}, #sqrt{s} = 8 TeV"                , "L");
+    leg.AddEntry(curve_8tev_opt , "20 fb^{-1}, #sqrt{s} = 8 TeV (optimistic)"   , "L");
+    leg.AddEntry(curve_14tev    , "300 fb^{-1}, #sqrt{s} = 14 TeV (pessimistic)", "L");
+    leg.AddEntry(curve_14tev_opt, "300 fb^{-1}, #sqrt{s} = 14 TeV (optimistic)" , "L");
+    leg.SetFillColor(0);  // 0 makes it the background clear on the pad
+    leg.SetFillStyle(0);
+    leg.SetBorderSize(0);
+    leg.Draw();
+    c1.Print(Form("%s/h_summary_curve.%s", output_path.c_str(), suffix.c_str()));
+}
+
+void PrintSbottomTopXsecOverlay()
+{
+    rt::TH1Container hc_xsec("data/xsec/susy_xsec.root");
+    rt::TH1Container hc_xsec_14tev("data/xsec/susy_xsec_14tev.root");
+    TH1* h_xsec_8tev  = hc_xsec      ["h_xsec_sbottomtop"]; 
+    TH1* h_xsec_14tev = hc_xsec_14tev["h_xsec_sbottomtop"]; 
+
+    TH1* h_xsec_ratio = rt::DivideHists(h_xsec_14tev, h_xsec_8tev, "h_xsec_ratio", "Ratio of Cross Sections for T6ttWW (14 TeV/8TeV);m_{#tilde{b}} (GeV);Ratio");
+    h_xsec_ratio->SetLineWidth(2);
+    h_xsec_ratio->SetStats(false);
+    h_xsec_ratio->Draw("hist");
+}
+
+void MassProjection()
+{
 }
