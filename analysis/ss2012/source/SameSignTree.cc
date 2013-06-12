@@ -164,6 +164,7 @@ void SameSignTree::Reset()
     pfTau_leadPtcandID                       = -999999;
     pfTauLoose_leadPtcandID                  = -999999;
     passes_tau_veto                          = false;
+    passes_isotrk_veto                       = false;
     pfTau15                                  = LorentzVector(0, 0, 0, 0);
     pfTau15_leadPtcand                       = LorentzVector(0, 0, 0, 0);
     pfTau                                    = LorentzVector(0, 0, 0, 0);
@@ -383,6 +384,7 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("pfTau_leadPtcandID"                       , &pfTau_leadPtcandID                       , "pfTau_leadPtcandID/I"                       ); 
     tree.Branch("pfTauLoose_leadPtcandID"                  , &pfTauLoose_leadPtcandID                  , "pfTauLoose_leadPtcandID/I"                  ); 
     tree.Branch("passes_tau_veto"                          , &passes_tau_veto                          , "passes_tau_veto/O"                          ); 
+    tree.Branch("passes_isotrk_veto"                       , &passes_isotrk_veto                       , "passes_isotrk_veto/O"                       ); 
     tree.Branch("pfTau15"                                  , "LorentzVector"                           , &pfTau15                                     ); 
     tree.Branch("pfTau15_leadPtcand"                       , "LorentzVector"                           , &pfTau15_leadPtcand                          ); 
     tree.Branch("pfTau"                                    , "LorentzVector"                           , &pfTau                                       ); 

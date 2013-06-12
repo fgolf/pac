@@ -30,6 +30,7 @@
 #include "at/MCBtagCount.h"
 #include "at/CMS2Tag.h"
 #include "rt/RootTools.h"
+#include "at/TrackIsoTools.h"
 #include "CTable.h"
 #include "GenParticleStruct.h"
 #include "EfficiencyModelTools.h"
@@ -2312,7 +2313,10 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         }        
 
         // tau veto
-        m_evt.passes_tau_veto = (m_evt.pfTau_leadPtcandID == -999999);
+        m_evt.passes_tau_veto = PassesTauVeto(); 
+
+        // track iso veto
+        m_evt.passes_isotrk_veto = PassesIsoTrkVeto(m_evt.lep1.p4, m_evt.lep2.p4); 
 
         // Fill the tree
         m_tree->Fill();
@@ -2449,4 +2453,105 @@ float SSAnalysisLooper::GetFlipRateValue(const int lep_id, const int lep_idx) co
     int pt_bin   = h_flip->GetYaxis()->FindBin(min(pt, max_pt));
     int eta_bin  = h_flip->GetXaxis()->FindBin(fabs(eta));
     return h_flip->GetBinContent(eta_bin, pt_bin);
+}
+
+bool SSAnalysisLooper::PassesIsoTrkVeto(const LorentzVector& l1_p4, const LorentzVector& l2_p4) const
+{
+    //------------------------------------------------------
+    // track isolation variable definition
+    //------------------------------------------------------
+    const float dz_cut = 0.1;
+
+    //------------------------------------------------------
+    // store pt and iso for most isolated track (pt>10 GeV) and (pt>5 GeV)
+    //------------------------------------------------------
+
+    float pfcandiso5looseZ    = -9999;
+    float pfcandpt5looseZ     = -9999;
+    int pfcandid5looseZ       = -9999;
+    float pfcandisoOS10looseZ = -9999;
+    float pfcandptOS10looseZ  = -9999;
+    int pfcandidOS10looseZ    = -9999;
+
+    std::vector<LorentzVector> goodLeptons;
+    if (l1_p4.pt() > 0.01) goodLeptons.push_back(l1_p4);
+    if (l2_p4.pt() > 0.01) goodLeptons.push_back(l2_p4);
+
+    for (size_t ipf = 0; ipf < cms2.pfcands_p4().size(); ipf++)
+    {
+        if (cms2.pfcands_p4().at(ipf).pt() < 5) {continue;}
+        if (cms2.pfcands_charge().at(ipf) == 0) {continue;}
+
+        at::myTrackIso myTrackIso = at::trackIso(ipf);
+
+        bool isGoodLepton = false;
+        for (int ilep = 0; ilep < (int)goodLeptons.size(); ilep++)
+        {
+            if (ROOT::Math::VectorUtil::DeltaR(cms2.pfcands_p4().at(ipf), goodLeptons.at(ilep)) < 0.1) {isGoodLepton = true;}
+        }
+
+        // this is with the OS requirement
+        float charge = (cms2.pfcands_particleId().at(ipf) * m_evt.lep1.charge);
+
+        // charge < 0 is a SS , charge > 0 is a OS for e/mu; need to flip for pions
+        if ((abs(cms2.pfcands_particleId().at(ipf)) != 11) && (abs(cms2.pfcands_particleId().at(ipf)) != 13))
+        {
+            charge *= (-1); 
+        }
+
+        //////////
+
+        int itrk = -1;
+        float mindz = 999;
+
+        if (abs(cms2.pfcands_particleId().at(ipf)) != 11)
+        {
+            itrk = cms2.pfcands_trkidx().at(ipf);
+            if (itrk >= (int)cms2.trks_trk_p4().size() || itrk < 0) continue;
+            mindz = trks_dz_pv(itrk,0).first;
+        }
+
+        if (abs(cms2.pfcands_particleId().at(ipf)) == 11 && cms2.pfcands_pfelsidx().at(ipf) >= 0)
+        {
+            itrk = cms2.els_gsftrkidx().at(cms2.pfcands_pfelsidx().at(ipf));
+            if (itrk >= (int)cms2.gsftrks_p4().size() || itrk < 0) continue;
+            mindz = gsftrks_dz_pv(itrk,0).first;
+        }
+
+        // start with loose dz cut
+        if (fabs(mindz) > dz_cut) {continue;}
+
+        // store loose definition to compare with previous results
+        float iso = myTrackIso.iso_dr03_dz010_pt00 / cms2.pfcands_p4().at(ipf).pt();
+
+        if (cms2.pfcands_p4().at(ipf).pt() >= 5 && iso < pfcandiso5looseZ && !isGoodLepton)
+        {
+            pfcandiso5looseZ = iso;
+            pfcandpt5looseZ  = cms2.pfcands_p4().at(ipf).pt();
+            pfcandid5looseZ  = cms2.pfcands_particleId().at(ipf);
+        }
+
+        if (cms2.pfcands_p4().at(ipf).pt() >= 10 && iso < pfcandisoOS10looseZ && !isGoodLepton && charge > 0)
+        {
+            pfcandisoOS10looseZ = iso;
+            pfcandptOS10looseZ  = cms2.pfcands_p4().at(ipf).pt();
+            pfcandidOS10looseZ  = cms2.pfcands_particleId().at(ipf);
+        }
+    }
+
+    // pass isolated track veto
+    // We want to check for the generic track only there is now good e/mu candidate
+    if (pfcandptOS10looseZ > 0.0 && abs(pfcandid5looseZ) != 13 && abs(pfcandid5looseZ) != 11 && pfcandisoOS10looseZ < 0.1) {return false;}
+    if (pfcandpt5looseZ    > 0.0 && abs(pfcandid5looseZ) == 13 && pfcandiso5looseZ < 0.2)                                  {return false;}
+    if (pfcandpt5looseZ    > 0.0 && abs(pfcandid5looseZ) == 11 && pfcandiso5looseZ < 0.2)                                  {return false;}
+
+    // if here then return true
+    return true;
+}
+
+
+bool SSAnalysisLooper::PassesTauVeto() const
+{
+    if(m_evt.pfTau_leadPtcandID != -999999) {return false;}
+    return true;
 }

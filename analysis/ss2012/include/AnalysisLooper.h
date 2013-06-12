@@ -108,6 +108,9 @@ private:
 
     float GetFakeRateValue(const int lep_id, const int lep_idx) const;
     float GetFlipRateValue(const int lep_id, const int lep_idx) const;
+
+    bool PassesIsoTrkVeto(const LorentzVector& l1_p4, const LorentzVector& l2_p4) const;
+    bool PassesTauVeto() const;
 };
 
 #endif // SSANALYSISLOOPER_H 

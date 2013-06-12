@@ -317,6 +317,9 @@ public:
     LorentzVector pfTauLoose;
     LorentzVector pfTauLoose_leadPtcand;
     bool passes_tau_veto;
+
+    // track iso veto 
+    bool passes_isotrk_veto;
 };
 
 #endif
