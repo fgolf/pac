@@ -78,6 +78,7 @@ public:
     int nbtags;
     int nbtags20;
     int nbtags30;
+    int nbtags_csvl;
     int ttbar_bkdn;
     int higgs_bkdn;
     int higgs_decay;
@@ -287,6 +288,35 @@ public:
     float gen_dilep_dphi;
     float gen_dilep_deta;
     float gen_dilep_dr;
+
+    //
+    // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
+    //
+    SingleLeptonTree lep3;
+    float lep3_wfr;
+    float lep3_wflip;
+
+    //
+    // additional lepton p4's
+    //
+    LorentzVector mu_muid_loose_p4;
+    LorentzVector mu_muid_tight_p4;
+    LorentzVector mu_muid_ssv5_p4;
+    LorentzVector el_elid_loose_p4;
+    LorentzVector el_elid_medium_p4;
+    LorentzVector el_elid_ssv7_p4;
+
+    // tau info
+    int pfTau15_leadPtcandID;
+    int pfTau_leadPtcandID;
+    int pfTauLoose_leadPtcandID;
+    LorentzVector pfTau15;
+    LorentzVector pfTau15_leadPtcand;
+    LorentzVector pfTau;
+    LorentzVector pfTau_leadPtcand;
+    LorentzVector pfTauLoose;
+    LorentzVector pfTauLoose_leadPtcand;
+    bool passes_tau_veto;
 };
 
 #endif

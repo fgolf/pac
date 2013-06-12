@@ -1,11 +1,14 @@
 #include "SameSignTree.h"
 
 SameSignTree::SameSignTree ()
+    : DileptonTree()
+    , lep3("lep3_")
 {
 }
 
 SameSignTree::SameSignTree (const std::string &prefix)
     : DileptonTree(prefix)
+    , lep3("lep3_")
 {
 }
 
@@ -13,6 +16,7 @@ void SameSignTree::Reset()
 {
     event_info.Reset();
     DileptonTree::Reset();
+    lep3.Reset();
 
     selection                                = 0;
     is_good_lumi                             = true;
@@ -23,6 +27,7 @@ void SameSignTree::Reset()
     nbtags                                   = -999999;
     nbtags20                                 = -999999;
     nbtags30                                 = -999999;
+    nbtags_csvl                              = -999999;
     ttbar_bkdn                               = -999999;
     higgs_bkdn                               = -999999;
     higgs_decay                              = -999999;
@@ -153,6 +158,24 @@ void SameSignTree::Reset()
     gen_dilep_dphi                           = -999999.0;
     gen_dilep_deta                           = -999999.0;
     gen_dilep_dr                             = -999999.0;
+    lep3_wfr                                 = -999999.0;
+    lep3_wflip                               = -999999.0;
+    pfTau15_leadPtcandID                     = -999999;
+    pfTau_leadPtcandID                       = -999999;
+    pfTauLoose_leadPtcandID                  = -999999;
+    passes_tau_veto                          = false;
+    pfTau15                                  = LorentzVector(0, 0, 0, 0);
+    pfTau15_leadPtcand                       = LorentzVector(0, 0, 0, 0);
+    pfTau                                    = LorentzVector(0, 0, 0, 0);
+    pfTau_leadPtcand                         = LorentzVector(0, 0, 0, 0);
+    pfTauLoose                               = LorentzVector(0, 0, 0, 0);
+    pfTauLoose_leadPtcand                    = LorentzVector(0, 0, 0, 0);
+    mu_muid_loose_p4                         = LorentzVector(0, 0, 0, 0);
+    mu_muid_tight_p4                         = LorentzVector(0, 0, 0, 0);
+    mu_muid_ssv5_p4                          = LorentzVector(0, 0, 0, 0);
+    el_elid_loose_p4                         = LorentzVector(0, 0, 0, 0);
+    el_elid_medium_p4                        = LorentzVector(0, 0, 0, 0);
+    el_elid_ssv7_p4                          = LorentzVector(0, 0, 0, 0);
 
     vgenb_p4.clear();
     vjets_p4.clear();
@@ -186,6 +209,7 @@ void SameSignTree::SetBranches(TTree &tree)
 {
     event_info.SetBranches(tree);
     DileptonTree::SetBranches(tree);
+    lep3.SetBranches(tree);
 
     tree.Branch("selection"                                , &selection                                , "selection/i"                                ); 
     tree.Branch("is_good_lumi"                             , &is_good_lumi                             , "is_good_lumi/O"                             ); 
@@ -196,6 +220,7 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("nbtags"                                   , &nbtags                                   , "nbtags/I"                                   ); 
     tree.Branch("nbtags20"                                 , &nbtags20                                 , "nbtags20/I"                                 ); 
     tree.Branch("nbtags30"                                 , &nbtags30                                 , "nbtags30/I"                                 ); 
+    tree.Branch("nbtags_csvl"                              , &nbtags_csvl                              , "nbtags_csvl/I"                              ); 
     tree.Branch("ttbar_bkdn"                               , &ttbar_bkdn                               , "ttbar_bkdn/I"                               ); 
     tree.Branch("higgs_bkdn"                               , &higgs_bkdn                               , "higgs_bkdn/I"                               ); 
     tree.Branch("higgs_decay"                              , &higgs_decay                              , "higgs_decay/I"                              ); 
@@ -352,4 +377,22 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("gen_dilep_dphi"                           , &gen_dilep_dphi                           , "gen_dilep_dphi/F"                           ); 
     tree.Branch("gen_dilep_deta"                           , &gen_dilep_deta                           , "gen_dilep_deta/F"                           ); 
     tree.Branch("gen_dilep_dr"                             , &gen_dilep_dr                             , "gen_dilep_dr/F"                             ); 
+    tree.Branch("lep3_wfr"                                 , &lep3_wfr                                 , "lep3_wfr/F"                                 ); 
+    tree.Branch("lep3_wflip"                               , &lep3_wflip                               , "lep3_wflip/F"                               ); 
+    tree.Branch("pfTau15_leadPtcandID"                     , &pfTau15_leadPtcandID                     , "pfTau15_leadPtcandID/I"                     ); 
+    tree.Branch("pfTau_leadPtcandID"                       , &pfTau_leadPtcandID                       , "pfTau_leadPtcandID/I"                       ); 
+    tree.Branch("pfTauLoose_leadPtcandID"                  , &pfTauLoose_leadPtcandID                  , "pfTauLoose_leadPtcandID/I"                  ); 
+    tree.Branch("passes_tau_veto"                          , &passes_tau_veto                          , "passes_tau_veto/O"                          ); 
+    tree.Branch("pfTau15"                                  , "LorentzVector"                           , &pfTau15                                     ); 
+    tree.Branch("pfTau15_leadPtcand"                       , "LorentzVector"                           , &pfTau15_leadPtcand                          ); 
+    tree.Branch("pfTau"                                    , "LorentzVector"                           , &pfTau                                       ); 
+    tree.Branch("pfTau_leadPtcand"                         , "LorentzVector"                           , &pfTau_leadPtcand                            ); 
+    tree.Branch("pfTauLoose"                               , "LorentzVector"                           , &pfTauLoose                                  ); 
+    tree.Branch("pfTauLoose_leadPtcand"                    , "LorentzVector"                           , &pfTauLoose_leadPtcand                       ); 
+    tree.Branch("mu_muid_loose_p4"                         , "LorentzVector"                           , &mu_muid_loose_p4                            );
+    tree.Branch("mu_muid_tight_p4"                         , "LorentzVector"                           , &mu_muid_tight_p4                            );
+    tree.Branch("mu_muid_ssv5_p4"                          , "LorentzVector"                           , &mu_muid_ssv5_p4                             );
+    tree.Branch("el_elid_loose_p4"                         , "LorentzVector"                           , &el_elid_loose_p4                            );
+    tree.Branch("el_elid_medium_p4"                        , "LorentzVector"                           , &el_elid_medium_p4                           );
+    tree.Branch("el_elid_ssv7_p4"                          , "LorentzVector"                           , &el_elid_ssv7_p4                             );
 }

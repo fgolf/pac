@@ -126,6 +126,16 @@ bool passesETHfo(const int lep_id, const int lep_idx, const bool use_el_eta)
     return false;
 }
 
+// POG medium working point with pt > 20 and |eta| < 2.4
+static const cuts_t electronSelection_pog_medium = 
+                       electronSelectionFO_SS_baselineV2   |
+                       (1ll<<ELEID_WP2012_MEDIUM_NOISO);
+
+// POG medium working point with pt > 20 and |eta| < 2.4
+static const cuts_t electronSelection_pog_loose = 
+                       electronSelectionFO_SS_baselineV2   |
+                       (1ll<<ELEID_WP2012_LOOSE_NOISO);
+
 // set then numerator bool
 bool SSAnalysisLooper::IsNumerator(const int lep_id, const int lep_idx)
 {
@@ -1262,6 +1272,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nbtags_csvl  = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
         }
         else
         {
@@ -1275,6 +1286,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nbtags_csvl  = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVL,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
         }
 
         m_evt.no_extrag    = (not samesign::makesExtraGammaStar(hyp_idx));
@@ -2055,6 +2067,252 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 m_evt.vbjets_mc3p4.push_back(mc3p4);
             }
         }
+
+        //----------------------------------------
+        // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
+        //----------------------------------------
+        int el3_idx  = -1;
+        int el3_id   = 0;
+        float el3_pt = -999999.0;
+        LorentzVector el3_medium_p4(0, 0, 0, 0);
+        LorentzVector el3_loose_p4(0, 0, 0, 0);
+        LorentzVector el3_ssv7_p4(0, 0, 0, 0);
+        for (size_t el3idx = 0; el3idx != els_p4().size(); el3idx++)
+        {
+            const LorentzVector& el_p4 = els_p4().at(el3idx);
+
+            if (el_p4.pt() < el_min_pt)             {continue;}
+            if (lep1_is_el and el3_idx == lep1_idx) {continue;}
+            if (lep2_is_el and el3_idx == lep2_idx) {continue;}
+
+            // set 3rd electron vars
+            if (el_p4.pt() > el3_pt)
+            {
+                el3_idx = el3idx;
+                el3_id  = -11 * els_charge().at(el3idx);
+                el3_pt  = el_p4.pt();
+            }
+
+            // medium WP
+            if (pass_electronSelection(el3_idx, electronSelection_pog_medium) and (el_p4.pt() > el3_medium_p4.pt()))
+            {
+                el3_medium_p4 = el_p4; 
+            }
+
+            // loose WP
+            if (pass_electronSelection(el3_idx, electronSelection_pog_loose) and (el_p4.pt() > el3_loose_p4.pt()))
+            {
+                el3_loose_p4 = el_p4; 
+            }
+
+            // full ss2012 selection
+            if (samesign::isGoodLepton(11, el3_idx) and (el_p4.pt() > el3_ssv7_p4.pt()))
+            {
+                el3_ssv7_p4 = el_p4; 
+            }
+        }
+        m_evt.el_elid_loose_p4  = el3_loose_p4;
+        m_evt.el_elid_medium_p4 = el3_medium_p4;
+        m_evt.el_elid_ssv7_p4   = el3_ssv7_p4;
+
+//         m_evt.el3.FillCommon(el3_id, el3_idx);
+//         if (el3_idx >= 0)
+//         {
+//             m_evt.el3.cordetiso   = m_evt.el3.detiso   - (log(m_evt.el3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.el3.p4.pt()); // check that I have the correct formula 
+//             m_evt.el3.cordetiso04 = m_evt.el3.detiso04 - (log(m_evt.el3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.el3.p4.pt()); // check that I have the correct formula 
+//             m_evt.el3.corpfiso    = samesign::leptonIsolation(el3_id, el3_idx);
+//             m_evt.el3.corpfiso04  = samesign::electronIsolationPF2012_cone04(el3_idx);
+//             m_evt.el3.effarea     = samesign::EffectiveArea03(el3_id, el3_idx);
+//             m_evt.el3.effarea04   = samesign::EffectiveArea04(el3_id, el3_idx);
+//             m_evt.el3.is_fo       = IsFO(el3_id, el3_idx); 
+//             m_evt.el3.is_num      = IsNumerator(el3_id, el3_idx);
+//             m_evt.el3.is_den      = IsDenominator(el3_id, el3_idx);
+//             m_evt.el3.mt          = rt::Mt(m_evt.el3.p4, met, met_phi);
+//             m_evt.el3.passes_id   = samesign::isGoodLepton(el3_id, el3_idx, m_use_el_eta);
+//             m_evt.el3.passes_iso  = samesign::isIsolatedLepton(el3_id, el3_idx);
+//         }
+
+        int mu3_idx  = -1;
+        int mu3_id   = 0;
+        float mu3_pt = -999999.0;
+        LorentzVector mu3_tight_p4(0, 0, 0, 0);
+        LorentzVector mu3_loose_p4(0, 0, 0, 0);
+        LorentzVector mu3_ssv5_p4(0, 0, 0, 0);
+        for (size_t mu3idx = 0; mu3idx != mus_p4().size(); mu3idx++)
+        {
+            const LorentzVector& mu_p4 = mus_p4().at(mu3idx);
+
+            if (mu_p4.pt() < mu_min_pt)             {continue;}
+            if (lep1_is_mu and mu3_idx == lep1_idx) {continue;}
+            if (lep2_is_mu and mu3_idx == lep2_idx) {continue;}
+
+            // set 3rd muon vars
+            if (mu_p4.pt() > mu3_pt)
+            {
+                mu3_idx = mu3idx;
+                mu3_id  = -13 * mus_charge().at(mu3idx);
+                mu3_pt  = mu_p4.pt();
+            }
+
+            // tight WP
+            if (passes_muid_wp2012(mu3_idx, mu2012_tightness::TIGHT) and (mu_p4.pt() > mu3_tight_p4.pt()))
+            {
+                mu3_tight_p4 = mu_p4; 
+            }
+
+            // loose WP
+            if (passes_muid_wp2012(mu3_idx, mu2012_tightness::LOOSE) and (mu_p4.pt() > mu3_loose_p4.pt()))
+            {
+                mu3_loose_p4 = mu_p4; 
+            }
+
+            // full ss2012 selection
+            if (samesign::isGoodLepton(13, mu3_idx) and (mu_p4.pt() > mu3_ssv5_p4.pt()))
+            {
+                mu3_ssv5_p4 = mu_p4; 
+            }
+        }
+        m_evt.mu_muid_loose_p4 = mu3_loose_p4;
+        m_evt.mu_muid_tight_p4 = mu3_tight_p4;
+        m_evt.mu_muid_ssv5_p4  = mu3_ssv5_p4;
+//         m_evt.mu3.FillCommon(mu3_id, mu3_idx);
+//         if (mu3_idx >= 0)
+//         {
+//             m_evt.mu3.cordetiso   = m_evt.mu3.detiso   - (log(m_evt.mu3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.mu3.p4.pt()); // check that I have the correct formula 
+//             m_evt.mu3.cordetiso04 = m_evt.mu3.detiso04 - (log(m_evt.mu3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.mu3.p4.pt()); // check that I have the correct formula 
+//             m_evt.mu3.corpfiso    = samesign::leptonIsolation(mu3_id, mu3_idx);
+//             m_evt.mu3.effarea     = samesign::EffectiveArea03(mu3_id, mu3_idx);
+//             m_evt.mu3.effarea04   = samesign::EffectiveArea04(mu3_id, mu3_idx);
+//             m_evt.mu3.dbeta       = mus_isoR03_pf_PUPt().at(mu3_idx);
+//             m_evt.mu3.dbeta04     = mus_isoR04_pf_PUPt().at(mu3_idx);
+//             m_evt.mu3.is_fo       = IsFO(mu3_id, mu3_idx); 
+//             m_evt.mu3.is_num      = IsNumerator(mu3_id, mu3_idx);
+//             m_evt.mu3.is_den      = IsDenominator(mu3_id, mu3_idx);
+//             m_evt.mu3.mt          = rt::Mt(m_evt.mu3.p4, met, met_phi);
+//             m_evt.mu3.passes_id   = samesign::isGoodLepton(mu3_id, mu3_idx, m_use_el_eta);
+//             m_evt.mu3.passes_iso  = samesign::isIsolatedLepton(mu3_id, mu3_idx);
+//         }
+
+        // fill common branches for lep3
+        int lep3_idx  = (mu3_pt > el3_pt ? mu3_idx : el3_idx); 
+        int lep3_id   = (mu3_pt > el3_pt ? mu3_id  : el3_id ); 
+        m_evt.lep3.FillCommon(lep3_id, lep3_idx);
+        if (lep3_idx >= 0)
+        {
+            const bool lep3_is_mu  = abs(lep3_id)==13;
+            const bool lep3_is_el  = abs(lep3_id)==11;
+            m_evt.lep3.cordetiso   = m_evt.lep3.detiso   - (log(m_evt.lep3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep3.p4.pt()); // check that I have the correct formula 
+            m_evt.lep3.cordetiso04 = m_evt.lep3.detiso04 - (log(m_evt.lep3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep3.p4.pt()); // check that I have the correct formula 
+            m_evt.lep3.corpfiso    = samesign::leptonIsolation(lep3_id, lep3_idx);
+            m_evt.lep3.corpfiso04  = (lep3_is_el) ? samesign::electronIsolationPF2012_cone04(lep3_idx) : -999999.0;  
+            m_evt.lep3.effarea     = samesign::EffectiveArea03(lep3_id, lep3_idx);
+            m_evt.lep3.effarea04   = samesign::EffectiveArea04(lep3_id, lep3_idx);
+            m_evt.lep3.dbeta       = (lep3_is_mu) ? mus_isoR03_pf_PUPt().at(lep3_idx) : -99999.0;
+            m_evt.lep3.dbeta04     = (lep3_is_mu) ? mus_isoR04_pf_PUPt().at(lep3_idx) : -99999.0;
+            m_evt.lep3.is_fo       = IsFO(lep3_id, lep3_idx); 
+            m_evt.lep3.is_num      = IsNumerator(lep3_id, lep3_idx);
+            m_evt.lep3.is_den      = IsDenominator(lep3_id, lep3_idx);
+            m_evt.lep3.mt          = rt::Mt(m_evt.lep3.p4, met, met_phi);
+            m_evt.lep3.passes_id   = samesign::isGoodLepton(lep3_id, lep3_idx, m_use_el_eta);
+            m_evt.lep3.passes_iso  = samesign::isIsolatedLepton(lep3_id, lep3_idx);
+            m_evt.lep3_wfr         = GetFakeRateValue(lep3_id, lep3_idx);
+            m_evt.lep3_wflip       = GetFlipRateValue(lep3_id, lep3_idx);
+        }
+
+        //----------------------------------------
+        // TAU
+        //----------------------------------------
+
+        int indexTauMax = -1;
+        double ptTauMax = 0.0;
+
+        int indexTauLooseMax = -1;
+        double ptTauLooseMax = 0.0;
+
+        int indexTauMax15 = -1;
+        double ptTauMax15 = 0.0;
+
+
+        for (unsigned int itau = 0; itau < cms2.taus_pf_p4().size(); itau++)
+        {
+            if(cms2.taus_pf_p4().at(itau).pt() < 15) {continue;}
+
+            ///
+            bool isHypLepton = false;
+            if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep1.p4) < 0.4) {isHypLepton = true;}
+            if (rt::DeltaR(cms2.taus_pf_p4().at(itau), m_evt.lep2.p4) < 0.4) {isHypLepton = true;}
+
+            if (isHypLepton) {continue;}
+            if (!cms2.taus_pf_byDecayModeFinding().at(itau)) {continue;}
+
+            // isolation Medium ; pt > 15
+            if (cms2.taus_pf_byMediumIsolationMVA2().at(itau))
+            {
+                if (cms2.taus_pf_p4().at(itau).pt() > ptTauMax15)
+                {
+                    ptTauMax15 = cms2.taus_pf_p4().at(itau).pt();
+                    indexTauMax15 = itau;
+                }	
+            }
+
+            if (cms2.taus_pf_p4().at(itau).pt() < 20) {continue;}
+
+            // isolation Medium ; pt > 20    
+            if (cms2.taus_pf_byMediumIsolationMVA2().at(itau))
+            {
+                if (cms2.taus_pf_p4().at(itau).pt() > ptTauMax)
+                {
+                    ptTauMax = cms2.taus_pf_p4().at(itau).pt();
+                    indexTauMax = itau;
+                }	
+            }
+
+            // isolation Loose ; pt > 20
+            if (taus_pf_byLooseIsolationMVA2().at(itau))
+            {
+                if (taus_pf_p4().at(itau).pt() > ptTauLooseMax)
+                {
+                    ptTauLooseMax = cms2.taus_pf_p4().at(itau).pt();
+                    indexTauLooseMax = itau;
+                }	
+            }
+        }
+
+        if (indexTauMax15 != -1)
+        {
+            m_evt.pfTau15 = cms2.taus_pf_p4().at(indexTauMax15);
+            if (cms2.taus_pf_pfcandIndicies().at(indexTauMax15).size() > 0)
+            {
+                int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax15).front();
+                m_evt.pfTau15_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
+                m_evt.pfTau15_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
+            }
+        }
+
+        if (indexTauMax != -1)
+        {
+            m_evt.pfTau = cms2.taus_pf_p4().at(indexTauMax);
+            if (cms2.taus_pf_pfcandIndicies().at(indexTauMax).size() > 0)
+            {
+                int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauMax).front();
+                m_evt.pfTau_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
+                m_evt.pfTau_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
+            }
+        }
+
+        if (indexTauLooseMax != -1)
+        {
+            m_evt.pfTauLoose = cms2.taus_pf_p4().at(indexTauLooseMax);
+            if (cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).size() > 0)
+            {
+                int leadingPtCand_index = cms2.taus_pf_pfcandIndicies().at(indexTauLooseMax).front();
+                m_evt.pfTauLoose_leadPtcand = cms2.pfcands_p4().at(leadingPtCand_index);
+                m_evt.pfTauLoose_leadPtcandID = cms2.pfcands_particleId().at(leadingPtCand_index);
+            }
+        }        
+
+        // tau veto
+        m_evt.passes_tau_veto = (m_evt.pfTau_leadPtcandID == -999999);
 
         // Fill the tree
         m_tree->Fill();
