@@ -463,63 +463,61 @@ void PrintSignificancePlot(TH1* hist, const std::string& output_file_name)
     c.Print(output_file_name.c_str());
 }
 
-void CreateSbottomProjectionHists(const std::string& input_file, const float max_msbottom = 900)
+void CreateSbottomProjectionHists(const std::string& input_file, const std::string& output_path = "plots/sig/t6ttww", const float max_msbottom = 900)
 {
+    // ------------------------------------------------- //
+    // get the inputs 
+    // ------------------------------------------------- //
+
     // get the xsec hist 
-    const std::string sample_name = at::GetSampleInfo(at::Sample::sbottomtop).name;
-    rt::TH1Container hc_xsec_14tev("data/xsec/susy_xsec_14tev.root");
-    TH1* h_xsec_14tev = hc_xsec_14tev[Form("h_xsec_%s", sample_name.c_str())]; 
+    TH1* h_xsec_14tev = rt::GetHistFromRootFile<TH1>("data/xsec/susy_xsec_14tev.root", "h_xsec_sbottomtop"); 
 
-    rt::TH1Container hc(input_file);
-    //TH2F* h_s = dynamic_cast<TH2F*>(hc["h_s_14tev_opt"]);
-    TH2F* h_eff      = dynamic_cast<TH2F*>(hc["SR28_effNormNice"    ]->Clone());
-    TH2F* h_eff_perc = dynamic_cast<TH2F*>(hc["SR28_effNormNicePerc"]->Clone());
-
-    TCanvas* c1 = new TCanvas("c1", "c1");
-    c1->cd();
-    gStyle->SetPaintTextFormat("1.0f");
-    gStyle->SetPaintTextFormat("1.2f");
-    h_eff_perc->SetStats(0);
-    h_eff_perc->Draw("text");
+    // get the efficiency plots
+    TH2F* h_eff_perc = rt::GetHistFromRootFile<TH2F>(input_file, "SR28_effNormNicePerc"); 
 
     // project to get the lowest bin in m_chargino
-    // I have to copy the hist because something is wrong with the projectioned hist
-    TCanvas* c2 = new TCanvas("c2", "c2");
-    TH1* h_eff_perc_vs_msb_temp = rt::MakeProjectionPlot(h_eff_perc, "x", "h_eff_perc_vs_msb_temp", "Signal efficiency percentage vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV)", 150, 175);
-    TH1* h_eff_perc_vs_msb      = new TH1F("h_eff_perc_vs_msb", "Signal efficiency percentage vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV)", 16, 325, 725);
+    // I have to copy the hist because something is wrong with the projectioned hist (not sure why)
+    TH1* h_eff_perc_vs_msb_temp = rt::MakeProjectionPlot(h_eff_perc, "x", "h_eff_perc_vs_msb_temp", "h_eff_perc_vs_msb_temp", 150, 175);
+    TH1* h_eff_perc_vs_msb      = new TH1F("h_eff_perc_vs_msb", "Signal efficiency percentage vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV);m_{#tilde{b}} (GeV);efficiency (perc)", 16, 325, 725);
     for (int bin = 1; bin != h_eff_perc_vs_msb->GetNbinsX()+1; bin++)
     {
         h_eff_perc_vs_msb->SetBinContent(bin, h_eff_perc_vs_msb_temp->GetBinContent(bin));
     }
 
+    // ------------------------------------------------- //
+    // fit the efficiency to make the projection function 
+    // ------------------------------------------------- //
+
     // fit to a line
     TF1* f_linear = new TF1("f_linear", "x*[0]+[1]", 325, 725);
     f_linear->SetParameters((0.62-0.08)/(700.0-352.0),-0.45);
-    h_eff_perc_vs_msb->Draw("text hist");
-    f_linear->Draw("same");
+    h_eff_perc_vs_msb->Fit(f_linear, "R+");
 
-    h_eff_perc_vs_msb->Fit(f_linear, "R");
-    cout << "after fit" << endl;
+    // print the fit parameters
+    cout << "The fit: x*p0 + p1:" << endl;
     cout << "p0 = " << f_linear->GetParameter(0) << endl;
     cout << "p1 = " << f_linear->GetParameter(1) << endl;
-    rt::SetStatBoxPosition(h_eff_perc_vs_msb, 0.1, 0.55, 0.3, 0.9);
-    h_eff_perc_vs_msb->Draw("text hist");
-    f_linear->Draw("same");
+
+    // ------------------------------------------------- //
+    // calculate the signficance 
+    // ------------------------------------------------- //
 
     // hard code the background for signal region 28
     const float lumi     = 300.0;
     const float n_bkgd   = 115.165;
     const float unc_bkgd = 28.3332;
 
+    // mass points to consider
     vector<float> v_msb;
     for (float msb = 700; msb < max_msbottom+0.001; msb += 25.0)
     {
         v_msb.push_back(msb);
     }
 
-    TH1* h_eff_proj_vs_msb           = new TH1F("h_eff_proj_vs_msb"          , "Signal efficiency projection vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV)"        , v_msb.size(), 725, max_msbottom);
-    TH1* h_s_proj_14tev_opt_vs_msb   = new TH1F("h_s_proj_14tev_opt_vs_msb"  , "Signal yield projection vs m_{#tilde{b}} (14 TeV, optimistic, m_{#tilde{#chi}^{#pm}} = 150 GeV)", v_msb.size(), 725, max_msbottom);
-    TH1* h_sig_proj_14tev_opt_vs_msb = new TH1F("h_sig_proj_14tev_opt_vs_msb", "Significance projection vs m_{#tilde{b}} (14 TeV, optimistic, m_{#tilde{#chi}^{#pm}} = 150 GeV)", v_msb.size(), 725, max_msbottom);
+    // histograms to visualize
+    TH1* h_eff_proj_vs_msb           = new TH1F("h_eff_proj_vs_msb"          , "Signal efficiency projection vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV);m_{#tilde{b}} (GeV);efficiency (perc)"   , v_msb.size(), 700, max_msbottom);
+    TH1* h_s_proj_14tev_opt_vs_msb   = new TH1F("h_s_proj_14tev_opt_vs_msb"  , "Signal yield projection vs m_{#tilde{b}} (14 TeV, optimistic, m_{#tilde{#chi}^{#pm}} = 150 GeV);m_{#tilde{b}} (GeV);N_{signal}"  , v_msb.size(), 700, max_msbottom);
+    TH1* h_sig_proj_14tev_opt_vs_msb = new TH1F("h_sig_proj_14tev_opt_vs_msb", "Significance projection vs m_{#tilde{b}} (14 TeV, optimistic, m_{#tilde{#chi}^{#pm}} = 150 GeV);m_{#tilde{b}} (GeV);significance", v_msb.size(), 700, max_msbottom);
 
     // calc the significance for each point
     for (size_t i = 0; i != v_msb.size(); i++)
@@ -531,37 +529,55 @@ void CreateSbottomProjectionHists(const std::string& input_file, const float max
         const float n_signal = lumi * xsec * eff;
         const float sig      = at::SimpleSignificance(n_signal, n_bkgd, unc_bkgd);
 
-        // printout
-        cout << bin << "\t" << msb << "\t" << xsec << "\t" << eff << "\t" << n_signal << "\t" << sig << endl;
-        
         // fill hists
         h_eff_proj_vs_msb->SetBinContent(bin, eff*100.0);
         h_s_proj_14tev_opt_vs_msb->SetBinContent(bin, n_signal);
         h_sig_proj_14tev_opt_vs_msb->SetBinContent(bin, sig);
     }
 
-    TCanvas* c3 = new TCanvas("c3", "c3");
+    // ------------------------------------------------- //
+    // save and print the output 
+    // ------------------------------------------------- //
+
+    const std::string& suffix = "eps"; 
+    gStyle->SetPaintTextFormat("1.2f");
+
+    // output
+    TCanvas* c1 = new TCanvas("c1", "c1");
+    h_eff_perc->SetStats(0);
+    h_eff_perc->Draw("text");
+    c1->Print(Form("%s/h_eff_perc.%s", output_path.c_str(), suffix.c_str())); 
+
+    rt::SetStatBoxPosition(h_eff_perc_vs_msb, 0.1, 0.65, 0.3, 0.9);
+    h_eff_perc_vs_msb->Draw("text hist");
+    f_linear->Draw("same");
+    c1->Print(Form("%s/h_eff_perc_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
+
     h_eff_proj_vs_msb->SetStats(false);
     h_eff_proj_vs_msb->Draw("text hist");
+    c1->Print(Form("%s/h_eff_proj_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
 
-    TCanvas* c4 = new TCanvas("c4", "c4");
     h_s_proj_14tev_opt_vs_msb->SetStats(false);
     h_s_proj_14tev_opt_vs_msb->Draw("hist text");
+    h_s_proj_14tev_opt_vs_msb->GetYaxis()->SetRangeUser(0.0, 170.0);
+    c1->Print(Form("%s/h_s_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
 
-    TCanvas* c5 = new TCanvas("c5", "c5");
     h_sig_proj_14tev_opt_vs_msb->SetStats(false);
     h_sig_proj_14tev_opt_vs_msb->Draw("hist text");
+    h_sig_proj_14tev_opt_vs_msb->GetYaxis()->SetRangeUser(0.0, 6.0);
+    c1->Print(Form("%s/h_sig_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
 
-/*     //const float n_signal_8tev      = lumi_8tev*xsec_8tev*GetValueFromScanHist(hc_interp[sr+"effNormNice"], sparm0, sparm1); */
+    // write to file
+    rt::TH1Container hc;
+    hc.Add(h_eff_perc);
+    hc.Add(h_eff_perc_vs_msb);
+    hc.Add(h_eff_proj_vs_msb);
+    hc.Add(h_s_proj_14tev_opt_vs_msb);
+    hc.Add(h_sig_proj_14tev_opt_vs_msb);
+    hc.Write(Form("%s/t6ttww_msb_proj.root", output_path.c_str()));
 
-/*     TCanvas* c2 = new TCanvas("c2", "c2"); */
-/*     f_eff_perc_vs_msp->SetRange(500, max_msbottom); */
-/*     f_eff_perc_vs_msp->Draw(); */
-/*     cout << 800 << "\t" << f_eff_perc_vs_msp->Eval(800) << endl;; */
-    
-
-    // fit?
-    //h_s->Draw("text");
+    // done
+    return;
 }
 
 void PrintExpectedSignificanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
