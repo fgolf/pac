@@ -14,6 +14,7 @@
 #include "TROOT.h"
 #include "TList.h"
 #include "TLegend.h"
+#include "TF1.h"
 
 using namespace std;
 
@@ -268,7 +269,7 @@ void CreateExpectedSignificanceHists
                 // 8 TeV significane
                 // -----------------------------// 
 
-                const float xsec_8tev          = 1000.0 * rt::GetBinContent1D(h_xsec_8tev , sparm0); // fb
+                const float xsec_8tev          = 1000.0 * rt::GetBinContent1D(h_xsec_8tev, sparm0); // fb
                 const float lumi_8tev          = 19.5;
                 const float n_signal_8tev      = lumi_8tev*xsec_8tev*GetValueFromScanHist(hc_interp[sr+"effNormNice"], sparm0, sparm1);
                 const float n_bkgd_8tev        = yi.pred;
@@ -405,8 +406,8 @@ void CreateExpectedSignificanceHists
                 rt::SetBinContent2D(hc_sig["h_sig_14tev_opt"        ], sparm0, sparm1, best_sr_sig_14tev_optimistic.sig);
                 rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev_opt"], sparm0, sparm1, best_sr_sig_14tev_optimistic.sr );
                 rt::SetBinContent2D(hc_sig["h_s_14tev_opt"          ], sparm0, sparm1, best_sr_sig_14tev_optimistic.s  );
-                rt::SetBinContent2D(hc_sig["h_b_14tev_opt"          ], sparm0, sparm1, best_sr_sig_14tev_optimistic.b  , best_sr_sig_8tev_optimistic.b_unc);
-                cout << "sig 14 = " << sig_14tev_optimistic << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << endl;
+                rt::SetBinContent2D(hc_sig["h_b_14tev_opt"          ], sparm0, sparm1, best_sr_sig_14tev_optimistic.b  , best_sr_sig_14tev_optimistic.b_unc);
+                cout << "sig 14 = " << sig_14tev_optimistic << "\t" << sr_num << "\t" << sparm0 << "\t" << sparm1 << "\t" << n_bkgd_14tev << "\t" << unc_bkgd_14tev_optimistic << endl;
 
             } // end signal region loop
         } // end ybin loop 
@@ -462,6 +463,107 @@ void PrintSignificancePlot(TH1* hist, const std::string& output_file_name)
     c.Print(output_file_name.c_str());
 }
 
+void CreateSbottomProjectionHists(const std::string& input_file, const float max_msbottom = 900)
+{
+    // get the xsec hist 
+    const std::string sample_name = at::GetSampleInfo(at::Sample::sbottomtop).name;
+    rt::TH1Container hc_xsec_14tev("data/xsec/susy_xsec_14tev.root");
+    TH1* h_xsec_14tev = hc_xsec_14tev[Form("h_xsec_%s", sample_name.c_str())]; 
+
+    rt::TH1Container hc(input_file);
+    //TH2F* h_s = dynamic_cast<TH2F*>(hc["h_s_14tev_opt"]);
+    TH2F* h_eff      = dynamic_cast<TH2F*>(hc["SR28_effNormNice"    ]->Clone());
+    TH2F* h_eff_perc = dynamic_cast<TH2F*>(hc["SR28_effNormNicePerc"]->Clone());
+
+    TCanvas* c1 = new TCanvas("c1", "c1");
+    c1->cd();
+    gStyle->SetPaintTextFormat("1.0f");
+    gStyle->SetPaintTextFormat("1.2f");
+    h_eff_perc->SetStats(0);
+    h_eff_perc->Draw("text");
+
+    // project to get the lowest bin in m_chargino
+    // I have to copy the hist because something is wrong with the projectioned hist
+    TCanvas* c2 = new TCanvas("c2", "c2");
+    TH1* h_eff_perc_vs_msb_temp = rt::MakeProjectionPlot(h_eff_perc, "x", "h_eff_perc_vs_msb_temp", "Signal efficiency percentage vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV)", 150, 175);
+    TH1* h_eff_perc_vs_msb      = new TH1F("h_eff_perc_vs_msb", "Signal efficiency percentage vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV)", 16, 325, 725);
+    for (int bin = 1; bin != h_eff_perc_vs_msb->GetNbinsX()+1; bin++)
+    {
+        h_eff_perc_vs_msb->SetBinContent(bin, h_eff_perc_vs_msb_temp->GetBinContent(bin));
+    }
+
+    // fit to a line
+    TF1* f_linear = new TF1("f_linear", "x*[0]+[1]", 325, 725);
+    f_linear->SetParameters((0.62-0.08)/(700.0-352.0),-0.45);
+    h_eff_perc_vs_msb->Draw("text hist");
+    f_linear->Draw("same");
+
+    h_eff_perc_vs_msb->Fit(f_linear, "R");
+    cout << "after fit" << endl;
+    cout << "p0 = " << f_linear->GetParameter(0) << endl;
+    cout << "p1 = " << f_linear->GetParameter(1) << endl;
+    rt::SetStatBoxPosition(h_eff_perc_vs_msb, 0.1, 0.55, 0.3, 0.9);
+    h_eff_perc_vs_msb->Draw("text hist");
+    f_linear->Draw("same");
+
+    // hard code the background for signal region 28
+    const float lumi     = 300.0;
+    const float n_bkgd   = 115.165;
+    const float unc_bkgd = 28.3332;
+
+    vector<float> v_msb;
+    for (float msb = 700; msb < max_msbottom+0.001; msb += 25.0)
+    {
+        v_msb.push_back(msb);
+    }
+
+    TH1* h_eff_proj_vs_msb           = new TH1F("h_eff_proj_vs_msb"          , "Signal efficiency projection vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV)"        , v_msb.size(), 725, max_msbottom);
+    TH1* h_s_proj_14tev_opt_vs_msb   = new TH1F("h_s_proj_14tev_opt_vs_msb"  , "Signal yield projection vs m_{#tilde{b}} (14 TeV, optimistic, m_{#tilde{#chi}^{#pm}} = 150 GeV)", v_msb.size(), 725, max_msbottom);
+    TH1* h_sig_proj_14tev_opt_vs_msb = new TH1F("h_sig_proj_14tev_opt_vs_msb", "Significance projection vs m_{#tilde{b}} (14 TeV, optimistic, m_{#tilde{#chi}^{#pm}} = 150 GeV)", v_msb.size(), 725, max_msbottom);
+
+    // calc the significance for each point
+    for (size_t i = 0; i != v_msb.size(); i++)
+    {
+        const int bin        = i+1;
+        const float msb      = v_msb.at(i);
+        const float xsec     = 1000.0 * rt::GetBinContent1D(h_xsec_14tev, msb); 
+        const float eff      = f_linear->Eval(msb)/100.0;  // reported as percentage
+        const float n_signal = lumi * xsec * eff;
+        const float sig      = at::SimpleSignificance(n_signal, n_bkgd, unc_bkgd);
+
+        // printout
+        cout << bin << "\t" << msb << "\t" << xsec << "\t" << eff << "\t" << n_signal << "\t" << sig << endl;
+        
+        // fill hists
+        h_eff_proj_vs_msb->SetBinContent(bin, eff*100.0);
+        h_s_proj_14tev_opt_vs_msb->SetBinContent(bin, n_signal);
+        h_sig_proj_14tev_opt_vs_msb->SetBinContent(bin, sig);
+    }
+
+    TCanvas* c3 = new TCanvas("c3", "c3");
+    h_eff_proj_vs_msb->SetStats(false);
+    h_eff_proj_vs_msb->Draw("text hist");
+
+    TCanvas* c4 = new TCanvas("c4", "c4");
+    h_s_proj_14tev_opt_vs_msb->SetStats(false);
+    h_s_proj_14tev_opt_vs_msb->Draw("hist text");
+
+    TCanvas* c5 = new TCanvas("c5", "c5");
+    h_sig_proj_14tev_opt_vs_msb->SetStats(false);
+    h_sig_proj_14tev_opt_vs_msb->Draw("hist text");
+
+/*     //const float n_signal_8tev      = lumi_8tev*xsec_8tev*GetValueFromScanHist(hc_interp[sr+"effNormNice"], sparm0, sparm1); */
+
+/*     TCanvas* c2 = new TCanvas("c2", "c2"); */
+/*     f_eff_perc_vs_msp->SetRange(500, max_msbottom); */
+/*     f_eff_perc_vs_msp->Draw(); */
+/*     cout << 800 << "\t" << f_eff_perc_vs_msp->Eval(800) << endl;; */
+    
+
+    // fit?
+    //h_s->Draw("text");
+}
+
 void PrintExpectedSignificanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
 {
     rt::TH1Container hc(input_file);
@@ -470,18 +572,18 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
 
     gStyle->SetPaintTextFormat("1.1f");
     rt::Print(hc["h_s_8tev"             ], output_path, suffix, "h_s_8tev_text"             , "text", false);
-    rt::Print(hc["h_b_8tev"             ], output_path, suffix, "h_b_8tev_text"             , "text", false);
+    rt::Print(hc["h_b_8tev"             ], output_path, suffix, "h_b_8tev_text"             , "texte", false);
     rt::Print(hc["h_sig_8tev"           ], output_path, suffix, "h_sig_8tev_text"           , "text", false);
     rt::Print(hc["h_sig_8tev_opt"       ], output_path, suffix, "h_sig_8tev_opt_text"       , "text", false);
     rt::Print(hc["h_s_8tev_opt"         ], output_path, suffix, "h_s_8tev_opt_text"         , "text", false);
-    rt::Print(hc["h_b_8tev_opt"         ], output_path, suffix, "h_b_8tev_opt_text"         , "text", false);
+    rt::Print(hc["h_b_8tev_opt"         ], output_path, suffix, "h_b_8tev_opt_text"         , "texte", false);
     gStyle->SetPaintTextFormat("1.0f");
     rt::Print(hc["h_sig_14tev"          ], output_path, suffix, "h_sig_14tev_text"          , "text", false);
     rt::Print(hc["h_s_14tev"            ], output_path, suffix, "h_s_14tev_text"            , "text", false);
-    rt::Print(hc["h_b_14tev"            ], output_path, suffix, "h_b_14tev_text"            , "text", false);
+    rt::Print(hc["h_b_14tev"            ], output_path, suffix, "h_b_14tev_text"            , "texte", false);
     rt::Print(hc["h_sig_ratio_14tev"    ], output_path, suffix, "h_sig_ratio_14tev_text"    , "text", false);
     rt::Print(hc["h_s_14tev_opt"        ], output_path, suffix, "h_s_14tev_opt_text"        , "text", false);
-    rt::Print(hc["h_b_14tev_opt"        ], output_path, suffix, "h_b_14tev_opt_text"        , "text", false);
+    rt::Print(hc["h_b_14tev_opt"        ], output_path, suffix, "h_b_14tev_opt_text"        , "texte", false);
     rt::Print(hc["h_sig_14tev_opt"      ], output_path, suffix, "h_sig_14tev_opt_text"      , "text", false);
     rt::Print(hc["h_sig_ratio_14tev_opt"], output_path, suffix, "h_sig_ratio_14tev_opt_text", "text", false);
 
