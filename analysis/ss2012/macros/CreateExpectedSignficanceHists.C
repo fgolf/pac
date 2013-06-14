@@ -549,22 +549,28 @@ void CreateSbottomProjectionHists(const std::string& input_file, const std::stri
     c1->Print(Form("%s/h_eff_perc.%s", output_path.c_str(), suffix.c_str())); 
 
     rt::SetStatBoxPosition(h_eff_perc_vs_msb, 0.1, 0.65, 0.3, 0.9);
+    h_eff_perc_vs_msb->GetYaxis()->SetRangeUser(0.0, 0.8);
+    h_eff_perc_vs_msb->SetLineWidth(2);
     h_eff_perc_vs_msb->Draw("text hist");
     f_linear->Draw("same");
     c1->Print(Form("%s/h_eff_perc_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
 
     h_eff_proj_vs_msb->SetStats(false);
+    h_eff_proj_vs_msb->SetLineWidth(2);
+    h_eff_proj_vs_msb->GetYaxis()->SetRangeUser(0.6, 1.0);
     h_eff_proj_vs_msb->Draw("text hist");
     c1->Print(Form("%s/h_eff_proj_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
 
     h_s_proj_14tev_opt_vs_msb->SetStats(false);
+    h_s_proj_14tev_opt_vs_msb->SetLineWidth(2);
+    h_s_proj_14tev_opt_vs_msb->GetYaxis()->SetRangeUser(0.0, 180.0);
     h_s_proj_14tev_opt_vs_msb->Draw("hist text");
-    h_s_proj_14tev_opt_vs_msb->GetYaxis()->SetRangeUser(0.0, 170.0);
     c1->Print(Form("%s/h_s_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
 
     h_sig_proj_14tev_opt_vs_msb->SetStats(false);
-    h_sig_proj_14tev_opt_vs_msb->Draw("hist text");
+    h_sig_proj_14tev_opt_vs_msb->SetLineWidth(2);
     h_sig_proj_14tev_opt_vs_msb->GetYaxis()->SetRangeUser(0.0, 6.0);
+    h_sig_proj_14tev_opt_vs_msb->Draw("hist text");
     c1->Print(Form("%s/h_sig_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
 
     // write to file
