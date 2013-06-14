@@ -490,7 +490,7 @@ void CreateSbottomProjectionHists(const std::string& input_file, const std::stri
 
     // fit to a line
     TF1* f_linear = new TF1("f_linear", "x*[0]+[1]", 325, 725);
-    f_linear->SetParameters((0.62-0.08)/(700.0-352.0),-0.45);
+    f_linear->SetParameters((0.62-0.08)/(700.0-350.0),-0.45); // initial guess
     h_eff_perc_vs_msb->Fit(f_linear, "R+");
 
     // print the fit parameters
@@ -599,7 +599,7 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
     rt::Print(hc["h_sig_8tev_opt"       ], output_path, suffix, "h_sig_8tev_opt_text"       , "text", false);
     rt::Print(hc["h_s_8tev_opt"         ], output_path, suffix, "h_s_8tev_opt_text"         , "text", false);
     rt::Print(hc["h_b_8tev_opt"         ], output_path, suffix, "h_b_8tev_opt_text"         , "texte", false);
-    gStyle->SetPaintTextFormat("1.0f");
+    gStyle->SetPaintTextFormat("1.1f");
     rt::Print(hc["h_sig_14tev"          ], output_path, suffix, "h_sig_14tev_text"          , "text", false);
     rt::Print(hc["h_s_14tev"            ], output_path, suffix, "h_s_14tev_text"            , "text", false);
     rt::Print(hc["h_b_14tev"            ], output_path, suffix, "h_b_14tev_text"            , "texte", false);
