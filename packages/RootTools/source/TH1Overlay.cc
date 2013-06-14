@@ -1346,9 +1346,9 @@ namespace rt
         m_pimpl->hist_stack->Draw(("nostack"+option).c_str());
         SetLog();
         DrawLegend();
-        DrawStatBoxes();
         DrawText();
         DrawLines();
+        DrawStatBoxes();
     }
 
 

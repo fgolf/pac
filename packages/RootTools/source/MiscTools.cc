@@ -61,9 +61,8 @@ namespace rt
             return;
         }
 
-        static TCanvas c("c_rt_SetStatBoxPosition", "bogus canvus for setting the statbox postion");
-        c.cd();
-        hist_ptr->Draw();
+        hist_ptr->SetStats(true);
+        hist_ptr->Draw(); // make sure the stat box exists
         gPad->Update();
         if (TPaveStats *statbox = dynamic_cast<TPaveStats*>(hist_ptr->FindObject("stats")))
         {

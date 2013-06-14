@@ -82,32 +82,35 @@ void test_stacked()
     TH1* h3 = new TH1F("h3", "histo from a gaussian", 100, -3, 3); h3->SetLineColor(1); h3->Sumw2(); h3->FillRandom("gaus", 15000);
     
     TCanvas* c = new TCanvas("c_test_stacked", "TH1Overlay Stack Test", 1200,900); c->Divide(2,2); c->cd(1);
+
+    // simple overlay
     TH1Overlay* p1 = new TH1Overlay("orig overlay;x;y", "sb::right lg::top_left");
-    //p1->SetLogy(true);
     p1->Add(h1, "red" , kRed);
     p1->Add(h2, "blue", kBlue);
     p1->Add(h3, /*no_stack=*/true, "black", kBlack);
     p1->SetLegendOption("f");
-    p1->SetTitle("overlay");
-    p1->Draw();
+    p1->SetTitle("dt::none");
+    p1->Draw("dt::none");
+
+    // test dt::stack_norm
     c->cd(2);
     TH1Overlay* p2 = new TH1Overlay(*p1);
-    p2->SetTitle("statck_norm overlay");
+    p2->SetTitle("dt::stack_norm");
     p2->Draw("dt::stack_norm");
+
+    // test dt::norm
     c->cd(3);
     TH1Overlay* p3 = new TH1Overlay(*p1);
-    p3->SetTitle("normalized overlay");
+    p3->SetTitle("dt::norm");
     p3->Draw("dt::norm");
+
+    // test dt::stack
     c->cd(4);
     TH1Overlay* p4 = new TH1Overlay(*p1);
-    p4->SetTitle("stack overlay");
+    p4->SetTitle("dt::stack");
     p4->Draw("dt::stack");
 
-//     c->cd(3);
-//     p1->Draw();
-// 
-//     c->cd(4);
-//     p1->Draw();
+    c->Print("test_stacked.png");
 }
 
 void test_overlay()
