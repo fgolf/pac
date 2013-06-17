@@ -764,8 +764,8 @@ int PlotLooper::operator()(long event)
         // charge option (1 == ++, -1 == --)
         switch (m_charge_option)
         {
-            case  1: if (not is_pp()) return 0; break;
-            case -1: if (not is_mm()) return 0; break;
+//             case  1: if (not is_pp()) return 0; break;
+//             case -1: if (not is_mm()) return 0; break;
             default: {/*do nothing*/}
         }
 

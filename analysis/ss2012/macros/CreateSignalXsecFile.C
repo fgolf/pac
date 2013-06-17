@@ -277,29 +277,91 @@ void CreateSignalXsecFile14TeV()
 
     // sbottomtop (sbottom pair production -- T6ttWW)
     // --------------------------------------------------------------------------------- //
-    // https://twiki.cern.ch/twiki/pub/CMS/SMST6ttWWMadgraph8TeV/Sbottom_8TeV_25GeV.txt
+    // https://twiki.cern.ch/twiki/bin/viewauth/CMS/SUSYCrossSectionsForProjections
     ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(at::Sample::sbottomtop);
-    hc.Add(new TH1F ("h_xsec_sbottomtop", "Cross Section sbottom pair (T6ttWW) #sqrt{s} = 14 TeV;m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
-    SetBinContent(hc["h_xsec_sbottomtop"] , 325 , 6.510e+00); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 350 , 4.410e+00); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 375 , 3.070e+00); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 400 , 2.180e+00); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 425 , 1.570e+00); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 450 , 1.140e+00); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 475 , 8.470e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 500 , 6.340e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 525 , 4.800e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 550 , 3.670e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 575 , 2.830e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 600 , 2.220e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 625 , 1.730e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 650 , 1.360e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 675 , 1.080e-01); 
-    SetBinContent(hc["h_xsec_sbottomtop"] , 700 , 8.640e-02); 
+/*     hc.Add(new TH1F ("h_xsec_sbottomtop", "Cross Section sbottom pair (T6ttWW) #sqrt{s} = 14 TeV;m_{#tilde{b}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax)); */
+    hc.Add(new TH1F ("h_xsec_sbottomtop", "Cross Section sbottom pair (T6ttWW) #sqrt{s} = 14 TeV;m_{#tilde{b}} (GeV); Cross Section (pb)", 27, 325, 1000));
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 100	 , 1.630e+03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 125	 , 6.190e+02);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 150	 , 2.730e+02);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 175	 , 1.350e+02);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 200	 , 7.200e+01);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 225	 , 4.100e+01);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 250	 , 2.450e+01);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 275	 , 1.530e+01);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 300	 , 9.790e+00);  */
+    SetBinContent(hc["h_xsec_sbottomtop"] , 325	 , 6.510e+00);
+    SetBinContent(hc["h_xsec_sbottomtop"] , 350	 , 4.410e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 375	 , 3.070e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 400	 , 2.180e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 425	 , 1.570e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 450	 , 1.140e+00); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 475	 , 8.470e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 500	 , 6.340e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 525	 , 4.800e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 550	 , 3.670e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 575	 , 2.830e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 600	 , 2.220e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 625	 , 1.730e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 650	 , 1.360e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 675	 , 1.080e-01); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 700	 , 8.640e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 725	 , 6.940e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 750	 , 5.610e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 775	 , 4.550e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 800	 , 3.710e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 825	 , 3.160e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 850	 , 2.510e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 875	 , 2.070e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 900	 , 1.720e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 925	 , 1.450e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 950	 , 1.230e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 975	 , 1.080e-02); 
+    SetBinContent(hc["h_xsec_sbottomtop"] , 1000 , 8.330e-03); 
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1025 , 7.060e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1050 , 6.030e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1075 , 5.320e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1100 , 4.250e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1125 , 3.600e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1150 , 3.110e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1175 , 2.700e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1200 , 2.370e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1225 , 1.960e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1250 , 1.640e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1275 , 1.420e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1300 , 1.240e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1325 , 1.090e-03);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1350 , 9.280e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1375 , 8.120e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1400 , 7.030e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1425 , 6.290e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1450 , 5.700e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1475 , 4.360e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1500 , 3.780e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1525 , 3.310e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1550 , 2.930e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1575 , 2.570e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1600 , 2.250e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1625 , 1.920e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1650 , 1.910e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1675 , 1.900e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1700 , 2.030e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1725 , 1.220e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1750 , 1.010e-04);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1775 , 8.840e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1800 , 8.170e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1825 , 7.420e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1850 , 6.820e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1875 , 6.360e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1900 , 5.990e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1925 , 5.910e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1950 , 5.810e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 1975 , 5.690e-05);  */
+/*     SetBinContent(hc["h_xsec_sbottomtop"] , 2000 , 5.680e-05);  */
 
     // T1tttt (sbottom pair production -- T1tttt)
     // --------------------------------------------------------------------------------- //
-    // https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections8TeVgluglu
+    // https://twiki.cern.ch/twiki/bin/viewauth/CMS/SUSYCrossSectionsForProjections
     bin_info = ss::GetSignalBinInfo(at::Sample::t1tttt);
     hc.Add(new  TH1F("h_xsec_t1tttt", "Cross Section T1tttt #sqrt{s} = 14 ;m_{#tilde{g}} (GeV); Cross Section (pb)", bin_info.nbinsx, bin_info.xmin, bin_info.xmax));
     SetBinContent(hc["h_xsec_t1tttt"] , 200  , 3.940e+03); 

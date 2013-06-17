@@ -710,14 +710,6 @@ int PlotLooper::operator()(long event)
         // convenience alias
         rt::TH1Container& hc = m_hist_container;
 
-        // scale 1b (set before cuts) 
-        m_scale1fb = (is_real_data() ? 1.0 : scale1fb());
-        // fix to wgstar's scale1fb
-        if (m_sample == Sample::wgstar2m) {m_scale1fb = 0.00638;}
-        if (m_sample == Sample::wgstar2t) {m_scale1fb = 0.00672;}
-
-        m_xsec     = xsec();
-        m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
         hc["h_lumi"]->Fill(m_lumi);
 
         // selections 
@@ -895,6 +887,14 @@ int PlotLooper::operator()(long event)
             if (m_verbose) {cout << Form("fails the sparm3 check: %s, %1.2f != %1.2f", sparm3_name().Data(), m_sparm3, sparm3()) << endl;}
             return 0;
         }
+
+        // scale 1b (set before cuts) 
+        m_scale1fb = (is_real_data() ? 1.0 : scale1fb());
+        // fix to wgstar's scale1fb
+        if (m_sample == Sample::wgstar2m) {m_scale1fb = 0.00638;}
+        if (m_sample == Sample::wgstar2t) {m_scale1fb = 0.00672;}
+        m_xsec     = xsec();
+        m_nevts    = static_cast<int>((xsec()*1000)/scale1fb());
 
         // ttbar breakdown 
         switch (m_sample)

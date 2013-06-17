@@ -667,9 +667,6 @@ namespace rt
     double DeltaR(const LorentzVector& p1, const LorentzVector& p2)
     {
         return ROOT::Math::VectorUtil::DeltaR(p1, p2); 
-        //float deta = p1.Eta()-p2.Eta();
-        //float dphi = DeltaPhi(p1.Phi(), p2.Phi());
-        //return sqrt(dphi*dphi + deta*deta);
     }
 
     // get all the hists from a root file (given a file) in a map of hist pointers 

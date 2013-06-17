@@ -1610,7 +1610,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         m_evt.is_mm       = hyp_lt_charge().at(hyp_idx)<0 && hyp_ll_charge().at(hyp_idx)<0; 
 
         // selected only triggered events
-        if (not((m_evt.ee && m_evt.trig_ee) || (m_evt.em && m_evt.trig_em) || (m_evt.mm && m_evt.trig_mm)))
+        if (evt_isRealData() && not((m_evt.ee && m_evt.trig_ee) || (m_evt.em && m_evt.trig_em) || (m_evt.mm && m_evt.trig_mm)))
         {
             if (m_verbose) {cout << "fails trigger selection" << endl;}
             //return 0;
@@ -2330,7 +2330,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
 
         // printout
-        if (m_evt.is_good_lumi && m_evt.njets >= 2)
+        if (m_evt.is_good_lumi && m_evt.njets >= m_njets)
         {
             scale = 1.0;
             if (dilepton_type==DileptonHypType::MUMU)
