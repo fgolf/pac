@@ -470,7 +470,7 @@ namespace at
             // tag
             "V05-03-23",
             // SampleType 
-            SampleType::rare,
+            SampleType::bkgd,
             // Sample
             Sample::ww,
             // color
