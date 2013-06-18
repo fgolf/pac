@@ -590,7 +590,7 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
 {
     rt::TH1Container hc(input_file);
     hc.SetStats(false);
-    TCanvas c1("c1", "c1");
+    TCanvas* c1 = new TCanvas("c1", "c1");
 
     gStyle->SetPaintTextFormat("1.1f");
     rt::Print(hc["h_s_8tev"             ], output_path, suffix, "h_s_8tev_text"             , "text", false);
@@ -639,44 +639,53 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
 
     // summary plot
     TGraph* curve_8tev = GetContourTGraph(hc["h_sig_8tev"]);
-    curve_8tev->SetLineWidth(3);
+    curve_8tev->SetLineWidth(4);
     curve_8tev->SetLineColor(kBlack);
     curve_8tev->SetLineStyle(1);
 
     TGraph* curve_8tev_opt = GetContourTGraph(hc["h_sig_8tev_opt"]);
-    curve_8tev_opt->SetLineWidth(3);
+    curve_8tev_opt->SetLineWidth(4);
     curve_8tev_opt->SetLineColor(kGreen+2);
     curve_8tev_opt->SetLineStyle(2);
 
     TGraph* curve_14tev = GetContourTGraph(hc["h_sig_14tev"]);
-    curve_14tev->SetLineWidth(3);
+    curve_14tev->SetLineWidth(4);
     curve_14tev->SetLineColor(kRed);
     curve_14tev->SetLineStyle(3);
 
     TGraph* curve_14tev_opt = GetContourTGraph(hc["h_sig_14tev_opt"]);
-    curve_14tev_opt->SetLineWidth(3);
+    curve_14tev_opt->SetLineWidth(4);
     curve_14tev_opt->SetLineColor(kBlue);
     curve_14tev_opt->SetLineStyle(4);
+    TLine* line_14tev_opt = new TLine();
+    line_14tev_opt->SetLineWidth(4);
+    line_14tev_opt->SetLineColor(kBlue);
+    line_14tev_opt->SetLineStyle(4);
 
+    // resulting histograms
     gStyle->SetPadRightMargin(0.10);
-    TH1* h_temp = dynamic_cast<TH1*>(hc["h_sig_8tev"]->Clone("h_temp"));
-    h_temp->SetTitle("Expected 5#sigma discovery reach");
+    ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(at::Sample::sbottomtop);
+    TH2F* h_temp = new TH2F("h_summary_curve", "Expected 5#sigma discovery reach", bin_info.nbinsx+2, bin_info.xmin, bin_info.xmax+100, bin_info.nbinsy+1, bin_info.ymin, bin_info.ymax+50);
+    h_temp->SetStats(false);
     h_temp->Draw("axis");
     curve_8tev->Draw("C");
     curve_8tev_opt->Draw("C");
     curve_14tev->Draw("C");
     curve_14tev_opt->Draw("C");
+    line_14tev_opt->Draw("same");
+    line_14tev_opt->DrawLine(725, 380, 725, 150);
+    line_14tev_opt->DrawLine(712, 399, 725, 380);
 
-    TLegend leg(0.15, 0.70, 0.5, 0.89);
-    leg.AddEntry(curve_8tev     , "20 fb^{-1}, #sqrt{s} = 8 TeV"                , "L");
-    leg.AddEntry(curve_8tev_opt , "20 fb^{-1}, #sqrt{s} = 8 TeV (optimistic)"   , "L");
-    leg.AddEntry(curve_14tev    , "300 fb^{-1}, #sqrt{s} = 14 TeV (pessimistic)", "L");
-    leg.AddEntry(curve_14tev_opt, "300 fb^{-1}, #sqrt{s} = 14 TeV (optimistic)" , "L");
-    leg.SetFillColor(0);  // 0 makes it the background clear on the pad
-    leg.SetFillStyle(0);
-    leg.SetBorderSize(0);
-    leg.Draw();
-    c1.Print(Form("%s/h_summary_curve.%s", output_path.c_str(), suffix.c_str()));
+    TLegend* leg = new TLegend(0.15, 0.70, 0.6, 0.89);
+    leg->AddEntry(curve_8tev     , "20 fb^{-1}, #sqrt{s} = 8 TeV"                , "L");
+    leg->AddEntry(curve_8tev_opt , "20 fb^{-1}, #sqrt{s} = 8 TeV (optimistic)"   , "L");
+    leg->AddEntry(curve_14tev    , "300 fb^{-1}, #sqrt{s} = 14 TeV (pessimistic)", "L");
+    leg->AddEntry(curve_14tev_opt, "300 fb^{-1}, #sqrt{s} = 14 TeV (optimistic)" , "L");
+    leg->SetFillColor(0);  // 0 makes it the background clear on the pad
+    leg->SetFillStyle(0);
+    leg->SetBorderSize(0);
+    leg->Draw("same");
+    c1->Print(Form("%s/h_summary_curve.%s", output_path.c_str(), suffix.c_str()));
 }
 
 void PrintSbottomTopXsecOverlay()
@@ -690,8 +699,4 @@ void PrintSbottomTopXsecOverlay()
     h_xsec_ratio->SetLineWidth(2);
     h_xsec_ratio->SetStats(false);
     h_xsec_ratio->Draw("hist");
-}
-
-void MassProjection()
-{
 }
