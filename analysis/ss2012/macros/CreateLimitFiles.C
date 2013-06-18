@@ -5,7 +5,8 @@
 #include "rt/RootTools.h"
 #include "at/Sample.h"
 #include "SignalBinInfo.h"
-#include "/usr/local/lands/03.06.07/test/fitRvsCLs.C"
+//#include "/usr/local/lands/03.06.07/test/fitRvsCLs.C"
+#include "/home/users/rwkelley/code/LandS/03.06.07/test/fitRvsCLs.C"
 
 using namespace std;
 using namespace ss;
@@ -43,7 +44,8 @@ ostream& operator << (ostream& os, const LimitInfo& limit_info)
         limit_info.obs_err,
         limit_info.exp,
         limit_info.exp_1sigma_up,
-        limit_info.exp_1sigma_dn);
+        limit_info.exp_1sigma_dn
+    );
     return os;
 }
 
@@ -125,8 +127,6 @@ void CreateLimitTextFile
             if (y > cond) {continue;}
 
             // extract file to process
-/*             const float sparm0 = 800; */
-/*             const float sparm1 = 0; */
             const string file_stem      = Form("%s_p%1.0f_p%1.0f", input_file_stem.c_str(), sparm0, sparm1);
             const string root_file_name = Form("%s/%s_m2lnQ.root", input_file_path.c_str(), file_stem.c_str());
             //const string root_file_name = "cards/t1tttt_mglu800_mlsp0_m2lnQ.root"; 
@@ -152,11 +152,11 @@ void CreateLimitTextFile
             chain.Add(Form("%s.root", band_name.c_str()));
 
             // branches
-            TBranch* b_obs     = chain.GetBranch("limit")   ; b_obs->SetAddress(&limit_info.obs)           ;  // observed limit
-            TBranch* b_obs_err = chain.GetBranch("limitErr"); b_obs_err->SetAddress(&limit_info.obs_err)   ;  // observed limit error
-            TBranch* b_rmedian = chain.GetBranch("rmedian") ; b_rmedian->SetAddress(&limit_info.exp)       ;  // expected median limit
-            TBranch* b_rm1s    = chain.GetBranch("rm1s")    ; b_rm1s->SetAddress(&limit_info.exp_1sigma_up);  // expected median limit -1s 
-            TBranch* b_rp1s    = chain.GetBranch("rp1s")    ; b_rp1s->SetAddress(&limit_info.exp_1sigma_dn);  // expected median limit +1s 
+            TBranch* b_obs     = chain.GetBranch("limit")       ; b_obs->SetAddress(&limit_info.obs)           ;  // observed limit
+            TBranch* b_obs_err = chain.GetBranch("limitErr")    ; b_obs_err->SetAddress(&limit_info.obs_err)   ;  // observed limit error
+            TBranch* b_rmedian = chain.GetBranch("rmedian")     ; b_rmedian->SetAddress(&limit_info.exp)       ;  // expected median limit
+            TBranch* b_rm1s    = chain.GetBranch("rm1s")        ; b_rm1s->SetAddress(&limit_info.exp_1sigma_up);  // expected median limit -1s 
+            TBranch* b_rp1s    = chain.GetBranch("rp1s")        ; b_rp1s->SetAddress(&limit_info.exp_1sigma_dn);  // expected median limit +1s 
 
             // only one entry
             chain.GetEntry(0);
