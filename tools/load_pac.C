@@ -1,7 +1,7 @@
 {
     std::string lib_path = gSystem->Getenv("LD_LIBRARY_PATH");
     std::string pac_path = gSystem->Getenv("PAC");
-    pac_path += "/lib";
+    //pac_path += "/lib";
 
     // cmsssw
     const bool cmssw = (TString(gSystem->Getenv("CMSSW_BASE")).Length() > 0);
