@@ -87,7 +87,7 @@ void test_stacked()
     TH1Overlay* p1 = new TH1Overlay("orig overlay;x;y", "sb::right lg::top_left");
     p1->Add(h1, "red" , kRed);
     p1->Add(h2, "blue", kBlue);
-    p1->Add(h3, /*no_stack=*/true, "black", kBlack);
+    p1->Add(h3, /*no_stack=*/true, "black", kBlack, 2, 0);
     p1->SetLegendOption("f");
     p1->SetTitle("dt::none");
     p1->Draw("dt::none");
@@ -108,7 +108,7 @@ void test_stacked()
     c->cd(4);
     TH1Overlay* p4 = new TH1Overlay(*p1);
     p4->SetTitle("dt::stack");
-    p4->Draw("dt::stack");
+    p4->Draw("dt::stack hist");
 
     c->Print("test_stacked.png");
 }

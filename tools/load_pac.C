@@ -40,6 +40,11 @@
     {
         cout << "PAC path set to: " << pac_path << endl;
     }
+    if (is_debug)
+    {
+        cout << "Dynamic path set to: " << pac_path << endl;
+        cout << gSystem->GetDynamicPath() << endl;
+    }
 
     // CMS2 header
     gSystem->AddIncludePath("-I$PAC/packages/cms2/05.03.23/header");

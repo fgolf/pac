@@ -41,11 +41,7 @@ alias cdrt="cd $RT"
 alias cdss="cd $SS"
 
 PATH=$project_dir/bin:$PATH
-if [ -d "$project_dir/lib" ] ; then
-    LD_LIBRARY_PATH=$project_dir/lib:$LD_LIBRARY_PATH
-    DYLD_LIBRARY_PATH=$project_dir/lib:$DYLD_LIBRARY_PATH
-    PATH=$PATH:$PAC/bin
-elif [ ! -z $CMSSW_BASE ] ; then
+if [ ! -z $CMSSW_BASE ] ; then
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$LD_LIBRARY_PATH
     DYLD_LIBRARY_PATH=$project_dir/bin/cmssw/debug:$DYLD_LIBRARY_PATH
     LD_LIBRARY_PATH=$project_dir/bin/cmssw/release:$LD_LIBRARY_PATH:$ROOTSYS/lib
