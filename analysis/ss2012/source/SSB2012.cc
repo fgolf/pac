@@ -225,6 +225,93 @@ namespace ssb {
 	const float &dilep_deta() { return samesignbtag.dilep_deta(); }
 	const float &dilep_dr() { return samesignbtag.dilep_dr(); }
 	const int &fiduciality() { return samesignbtag.fiduciality(); }
+	const bool &lep3_passes_id() { return samesignbtag.lep3_passes_id(); }
+	const bool &lep3_passes_iso() { return samesignbtag.lep3_passes_iso(); }
+	const bool &lep3_is_num() { return samesignbtag.lep3_is_num(); }
+	const bool &lep3_is_den() { return samesignbtag.lep3_is_den(); }
+	const bool &lep3_is_fo() { return samesignbtag.lep3_is_fo(); }
+	const int &lep3_is_fromw() { return samesignbtag.lep3_is_fromw(); }
+	const int &lep3_charge() { return samesignbtag.lep3_charge(); }
+	const int &lep3_pdgid() { return samesignbtag.lep3_pdgid(); }
+	const int &lep3_type() { return samesignbtag.lep3_type(); }
+	const float &lep3_d0() { return samesignbtag.lep3_d0(); }
+	const float &lep3_d0err() { return samesignbtag.lep3_d0err(); }
+	const float &lep3_dz() { return samesignbtag.lep3_dz(); }
+	const float &lep3_ip3d() { return samesignbtag.lep3_ip3d(); }
+	const float &lep3_ip3derr() { return samesignbtag.lep3_ip3derr(); }
+	const float &lep3_dzerr() { return samesignbtag.lep3_dzerr(); }
+	const float &lep3_mt() { return samesignbtag.lep3_mt(); }
+	const float &lep3_corpfiso() { return samesignbtag.lep3_corpfiso(); }
+	const float &lep3_pfiso() { return samesignbtag.lep3_pfiso(); }
+	const float &lep3_chiso() { return samesignbtag.lep3_chiso(); }
+	const float &lep3_emiso() { return samesignbtag.lep3_emiso(); }
+	const float &lep3_nhiso() { return samesignbtag.lep3_nhiso(); }
+	const float &lep3_corpfiso04() { return samesignbtag.lep3_corpfiso04(); }
+	const float &lep3_pfiso04() { return samesignbtag.lep3_pfiso04(); }
+	const float &lep3_chiso04() { return samesignbtag.lep3_chiso04(); }
+	const float &lep3_emiso04() { return samesignbtag.lep3_emiso04(); }
+	const float &lep3_nhiso04() { return samesignbtag.lep3_nhiso04(); }
+	const float &lep3_cordetiso() { return samesignbtag.lep3_cordetiso(); }
+	const float &lep3_detiso() { return samesignbtag.lep3_detiso(); }
+	const float &lep3_trkiso() { return samesignbtag.lep3_trkiso(); }
+	const float &lep3_ecaliso() { return samesignbtag.lep3_ecaliso(); }
+	const float &lep3_hcaliso() { return samesignbtag.lep3_hcaliso(); }
+	const float &lep3_cordetiso04() { return samesignbtag.lep3_cordetiso04(); }
+	const float &lep3_detiso04() { return samesignbtag.lep3_detiso04(); }
+	const float &lep3_trkiso04() { return samesignbtag.lep3_trkiso04(); }
+	const float &lep3_ecaliso04() { return samesignbtag.lep3_ecaliso04(); }
+	const float &lep3_hcaliso04() { return samesignbtag.lep3_hcaliso04(); }
+	const float &lep3_effarea() { return samesignbtag.lep3_effarea(); }
+	const float &lep3_effarea04() { return samesignbtag.lep3_effarea04(); }
+	const float &lep3_dbeta() { return samesignbtag.lep3_dbeta(); }
+	const float &lep3_dbeta04() { return samesignbtag.lep3_dbeta04(); }
+	const float &lep3_sf_lepeff() { return samesignbtag.lep3_sf_lepeff(); }
+	const float &lep3_sf_trig() { return samesignbtag.lep3_sf_trig(); }
+	const int &lep3_mcid() { return samesignbtag.lep3_mcid(); }
+	const int &lep3_mc3id() { return samesignbtag.lep3_mc3id(); }
+	const int &lep3_momid() { return samesignbtag.lep3_momid(); }
+	const int &lep3_mc3_momid() { return samesignbtag.lep3_mc3_momid(); }
+	const bool &lep3_q3agree() { return samesignbtag.lep3_q3agree(); }
+	const bool &lep3_is_conv() { return samesignbtag.lep3_is_conv(); }
+	const int &lep3_qsc() { return samesignbtag.lep3_qsc(); }
+	const int &lep3_qctf() { return samesignbtag.lep3_qctf(); }
+	const int &lep3_qgsf() { return samesignbtag.lep3_qgsf(); }
+	const int &lep3_nmhits() { return samesignbtag.lep3_nmhits(); }
+	const int &lep3_eleid_veto() { return samesignbtag.lep3_eleid_veto(); }
+	const int &lep3_eleid_loose() { return samesignbtag.lep3_eleid_loose(); }
+	const int &lep3_eleid_medium() { return samesignbtag.lep3_eleid_medium(); }
+	const int &lep3_eleid_tight() { return samesignbtag.lep3_eleid_tight(); }
+	const float &lep3_dphiin() { return samesignbtag.lep3_dphiin(); }
+	const float &lep3_detain() { return samesignbtag.lep3_detain(); }
+	const float &lep3_sieie() { return samesignbtag.lep3_sieie(); }
+	const float &lep3_hoe() { return samesignbtag.lep3_hoe(); }
+	const float &lep3_ooemoop() { return samesignbtag.lep3_ooemoop(); }
+	const float &lep3_conv_dist() { return samesignbtag.lep3_conv_dist(); }
+	const float &lep3_conv_dcot() { return samesignbtag.lep3_conv_dcot(); }
+	const bool &lep3_is_global() { return samesignbtag.lep3_is_global(); }
+	const bool &lep3_is_tracker() { return samesignbtag.lep3_is_tracker(); }
+	const bool &lep3_is_stamu() { return samesignbtag.lep3_is_stamu(); }
+	const bool &lep3_is_pfmu() { return samesignbtag.lep3_is_pfmu(); }
+	const bool &lep3_is_loosemu() { return samesignbtag.lep3_is_loosemu(); }
+	const bool &lep3_is_tightmu() { return samesignbtag.lep3_is_tightmu(); }
+	const int &lep3_npixelhits() { return samesignbtag.lep3_npixelhits(); }
+	const int &lep3_nsihits() { return samesignbtag.lep3_nsihits(); }
+	const int &lep3_nsilayers() { return samesignbtag.lep3_nsilayers(); }
+	const int &lep3_nstahits() { return samesignbtag.lep3_nstahits(); }
+	const int &lep3_nstations() { return samesignbtag.lep3_nstations(); }
+	const float &lep3_chi2() { return samesignbtag.lep3_chi2(); }
+	const float &lep3_ndof() { return samesignbtag.lep3_ndof(); }
+	const float &lep3_pterr() { return samesignbtag.lep3_pterr(); }
+	const float &lep3_ecal_vetodep() { return samesignbtag.lep3_ecal_vetodep(); }
+	const float &lep3_hcal_vetodep() { return samesignbtag.lep3_hcal_vetodep(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_p4() { return samesignbtag.lep3_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_mcp4() { return samesignbtag.lep3_mcp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_mc3p4() { return samesignbtag.lep3_mc3p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_mc_momp4() { return samesignbtag.lep3_mc_momp4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_gsf_p4() { return samesignbtag.lep3_gsf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_ctf_p4() { return samesignbtag.lep3_ctf_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_sc_p4() { return samesignbtag.lep3_sc_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_gfit_p4() { return samesignbtag.lep3_gfit_p4(); }
 	const unsigned int &selection() { return samesignbtag.selection(); }
 	const bool &is_good_lumi() { return samesignbtag.is_good_lumi(); }
 	const int &charge_type() { return samesignbtag.charge_type(); }
@@ -234,6 +321,7 @@ namespace ssb {
 	const int &nbtags() { return samesignbtag.nbtags(); }
 	const int &nbtags20() { return samesignbtag.nbtags20(); }
 	const int &nbtags30() { return samesignbtag.nbtags30(); }
+	const int &nbtags_csvl() { return samesignbtag.nbtags_csvl(); }
 	const int &ttbar_bkdn() { return samesignbtag.ttbar_bkdn(); }
 	const int &higgs_bkdn() { return samesignbtag.higgs_bkdn(); }
 	const int &higgs_decay() { return samesignbtag.higgs_decay(); }
@@ -375,12 +463,6 @@ namespace ssb {
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4() { return samesignbtag.vbjets_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4_up() { return samesignbtag.vbjets_p4_up(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4_dn() { return samesignbtag.vbjets_p4_dn(); }
-	const vector<int> &vbjets_mcflavor_phys() { return samesignbtag.vbjets_mcflavor_phys(); }
-	const vector<int> &vbjets_mcflavor_algo() { return samesignbtag.vbjets_mcflavor_algo(); }
-	const vector<int> &vbjets_mcflavor_phys_up() { return samesignbtag.vbjets_mcflavor_phys_up(); }
-	const vector<int> &vbjets_mcflavor_algo_up() { return samesignbtag.vbjets_mcflavor_algo_up(); }
-	const vector<int> &vbjets_mcflavor_phys_dn() { return samesignbtag.vbjets_mcflavor_phys_dn(); }
-	const vector<int> &vbjets_mcflavor_algo_dn() { return samesignbtag.vbjets_mcflavor_algo_dn(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4() { return samesignbtag.vbjets_mc3p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4() { return samesignbtag.vbjets_nearjet_p4(); }
 	const vector<float> &vbjets_nearjet_dr() { return samesignbtag.vbjets_nearjet_dr(); }
@@ -396,4 +478,23 @@ namespace ssb {
 	const float &gen_dilep_dphi() { return samesignbtag.gen_dilep_dphi(); }
 	const float &gen_dilep_deta() { return samesignbtag.gen_dilep_deta(); }
 	const float &gen_dilep_dr() { return samesignbtag.gen_dilep_dr(); }
+	const float &lep3_wfr() { return samesignbtag.lep3_wfr(); }
+	const float &lep3_wflip() { return samesignbtag.lep3_wflip(); }
+	const int &pfTau15_leadPtcandID() { return samesignbtag.pfTau15_leadPtcandID(); }
+	const int &pfTau_leadPtcandID() { return samesignbtag.pfTau_leadPtcandID(); }
+	const int &pfTauLoose_leadPtcandID() { return samesignbtag.pfTauLoose_leadPtcandID(); }
+	const bool &passes_tau_veto() { return samesignbtag.passes_tau_veto(); }
+	const bool &passes_isotrk_veto() { return samesignbtag.passes_isotrk_veto(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau15() { return samesignbtag.pfTau15(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau15_leadPtcand() { return samesignbtag.pfTau15_leadPtcand(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau() { return samesignbtag.pfTau(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTau_leadPtcand() { return samesignbtag.pfTau_leadPtcand(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose() { return samesignbtag.pfTauLoose(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &pfTauLoose_leadPtcand() { return samesignbtag.pfTauLoose_leadPtcand(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mu_muid_loose_p4() { return samesignbtag.mu_muid_loose_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mu_muid_tight_p4() { return samesignbtag.mu_muid_tight_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mu_muid_ssv5_p4() { return samesignbtag.mu_muid_ssv5_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &el_elid_loose_p4() { return samesignbtag.el_elid_loose_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &el_elid_medium_p4() { return samesignbtag.el_elid_medium_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &el_elid_ssv7_p4() { return samesignbtag.el_elid_ssv7_p4(); }
 }
