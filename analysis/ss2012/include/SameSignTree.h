@@ -70,6 +70,7 @@ public:
     //
     EventInfoTree event_info;
     uint64 selection;
+    int anal_type;
     bool is_good_lumi;
     int charge_type;
     int njets;

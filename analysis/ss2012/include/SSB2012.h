@@ -953,6 +953,9 @@ protected:
 	unsigned int	selection_;
 	TBranch *selection_branch;
 	bool selection_isLoaded;
+	int	anal_type_;
+	TBranch *anal_type_branch;
+	bool anal_type_isLoaded;
 	bool	is_good_lumi_;
 	TBranch *is_good_lumi_branch;
 	bool is_good_lumi_isLoaded;
@@ -3233,6 +3236,11 @@ void Init(TTree *tree) {
 		selection_branch = tree->GetBranch("selection");
 		if (selection_branch) {selection_branch->SetAddress(&selection_);}
 	}
+	anal_type_branch = 0;
+	if (tree->GetBranch("anal_type") != 0) {
+		anal_type_branch = tree->GetBranch("anal_type");
+		if (anal_type_branch) {anal_type_branch->SetAddress(&anal_type_);}
+	}
 	is_good_lumi_branch = 0;
 	if (tree->GetBranch("is_good_lumi") != 0) {
 		is_good_lumi_branch = tree->GetBranch("is_good_lumi");
@@ -4306,6 +4314,7 @@ void GetEntry(unsigned int idx)
 		lep3_sc_p4_isLoaded = false;
 		lep3_gfit_p4_isLoaded = false;
 		selection_isLoaded = false;
+		anal_type_isLoaded = false;
 		is_good_lumi_isLoaded = false;
 		charge_type_isLoaded = false;
 		njets_isLoaded = false;
@@ -4807,6 +4816,7 @@ void LoadAllBranches()
 	if (lep3_sc_p4_branch != 0) lep3_sc_p4();
 	if (lep3_gfit_p4_branch != 0) lep3_gfit_p4();
 	if (selection_branch != 0) selection();
+	if (anal_type_branch != 0) anal_type();
 	if (is_good_lumi_branch != 0) is_good_lumi();
 	if (charge_type_branch != 0) charge_type();
 	if (njets_branch != 0) njets();
@@ -9049,6 +9059,19 @@ void LoadAllBranches()
 		}
 		return selection_;
 	}
+	int &anal_type()
+	{
+		if (not anal_type_isLoaded) {
+			if (anal_type_branch != 0) {
+				anal_type_branch->GetEntry(index);
+			} else { 
+				printf("branch anal_type_branch does not exist!\n");
+				exit(1);
+			}
+			anal_type_isLoaded = true;
+		}
+		return anal_type_;
+	}
 	bool &	is_good_lumi()
 	{
 		if (not is_good_lumi_isLoaded) {
@@ -11781,6 +11804,7 @@ namespace ssb {
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_sc_p4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_gfit_p4();
 	const unsigned int &selection();
+	const int &anal_type();
 	const bool &is_good_lumi();
 	const int &charge_type();
 	const int &njets();

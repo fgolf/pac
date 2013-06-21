@@ -795,6 +795,9 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             case AnalysisType::static_size: break; // no default is intentional so that compiler issues a warning if you don't handle all the cases
         }
 
+        // set analysis type
+        m_evt.anal_type = m_analysis_type;
+
         // lepton pT cut values
         float mu_min_pt = 0.0;
         float el_min_pt = 0.0;

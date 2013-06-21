@@ -313,6 +313,7 @@ namespace ssb {
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_sc_p4() { return samesignbtag.lep3_sc_p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep3_gfit_p4() { return samesignbtag.lep3_gfit_p4(); }
 	const unsigned int &selection() { return samesignbtag.selection(); }
+	const int &anal_type() { return samesignbtag.anal_type(); }
 	const bool &is_good_lumi() { return samesignbtag.is_good_lumi(); }
 	const int &charge_type() { return samesignbtag.charge_type(); }
 	const int &njets() { return samesignbtag.njets(); }

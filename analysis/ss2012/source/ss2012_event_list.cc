@@ -20,6 +20,7 @@ struct event_info_t
     unsigned int ls;
     unsigned int evt;
     std::string  channel;
+    std::string  at;
     std::string  l1_flav;
     float        l1_pt;
     float        l1_eta;
@@ -49,10 +50,11 @@ struct SortByEventInfo
 {
     bool operator () (const event_info_t& lhs, const event_info_t& rhs) const 
     {
-        if (lhs.channel != rhs.channel) {return lhs.channel < rhs.channel;}
-        else if (lhs.run != rhs.run)    {return lhs.run < rhs.run;}
-        else if (lhs.ls != rhs.ls)      {return lhs.ls < rhs.ls;}
-        else                            {return lhs.evt < rhs.evt;}
+//         return (lhs.ht < rhs.ht);
+        if      (lhs.channel != rhs.channel) {return lhs.channel < rhs.channel;}
+        else if (lhs.run != rhs.run)         {return lhs.run < rhs.run;}
+        else if (lhs.ls != rhs.ls)           {return lhs.ls < rhs.ls;}
+        else                                 {return lhs.evt < rhs.evt;}
     }
 };
 
@@ -155,6 +157,7 @@ CTable EventLists
             ssb::ls(), 
             ssb::evt(), 
             channel, 
+            at_info.name,
             l1_flav, 
             ssb::lep1_p4().pt(), 
             ssb::lep1_p4().eta(), 
@@ -195,6 +198,7 @@ CTable EventLists
     list.setColLabel("ls"      , col++);
     list.setColLabel("evt"     , col++);
     list.setColLabel("chan"    , col++);
+    list.setColLabel("AT"      , col++);
     list.setColLabel("l1"      , col++);
     list.setColLabel("l1 pt"   , col++);
     list.setColLabel("l1 eta"  , col++);
@@ -230,6 +234,7 @@ CTable EventLists
         list.setCell(event.ls                           , row, col++);
         list.setCell(event.evt                          , row, col++);
         list.setCell(event.channel                      , row, col++);
+        list.setCell(event.at                           , row, col++);
         list.setCell(event.l1_flav                      , row, col++);
         list.setCell(Form("%4.2f"  , event.l1_pt)       , row, col++);
         list.setCell(Form("%4.2f"  , event.l1_eta)      , row, col++);
