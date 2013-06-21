@@ -78,5 +78,6 @@ namespace at
                 throw std::domain_error("ERROR: at::GetDileptonHypeTitle: hyp_type out of bounds");
         };
     }
-}
+
+} // namespace at
 

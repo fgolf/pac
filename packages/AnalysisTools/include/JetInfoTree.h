@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Math/LorentzVector.h"
+#include "at/JetInfo.h"
 
 // forward declaration
 class TTree;
@@ -25,8 +26,13 @@ class JetInfoTree
         // methods:
         void Reset();
         void SetBranches(TTree &tree);
-        void FillCommon(const std::vector<int>& mu_indices, const std::vector<int>& el_indices);
-        void FillCommon(int hyp_index);
+
+        template <typename Function>
+        void FillCommon
+        (
+            const at::JetBaseSelectionArgs& jet_args,
+            Function jet_election
+        );
 
     private:
 
@@ -43,6 +49,12 @@ class JetInfoTree
         vecLorentzVector vjets_p4;
         int nbtags;
         vecLorentzVector vbjets_p4;
+
+    private: 
+
 };
+
+// template function definitiions
+#include "JetInfoTree.impl.h"
 
 #endif // JETINFOTREE_H

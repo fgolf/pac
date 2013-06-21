@@ -1,6 +1,8 @@
 #include "at/JetInfo.h"
 #include "at/DorkyEventIdentifier.h"
+#include "at/ConvertHypIndexToVectors.h"
 #include "rt/is_equal.h"
+#include "rt/MiscTools.h"
 #include "jetSelections.h"
 #include "Math/GenVector/VectorUtil.h"
 
@@ -147,6 +149,102 @@ namespace at
     {
     }
 
+    JetBaseSelectionArgs::JetBaseSelectionArgs
+    (
+        JetType::value_type jet_type_,
+        JetBtagType::value_type btag_type_,           
+        JetScaleType::value_type scale_type_,      
+        int hyp_index_,
+        float dr_,                     
+        float min_pt_,                 
+        float max_eta_                 
+    )
+        : jet_corrector(NULL)
+        , jet_unc(NULL)
+        , jet_type(jet_type_)
+        , btag_type(btag_type_) 
+        , scale_type(scale_type_) 
+        , mu_indices()
+        , el_indices()
+        , deltaR(dr_)
+        , min_pt(min_pt_)
+        , max_eta(max_eta_)
+    {
+        at::ConvertHypIndexToVectors(hyp_index_, mu_indices, el_indices);
+    }
+
+    JetBaseSelectionArgs::JetBaseSelectionArgs
+    (
+        FactorizedJetCorrector* jet_corrector,
+        JetCorrectionUncertainty *jet_unc,
+        JetType::value_type jet_type_,
+        JetBtagType::value_type btag_type_,           
+        JetScaleType::value_type scale_type_,      
+        int hyp_index_,
+        float dr_,                     
+        float min_pt_,                 
+        float max_eta_                 
+    )
+        : jet_corrector(jet_corrector)
+        , jet_unc(jet_unc)
+        , jet_type(jet_type_)
+        , btag_type(btag_type_) 
+        , scale_type(scale_type_) 
+        , mu_indices()
+        , el_indices()
+        , deltaR(dr_)
+        , min_pt(min_pt_)
+        , max_eta(max_eta_)
+    {
+        at::ConvertHypIndexToVectors(hyp_index_, mu_indices, el_indices);
+    }
+
+    JetBaseSelectionArgs::JetBaseSelectionArgs
+    (
+        JetType::value_type jet_type_,
+        JetBtagType::value_type btag_type_,           
+        JetScaleType::value_type scale_type_,      
+        float dr_,                     
+        float min_pt_,                 
+        float max_eta_                 
+    )
+        : jet_corrector(NULL)
+        , jet_unc(NULL)
+        , jet_type(jet_type_)
+        , btag_type(btag_type_) 
+        , scale_type(scale_type_) 
+        , mu_indices()
+        , el_indices()
+        , deltaR(dr_)
+        , min_pt(min_pt_)
+        , max_eta(max_eta_)
+    {
+    }
+
+    JetBaseSelectionArgs::JetBaseSelectionArgs
+    (
+        FactorizedJetCorrector* jet_corrector,
+        JetCorrectionUncertainty *jet_unc,
+        JetType::value_type jet_type_,
+        JetBtagType::value_type btag_type_,           
+        JetScaleType::value_type scale_type_,      
+        float dr_,                     
+        float min_pt_,                 
+        float max_eta_                 
+    )
+        : jet_corrector(jet_corrector)
+        , jet_unc(jet_unc)
+        , jet_type(jet_type_)
+        , btag_type(btag_type_) 
+        , scale_type(scale_type_) 
+        , mu_indices()
+        , el_indices()
+        , deltaR(dr_)
+        , min_pt(min_pt_)
+        , max_eta(max_eta_)
+    {
+    }
+
     // non members
     bool operator == (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs)
     {
@@ -183,42 +281,48 @@ namespace at
     };
     
     // apply base selection
-    bool JetPassesSelection(const JetInfo& jet_info, const JetBaseSelectionArgs& jet_sel_args) 
+    struct JetPassesSelection
     {
-        // convenience
-        const JetBaseSelectionArgs& ja = jet_sel_args;
 
-        // min pt --> using corrected p4
-        if (jet_info.CorrPt() < ja.min_pt)
+        JetPassesSelection(const JetBaseSelectionArgs& jet_sel_args) : m_ja(jet_sel_args) {}
+
+        bool operator() (const JetInfo& jet_info) const
         {
-            return false;
+            // min pt --> using corrected p4
+            if (jet_info.CorrPt() < m_ja.min_pt)
+            {
+                return false;
+            }
+
+            // min pt --> using corrected p4
+            if (fabs(jet_info.CorrP4().eta()) > m_ja.max_eta)
+            {   
+                return false;
+            }
+
+            // selected muons
+            for (size_t i = 0; i != m_ja.mu_indices.size(); i++)
+            {
+                const LorentzVector& mu_p4 = tas::mus_p4().at(m_ja.mu_indices.at(i));
+                const float dr = ROOT::Math::VectorUtil::DeltaR(jet_info.CorrP4(), mu_p4);
+                if (dr < m_ja.deltaR) {return false;}
+            }
+
+            // selected electrons
+            for (size_t i = 0; i != m_ja.el_indices.size(); i++)
+            {
+                const LorentzVector& el_p4 = tas::els_p4().at(m_ja.el_indices.at(i));
+                const float dr = ROOT::Math::VectorUtil::DeltaR(jet_info.CorrP4(), el_p4);
+                if (dr < m_ja.deltaR) {return false;}
+            }
+
+            // if we're here then the jet is good 
+            return true;
         }
 
-        // min pt --> using corrected p4
-        if (fabs(jet_info.CorrP4().eta()) > ja.max_eta)
-        {   
-            return false;
-        }
-
-        // selected muons
-        for (size_t i = 0; i != ja.mu_indices.size(); i++)
-        {
-            const LorentzVector& mu_p4 = tas::mus_p4().at(ja.mu_indices.at(i));
-            const float dr = ROOT::Math::VectorUtil::DeltaR(jet_info.P4(), mu_p4);
-            if (dr < ja.deltaR) {return false;}
-        }
-            
-        // selected electrons
-        for (size_t i = 0; i != ja.el_indices.size(); i++)
-        {
-            const LorentzVector& el_p4 = tas::els_p4().at(ja.el_indices.at(i));
-            const float dr = ROOT::Math::VectorUtil::DeltaR(jet_info.P4(), el_p4);
-            if (dr < ja.deltaR) {return false;}
-        }
-
-        // if we're here then the jet is good 
-        return true;
-    }
+        // members
+        JetBaseSelectionArgs m_ja;
+    };
 
     // function to build the vector of JetInfos
     std::vector<at::JetInfo> GetJetInfos(const JetBaseSelectionArgs& jet_sel_args)
@@ -282,8 +386,8 @@ namespace at
                 const LorentzVector& jet_p4 = pfjets_p4().at(jidx);
 
                 // corrected p4
-                float jet_corr = 1.0;
-                if (ja.jet_corrector)
+                double jet_corr = 1.0;
+                if (ja.jet_corrector)  // if pointer not NULL, use the OTF JEC
                 {
                     ja.jet_corrector->setRho(evt_ww_rho_vor());
                     ja.jet_corrector->setJetA(pfjets_area().at(jidx));
@@ -291,7 +395,7 @@ namespace at
                     ja.jet_corrector->setJetEta(pfjets_p4().at(jidx).eta());        
                     jet_corr = ja.jet_corrector->getCorrection();
                 }
-                else
+                else  // else, take it from the ntuple
                 {
                     switch (ja.jet_type)
                     {
@@ -302,22 +406,25 @@ namespace at
                         default:                             jet_corr = 1.0;
                     }
                 }
+                LorentzVector jet_corr_p4 = jet_p4 * jet_corr; 
 
-                float jet_corr_unc = 1.0;  // relative uncertainty factor
-                if (ja.scale_type == JetScaleType::UP or ja.scale_type == JetScaleType::DOWN)
+                // jet uncertainty up/down
+                if (ja.scale_type == JetScaleType::UP or ja.scale_type == JetScaleType::DOWN)  // if pointer not NULL, use the OTF JEC uncertainty
                 {
                     if (ja.jet_unc)
                     {
-                        ja.jet_unc->setJetPt(jet_p4.pt());    
-                        ja.jet_unc->setJetEta(jet_p4.eta());  
-                        jet_corr_unc = (1.0 + ja.jet_unc->getUncertainty(true) * ja.scale_type);    
+                        ja.jet_unc->setJetPt(jet_corr_p4.pt());    
+                        ja.jet_unc->setJetEta(jet_corr_p4.eta());  
+                        const double jet_corr_unc = (1.0 + ja.jet_unc->getUncertainty(true) * ja.scale_type);    
+                        jet_corr_p4 *= jet_corr_unc; 
                     }
+                    else // else, take it from the ntuple
                     {
-                        jet_corr_unc = getJetMetSyst(ja.scale_type, jet_p4.pt() * jet_corr, jet_p4.eta());
+                        const double jet_corr_unc = getJetMetSyst(static_cast<int>(ja.scale_type), jet_corr_p4.pt(), jet_p4.eta());
+                        jet_corr_p4 *= jet_corr_unc; 
                     }
                 }
 
-                const LorentzVector jet_corr_p4 = jet_p4 * jet_corr * jet_corr_unc; 
 
                 // btag info
                 const float jet_btag_wp = JetBtagWP[ja.btag_type];
@@ -340,7 +447,7 @@ namespace at
                 JetInfo jet_info(jet_p4, jet_corr_p4, jet_is_btagged, jet_btag_disc, mc_flavor_algo, mc_flavor_phys);
 
                 // select
-                if (JetPassesSelection(jet_info, ja))
+                if (JetPassesSelection(ja)(jet_info))
                 {
                     jet_infos.push_back(jet_info);
                 }

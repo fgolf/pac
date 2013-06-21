@@ -10,7 +10,7 @@ namespace at
     template <typename T>
     struct SortByPt
     {
-        bool operator () (const T& lhs, const T& rhs) const { return rhs.Pt() < lhs.Pt(); }
+        bool operator () (const T& lhs, const T& rhs) const { return lhs.Pt() > rhs.Pt(); }
     };
     
     template <typename T>

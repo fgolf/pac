@@ -131,6 +131,8 @@ namespace at
     {
         // construct
         JetBaseSelectionArgs();
+
+        // constuct: general list of els/mus
         JetBaseSelectionArgs
         (
             JetType::value_type jet_type_,          // jet type (from jetSelection.h)
@@ -142,6 +144,7 @@ namespace at
             float min_pt_,                          // jet pt requirement: jet pt > min_pt
             float max_eta_                          // jet eta requirement: |jet eta| < max_eta
         );
+
         JetBaseSelectionArgs
         (
             FactorizedJetCorrector* jet_corrector,  // jet corrector pointer does not own pointer
@@ -155,6 +158,55 @@ namespace at
             float min_pt_,                          // jet pt requirement: jet pt > min_pt
             float max_eta_                          // jet eta requirement: |jet eta| < max_eta
         );
+
+        // constuct: hyp index 
+        JetBaseSelectionArgs
+        (
+            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
+            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
+            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
+            int hyp_index_,                         // hypothesis index 
+            float dr_,                              // the minimum DeltaR(jet, lepton)
+            float min_pt_,                          // jet pt requirement: jet pt > min_pt
+            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
+        );
+
+        JetBaseSelectionArgs
+        (
+            FactorizedJetCorrector* jet_corrector,  // jet corrector pointer does not own pointer
+            JetCorrectionUncertainty* jet_unc,      // jet uncertainty pointer does not own pointer
+            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
+            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
+            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
+            int hyp_index_,                         // hypothesis index 
+            float dr_,                              // the minimum DeltaR(jet, lepton)
+            float min_pt_,                          // jet pt requirement: jet pt > min_pt
+            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
+        );
+
+        // constuct: no selection lepton removal 
+        JetBaseSelectionArgs
+        (
+            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
+            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
+            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
+            float dr_,                              // the minimum DeltaR(jet, lepton)
+            float min_pt_,                          // jet pt requirement: jet pt > min_pt
+            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
+        );
+
+        JetBaseSelectionArgs
+        (
+            FactorizedJetCorrector* jet_corrector,  // jet corrector pointer does not own pointer
+            JetCorrectionUncertainty* jet_unc,      // jet uncertainty pointer does not own pointer
+            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
+            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
+            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
+            float dr_,                              // the minimum DeltaR(jet, lepton)
+            float min_pt_,                          // jet pt requirement: jet pt > min_pt
+            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
+        );
+
 
         // members
         FactorizedJetCorrector* jet_corrector;  // does not own pointer
