@@ -37,6 +37,9 @@ public:
     bool is_num;
     bool is_den;
     bool is_fo;
+    bool is_mu;
+    bool is_el;
+    bool exists;
     int is_fromw;
     int charge;
     int pdgid;
@@ -130,6 +133,7 @@ public:
     float pterr;
     float ecal_vetodep;
     float hcal_vetodep;    
+
 };
 
 #endif

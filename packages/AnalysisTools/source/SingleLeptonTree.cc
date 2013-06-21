@@ -49,6 +49,8 @@ void SingleLeptonTree::FillCommon (int id, int idx)
 
     if (abs(id) == 11)
     {
+        exists = true;
+        is_el  = true;
         p4     = cms2.els_p4().at(idx);
         charge = cms2.els_charge().at(idx);
         pdgid  = charge * -11;
@@ -135,6 +137,8 @@ void SingleLeptonTree::FillCommon (int id, int idx)
     } // end electron block
     if (abs(id) == 13)
     {
+        exists = true;
+        is_mu = true;
         p4 = cms2.mus_p4().at(idx);
         charge = cms2.mus_charge().at(idx);
         pdgid = charge * -13;
@@ -221,6 +225,9 @@ void SingleLeptonTree::Reset()
     is_num       = false;
     is_den       = false;
     is_fo        = false;
+    is_mu        = false;
+    is_el        = false;
+    exists       = false;
     is_fromw     = -999999;
     charge       = -999999;
     pdgid        = -999999;
@@ -311,6 +318,9 @@ void SingleLeptonTree::SetBranches(TTree &tree)
     tree.Branch(Form("%sis_num"       , prefix_.c_str()) , &is_num         );
     tree.Branch(Form("%sis_den"       , prefix_.c_str()) , &is_den         );
     tree.Branch(Form("%sis_fo"        , prefix_.c_str()) , &is_fo          );
+    tree.Branch(Form("%sis_mu"        , prefix_.c_str()) , &is_mu          );
+    tree.Branch(Form("%sis_el"        , prefix_.c_str()) , &is_el          );
+    tree.Branch(Form("%sexists"       , prefix_.c_str()) , &exists         );
     tree.Branch(Form("%sis_fromw"     , prefix_.c_str()) , &is_fromw       );
     tree.Branch(Form("%scharge"       , prefix_.c_str()) , &charge         );
     tree.Branch(Form("%spdgid"        , prefix_.c_str()) , &pdgid          );

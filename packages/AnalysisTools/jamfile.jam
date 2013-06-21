@@ -23,6 +23,8 @@ lib AnalysisTools
     ./source/MCBtagCount.cc
     ./source/SingleLeptonTree.cc
     ./source/EventInfoTree.cc
+    ./source/JetInfo.cc
+    ./source/JetInfoTree.cc
     ./source/CMS2Wrapper.cc
     ./source/FakeRatePrediction.cc
     ./source/FlipRatePrediction.cc
