@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm> 
 
 #include "rt/RootTools.h"
 #include "at/Sample.h"
@@ -192,25 +193,28 @@ void CreateExpectedSignificanceHists
 
     // resulting histograms
     rt::TH1Container hc_sig;
-    hc_sig.Add(new TH2F("h_s_8tev"             , Form("Signal yield (8 TeV) %s;significance"          , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_b_8tev"             , Form("Background estimate (8 TeV) %s;significance"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_8tev"           , Form("Expected Significance (8 TeV) %s;significance" , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr_8tev"   , Form("Best Signal Region (sig) (8 TeV) %s;best SR"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_s_8tev"             , Form("Signal yield (8 TeV) %s;significance"                  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_8tev"             , Form("Background estimate (8 TeV) %s;significance"           , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_8tev"           , Form("Expected Significance (8 TeV) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_8tev_trunc"     , Form("Expected Significance (8 TeV) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_8tev"   , Form("Best Signal Region (sig) (8 TeV) %s;best signal region", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
-    hc_sig.Add(new TH2F("h_s_8tev_opt"           , Form("Signal yield (8 TeV, optimistic) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_b_8tev_opt"           , Form("Background estimate (8 TeV, optimistic) %s;significance"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_8tev_opt"         , Form("Expected Significance (8 TeV, optimistic) %s;significance", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr_8tev_opt" , Form("Best Signal Region (sig) (8 TeV, optimistic) %s;best SR"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_s_8tev_opt"           , Form("Signal yield (8 TeV, optimistic) %s;significance"                , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_8tev_opt"           , Form("Background estimate (8 TeV, optimistic) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_8tev_opt"         , Form("Expected Significance (8 TeV, optimistic) %s;significance"       , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_8tev_opt" , Form("Best Signal Region (sig) (8 TeV, optimistic) %s;signal region SR", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
-    hc_sig.Add(new TH2F("h_s_14tev"             , Form("Signal yield (14 TeV) %s;significance"          , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_b_14tev"             , Form("Background estimate (14 TeV) %s;significance"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_14tev"           , Form("Expected Significance (14 TeV) %s;significance" , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr_14tev"   , Form("Best Signal Region (sig) (14 TeV) %s;best SR"   , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_s_14tev"             , Form("Signal yield (14 TeV) %s;significance"                 , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_14tev"             , Form("Background estimate (14 TeV) %s;significance"          , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_14tev"           , Form("Expected Significance (14 TeV) %s;significance"        , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_14tev_trunc"     , Form("Expected Significance (14 TeV) %s;significance"        , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_14tev"   , Form("Best Signal Region (sig) (14 TeV) %s;signal region SR" , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
 
-    hc_sig.Add(new TH2F("h_s_14tev_opt"           , Form("Signal yield (14 TeV, optimistic) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_b_14tev_opt"           , Form("Background estimate (14 TeV, optimistic) %s;significance"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_14tev_opt"         , Form("Expected Significance (14 TeV, optimistic) %s;significance", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
-    hc_sig.Add(new TH2F("h_sig_best_sr_14tev_opt" , Form("Best Signal Region (sig) (14 TeV, optimistic) %s;best SR"  , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_s_14tev_opt"           , Form("Signal yield (14 TeV, optimistic) %s;significance"                , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_b_14tev_opt"           , Form("Background estimate (14 TeV, optimistic) %s;significance"         , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_14tev_opt"         , Form("Expected Significance (14 TeV, optimistic) %s;significance"       , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_14tev_opt_trunc"   , Form("Expected Significance (14 TeV, optimistic) %s;significance"       , ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+    hc_sig.Add(new TH2F("h_sig_best_sr_14tev_opt" , Form("Best Signal Region (sig) (14 TeV, optimistic) %s;signal region SR", ss::GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
     //for (size_t i = 0; i != sr_nums.size(); i++)
     //{
     //    const unsigned int sr_num = sr_nums.at(i);
@@ -278,7 +282,7 @@ void CreateExpectedSignificanceHists
                 cout << "xsec_8tev = " << xsec_8tev << endl;
 
                 // signficance
-                const float sig_8tev    = at::SimpleSignificance(n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev);
+                const float sig_8tev = at::SimpleSignificance(n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev);
                 cout << "n_signal_8tev      = " << n_signal_8tev      << endl;
                 cout << "n_bkgd_8tev        = " << n_bkgd_8tev        << endl;
                 cout << "unc_bkgd_8tev      = " << unc_bkgd_8tev      << endl;
@@ -291,6 +295,7 @@ void CreateExpectedSignificanceHists
                     best_sr_sig_8tev = SRInfo(sr_num, sig_8tev, n_signal_8tev, n_bkgd_8tev, unc_bkgd_8tev);
                 }
                 rt::SetBinContent2D(hc_sig["h_sig_8tev"        ], sparm0, sparm1, best_sr_sig_8tev.sig);
+                rt::SetBinContent2D(hc_sig["h_sig_8tev_trunc"  ], sparm0, sparm1, std::min(5.0f, best_sr_sig_8tev.sig));
                 rt::SetBinContent2D(hc_sig["h_sig_best_sr_8tev"], sparm0, sparm1, best_sr_sig_8tev.sr );
                 rt::SetBinContent2D(hc_sig["h_s_8tev"          ], sparm0, sparm1, best_sr_sig_8tev.s  );
                 rt::SetBinContent2D(hc_sig["h_b_8tev"          ], sparm0, sparm1, best_sr_sig_8tev.b  , best_sr_sig_8tev.b_unc);
@@ -354,7 +359,7 @@ void CreateExpectedSignificanceHists
                 const float frac_unc_bkgd_14tev = unc_bkgd_14tev / n_bkgd_14tev;
 
                 // signficance
-                const float sig_14tev    = at::SimpleSignificance(n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev);
+                const float sig_14tev = at::SimpleSignificance(n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev);
                 cout << "n_signal_14tev      = " << n_signal_14tev      << endl;
                 cout << "n_bkgd_14tev        = " << n_bkgd_14tev        << endl;
                 cout << "unc_bkgd_14tev      = " << unc_bkgd_14tev      << endl;
@@ -369,6 +374,7 @@ void CreateExpectedSignificanceHists
                     best_sr_sig_14tev = SRInfo(sr_num, sig_14tev, n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev);
                 }
                 rt::SetBinContent2D(hc_sig["h_sig_14tev"        ], sparm0, sparm1, best_sr_sig_14tev.sig);
+                rt::SetBinContent2D(hc_sig["h_sig_14tev_trunc"  ], sparm0, sparm1, std::min(5.0f, best_sr_sig_14tev.sig));
                 rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev"], sparm0, sparm1, best_sr_sig_14tev.sr );
                 rt::SetBinContent2D(hc_sig["h_s_14tev"          ], sparm0, sparm1, best_sr_sig_14tev.s  );
                 rt::SetBinContent2D(hc_sig["h_b_14tev"          ], sparm0, sparm1, best_sr_sig_14tev.b  , best_sr_sig_14tev.b_unc);
@@ -404,6 +410,7 @@ void CreateExpectedSignificanceHists
                     best_sr_sig_14tev_optimistic = SRInfo(sr_num, sig_14tev_optimistic, n_signal_14tev, n_bkgd_14tev, unc_bkgd_14tev_optimistic);
                 }
                 rt::SetBinContent2D(hc_sig["h_sig_14tev_opt"        ], sparm0, sparm1, best_sr_sig_14tev_optimistic.sig);
+                rt::SetBinContent2D(hc_sig["h_sig_14tev_opt_trunc"  ], sparm0, sparm1, std::min(5.0f, best_sr_sig_14tev_optimistic.sig));
                 rt::SetBinContent2D(hc_sig["h_sig_best_sr_14tev_opt"], sparm0, sparm1, best_sr_sig_14tev_optimistic.sr );
                 rt::SetBinContent2D(hc_sig["h_s_14tev_opt"          ], sparm0, sparm1, best_sr_sig_14tev_optimistic.s  );
                 rt::SetBinContent2D(hc_sig["h_b_14tev_opt"          ], sparm0, sparm1, best_sr_sig_14tev_optimistic.b  , best_sr_sig_14tev_optimistic.b_unc);
@@ -439,28 +446,6 @@ TGraph* GetContourTGraph(TH1* hist, const double level = 5.0)
     // reset the contours
     hist->SetContour(static_cast<int>(max-min)+1);
     return curve;
-}
-
-void PrintSignificancePlot(TH1* hist, const std::string& output_file_name)
-{
-    // Draw the hist and curve
-    gStyle->SetPadRightMargin(0.15);
-    gStyle->SetPaintTextFormat("1.1f");
-    TGraph* curve = GetContourTGraph(hist, 5.0);
-    TCanvas c("c_PrintSignificancePlot_temp", "c_PrintSignificancePlot_temp");
-    hist->Draw("colz");
-    curve->SetLineWidth(3);
-    curve->Draw("C");
-
-    // Draw the legend
-    TLegend leg(0.15, 0.75, 0.5, 0.89);
-    leg.AddEntry(curve, "5#sigma signficance", "L");
-    leg.SetFillColor(0);  // 0 makes it the background clear on the pad
-    leg.SetFillStyle(0);
-    leg.SetBorderSize(0);
-    leg.Draw();
-
-    c.Print(output_file_name.c_str());
 }
 
 void CreateSbottomProjectionHists(const std::string& input_file, const std::string& output_path = "plots/sig/t6ttww", const float max_msbottom = 900)
@@ -546,32 +531,32 @@ void CreateSbottomProjectionHists(const std::string& input_file, const std::stri
     TCanvas* c1 = new TCanvas("c1", "c1");
     h_eff_perc->SetStats(0);
     h_eff_perc->Draw("text");
-    c1->Print(Form("%s/h_eff_perc.%s", output_path.c_str(), suffix.c_str())); 
+    c1->Print(Form("%s/h_eff_perc.%s", output_path.c_str(), suffix.c_str()));
 
     rt::SetStatBoxPosition(h_eff_perc_vs_msb, 0.1, 0.65, 0.3, 0.9);
     h_eff_perc_vs_msb->GetYaxis()->SetRangeUser(0.0, 0.8);
     h_eff_perc_vs_msb->SetLineWidth(2);
     h_eff_perc_vs_msb->Draw("text hist");
     f_linear->Draw("same");
-    c1->Print(Form("%s/h_eff_perc_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
+    c1->Print(Form("%s/h_eff_perc_vs_msb.%s", output_path.c_str(), suffix.c_str()));
 
     h_eff_proj_vs_msb->SetStats(false);
     h_eff_proj_vs_msb->SetLineWidth(2);
     h_eff_proj_vs_msb->GetYaxis()->SetRangeUser(0.6, 1.0);
     h_eff_proj_vs_msb->Draw("text hist");
-    c1->Print(Form("%s/h_eff_proj_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
+    c1->Print(Form("%s/h_eff_proj_vs_msb.%s", output_path.c_str(), suffix.c_str()));
 
     h_s_proj_14tev_opt_vs_msb->SetStats(false);
     h_s_proj_14tev_opt_vs_msb->SetLineWidth(2);
     h_s_proj_14tev_opt_vs_msb->GetYaxis()->SetRangeUser(0.0, 180.0);
     h_s_proj_14tev_opt_vs_msb->Draw("hist text");
-    c1->Print(Form("%s/h_s_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
+    c1->Print(Form("%s/h_s_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str()));
 
     h_sig_proj_14tev_opt_vs_msb->SetStats(false);
     h_sig_proj_14tev_opt_vs_msb->SetLineWidth(2);
     h_sig_proj_14tev_opt_vs_msb->GetYaxis()->SetRangeUser(0.0, 6.0);
     h_sig_proj_14tev_opt_vs_msb->Draw("hist text");
-    c1->Print(Form("%s/h_sig_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str())); 
+    c1->Print(Form("%s/h_sig_proj_14tev_opt_vs_msb.%s", output_path.c_str(), suffix.c_str()));
 
     // write to file
     rt::TH1Container hc;
@@ -586,28 +571,76 @@ void CreateSbottomProjectionHists(const std::string& input_file, const std::stri
     return;
 }
 
+void PrintSignificancePlot(TH1* hist, TH1* hist2, const std::string& output_file_name)
+{
+    // Draw the hist and curve
+    gStyle->SetPadRightMargin(0.15);
+    gStyle->SetPaintTextFormat("1.1f");
+    TGraph* curve = GetContourTGraph(hist, 5.0);
+    TCanvas c("c_PrintSignificancePlot_temp", "c_PrintSignificancePlot_temp");
+    hist2->SetXTitle("m_{#tilde{b}} [GeV]");
+    hist2->SetYTitle("m_{#tilde{#chi}^{#pm}} [GeV]");
+    hist2->Draw("colz");
+    curve->SetLineWidth(3);
+    curve->Draw("C");
+
+    // Draw the legend
+    float stat_y1 = 1.0 - gStyle->GetPadTopMargin() - 0.01;
+    float stat_y2 = 0.80;
+    float stat_x1 = gStyle->GetPadLeftMargin() + 0.02;
+    float stat_x2 = 0.5;
+    TLegend leg(stat_x1, stat_y1, stat_x2, stat_y2);
+    leg.AddEntry(curve, "5#sigma signficance", "L");
+    leg.SetFillColor(0);  // 0 makes it the background clear on the pad
+    leg.SetFillStyle(0);
+    leg.SetBorderSize(0);
+    leg.Draw();
+
+    // label
+    TLatex t1(gStyle->GetPadLeftMargin() + 0.02, 0.75, "pp #rightarrow #tilde{b}#tilde{b}*, #tilde{b} #rightarrow tW#tilde{#chi}^{0}"); t1.SetNDC(); t1.SetTextSize(0.04); t1.Draw();
+    TLatex t2(gStyle->GetPadLeftMargin() + 0.02, 0.70, "same-sign dilepton analysis"                                                 ); t2.SetNDC(); t2.SetTextSize(0.04); t2.Draw();
+
+    c.Print(output_file_name.c_str());
+}
+
+void PrintBestSRPlot(TH1* hist, const std::string& output_file_name)
+{
+    // Draw the hist and curve
+    gStyle->SetPadRightMargin(0.15);
+    gStyle->SetPaintTextFormat("1.0f");
+    TCanvas c("c_PrintBestSRPlot_temp", "c_PrintBestSRPlot_temp");
+    hist->SetXTitle("m_{#tilde{b}} [GeV]");
+    hist->SetYTitle("m_{#tilde{#chi}^{#pm}} [GeV]");
+/*     hist->SetMarkerColor(kWhite); */
+    hist->Draw("colz text");
+
+    // label
+    TLatex t1(gStyle->GetPadLeftMargin() + 0.02, 0.80, "pp #rightarrow #tilde{b}#tilde{b}*, #tilde{b} #rightarrow tW#tilde{#chi}^{0}"); t1.SetNDC(); t1.SetTextSize(0.04); t1.Draw();
+    TLatex t2(gStyle->GetPadLeftMargin() + 0.02, 0.75, "same-sign dilepton analysis"                                                 ); t2.SetNDC(); t2.SetTextSize(0.04); t2.Draw();
+
+    c.Print(output_file_name.c_str());
+}
+
 void PrintExpectedSignificanceHists(const std::string& input_file, const std::string& output_path, const std::string& suffix = "png")
 {
     rt::TH1Container hc(input_file);
     hc.SetStats(false);
     TCanvas* c1 = new TCanvas("c1", "c1");
 
-    gStyle->SetPaintTextFormat("1.1f");
-    rt::Print(hc["h_s_8tev"             ], output_path, suffix, "h_s_8tev_text"             , "text", false);
-    rt::Print(hc["h_b_8tev"             ], output_path, suffix, "h_b_8tev_text"             , "texte", false);
-    rt::Print(hc["h_sig_8tev"           ], output_path, suffix, "h_sig_8tev_text"           , "text", false);
-    rt::Print(hc["h_sig_8tev_opt"       ], output_path, suffix, "h_sig_8tev_opt_text"       , "text", false);
-    rt::Print(hc["h_s_8tev_opt"         ], output_path, suffix, "h_s_8tev_opt_text"         , "text", false);
-    rt::Print(hc["h_b_8tev_opt"         ], output_path, suffix, "h_b_8tev_opt_text"         , "texte", false);
-    gStyle->SetPaintTextFormat("1.1f");
-    rt::Print(hc["h_sig_14tev"          ], output_path, suffix, "h_sig_14tev_text"          , "text", false);
-    rt::Print(hc["h_s_14tev"            ], output_path, suffix, "h_s_14tev_text"            , "text", false);
-    rt::Print(hc["h_b_14tev"            ], output_path, suffix, "h_b_14tev_text"            , "texte", false);
-    rt::Print(hc["h_sig_ratio_14tev"    ], output_path, suffix, "h_sig_ratio_14tev_text"    , "text", false);
-    rt::Print(hc["h_s_14tev_opt"        ], output_path, suffix, "h_s_14tev_opt_text"        , "text", false);
-    rt::Print(hc["h_b_14tev_opt"        ], output_path, suffix, "h_b_14tev_opt_text"        , "texte", false);
-    rt::Print(hc["h_sig_14tev_opt"      ], output_path, suffix, "h_sig_14tev_opt_text"      , "text", false);
-    rt::Print(hc["h_sig_ratio_14tev_opt"], output_path, suffix, "h_sig_ratio_14tev_opt_text", "text", false);
+    // More better palette
+    const Int_t NRGBs = 5;
+    const Int_t NCont = 255;
+    Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
+    Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
+    Double_t green[NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
+    Double_t blue[NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
+    TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
+    gStyle->SetNumberContours(NCont);
+    gStyle->SetNumberContours(NCont);
+    
+    const std::string cms  = "CMS Preliminary";
+    const std::string lumi = "#sqrt{s} = 8 TeV, #int Ldt = 19.5 fb^{-1}";
+    const std::string title = Form("%s  %s", cms.c_str(), lumi.c_str());
 
     gStyle->SetPadRightMargin(0.15);
     gStyle->SetPaintTextFormat("1.0f");
@@ -619,34 +652,113 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
     hc["h_sig_best_sr_8tev_opt" ]->SetContour(29-18);
     hc["h_sig_best_sr_14tev"    ]->SetContour(29-23);
     hc["h_sig_best_sr_14tev_opt"]->SetContour(29-23);
-    rt::Print(hc["h_sig_best_sr_8tev"     ], output_path, suffix, "h_sig_best_sr_8tev"     , "text colz", false);
-    rt::Print(hc["h_sig_best_sr_8tev_opt" ], output_path, suffix, "h_sig_best_sr_8tev_opt" , "text colz", false);
-    rt::Print(hc["h_sig_best_sr_14tev"    ], output_path, suffix, "h_sig_best_sr_14tev"    , "text colz", false);
-    rt::Print(hc["h_sig_best_sr_14tev_opt"], output_path, suffix, "h_sig_best_sr_14tev_opt", "text colz", false);
 
-    rt::Print(hc["h_sig_8tev"           ], output_path, suffix, "h_sig_8tev_col"           , "colz", false);
-    rt::Print(hc["h_sig_8tev_opt"       ], output_path, suffix, "h_sig_8tev_opt_col"       , "colz", false);
-    rt::Print(hc["h_sig_14tev"          ], output_path, suffix, "h_sig_14tev_col"          , "colz", false);
-    rt::Print(hc["h_sig_ratio_14tev"    ], output_path, suffix, "h_sig_ratio_14tev_col"    , "colz", false);
-    rt::Print(hc["h_sig_14tev_opt"      ], output_path, suffix, "h_sig_14tev_opt_col"      , "colz", false);
-    rt::Print(hc["h_sig_ratio_14tev_opt"], output_path, suffix, "h_sig_ratio_14tev_opt_col", "colz", false);
+    // ---------------------------------------------- //
+    //  style
+    // ---------------------------------------------- //
 
+    // For the canvas:
+    gStyle->SetCanvasBorderMode(0);
+    gStyle->SetCanvasColor(kWhite);
+    gStyle->SetCanvasDefH(600); //Height of canvas
+    gStyle->SetCanvasDefW(800); //Width of canvas
+    gStyle->SetCanvasDefX(0);   //POsition on screen
+    gStyle->SetCanvasDefY(0);
+
+    // For the Pad:
+    gStyle->SetPadBorderMode(0);
+    gStyle->SetPadColor(kWhite);
+    gStyle->SetPadGridX(false);
+    gStyle->SetPadGridY(false);
+    gStyle->SetGridColor(0);
+    gStyle->SetGridStyle(3);
+    gStyle->SetGridWidth(1);
+    gStyle->SetPadTopMargin(0.12);
+    gStyle->SetPadBottomMargin(0.15);
+    gStyle->SetPadLeftMargin(0.15);
+    gStyle->SetPadRightMargin(0.04);
+    
+    // title
+    gStyle->SetOptTitle(1);
+    gStyle->SetTitleFont(42);
+    gStyle->SetTitleColor(1);
+    gStyle->SetTitleTextColor(1);
+    gStyle->SetTitleFillColor(10);
+    gStyle->SetTitleFontSize(0.05);
+    gStyle->SetTitleX(0.5);
+    gStyle->SetTitleY(0.985);
+    gStyle->SetTitleAlign(23);
+    gStyle->SetTitleStyle(0);
+    gStyle->SetTitleBorderSize(0);
+    gStyle->SetTitleFillColor(0);
+
+    // hist
+    gStyle->SetTitleColor(1, "XYZ");
+    gStyle->SetTitleFont(42, "XYZ");
+    gStyle->SetTitleSize(0.05, "XYZ");
+    gStyle->SetTitleOffset(1.20, "X");
+    gStyle->SetTitleOffset(1.10, "Y"); 
+
+    // axis
+    gStyle->SetAxisColor(1, "XYZ");
+    gStyle->SetStripDecimals(kTRUE);
+    gStyle->SetTickLength(0.03, "XYZ");
+    gStyle->SetNdivisions(510, "XYZ");
+    gStyle->SetPadTickX(0);  // To get tick marks on the opposite side of the frame
+    gStyle->SetPadTickY(0);
+
+/*     hc["h_s_8tev"             ]->SetTitle(title.c_str()); */
+/*     hc["h_b_8tev"             ]->SetTitle(title.c_str()); */
+/*     hc["h_sig_8tev"           ]->SetTitle(title.c_str()); */
+/*     hc["h_s_8tev_opt"         ]->SetTitle(title.c_str()); */
+/*     hc["h_b_8tev_opt"         ]->SetTitle(title.c_str()); */
+/*     hc["h_sig_14tev"          ]->SetTitle(title.c_str()); */
+/*     hc["h_s_14tev"            ]->SetTitle(title.c_str()); */
+/*     hc["h_b_14tev"            ]->SetTitle(title.c_str()); */
+/*     hc["h_sig_ratio_14tev"    ]->SetTitle(title.c_str()); */
+/*     hc["h_s_14tev_opt"        ]->SetTitle(title.c_str()); */
+/*     hc["h_b_14tev_opt"        ]->SetTitle(title.c_str()); */
+/*     hc["h_sig_14tev_opt"      ]->SetTitle(title.c_str()); */
+/*     hc["h_sig_ratio_14tev_opt"]->SetTitle(title.c_str()); */
+
+    gStyle->SetPaintTextFormat("1.1f");
+    rt::Print(hc["h_s_8tev"             ], output_path, suffix, "h_s_8tev_text"             , "text" , false);
+    rt::Print(hc["h_b_8tev"             ], output_path, suffix, "h_b_8tev_text"             , "texte", false);
+    rt::Print(hc["h_sig_8tev"           ], output_path, suffix, "h_sig_8tev_text"           , "text" , false);
+    rt::Print(hc["h_sig_14tev"          ], output_path, suffix, "h_sig_14tev_text"          , "text" , false);
+    rt::Print(hc["h_s_14tev"            ], output_path, suffix, "h_s_14tev_text"            , "text" , false);
+    rt::Print(hc["h_b_14tev"            ], output_path, suffix, "h_b_14tev_text"            , "texte", false);
+    rt::Print(hc["h_sig_ratio_14tev"    ], output_path, suffix, "h_sig_ratio_14tev_text"    , "text" , false);
+    rt::Print(hc["h_s_14tev_opt"        ], output_path, suffix, "h_s_14tev_opt_text"        , "text" , false);
+    rt::Print(hc["h_b_14tev_opt"        ], output_path, suffix, "h_b_14tev_opt_text"        , "texte", false);
+    rt::Print(hc["h_sig_14tev_opt"      ], output_path, suffix, "h_sig_14tev_opt_text"      , "text" , false);
+    rt::Print(hc["h_sig_ratio_14tev_opt"], output_path, suffix, "h_sig_ratio_14tev_opt_text", "text" , false);
+
+    // ---------------------------------------------- //
     // pretty versions
-    PrintSignificancePlot(hc["h_sig_8tev"     ], Form("%s/h_sig_8tev_curve.%s"     , output_path.c_str(), suffix.c_str()));
-    PrintSignificancePlot(hc["h_sig_8tev_opt" ], Form("%s/h_sig_8tev_opt_curve.%s" , output_path.c_str(), suffix.c_str()));
-    PrintSignificancePlot(hc["h_sig_14tev"    ], Form("%s/h_sig_14tev_curve.%s"    , output_path.c_str(), suffix.c_str()));
-    PrintSignificancePlot(hc["h_sig_14tev_opt"], Form("%s/h_sig_14tev_opt_curve.%s", output_path.c_str(), suffix.c_str()));
+    // ---------------------------------------------- //
+
+    hc["h_sig_best_sr_8tev"     ]->SetTitle(title.c_str());
+    hc["h_sig_best_sr_14tev"    ]->SetTitle(title.c_str());
+    hc["h_sig_best_sr_14tev_opt"]->SetTitle(title.c_str());
+
+    PrintBestSRPlot(hc["h_sig_best_sr_8tev"     ], Form("%s/h_sig_best_sr_8tev.%s"      , output_path.c_str(), suffix.c_str()));
+    PrintBestSRPlot(hc["h_sig_best_sr_14tev"    ], Form("%s/h_sig_best_sr_14tev.%s"     , output_path.c_str(), suffix.c_str()));
+    PrintBestSRPlot(hc["h_sig_best_sr_14tev_opt"], Form("%s/h_sig_best_sr_14tev_opt.%s" , output_path.c_str(), suffix.c_str()));
+
+    hc["h_sig_8tev_trunc"     ]->SetTitle(title.c_str());
+    hc["h_sig_14tev_trunc"    ]->SetTitle(title.c_str());
+    hc["h_sig_14tev_opt_trunc"]->SetTitle(title.c_str());
+
+    PrintSignificancePlot(hc["h_sig_8tev"     ], hc["h_sig_8tev_trunc"     ], Form("%s/h_sig_8tev_curve.%s"     , output_path.c_str(), suffix.c_str()));
+    PrintSignificancePlot(hc["h_sig_14tev"    ], hc["h_sig_14tev_trunc"    ], Form("%s/h_sig_14tev_curve.%s"    , output_path.c_str(), suffix.c_str()));
+    PrintSignificancePlot(hc["h_sig_14tev_opt"], hc["h_sig_14tev_opt_trunc"], Form("%s/h_sig_14tev_opt_curve.%s", output_path.c_str(), suffix.c_str()));
 
     // summary plot
     TGraph* curve_8tev = GetContourTGraph(hc["h_sig_8tev"]);
     curve_8tev->SetLineWidth(4);
     curve_8tev->SetLineColor(kBlack);
     curve_8tev->SetLineStyle(1);
-
-    TGraph* curve_8tev_opt = GetContourTGraph(hc["h_sig_8tev_opt"]);
-    curve_8tev_opt->SetLineWidth(4);
-    curve_8tev_opt->SetLineColor(kGreen+2);
-    curve_8tev_opt->SetLineStyle(2);
 
     TGraph* curve_14tev = GetContourTGraph(hc["h_sig_14tev"]);
     curve_14tev->SetLineWidth(4);
@@ -665,27 +777,47 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
     // resulting histograms
     gStyle->SetPadRightMargin(0.10);
     ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(at::Sample::sbottomtop);
-    TH2F* h_temp = new TH2F("h_summary_curve", "Expected 5#sigma discovery reach", bin_info.nbinsx+2, bin_info.xmin, bin_info.xmax+100, bin_info.nbinsy+1, bin_info.ymin, bin_info.ymax+50);
+    TH2F* h_temp = new TH2F("h_summary_curve", title.c_str(), bin_info.nbinsx+2, bin_info.xmin, bin_info.xmax+100, bin_info.nbinsy+1, bin_info.ymin, bin_info.ymax+50);
+    h_temp->SetXTitle("m_{#tilde{b}} [GeV]");
+    h_temp->SetYTitle("m_{#tilde{#chi}^{#pm}} [GeV]");
     h_temp->SetStats(false);
     h_temp->Draw("axis");
     curve_8tev->Draw("C");
-    curve_8tev_opt->Draw("C");
     curve_14tev->Draw("C");
     curve_14tev_opt->Draw("C");
     line_14tev_opt->Draw("same");
     line_14tev_opt->DrawLine(725, 380, 725, 150);
     line_14tev_opt->DrawLine(712, 399, 725, 380);
 
-    TLegend* leg = new TLegend(0.15, 0.70, 0.6, 0.89);
-    leg->AddEntry(curve_8tev     , "20 fb^{-1}, #sqrt{s} = 8 TeV"                , "L");
-    leg->AddEntry(curve_8tev_opt , "20 fb^{-1}, #sqrt{s} = 8 TeV (optimistic)"   , "L");
-    leg->AddEntry(curve_14tev    , "300 fb^{-1}, #sqrt{s} = 14 TeV (pessimistic)", "L");
-    leg->AddEntry(curve_14tev_opt, "300 fb^{-1}, #sqrt{s} = 14 TeV (optimistic)" , "L");
+    TLegend* leg = new TLegend(0.45, 0.725, 0.85, 0.875);
+    leg->AddEntry(curve_8tev     , "20 fb^{-1}, #sqrt{s} = 8 TeV"                 , "L");
+    leg->AddEntry(curve_14tev    , "300 fb^{-1}, #sqrt{s} = 14 TeV (conservative)", "L");
+    leg->AddEntry(curve_14tev_opt, "300 fb^{-1}, #sqrt{s} = 14 TeV (optimistic)"  , "L");
     leg->SetFillColor(0);  // 0 makes it the background clear on the pad
     leg->SetFillStyle(0);
     leg->SetBorderSize(0);
     leg->Draw("same");
+
+    TLatex t1(gStyle->GetPadLeftMargin() + 0.02, 0.80, "pp #rightarrow #tilde{b}#tilde{b}*, #tilde{b} #rightarrow tW#tilde{#chi}^{0}"); t1.SetNDC(); t1.SetTextSize(0.03); t1.Draw();
+    TLatex t2(gStyle->GetPadLeftMargin() + 0.02, 0.75, "same-sign dilepton analysis"                                                 ); t2.SetNDC(); t2.SetTextSize(0.03); t2.Draw();
+    TLatex t3(gStyle->GetPadLeftMargin() + 0.02, 0.70, "Expected 5#sigma discovery reach"                                            ); t3.SetNDC(); t3.SetTextSize(0.03); t3.Draw();
+
     c1->Print(Form("%s/h_summary_curve.%s", output_path.c_str(), suffix.c_str()));
+
+    // eff fit
+    TH1F* h_eff_fit = rt::GetHistFromRootFile<TH1F>("plots/sig/t6ttww/t6ttww_msb_proj.root", "h_eff_perc_vs_msb");
+    h_eff_fit->SetTitle(title.c_str());
+    h_eff_fit->SetXTitle("m_{#tilde{b}} [GeV]");
+    h_eff_fit->SetYTitle("Efficiency [percentage]");
+    h_eff_fit->SetStats(false);
+    h_eff_fit->Draw();
+
+    TLatex t4(gStyle->GetPadLeftMargin() + 0.02, 0.80, "pp #rightarrow #tilde{b}#tilde{b}*, #tilde{b} #rightarrow tW#tilde{#chi}^{0}"); t4.SetNDC(); t4.SetTextSize(0.03); t4.Draw();
+    TLatex t5(gStyle->GetPadLeftMargin() + 0.02, 0.75, "same-sign dilepton analysis"                                                 ); t5.SetNDC(); t5.SetTextSize(0.03); t5.Draw();
+    TLatex t6(gStyle->GetPadLeftMargin() + 0.02, 0.70, "Efficiency vs m_{#tilde{b}} [percentage]"                                    ); t6.SetNDC(); t6.SetTextSize(0.03); t6.Draw();
+    TLatex t7(0.6                              , 0.80, "#varepsilon = 0.0015 #times m_{#tilde{b}} - 0.45"                            ); t7.SetNDC(); t7.SetTextSize(0.04); t7.Draw();
+
+    c1->Print(Form("%s/h_eff_perc.%s", output_path.c_str(), suffix.c_str()));
 }
 
 void PrintSbottomTopXsecOverlay()
