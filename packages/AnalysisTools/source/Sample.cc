@@ -718,6 +718,24 @@ namespace at
         },
         {
             // name
+            "t6tthh",
+            // title
+            "T6tthh", 
+            // latex
+            "T6tthh", 
+            // ntuple_path
+            "/home/users/dalfonso/CMSSW_5_3_2_patch4_V05-03-25_V00-02-25_pythia/src/SingleLepton2012/looper/SCAN/T6tthh/CMS2",
+            // tag
+            "V05-03-25",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::t6tthh,
+            // color
+            kBlue
+        },
+        {
+            // name
             "sbottomtop", 
             // title
             "#tilde{b}#tilde{b}* #rightarrow t#bar{t}W^{+}W^{-}#tilde{#chi}^{0}#tilde{#chi}^{0}",
@@ -1374,7 +1392,6 @@ namespace at
                 prefix = "/hadoop/cms/store/group/snt/papers2012/Summer12MC/";
             }
         }
-
         // build the list of files
         vector<string> vpath = rt::string_split(GetSampleInfo(sample).ntuple_path, ",");
         for (size_t i = 0; i != vpath.size(); i++)
@@ -1391,6 +1408,13 @@ namespace at
             {
                 vpath.at(i) = Form("%s/%s/*.root", prefix.c_str(), vpath.at(i).c_str()); 
             }
+        }
+
+        // special case (non-standard path)
+        if (sample == Sample::t6tthh)
+        {
+            vpath.clear();
+            vpath.push_back(Form("%s/*.root", info.ntuple_path.c_str()));
         }
 
         // build the chain

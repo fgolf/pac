@@ -49,6 +49,7 @@ namespace at
             t5lnu,
             t5vv,
             t7btw,
+            t6tthh,
             sbottomtop,
             glusbottom,
             glustop,
