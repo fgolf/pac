@@ -16,8 +16,8 @@ JetInfoTree::JetInfoTree(const std::string& prefix, const std::string& postfix)
 
 void JetInfoTree::Reset()
 {
-    njets  = -99999.0;
-    nbtags = -99999.0;
+    njets  = -99999;
+    nbtags = -99999;
 
     vjets_p4.clear();
     vbjets_p4.clear();
