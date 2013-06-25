@@ -44,26 +44,27 @@ PlotLooper::PlotLooper
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
     const std::string& event_list_name,
-    unsigned int num_btags,
-    unsigned int num_jets,
-    int charge_option,
-    bool do_scale_factors,
-    bool check_good_lumi,
-    float sparm0,
-    float sparm1,
-    float sparm2,
-    float sparm3,
-    float sf_flip,
-    float fr_unc,
-    float fl_unc,
-    float mc_unc,
-    float lumi,
-    //float l1_min_pt,
-    //float l1_max_pt,
-    //float l2_min_pt,
-    //float l2_max_pt,
-    float min_ht,
-    bool verbose
+    const unsigned int num_btags,
+    const unsigned int num_jets,
+    const int charge_option,
+    const bool do_scale_factors,
+    const bool check_good_lumi,
+    const bool do_3lep_veto,
+    const float sparm0,
+    const float sparm1,
+    const float sparm2,
+    const float sparm3,
+    const float sf_flip,
+    const float fr_unc,
+    const float fl_unc,
+    const float mc_unc,
+    const float lumi,
+    //const float l1_min_pt,
+    //const float l1_max_pt,
+    //const float l2_min_pt,
+    //const float l2_max_pt,
+    const float min_ht,
+    const bool verbose
 )
     : at::AnalysisWithHist(root_file_name)
     , m_lumi(lumi)
@@ -72,6 +73,7 @@ PlotLooper::PlotLooper
     , m_do_vtx_reweight(not vtxreweight_file_name.empty())
     , m_do_scale_factors(do_scale_factors)
     , m_check_good_lumi(check_good_lumi)
+    , m_do_3lep_veto(do_3lep_veto)
     , m_nbtags(num_btags)
     , m_njets(num_jets)
     , m_charge_option(charge_option)
@@ -180,6 +182,10 @@ PlotLooper::PlotLooper
         }
     }
 
+    // binning info for Fake/Flip rate
+    m_fr_bin_info = GetFakeRateBinInfo();
+    m_fl_bin_info = GetFlipRateBinInfo();
+
     // begin job
     BeginJob();
 }
@@ -193,8 +199,6 @@ PlotLooper::~PlotLooper()
 void PlotLooper::BeginJob()
 {
     // book the histograms
-    m_fr_bin_info = GetFakeRateBinInfo();
-    m_fl_bin_info = GetFlipRateBinInfo();
     BookHists();
 }
 
@@ -801,6 +805,14 @@ int PlotLooper::operator()(long event)
         if (lep2_p4().pt() < (abs(lep2_pdgid()==11) ? el_min_pt : mu_min_pt))
         {
             if (m_verbose) {cout << "failing minimum lep2 pT" << endl;}
+            return 0;
+        }
+
+        // third lepton veto
+        if (m_do_3lep_veto and not (passes_tau_veto() and passes_isotrk_veto()))
+        {
+            if (m_verbose and passes_tau_veto()   ) {cout << "failing tau veto"    << endl;}
+            if (m_verbose and passes_isotrk_veto()) {cout << "failing isotrk veto" << endl;}
             return 0;
         }
 

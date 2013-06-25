@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
     bool exclusive                  = false;
     bool do_scale_factors           = true;
     bool check_good_lumi            = true;
+    bool do_3lep_veto               = false;
     float sparm0                    = -999;
     float sparm1                    = -999;
     float sparm2                    = -999;
@@ -70,6 +71,7 @@ int main(int argc, char* argv[])
         ("njets"    , po::value<unsigned int>(&num_jets)                      , "number of jets to cut on (default is 2)"                                       )
         ("do_sf"    , po::value<bool>(&do_scale_factors)                      , "use the MC scale factors (default is true)"                                    )
         ("gr"       , po::value<bool>(&check_good_lumi)                       , "for data, check the is_good_lumi() method"                                     )
+        ("3lep_veto", po::value<bool>(&do_3lep_veto)                          , "apply veto to the third lepton in the event"                                   )
         ("sparm0"   , po::value<float>(&sparm0)                               , "sparm0 value is required"                                                      )
         ("sparm1"   , po::value<float>(&sparm1)                               , "sparm1 value is required"                                                      )
         ("sparm2"   , po::value<float>(&sparm2)                               , "sparm2 value is required"                                                      )
@@ -140,6 +142,7 @@ int main(int argc, char* argv[])
     cout << "num_jets            :\t" << num_jets            << endl;
     cout << "do_scale_factors    :\t" << do_scale_factors    << endl;
     cout << "check_good_lumi     :\t" << check_good_lumi     << endl;
+    cout << "3lep_veto           :\t" << do_3lep_veto        << endl;
     cout << "sparm0              :\t" << sparm0              << endl;
     cout << "sparm1              :\t" << sparm1              << endl;
     cout << "sparm2              :\t" << sparm2              << endl;
@@ -241,6 +244,7 @@ int main(int argc, char* argv[])
             charge_option,
             do_scale_factors,
             check_good_lumi, 
+            do_3lep_veto,
             sparm0,
             sparm1,
             sparm2,

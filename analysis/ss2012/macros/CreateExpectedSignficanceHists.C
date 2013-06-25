@@ -459,14 +459,23 @@ void CreateSbottomProjectionHists(const std::string& input_file, const std::stri
 
     // get the efficiency plots
     TH2F* h_eff_perc = rt::GetHistFromRootFile<TH2F>(input_file, "SR28_effNormNicePerc"); 
+    TH2F* h_eff_unc  = rt::GetHistFromRootFile<TH2F>(input_file, "SR28_effErrStat"     ); 
 
     // project to get the lowest bin in m_chargino
     // I have to copy the hist because something is wrong with the projectioned hist (not sure why)
     TH1* h_eff_perc_vs_msb_temp = rt::MakeProjectionPlot(h_eff_perc, "x", "h_eff_perc_vs_msb_temp", "h_eff_perc_vs_msb_temp", 150, 175);
+    TH1* h_eff_perc_vs_msb_unc  = rt::MakeProjectionPlot(h_eff_unc , "x", "h_eff_perc_vs_msb_unc" , "h_eff_perc_vs_msb_unc" , 150, 175);
     TH1* h_eff_perc_vs_msb      = new TH1F("h_eff_perc_vs_msb", "Signal efficiency percentage vs m_{#tilde{b}} (8 TeV, m_{#tilde{#chi}^{#pm}} = 150 GeV);m_{#tilde{b}} (GeV);efficiency (perc)", 16, 325, 725);
+    h_eff_perc_vs_msb->Sumw2();
+    h_eff_perc_vs_msb->SetLineColor(kBlue);
+    h_eff_perc_vs_msb->SetLineWidth(2);
+    h_eff_perc_vs_msb->SetMarkerStyle(20);
+    h_eff_perc_vs_msb->SetMarkerSize(1.0);
+    h_eff_perc_vs_msb->SetMarkerColor(kBlack);
     for (int bin = 1; bin != h_eff_perc_vs_msb->GetNbinsX()+1; bin++)
     {
         h_eff_perc_vs_msb->SetBinContent(bin, h_eff_perc_vs_msb_temp->GetBinContent(bin));
+        h_eff_perc_vs_msb->SetBinError  (bin, h_eff_perc_vs_msb_unc->GetBinContent(bin) );
     }
 
     // ------------------------------------------------- //
@@ -476,12 +485,19 @@ void CreateSbottomProjectionHists(const std::string& input_file, const std::stri
     // fit to a line
     TF1* f_linear = new TF1("f_linear", "x*[0]+[1]", 325, 725);
     f_linear->SetParameters((0.62-0.08)/(700.0-350.0),-0.45); // initial guess
+    f_linear->SetLineWidth(2);
+    f_linear->SetLineStyle(3);
     h_eff_perc_vs_msb->Fit(f_linear, "R+");
 
     // print the fit parameters
     cout << "The fit: x*p0 + p1:" << endl;
     cout << "p0 = " << f_linear->GetParameter(0) << endl;
     cout << "p1 = " << f_linear->GetParameter(1) << endl;
+
+    cout << "The fit: (x - 350)*p0 + p1 + 350*p0 = (x - 350)*p0 + p2:" << endl;
+    cout << "p0 = " << f_linear->GetParameter(0) << endl;
+    cout << "p1 = " << f_linear->GetParameter(1) << endl;
+    cout << "p2 = " << 350*f_linear->GetParameter(0) + f_linear->GetParameter(1) << endl;
 
     // ------------------------------------------------- //
     // calculate the signficance 
@@ -805,7 +821,7 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
     c1->Print(Form("%s/h_summary_curve.%s", output_path.c_str(), suffix.c_str()));
 
     // eff fit
-    TH1F* h_eff_fit = rt::GetHistFromRootFile<TH1F>("plots/sig/t6ttww/t6ttww_msb_proj.root", "h_eff_perc_vs_msb");
+    TH1F* h_eff_fit = rt::GetHistFromRootFile<TH1F>("plots/sig/t6ttww_v2/t6ttww_msb_proj.root", "h_eff_perc_vs_msb");
     h_eff_fit->SetTitle(title.c_str());
     h_eff_fit->SetXTitle("m_{#tilde{b}} [GeV]");
     h_eff_fit->SetYTitle("Efficiency [percentage]");
@@ -815,7 +831,7 @@ void PrintExpectedSignificanceHists(const std::string& input_file, const std::st
     TLatex t4(gStyle->GetPadLeftMargin() + 0.02, 0.80, "pp #rightarrow #tilde{b}#tilde{b}*, #tilde{b} #rightarrow tW#tilde{#chi}^{0}"); t4.SetNDC(); t4.SetTextSize(0.03); t4.Draw();
     TLatex t5(gStyle->GetPadLeftMargin() + 0.02, 0.75, "same-sign dilepton analysis"                                                 ); t5.SetNDC(); t5.SetTextSize(0.03); t5.Draw();
     TLatex t6(gStyle->GetPadLeftMargin() + 0.02, 0.70, "Efficiency vs m_{#tilde{b}} [percentage]"                                    ); t6.SetNDC(); t6.SetTextSize(0.03); t6.Draw();
-    TLatex t7(0.6                              , 0.80, "#varepsilon = 0.0015 #times m_{#tilde{b}} - 0.45"                            ); t7.SetNDC(); t7.SetTextSize(0.04); t7.Draw();
+    TLatex t7(0.6                              , 0.80, "#varepsilon = 0.0014 #times m_{#tilde{b}} - 0.11"                            ); t7.SetNDC(); t7.SetTextSize(0.04); t7.Draw();
 
     c1->Print(Form("%s/h_eff_perc.%s", output_path.c_str(), suffix.c_str()));
 }

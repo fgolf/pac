@@ -2546,14 +2546,14 @@ bool SSAnalysisLooper::PassesIsoTrkVeto(const LorentzVector& l1_p4, const Lorent
         if (abs(cms2.pfcands_particleId().at(ipf)) != 11)
         {
             itrk = cms2.pfcands_trkidx().at(ipf);
-            if (itrk >= (int)cms2.trks_trk_p4().size() || itrk < 0) continue;
+            if (itrk >= (int)cms2.trks_trk_p4().size() || itrk < 0) {continue;}
             mindz = trks_dz_pv(itrk,0).first;
         }
 
         if (abs(cms2.pfcands_particleId().at(ipf)) == 11 && cms2.pfcands_pfelsidx().at(ipf) >= 0)
         {
             itrk = cms2.els_gsftrkidx().at(cms2.pfcands_pfelsidx().at(ipf));
-            if (itrk >= (int)cms2.gsftrks_p4().size() || itrk < 0) continue;
+            if (itrk >= (int)cms2.gsftrks_p4().size() || itrk < 0) {continue;}
             mindz = gsftrks_dz_pv(itrk,0).first;
         }
 

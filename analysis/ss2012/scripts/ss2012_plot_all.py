@@ -69,26 +69,27 @@ default_fr_file = "data/fake_rates/ssFR_data_ewkcor_17Apr2013.root"
 default_fl_file = "data/flip_rates/ssFL_data_standard_02222013.root"
 
 # parameter options
-parser.add_option("--nev"       , dest="nev"       , default=-1             , help="The number of events to run (-1 for all)"                 )
-parser.add_option("--lumi"      , dest="lumi"      , default=1.0            , help="luminosity in fb^-1"                                      )
-parser.add_option("--suffix"    , dest="suffix"    , default="all"          , help="The suffix for the histograms (eps, png, pdf, all)"       )
-parser.add_option("--out_name"  , dest="out_name"  , default="test"         , help="name for all the directories associated with these yields")
-parser.add_option("--anal_type" , dest="anal_type" , default="high_pt"      , help="analysis type"                                            )
-parser.add_option("--nbtags"    , dest="nbtags"    , default=0              , help="# btags"                                                  )
-parser.add_option("--njets"     , dest="njets"     , default=2              , help="# jets"                                                   )
-parser.add_option("--min_ht"    , dest="min_ht"    , default=80.0           , help="minimum HT"                                               )
-parser.add_option("--charge"    , dest="charge"    , default=0              , help="charge of leptons (1 for +, -1 for -, 0)"                 )
-parser.add_option("--sr"        , dest="sr"        , default=0              , help="signal region"                                            )
-parser.add_option("--fr_file"   , dest="fr_file"   , default=default_fr_file, help="fake rate file to use"                                    )
-parser.add_option("--fl_file"   , dest="fl_file"   , default=default_fl_file, help="flip rate file to use"                                    )
+parser.add_option("--nev"       , dest="nev"         , default=-1             , help="The number of events to run (-1 for all)"                 )
+parser.add_option("--lumi"      , dest="lumi"        , default=1.0            , help="luminosity in fb^-1"                                      )
+parser.add_option("--suffix"    , dest="suffix"      , default="all"          , help="The suffix for the histograms (eps, png, pdf, all)"       )
+parser.add_option("--out_name"  , dest="out_name"    , default="test"         , help="name for all the directories associated with these yields")
+parser.add_option("--anal_type" , dest="anal_type"   , default="high_pt"      , help="analysis type"                                            )
+parser.add_option("--nbtags"    , dest="nbtags"      , default=0              , help="# btags"                                                  )
+parser.add_option("--njets"     , dest="njets"       , default=2              , help="# jets"                                                   )
+parser.add_option("--min_ht"    , dest="min_ht"      , default=80.0           , help="minimum HT"                                               )
+parser.add_option("--charge"    , dest="charge"      , default=0              , help="charge of leptons (1 for +, -1 for -, 0)"                 )
+parser.add_option("--sr"        , dest="sr"          , default=0              , help="signal region"                                            )
+parser.add_option("--fr_file"   , dest="fr_file"     , default=default_fr_file, help="fake rate file to use"                                    )
+parser.add_option("--fl_file"   , dest="fl_file"     , default=default_fl_file, help="flip rate file to use"                                    )
 
 # boolean options
-parser.add_option("--test"       , action="store_true"  , dest="test"       , default=False , help="test script -- print commands but do nothing"   )
-parser.add_option("--excl"       , action="store_true"  , dest="excl"       , default=False , help="use exclusive SR"                               )
-parser.add_option("--incl"       , action="store_false" , dest="excl"       , default=False , help="use incl SR (default)"                          )
-parser.add_option("--no_hist"    , action="store_true"  , dest="no_hist"    , default=False , help="do not create histograms, do everything else"   )
-parser.add_option("--do_caption" , action="store_true"  , dest="do_caption" , default=False , help="create the caption for the SR above the tabular")
-parser.add_option("--verbose"    , action="store_true"  , dest="verbose"    , default=False , help="verbose print out"                              )
+parser.add_option("--test"       , action="store_true"  , dest="test"        , default=False , help="test script -- print commands but do nothing"   )
+parser.add_option("--excl"       , action="store_true"  , dest="excl"        , default=False , help="use exclusive SR"                               )
+parser.add_option("--incl"       , action="store_false" , dest="excl"        , default=False , help="use incl SR (default)"                          )
+parser.add_option("--no_hist"    , action="store_true"  , dest="no_hist"     , default=False , help="do not create histograms, do everything else"   )
+parser.add_option("--do_caption" , action="store_true"  , dest="do_caption"  , default=False , help="create the caption for the SR above the tabular")
+parser.add_option("--3lep_veto"  , action="store_true"  , dest="do_3lep_veto", default=False , help="apply the 3rd lepton veto"                      )
+parser.add_option("--verbose"    , action="store_true"  , dest="verbose"     , default=False , help="verbose print out"                              )
 
 (options, args) = parser.parse_args()
 
@@ -152,6 +153,10 @@ def make_hist(signal_region, sample):
 		cmd += " --excl 1"
 	else:
 		cmd += " --excl 0"
+	if (options.do_3lep_veto):
+		cmd += " --3lep_veto 1"
+	else:
+		cmd += " --3lep_veto 0"
 
 	# logname
 	if (int(options.charge) == 1):

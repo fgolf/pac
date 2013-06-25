@@ -30,26 +30,27 @@ public:
         const std::string& fake_rate_file_name = "",
         const std::string& flip_rate_file_name = "",
         const std::string& event_list_name = "",
-        unsigned int num_btags = 0,
-        unsigned int num_jets = 0,
-        int charge_option = 0,
-        bool do_scale_factors = true,
-        bool bheck_good_lumi = false,
-        float sparm0 = -999,
-        float sparm1 = -999,
-        float sparm2 = -999,
-        float sparm3 = -999,
-        float sf_flip = 1.0,
-        float fr_unc = 0.5,
-        float fl_unc = 0.2,
-        float mc_unc = 0.5,
-        float lumi = 1.0,
-        //float l1_min_pt = 20.0,
-        //float l1_max_pt = 10000000.0,
-        //float l2_min_pt = 20.0,
-        //float l2_max_pt = 10000000.0,
-        float min_ht = 80.0,
-        bool verbose = false
+        const unsigned int num_btags = 0,
+        const unsigned int num_jets = 0,
+        const int charge_option = 0,
+        const bool do_scale_factors = true,
+        const bool check_good_lumi = false,
+        const bool do_3lep_veto = false,
+        const float sparm0 = -999,
+        const float sparm1 = -999,
+        const float sparm2 = -999,
+        const float sparm3 = -999,
+        const float sf_flip = 1.0,
+        const float fr_unc = 0.5,
+        const float fl_unc = 0.2,
+        const float mc_unc = 0.5,
+        const float lumi = 1.0,
+        //const float l1_min_pt = 20.0,
+        //const float l1_max_pt = 10000000.0,
+        //const float l2_min_pt = 20.0,
+        //const float l2_max_pt = 10000000.0,
+        const float min_ht = 80.0,
+        const bool verbose = false
     );
 
     // destroy:
@@ -66,34 +67,35 @@ public:
 private:
     // members
     float m_lumi;
-    bool m_verbose;
-    bool m_is_data;
-    bool m_do_vtx_reweight;
-    bool m_do_scale_factors;
-    bool m_check_good_lumi;
-    unsigned int m_nbtags;
-    unsigned int m_njets;
-    int m_charge_option;
-    float m_sparm0;
-    float m_sparm1;
-    float m_sparm2;
-    float m_sparm3;
+    const bool m_verbose;
+    const bool m_is_data;
+    const bool m_do_vtx_reweight;
+    const bool m_do_scale_factors;
+    const bool m_check_good_lumi;
+    const bool m_do_3lep_veto;
+    const unsigned int m_nbtags;
+    const unsigned int m_njets;
+    const int m_charge_option;
+    const float m_sparm0;
+    const float m_sparm1;
+    const float m_sparm2;
+    const float m_sparm3;
     float m_scale1fb;
     float m_xsec;
     int m_nevts;
-    float m_sf_flip;
-    float m_fr_unc;
-    float m_fl_unc;
-    float m_mc_unc;
+    const float m_sf_flip;
+    const float m_fr_unc;
+    const float m_fl_unc;
+    const float m_mc_unc;
     //float m_l1_min_pt;
     //float m_l1_max_pt;
     //float m_l2_min_pt;
     //float m_l2_max_pt;
-    float m_min_ht;
-    at::Sample::value_type m_sample;
-    ss::SignalRegion::value_type m_signal_region;
-    ss::AnalysisType::value_type m_analysis_type;
-    ss::SignalRegionType::value_type m_signal_region_type;
+    const float m_min_ht;
+    const at::Sample::value_type m_sample;
+    const ss::SignalRegion::value_type m_signal_region;
+    const ss::AnalysisType::value_type m_analysis_type;
+    const ss::SignalRegionType::value_type m_signal_region_type;
     at::FakeRateBinInfo m_fr_bin_info;
     at::FlipRateBinInfo m_fl_bin_info;
 
