@@ -2505,12 +2505,12 @@ bool SSAnalysisLooper::PassesIsoTrkVeto(const LorentzVector& l1_p4, const Lorent
     // store pt and iso for most isolated track (pt>10 GeV) and (pt>5 GeV)
     //------------------------------------------------------
 
-    float pfcandiso5looseZ    = -9999;
-    float pfcandpt5looseZ     = -9999;
-    int pfcandid5looseZ       = -9999;
-    float pfcandisoOS10looseZ = -9999;
-    float pfcandptOS10looseZ  = -9999;
-    int pfcandidOS10looseZ    = -9999;
+    float pfcandiso5looseZ    = 9999;
+    float pfcandpt5looseZ     = 9999;
+    int pfcandid5looseZ       = 9999;
+    float pfcandisoOS10looseZ = 9999;
+    float pfcandptOS10looseZ  = 9999;
+    int pfcandidOS10looseZ    = 9999;
 
     std::vector<LorentzVector> goodLeptons;
     if (l1_p4.pt() > 0.01) goodLeptons.push_back(l1_p4);
@@ -2580,9 +2580,9 @@ bool SSAnalysisLooper::PassesIsoTrkVeto(const LorentzVector& l1_p4, const Lorent
 
     // pass isolated track veto
     // We want to check for the generic track only there is now good e/mu candidate
-    if (pfcandptOS10looseZ > 0.0 && abs(pfcandid5looseZ) != 13 && abs(pfcandid5looseZ) != 11 && pfcandisoOS10looseZ < 0.1) {return false;}
-    if (pfcandpt5looseZ    > 0.0 && abs(pfcandid5looseZ) == 13 && pfcandiso5looseZ < 0.2)                                  {return false;}
-    if (pfcandpt5looseZ    > 0.0 && abs(pfcandid5looseZ) == 11 && pfcandiso5looseZ < 0.2)                                  {return false;}
+    if (pfcandptOS10looseZ < 9998 && abs(pfcandid5looseZ) != 13 && abs(pfcandid5looseZ) != 11 && pfcandisoOS10looseZ < 0.1) {return false;}
+    if (pfcandpt5looseZ    < 9998 && abs(pfcandid5looseZ) == 13 && pfcandiso5looseZ < 0.2)                                  {return false;}
+    if (pfcandpt5looseZ    < 9998 && abs(pfcandid5looseZ) == 11 && pfcandiso5looseZ < 0.2)                                  {return false;}
 
     // if here then return true
     return true;
