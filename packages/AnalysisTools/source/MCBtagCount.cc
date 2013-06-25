@@ -98,6 +98,7 @@ namespace at
                 case Sample::sbottomtop:
                 case Sample::t6ttww_x08:
                 case Sample::t6ttww_x05:
+                case Sample::t6tthh:
                 {
                     const float err[] = {0.00574604,0.00677246,0.00509557,0.00374240,0.00314873,0.000637591,-0.000242591,-4.16636e-05,-0.00292352,-0.00581479,-0.000461876,-0.00676391,0.00488830,3.05474e-05};
                     vec.assign(err, err + sizeof(err) / sizeof(err[0]));
@@ -162,6 +163,7 @@ namespace at
                 case Sample::sbottomtop:
                 case Sample::t6ttww_x08:
                 case Sample::t6ttww_x05:
+                case Sample::t6tthh:
                 {
                     
                     const float err[] = {-0.0183669,-0.0125071,-0.0174156,-0.0164738,-0.0167200,-0.0149260,-0.0180894,-0.0154648,-0.0141536,-0.0119079,-0.0206974,0.000753522,0.0221000,0.0209901};
@@ -233,6 +235,7 @@ namespace at
                     case Sample::sbottomtop:
                     case Sample::t6ttww_x08:
                     case Sample::t6ttww_x05:
+                    case Sample::t6tthh:
                     {
                          const float err[]   = {0.241447,0.297617,0.365921,0.372697,0.378869,0.434225,0.385061,0.452832,0.412124,0.498940,0.675028,0.813003,1.31961,1.57929};
                          vec.assign(err, err + sizeof(err) / sizeof(err[0]));
@@ -275,7 +278,7 @@ namespace at
                          //}
             }
             // FORWARD jets
-            else if (fabs(jet_eta) >= 1.2 && fabs(jet_eta) <2.4)
+            else if (fabs(jet_eta) >= 1.2 && fabs(jet_eta) <2.5)
             {
                 const float SF[]       = {1.46970 , 1.48732  , 1.69024 , 1.64494 , 1.79297 , 1.90760  , 1.99867 , 2.21659 , 2.20103 , 2.42645 , 2.67594 , 4.24735 , 3.98979, 15.0457};
                 const float SF_error[] = {0.104716, 0.0392025, 0.106315, 0.115751, 0.106807, 0.0642086, 0.138742, 0.182345, 0.169922, 0.297889, 0.320088, 0.927736, 1.24666, 15.1860}; // stat + PU
@@ -297,6 +300,7 @@ namespace at
                     case Sample::sbottomtop:
                     case Sample::t6ttww_x08:
                     case Sample::t6ttww_x05:
+                    case Sample::t6tthh:
                     {
                         const float err[]   = {0.694594,0.753930,1.01105,1.02488,1.18455,1.36025,1.57676,1.87545,2.24691,2.81635,3.46050,5.75946,6.89900,15.8855};
                         vec.assign(err, err + sizeof(err) / sizeof(err[0]));
@@ -369,7 +373,7 @@ namespace at
         static TF1 LightSFeta1mean("SFlight"   , "((1.08048+(0.00110831*x))+(-2.96189e-06*(x*x)))+(2.16266e-09*(x*(x*x)))" , ptmin, ptmax);
         static TF1 LightSFeta1min ("SFlightMin", "((0.9836+(0.000649761*x))+(-1.59773e-06*(x*x)))+(1.14324e-09*(x*(x*x)))" , ptmin, ptmax);
         static TF1 LightSFeta1max ("SFlightMax", "((1.17735+(0.00156533*x))+(-4.32257e-06*(x*x)))+(3.18197e-09*(x*(x*x)))" , ptmin, ptmax);
-        // eta between 1.6 and 2.4
+        // eta between 1.6 and 2.5
         static TF1 LightSFeta2mean("SFlight"   , "((1.09145+(0.000687171*x))+(-2.45054e-06*(x*x)))+(1.7844e-09*(x*(x*x)))" , ptmin, ptmax);
         static TF1 LightSFeta2min ("SFlightMin", "((1.00616+(0.000358884*x))+(-1.23768e-06*(x*x)))+(6.86678e-10*(x*(x*x)))", ptmin, ptmax);
         static TF1 LightSFeta2max ("SFlightMax", "((1.17671+(0.0010147*x))+(-3.66269e-06*(x*x)))+(2.88425e-09*(x*(x*x)))"  , ptmin, ptmax);
@@ -390,7 +394,7 @@ namespace at
             if (unc_option == -1) sf = LightSFeta1min.Eval( jet_pt);
             if (unc_option == 1 ) sf = LightSFeta1max.Eval( jet_pt);
         }
-        else if (jet_eta  > 1.6 && jet_eta <= 2.4)
+        else if (jet_eta  > 1.6 && jet_eta <= 2.5)
         {
             if (unc_option == 0 ) sf = LightSFeta2mean.Eval(jet_pt);
             if (unc_option == -1) sf = LightSFeta2min.Eval( jet_pt);
