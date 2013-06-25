@@ -809,11 +809,19 @@ int PlotLooper::operator()(long event)
         }
 
         // third lepton veto
-        if (m_do_3lep_veto and not (passes_tau_veto() and passes_isotrk_veto()))
+        if (m_do_3lep_veto)
         {
-            if (m_verbose and passes_tau_veto()   ) {cout << "failing tau veto"    << endl;}
-            if (m_verbose and passes_isotrk_veto()) {cout << "failing isotrk veto" << endl;}
-            return 0;
+            const bool l3_passes_id     = ((abs(lep3_pdgid())==13 and lep3_is_tightmu()) or (abs(lep3_pdgid())==11 and lep3_eleid_medium()));
+            const bool l3_passes_iso    = (lep3_corpfiso() < 0.15); 
+            const bool l3_passes_pt     = (lep3_p4().pt() > 10.0);
+            const bool passes_lep3_veto = not (l3_passes_pt and l3_passes_iso and l3_passes_id);
+            if (not (passes_lep3_veto and passes_tau_veto() and passes_isotrk_veto()))
+            {
+                if (m_verbose and passes_lep3_veto    ) {cout << "failing 3rd lepton veto" << endl;}
+                if (m_verbose and passes_tau_veto()   ) {cout << "failing tau veto"        << endl;}
+                if (m_verbose and passes_isotrk_veto()) {cout << "failing isotrk veto"     << endl;}
+                return 0;
+            }
         }
 
         // HT cut
