@@ -356,7 +356,8 @@ namespace at
         const JetBaseSelectionArgs& ja = jet_sel_args;
 
         // Factorized Jet corrector only for PF jets
-        if (ja.jet_corrector != NULL &&
+        if (
+                ja.jet_corrector != NULL &&
                 ja.jet_type != JetType::PF_FAST_CORR_RESIDUAL && 
                 ja.jet_type != JetType::PF_FAST_CORR && 
                 ja.jet_type != JetType::PF_CORR && 
@@ -367,7 +368,8 @@ namespace at
         }
 
         // Factorized Jet Uncertainty Corrector only for PF jets
-        if (ja.jet_unc != NULL &&
+        if (
+                ja.jet_unc != NULL &&
                 ja.jet_type != JetType::PF_FAST_CORR_RESIDUAL && 
                 ja.jet_type != JetType::PF_FAST_CORR && 
                 ja.jet_type != JetType::PF_CORR && 
@@ -462,6 +464,9 @@ namespace at
 
         // sort by corrected pt
         std::sort(jet_infos.begin(), jet_infos.end(), SortByCorrPt()); 
+
+        // push into the map:
+        results_map[jet_sel_args] = jet_infos;
 
         // done
         return jet_infos;
