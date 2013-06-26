@@ -60,6 +60,7 @@ rt::TH1Overlay CreateOverlay
     TH1* h_pred = GetTotalPredHist(h_fake, h_flip, h_rare);
     h_data->SetMarkerSize(marker_size);
 
+
     if (hist_stem == "yield")
     {
         option.append(" B");
@@ -84,11 +85,13 @@ rt::TH1Overlay CreateOverlay
     }
 
     rt::TH1Overlay p(title, option);
+    const float max = std::max(h_data->GetMaximum(), h_pred->GetMaximum());
     p.Add(h_data, /*no_stack=*/true, data_legend, data_color, 2, data_marker);
     p.Add(h_fake, fake_legend, fake_color);
     p.Add(h_flip, flip_legend, flip_color);
     p.Add(h_rare, rare_legend, rare_color);
-    p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style); 
+    p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style);
+    p.SetYAxisRange(0.0, max);
     return p;
 }
 

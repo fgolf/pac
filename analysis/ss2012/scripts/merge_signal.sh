@@ -2,7 +2,7 @@
 
 verbose=0
 njets=2
-tag=V02-05-17
+tag=V02-05-19
 path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
 
 # make the output dirs
@@ -38,8 +38,9 @@ function post_process2
 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/mc
 output_path=$path/signal
-post_process vlow_pt t1tttt     SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1 
-post_process vlow_pt sbottomtop SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph_Summer12-START52_V9_FSIM
+#post_process vlow_pt t1tttt     SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1 
+post_process vlow_pt t1tttt     SMS-T1tttt_Mgluino-350to2000_mLSP-0to1650_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1 
+#post_process vlow_pt sbottomtop SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph_Summer12-START52_V9_FSIM
 
 #input_path=/nfs-7/userdata/rwkelley/babies/cms2_V05-03-23_ss2012_V02-05-01
 #post_process vlow_pt tchiwh /TChiwh/res

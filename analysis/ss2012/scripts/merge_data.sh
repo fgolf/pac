@@ -2,7 +2,7 @@
 
 verbose=0
 njets=2
-tag=V02-05-15
+tag=V02-05-19
 path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
 
 # make the output dirs
@@ -59,7 +59,7 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-#merge data_lpt_19p5 low_pt $input_files
+merge data_lpt_19p5 low_pt $input_files
 
 # very low pt 
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/vlow_pt
@@ -76,4 +76,4 @@ input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root
 input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
 input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-#merge data_vpt_19p5 vlow_pt $input_files
+merge data_vpt_19p5 vlow_pt $input_files

@@ -811,7 +811,7 @@ int PlotLooper::operator()(long event)
         // third lepton veto
         if (m_do_3lep_veto)
         {
-            const bool l3_passes_id     = ((abs(lep3_pdgid())==13 and lep3_is_tightmu()) or (abs(lep3_pdgid())==11 and lep3_eleid_medium()));
+            const bool l3_passes_id     = ((abs(lep3_pdgid())==13 and lep3_is_tightmu()) or (abs(lep3_pdgid())==11 and lep3_eleid_loose()));
             const bool l3_passes_iso    = (lep3_corpfiso() < 0.15); 
             const bool l3_passes_pt     = (lep3_p4().pt() > 10.0);
             const bool passes_lep3_veto = not (l3_passes_pt and l3_passes_iso and l3_passes_id);
