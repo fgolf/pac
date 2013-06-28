@@ -820,8 +820,8 @@ int PlotLooper::operator()(long event)
             if (not (passes_lep3_veto))
             {
                 if (m_verbose and passes_lep3_veto    ) {cout << "failing 3rd lepton veto" << endl;}
-                if (m_verbose and passes_tau_veto()   ) {cout << "failing tau veto"        << endl;}
-                if (m_verbose and passes_isotrk_veto()) {cout << "failing isotrk veto"     << endl;}
+//                 if (m_verbose and passes_tau_veto()   ) {cout << "failing tau veto"        << endl;}
+//                 if (m_verbose and passes_isotrk_veto()) {cout << "failing isotrk veto"     << endl;}
                 return 0;
             }
         }
