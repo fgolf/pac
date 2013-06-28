@@ -62,7 +62,7 @@ struct HypInfo
     at::DileptonHypType::value_type hyp_type;
 
     // scalar sum pT between the two leptons
-    float pt() const;
+    float sum_pt() const;
 
     // lower means higher priority
     bool operator < (const HypInfo& rhs) const;  
@@ -75,7 +75,7 @@ HypInfo::HypInfo(int i, const at::DileptonChargeType::value_type& c, const at::D
 {
 }
 
-float HypInfo::pt() const
+float HypInfo::sum_pt() const
 {
     if (idx < 0)
     {
@@ -99,8 +99,8 @@ bool HypInfo::operator < (const HypInfo& rhs) const
     if (hyp_type > rhs.hyp_type) {return false;}
 
     // sum pt
-    if (pt() > rhs.pt())  {return true;}
-    if (pt() <= rhs.pt()) {return false;}
+    if (sum_pt() > rhs.sum_pt())  {return true;}
+    if (sum_pt() <= rhs.sum_pt()) {return false;}
 
     return false;
 }
@@ -1631,8 +1631,8 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.sf_dileptrig_hpt = DileptonTriggerScaleFactor(dilepton_type, AnalysisType::high_pt, m_evt.lep2.p4);
             m_evt.sf_dileptrig_lpt = DileptonTriggerScaleFactor(dilepton_type, AnalysisType::low_pt , m_evt.lep2.p4);
             m_evt.sf_dileptrig_vpt = DileptonTriggerScaleFactor(dilepton_type, AnalysisType::vlow_pt, m_evt.lep2.p4);
-            m_evt.lep1.sf_trig   = -999999; // not done 
-            m_evt.lep2.sf_trig   = -999999; // not done
+            m_evt.lep1.sf_trig     = -999999; // not done 
+            m_evt.lep2.sf_trig     = -999999; // not done
 
             // scale factor for lepton reconstruction efficiency
             const float eta1 = (abs(lep1_id) == 13 ? m_evt.lep1.p4.eta() : m_evt.lep1.sc_p4.eta());
@@ -2111,134 +2111,15 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         //----------------------------------------
         // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
         //----------------------------------------
-        int el3_idx  = -1;
-        int el3_id   = 0;
-        float el3_pt = -999999.0;
-        LorentzVector el3_medium_p4(0, 0, 0, 0);
-        LorentzVector el3_loose_p4(0, 0, 0, 0);
-        LorentzVector el3_ssv7_p4(0, 0, 0, 0);
-        for (size_t el_idx = 0; el_idx != els_p4().size(); el_idx++)
-        {
-            const LorentzVector& el_p4 = els_p4().at(el_idx);
-
-            if (el_p4.pt() < el_min_pt)            {continue;}
-            if (lep1_is_el and (int)el_idx == lep1_idx) {continue;}
-            if (lep2_is_el and (int)el_idx == lep2_idx) {continue;}
-
-            // set 3rd electron vars
-            if (el_p4.pt() > el3_pt)
-            {
-                el3_idx = el_idx;
-                el3_id  = -11 * els_charge().at(el_idx);
-                el3_pt  = el_p4.pt();
-            }
-
-            // medium WP
-            if (pass_electronSelection(el_idx, electronSelection_pog_medium) and (el_p4.pt() > el3_medium_p4.pt()))
-            {
-                el3_medium_p4 = el_p4; 
-            }
-
-            // loose WP
-            if (pass_electronSelection(el_idx, electronSelection_pog_loose) and (el_p4.pt() > el3_loose_p4.pt()))
-            {
-                el3_loose_p4 = el_p4; 
-            }
-
-            // full ss2012 selection
-            if (samesign::isGoodLepton(11, el_idx) and (el_p4.pt() > el3_ssv7_p4.pt()))
-            {
-                el3_ssv7_p4 = el_p4; 
-            }
-        }
-        m_evt.el_elid_loose_p4  = el3_loose_p4;
-        m_evt.el_elid_medium_p4 = el3_medium_p4;
-        m_evt.el_elid_ssv7_p4   = el3_ssv7_p4;
-
-//         m_evt.el3.FillCommon(el3_id, el3_idx);
-//         if (el3_idx >= 0)
-//         {
-//             m_evt.el3.cordetiso   = m_evt.el3.detiso   - (log(m_evt.el3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.el3.p4.pt()); // check that I have the correct formula 
-//             m_evt.el3.cordetiso04 = m_evt.el3.detiso04 - (log(m_evt.el3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.el3.p4.pt()); // check that I have the correct formula 
-//             m_evt.el3.corpfiso    = samesign::leptonIsolation(el3_id, el3_idx);
-//             m_evt.el3.corpfiso04  = samesign::electronIsolationPF2012_cone04(el3_idx);
-//             m_evt.el3.effarea     = samesign::EffectiveArea03(el3_id, el3_idx);
-//             m_evt.el3.effarea04   = samesign::EffectiveArea04(el3_id, el3_idx);
-//             m_evt.el3.is_fo       = IsFO(el3_id, el3_idx); 
-//             m_evt.el3.is_num      = IsNumerator(el3_id, el3_idx);
-//             m_evt.el3.is_den      = IsDenominator(el3_id, el3_idx);
-//             m_evt.el3.mt          = rt::Mt(m_evt.el3.p4, met, met_phi);
-//             m_evt.el3.passes_id   = samesign::isGoodLepton(el3_id, el3_idx, m_use_el_eta);
-//             m_evt.el3.passes_iso  = samesign::isIsolatedLepton(el3_id, el3_idx);
-//         }
-
-        int mu3_idx  = -1;
-        int mu3_id   = 0;
-        float mu3_pt = -999999.0;
-        LorentzVector mu3_tight_p4(0, 0, 0, 0);
-        LorentzVector mu3_loose_p4(0, 0, 0, 0);
-        LorentzVector mu3_ssv5_p4(0, 0, 0, 0);
-        for (size_t mu_idx = 0; mu_idx != mus_p4().size(); mu_idx++)
-        {
-            const LorentzVector& mu_p4 = mus_p4().at(mu_idx);
-
-            if (mu_p4.pt() < mu_min_pt)             {continue;}
-            if (lep1_is_mu and (int)mu_idx == lep1_idx) {continue;}
-            if (lep2_is_mu and (int)mu_idx == lep2_idx) {continue;}
-
-            // set 3rd muon vars
-            if (mu_p4.pt() > mu3_pt)
-            {
-                mu3_idx = mu_idx;
-                mu3_id  = -13 * mus_charge().at(mu_idx);
-                mu3_pt  = mu_p4.pt();
-            }
-
-            // tight WP
-            if (passes_muid_wp2012(mu_idx, mu2012_tightness::TIGHT) and (mu_p4.pt() > mu3_tight_p4.pt()))
-            {
-                mu3_tight_p4 = mu_p4; 
-            }
-
-            // loose WP
-            if (passes_muid_wp2012(mu_idx, mu2012_tightness::LOOSE) and (mu_p4.pt() > mu3_loose_p4.pt()))
-            {
-                mu3_loose_p4 = mu_p4; 
-            }
-
-            // full ss2012 selection
-            if (samesign::isGoodLepton(13, mu_idx) and (mu_p4.pt() > mu3_ssv5_p4.pt()))
-            {
-                mu3_ssv5_p4 = mu_p4; 
-            }
-        }
-        m_evt.mu_muid_loose_p4 = mu3_loose_p4;
-        m_evt.mu_muid_tight_p4 = mu3_tight_p4;
-        m_evt.mu_muid_ssv5_p4  = mu3_ssv5_p4;
-//         m_evt.mu3.FillCommon(mu3_id, mu3_idx);
-//         if (mu3_idx >= 0)
-//         {
-//             m_evt.mu3.cordetiso   = m_evt.mu3.detiso   - (log(m_evt.mu3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.mu3.p4.pt()); // check that I have the correct formula 
-//             m_evt.mu3.cordetiso04 = m_evt.mu3.detiso04 - (log(m_evt.mu3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.mu3.p4.pt()); // check that I have the correct formula 
-//             m_evt.mu3.corpfiso    = samesign::leptonIsolation(mu3_id, mu3_idx);
-//             m_evt.mu3.effarea     = samesign::EffectiveArea03(mu3_id, mu3_idx);
-//             m_evt.mu3.effarea04   = samesign::EffectiveArea04(mu3_id, mu3_idx);
-//             m_evt.mu3.dbeta       = mus_isoR03_pf_PUPt().at(mu3_idx);
-//             m_evt.mu3.dbeta04     = mus_isoR04_pf_PUPt().at(mu3_idx);
-//             m_evt.mu3.is_fo       = IsFO(mu3_id, mu3_idx); 
-//             m_evt.mu3.is_num      = IsNumerator(mu3_id, mu3_idx);
-//             m_evt.mu3.is_den      = IsDenominator(mu3_id, mu3_idx);
-//             m_evt.mu3.mt          = rt::Mt(m_evt.mu3.p4, met, met_phi);
-//             m_evt.mu3.passes_id   = samesign::isGoodLepton(mu3_id, mu3_idx, m_use_el_eta);
-//             m_evt.mu3.passes_iso  = samesign::isIsolatedLepton(mu3_id, mu3_idx);
-//         }
 
         // fill common branches for lep3
-        int lep3_idx  = (mu3_pt > el3_pt ? mu3_idx : el3_idx); 
-        int lep3_id   = (mu3_pt > el3_pt ? mu3_id  : el3_id ); 
-        m_evt.lep3.FillCommon(lep3_id, lep3_idx);
+        const float min_3lep_pt = (m_analysis_type==AnalysisType::high_pt ? 10.0 : 20.0);
+        std::pair <int, int> highest_addtional_lep = samesign::highestPtAdditionalLepton(hyp_idx, min_3lep_pt);
+        int lep3_id   = highest_addtional_lep.first; 
+        int lep3_idx  = highest_addtional_lep.second; 
         if (lep3_idx >= 0)
         {
+            m_evt.lep3.FillCommon(lep3_id, lep3_idx);
             const bool lep3_is_mu  = abs(lep3_id)==13;
             const bool lep3_is_el  = abs(lep3_id)==11;
             m_evt.lep3.cordetiso   = m_evt.lep3.detiso   - (log(m_evt.lep3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep3.p4.pt()); // check that I have the correct formula 
@@ -2258,6 +2139,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.lep3_wfr         = GetFakeRateValue(lep3_id, lep3_idx);
             m_evt.lep3_wflip       = GetFlipRateValue(lep3_id, lep3_idx);
         }
+        m_evt.passes_3lep_veto = (not samesign::has3rdLepton(hyp_idx, min_3lep_pt));
 
         //----------------------------------------
         // TAU

@@ -166,18 +166,13 @@ void SameSignTree::Reset()
     pfTauLoose_leadPtcandID                  = -999999;
     passes_tau_veto                          = false;
     passes_isotrk_veto                       = false;
+    passes_3lep_veto                         = false;
     pfTau15                                  = LorentzVector(0, 0, 0, 0);
     pfTau15_leadPtcand                       = LorentzVector(0, 0, 0, 0);
     pfTau                                    = LorentzVector(0, 0, 0, 0);
     pfTau_leadPtcand                         = LorentzVector(0, 0, 0, 0);
     pfTauLoose                               = LorentzVector(0, 0, 0, 0);
     pfTauLoose_leadPtcand                    = LorentzVector(0, 0, 0, 0);
-    mu_muid_loose_p4                         = LorentzVector(0, 0, 0, 0);
-    mu_muid_tight_p4                         = LorentzVector(0, 0, 0, 0);
-    mu_muid_ssv5_p4                          = LorentzVector(0, 0, 0, 0);
-    el_elid_loose_p4                         = LorentzVector(0, 0, 0, 0);
-    el_elid_medium_p4                        = LorentzVector(0, 0, 0, 0);
-    el_elid_ssv7_p4                          = LorentzVector(0, 0, 0, 0);
 
     vgenb_p4.clear();
     vjets_p4.clear();
@@ -387,16 +382,11 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("pfTauLoose_leadPtcandID"                  , &pfTauLoose_leadPtcandID                  , "pfTauLoose_leadPtcandID/I"                  ); 
     tree.Branch("passes_tau_veto"                          , &passes_tau_veto                          , "passes_tau_veto/O"                          ); 
     tree.Branch("passes_isotrk_veto"                       , &passes_isotrk_veto                       , "passes_isotrk_veto/O"                       ); 
+    tree.Branch("passes_3lep_veto"                         , &passes_3lep_veto                         , "passes_3lep_veto/O"                         ); 
     tree.Branch("pfTau15"                                  , "LorentzVector"                           , &pfTau15                                     ); 
     tree.Branch("pfTau15_leadPtcand"                       , "LorentzVector"                           , &pfTau15_leadPtcand                          ); 
     tree.Branch("pfTau"                                    , "LorentzVector"                           , &pfTau                                       ); 
     tree.Branch("pfTau_leadPtcand"                         , "LorentzVector"                           , &pfTau_leadPtcand                            ); 
     tree.Branch("pfTauLoose"                               , "LorentzVector"                           , &pfTauLoose                                  ); 
     tree.Branch("pfTauLoose_leadPtcand"                    , "LorentzVector"                           , &pfTauLoose_leadPtcand                       ); 
-    tree.Branch("mu_muid_loose_p4"                         , "LorentzVector"                           , &mu_muid_loose_p4                            );
-    tree.Branch("mu_muid_tight_p4"                         , "LorentzVector"                           , &mu_muid_tight_p4                            );
-    tree.Branch("mu_muid_ssv5_p4"                          , "LorentzVector"                           , &mu_muid_ssv5_p4                             );
-    tree.Branch("el_elid_loose_p4"                         , "LorentzVector"                           , &el_elid_loose_p4                            );
-    tree.Branch("el_elid_medium_p4"                        , "LorentzVector"                           , &el_elid_medium_p4                           );
-    tree.Branch("el_elid_ssv7_p4"                          , "LorentzVector"                           , &el_elid_ssv7_p4                             );
 }

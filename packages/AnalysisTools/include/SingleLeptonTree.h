@@ -105,6 +105,10 @@ public:
     int eleid_loose;
     int eleid_medium;
     int eleid_tight;
+    bool is_eleid_veto;
+    bool is_eleid_loose;
+    bool is_eleid_medium;
+    bool is_eleid_tight;
     float dphiin;
     float detain;
     float sieie;

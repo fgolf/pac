@@ -296,16 +296,7 @@ public:
     SingleLeptonTree lep3;
     float lep3_wfr;
     float lep3_wflip;
-
-    //
-    // additional lepton p4's
-    //
-    LorentzVector mu_muid_loose_p4;
-    LorentzVector mu_muid_tight_p4;
-    LorentzVector mu_muid_ssv5_p4;
-    LorentzVector el_elid_loose_p4;
-    LorentzVector el_elid_medium_p4;
-    LorentzVector el_elid_ssv7_p4;
+    bool passes_3lep_veto;
 
     // tau info
     int pfTau15_leadPtcandID;
