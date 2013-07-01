@@ -12,9 +12,29 @@ void JetInfoTree::FillCommon
 {
 //     using namespace tas;
 
-    // fill vectors
-    vjets_p4  = at::GetJets       (jet_args, jet_selection);
-    njets     = at::NumJets       (jet_args, jet_selection);
-    vbjets_p4 = at::GetBtaggedJets(jet_args, jet_selection);
-    nbtags    = at::NumBtaggedJets(jet_args, jet_selection);
+    // jets 
+    njets               = at::NumJets            (jet_args, jet_selection);
+    jets_dr12           = at::JetsDr12           (jet_args, jet_selection);
+    vjets_p4            = at::GetJetsP4          (jet_args, jet_selection);
+    vjets_mc3p4         = at::GetJetsMC3P4       (jet_args, jet_selection);
+    vjets_nearjet_p4    = at::GetJetsNearjetP4   (jet_args, jet_selection);
+    vjets_nearjet_dr    = at::GetJetsNearjetDr   (jet_args, jet_selection);
+    vjets_disc          = at::GetJetsDisc        (jet_args, jet_selection);
+    vjets_btagged       = at::GetJetsBtagged     (jet_args, jet_selection);
+    vjets_mcflavor_phys = at::GetJetsMCFlavorPhys(jet_args, jet_selection);
+    vjets_mcflavor_algo = at::GetJetsMCFlavorAlgo(jet_args, jet_selection);
+    vjets_mc3id         = at::GetJetsMC3Id       (jet_args, jet_selection);
+    vjets_momid         = at::GetJetsMomId       (jet_args, jet_selection);
+ 
+    // b-tagged jets
+    nbtags               = at::NumBtaggedJets            (jet_args, jet_selection);
+    bjets_dr12           = at::BJetsDr12                 (jet_args, jet_selection);
+    vbjets_p4            = at::GetBtaggedJetsP4          (jet_args, jet_selection);
+    vbjets_mc3p4         = at::GetBtaggedJetsMC3P4       (jet_args, jet_selection);
+    vbjets_nearjet_p4    = at::GetBtaggedJetsNearjetP4   (jet_args, jet_selection);
+    vbjets_nearjet_dr    = at::GetBtaggedJetsNearjetDr   (jet_args, jet_selection);
+    vbjets_mcflavor_phys = at::GetBtaggedJetsMCFlavorPhys(jet_args, jet_selection);
+    vbjets_mcflavor_algo = at::GetBtaggedJetsMCFlavorAlgo(jet_args, jet_selection);
+    vbjets_mc3id         = at::GetBtaggedJetsMC3Id       (jet_args, jet_selection);
+    vbjets_momid         = at::GetBtaggedJetsMomId       (jet_args, jet_selection);
 }

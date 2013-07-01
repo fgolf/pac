@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <ostream>
 #include "Math/LorentzVector.h"
 #include "jetcorr/FactorizedJetCorrector.h"
 #include "jetcorr/JetCorrectionUncertainty.h"
@@ -33,8 +34,7 @@ namespace at
     {
         enum value_type
         {
-            PF_FAST_CORR_RESIDUAL,
-            PF_FAST_CORR,
+            PF_FAST_CORR,  // for data, residual correction is implied
             PF_CORR,
             PF_UNCORR,
             static_size
@@ -74,32 +74,50 @@ namespace at
             (
                 LorentzVector p4,
                 LorentzVector corr_p4, 
+                LorentzVector mc3_p4, 
+                LorentzVector nearjet_p4, 
+                LorentzVector nearlep_p4, 
                 bool is_btagged,
                 float btag_disc,
                 int mc_flavor_algo,
-                int mc_flavor_phys
+                int mc_flavor_phys,
+                int mc3_id,
+                int mom_id
             );
             
             // methods
-            LorentzVector P4()     const; 
-            LorentzVector CorrP4() const; 
-            float Pt()             const; 
-            float CorrPt()         const; 
-            float Eta()            const; 
-            float Phi()            const; 
-            float BtagDisc()       const; 
-            bool IsBtagged()       const; 
-            int MCFlavorAlgo()     const;
-            int MCFlavorPhys()     const;
+            LorentzVector P4()        const; 
+            LorentzVector CorrP4()    const; 
+            LorentzVector MC3P4()     const; 
+            LorentzVector NearjetP4() const; 
+            LorentzVector NearlepP4() const; 
+            float Pt()                const; 
+            float CorrPt()            const; 
+            float Eta()               const; 
+            float Phi()               const; 
+            float BtagDisc()          const; 
+            float NearjetDr()         const;
+            float NearlepDr()         const;
+            bool IsBtagged()          const; 
+            int MCFlavorAlgo()        const;
+            int MCFlavorPhys()        const;
+            int MC3Id()               const;
+            int MomId()               const;
 
         private:
     
             LorentzVector m_p4;
             LorentzVector m_corr_p4; 
+            LorentzVector m_mc3_p4;
+            LorentzVector m_nearjet_p4;
+            LorentzVector m_nearlep_p4;
             bool m_is_btagged;
+            bool m_is_vtx_matched;
             float m_btag_disc;
             int m_mc_flavor_algo;
             int m_mc_flavor_phys;
+            int m_mc3_id;
+            int m_mom_id;
     };
     
     // non-member methods
@@ -132,59 +150,7 @@ namespace at
         // construct
         JetBaseSelectionArgs();
 
-        // constuct: general list of els/mus
-        JetBaseSelectionArgs
-        (
-            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
-            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
-            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
-            std::vector<int> mu_indices_,           // monns indices to veto from the event
-            std::vector<int> el_indices_,           // electron indices to veto from the event
-            float dr_,                              // the minimum DeltaR(jet, lepton)
-            float min_pt_,                          // jet pt requirement: jet pt > min_pt
-            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
-        );
-
-        JetBaseSelectionArgs
-        (
-            FactorizedJetCorrector* jet_corrector,  // jet corrector pointer does not own pointer
-            JetCorrectionUncertainty* jet_unc,      // jet uncertainty pointer does not own pointer
-            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
-            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
-            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
-            std::vector<int> mu_indices_,           // monns indices to veto from the event
-            std::vector<int> el_indices_,           // electron indices to veto from the event
-            float dr_,                              // the minimum DeltaR(jet, lepton)
-            float min_pt_,                          // jet pt requirement: jet pt > min_pt
-            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
-        );
-
-        // constuct: hyp index 
-        JetBaseSelectionArgs
-        (
-            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
-            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
-            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
-            int hyp_index_,                         // hypothesis index 
-            float dr_,                              // the minimum DeltaR(jet, lepton)
-            float min_pt_,                          // jet pt requirement: jet pt > min_pt
-            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
-        );
-
-        JetBaseSelectionArgs
-        (
-            FactorizedJetCorrector* jet_corrector,  // jet corrector pointer does not own pointer
-            JetCorrectionUncertainty* jet_unc,      // jet uncertainty pointer does not own pointer
-            JetType::value_type jet_type_,          // jet type (from jetSelection.h)
-            JetBtagType::value_type btag_type_,     // btag type (from jetSelections.h)
-            JetScaleType::value_type scale_type_,   // JEC scale type (from jetSelection.h)
-            int hyp_index_,                         // hypothesis index 
-            float dr_,                              // the minimum DeltaR(jet, lepton)
-            float min_pt_,                          // jet pt requirement: jet pt > min_pt
-            float max_eta_                          // jet eta requirement: |jet eta| < max_eta
-        );
-
-        // constuct: no selection lepton removal 
+        // constuct:
         JetBaseSelectionArgs
         (
             JetType::value_type jet_type_,          // jet type (from jetSelection.h)
@@ -206,7 +172,6 @@ namespace at
             float min_pt_,                          // jet pt requirement: jet pt > min_pt
             float max_eta_                          // jet eta requirement: |jet eta| < max_eta
         );
-
 
         // members
         FactorizedJetCorrector* jet_corrector;  // does not own pointer
@@ -214,8 +179,6 @@ namespace at
         JetType::value_type jet_type; 
         JetBtagType::value_type btag_type;
         JetScaleType::value_type scale_type; 
-        std::vector<int> mu_indices;
-        std::vector<int> el_indices;
         float deltaR; 
         float min_pt;
         float max_eta;
@@ -226,15 +189,8 @@ namespace at
     // operators
     bool operator == (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs);
     bool operator != (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs);
-
-    // comparison (needed by map)
-    struct JetBaseSelectionArgsCompare
-    {
-        bool operator () (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs) const
-        {
-            return (lhs == rhs);
-        }
-    };
+    bool operator <  (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs);
+    std::ostream& operator << (std::ostream& os, const JetBaseSelectionArgs& ja);
 
 // ----------------------------------------------------------------------------- //
 // functions to return the JetInfo collections 
@@ -243,7 +199,7 @@ namespace at
     std::vector<at::JetInfo> GetJetInfos(const JetBaseSelectionArgs& jet_sel_args);
 
 // ----------------------------------------------------------------------------- //
-// functions to return the indivdual components in the form of a std::vector 
+// functions to return the indivdual components 
 // ----------------------------------------------------------------------------- //
 
     // always returns true 
@@ -251,19 +207,98 @@ namespace at
 
     // get the jet corrected p4
     template <typename Function>
-    std::vector<LorentzVector> GetJets(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+    std::vector<LorentzVector> GetJetsP4(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+
+    template <typename Function>
+    std::vector<LorentzVector> GetBtaggedJetsP4(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
 
     // get the number of jets 
     template <typename Function>
     unsigned int NumJets(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
 
-    // get the jet corrected p4
-    template <typename Function>
-    std::vector<LorentzVector> GetBtaggedJets(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
-
-    // get the number of btagged jets 
     template <typename Function>
     unsigned int NumBtaggedJets(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+
+    // get the deltaR between j1 and j2 
+    template <typename Function>
+    float JetsDr12(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+
+    template <typename Function>
+    float BJetsDr12(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+
+    // get the jet mc3 p4
+    template <typename Function>
+    std::vector<LorentzVector> GetJetsMC3P4(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+
+    template <typename Function>
+    std::vector<LorentzVector> GetBtaggedJetsMC3P4(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+
+    // get the nearest jet p4
+    template <typename Function>
+    std::vector<LorentzVector> GetJetsNearjetP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<LorentzVector> GetBtaggedJetsNearjetP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the nearest jet DeltaR 
+    template <typename Function>
+    std::vector<float> GetJetsNearjetDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<float> GetBtaggedJetsNearjetDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the nearest lepton p4
+    template <typename Function>
+    std::vector<LorentzVector> GetJetsNearlepP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<LorentzVector> GetBtaggedJetsNearlepP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the nearest lepton DeltaR 
+    template <typename Function>
+    std::vector<float> GetJetsNearlepDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<float> GetBtaggedJetsNearlepDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the b-tag discriminator value
+    template <typename Function>
+    std::vector<float> GetJetsDisc(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<float> GetBtaggedJetsDisc(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the bools for whether the jet is b-tagged
+    template <typename Function>
+    std::vector<bool> GetJetsBtagged(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the MC flavor physics
+    template <typename Function>
+    std::vector<int> GetJetsMCFlavorPhys(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<int> GetBtaggedJetsMCFlavorPhys(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the MC flavor algorithm
+    template <typename Function>
+    std::vector<int> GetJetsMCFlavorAlgo(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<int> GetBtaggedJetsMCFlavorAlgo(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the MC matched ID 
+    template <typename Function>
+    std::vector<int> GetJetsMC3Id(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<int> GetBtaggedJetsMC3Id(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the MC matched mother ID
+    template <typename Function>
+    std::vector<int> GetJetsMomId(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    template <typename Function>
+    std::vector<int> GetBtaggedJetsMomId(const JetBaseSelectionArgs& jet_args, Function jet_selection);
 
 } // namespace at
 
