@@ -17,8 +17,6 @@ namespace at
         : m_p4(0, 0, 0, 0)
         , m_corr_p4(0, 0, 0, 0)
         , m_mc3_p4(0, 0, 0, 0)
-        , m_nearjet_p4(0, 0, 0, 0)
-        , m_nearlep_p4(0, 0, 0, 0)
         , m_is_btagged(false)
         , m_btag_disc(-999999.0)
         , m_mc_flavor_algo(-999999)
@@ -34,8 +32,6 @@ namespace at
         LorentzVector p4,
         LorentzVector corr_p4, 
         LorentzVector mc3_p4, 
-        LorentzVector nearjet_p4, 
-        LorentzVector nearlep_p4, 
         bool is_btagged,
         float btag_disc,
         int mc_flavor_algo,
@@ -46,8 +42,6 @@ namespace at
         : m_p4(p4)
         , m_corr_p4(corr_p4)
         , m_mc3_p4(mc3_p4)
-        , m_nearjet_p4(nearjet_p4)
-        , m_nearlep_p4(nearlep_p4)
         , m_is_btagged(is_btagged)
         , m_btag_disc(btag_disc)
         , m_mc_flavor_algo(mc_flavor_algo)
@@ -61,8 +55,6 @@ namespace at
     LorentzVector JetInfo::P4()        const {return m_p4;                                } 
     LorentzVector JetInfo::CorrP4()    const {return m_corr_p4;                           } 
     LorentzVector JetInfo::MC3P4()     const {return m_mc3_p4;                            } 
-    LorentzVector JetInfo::NearjetP4() const {return m_nearjet_p4;                        } 
-    LorentzVector JetInfo::NearlepP4() const {return m_nearlep_p4;                        } 
     float JetInfo::Pt()                const {return m_p4.pt();                           } 
     float JetInfo::CorrPt()            const {return m_corr_p4.pt();                      } 
     float JetInfo::Eta()               const {return m_p4.eta();                          } 
@@ -73,8 +65,6 @@ namespace at
     int JetInfo::MCFlavorPhys()        const {return m_mc_flavor_phys;                    } 
     int JetInfo::MC3Id()               const {return m_mc3_id;                            } 
     int JetInfo::MomId()               const {return m_mom_id;                            } 
-    float JetInfo::NearjetDr()         const {return rt::DeltaR(m_nearjet_p4, m_corr_p4); } 
-    float JetInfo::NearlepDr()         const {return rt::DeltaR(m_nearlep_p4, m_corr_p4); } 
 
     // non member methods
 
@@ -84,8 +74,6 @@ namespace at
         bool result = (lhs.P4() == rhs.P4());
         result = result && (lhs.CorrP4()       == rhs.CorrP4()       ); 
         result = result && (lhs.MC3P4()        == rhs.MC3P4()        ); 
-        result = result && (lhs.NearjetP4()    == rhs.NearjetP4()    ); 
-        result = result && (lhs.NearlepP4()    == rhs.NearlepP4()    ); 
         result = result && (lhs.IsBtagged()    == rhs.IsBtagged()    ); 
         result = result && (lhs.MCFlavorAlgo() == rhs.MCFlavorAlgo() ); 
         result = result && (lhs.MCFlavorPhys() == rhs.MCFlavorPhys() ); 
@@ -105,6 +93,13 @@ namespace at
     bool IsBtagged(const JetInfo& jet_info)
     {
         return jet_info.IsBtagged();
+    }
+
+    // find the jet corresponding the p4, return (0,0,0,0) if not found 
+    bool JetCorrespondsToP4(const JetInfo& jet_info, const LorentzVector& p4)
+    {
+        //return (p4 == jet_info.CorrP4());
+        return (rt::DeltaR(jet_info.CorrP4(), p4) < 0.0001);
     }
 
 // ----------------------------------------------------------------------------- //
@@ -396,13 +391,13 @@ namespace at
                     jet_mc3_p4 = (tmp_gen_idx>= 0 ? tas::genps_p4().at(tmp_gen_idx)        : LorentzVector(0,0,0,0));
                 }
 
+                // nearest jet
+
                 // create jet infos
                 JetInfo jet_info
                 (
                     jet_p4, 
                     jet_corr_p4, 
-                    jet_mc3_p4, 
-                    jet_mc3_p4, 
                     jet_mc3_p4, 
                     jet_is_btagged, 
                     jet_btag_disc, 

@@ -101,6 +101,7 @@ private:
     SameSignTree m_evt;
 
 private:
+
     // methods:
     bool IsNumerator(const int lep_id, const int lep_idx);
     bool IsDenominator(const int lep_id, const int lep_idx);
@@ -111,6 +112,13 @@ private:
 
     bool PassesIsoTrkVeto(const LorentzVector& l1_p4, const LorentzVector& l2_p4) const;
     bool PassesTauVeto() const;
+
+    // members:
+    at::JetBaseSelectionArgs m_jet_args;
+    at::JetBaseSelectionArgs m_jet_args_up;
+    at::JetBaseSelectionArgs m_jet_args_dn;
+    at::JetBaseSelectionArgs m_jet_args_pt30;
+    at::JetBaseSelectionArgs m_uncorrected_jet_args;
 };
 
 #endif // SSANALYSISLOOPER_H 

@@ -1,16 +1,19 @@
-#ifndef JETINFO_H
-#define JETINFO_H
+#ifndef AT_JETINFO_H
+#define AT_JETINFO_H
 
 #include <string>
 #include <vector>
 #include <ostream>
 #include "Math/LorentzVector.h"
+#include "Math/GenVector/VectorUtil.h"
 #include "jetcorr/FactorizedJetCorrector.h"
 #include "jetcorr/JetCorrectionUncertainty.h"
+
 
 // ----------------------------------------------------------------------------- //
 // Declarations 
 // ----------------------------------------------------------------------------- //
+
 
 // forward declaration
 class TTree;
@@ -23,7 +26,7 @@ typedef std::vector<int> veci;
 
 
 // ----------------------------------------------------------------------------- //
-// A simple class to hold the Jet object information 
+// Enumerations for various jet selection options 
 // ----------------------------------------------------------------------------- //
 
 
@@ -64,81 +67,7 @@ namespace at
         };
     };
 
-    // JetInfo class
-    class JetInfo
-    {
-        public:
-            // construct
-            JetInfo();
-            JetInfo
-            (
-                LorentzVector p4,
-                LorentzVector corr_p4, 
-                LorentzVector mc3_p4, 
-                LorentzVector nearjet_p4, 
-                LorentzVector nearlep_p4, 
-                bool is_btagged,
-                float btag_disc,
-                int mc_flavor_algo,
-                int mc_flavor_phys,
-                int mc3_id,
-                int mom_id
-            );
-            
-            // methods
-            LorentzVector P4()        const; 
-            LorentzVector CorrP4()    const; 
-            LorentzVector MC3P4()     const; 
-            LorentzVector NearjetP4() const; 
-            LorentzVector NearlepP4() const; 
-            float Pt()                const; 
-            float CorrPt()            const; 
-            float Eta()               const; 
-            float Phi()               const; 
-            float BtagDisc()          const; 
-            float NearjetDr()         const;
-            float NearlepDr()         const;
-            bool IsBtagged()          const; 
-            int MCFlavorAlgo()        const;
-            int MCFlavorPhys()        const;
-            int MC3Id()               const;
-            int MomId()               const;
-
-        private:
     
-            LorentzVector m_p4;
-            LorentzVector m_corr_p4; 
-            LorentzVector m_mc3_p4;
-            LorentzVector m_nearjet_p4;
-            LorentzVector m_nearlep_p4;
-            bool m_is_btagged;
-            bool m_is_vtx_matched;
-            float m_btag_disc;
-            int m_mc_flavor_algo;
-            int m_mc_flavor_phys;
-            int m_mc3_id;
-            int m_mom_id;
-    };
-    
-    // non-member methods
-
-    // operators 
-    bool operator == (const JetInfo& lhs, const JetInfo& rhs);
-    bool operator <  (const JetInfo& lhs, const JetInfo& rhs);
-    
-    // determine if btagged (needed for boost::bind)
-    bool IsBtagged(const JetInfo& jet_info);
-
-    // sorting
-    struct SortByCorrPt 
-    {
-        bool operator () (const JetInfo& lhs, const JetInfo& rhs) const 
-        {
-            return lhs.CorrPt() > rhs.CorrPt();
-        }
-    };
-    
-
 // ----------------------------------------------------------------------------- //
 // A selection class to hold the base jet selection requirements 
 // ----------------------------------------------------------------------------- //
@@ -192,18 +121,120 @@ namespace at
     bool operator <  (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs);
     std::ostream& operator << (std::ostream& os, const JetBaseSelectionArgs& ja);
 
+
+// ----------------------------------------------------------------------------- //
+// A simple class to hold the Jet object information 
+// ----------------------------------------------------------------------------- //
+
+
+    // JetInfo class
+    class JetInfo
+    {
+        public:
+            // construct
+            JetInfo();
+            JetInfo
+            (
+                LorentzVector p4,
+                LorentzVector corr_p4, 
+                LorentzVector mc3_p4, 
+                bool is_btagged,
+                float btag_disc,
+                int mc_flavor_algo,
+                int mc_flavor_phys,
+                int mc3_id,
+                int mom_id
+            );
+            
+            // methods
+            LorentzVector P4()        const; 
+            LorentzVector CorrP4()    const; 
+            LorentzVector MC3P4()     const; 
+            float Pt()                const; 
+            float CorrPt()            const; 
+            float Eta()               const; 
+            float Phi()               const; 
+            float BtagDisc()          const; 
+            bool IsBtagged()          const; 
+            int MCFlavorAlgo()        const;
+            int MCFlavorPhys()        const;
+            int MC3Id()               const;
+            int MomId()               const;
+
+        private:
+    
+            LorentzVector m_p4;
+            LorentzVector m_corr_p4; 
+            LorentzVector m_mc3_p4;
+            bool m_is_btagged;
+            float m_btag_disc;
+            int m_mc_flavor_algo;
+            int m_mc_flavor_phys;
+            int m_mc3_id;
+            int m_mom_id;
+    };
+    
+    // non-member methods
+
+    // operators 
+    bool operator == (const JetInfo& lhs, const JetInfo& rhs);
+    bool operator <  (const JetInfo& lhs, const JetInfo& rhs);
+    
+    // always returns true (used if you want to select all the jets with only the simple jet_args selection)
+    bool NoSelection(const JetInfo&);
+
+    // determine if btagged (needed for boost::bind)
+    bool IsBtagged(const JetInfo& jet_info);
+
+    // find the jet corresponding the p4, return (0,0,0,0) if not found 
+    bool JetCorrespondsToP4(const JetInfo& jet_info, const LorentzVector& p4);
+
+    // get the nearest jet p4 to the given p4 
+    template <typename Function>
+    JetInfo NearestJet(const LorentzVector& p4, const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the nearest tagged jet p4 to the given p4 
+    template <typename Function>
+    JetInfo NearestBtaggedJet(const LorentzVector& p4, const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // get the nearest non-tagged jet p4 to the given p4 
+    template <typename Function>
+    JetInfo NearestNonBtaggedJet(const LorentzVector& p4, const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+    // sorting by corrected pt
+    struct SortByCorrPt 
+    {
+        bool operator () (const JetInfo& lhs, const JetInfo& rhs) const 
+        {
+            return lhs.CorrPt() > rhs.CorrPt();
+        }
+    };
+
+    // sorting by DeltaR(jet corrected p4, p4)
+    struct SortByDeltaRToCorrP4
+    {
+        SortByDeltaRToCorrP4(const LorentzVector& p4) : m_p4(p4) {}
+        bool operator () (const JetInfo& lhs, const JetInfo& rhs) const 
+        { 
+            float delta_r1 = ROOT::Math::VectorUtil::DeltaR(lhs.CorrP4(), m_p4); 
+            float delta_r2 = ROOT::Math::VectorUtil::DeltaR(rhs.CorrP4(), m_p4); 
+            return delta_r1 < delta_r2; 
+        }
+        LorentzVector m_p4;
+    };
+    
+
 // ----------------------------------------------------------------------------- //
 // functions to return the JetInfo collections 
 // ----------------------------------------------------------------------------- //
 
+
     std::vector<at::JetInfo> GetJetInfos(const JetBaseSelectionArgs& jet_sel_args);
+
 
 // ----------------------------------------------------------------------------- //
 // functions to return the indivdual components 
 // ----------------------------------------------------------------------------- //
-
-    // always returns true 
-    bool NoSelection(const JetInfo&);
 
     // get the jet corrected p4
     template <typename Function>
@@ -219,6 +250,10 @@ namespace at
     template <typename Function>
     unsigned int NumBtaggedJets(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
 
+    // get the sum pt of jets (HT)
+    template <typename Function>
+    float SumJetPt(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
+
     // get the deltaR between j1 and j2 
     template <typename Function>
     float JetsDr12(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
@@ -233,33 +268,19 @@ namespace at
     template <typename Function>
     std::vector<LorentzVector> GetBtaggedJetsMC3P4(const JetBaseSelectionArgs& jet_fun_args, Function Selection);
 
-    // get the nearest jet p4
+    // get the nearest non-tagged jet p4 to the given jet
     template <typename Function>
     std::vector<LorentzVector> GetJetsNearjetP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
 
     template <typename Function>
     std::vector<LorentzVector> GetBtaggedJetsNearjetP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
 
-    // get the nearest jet DeltaR 
+    // get the nearest non-tagged jet deltaR to the given jet
     template <typename Function>
     std::vector<float> GetJetsNearjetDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
 
     template <typename Function>
     std::vector<float> GetBtaggedJetsNearjetDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
-
-    // get the nearest lepton p4
-    template <typename Function>
-    std::vector<LorentzVector> GetJetsNearlepP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
-
-    template <typename Function>
-    std::vector<LorentzVector> GetBtaggedJetsNearlepP4(const JetBaseSelectionArgs& jet_args, Function jet_selection);
-
-    // get the nearest lepton DeltaR 
-    template <typename Function>
-    std::vector<float> GetJetsNearlepDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
-
-    template <typename Function>
-    std::vector<float> GetBtaggedJetsNearlepDr(const JetBaseSelectionArgs& jet_args, Function jet_selection);
 
     // get the b-tag discriminator value
     template <typename Function>

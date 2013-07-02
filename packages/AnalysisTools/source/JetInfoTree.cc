@@ -16,8 +16,18 @@ JetInfoTree::JetInfoTree(const std::string& prefix, const std::string& postfix)
 
 void JetInfoTree::Reset()
 {
-    njets  = -99999;
-    jets_dr12 = -999999.0;
+    njets                     = -999999;
+    gen_njets                 = -999999;
+    gen_nbjets                = -999999;
+    ht                        = -999999.0;
+    gen_ht                    = -999999.0;
+    jets_dr12                 = -999999.0;
+    bjets_dr12                = -999999.0;
+    nbtags                    = -999999;
+    nbtags_reweighted         = -999999;
+    nbtags_reweighted_beff_up = -999999;
+    nbtags_reweighted_beff_dn = -999999;
+
     vjets_p4.clear();
     vjets_mc3p4.clear();
     vjets_nearjet_p4.clear();
@@ -28,9 +38,9 @@ void JetInfoTree::Reset()
     vjets_mcflavor_algo.clear();
     vjets_momid.clear();
     vjets_mc3id.clear();
+    gen_vjets_p4.clear();
+    gen_vbjets_p4.clear();
 
-    nbtags = -99999;
-    bjets_dr12 = -999999.0;
     vbjets_p4.clear();
     vbjets_mc3p4.clear();
     vbjets_nearjet_p4.clear();
@@ -44,10 +54,17 @@ void JetInfoTree::Reset()
 
 void JetInfoTree::SetBranches(TTree& tree)
 {
-    tree.Branch(Form("%snjets%s"      , m_prefix.c_str() , m_postfix.c_str()) , &njets      ); 
-    tree.Branch(Form("%sjets_dr12%s"  , m_prefix.c_str() , m_postfix.c_str()) , &jets_dr12  ); 
-    tree.Branch(Form("%snbtags%s"     , m_prefix.c_str() , m_postfix.c_str()) , &nbtags     ); 
-    tree.Branch(Form("%sbjets_dr12%s" , m_prefix.c_str() , m_postfix.c_str()) , &bjets_dr12 ); 
+    tree.Branch(Form("%snjets%s"                     , m_prefix.c_str() , m_postfix.c_str()) , &njets                     ); 
+    tree.Branch(Form("%sht%s"                        , m_prefix.c_str() , m_postfix.c_str()) , &ht                        ); 
+    tree.Branch(Form("%sjets_dr12%s"                 , m_prefix.c_str() , m_postfix.c_str()) , &jets_dr12                 ); 
+    tree.Branch(Form("%sbjets_dr12%s"                , m_prefix.c_str() , m_postfix.c_str()) , &bjets_dr12                ); 
+    tree.Branch(Form("%sgen_ht%s"                    , m_prefix.c_str() , m_postfix.c_str()) , &gen_ht                    ); 
+    tree.Branch(Form("%sgen_njets%s"                 , m_prefix.c_str() , m_postfix.c_str()) , &gen_njets                 ); 
+    tree.Branch(Form("%sgen_nbjets%s"                , m_prefix.c_str() , m_postfix.c_str()) , &gen_nbjets                ); 
+    tree.Branch(Form("%snbtags%s"                    , m_prefix.c_str() , m_postfix.c_str()) , &nbtags                    ); 
+    tree.Branch(Form("%snbtags_reweighted%s"         , m_prefix.c_str() , m_postfix.c_str()) , &nbtags_reweighted         ); 
+    tree.Branch(Form("%snbtags_reweighted_beff_up%s" , m_prefix.c_str() , m_postfix.c_str()) , &nbtags_reweighted_beff_up ); 
+    tree.Branch(Form("%snbtags_reweighted_beff_dn%s" , m_prefix.c_str() , m_postfix.c_str()) , &nbtags_reweighted_beff_dn ); 
 
     tree.Branch(Form("%svjets_p4%s"            , m_prefix.c_str() , m_postfix.c_str()) , "vecLorentzVector" , &vjets_p4            ); 
     tree.Branch(Form("%svjets_mc3p4%s"         , m_prefix.c_str() , m_postfix.c_str()) , "vecLorentzVector" , &vjets_mc3p4         ); 
@@ -68,4 +85,8 @@ void JetInfoTree::SetBranches(TTree& tree)
     tree.Branch(Form("%svbjets_mcflavor_algo%s" , m_prefix.c_str() , m_postfix.c_str()) , "veci"             , &vbjets_mcflavor_algo ); 
     tree.Branch(Form("%svbjets_momid%s"         , m_prefix.c_str() , m_postfix.c_str()) , "veci"             , &vbjets_momid         ); 
     tree.Branch(Form("%svbjets_mc3id%s"         , m_prefix.c_str() , m_postfix.c_str()) , "veci"             , &vbjets_mc3id         ); 
+
+    tree.Branch(Form("%sgen_vjets_p4%s" , m_prefix.c_str() , m_postfix.c_str()) , "vecLorentzVector" , &gen_vjets_p4 ); 
+    tree.Branch(Form("%sgen_vbjets_p4%s", m_prefix.c_str() , m_postfix.c_str()) , "vecLorentzVector" , &gen_vbjets_p4); 
+
 }

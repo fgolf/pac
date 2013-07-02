@@ -118,8 +118,6 @@ private:
     float GetFlipRateValue(int lep_id, float pt, float eta) const; 
     float GetFlipRateError(int lep_id, float pt, float eta) const; 
     at::FlipRateBinInfo GetFlipRateBinInfo() const;
-
-    bool Passes3rdLeptonSelection() const;
 };
 
 #endif // PLOTLOOPER_HPP

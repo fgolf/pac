@@ -85,6 +85,9 @@ private:
     // struct to hold tree values
     SameSignTree m_evt;
 
+    // jet args
+    at::JetBaseSelectionArgs m_jet_args;
+
 private:
     // methods:
     float GetFakeRateValue(int lep_id, int lep_idx) const;

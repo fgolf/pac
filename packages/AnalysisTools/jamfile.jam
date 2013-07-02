@@ -24,6 +24,7 @@ lib AnalysisTools
     ./source/SingleLeptonTree.cc
     ./source/EventInfoTree.cc
     ./source/JetInfo.cc
+    ./source/GenJetInfo.cc
     ./source/JetInfoTree.cc
     ./source/ConvertHypIndexToVectors.cc
     ./source/CMS2Wrapper.cc

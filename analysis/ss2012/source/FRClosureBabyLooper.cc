@@ -34,6 +34,7 @@
 #include "ScaleFactors.h"
 #include "TTbarBreakDown.h"
 #include "SignalBinInfo.h"
+#include "RemoveLeptonsSSID.h"
 
 // ROOT
 #include "Math/LorentzVector.h"
@@ -358,6 +359,9 @@ FRClosureBabyLooper::FRClosureBabyLooper
         else m_jet_pt_cut = 40.0f;
     }
 
+    // jet args
+    m_jet_args = at::JetBaseSelectionArgs(m_jet_corrector, /*jet_unc=*/NULL, at::JetType::PF_FAST_CORR, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
+
     // begin job
     BeginJob();
 }
@@ -482,14 +486,6 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
         }
         //const float min_pt = std::min(mu_min_pt, el_min_pt);
 
-        // gen level  
-        // --------------------------------------------------------------------------------------------------------- //
-        m_evt.vgenb_p4    = efftools::getGenBjets(m_jet_pt_cut, 2.4);
-        m_evt.vgenjets_p4 = efftools::getGenJets(m_jet_pt_cut, 2.4);
-        m_evt.gen_ht      = efftools::getGenHT(m_jet_pt_cut, 2.4);
-        m_evt.gen_nbtags  = m_evt.vgenb_p4.size();
-        m_evt.gen_njets   = m_evt.vgenjets_p4.size();
-        
         // require standard cleaning 
         if (!cleaning_standardNovember2011()) 
         {
@@ -501,7 +497,7 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
         // --------------------------------------------------------------------------------------------------------- //
 
         // jet type
-        JetType jet_type = JETS_TYPE_PF_FAST_CORR;
+        enum ::JetType jet_type = JETS_TYPE_PF_FAST_CORR;
 
         // loop over hypotheses
         HypInfo best_hyp(0, DileptonChargeType::static_size, DileptonHypType::static_size);
@@ -645,32 +641,6 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
         // SS specific event level info
         m_evt.mt           = rt::Mt(m_evt.lep1.p4, met, met_phi);  // calculated against the higher pT lepton
         m_evt.no_extraz    = (not samesign::makesExtraZ(hyp_idx));
-
-        if (not m_jet_corrector)
-        {
-            m_evt.ht           = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht20         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht30         = samesign::sumJetPt(hyp_idx, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets        = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets20      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets30      = samesign::nJets(hyp_idx, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-        }
-        else
-        {
-            m_evt.ht           = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht20         = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.ht30         = samesign::sumJetPt(hyp_idx, m_jet_corrector, jet_type,                     /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets        = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets20      = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.njets30      = samesign::nJets(hyp_idx, m_jet_corrector, jet_type,                        /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags20     = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/20.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags30     = samesign::nBtaggedJets(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/30.0,         /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-        }
-
         m_evt.no_extrag    = (not samesign::makesExtraGammaStar(hyp_idx));
         m_evt.hyp_good_vtx = hypsFromFirstGoodVertex(hyp_idx);
         m_evt.clean        = cleaning_standardNovember2011(); 
@@ -768,261 +738,18 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
         m_evt.rho_iso = evt_kt6pf_foregiso_rho();
         m_evt.rho     = evt_ww_rho_vor(); 
 
-        // jet/bjet info 
-        if (not m_jet_corrector)
-        {
-            m_evt.vbjets_p4           = samesign::getBtaggedJets       (hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vjets_p4            = samesign::getJets              (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vjets_mcflavor_phys = samesign::getJetMcPhysMatch    (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            m_evt.vjets_mcflavor_algo = samesign::getJetMcAlgoMatch    (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            m_evt.vjets_btagged       = samesign::getSortedBtaggedFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-        }
-        else
-        {
-            m_evt.vbjets_p4           = samesign::getBtaggedJets       (hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vjets_p4            = samesign::getJets              (hyp_idx, m_jet_corrector, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale); 
-            m_evt.vjets_mcflavor_phys = samesign::getJetMcPhysMatch    (hyp_idx, m_jet_corrector, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            m_evt.vjets_mcflavor_algo = samesign::getJetMcAlgoMatch    (hyp_idx, m_jet_corrector, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-            m_evt.vjets_btagged       = samesign::getSortedBtaggedFlags(hyp_idx, m_jet_corrector, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-        }
+        // lepton overlap removal
+        RemoveLeptonsSSID jet_selection(hyp_idx, m_jet_args.deltaR, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
 
-        m_evt.bjets_dr12 = (m_evt.nbtags>=2) ? rt::DeltaR(m_evt.vbjets_p4.at(0), m_evt.vbjets_p4.at(1)) : -999999.0;
-        m_evt.jets_dr12  = (m_evt.njets>=2 ) ? rt::DeltaR(m_evt.vjets_p4.at(0) , m_evt.vjets_p4.at(1) ) : -999999.0;
-
-        vector<LorentzVector> temp_bjets_p4 = m_evt.vbjets_p4;
-        if (!temp_bjets_p4.empty())
-        {
-            // nearest to lep1
-            std::sort(temp_bjets_p4.begin(), temp_bjets_p4.begin(), SortByDeltaR<LorentzVector>(m_evt.lep1.p4));
-            m_evt.lep1_nearbjet_p4 = temp_bjets_p4.front();
-            m_evt.lep1_nearbjet_dr = rt::DeltaR(m_evt.lep1.p4, temp_bjets_p4.front());
-
-            // nearest to lep2
-            std::sort(temp_bjets_p4.begin(), temp_bjets_p4.begin(), SortByDeltaR<LorentzVector>(m_evt.lep2.p4));
-            m_evt.lep2_nearbjet_p4 = temp_bjets_p4.front();
-            m_evt.lep2_nearbjet_dr = rt::DeltaR(m_evt.lep2.p4, temp_bjets_p4.front());
-        }
-
-        vector<LorentzVector> temp_jets_p4 = m_evt.vjets_p4;  
-
-        // get the untagged jets
-        vector<LorentzVector> temp_jets_nontagged_p4;
-        for (size_t i = 0; i != temp_jets_p4.size(); i++)
-        {
-            //temp_jets_p4.at(i) *= evt_isRealData() ? pfjets_corL1FastL2L3residual().at(i) : pfjets_corL1FastL2L3().at(i);
-            if (not m_evt.vjets_btagged.at(i))
-            {
-                temp_jets_nontagged_p4.push_back(temp_jets_p4.at(i));
-            }
-        }
-
-        if (!temp_jets_p4.empty())
-        {
-            // nearest untagged jet to the btags
-            for (size_t i = 0; i != m_evt.vbjets_p4.size(); i++)
-            {
-                const LorentzVector& p4 = m_evt.vbjets_p4.at(i);
-                if (temp_jets_nontagged_p4.empty()) 
-                {
-                    m_evt.vbjets_nearjet_p4.push_back(LorentzVector(0,0,0,0));
-                    m_evt.vbjets_nearjet_dr.push_back(-999999.0);
-                    continue;
-                }
-                std::sort(temp_jets_nontagged_p4.begin(), temp_jets_nontagged_p4.end(), SortByDeltaR<LorentzVector>(p4));
-                m_evt.vbjets_nearjet_p4.push_back(temp_jets_nontagged_p4.front());
-                m_evt.vbjets_nearjet_dr.push_back(rt::DeltaR(p4, temp_jets_nontagged_p4.front()));
-            }
-
-            // nearest jet to the selected jet
-            for (size_t i = 0; i != m_evt.vjets_p4.size(); i++)
-            {
-                if (temp_jets_nontagged_p4.empty()) 
-                {
-                    m_evt.vjets_nearjet_p4.push_back(LorentzVector(0,0,0,0));
-                    m_evt.vjets_nearjet_dr.push_back(-999999.0);
-                    continue;
-                }
-                const LorentzVector& p4 = m_evt.vjets_p4.at(i);
-                std::sort(temp_jets_nontagged_p4.begin(), temp_jets_nontagged_p4.end(), SortByDeltaR<LorentzVector>(p4));
-
-                // check if closest is the same jet?
-                if (rt::DeltaR(temp_jets_nontagged_p4.front(), p4) < 0.0001)
-                {
-                    if (temp_jets_nontagged_p4.size()>=2)
-                    {
-                        m_evt.vjets_nearjet_p4.push_back(temp_jets_nontagged_p4.at(1));
-                        m_evt.vjets_nearjet_dr.push_back(rt::DeltaR(p4, temp_jets_nontagged_p4.at(1)));
-                    }
-                    else // fill with dummy values
-                    {
-                        m_evt.vjets_nearjet_p4.push_back(LorentzVector(0,0,0,0));
-                        m_evt.vjets_nearjet_dr.push_back(-999999.0);
-                    }
-                }
-                else
-                {
-                    m_evt.vjets_nearjet_p4.push_back(temp_jets_nontagged_p4.front());
-                    m_evt.vjets_nearjet_dr.push_back(rt::DeltaR(p4, temp_jets_nontagged_p4.front()));
-                }
-            }
-            
-            // nearest to lep1
-            std::sort(temp_jets_p4.begin(), temp_jets_p4.end(), SortByDeltaR<LorentzVector>(m_evt.lep1.p4));
-            m_evt.lep1_nearjet_p4 = temp_jets_p4.front();
-            m_evt.lep1_nearjet_dr = rt::DeltaR(m_evt.lep1.p4, temp_jets_p4.front());
-
-            // nearest to lep2
-            std::sort(temp_jets_p4.begin(), temp_jets_p4.end(), SortByDeltaR<LorentzVector>(m_evt.lep2.p4));
-            m_evt.lep2_nearjet_p4 = temp_jets_p4.front();
-            m_evt.lep2_nearjet_dr = rt::DeltaR(m_evt.lep2.p4, temp_jets_p4.front());
-        }
-
-        if (abs(m_evt.lep1.pdgid) == 11) {
-            std::pair<int,double> closest_el = std::make_pair(-1, 99.);
-            for (unsigned int eidx = 0; eidx < cms2.els_p4().size(); eidx++) {
-                
-                if (cms2.els_p4().at(eidx).pt() < 5.) continue;
-                if (fabs(cms2.els_p4().at(eidx).eta()) > 2.5) continue;
-                if (m_evt.lep1.charge * cms2.els_charge().at(eidx) > 0) continue;
-
-                double iso_val = samesign::electronIsolationPF2012(eidx);
-                if (iso_val > 0.2) continue;
-
-                using namespace wp2012;
-                electronIdComponent_t passAllVetoCuts = DETAIN | DPHIIN | SIGMAIETAIETA | HOE | D0VTX | DZVTX;
-                electronIdComponent_t vetoid = electronId_WP2012(eidx, VETO);
-                if ((passAllVetoCuts & vetoid) != passAllVetoCuts)
-                    continue;
-
-                double dr = rt::DeltaR(cms2.els_p4().at(eidx), m_evt.lep1.p4);
-                if (dr < closest_el.second)
-                    closest_el = std::make_pair(eidx, dr);
-            }
-
-            if (closest_el.first >= 0) {
-                m_evt.lep1_nearlep_p4 = cms2.els_p4().at(closest_el.first);
-                m_evt.lep1_nearlep_id = -11 * cms2.els_charge().at(closest_el.first);
-                m_evt.lep1_nearlep_dr = closest_el.second;
-            }                
-        }
-
-        if (abs(m_evt.lep2.pdgid) == 11) {
-            std::pair<int,double> closest_el = std::make_pair(-1, 99.);
-            for (unsigned int eidx = 0; eidx < cms2.els_p4().size(); eidx++) {
-                
-                if (cms2.els_p4().at(eidx).pt() < 5.) continue;
-                if (fabs(cms2.els_p4().at(eidx).eta()) > 2.5) continue;
-                if (m_evt.lep2.charge * cms2.els_charge().at(eidx) > 0) continue;
-
-                double iso_val = samesign::electronIsolationPF2012(eidx);
-                if (iso_val > 0.2) continue;
-
-                using namespace wp2012;
-                electronIdComponent_t passAllVetoCuts = DETAIN | DPHIIN | SIGMAIETAIETA | HOE | D0VTX | DZVTX;
-                electronIdComponent_t vetoid = electronId_WP2012(eidx, VETO);
-                if ((passAllVetoCuts & vetoid) != passAllVetoCuts)
-                    continue;
-
-                double dr = rt::DeltaR(cms2.els_p4().at(eidx), m_evt.lep2.p4);
-                if (dr < closest_el.second)
-                    closest_el = std::make_pair(eidx, dr);
-            }
-
-            if (closest_el.first >= 0) {
-                m_evt.lep2_nearlep_p4 = cms2.els_p4().at(closest_el.first);
-                m_evt.lep2_nearlep_id = -11 * cms2.els_charge().at(closest_el.first);
-                m_evt.lep2_nearlep_dr = closest_el.second;
-            }                
-        }
-
-        if (abs(m_evt.lep1.pdgid) == 13) {
-            std::pair<int,double> closest_mu = std::make_pair(-1, 99.);
-            for (unsigned int midx = 0; midx < cms2.mus_p4().size(); midx++) {
-                
-                if (cms2.mus_p4().at(midx).pt() < 5.) continue;
-                if (fabs(cms2.mus_p4().at(midx).eta()) > 2.5) continue;
-                if (m_evt.lep1.charge * cms2.mus_charge().at(midx) > 0) continue;
-
-                double iso_val = muonIsoValuePF2012_deltaBeta(midx);
-                if (iso_val > 0.2) continue;
-
-                if (!passes_muid_wp2012(midx, mu2012_tightness::LOOSE))
-                    continue;
-
-                double dr = rt::DeltaR(cms2.mus_p4().at(midx), m_evt.lep1.p4);
-                if (dr < closest_mu.second)
-                    closest_mu = std::make_pair(midx, dr);
-            }
-
-            if (closest_mu.first >= 0) {
-                m_evt.lep1_nearlep_p4 = cms2.mus_p4().at(closest_mu.first);
-                m_evt.lep1_nearlep_id = -13 * cms2.mus_charge().at(closest_mu.first);
-                m_evt.lep1_nearlep_dr = closest_mu.second;
-            }                
-        }
-
-        if (abs(m_evt.lep2.pdgid) == 13) {
-            std::pair<int,double> closest_mu = std::make_pair(-1, 99.);
-            for (unsigned int midx = 0; midx < cms2.mus_p4().size(); midx++) {
-                
-                if (cms2.mus_p4().at(midx).pt() < 5.) continue;
-                if (fabs(cms2.mus_p4().at(midx).eta()) > 2.5) continue;
-                if (m_evt.lep2.charge * cms2.mus_charge().at(midx) > 0) continue;
-
-                double iso_val = muonIsoValuePF2012_deltaBeta(midx);
-                if (iso_val > 0.2) continue;
-
-                if (!passes_muid_wp2012(midx, mu2012_tightness::LOOSE))
-                    continue;
-
-                double dr = rt::DeltaR(cms2.mus_p4().at(midx), m_evt.lep2.p4);
-                if (dr < closest_mu.second)
-                    closest_mu = std::make_pair(midx, dr);
-            }
-
-            if (closest_mu.first >= 0) {
-                m_evt.lep2_nearlep_p4 = cms2.mus_p4().at(closest_mu.first);
-                m_evt.lep2_nearlep_id = -13 * cms2.mus_charge().at(closest_mu.first);
-                m_evt.lep2_nearlep_dr = closest_mu.second;
-            }                
-        }
-
-        // match njets/btags to MC truth
-        if (not tas::evt_isRealData())
-        {
-            // jets
-            for (size_t i = 0; i != m_evt.vjets_p4.size(); i++)
-            {
-                const LorentzVector jet_p4 = m_evt.vjets_p4.at(i);
-                int idx = efftools::getGenParton(jet_p4, /*use status3 =*/true);
-                int mc3id = idx>= 0 ? tas::genps_id().at(idx) : -999999;
-                int momid = idx>= 0 ? tas::genps_id_mother().at(idx) : -999999;
-                LorentzVector mc3p4 = idx>= 0 ? tas::genps_p4().at(idx) : LorentzVector(0,0,0,0);
-                m_evt.vjets_mc3id.push_back(mc3id);
-                m_evt.vjets_momid.push_back(momid);
-                m_evt.vjets_mc3p4.push_back(mc3p4);
-            }
-
-            // b-tagged jets
-            for (size_t i = 0; i != m_evt.vbjets_p4.size(); i++)
-            {
-                const LorentzVector bjet_p4 = m_evt.vbjets_p4.at(i);
-                int idx = efftools::getGenParton(bjet_p4, /*use status3 =*/true);
-                int mc3id = idx>= 0 ? tas::genps_id().at(idx) : -999999;
-                int momid = idx>= 0 ? tas::genps_id_mother().at(idx) : -999999;
-                LorentzVector mc3p4 = idx>= 0 ? tas::genps_p4().at(idx) : LorentzVector(0,0,0,0);
-                m_evt.vbjets_mc3id.push_back(mc3id);
-                m_evt.vbjets_momid.push_back(momid);
-                m_evt.vbjets_mc3p4.push_back(mc3p4);
-            }
-        }
+        // fill the jet info
+        m_evt.jet_info.FillCommon   (m_sample, /*is_fast_sim=*/false, m_jet_args   , jet_selection);
 
         // Fill the tree
         m_tree->Fill();
 
         // printout
         m_evt.is_good_lumi = true;
-        if (m_evt.is_good_lumi && m_evt.njets >= m_njets)
+        if (m_evt.is_good_lumi && m_evt.jet_info.njets >= m_njets)
         {
             scale = 1.0;
             if (dilepton_type==DileptonHypType::MUMU)
@@ -1032,10 +759,10 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
                 if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[0] += scale;
                 if(event_type==DileptonChargeType::DF) m_count_nobtag_df[0] += scale;
                 if(event_type==DileptonChargeType::OS) m_count_nobtag_os[0] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[0] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[0] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[0] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[0] += scale;
+                if(event_type==DileptonChargeType::SS && m_evt.jet_info.nbtags > 1) m_count_ss[0] += scale;
+                if(event_type==DileptonChargeType::SF && m_evt.jet_info.nbtags > 1) m_count_sf[0] += scale;
+                if(event_type==DileptonChargeType::DF && m_evt.jet_info.nbtags > 1) m_count_df[0] += scale;
+                if(event_type==DileptonChargeType::OS && m_evt.jet_info.nbtags > 1) m_count_os[0] += scale;
             }
             if (dilepton_type==DileptonHypType::EMU)
             {
@@ -1044,10 +771,10 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
                 if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[1] += scale;
                 if(event_type==DileptonChargeType::DF) m_count_nobtag_df[1] += scale;
                 if(event_type==DileptonChargeType::OS) m_count_nobtag_os[1] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[1] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[1] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[1] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[1] += scale;
+                if(event_type==DileptonChargeType::SS && m_evt.jet_info.nbtags > 1) m_count_ss[1] += scale;
+                if(event_type==DileptonChargeType::SF && m_evt.jet_info.nbtags > 1) m_count_sf[1] += scale;
+                if(event_type==DileptonChargeType::DF && m_evt.jet_info.nbtags > 1) m_count_df[1] += scale;
+                if(event_type==DileptonChargeType::OS && m_evt.jet_info.nbtags > 1) m_count_os[1] += scale;
             }
             if (dilepton_type==DileptonHypType::EE)
             {
@@ -1056,10 +783,10 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
                 if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[2] += scale;
                 if(event_type==DileptonChargeType::DF) m_count_nobtag_df[2] += scale;
                 if(event_type==DileptonChargeType::OS) m_count_nobtag_os[2] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[2] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[2] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[2] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[2] += scale;
+                if(event_type==DileptonChargeType::SS && m_evt.jet_info.nbtags > 1) m_count_ss[2] += scale;
+                if(event_type==DileptonChargeType::SF && m_evt.jet_info.nbtags > 1) m_count_sf[2] += scale;
+                if(event_type==DileptonChargeType::DF && m_evt.jet_info.nbtags > 1) m_count_df[2] += scale;
+                if(event_type==DileptonChargeType::OS && m_evt.jet_info.nbtags > 1) m_count_os[2] += scale;
             }
             // count all 
             {
@@ -1067,10 +794,10 @@ int FRClosureBabyLooper::Analyze(long event, const std::string& filename)
                 if(event_type==DileptonChargeType::SF) m_count_nobtag_sf[3] += scale;
                 if(event_type==DileptonChargeType::DF) m_count_nobtag_df[3] += scale;
                 if(event_type==DileptonChargeType::OS) m_count_nobtag_os[3] += scale;
-                if(event_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[3] += scale;
-                if(event_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[3] += scale;
-                if(event_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[3] += scale;
-                if(event_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[3] += scale;
+                if(event_type==DileptonChargeType::SS && m_evt.jet_info.nbtags > 1) m_count_ss[3] += scale;
+                if(event_type==DileptonChargeType::SF && m_evt.jet_info.nbtags > 1) m_count_sf[3] += scale;
+                if(event_type==DileptonChargeType::DF && m_evt.jet_info.nbtags > 1) m_count_df[3] += scale;
+                if(event_type==DileptonChargeType::OS && m_evt.jet_info.nbtags > 1) m_count_os[3] += scale;
             }
         }
     }

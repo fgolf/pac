@@ -5,6 +5,7 @@
 #include <vector>
 #include "Math/LorentzVector.h"
 #include "at/JetInfo.h"
+#include "at/Sample.h"
 
 // forward declaration
 class TTree;
@@ -31,6 +32,8 @@ class JetInfoTree
         template <typename Function>
         void FillCommon
         (
+            const at::Sample::value_type sample,
+            const bool is_fast_sim,
             const at::JetBaseSelectionArgs& jet_args,
             Function jet_election
         );
@@ -46,10 +49,8 @@ class JetInfoTree
         // branch objects
         // ----------------------------------------- //
 
-        // sum jet pt
-        float ht;
-
         // jets
+        float ht;
         int njets;
         float jets_dr12;
         vecLorentzVector vjets_p4;
@@ -76,10 +77,19 @@ class JetInfoTree
         veci vbjets_mc3id;
         veci vbjets_momid;
 
-        // generator level jets
-        vecLorentzVector vgenjets_p4;
+        // reweighted btag counts
+        int nbtags_reweighted;
+        int nbtags_reweighted_beff_up;
+        int nbtags_reweighted_beff_dn;
 
-    private: 
+        // generator level jets
+        float gen_ht;
+        int gen_njets;
+        vecLorentzVector gen_vjets_p4;
+
+        // generator level bjets
+        int gen_nbjets;
+        vecLorentzVector gen_vbjets_p4;
 
 };
 

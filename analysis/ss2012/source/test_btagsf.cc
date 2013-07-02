@@ -73,10 +73,10 @@ try
 //         hc["h_nbtags_sf"   ]->Fill(num_btags_sf   );
 //         hc["h_nbtags_sf_up"]->Fill(num_btags_sf_up);
 //         hc["h_nbtags_sf_dn"]->Fill(num_btags_sf_dn);
-        hc["h_nbtags"      ]->Fill(nbtags()              );
-        hc["h_nbtags_sf"   ]->Fill(nbtags_reweighted()   );
-        hc["h_nbtags_sf_up"]->Fill(nbtags_reweighted_up());
-        hc["h_nbtags_sf_dn"]->Fill(nbtags_reweighted_dn());
+        hc["h_nbtags"      ]->Fill(nbtags()                   );
+        hc["h_nbtags_sf"   ]->Fill(nbtags_reweighted()        );
+        hc["h_nbtags_sf_up"]->Fill(nbtags_reweighted_beff_up());
+        hc["h_nbtags_sf_dn"]->Fill(nbtags_reweighted_beff_dn());
 
     } // end events
 

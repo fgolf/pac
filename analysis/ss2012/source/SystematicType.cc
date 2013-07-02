@@ -51,16 +51,16 @@ namespace ss
                     nbtags = (do_beff_sf ? ssb::nbtags_reweighted() : ssb::nbtags());  // reweighted # btags (random #)
                     break;
                 case SystematicType::JES_UP: 
-                    met    = ssb::pfmet_up();  
-                    ht     = ssb::ht_up();
-                    njets  = ssb::njets_up();
-                    nbtags = (do_beff_sf ? ssb::nbtags_reweighted_jec_up() : ssb::nbtags_up()); // reweighted # btags (random #) using JES+ jets
+                    met    = ssb::pfmet_jec_up();  
+                    ht     = ssb::ht_jec_up();
+                    njets  = ssb::njets_jec_up();
+                    nbtags = (do_beff_sf ? ssb::nbtags_reweighted_jec_up() : ssb::nbtags_jec_up()); // reweighted # btags (random #) using JES+ jets
                     break;
                 case SystematicType::JES_DN:
-                    met    = ssb::pfmet_dn();
-                    ht     = ssb::ht_dn();
-                    njets  = ssb::njets_dn();
-                    nbtags = (do_beff_sf ? ssb::nbtags_reweighted_jec_dn() : ssb::nbtags_dn()); // reweighted # btags (random #) using JES- jets
+                    met    = ssb::pfmet_jec_dn();
+                    ht     = ssb::ht_jec_dn();
+                    njets  = ssb::njets_jec_dn();
+                    nbtags = (do_beff_sf ? ssb::nbtags_reweighted_jec_dn() : ssb::nbtags_jec_dn()); // reweighted # btags (random #) using JES- jets
                     break;
                 case SystematicType::JER:
                     met    = ssb::pfmet_jer();

@@ -7,12 +7,14 @@
 #include "at/DileptonHypType.h"
 #include "DileptonTree.h"
 #include "EventInfoTree.h"
+#include "JetInfoTree.h"
 #include "LooperTypes.h"
 
 // forward declaration
 class TTree;
 
 // typedefs
+typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 typedef std::vector<LorentzVector> vecLorentzVector;
 typedef std::vector<float> vecd;
 typedef std::vector<int> veci;
@@ -73,21 +75,11 @@ public:
     int anal_type;
     bool is_good_lumi;
     int charge_type;
-    int njets;
-    int njets20;
-    int njets30;
-    int nbtags;
-    int nbtags20;
-    int nbtags30;
-    int nbtags_csvl;
     int ttbar_bkdn;
     int higgs_bkdn;
     int higgs_decay;
     float vtxw;
     float mt;
-    float ht;
-    float ht20;
-    float ht30;    
     float rho;
     float rho_iso;
     float sf_dileptrig;
@@ -117,39 +109,16 @@ public:
     bool trig_em_riso1p0mu5_el8_id_m8_pfnopuht175;
 
     //
-    // for JES sysetmatics
+    // sysetmatics (most of the JEC +/- are handled in the JetInfoTree)
     //
-    int njets_dn;
-    int njets_up;
     int njets_jer;
-    int nbtags_dn;
-    int nbtags_up;
     int nbtags_jer;
-    int nbtags_reweighted;
-    int nbtags_reweighted_dn;
-    int nbtags_reweighted_up;
     int nbtags_reweighted_jer;
-    int nbtags_reweighted_jec_up;
-    int nbtags_reweighted_jec_dn;
-    float ht_dn;
-    float ht_up;
     float ht_jer;
-    int njets20_dn;
-    int njets20_up;
-    int nbtags20_dn;
-    int nbtags20_up;
-    float ht20_dn;
-    float ht20_up;
-    int njets30_dn;
-    int njets30_up;
-    int nbtags30_dn;
-    int nbtags30_up;
-    float ht30_dn;
-    float ht30_up;
-    float pfmet_dn;
-    float pfmet_up;
-    float pfmet_phi_dn;
-    float pfmet_phi_up;
+    float pfmet_jec_dn;
+    float pfmet_jec_up;
+    float pfmet_phi_jec_dn;
+    float pfmet_phi_jec_up;
     float pfmet_jer;
     float pfmet_jer_phi;
     float pfmet_uncl_up;
@@ -190,12 +159,8 @@ public:
     //
     // gen level info
     //
-    vecLorentzVector vgenb_p4;
     bool is_gen_pp;
     bool is_gen_mm;
-    int gen_nbtags; 
-    int gen_njets; 
-    float gen_ht;
 
     //
     // reco lepton 1 info
@@ -231,42 +196,13 @@ public:
     float sf_unc_nbtag;
     float sf_unc_nbtag3;
 
-    //
-    // jet info
-    //
-    vecLorentzVector vjets_p4;
-    vecLorentzVector vjets_p4_up;
-    vecLorentzVector vjets_p4_dn;
-    vecLorentzVector vjets_mc3p4;
-    vecLorentzVector vgenjets_p4;
-    vecLorentzVector vjets_nearjet_p4;
-    std::vector<bool> vjets_btagged;
-    std::vector<bool> vjets_btagged_up;
-    std::vector<bool> vjets_btagged_dn;
-    float jets_dr12;
-    vecd vjets_nearjet_dr;
-    veci vjets_mcflavor_phys;
-    veci vjets_mcflavor_algo;
-    veci vjets_mcflavor_phys_up;
-    veci vjets_mcflavor_algo_up;
-    veci vjets_mcflavor_phys_dn;
-    veci vjets_mcflavor_algo_dn;
-    vecd vbjets_disc;
-    veci vjets_momid;
-    veci vjets_mc3id;
-
-    //
-    // bjet info
-    //
-    vecLorentzVector vbjets_p4;
-    vecLorentzVector vbjets_p4_up;
-    vecLorentzVector vbjets_p4_dn;
-    vecLorentzVector vbjets_mc3p4;
-    vecLorentzVector vbjets_nearjet_p4;
-    vecd vbjets_nearjet_dr;
-    veci vbjets_mc3id;
-    veci vbjets_momid;
-    float bjets_dr12;
+    // 
+    // new jet info
+    // 
+    JetInfoTree jet_info;
+    JetInfoTree jet_info_up;
+    JetInfoTree jet_info_dn;
+    JetInfoTree jet_info_pt30;
 
     //
     // gen lep1 info
@@ -298,7 +234,9 @@ public:
     float lep3_wflip;
     bool passes_3lep_veto;
 
+    //
     // tau info
+    //
     int pfTau15_leadPtcandID;
     int pfTau_leadPtcandID;
     int pfTauLoose_leadPtcandID;

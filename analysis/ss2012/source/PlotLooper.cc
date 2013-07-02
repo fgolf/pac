@@ -812,7 +812,7 @@ int PlotLooper::operator()(long event)
         // third lepton veto
         if (m_do_3lep_veto)
         {
-            if (Passes3rdLeptonSelection())
+            if (not passes_3lep_veto())
             {
                 if (m_verbose) {cout << "failing 3rd lepton veto" << endl;}
                 return 0;
@@ -1405,43 +1405,4 @@ at::FlipRateBinInfo PlotLooper::GetFlipRateBinInfo() const
     tmp.v_pt_bins .assign(pt_bins , pt_bins +num_pt_bins+1 );
 
     return tmp;
-}
-
-bool PlotLooper::Passes3rdLeptonSelection() const
-{
-    using namespace ssb;
-
-    // only veto if the flag is set 
-    if (not m_do_3lep_veto)
-    {
-        return true;
-    }
-
-    // electrons
-    if (abs(lep3_pdgid())==11)
-    {
-        if (not pass_electronSelectionCompareMask(lep3_eleid_loose(), ELEID_WP2012_LOOSE_NOISO)) {return false;}
-        if (1.4442 < fabs(lep3_sc_p4().eta()) && fabs(lep3_sc_p4().eta()) < 1.566)               {return false;} 
-        if (abs(lep1_pdgid())==13 and rt::DeltaR(lep1_p4(), lep3_p4()) < 0.1)                    {return false;}
-        if (abs(lep2_pdgid())==13 and rt::DeltaR(lep2_p4(), lep3_p4()) < 0.1)                    {return false;}
-    }
-
-    // muons
-    if (abs(lep3_pdgid())==13)
-    {
-        if (not (lep3_is_tightmu())) {return false;}
-    }
-
-    // lepton independent requirement
-    if (fabs(lep3_p4().eta()) > 2.4) {return false;}
-    if (lep3_corpfiso() > 0.15)      {return false;} 
-    switch (m_analysis_type)
-    {
-        case ss::AnalysisType::high_pt: if (lep3_p4().pt() < 10.0) {return false;} break;
-        case ss::AnalysisType::low_pt:  if (lep3_p4().pt() < 20.0) {return false;} break;
-        default:                        if (lep3_p4().pt() < 20.0) {return false;} break;
-    }
-
-    // if we're here, return true
-    return true;
 }
