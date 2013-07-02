@@ -2,6 +2,7 @@
 #define AT_PREDICATES_H
 
 #include <cmath>
+#include <cstring>
 #include "Math/GenVector/VectorUtil.h"
 
 namespace at
