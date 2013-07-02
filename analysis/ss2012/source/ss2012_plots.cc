@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
     std::string good_run_list       = "";
     bool exclusive                  = false;
     bool do_scale_factors           = true;
+    bool do_truth_matching          = true;
     bool check_good_lumi            = true;
     bool do_3lep_veto               = false;
     float sparm0                    = -999;
@@ -70,6 +71,7 @@ int main(int argc, char* argv[])
         ("nbtags"   , po::value<unsigned int>(&num_btags)                     , "number of btags to cut on (default is 0)"                                      )
         ("njets"    , po::value<unsigned int>(&num_jets)                      , "number of jets to cut on (default is 2)"                                       )
         ("do_sf"    , po::value<bool>(&do_scale_factors)                      , "use the MC scale factors (default is true)"                                    )
+        ("do_match" , po::value<bool>(&do_truth_matching)                     , "apply the truth matching to MC (default is true)"                              )
         ("gr"       , po::value<bool>(&check_good_lumi)                       , "for data, check the is_good_lumi() method"                                     )
         ("3lep_veto", po::value<bool>(&do_3lep_veto)                          , "apply veto to the third lepton in the event"                                   )
         ("sparm0"   , po::value<float>(&sparm0)                               , "sparm0 value is required"                                                      )
@@ -140,6 +142,7 @@ int main(int argc, char* argv[])
     cout << "suffix              :\t" << suffix              << endl;
     cout << "num_btags           :\t" << num_btags           << endl;
     cout << "num_jets            :\t" << num_jets            << endl;
+    cout << "do_scale_factors    :\t" << do_scale_factors    << endl;
     cout << "do_scale_factors    :\t" << do_scale_factors    << endl;
     cout << "check_good_lumi     :\t" << check_good_lumi     << endl;
     cout << "3lep_veto           :\t" << do_3lep_veto        << endl;
@@ -245,6 +248,7 @@ int main(int argc, char* argv[])
             do_scale_factors,
             check_good_lumi, 
             do_3lep_veto,
+            do_truth_matching,
             sparm0,
             sparm1,
             sparm2,

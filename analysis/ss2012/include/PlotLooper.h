@@ -36,6 +36,7 @@ public:
         const bool do_scale_factors = true,
         const bool check_good_lumi = false,
         const bool do_3lep_veto = false,
+        const bool do_truth_matching = true,
         const float sparm0 = -999,
         const float sparm1 = -999,
         const float sparm2 = -999,
@@ -73,6 +74,7 @@ private:
     const bool m_do_scale_factors;
     const bool m_check_good_lumi;
     const bool m_do_3lep_veto;
+    const bool m_do_truth_matching;
     const unsigned int m_nbtags;
     const unsigned int m_njets;
     const int m_charge_option;

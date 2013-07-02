@@ -2483,6 +2483,8 @@ namespace ss
     // set aliases for TTree
     void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf)
     {
+        // for scans
+        tree.SetScanField(0);
 
         // kinematic variable aliases
         tree.SetAlias("l1_id"  , "lep1_pdgid"                 ); 
@@ -2518,6 +2520,9 @@ namespace ss
 
         // scale factors
         tree.SetAlias("sf", "sf_dileptrig*sf_dilepeff");
+
+        // 3lep veto 
+        tree.SetAlias("3lep_veto", "passes_3lep_veto");
 
         // do btag scale factor
         if (do_btag_sf)

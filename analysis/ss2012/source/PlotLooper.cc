@@ -51,6 +51,7 @@ PlotLooper::PlotLooper
     const bool do_scale_factors,
     const bool check_good_lumi,
     const bool do_3lep_veto,
+    const bool do_truth_matching,
     const float sparm0,
     const float sparm1,
     const float sparm2,
@@ -75,6 +76,7 @@ PlotLooper::PlotLooper
     , m_do_scale_factors(do_scale_factors)
     , m_check_good_lumi(check_good_lumi)
     , m_do_3lep_veto(do_3lep_veto)
+    , m_do_truth_matching(do_truth_matching)
     , m_nbtags(num_btags)
     , m_njets(num_jets)
     , m_charge_option(charge_option)
@@ -733,10 +735,13 @@ int PlotLooper::operator()(long event)
         const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
         const bool is_signal_mc  = (at::GetSampleInfo(m_sample).type == at::SampleType::susy);
         const bool is_mc_matched = (m_sample==at::Sample::ttg ? not_from_borc : true_ss_event);
-        if ((not is_real_data()) && (not is_mc_matched) && (is_rare_mc || is_signal_mc))
+        if (m_do_truth_matching)
         {
-            if (m_verbose) {cout << "failing MC truth matching" << endl;}
-            return 0;
+            if ((not is_real_data()) && (not is_mc_matched) && (is_rare_mc || is_signal_mc))
+            {
+                if (m_verbose) {cout << "failing MC truth matching" << endl;}
+                return 0;
+            }
         }
 
         // charge type
