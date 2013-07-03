@@ -129,16 +129,6 @@ bool passesETHfo(const int lep_id, const int lep_idx, const bool use_el_eta)
     return false;
 }
 
-// POG medium working point with pt > 20 and |eta| < 2.4
-static const cuts_t electronSelection_pog_medium = 
-                       electronSelectionFO_SS_baselineV2   |
-                       (1ll<<ELEID_WP2012_MEDIUM_NOISO);
-
-// POG medium working point with pt > 20 and |eta| < 2.4
-static const cuts_t electronSelection_pog_loose = 
-                       electronSelectionFO_SS_baselineV2   |
-                       (1ll<<ELEID_WP2012_LOOSE_NOISO);
-
 // set then numerator bool
 bool SSAnalysisLooper::IsNumerator(const int lep_id, const int lep_idx)
 {
@@ -1752,6 +1742,10 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             m_evt.lep3_wflip       = GetFlipRateValue(lep3_id, lep3_idx);
         }
         m_evt.passes_3lep_veto = (not samesign::has3rdLepton(hyp_idx, min_3lep_pt));
+        if (m_verbose) 
+        {
+            cout << "passes_3lep_veto == " << m_evt.passes_3lep_veto << endl;
+        }
 
         //----------------------------------------
         // TAU
