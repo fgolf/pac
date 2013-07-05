@@ -363,33 +363,39 @@ namespace at
                 const bool jet_is_btagged = (jet_btag_disc > jet_btag_wp);
 
                 // MC flavor
-                const int jet_mc_flavor_algo = pfjets_mcflavorAlgo().at(jidx);
-                const int jet_mc_flavor_phys = pfjets_mcflavorPhys().at(jidx);
+                const int jet_mc_flavor_algo = (evt_isRealData() ? -999999 : pfjets_mcflavorAlgo().at(jidx));
+                const int jet_mc_flavor_phys = (evt_isRealData() ? -999999 : pfjets_mcflavorPhys().at(jidx));
 
                 // match to MC truth
                 
                 LorentzVector jet_mc3_p4; 
-                int jet_mc3_id = -999999.0;
-                int jet_mom_id = -999999.0;
-                if (not tas::evt_isRealData())
-                {
-                    float tmp_gen_dr = 999999.0;
-                    int tmp_gen_idx  = -999999;
+                int jet_mc3_id = -999999;
+                int jet_mom_id = -999999;
+                if (not tas::evt_isRealData())                                 
+                {                                                              
+                    float tmp_gen_dr = 999999.0;                               
+                    int tmp_gen_idx  = -999999;                                
                     for (size_t gen_idx = 0; gen_idx != genps_p4().size(); gen_idx++) 
-                    {
+                    {                                                          
                         if (genps_status().at(gen_idx) != 3)                           {continue;}
                         if (fabs(genps_p4().at(gen_idx).eta()) > jet_sel_args.max_eta) {continue;}
                         if (genps_p4().at(gen_idx).pt() < jet_sel_args.min_pt)         {continue;}
                         if (rt::DeltaR(genps_p4().at(gen_idx), jet_corr_p4) < tmp_gen_dr)
-                        {
+                        {                                                      
                             tmp_gen_dr  = rt::DeltaR(genps_p4().at(gen_idx), jet_corr_p4);
-                            tmp_gen_idx = gen_idx;
-                        }                            
-                    }
+                            tmp_gen_idx = gen_idx;                             
+                        }                                                      
+                    }                                                          
                     jet_mc3_id = (tmp_gen_idx>= 0 ? tas::genps_id().at(tmp_gen_idx)        : -999999               );
                     jet_mom_id = (tmp_gen_idx>= 0 ? tas::genps_id_mother().at(tmp_gen_idx) : -999999               );
                     jet_mc3_p4 = (tmp_gen_idx>= 0 ? tas::genps_p4().at(tmp_gen_idx)        : LorentzVector(0,0,0,0));
-                }
+                }                                                              
+                else                                                           
+                {                                                              
+                    jet_mc3_id = -999999;                                      
+                    jet_mom_id = -999999;                                      
+                    jet_mc3_p4 = LorentzVector(0,0,0,0);                       
+                }                                                              
 
                 // nearest jet
 

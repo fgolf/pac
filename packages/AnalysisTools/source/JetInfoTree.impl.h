@@ -44,14 +44,17 @@ void JetInfoTree::FillCommon
     vbjets_mc3id         = at::GetBtaggedJetsMC3Id       (jet_args, jet_selection);
     vbjets_momid         = at::GetBtaggedJetsMomId       (jet_args, jet_selection);
 
-    // generator level "jets"
-    gen_vjets_p4 = at::GetGenJets(jet_args.min_pt, jet_args.max_eta);
-    gen_njets    = gen_vjets_p4.size(); 
-    gen_ht       = at::GetGenHT(jet_args.min_pt, jet_args.max_eta); 
+    if (not evt_isRealData())
+    {
+        // generator level "jets"
+        gen_vjets_p4 = at::GetGenJets(jet_args.min_pt, jet_args.max_eta);
+        gen_njets    = gen_vjets_p4.size(); 
+        gen_ht       = at::GetGenHT(jet_args.min_pt, jet_args.max_eta); 
 
-    // generator level "b jets"
-    gen_vbjets_p4 = at::GetGenBJets(jet_args.min_pt, jet_args.max_eta);
-    gen_nbjets    = gen_vbjets_p4.size(); 
+        // generator level "b jets"
+        gen_vbjets_p4 = at::GetGenBJets(jet_args.min_pt, jet_args.max_eta);
+        gen_nbjets    = gen_vbjets_p4.size(); 
+    }
 
     // # btags reweighted
     const unsigned int seed = tas::evt_event();
