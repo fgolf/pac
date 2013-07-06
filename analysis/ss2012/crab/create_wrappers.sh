@@ -16,7 +16,7 @@
 
 default_args="--anal_type vlow_pt --fr ssFR_data_ewkcor_17Apr2013.root --fl ssFL_data_standard_02222013.root --sparms 1 --isFastSim 1 --njets 0 --apply_jec_unc START52_V9"
 #crab_dir="test_crab"
-crab_dir="/nfs-7/userdata/rwkelley/babies/ss2012/crab/V03-00-01"
+crab_dir="/nfs-7/userdata/rwkelley/babies/ss2012/crab/V03-01-01"
 
 # # T1tttt
 # # --------------------------------------------------------------------- #

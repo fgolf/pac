@@ -1021,7 +1021,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
             if (evt_isRealData() && num_jets < m_njets)
             {
-                if (m_verbose) {std::cout << "fails # jets >= " << 2 << " requirement with " << num_jets << " jets" << std::endl;}
+                if (m_verbose) {std::cout << "fails # jets >= " << m_njets << " requirement with " << num_jets << " jets" << std::endl;}
                 continue;
             }
 
