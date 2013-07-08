@@ -13,7 +13,7 @@ import sys
 # ---------------------------------------------------------------------------------- #
 
 samples = [
-	# "data",
+	"data",
 	"ww",
 	"wz",
 	"zz",
@@ -51,8 +51,9 @@ samples = [
 # supported signal regions
 # ---------------------------------------------------------------------------------- #
 
-incl_signal_regions = [ 0, 1,  2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-excl_signal_regions = [ 0, 1,  2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+#incl_signal_regions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+incl_signal_regions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+excl_signal_regions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
 # parse inputs
 # ---------------------------------------------------------------------------------- #
@@ -87,6 +88,9 @@ parser.add_option("--combine_signals" , action="store_true"  , dest="combine_sig
 parser.add_option("--combine_bkgds"   , action="store_true"  , dest="combine_bkgds"   , default=False , help="combine backgrounds"                             )
 parser.add_option("--do_sf"           , action="store_false" , dest="do_sf"           , default=True  , help="apply mc scale factors"                          )
 parser.add_option("--print_evt_list"  , action="store_true"  , dest="print_evt_list"  , default=False , help="print evt,ls,run for is_ss events to file"       )
+parser.add_option("--norm_hist"       , action="store_true"  , dest="normalize_hists" , default=False , help="normalize histograms to unit area"               )
+parser.add_option("--hybrid"          , action="store_true"  , dest="do_hybrid"       , default=False , help="use data-driven bkgd estimates with MC signal"   )
+parser.add_option("--categorize_rare" , action="store_true"  , dest="categorize_rare" , default=False , help="group rare SM bkgd into categories"              )
 
 (options, args) = parser.parse_args()
 
@@ -114,7 +118,7 @@ def make_hist(signal_region, sample):
 	cmd += " --lumi %1.3f" % float(options.lumi)
 	
         # let's deal with signal samples with sparm parameters
-        sample_list = sample.split('-');
+        sample_list = sample.split('-');        
         sample_with_underscores = sample.replace('-','_')
         if (len(sample_list) == 1):
                 is_signal = False
@@ -171,7 +175,7 @@ def make_hist(signal_region, sample):
         if (is_signal):
                 if (len(sample_list) >= 2):
                         cmd += " --sparm0 %f" % float(sample_list[1])
-                elif (len(sample_list) == 3):
+                if (len(sample_list) >= 3):
                         cmd += " --sparm1 %f" % float(sample_list[2])
 
 	# logname
@@ -207,8 +211,14 @@ def overlay_hist(signal_region):
         if (options.mc_only):
                 bkgds = "all"
                 signal_with_underscores = options.signal.replace('-','_')
-                cmd = "root -b -q -l \"macros/OverlaySSPlotsMC.C+ (%1.3f,\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, %d, \\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" \
-                    % (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(signal_with_underscores), str(bkgds), bool(options.combine_signals), bool(options.combine_bkgds), str(srt_name), int(options.charge), str(options.suffix))        
+                cmd = "root -b -q -l \"macros/OverlaySSPlotsMC.C+ (%1.3f,\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, %d, %d, \\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" \
+                    % (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(signal_with_underscores), str(bkgds), bool(options.combine_signals), bool(options.combine_bkgds), \
+                               bool(options.normalize_hists), str(srt_name), int(options.charge), str(options.suffix))        
+        elif (options.do_hybrid):
+                signal_with_underscores = options.signal.replace('-','_')
+                cmd = "root -b -q -l \"macros/OverlaySSPlotsHybrid.C+ (%1.3f,\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, %d, %d, %d, \\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" \
+                    % (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(signal_with_underscores), bool(options.combine_signals), bool(options.categorize_rare), bool(options.combine_bkgds), \
+                               bool(options.normalize_hists), str(srt_name), int(options.charge), str(options.suffix))
         else:
                 cmd = "root -b -q -l \"macros/OverlaySSPlots.C+ (%1.3f,\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" \
                     % (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(srt_name), int(options.charge), str(options.suffix))
@@ -249,6 +259,10 @@ def print_yield_table(signal_region, do_append):
                 signal_with_underscores = options.signal.replace('-','_')
                 cmd = "root -b -q -l \"macros/PrintYieldsMC.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, %d, \\\"%s\\\", %d, false); %s %s\" " \
                     % (options.out_name, sr_name, options.anal_type, str(signal_with_underscores), str(bkgds), bool(options.combine_signals), bool(options.combine_bkgds), srt_name, int(options.charge), operator, text_name)
+        elif (options.do_hybrid):
+                signal_with_underscores = options.signal.replace('-','_')
+                cmd = "root -b -q -l \"macros/PrintYieldsHybrid.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, false); %s %s\" " \
+                    % (options.out_name, sr_name, options.anal_type, str(signal_with_underscores), srt_name, int(options.charge), operator, text_name)
         else:
                 cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, false); %s %s\" " \
                     % (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), operator, text_name)
@@ -266,6 +280,10 @@ def print_yield_table(signal_region, do_append):
                 signal_with_underscores = options.signal.replace('-','_')                
                 cmd = "root -b -q -l \"macros/PrintYieldsMC.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, %d, \\\"%s\\\", %d, true, %d); >& %s\" " \
                     % (options.out_name, sr_name, options.anal_type, str(signal_with_underscores), str(bkgds), bool(options.combine_signals), bool(options.combine_bkgds), srt_name, int(options.charge), int(options.do_caption), tex_name)
+        elif (options.do_hybrid):
+                signal_with_underscores = options.signal.replace('-','_')
+                cmd = "root -b -q -l \"macros/PrintYieldsHybrid.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, true, %d); >& %s\" " \
+                    % (options.out_name, sr_name, options.anal_type, str(signal_with_underscores), srt_name, int(options.charge), int(options.do_caption), tex_name)
         else:
                 cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, true, %d); >& %s\" " \
                     % (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), int(options.do_caption), tex_name)
