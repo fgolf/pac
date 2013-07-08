@@ -2,7 +2,7 @@
 
 verbose=0
 njets=2
-tag=v6
+tag=v7
 analysis=ss
 path=/nfs-7/userdata/${USER}/babies/ewkino2012/$analysis/$tag/
 
