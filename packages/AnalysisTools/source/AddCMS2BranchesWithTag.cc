@@ -81,7 +81,6 @@ int AddCMS2BranchesWithTag
 
     TFile output_file(output_file_name.c_str(), "RECREATE");
     TTree *clone = (SortBasketsByEntry ? tree->CloneTree(-1, "fastSortBasketsByEntry") : tree->CloneTree(-1, "fast"));
-//     TTree *clone = new TTree("Events", "Events"); 
     clone->SetDirectory(&output_file);
 
     // Add the new branches 
@@ -114,7 +113,6 @@ int AddCMS2BranchesWithTag
         b5->Fill();
         b6->Fill();
         b7->Fill();
-//         clone->Fill();
     }
 
     // wrap up
