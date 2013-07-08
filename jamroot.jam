@@ -120,6 +120,6 @@ use-project /AnalysisTools  : ./packages/AnalysisTools ;
 use-project /FakeRateBabyTools : ./packages/FakeRateBabyTools ;
 
 # CMS2
-local cms2_header_tag = 05.03.23 ;
+local cms2_header_tag = 05.03.27 ;
 path-constant CMS2 : ./packages/cms2/$(cms2_header_tag) ;
 use-project /CMS2  : ./packages/cms2 ;
