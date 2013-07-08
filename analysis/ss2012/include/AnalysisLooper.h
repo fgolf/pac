@@ -115,8 +115,9 @@ private:
 
     // members:
     at::JetBaseSelectionArgs m_jet_args;
-    at::JetBaseSelectionArgs m_jet_args_up;
-    at::JetBaseSelectionArgs m_jet_args_dn;
+    at::JetBaseSelectionArgs m_jet_args_jec_up;
+    at::JetBaseSelectionArgs m_jet_args_jec_dn;
+    at::JetBaseSelectionArgs m_jet_args_jer;
     at::JetBaseSelectionArgs m_jet_args_pt30;
     at::JetBaseSelectionArgs m_uncorrected_jet_args;
 };

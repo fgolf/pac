@@ -14,7 +14,7 @@ namespace at
     template <typename Function>
     JetInfo NearestJet(const LorentzVector& p4, const JetBaseSelectionArgs& jet_args, Function jet_selection)
     {
-        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);   
+        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);
         jet_infos = rt::filter_container(jet_infos, jet_selection);
         if (jet_infos.empty())
         {
@@ -98,11 +98,11 @@ namespace at
     template <typename Function>
     float SumJetPt(const JetBaseSelectionArgs& jet_args, Function jet_selection)
     {
-        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);   
+        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);
         jet_infos = rt::filter_container(jet_infos, jet_selection);
 
         float result = 0.0;
-        for (size_t i = 0; i != jet_infos.size(); i++) {result += jet_infos.at(i).CorrPt();}
+        for (size_t i = 0; i != jet_infos.size(); i++){result += jet_infos.at(i).CorrPt();}
         return result;
     }
 
@@ -125,7 +125,7 @@ namespace at
     template <typename Function>
     std::vector<LorentzVector> GetJetsMC3P4(const JetBaseSelectionArgs& jet_args, Function jet_selection)
     {
-        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);   
+        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);
         jet_infos = rt::filter_container(jet_infos, jet_selection);
 
         std::vector<LorentzVector> results;
@@ -143,7 +143,7 @@ namespace at
     template <typename Function>
     std::vector<LorentzVector> GetJetsNearjetP4(const JetBaseSelectionArgs& jet_args, Function jet_selection)
     {
-        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);   
+        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);
         jet_infos = rt::filter_container(jet_infos, jet_selection);
 
         std::vector<LorentzVector> results;

@@ -641,9 +641,10 @@ SSAnalysisLooper::SSAnalysisLooper
     JetCorrectionUncertainty* const jcu = m_jet_corr_unc.get();
 
     // base level selection
-    m_jet_args             = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
-    m_jet_args_up          = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::UP  , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
-    m_jet_args_dn          = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::DOWN, /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
+    m_jet_args        = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE    , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
+    m_jet_args_jec_up = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_UP  , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
+    m_jet_args_jec_dn = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_DOWN, /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
+    m_jet_args_jer    = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JER     , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
 
     // jets
     m_uncorrected_jet_args = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.4, /*min_pt=*/10.0, /*max_eta=*/5.0);
@@ -1248,10 +1249,11 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         RemoveLeptonsSSID jet_selection(hyp_idx, m_jet_args.deltaR, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
 
         // fill the jet info
-        m_evt.jet_info.FillCommon     (m_sample, m_is_fast_sim, m_jet_args     , jet_selection);
-        m_evt.jet_info_up.FillCommon  (m_sample, m_is_fast_sim, m_jet_args_up  , jet_selection);
-        m_evt.jet_info_dn.FillCommon  (m_sample, m_is_fast_sim, m_jet_args_dn  , jet_selection);
-        m_evt.jet_info_pt30.FillCommon(m_sample, m_is_fast_sim, m_jet_args_pt30, jet_selection);
+        m_evt.jet_info.FillCommon       (m_sample, m_is_fast_sim, m_jet_args       , jet_selection);
+        m_evt.jet_info_jec_up.FillCommon(m_sample, m_is_fast_sim, m_jet_args_jec_up, jet_selection);
+        m_evt.jet_info_jec_dn.FillCommon(m_sample, m_is_fast_sim, m_jet_args_jec_dn, jet_selection);
+        m_evt.jet_info_jer.FillCommon   (m_sample, m_is_fast_sim, m_jet_args_jer   , jet_selection);
+        m_evt.jet_info_pt30.FillCommon  (m_sample, m_is_fast_sim, m_jet_args_pt30  , jet_selection);
 
         // event level info
         if (not m_jet_corrector)
@@ -1427,7 +1429,13 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         }
         else
         {
-            bool pass_njets_cut = (m_evt.jet_info_up.njets >= m_njets || m_evt.jet_info_dn.njets >= m_njets || m_evt.jet_info.njets >= m_njets);
+            bool pass_njets_cut =
+            (
+                m_evt.jet_info_jec_up.njets >= m_njets || 
+                m_evt.jet_info_jec_dn.njets >= m_njets || 
+                m_evt.jet_info_jer.njets    >= m_njets || 
+                m_evt.jet_info.njets >= m_njets
+            );
             if (not pass_njets_cut)
             {
                 if (m_verbose) {std::cout << "fails # jets >= " << m_njets << " cut" << std::endl;}
@@ -1538,33 +1546,18 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
         }
 
-        // scale the JER 
-
         // set the seed
         const unsigned int seed = evt_event();
 
+        // scale the JER 
         // set initial values
-        m_evt.ht_jer        = m_evt.jet_info.ht;
         m_evt.pfmet_jer     = met;
-        m_evt.pfmet_jer_phi = met_phi;
-        vector<LorentzVector> vjets_jer_p4             = m_evt.jet_info.vjets_p4;
-        vector<LorentzVector> vbjets_jer_p4            = m_evt.jet_info.vbjets_p4; 
-        vector<LorentzVector> vbjets_reweighted_jer_p4 = m_evt.jet_info.vbjets_p4; 
-
-        // update the values by scaling the JER
-        samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_jer_phi, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
-        samesign::smearJETScaleJets(vbjets_jer_p4, seed);
-        samesign::smearJETScaleJets(vbjets_reweighted_jer_p4, seed);
-
-        // set the branches 
-        m_evt.njets_jer             = vjets_jer_p4.size();
-        m_evt.nbtags_jer            = vbjets_jer_p4.size();
-        m_evt.nbtags_reweighted_jer = vbjets_reweighted_jer_p4.size();
+        m_evt.pfmet_phi_jer = met_phi;
+        at::RescaleMETJER(m_evt.pfmet_jer, m_evt.pfmet_phi_jer, seed, m_jet_corrector.get(), m_jet_corr_unc.get(), at::JetType::PF_FAST_CORR);
 
         // scale the unclustered MET
         m_evt.pfmet_uncl_up = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/1 , /*scale=*/0.1);
         m_evt.pfmet_uncl_dn = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/-1, /*scale=*/0.1);
-
 
         // nearest jet leptons
 
@@ -1850,9 +1843,10 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
         if (m_sync_print)
         {
-            PrintJetInfo(Form("passing jets for hyp %d"     , hyp_idx), m_evt.jet_info.vjets_p4   );
-            PrintJetInfo(Form("passing jets JES+ for hyp %d", hyp_idx), m_evt.jet_info_up.vjets_p4);
-            PrintJetInfo(Form("passing jets JES- for hyp %d", hyp_idx), m_evt.jet_info_dn.vjets_p4);
+            PrintJetInfo(Form("passing jets for hyp %d"     , hyp_idx), m_evt.jet_info.vjets_p4       );
+            PrintJetInfo(Form("passing jets JES+ for hyp %d", hyp_idx), m_evt.jet_info_jec_up.vjets_p4);
+            PrintJetInfo(Form("passing jets JES- for hyp %d", hyp_idx), m_evt.jet_info_jec_dn.vjets_p4);
+            PrintJetInfo(Form("passing jets JER for hyp %d" , hyp_idx), m_evt.jet_info_jer.vjets_p4   );
         }
 
 

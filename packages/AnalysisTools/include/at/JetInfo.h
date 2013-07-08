@@ -61,9 +61,10 @@ namespace at
         enum value_type
         {
             NONE        = 0,
-            DOWN        = -1,
-            UP          = 1,
-            static_size = 3
+            JEC_DOWN    = -1,
+            JEC_UP      = 1,
+            JER         = 2,
+            static_size = 4
         };
     };
 
@@ -180,9 +181,6 @@ namespace at
     bool operator == (const JetInfo& lhs, const JetInfo& rhs);
     bool operator <  (const JetInfo& lhs, const JetInfo& rhs);
     
-    // always returns true (used if you want to select all the jets with only the simple jet_args selection)
-    bool NoSelection(const JetInfo&);
-
     // determine if btagged (needed for boost::bind)
     bool IsBtagged(const JetInfo& jet_info);
 
@@ -201,6 +199,9 @@ namespace at
     template <typename Function>
     JetInfo NearestNonBtaggedJet(const LorentzVector& p4, const JetBaseSelectionArgs& jet_args, Function jet_selection);
 
+    // always returns true (used if you want to select all the jets with only the simple jet_args selection)
+    bool NoSelection(const JetInfo&);
+
     // sorting by corrected pt
     struct SortByCorrPt 
     {
@@ -214,10 +215,10 @@ namespace at
     struct SortByDeltaRToCorrP4
     {
         SortByDeltaRToCorrP4(const LorentzVector& p4) : m_p4(p4) {}
-        bool operator () (const JetInfo& lhs, const JetInfo& rhs) const 
+        bool operator () (const JetInfo& lhs, const JetInfo& rhs) const
         { 
-            float delta_r1 = ROOT::Math::VectorUtil::DeltaR(lhs.CorrP4(), m_p4); 
-            float delta_r2 = ROOT::Math::VectorUtil::DeltaR(rhs.CorrP4(), m_p4); 
+            float delta_r1 = ROOT::Math::VectorUtil::DeltaR(lhs.CorrP4(), m_p4);
+            float delta_r2 = ROOT::Math::VectorUtil::DeltaR(rhs.CorrP4(), m_p4);
             return delta_r1 < delta_r2; 
         }
         LorentzVector m_p4;
@@ -320,6 +321,26 @@ namespace at
 
     template <typename Function>
     std::vector<int> GetBtaggedJetsMomId(const JetBaseSelectionArgs& jet_args, Function jet_selection);
+
+
+// ----------------------------------------------------------------------------- //
+// rescale the jet energy resolution (JER) 
+// ----------------------------------------------------------------------------- //
+
+
+    // smear p4's by the jet energy resolution (JER)
+    LorentzVector RescaleJetP4JER(const LorentzVector& jet_info, const unsigned int seed);
+
+    // smear MET's by the jet energy resolution (JER)
+    void RescaleMETJER
+    (
+        float& met,
+        float& met_phi,
+        const unsigned int seed,
+        FactorizedJetCorrector* const jc,
+        JetCorrectionUncertainty* const jcu,
+        at::JetType::value_type jet_type
+    ); 
 
 } // namespace at
 

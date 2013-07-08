@@ -5,6 +5,8 @@
 #include "rt/MiscTools.h"
 #include "jetSelections.h"
 #include "Math/GenVector/VectorUtil.h"
+#include "Math/Vector2D.h"
+#include "TRandom3.h"
 
 namespace at
 {
@@ -29,15 +31,15 @@ namespace at
     // construct
     JetInfo::JetInfo
     (
-        LorentzVector p4,
-        LorentzVector corr_p4, 
-        LorentzVector mc3_p4, 
-        bool is_btagged,
-        float btag_disc,
-        int mc_flavor_algo,
-        int mc_flavor_phys,
-        int mc3_id,
-        int mom_id
+         LorentzVector p4,
+         LorentzVector corr_p4, 
+         LorentzVector mc3_p4, 
+         bool is_btagged,
+         float btag_disc,
+         int mc_flavor_algo,
+         int mc_flavor_phys,
+         int mc3_id,
+         int mom_id
     )
         : m_p4(p4)
         , m_corr_p4(corr_p4)
@@ -52,19 +54,19 @@ namespace at
     }
 
     // methods
-    LorentzVector JetInfo::P4()        const {return m_p4;                                } 
-    LorentzVector JetInfo::CorrP4()    const {return m_corr_p4;                           } 
-    LorentzVector JetInfo::MC3P4()     const {return m_mc3_p4;                            } 
-    float JetInfo::Pt()                const {return m_p4.pt();                           } 
-    float JetInfo::CorrPt()            const {return m_corr_p4.pt();                      } 
-    float JetInfo::Eta()               const {return m_p4.eta();                          } 
-    float JetInfo::Phi()               const {return m_p4.phi();                          } 
-    float JetInfo::BtagDisc()          const {return m_btag_disc;                         } 
-    bool JetInfo::IsBtagged()          const {return m_is_btagged;                        } 
-    int JetInfo::MCFlavorAlgo()        const {return m_mc_flavor_algo;                    } 
-    int JetInfo::MCFlavorPhys()        const {return m_mc_flavor_phys;                    } 
-    int JetInfo::MC3Id()               const {return m_mc3_id;                            } 
-    int JetInfo::MomId()               const {return m_mom_id;                            } 
+    LorentzVector JetInfo::P4()     const {return m_p4;            } 
+    LorentzVector JetInfo::CorrP4() const {return m_corr_p4;       } 
+    LorentzVector JetInfo::MC3P4()  const {return m_mc3_p4;        } 
+    float JetInfo::Pt()             const {return m_p4.pt();       } 
+    float JetInfo::CorrPt()         const {return m_corr_p4.pt();  } 
+    float JetInfo::Eta()            const {return m_p4.eta();      } 
+    float JetInfo::Phi()            const {return m_p4.phi();      } 
+    float JetInfo::BtagDisc()       const {return m_btag_disc;     } 
+    bool JetInfo::IsBtagged()       const {return m_is_btagged;    } 
+    int JetInfo::MCFlavorAlgo()     const {return m_mc_flavor_algo;} 
+    int JetInfo::MCFlavorPhys()     const {return m_mc_flavor_phys;} 
+    int JetInfo::MC3Id()            const {return m_mc3_id;        } 
+    int JetInfo::MomId()            const {return m_mom_id;        } 
 
     // non member methods
 
@@ -82,13 +84,13 @@ namespace at
         result = result && (rt::is_equal(lhs.BtagDisc(), rhs.BtagDisc()));
         return result;
     }
-    
+
     // define less than
     bool operator < (const JetInfo& lhs, const JetInfo& rhs)
     {
         return (lhs.CorrPt() < rhs.CorrPt());
     }
-    
+
     // determine if btagged (needed for boost::bind)
     bool IsBtagged(const JetInfo& jet_info)
     {
@@ -102,9 +104,9 @@ namespace at
         return (rt::DeltaR(jet_info.CorrP4(), p4) < 0.0001);
     }
 
-// ----------------------------------------------------------------------------- //
-// A selection class to hold the base jet selection requirements 
-// ----------------------------------------------------------------------------- //
+    // ----------------------------------------------------------------------------- //
+    // A selection class to hold the base jet selection requirements 
+    // ----------------------------------------------------------------------------- //
 
     // arguments struct for the map to hold the JetInfo results if the arguments are the same
     JetBaseSelectionArgs::JetBaseSelectionArgs()
@@ -121,12 +123,12 @@ namespace at
 
     JetBaseSelectionArgs::JetBaseSelectionArgs
     (
-        JetType::value_type jet_type_,
-        JetBtagType::value_type btag_type_,           
-        JetScaleType::value_type scale_type_,      
-        float dr_,                     
-        float min_pt_,                 
-        float max_eta_                 
+         JetType::value_type jet_type_,
+         JetBtagType::value_type btag_type_,
+         JetScaleType::value_type scale_type_,
+         float dr_,
+         float min_pt_,
+         float max_eta_
     )
         : jet_corrector(NULL)
         , jet_unc(NULL)
@@ -140,24 +142,24 @@ namespace at
     }
 
     JetBaseSelectionArgs::JetBaseSelectionArgs
-    (
-        FactorizedJetCorrector* jet_corrector,
-        JetCorrectionUncertainty *jet_unc,
-        JetType::value_type jet_type_,
-        JetBtagType::value_type btag_type_,           
-        JetScaleType::value_type scale_type_,      
-        float dr_,                     
-        float min_pt_,                 
-        float max_eta_                 
-    )
+        (
+         FactorizedJetCorrector* jet_corrector,
+         JetCorrectionUncertainty *jet_unc,
+         JetType::value_type jet_type_,
+         JetBtagType::value_type btag_type_,
+         JetScaleType::value_type scale_type_,
+         float dr_,
+         float min_pt_,
+         float max_eta_
+        )
         : jet_corrector(jet_corrector)
-        , jet_unc(jet_unc)
-        , jet_type(jet_type_)
-        , btag_type(btag_type_) 
-        , scale_type(scale_type_) 
-        , deltaR(dr_)
-        , min_pt(min_pt_)
-        , max_eta(max_eta_)
+          , jet_unc(jet_unc)
+          , jet_type(jet_type_)
+          , btag_type(btag_type_) 
+          , scale_type(scale_type_) 
+          , deltaR(dr_)
+          , min_pt(min_pt_)
+          , max_eta(max_eta_)
     {
     }
 
@@ -165,13 +167,13 @@ namespace at
     bool operator == (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs)
     {
         bool result = (lhs.jet_corrector == rhs.jet_corrector)
-        && (lhs.jet_unc    == rhs.jet_unc)     
-        && (lhs.scale_type == rhs.scale_type) 
-        && (lhs.jet_type   == rhs.jet_type) 
-        && (lhs.btag_type  == rhs.btag_type)
-        && (rt::is_equal(lhs.deltaR  , rhs.deltaR)) 
-        && (rt::is_equal(lhs.min_pt  , rhs.min_pt))
-        && (rt::is_equal(lhs.max_eta , rhs.max_eta));
+            && (lhs.jet_unc    == rhs.jet_unc)
+            && (lhs.scale_type == rhs.scale_type)
+            && (lhs.jet_type   == rhs.jet_type) 
+            && (lhs.btag_type  == rhs.btag_type)
+            && (rt::is_equal(lhs.deltaR  , rhs.deltaR)) 
+            && (rt::is_equal(lhs.min_pt  , rhs.min_pt))
+            && (rt::is_equal(lhs.max_eta , rhs.max_eta));
         return result;
     }
 
@@ -182,14 +184,14 @@ namespace at
 
     bool operator < (const JetBaseSelectionArgs& lhs, const JetBaseSelectionArgs& rhs)
     {
-        if (lhs.jet_corrector != rhs.jet_corrector)      {return lhs.jet_corrector < rhs.jet_corrector; } 
-        if (lhs.jet_unc    != rhs.jet_unc)               {return lhs.jet_unc    < rhs.jet_unc;          } 
-        if (lhs.scale_type != rhs.scale_type)            {return lhs.scale_type < rhs.scale_type;       } 
-        if (lhs.jet_type   != rhs.jet_type)              {return lhs.jet_type   < rhs.jet_type;         } 
-        if (lhs.btag_type  != rhs.btag_type)             {return lhs.btag_type  < rhs.btag_type;        } 
-        if (not rt::is_equal(lhs.deltaR  , rhs.deltaR))  {return lhs.deltaR  < rhs.deltaR;              } 
-        if (not rt::is_equal(lhs.min_pt  , rhs.min_pt))  {return lhs.min_pt  < rhs.min_pt;              } 
-        if (not rt::is_equal(lhs.max_eta , rhs.max_eta)) {return lhs.max_eta < rhs.max_eta;             } 
+        if (lhs.jet_corrector != rhs.jet_corrector)      {return lhs.jet_corrector < rhs.jet_corrector; }
+        if (lhs.jet_unc    != rhs.jet_unc)               {return lhs.jet_unc    < rhs.jet_unc;          }
+        if (lhs.scale_type != rhs.scale_type)            {return lhs.scale_type < rhs.scale_type;       }
+        if (lhs.jet_type   != rhs.jet_type)              {return lhs.jet_type   < rhs.jet_type;         }
+        if (lhs.btag_type  != rhs.btag_type)             {return lhs.btag_type  < rhs.btag_type;        }
+        if (not rt::is_equal(lhs.deltaR  , rhs.deltaR))  {return lhs.deltaR  < rhs.deltaR;              }
+        if (not rt::is_equal(lhs.min_pt  , rhs.min_pt))  {return lhs.min_pt  < rhs.min_pt;              }
+        if (not rt::is_equal(lhs.max_eta , rhs.max_eta)) {return lhs.max_eta < rhs.max_eta;             }
         return false;
     }
 
@@ -206,19 +208,19 @@ namespace at
         return os;
     }
 
-// ----------------------------------------------------------------------------- //
-// functions to return the JetInfo collections 
-// ----------------------------------------------------------------------------- //
+    // ----------------------------------------------------------------------------- //
+    // functions to return the JetInfo collections 
+    // ----------------------------------------------------------------------------- //
 
-    // Btag working points
+    // b-tag working points
     static float JetBtagWP[JetBtagType::static_size] = 
     {
         /*JetBtagType::NONE WP = */-999999.0f, 
-        /*JetBtagType::CSVL WP = */0.244f, 
-        /*JetBtagType::CSVM WP = */0.679f, 
+        /*JetBtagType::CSVL WP = */0.244f,
+        /*JetBtagType::CSVM WP = */0.679f,
         /*JetBtagType::CSVL WP = */0.898f
     };
-    
+
     // apply base selection
     struct JetPassesSelection
     {
@@ -232,9 +234,9 @@ namespace at
                 return false;
             }
 
-            // min pt --> using corrected p4
+            // max eta --> using corrected p4
             if (fabs(jet_info.CorrP4().eta()) > m_ja.max_eta)
-            {   
+            {
                 return false;
             }
 
@@ -245,7 +247,7 @@ namespace at
         // members
         JetBaseSelectionArgs m_ja;
     };
-        
+
     // function to build the vector of JetInfos
     std::vector<at::JetInfo> GetJetInfos(const JetBaseSelectionArgs& jet_sel_args)
     {
@@ -266,7 +268,7 @@ namespace at
         // determine if the result is already in the map?
         if (results_map.find(jet_sel_args) != results_map.end())
         {
-             return results_map[jet_sel_args];
+            return results_map[jet_sel_args];
         }
 
         // doesn't already exist, now create the JetInfos
@@ -292,7 +294,7 @@ namespace at
         if (
                 ja.jet_unc != NULL &&
                 ja.jet_type != JetType::PF_FAST_CORR && 
-                ja.jet_type != JetType::PF_CORR && 
+                ja.jet_type != JetType::PF_CORR &&
                 ja.jet_type != JetType::PF_UNCORR
            )
         {
@@ -314,7 +316,7 @@ namespace at
                     ja.jet_corrector->setRho(evt_ww_rho_vor());
                     ja.jet_corrector->setJetA(pfjets_area().at(jidx));
                     ja.jet_corrector->setJetPt(pfjets_p4().at(jidx).pt());
-                    ja.jet_corrector->setJetEta(pfjets_p4().at(jidx).eta());        
+                    ja.jet_corrector->setJetEta(pfjets_p4().at(jidx).eta());
                     jet_corr = ja.jet_corrector->getCorrection();
                 }
                 else  // else, take it from the ntuple
@@ -324,22 +326,22 @@ namespace at
                         case JetType::PF_CORR:      jet_corr = 1.0;                   break;
                         case JetType::PF_UNCORR:    jet_corr = pfjets_cor().at(jidx); break;
                         case JetType::PF_FAST_CORR: 
-                            jet_corr = (evt_isRealData() ? pfjets_corL1FastL2L3residual().at(jidx) : pfjets_corL1FastL2L3().at(jidx)); 
-                            break;
+                                                    jet_corr = (evt_isRealData() ? pfjets_corL1FastL2L3residual().at(jidx) : pfjets_corL1FastL2L3().at(jidx)); 
+                                                    break;
                         default:                    jet_corr = 1.0;
                     }
                 }
                 LorentzVector jet_corr_p4 = jet_p4 * jet_corr; 
 
                 // jet uncertainty up/down
-                if (ja.scale_type == JetScaleType::UP or ja.scale_type == JetScaleType::DOWN)  // if pointer not NULL, use the OTF JEC uncertainty
+                if (ja.scale_type == JetScaleType::JEC_UP or ja.scale_type == JetScaleType::JEC_DOWN)  // if pointer not NULL, use the OTF JEC uncertainty
                 {
                     if (ja.jet_unc)
                     {
-                        ja.jet_unc->setJetPt(jet_corr_p4.pt());    
-                        ja.jet_unc->setJetEta(jet_corr_p4.eta());  
-                        const double jet_corr_unc = (1.0 + ja.jet_unc->getUncertainty(true) * ja.scale_type);    
-                        jet_corr_p4 *= jet_corr_unc; 
+                        ja.jet_unc->setJetPt(jet_corr_p4.pt());
+                        ja.jet_unc->setJetEta(jet_corr_p4.eta());
+                        const double jet_corr_unc = (1.0 + ja.jet_unc->getUncertainty(true) * ja.scale_type);
+                        jet_corr_p4 *= jet_corr_unc;
                     }
                     else // else, take it from the ntuple
                     {
@@ -348,6 +350,18 @@ namespace at
                     }
                 }
 
+                // jet energy resolution smeearing
+                if (ja.scale_type == JetScaleType::JER)
+                {
+                    // JER doesn't work at eta > 2.5 (gives nan)
+                    if (fabs(jet_corr_p4.eta()) > 2.5)
+                    {
+                        continue;
+                    }
+
+                    const unsigned int seed = evt_event();
+                    jet_corr_p4 = RescaleJetP4JER(jet_corr_p4, seed);
+                }
 
                 // btag info
                 const float jet_btag_wp = JetBtagWP[ja.btag_type];
@@ -367,50 +381,48 @@ namespace at
                 const int jet_mc_flavor_phys = (evt_isRealData() ? -999999 : pfjets_mcflavorPhys().at(jidx));
 
                 // match to MC truth
-                
+
                 LorentzVector jet_mc3_p4; 
                 int jet_mc3_id = -999999;
                 int jet_mom_id = -999999;
-                if (not tas::evt_isRealData())                                 
-                {                                                              
-                    float tmp_gen_dr = 999999.0;                               
-                    int tmp_gen_idx  = -999999;                                
+                if (not tas::evt_isRealData())
+                {
+                    float tmp_gen_dr = 999999.0;
+                    int tmp_gen_idx  = -999999;
                     for (size_t gen_idx = 0; gen_idx != genps_p4().size(); gen_idx++) 
-                    {                                                          
+                    {
                         if (genps_status().at(gen_idx) != 3)                           {continue;}
                         if (fabs(genps_p4().at(gen_idx).eta()) > jet_sel_args.max_eta) {continue;}
                         if (genps_p4().at(gen_idx).pt() < jet_sel_args.min_pt)         {continue;}
                         if (rt::DeltaR(genps_p4().at(gen_idx), jet_corr_p4) < tmp_gen_dr)
-                        {                                                      
+                        {
                             tmp_gen_dr  = rt::DeltaR(genps_p4().at(gen_idx), jet_corr_p4);
-                            tmp_gen_idx = gen_idx;                             
-                        }                                                      
-                    }                                                          
+                            tmp_gen_idx = gen_idx;
+                        }
+                    }
                     jet_mc3_id = (tmp_gen_idx>= 0 ? tas::genps_id().at(tmp_gen_idx)        : -999999               );
                     jet_mom_id = (tmp_gen_idx>= 0 ? tas::genps_id_mother().at(tmp_gen_idx) : -999999               );
                     jet_mc3_p4 = (tmp_gen_idx>= 0 ? tas::genps_p4().at(tmp_gen_idx)        : LorentzVector(0,0,0,0));
-                }                                                              
-                else                                                           
-                {                                                              
-                    jet_mc3_id = -999999;                                      
-                    jet_mom_id = -999999;                                      
-                    jet_mc3_p4 = LorentzVector(0,0,0,0);                       
-                }                                                              
-
-                // nearest jet
+                }
+                else
+                {
+                    jet_mc3_id = -999999;
+                    jet_mom_id = -999999;
+                    jet_mc3_p4 = LorentzVector(0,0,0,0);
+                }
 
                 // create jet infos
                 JetInfo jet_info
                 (
-                    jet_p4, 
-                    jet_corr_p4, 
-                    jet_mc3_p4, 
-                    jet_is_btagged, 
-                    jet_btag_disc, 
-                    jet_mc_flavor_algo, 
-                    jet_mc_flavor_phys,
-                    jet_mc3_id,
-                    jet_mom_id
+                     jet_p4,
+                     jet_corr_p4,
+                     jet_mc3_p4,
+                     jet_is_btagged,
+                     jet_btag_disc,
+                     jet_mc_flavor_algo,
+                     jet_mc_flavor_phys,
+                     jet_mc3_id,
+                     jet_mom_id
                 );
 
                 // select
@@ -441,6 +453,142 @@ namespace at
     {
         return true;
     }
-    
+
+    // ----------------------------------------------------------------------------- //
+    // rescale the jet energy resolution (JER) 
+    // ----------------------------------------------------------------------------- //
+
+    // function that returns the sigma(pT)*pT of the MC jets. those numbers are old,
+    // but at least they are in an understandable format.
+    // -----------------------------------------------------------------------------
+    float getErrPt(const float pt, const float eta)
+    {
+        float InvPerr2;
+        float N = 0.0;
+        float S = 0.0;
+        float C = 0.0;
+        float m = 0.0;
+        if(fabs(eta) < 0.5)
+        {
+            N = 3.96859;
+            S = 0.18348;
+            C = 0.;
+            m = 0.62627;
+        } 
+        else if(fabs(eta) < 1.0)
+        {
+            N = 3.55226;
+            S = 0.24026;
+            C = 0.;
+            m = 0.52571;
+        } 
+        else if(fabs(eta) < 1.5) 
+        {
+            N = 4.54826;
+            S = 0.22652;
+            C = 0.;
+            m = 0.58963;
+        }
+        else if(fabs(eta) < 2.0)
+        {
+            N = 4.62622;
+            S = 0.23664;
+            C = 0.;
+            m = 0.48738;
+        }
+        else if(fabs(eta) < 2.5)
+        {
+            N = 2.53324;
+            S = 0.34306;
+            C = 0.;
+            m = 0.28662;
+        }
+        else if(fabs(eta) < 3.0)
+        {
+            N = -3.33814;
+            S = 0.73360;
+            C = 0.;
+            m = 0.08264;
+        }
+        else if(fabs(eta) < 5.0)
+        {
+            N = 2.95397;
+            S = 0.11619;
+            C = 0.;
+            m = 0.96086;
+        }
+
+        // this is the absolute resolution (squared), not sigma(pt)/pt
+        // so have to multiply by pt^2, thats why m+1 instead of m-1
+        InvPerr2 = (N * fabs(N) ) + (S * S) * pow(pt, m+1) + (C * C) * pt * pt;
+
+        return sqrt(InvPerr2);
+    }
+
+    // function to get the jer scale factors. values taken from the twiki: 
+    // https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution
+    // -------------------------------------------------------------------
+    float getJERScale(const float jet_eta)
+    {
+        const float aeta = fabs(jet_eta);
+        if      (aeta < 0.5) {return 1.052;}
+        else if (aeta < 1.1) {return 1.057;}
+        else if (aeta < 1.7) {return 1.096;}
+        else if (aeta < 2.3) {return 1.134;}
+        else                 {return 1.288;}
+
+    }
+
+    // smear p4's by the jet energy resolution (JER)
+    // note: gives some bogus values for eta > 2.5 (not sure why)
+    LorentzVector RescaleJetP4JER(const LorentzVector& jet_p4, const unsigned int seed)
+    {
+        static TRandom3 random(seed);
+
+        // rescale the jet pt
+        const float jer_scale    = getJERScale(jet_p4.eta());
+        const float sigma_mc     = getErrPt(jet_p4.pt(), jet_p4.eta())/jet_p4.pt();
+        const float jet_rescaled = random.Gaus(1.0, sqrt(jer_scale*jer_scale-1.0)*sigma_mc);
+        LorentzVector new_jet_p4 = (jet_p4 * jet_rescaled);
+
+        return new_jet_p4;
+    }
+
+    // smear MET's by the jet energy resolution (JER)
+    void RescaleMETJER
+    (
+        float& met,
+        float& met_phi,
+        const unsigned int seed,
+        FactorizedJetCorrector* const jc,
+        JetCorrectionUncertainty* const jcu,
+        at::JetType::value_type jet_type
+    ) 
+    {
+        static at::JetBaseSelectionArgs jet_args(jc, jcu, jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.4, /*min_pt=*/15.0, /*max_eta=*/2.4);
+        std::vector<JetInfo> jet_infos = GetJetInfos(jet_args);
+        ROOT::Math::XYVector cmet(met*cos(met_phi), met*sin(met_phi));
+        for (size_t jidx = 0; jidx != jet_infos.size(); jidx++)
+        {
+            const LorentzVector& jet_p4     = jet_infos.at(jidx).CorrP4();
+            const LorentzVector& new_jet_p4 = RescaleJetP4JER(jet_p4, seed*(jidx+1));
+
+            // propogate to the met
+            ROOT::Math::XYVector old_jet(jet_p4.px(), jet_p4.py());
+            ROOT::Math::XYVector new_jet(new_jet_p4.px(), new_jet_p4.py());
+            cmet = cmet - new_jet + old_jet;
+
+            // rescale the met
+            ROOT::Math::XYVector cmet(met*cos(met_phi), met*sin(met_phi));
+        }
+
+        // set the new met
+        met     = cmet.r();
+        met_phi = cmet.phi();
+
+        // done
+        return;
+    }
+
 } // namespace at
 

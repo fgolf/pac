@@ -111,16 +111,12 @@ public:
     //
     // sysetmatics (most of the JEC +/- are handled in the JetInfoTree)
     //
-    int njets_jer;
-    int nbtags_jer;
-    int nbtags_reweighted_jer;
-    float ht_jer;
     float pfmet_jec_dn;
     float pfmet_jec_up;
     float pfmet_phi_jec_dn;
     float pfmet_phi_jec_up;
     float pfmet_jer;
-    float pfmet_jer_phi;
+    float pfmet_phi_jer;
     float pfmet_uncl_up;
     float pfmet_uncl_dn;
 
@@ -200,8 +196,9 @@ public:
     // new jet info
     // 
     JetInfoTree jet_info;
-    JetInfoTree jet_info_up;
-    JetInfoTree jet_info_dn;
+    JetInfoTree jet_info_jec_up;
+    JetInfoTree jet_info_jec_dn;
+    JetInfoTree jet_info_jer;
     JetInfoTree jet_info_pt30;
 
     //

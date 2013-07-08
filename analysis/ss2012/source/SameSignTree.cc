@@ -3,8 +3,9 @@
 SameSignTree::SameSignTree()
     : DileptonTree()
     , jet_info("")
-    , jet_info_up("", "_jec_up")
-    , jet_info_dn("", "_jec_dn")
+    , jet_info_jec_up("", "_jec_up")
+    , jet_info_jec_dn("", "_jec_dn")
+    , jet_info_jer("", "_jer")
     , jet_info_pt30("", "_pt30")
     , lep3("lep3_")
 {
@@ -13,8 +14,9 @@ SameSignTree::SameSignTree()
 SameSignTree::SameSignTree(const std::string &prefix)
     : DileptonTree(prefix)
     , jet_info("")
-    , jet_info_up("", "_jec_up")
-    , jet_info_dn("", "_jec_dn")
+    , jet_info_jec_up("", "_jec_up")
+    , jet_info_jec_dn("", "_jec_dn")
+    , jet_info_jer("", "_jer")
     , jet_info_pt30("", "_pt30")
     , lep3("lep3_")
 {
@@ -25,8 +27,9 @@ void SameSignTree::Reset()
     event_info.Reset();
     DileptonTree::Reset();
     jet_info.Reset();
-    jet_info_up.Reset();
-    jet_info_dn.Reset();
+    jet_info_jec_up.Reset();
+    jet_info_jec_dn.Reset();
+    jet_info_jer.Reset();
     jet_info_pt30.Reset();
     lep3.Reset();
 
@@ -66,16 +69,12 @@ void SameSignTree::Reset()
     trig_em_mu8_el8_id_m8_pfnopuht175        = false;
     trig_em_riso1p0mu5_el8_id_m8_pfht175     = false;
     trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 = false;
-    njets_jer                                = -999999;
-    nbtags_jer                               = -999999;
-    nbtags_reweighted_jer                    = -999999;
-    ht_jer                                   = -999999.;
     pfmet_jec_dn                             = -999999.;
     pfmet_jec_up                             = -999999.;
     pfmet_phi_jec_dn                         = -999999.;
     pfmet_phi_jec_up                         = -999999.;
     pfmet_jer                                = -999999.;
-    pfmet_jer_phi                            = -999999.;
+    pfmet_phi_jer                            = -999999.;
     pfmet_uncl_dn                            = -999999.;
     pfmet_uncl_up                            = -999999.;
     sparm0                                   = -999999.0;
@@ -155,8 +154,9 @@ void SameSignTree::SetBranches(TTree &tree)
     DileptonTree::SetBranches(tree);
     lep3.SetBranches(tree);
     jet_info.SetBranches(tree);
-    jet_info_up.SetBranches(tree);
-    jet_info_dn.SetBranches(tree);
+    jet_info_jec_up.SetBranches(tree);
+    jet_info_jec_dn.SetBranches(tree);
+    jet_info_jer.SetBranches(tree);
     jet_info_pt30.SetBranches(tree);
 
     tree.Branch("selection"                                , &selection                                , "selection/i"                                ); 
@@ -190,16 +190,12 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("trig_em_mu8_el8_id_m8_pfnopuht175"        , &trig_em_mu8_el8_id_m8_pfnopuht175        , "trig_em_mu8_el8_id_m8_pfnopuht175/O"        ); 
     tree.Branch("trig_em_riso1p0mu5_el8_id_m8_pfht175"     , &trig_em_riso1p0mu5_el8_id_m8_pfht175     , "trig_em_riso1p0mu5_el8_id_m8_pfht175/O"     ); 
     tree.Branch("trig_em_riso1p0mu5_el8_id_m8_pfnopuht175" , &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175 , "trig_em_riso1p0mu5_el8_id_m8_pfnopuht175/O" ); 
-    tree.Branch("njets_jer"                                , &njets_jer                                , "njets_jer/I"                                ); 
-    tree.Branch("ht_jer"                                   , &ht_jer                                   , "ht_jer/F"                                   ); 
-    tree.Branch("nbtags_jer"                               , &nbtags_jer                               , "nbtags_jer/I"                               ); 
-    tree.Branch("nbtags_reweighted_jer"                    , &nbtags_reweighted_jer                    , "nbtags_reweighted_jer/I"                    ); 
     tree.Branch("pfmet_jec_dn"                             , &pfmet_jec_dn                             , "pfmet_jec_dn/F"                             ); 
     tree.Branch("pfmet_jec_up"                             , &pfmet_jec_up                             , "pfmet_jec_up/F"                             ); 
     tree.Branch("pfmet_phi_jec_dn"                         , &pfmet_phi_jec_dn                         , "pfmet_phi_jec_dn/F"                         ); 
     tree.Branch("pfmet_phi_jec_up"                         , &pfmet_phi_jec_up                         , "pfmet_phi_jec_up/F"                         ); 
     tree.Branch("pfmet_jer"                                , &pfmet_jer                                , "pfmet_jer/F"                                ); 
-    tree.Branch("pfmet_jer_phi"                            , &pfmet_jer_phi                            , "pfmet_jer_phi/F"                            ); 
+    tree.Branch("pfmet_phi_jer"                            , &pfmet_phi_jer                            , "pfmet_phi_jer/F"                            ); 
     tree.Branch("pfmet_uncl_dn"                            , &pfmet_uncl_dn                            , "pfmet_uncl_dn/F"                            ); 
     tree.Branch("pfmet_uncl_up"                            , &pfmet_uncl_up                            , "pfmet_uncl_up/F"                            ); 
     tree.Branch("sf_dileptrig"                             , &sf_dileptrig                             , "sf_dileptrig/F"                             ); 
