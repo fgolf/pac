@@ -634,8 +634,8 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         switch(m_analysis_type)
         {
             case AnalysisType::ss:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
+                mu_min_pt = 10.0;
+                el_min_pt = 10.0;
                 break;
             default:
                 mu_min_pt = 20.0;
@@ -649,6 +649,54 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
         if (not evt_isRealData())
         {
+            // if sample is tchiwh, figure out which W from Higgs decayed leptonically, which hadronically
+            if (m_sample == at::Sample::tchiwh || m_sample == at::Sample::tchiwh_150_1 || m_sample == at::Sample::tchiwh_200_1)
+            {
+                bool found_higgs = false;
+                std::vector<int> w_indices;
+                std::vector<std::pair<int, int> > w_daughter_indices;
+                for (unsigned int idx = 0; idx < genps_p4().size(); idx++)
+                {
+                    if (genps_status().at(idx) != 3) continue;
+                    if (abs(genps_id().at(idx)) == 24) w_indices.push_back(idx);
+                    if (abs(genps_id().at(idx)) != 25 && !found_higgs) continue;
+                    if (abs(genps_id().at(idx)) == 25)
+                    {
+                        found_higgs = true;
+                        continue;
+                    }
+                    if ((abs(genps_id().at(idx)) > 0 && abs(genps_id().at(idx)) < 6) || (abs(genps_id().at(idx)) > 10 && abs(genps_id().at(idx)) < 17))
+                    {
+                        w_daughter_indices.push_back(std::make_pair(idx, idx+1));
+                        ++idx;
+                    }                    
+                }
+
+                if (fabs(genps_p4().at(w_indices.at(1)).mass() - 80.) > 10.)
+                {
+                    if (abs(genps_id().at(w_daughter_indices.at(1).first)) > 10 && abs(genps_id().at(w_daughter_indices.at(1).first)) < 17)
+                    {
+                        m_evt.leptonic_offshell_w = true;
+                    }
+                    else if (abs(genps_id().at(w_daughter_indices.at(1).first)) > 0 && abs(genps_id().at(w_daughter_indices.at(1).first)) < 6)
+                    {
+                        m_evt.hadronic_offshell_w = true;
+                    }
+                }
+
+                if (fabs(genps_p4().at(w_indices.at(2)).mass() - 80.) > 10.)
+                {
+                    if (abs(genps_id().at(w_daughter_indices.at(2).first)) > 10 && abs(genps_id().at(w_daughter_indices.at(2).first)) < 17)
+                    {
+                        m_evt.leptonic_offshell_w = true;
+                    }
+                    else if (abs(genps_id().at(w_daughter_indices.at(2).first)) > 0 && abs(genps_id().at(w_daughter_indices.at(2).first)) < 6)
+                    {
+                        m_evt.hadronic_offshell_w = true;
+                    }
+                }
+            }
+
             // sparms parameters
             if (m_sparms) 
             {
@@ -1018,7 +1066,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         //
         // to calculate MT2, need mass of invisible particle
         //
-        m_evt.mt2          = MT2(met_phi, met, m_evt.lep1.p4, m_evt.lep2.p4);
+        m_evt.mt2          = MT2(met, met_phi, m_evt.lep1.p4, m_evt.lep2.p4);
         m_evt.no_extraz    = (not samesign::makesExtraZ(hyp_idx));
 
         if (not m_jet_corrector)
@@ -1519,6 +1567,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             m_evt.njets_jer             = vjets_jer_p4.size();
             m_evt.nbtags_jer            = vbjets_jer_p4.size();
             m_evt.nbtags_reweighted_jer = vbjets_reweighted_jer_p4.size();
+            m_evt.vjets_p4_jer          = vjets_jer_p4;
         }
 
         // scale the unclustered MET
@@ -2202,19 +2251,37 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         int njets_pv_tmp0 = 0;
         int njets_pv_tmp1 = 0;
         int njets_pv_tmp2 = 0;
+        std::vector<bool> tmp_vjets_matched_pv;
         if (cms2_tag.version > 13)
         {
             for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4.size(); jetpvidx++)
             {
-                if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 0)) ++njets_pv_tmp0;
+                bool jet_is_matched = passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 0);
+                tmp_vjets_matched_pv.push_back(jet_is_matched);
+                if (jet_is_matched) ++njets_pv_tmp0;
                 if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 1)) ++njets_pv_tmp1;
-                if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 2)) ++njets_pv_tmp2;
+                if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 2)) ++njets_pv_tmp2;                
             }
+            m_evt.vjets_matched_pv = tmp_vjets_matched_pv;
         }
 
         m_evt.njets_pv_tight0 = njets_pv_tmp0;
         m_evt.njets_pv_tight1 = njets_pv_tmp1;
         m_evt.njets_pv_tight2 = njets_pv_tmp2;
+
+        std::vector<LorentzVector> vjets_matched_p4;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv.at(idx)) continue;
+            vjets_matched_p4.push_back(m_evt.vjets_p4.at(idx));
+        }
+
+        if (vjets_matched_p4.size() > 1)
+        {
+            LorentzVector p4_dijet = vjets_matched_p4.at(0) + vjets_matched_p4.at(1);
+            m_evt.mt2j = MT2J(met, met_phi, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4);
+            m_evt.dijet_mass_pv = p4_dijet.mass();
+        }
 
         // Fill the tree
         m_tree->Fill();
