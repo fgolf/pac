@@ -7,6 +7,7 @@
 #include "AnalysisType.h"
 #include "SystematicType.h"
 #include "TTree.h"
+#include "EWKINO2012_SS.h"
 
 namespace ewkino
 {
@@ -15,18 +16,23 @@ namespace ewkino
         enum value_type
         {
             // inclusive
-            sr0  = 0,  // baseline:  SS (20/20), #btags==0 (pt>30), #jets==2,3
-            sr1  = 1,  // baseline + iso track veto (stop), tau veto (stop), jet-PV matching
-            sr2  = 2,  // sr1 + mjj < 120
-            sr3  = 3,  // sr2 + veto 76 < M_ee < 106
-            sr4  = 4,  // sr3 + exactly 2 jets
-            sr5  = 5,  // sr3 + no loose btags
-            sr6  = 6,  // sr5 + ht < 200 && pfmet > 30
-            sr7  = 7,  // sr6 + no third muon w/ pt > 5
+            sr0  = 0,  // baseline: pt > 20/20, njets_matched = 2,3 and MET > 30 GeV
+            sr1  = 1,  // sr0 + pt>30/20 + MET > 80 + HT < 200 + min MT > 80 + 0 CSVM + <2 CSVL + 3rd lepton veto + iso track veto + tau veto + dijet pt < 160 + dR(jet1,jet2) < 3 + dEta(lep1,lep2) < 2. + dR(ll,jj) < 3.2
+            sr2  = 2,  // sr1 + <= 1 CVSL b-tagged jets
+            sr3  = 3,  // sr2 + max[ M(11,31), M(21,3l) ] < 10 GeV
+            sr4  = 4,  // sr3 + jets from off-shell W 
+            sr5  = 5,  // sr3 + jets from on-shell W
+            sr6  = 6,  // sr5 + MET > 90 GeV
+            sr7  = 7,  // sr6 + no third muon w/ pt > 5 + no third electron w/ pt > 10
             sr8  = 8,  // sr7 + |deta(lep1,lep2)| < 2.0
             sr9  = 9,  // sr8 + max(pt1,pt2) > 30
-            sr10 = 10,  // sr9 + ht < 160
-            sr11 = 11,  // sr10 + pfmet > 90
+            sr10 = 10, // sr9 + ht < 160
+            sr11 = 11, // sr10 + pfmet > 90
+            sr12 = 12, // sr8 + max(lep1_mt,lep2_mt) > 70.
+            sr13 = 13, // sr12 + 0.4 < min(jet1_pt,jet2_pt)/pt_jj < 1.1
+            sr14 = 14, // sr0 + dR(j,j) < 3. && pt(jj) < 160 && ht < 200 && dR(ll) < 2.4 && met > 20
+            sr15 = 15, // pt > 20/20, njets_matched = 2,3 and MET > 30 GeV
+            sr16 = 16, // pt > 20/20, njets_matched = 2,3 and MET > 30 GeV
             // keep track of the size
             static_size
         };
@@ -112,6 +118,11 @@ namespace ewkino
     // set aliases for TTree
     void SetSignalRegionAliases(TTree& tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf = true);
     void SetSignalRegionAliases(TTree* tree, const AnalysisType::value_type& anal_type, const bool do_btag_sf = true);
+
+    // get matched jets
+    bool passesMVAJetId(LorentzVector p4, float mva_value, int tightness);    
+    std::vector<LorentzVector> getMatchedJets(int tightness);
+    int nMatchedBtags(int mva_tightness, int btag_tightness);
 
 } // namespace ss
 

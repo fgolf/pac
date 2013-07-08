@@ -1,7 +1,6 @@
 #include "SignalRegion.h"
 #include "AnalysisType.h"
 #include "SystematicType.h"
-#include "EWKINO2012_SS.h"
 #include <stdexcept>
 #include "at/DileptonHypType.h"
 #include "rt/RootTools.h"
@@ -24,7 +23,7 @@ const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] =
         // name
         "sr1",
         // title
-        "sr1: baseline + iso track veto + tau veto + jet-PV matching",
+        "SR1",
         // latex
         "SR1"
     },
@@ -32,9 +31,9 @@ const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] =
         // name
         "sr2",
         // title
-        "sr2: sr1 + mjj < 120 GeV",
+        "sr2: sr1 + <= 1 CVSL jet",
         // latex
-        "SR1 + $M_{jj} < 120$ GeV"
+        "SR1 + \\le 1 CVSL jet"
     },
     { 
         // name
@@ -108,6 +107,46 @@ const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] =
         // latex
         "SR10 + $met > 90$ GeV"
     },
+    { 
+        // name
+        "sr12",
+        // title
+        "sr12: sr8 + max_mt > 70 GeV",
+        // latex
+        "SR8 + max$(M^{\\ell_{1}}_{T},\\ell_{2}}_{T}) > 70$ GeV"
+    },
+    { 
+        // name
+        "sr13",
+        // title
+        "sr13: sr12 + 0.4 < min(jet1_pt,jet2_pt)/M_{jj} < 1.1",
+        // latex
+        "SR12 + $0.4 < min(p^{j_{1}}_{T},p^{j_{2}}_{T})/M_{jj} < 1.1$"
+    },
+    { 
+        // name
+        "sr14",
+        // title
+        "sr14: sr0 + jet-PV matching + M_{jj} < 120 GeV",
+        // latex
+        "SR0 + jet-PV matching + $M_{jj} < 120$ GeV"
+    },
+    { 
+        // name
+        "sr15",
+        // title
+        "sr15: pt > 20/20, njets=2,3 and MET > 30 GeV",
+        // latex
+        "$p_{T} > 20/20 GeV, njets=2,3 and MET > 30 GeV$"
+    },
+    { 
+        // name
+        "sr16",
+        // title
+        "sr16: pt > 20/20, njets=2,3 and MET > 30 GeV",
+        // latex
+        "$p_{T} > 20/20 GeV, njets=2,3 and MET > 30 GeV$"
+    },
 };
 
 // check that the SignalRegionInfoArray is the same size as the enum
@@ -118,6 +157,8 @@ STATIC_ASSERT(ARRAY_SIZE(s_SsInclSignalRegionInfos)      == ewkino::SignalRegion
 
 namespace ewkino
 {
+    using namespace ewkino_ss;
+
     // wrapper function to get the SignalRegionInfo
     SignalRegion::value_type GetSignalRegionFromName
     (
@@ -204,24 +245,73 @@ namespace ewkino
                 return false;
         }
 
+        std::vector<LorentzVector> matched_jets;
+        float matched_ht = 0.;
+        for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
+        {
+            if (!vjets_matched_pv().at(idx)) continue;
+            matched_jets.push_back(vjets_p4().at(idx));
+            matched_ht += vjets_p4().at(idx).pt();
+        }
+
+        LorentzVector dijet_p4 = LorentzVector(0,0,0,0);        
+        if (matched_jets.size() > 1)
+            dijet_p4 = matched_jets.at(0) + matched_jets.at(1);
+
+        int num_loose_btags = nMatchedBtags(0, 0);
+
+        int tmp_nlbtags = 0;
+        int tmp_nmbtags = 0;
+        int tmp_ntbtags = 0;
+        for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
+        {
+            if (!vjets_matched_pv().at(idx)) continue;
+            if (vjets_bdisc().at(idx) > 0.244) ++tmp_nlbtags;
+            if (vjets_bdisc().at(idx) > 0.679) ++tmp_nmbtags;
+            if (vjets_bdisc().at(idx) > 0.898) ++tmp_ntbtags;
+        }
+
+        float max_ml3l = 0.;
+        if (lep1_nearlep_dr() > -1)
+        {
+            LorentzVector tmp_p4 = lep1_p4() + lep1_nearlep_p4();
+            max_ml3l = tmp_p4.mass();
+        }
+        if (lep2_nearlep_dr() > -1)
+        {
+            LorentzVector tmp_p4 = lep2_p4() + lep2_nearlep_p4();
+            max_ml3l = max(tmp_p4.mass(), max_ml3l);
+        }
+
+        bool is_offshell_wjj = is_real_data() || (!is_real_data() && hadronic_offshell_w());
+        bool not_offshell_wjj = is_real_data() || (!is_real_data() && !hadronic_offshell_w());
+
+        bool passes_third_lepton_veto = not ((abs(lep3_pdgid()) == 11 && lep3_p4().pt()>40.) || (abs(lep3_pdgid()) == 13 && lep3_p4().pt()>5.));
+
+        
         // SS WH
         if (anal_type==AnalysisType::ss)
         {
-            const bool baseline      = (ewkino_ss::nbtags()==0 && min(ewkino_ss::lep1_p4().pt(), ewkino_ss::lep2_p4().pt()) > 20.);
-            const bool pass_zee_veto = (not (ewkino_ss::dilep_type() == at::DileptonHypType::EE && ewkino_ss::dilep_mass() > 76. && ewkino_ss::dilep_mass() < 106.));
-            const bool pass_sr0      = (baseline && (ewkino_ss::njets()==2 || ewkino_ss::njets()==3));
-            const bool pass_sr1      = (baseline && ewkino_ss::passes_isotrk_veto() && ewkino_ss::passes_tau_veto() && (ewkino_ss::njets_pv_tight0() == 2 || ewkino_ss::njets_pv_tight0()==3));
-            const bool pass_sr2      = (pass_sr1 && ewkino_ss::dijet_mass() < 120.);
-            const bool pass_sr3      = (pass_sr2 && pass_zee_veto);
-            const bool pass_sr4      = (pass_sr3 && ewkino_ss::njets_pv_tight0()==2);
-            const bool pass_sr5      = (pass_sr3 && ewkino_ss::nbtags_loose()==0);
-            const bool pass_sr6      = (pass_sr5 && ewkino_ss::ht() < 200 && ewkino_ss::pfmet() > 30);
-            const bool pass_sr7      = (pass_sr6 && not ((abs(ewkino_ss::lep3_pdgid())==13 && ewkino_ss::lep3_p4().pt()>5.) || (abs(ewkino_ss::lep3_pdgid())==11 && ewkino_ss::lep3_p4().pt()>10.)));
-            const bool pass_sr8      = (pass_sr7 && (rt::DeltaEta(ewkino_ss::lep1_p4(), ewkino_ss::lep2_p4()) < 2.0));
-            const bool pass_sr9      = (pass_sr8 && (ewkino_ss::lep1_p4().pt()>30. || ewkino_ss::lep2_p4().pt()>30.));
-            const bool pass_sr10     = (pass_sr9 && ewkino_ss::ht() < 160);
-            const bool pass_sr11     = (pass_sr10 && ewkino_ss::pfmet() > 90);
-
+            const bool baseline      = (min(lep1_p4().pt(), lep2_p4().pt()) > 20.);
+            const bool pass_zee_veto = (not (dilep_type() == at::DileptonHypType::EE && dilep_mass() > 76. && dilep_mass() < 106.));
+            const bool pass_sr0      = (baseline && (njets_pv_tight0()==2 || njets_pv_tight0()==3) && pfmet() > 30);
+            const bool pass_sr1      = (pass_sr0 && tmp_nmbtags == 0 && tmp_nlbtags < 2 && matched_ht < 200. && pfmet() > 80. && mt() > 80. && max(lep1_p4().pt(), lep2_p4().pt()) > 30. && passes_isotrk_veto() && passes_tau_veto() && dijet_p4.pt() < 160. && rt::DeltaR(matched_jets.at(0),matched_jets.at(1)) < 3. && rt::DeltaEta(lep1_p4(),lep2_p4()) < 2. && rt::DeltaR(dilep_p4(),dijet_p4) < 3.2 && passes_third_lepton_veto);
+            const bool pass_sr2      = (pass_sr1 && tmp_nlbtags <= 1);
+            const bool pass_sr3      = (pass_sr2 && max_ml3l < 10.);
+            const bool pass_sr4      = (pass_sr3 && passes_tau_veto());
+            const bool pass_sr5      = (pass_sr4 && matched_ht < 180.);
+            const bool pass_sr6      = (pass_sr5 && njets_pv_tight0()==2);
+            const bool pass_sr7      = (pass_sr5 && njets_pv_tight0()==3);
+            const bool pass_sr8      = (pass_sr6 && matched_ht < 160);
+            const bool pass_sr9      = (pass_sr8 && max(lep1_mt(),lep2_mt()) > 70.);
+            const bool pass_sr10     = (pass_sr9 && matched_ht < 160);
+            const bool pass_sr11     = (pass_sr10 && pfmet() > 90);
+            const bool pass_sr12     = (pass_sr8 && std::max(lep1_mt(),lep2_mt()) > 70);
+            const bool pass_sr13     = (pass_sr12 && std::min(matched_jets.at(0).pt(),matched_jets.at(1).pt())/dijet_p4.pt() > 0.4 && std::min(matched_jets.at(0).pt(),matched_jets.at(1).pt())/dijet_p4.pt() < 1.1);
+            const bool pass_sr14     = (pass_sr0 && matched_ht < 200 && (njets_pv_tight0() == 2 || njets_pv_tight0()==3) && dijet_p4.pt() < 160 && fabs(dilep_deta()) < 2.4 && rt::DeltaR(matched_jets.at(0), matched_jets.at(1)) < 3 && pfmet() > 60. && not (lep3_p4().pt() > 40 && abs(lep3_pdgid())==11) && not (lep3_p4().pt() > 5 && abs(lep3_pdgid())==13) && passes_isotrk_veto() && passes_tau_veto() && mt() > 40 && num_loose_btags<2 && std::max(rt::DeltaPhi(lep1_p4().phi(), pfmet_phi()), rt::DeltaPhi(lep2_p4().phi(), pfmet_phi())) > 2 && rt::DeltaEta(dijet_p4,dilep_p4()) < 2.4 && rt::DeltaR(dijet_p4,dilep_p4()) < 3.2 && pfmet() > 80 && fabs(dilep_deta()) < 2.);
+            const bool pass_sr15     = (min(lep1_p4().pt(), lep2_p4().pt()) > 20. && (njets_pv_tight0() == 2 || njets_pv_tight0() == 3) && pfmet() > 30);
+            const bool pass_sr16     = (pass_sr15 && tmp_ntbtags == 0 && passes_tau_veto());
+            
             if (signal_region_type==SignalRegionType::inclusive)
             {
                 switch (signal_region)
@@ -238,6 +328,11 @@ namespace ewkino
                 case SignalRegion::sr9 : return (pass_sr9);
                 case SignalRegion::sr10 : return (pass_sr10);
                 case SignalRegion::sr11 : return (pass_sr11);
+                case SignalRegion::sr12 : return (pass_sr12);
+                case SignalRegion::sr13 : return (pass_sr13);
+                case SignalRegion::sr14 : return (pass_sr14);
+                case SignalRegion::sr15 : return (pass_sr15);
+                case SignalRegion::sr16 : return (pass_sr16);
                 };
             }
 
@@ -260,10 +355,10 @@ namespace ewkino
     )
     {
         // lepton pt cuts
-        const unsigned int l1_id = abs(ewkino_ss::lep1_pdgid());
-        const unsigned int l2_id = abs(ewkino_ss::lep2_pdgid());
-        const float l1_pt        = ewkino_ss::lep1_p4().pt();
-        const float l2_pt        = ewkino_ss::lep2_p4().pt();
+        const unsigned int l1_id = abs(lep1_pdgid());
+        const unsigned int l2_id = abs(lep2_pdgid());
+        const float l1_pt        = lep1_p4().pt();
+        const float l2_pt        = lep2_p4().pt();
 
         // kinematic variables that define the signal region
         float met   = -999999;
@@ -333,6 +428,7 @@ namespace ewkino
         {
             case AnalysisType::ss:
                 tree.SetAlias("lep_pt", "lep1_p4.pt()>20 && lep2_p4.pt()>20");
+                tree.SetAlias("lep_eta", "abs(lep1_p4.eta())<2.4 && abs(lep2_p4.eta())<2.4");
                 break;
             case AnalysisType::static_size:
                 /*do nothing*/
@@ -343,6 +439,8 @@ namespace ewkino
         tree.SetAlias("lep_d0", "((is_ss || is_os) && (l1_d0<l1_d0_cut) && (l2_d0_cut)) || ((is_sf) && (l1_num ? l1_d0<l1_d0_cut : l2_d0<l2_d0_cut)");
 
         tree.SetAlias("pass_zee_veto", "!(dilep_type==3 && dilep_mass>76. && dilep_mass<106.)");
+
+        tree.SetAlias("min_jet_pt_over_mass", "min(vjets_p4.at(0).pt(),vjets_p4.at(1).pt())/dijet_mass");
 
         // trigger
         switch (anal_type)
@@ -371,6 +469,10 @@ namespace ewkino
                 tree.SetAlias("sr9" , "sr8 && max(l1_pt,l2_pt)>30.");
                 tree.SetAlias("sr10" , "sr9 && pfmet > 90");
                 tree.SetAlias("sr11" , "sr10 && ht < 160");
+                tree.SetAlias("sr12" , "sr8 && max(lep1_mt,lep2_mt)>70");
+                tree.SetAlias("sr13" , "sr12 && min_jet_pt_over_mass > 0.4 && min_jet_pt_over_mass < 1.1");
+                tree.SetAlias("sr14" , "sr0 && (njets_pv_tight0==2 || njets_pv_tight0==3)");
+                tree.SetAlias("sr15" , "lep_pt && lep_eta && (njets_pv_tight0==2 || njets_pv_tight0==3) && pfmet > 30");
                 break;
             case AnalysisType::static_size:
                 /*do nothing*/
@@ -411,4 +513,99 @@ namespace ewkino
         throw std::domain_error("ERROR: ewkino::GetSignalRegionTypeFromName(): arguments out of bounds!");
     }
 
-} // namespace ewkino
+    // match jet to PV
+    bool passesMVAJetId(LorentzVector p4, float mva_value, int tightness)
+    {
+        if (tightness < 0 || tightness > 2)
+        {
+            std::cout << "ERROR : tightness should be 0, 1, or 2. " << std::endl;
+            return false;
+        }
+
+        float fMVACut[3][4][4];
+
+        /*
+        // working points from full_53x_wp defined in 
+        // http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/CMG/CMGTools/External/python/JetIdParams_cfi.py?revision=1.12&view=markup
+
+        //Tight Id
+        fMVACut[0][0][0] = -0.83; fMVACut[0][0][1] = -0.81; fMVACut[0][0][2] = -0.74; fMVACut[0][0][3] = -0.81;
+        fMVACut[0][1][0] = -0.83; fMVACut[0][1][1] = -0.81; fMVACut[0][1][2] = -0.74; fMVACut[0][1][3] = -0.81;
+        fMVACut[0][2][0] = -0.38; fMVACut[0][2][1] = -0.32; fMVACut[0][2][2] = -0.14; fMVACut[0][2][3] = -0.48;
+        fMVACut[0][3][0] = -0.38; fMVACut[0][3][1] = -0.32; fMVACut[0][3][2] = -0.14; fMVACut[0][3][3] = -0.48;
+        //Medium id
+        fMVACut[1][0][0] = -0.83; fMVACut[1][0][1] = -0.92; fMVACut[1][0][2] = -0.90; fMVACut[1][0][3] = -0.92;
+        fMVACut[1][1][0] = -0.83; fMVACut[1][1][1] = -0.92; fMVACut[1][1][2] = -0.90; fMVACut[1][1][3] = -0.92;
+        fMVACut[1][2][0] = -0.40; fMVACut[1][2][1] = -0.49; fMVACut[1][2][2] = -0.50; fMVACut[1][2][3] = -0.65;
+        fMVACut[1][3][0] = -0.40; fMVACut[1][3][1] = -0.49; fMVACut[1][3][2] = -0.50; fMVACut[1][3][3] = -0.65;
+        //Loose Id 
+        fMVACut[2][0][0] = -0.95; fMVACut[2][0][1] = -0.96; fMVACut[2][0][2] = -0.94; fMVACut[2][0][3] = -0.95;
+        fMVACut[2][1][0] = -0.95; fMVACut[2][1][1] = -0.96; fMVACut[2][1][2] = -0.94; fMVACut[2][1][3] = -0.95;
+        fMVACut[2][2][0] = -0.80; fMVACut[2][2][1] = -0.74; fMVACut[2][2][2] = -0.68; fMVACut[2][2][3] = -0.77;
+        fMVACut[2][3][0] = -0.80; fMVACut[2][3][1] = -0.74; fMVACut[2][3][2] = -0.68; fMVACut[2][3][3] = -0.77;
+        */
+
+        // working points from full_5x_wp defined in 
+        // http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/UserCode/CMG/CMGTools/External/python/JetIdParams_cfi.py?revision=1.12&view=markup
+        //Tight Id                                                                                                                                                                       
+        fMVACut[0][0][0] = -0.47; fMVACut[0][0][1] = -0.92; fMVACut[0][0][2] = -0.92; fMVACut[0][0][3] = -0.94;
+        fMVACut[0][1][0] = -0.47; fMVACut[0][1][1] = -0.92; fMVACut[0][1][2] = -0.92; fMVACut[0][1][3] = -0.94;
+        fMVACut[0][2][0] = +0.32; fMVACut[0][2][1] = -0.49; fMVACut[0][2][2] = -0.61; fMVACut[0][2][3] = -0.74;
+        fMVACut[0][3][0] = +0.32; fMVACut[0][3][1] = -0.49; fMVACut[0][3][2] = -0.61; fMVACut[0][3][3] = -0.74;
+        //Medium id
+        fMVACut[1][0][0] = -0.83; fMVACut[1][0][1] = -0.96; fMVACut[1][0][2] = -0.95; fMVACut[1][0][3] = -0.96;
+        fMVACut[1][1][0] = -0.83; fMVACut[1][1][1] = -0.96; fMVACut[1][1][2] = -0.95; fMVACut[1][1][3] = -0.96;
+        fMVACut[1][2][0] = -0.40; fMVACut[1][2][1] = -0.74; fMVACut[1][2][2] = -0.76; fMVACut[1][2][3] = -0.81;
+        fMVACut[1][3][0] = -0.40; fMVACut[1][3][1] = -0.74; fMVACut[1][3][2] = -0.76; fMVACut[1][3][3] = -0.81;
+        //Loose Id 
+        fMVACut[2][0][0] = -0.95; fMVACut[2][0][1] = -0.97; fMVACut[2][0][2] = -0.97; fMVACut[2][0][3] = -0.97;
+        fMVACut[2][1][0] = -0.95; fMVACut[2][1][1] = -0.97; fMVACut[2][1][2] = -0.97; fMVACut[2][1][3] = -0.97;
+        fMVACut[2][2][0] = -0.80; fMVACut[2][2][1] = -0.85; fMVACut[2][2][2] = -0.84; fMVACut[2][2][3] = -0.85;
+        fMVACut[2][3][0] = -0.80; fMVACut[2][3][1] = -0.85; fMVACut[2][3][2] = -0.84; fMVACut[2][3][3] = -0.85;
+
+
+        // pT categorization
+        int ptId = 0;
+        if (p4.pt() > 10 && p4.pt() < 20) ptId = 1;
+        if (p4.pt() > 20 && p4.pt() < 30) ptId = 2;
+        if (p4.pt() > 30                ) ptId = 3;
+
+        // eta categorization
+        int etaId = 0;
+        if (fabs(p4.eta()) > 2.5  && fabs(p4.eta()) < 2.75) etaId = 1;
+        if (fabs(p4.eta()) > 2.75 && fabs(p4.eta()) < 3.0 ) etaId = 2;
+        if (fabs(p4.eta()) > 3.0  && fabs(p4.eta()) < 5.0 ) etaId = 3;
+
+        // return  
+        if (mva_value > fMVACut[tightness][ptId][etaId]) return true;
+        return false;
+    }
+
+    std::vector<LorentzVector> getMatchedJets(int tightness)
+    {
+        std::vector<LorentzVector> ret;
+        for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
+        {
+            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), tightness));
+            ret.push_back(vjets_p4().at(idx));                
+        }
+
+        return ret;
+    }
+
+    int nMatchedBtags(int mva_tightness, int btag_tightness)
+    {
+        int ret = 0;
+        for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
+        {
+            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), mva_tightness));
+            if (btag_tightness == 0 && vjets_bdisc().at(idx) > 0.244) ++ret;
+            else if (btag_tightness == 1 && vjets_bdisc().at(idx) > 0.679) ++ret;
+            else if (btag_tightness == 2 && vjets_bdisc().at(idx) > 0.898) ++ret;
+        }
+
+        return ret;
+        
+    }
+
+} // Namespace ewkino
