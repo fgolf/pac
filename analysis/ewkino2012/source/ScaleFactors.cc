@@ -266,6 +266,7 @@ std::pair<float, float> TTGammaScaleFactor(const unsigned int sr_num, const unsi
             case 33 : N_ttbar_SRn = 19546.44  ; break;
             case 34 : N_ttbar_SRn = 586052.12 ; break;
             case 35 : N_ttbar_SRn = 586052.12 ; break;
+            case 9  : N_ttbar_SRn = 0.        ; break;
             default : 
                       std::cout << Form("[ewkino::TTGammaScaleFactor] Signal Region %u not valid.  Return bogus value.", sr_num) << std::endl; 
                       return std::make_pair(-999999.0 , -999999.0); 
