@@ -87,7 +87,7 @@ namespace at
         Double_t B, sB;
         B = par[0];
         sB = par[1];
-        Int_t n = par[2];
+        Int_t n = static_cast<Int_t>(par[2]);
         //
         return 1./sqrt(2.*TMath::Pi())/sB*exp(-(x[0]-B)*(x[0]-B)/2./sB/sB)*Poisson(x[0],n);
     }

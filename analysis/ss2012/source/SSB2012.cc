@@ -426,6 +426,37 @@ namespace ssb {
 	const vector<int> &vbjets_mc3id_jec_dn() { return samesignbtag.vbjets_mc3id_jec_dn(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gen_vjets_p4_jec_dn() { return samesignbtag.gen_vjets_p4_jec_dn(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gen_vbjets_p4_jec_dn() { return samesignbtag.gen_vbjets_p4_jec_dn(); }
+	const int &njets_jer() { return samesignbtag.njets_jer(); }
+	const float &ht_jer() { return samesignbtag.ht_jer(); }
+	const float &jets_dr12_jer() { return samesignbtag.jets_dr12_jer(); }
+	const float &bjets_dr12_jer() { return samesignbtag.bjets_dr12_jer(); }
+	const float &gen_ht_jer() { return samesignbtag.gen_ht_jer(); }
+	const int &gen_njets_jer() { return samesignbtag.gen_njets_jer(); }
+	const int &gen_nbjets_jer() { return samesignbtag.gen_nbjets_jer(); }
+	const int &nbtags_jer() { return samesignbtag.nbtags_jer(); }
+	const int &nbtags_reweighted_jer() { return samesignbtag.nbtags_reweighted_jer(); }
+	const int &nbtags_reweighted_beff_up_jer() { return samesignbtag.nbtags_reweighted_beff_up_jer(); }
+	const int &nbtags_reweighted_beff_dn_jer() { return samesignbtag.nbtags_reweighted_beff_dn_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4_jer() { return samesignbtag.vjets_p4_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4_jer() { return samesignbtag.vjets_mc3p4_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_nearjet_p4_jer() { return samesignbtag.vjets_nearjet_p4_jer(); }
+	const vector<float> &vjets_nearjet_dr_jer() { return samesignbtag.vjets_nearjet_dr_jer(); }
+	const vector<float> &vjets_disc_jer() { return samesignbtag.vjets_disc_jer(); }
+	const vector<bool> &vjets_btagged_jer() { return samesignbtag.vjets_btagged_jer(); }
+	const vector<int> &vjets_mcflavor_phys_jer() { return samesignbtag.vjets_mcflavor_phys_jer(); }
+	const vector<int> &vjets_mcflavor_algo_jer() { return samesignbtag.vjets_mcflavor_algo_jer(); }
+	const vector<int> &vjets_momid_jer() { return samesignbtag.vjets_momid_jer(); }
+	const vector<int> &vjets_mc3id_jer() { return samesignbtag.vjets_mc3id_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_p4_jer() { return samesignbtag.vbjets_p4_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_mc3p4_jer() { return samesignbtag.vbjets_mc3p4_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vbjets_nearjet_p4_jer() { return samesignbtag.vbjets_nearjet_p4_jer(); }
+	const vector<float> &vbjets_nearjet_dr_jer() { return samesignbtag.vbjets_nearjet_dr_jer(); }
+	const vector<int> &vbjets_mcflavor_phys_jer() { return samesignbtag.vbjets_mcflavor_phys_jer(); }
+	const vector<int> &vbjets_mcflavor_algo_jer() { return samesignbtag.vbjets_mcflavor_algo_jer(); }
+	const vector<int> &vbjets_momid_jer() { return samesignbtag.vbjets_momid_jer(); }
+	const vector<int> &vbjets_mc3id_jer() { return samesignbtag.vbjets_mc3id_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gen_vjets_p4_jer() { return samesignbtag.gen_vjets_p4_jer(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &gen_vbjets_p4_jer() { return samesignbtag.gen_vbjets_p4_jer(); }
 	const int &njets_pt30() { return samesignbtag.njets_pt30(); }
 	const float &ht_pt30() { return samesignbtag.ht_pt30(); }
 	const float &jets_dr12_pt30() { return samesignbtag.jets_dr12_pt30(); }
@@ -488,16 +519,12 @@ namespace ssb {
 	const bool &trig_em_mu8_el8_id_m8_pfnopuht175() { return samesignbtag.trig_em_mu8_el8_id_m8_pfnopuht175(); }
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfht175() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfht175(); }
 	const bool &trig_em_riso1p0mu5_el8_id_m8_pfnopuht175() { return samesignbtag.trig_em_riso1p0mu5_el8_id_m8_pfnopuht175(); }
-	const int &njets_jer() { return samesignbtag.njets_jer(); }
-	const float &ht_jer() { return samesignbtag.ht_jer(); }
-	const int &nbtags_jer() { return samesignbtag.nbtags_jer(); }
-	const int &nbtags_reweighted_jer() { return samesignbtag.nbtags_reweighted_jer(); }
 	const float &pfmet_jec_dn() { return samesignbtag.pfmet_jec_dn(); }
 	const float &pfmet_jec_up() { return samesignbtag.pfmet_jec_up(); }
 	const float &pfmet_phi_jec_dn() { return samesignbtag.pfmet_phi_jec_dn(); }
 	const float &pfmet_phi_jec_up() { return samesignbtag.pfmet_phi_jec_up(); }
 	const float &pfmet_jer() { return samesignbtag.pfmet_jer(); }
-	const float &pfmet_jer_phi() { return samesignbtag.pfmet_jer_phi(); }
+	const float &pfmet_phi_jer() { return samesignbtag.pfmet_phi_jer(); }
 	const float &pfmet_uncl_dn() { return samesignbtag.pfmet_uncl_dn(); }
 	const float &pfmet_uncl_up() { return samesignbtag.pfmet_uncl_up(); }
 	const float &sf_dileptrig() { return samesignbtag.sf_dileptrig(); }
