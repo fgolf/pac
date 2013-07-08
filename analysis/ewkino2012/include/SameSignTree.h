@@ -75,6 +75,7 @@ public:
     float vtxw;
     float mt;
     float mt2;
+    float mt2j;
     float ht;
     float rho;
     float rho_iso;
@@ -187,12 +188,22 @@ public:
     vecLorentzVector vjets_p4;
     vecLorentzVector vjets_p4_up;
     vecLorentzVector vjets_p4_dn;
+    vecLorentzVector vjets_p4_jer;
     vecLorentzVector vjets_mc3p4;
     vecLorentzVector vgenjets_p4;
     vecLorentzVector vjets_nearjet_p4;
     std::vector<bool> vjets_btagged;
     std::vector<bool> vjets_btagged_up;
     std::vector<bool> vjets_btagged_dn;
+    std::vector<bool> vjets_btagged_jer;
+    std::vector<bool> vjets_matched_pv;
+    std::vector<bool> vjets_matched_pv_up;
+    std::vector<bool> vjets_matched_pv_dn;
+    std::vector<bool> vjets_matched_pv_jer;
+    std::vector<bool> vjets_qgdisc;
+    std::vector<bool> vjets_qgdisc_up;
+    std::vector<bool> vjets_qgdisc_dn;
+    std::vector<bool> vjets_qgdisc_jer;
     float jets_dr12;
     vecd vjets_nearjet_dr;
     veci vjets_mcflavor_phys;
@@ -201,12 +212,16 @@ public:
     veci vjets_mcflavor_algo_up;
     veci vjets_mcflavor_phys_dn;
     veci vjets_mcflavor_algo_dn;
+    veci vjets_mcflavor_phys_jer;
+    veci vjets_mcflavor_algo_jer;
     vecd vjets_bdisc;
     vecd vjets_bdisc_up;
     vecd vjets_bdisc_dn;
+    vecd vjets_bdisc_jer;
     veci vjets_momid;
     veci vjets_mc3id;
     float dijet_mass;
+    float dijet_mass_pv;
 
     //
     // gen lep1 info
@@ -367,6 +382,9 @@ public:
     vecd pfjets_beta2_0p5;
     vecd pfjets_mvaPUid;
     vecd pfjets_mva5xPUid;
+    vecd pfjets_up_mva5xPUid;
+    vecd pfjets_dn_mva5xPUid;
+    vecd pfjets_jer_mva5xPUid;
     vecd pfjets_mvaBeta;
 
     //
@@ -382,6 +400,12 @@ public:
     int njets_pv_tight0;
     int njets_pv_tight1;
     int njets_pv_tight2;
+
+    //
+    // extra branches for off-shell W
+    //
+    bool leptonic_offshell_w;
+    bool hadronic_offshell_w;
 };
 
 #endif

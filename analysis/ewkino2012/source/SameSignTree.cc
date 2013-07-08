@@ -27,6 +27,7 @@ void SameSignTree::Reset()
     vtxw                                     = -999999.0;
     mt                                       = -999999.0;
     mt2                                      = -999999.0;
+    mt2j                                     = -999999.0;
     ht                                       = -999999.0;
     rho                                      = -999999.0;
     rho_iso                                  = -999999.0;
@@ -106,6 +107,7 @@ void SameSignTree::Reset()
     lep2_isFromH                             = false;
     jets_dr12                                = -999999.0;
     dijet_mass                               = -999999.0;
+    dijet_mass_pv                            = -999999.0;
     gen_lep1_p4                              = LorentzVector(0, 0, 0, 0);
     gen_lep1_pdgid                           = -999999;
     gen_lep2_p4                              = LorentzVector(0, 0, 0, 0);
@@ -123,19 +125,25 @@ void SameSignTree::Reset()
     njets_pv_tight0                          = 0;
     njets_pv_tight1                          = 0;
     njets_pv_tight2                          = 0;
+    leptonic_offshell_w                      = false;
+    hadronic_offshell_w                      = false;
 
     vjets_p4.clear();
     vjets_p4_up.clear();
     vjets_p4_dn.clear();
+    vjets_p4_jer.clear();
     vjets_btagged.clear();
     vjets_btagged_up.clear();
     vjets_btagged_dn.clear();
+    vjets_btagged_jer.clear();
     vjets_mcflavor_phys.clear();
     vjets_mcflavor_algo.clear();
     vjets_mcflavor_phys_up.clear();
     vjets_mcflavor_algo_up.clear();
     vjets_mcflavor_phys_dn.clear();
     vjets_mcflavor_algo_dn.clear();
+    vjets_mcflavor_phys_jer.clear();
+    vjets_mcflavor_algo_jer.clear();
     vgenjets_p4.clear();
     vjets_nearjet_p4.clear();
     vjets_nearjet_dr.clear();
@@ -145,6 +153,15 @@ void SameSignTree::Reset()
     vjets_bdisc.clear();
     vjets_bdisc_up.clear();
     vjets_bdisc_dn.clear();
+    vjets_bdisc_jer.clear();
+    vjets_matched_pv.clear();
+    vjets_matched_pv_up.clear();
+    vjets_matched_pv_dn.clear();
+    vjets_matched_pv_jer.clear();
+    vjets_qgdisc.clear();
+    vjets_qgdisc_up.clear();
+    vjets_qgdisc_dn.clear();
+    vjets_qgdisc_jer.clear();
 
     pfcandid5          = -999999;     
     pfcandid10         = -999999;     
@@ -263,6 +280,9 @@ void SameSignTree::Reset()
     pfjets_beta2_0p5.clear();
     pfjets_mvaPUid.clear();
     pfjets_mva5xPUid.clear();
+    pfjets_up_mva5xPUid.clear();
+    pfjets_dn_mva5xPUid.clear();
+    pfjets_jer_mva5xPUid.clear();
     pfjets_mvaBeta.clear();
 }
 
@@ -282,6 +302,7 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("vtxw"                     , &vtxw                     , "vtxw/F"                     ); 
     tree.Branch("mt"                       , &mt                       , "mt/F"                       ); 
     tree.Branch("mt2"                      , &mt2                      , "mt2/F"                      ); 
+    tree.Branch("mt2j"                     , &mt2j                     , "mt2j/F"                     ); 
     tree.Branch("ht"                       , &ht                       , "ht/F"                       ); 
     tree.Branch("rho"                      , &rho                      , "rho/F"                      ); 
     tree.Branch("rho_iso"                  , &rho_iso                  , "rho_iso/F"                  ); 
@@ -360,18 +381,27 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("lep2_isFromH"             , &lep2_isFromH             , "lep2_isFromH/O"             );  
     tree.Branch("jets_dr12"                , &jets_dr12                , "jets_dr12/F"                ); 
     tree.Branch("dijet_mass"               , &dijet_mass               , "dijet_mass/F"               ); 
+    tree.Branch("dijet_mass_pv"            , &dijet_mass_pv            , "dijet_mass_pv/F"            ); 
     tree.Branch("vjets_p4"                 , "vecLorentzVector"        , &vjets_p4                    ); 
     tree.Branch("vjets_p4_up"              , "vecLorentzVector"        , &vjets_p4_up                 ); 
     tree.Branch("vjets_p4_dn"              , "vecLorentzVector"        , &vjets_p4_dn                 ); 
+    tree.Branch("vjets_p4_jer"             , "vecLorentzVector"        , &vjets_p4_jer                ); 
     tree.Branch("vjets_btagged"            , "std::vector<bool>"       , &vjets_btagged               ); 
     tree.Branch("vjets_btagged_up"         , "std::vector<bool>"       , &vjets_btagged_up            ); 
-    tree.Branch("vjets_btagged_dn"         , "std::vector<bool>"       , &vjets_btagged_dn            ); 
+    tree.Branch("vjets_btagged_dn"         , "std::vector<bool>"       , &vjets_btagged_dn            );
+    tree.Branch("vjets_btagged_jer"        , "std::vector<bool>"       , &vjets_btagged_jer           );
+    tree.Branch("vjets_matched_pv"         , "std::vector<bool>"       , &vjets_matched_pv            );
+    tree.Branch("vjets_matched_pv_up"      , "std::vector<bool>"       , &vjets_matched_pv_up         );
+    tree.Branch("vjets_matched_pv_dn"      , "std::vector<bool>"       , &vjets_matched_pv_dn         );
+    tree.Branch("vjets_matched_pv_jer"     , "std::vector<bool>"       , &vjets_matched_pv_jer        );
     tree.Branch("vjets_mcflavor_phys"      , "veci"                    , &vjets_mcflavor_phys         ); 
     tree.Branch("vjets_mcflavor_algo"      , "veci"                    , &vjets_mcflavor_algo         ); 
     tree.Branch("vjets_mcflavor_phys_up"   , "veci"                    , &vjets_mcflavor_phys_up      ); 
     tree.Branch("vjets_mcflavor_algo_up"   , "veci"                    , &vjets_mcflavor_algo_up      ); 
     tree.Branch("vjets_mcflavor_phys_dn"   , "veci"                    , &vjets_mcflavor_phys_dn      ); 
     tree.Branch("vjets_mcflavor_algo_dn"   , "veci"                    , &vjets_mcflavor_algo_dn      ); 
+    tree.Branch("vjets_mcflavor_phys_jer"  , "veci"                    , &vjets_mcflavor_phys_jer     ); 
+    tree.Branch("vjets_mcflavor_algo_jer"  , "veci"                    , &vjets_mcflavor_algo_jer     ); 
     tree.Branch("vjets_mc3p4"              , "vecLorentzVector"        , &vjets_mc3p4                 ); 
     tree.Branch("vgenjets_p4"              , "vecLorentzVector"        , &vgenjets_p4                 ); 
     tree.Branch("vjets_mc3id"              , "veci"                    , &vjets_mc3id                 ); 
@@ -381,6 +411,11 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("vjets_bdisc"              , "vecd"                    , &vjets_bdisc                 );
     tree.Branch("vjets_bdisc_up"           , "vecd"                    , &vjets_bdisc_up              );
     tree.Branch("vjets_bdisc_dn"           , "vecd"                    , &vjets_bdisc_dn              );
+    tree.Branch("vjets_bdisc_jer"          , "vecd"                    , &vjets_bdisc_jer             );
+    tree.Branch("vjets_qgdisc"             , "vecd"                    , &vjets_qgdisc                );
+    tree.Branch("vjets_qgdisc_up"          , "vecd"                    , &vjets_qgdisc_up             );
+    tree.Branch("vjets_qgdisc_dn"          , "vecd"                    , &vjets_qgdisc_dn             );
+    tree.Branch("vjets_qgdisc_jer"         , "vecd"                    , &vjets_qgdisc_jer            );
     tree.Branch("gen_lep1_p4"              , "LorentzVector"           , &gen_lep1_p4                 ); 
     tree.Branch("gen_lep1_pdgid"           , &gen_lep1_pdgid           , "gen_lep1_pdgid/I"           ); 
     tree.Branch("gen_lep2_p4"              , "LorentzVector"           , &gen_lep2_p4                 ); 
@@ -505,12 +540,17 @@ void SameSignTree::SetBranches(TTree &tree)
     tree.Branch("pfjets_beta2_0p5"         , "vecd"                    , &pfjets_beta2_0p5            );
     tree.Branch("pfjets_mvaPUid"           , "vecd"                    , &pfjets_mvaPUid              );
     tree.Branch("pfjets_mva5xPUid"         , "vecd"                    , &pfjets_mva5xPUid            );
+    tree.Branch("pfjets_up_mva5xPUid"      , "vecd"                    , &pfjets_up_mva5xPUid         );
+    tree.Branch("pfjets_dn_mva5xPUid"      , "vecd"                    , &pfjets_dn_mva5xPUid         );
+    tree.Branch("pfjets_jer_mva5xPUid"     , "vecd"                    , &pfjets_jer_mva5xPUid        );
     tree.Branch("pfjets_mvaBeta"           , "vecd"                    , &pfjets_mvaBeta              );
     tree.Branch("passes_isotrk_veto"       , &passes_isotrk_veto       , "passes_isotrk_veto/O"       );
     tree.Branch("passes_tau_veto"          , &passes_tau_veto          , "passes_tau_veto/O"          );
     tree.Branch("njets_pv_tight0"          , &njets_pv_tight0          , "njets_pv_tight0/I"          );
     tree.Branch("njets_pv_tight1"          , &njets_pv_tight1          , "njets_pv_tight1/I"          );
     tree.Branch("njets_pv_tight2"          , &njets_pv_tight2          , "njets_pv_tight2/I"          );
+    tree.Branch("leptonic_offshell_w"      , &leptonic_offshell_w      , "leptonic_offshell_w/O"      );
+    tree.Branch("hadronic_offshell_w"      , &hadronic_offshell_w      , "hadronic_offshell_w/O"      );
 }
 
 void SameSignTree::SetBitMask ()
