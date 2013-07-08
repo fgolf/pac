@@ -18,7 +18,7 @@ void PrintYields
     const std::string& output_path, 
     const std::string& signal_region_name, 
     const std::string& analysis_type_name, 
-    const std::string& signal_region_type_name = "exclusive", 
+    const std::string& signal_region_type_name = "inclusive", 
     const int charge_option = 0, 
     bool print_latex = false,
     bool do_caption = false
