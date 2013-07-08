@@ -329,7 +329,7 @@ namespace at
 
 
     // smear p4's by the jet energy resolution (JER)
-    LorentzVector RescaleJetP4JER(const LorentzVector& jet_info, const unsigned int seed);
+    LorentzVector RescaleJetP4JER(const LorentzVector& jet_p4, const unsigned int seed);
 
     // smear MET's by the jet energy resolution (JER)
     void RescaleMETJER
