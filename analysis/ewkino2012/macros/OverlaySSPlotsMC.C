@@ -54,6 +54,7 @@ const std::string bkgds_all[] = {
 
 // const Int_t colors[] = {2,3,4,5,6,7,8,9,28,30,38,40,41,42,46,102,152,103,153,104,154,105,155,106,156,107,157,108,158,109,159};
 const Int_t colors[] = {2,3,4,5,6,7,8,9,28,30,38,40,41,42,46,kRed+2,kRed-7,kGreen+2,kGreen-7,kBlue+2,kBlue-7,kMagenta+2,kMagenta-7,kCyan+2,kCyan-7,kViolet+2,kViolet-7,kBlue-6,kGreen+2,kMagenta+2,kRed-4};
+const Int_t markers[] = {20, 21, 22, 23, 24, 25, 26};
 
 bool my_sort_function_lin(TH1* h1, TH1* h2)
 {
@@ -142,7 +143,7 @@ rt::TH1Overlay CreateOverlay
     rt::TH1Overlay p(title, option);
     for (unsigned int idx = 0; idx < vsignals.size(); idx++)
     {
-        p.Add(vsignals.at(idx), /*no_stack=*/true, vhc_signal_names.at(idx), data_color, 2, 1+idx);
+        p.Add(vsignals.at(idx), /*no_stack=*/true, vhc_signal_names.at(idx), data_color, 2, markers[idx]);
     }
 
     for (unsigned int idx = 0; idx < vbkgds.size(); idx++)
@@ -165,6 +166,7 @@ void OverlaySSPlotsMC
     const std::string& bkgd_samples = "all",  
     bool combine_signals = false,
     bool combine_bkgds = false,
+    bool normalize = false,
     const std::string& signal_region_type_name = "inclusive", 
     int charge_type = 0, 
     const std::string& suffix = "png"
@@ -187,32 +189,11 @@ void OverlaySSPlotsMC
     if (!signal_samples.empty()) {vsignals = rt::string_split(signal_samples);}    
     if (vsignals.empty()) {std::cout << "No signal samples provided." << std::endl;}
 
-    std::vector<rt::TH1Container> vhc_signals;
-    rt::TH1Container hc_signal;
-    if (!vsignals.empty())
-    {       
-        if (combine_signals)
-        {
-            hc_signal = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(0).c_str(), charge_stem.c_str()));
-            for (unsigned int idx = 1; idx < vsignals.size(); idx++)
-            {
-                hc_signal += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(idx).c_str(), charge_stem.c_str()));
-            }
-            vhc_signals.push_back(hc_signal);
-        }
-        else
-        {
-            for (unsigned int idx = 0; idx < vsignals.size(); idx++)
-            {
-                hc_signal.Clear();
-                hc_signal = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(idx).c_str(), charge_stem.c_str()));
-                vhc_signals.push_back(hc_signal);
-            }
-        }
-    }
-
     std::vector<std::string> vbkgds;
     if (!bkgd_samples.empty() && bkgd_samples != "all") {vbkgds = rt::string_split(bkgd_samples);}
+    else vbkgds.assign(bkgds_all, bkgds_all + arraysize(bkgds_all));    
+    int num_bkgds = vbkgds.size();
+
     rt::TH1Container hc_bkgd;
     rt::TH1Container hc_top_bkgd;
     rt::TH1Container hc_vv_bkgd;
@@ -220,6 +201,18 @@ void OverlaySSPlotsMC
     rt::TH1Container hc_rare_top_bkgd;
     rt::TH1Container hc_qqww_bkgd;
     rt::TH1Container hc_higgs_bkgd;
+    float total_bkgd = 0.;
+
+    rt::TH1Container tmp_fake_container = rt::TH1Container(Form("%s/data/%s.root", plots_path.c_str(), charge_stem.c_str()));
+
+    for (unsigned int idx = 0; idx < vbkgds.size(); idx++)
+    {
+        if (std::find(vsignals.begin(), vsignals.end(), vbkgds.at(idx)) != vsignals.end()) continue;
+        rt::TH1Container tmp_hist_container = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));        
+        total_bkgd += tmp_hist_container["h_yield_ll"]->Integral();
+    }
+
+    
 
     std::vector<std::string> vbkgd_names;
     if (!combine_bkgds) vbkgd_names = vbkgds;
@@ -233,26 +226,30 @@ void OverlaySSPlotsMC
             {
                 if (std::find(vsignals.begin(), vsignals.end(), vbkgds.at(idx)) != vsignals.end()) continue;
 
+                hc_bkgd = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+
+                if (normalize)
+                    hc_bkgd.Scale(1./total_bkgd);
+
                 if (vbkgds.at(idx).compare("ttdil") == 0 || vbkgds.at(idx).compare("ttslb") == 0 || vbkgds.at(idx).compare("ttslo") == 0 ||
                     vbkgds.at(idx).compare("ttotr") == 0 || vbkgds.at(idx).compare("t_tw") == 0 || vbkgds.at(idx).compare("t_schan") == 0 ||
                     vbkgds.at(idx).compare("t_tchan") == 0)
-                    hc_top_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_top_bkgd += hc_bkgd;
                 else if (vbkgds.at(idx).compare("ww") == 0 || vbkgds.at(idx).compare("wz") == 0 || vbkgds.at(idx).compare("zz") == 0 ||
                          vbkgds.at(idx).compare("wgstar2m") == 0 || vbkgds.at(idx).compare("wgstar2t") == 0)
-                    hc_vv_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_vv_bkgd += hc_bkgd;
                 else if (vbkgds.at(idx).compare("www") == 0 || vbkgds.at(idx).compare("wwz") == 0 || vbkgds.at(idx).compare("wzz") == 0 ||
                          vbkgds.at(idx).compare("zzz") == 0 || vbkgds.at(idx).compare("wwg") == 0)
-                    hc_vvv_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));                    
+                    hc_vvv_bkgd += hc_bkgd;                    
                 else if (vbkgds.at(idx).compare("wpwpqq") == 0 || vbkgds.at(idx).compare("wmwmqq") == 0 || vbkgds.at(idx).compare("ww_ds") == 0)
-                    hc_qqww_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_qqww_bkgd += hc_bkgd;
                 else if (vbkgds.at(idx).compare("ttw") == 0 || vbkgds.at(idx).compare("ttz") == 0 || vbkgds.at(idx).compare("tbz") == 0 ||
                          vbkgds.at(idx).compare("ttg") == 0 || vbkgds.at(idx).compare("ttww") == 0)
-                    hc_rare_top_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_rare_top_bkgd += hc_bkgd;
                 else if (rt::string_contains(vbkgds.at(idx), "wh_zh_tth"))
-                    hc_higgs_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_higgs_bkgd += hc_bkgd;
                 else
                 {
-                    hc_bkgd = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
                     vhc_bkgds.push_back(hc_bkgd);
                     vbkgd_names.push_back(vbkgds.at(idx));
                 }
@@ -282,39 +279,44 @@ void OverlaySSPlotsMC
             {
                 hc_bkgd.Clear();
                 hc_bkgd = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                if (normalize)
+                    hc_bkgd.Scale(1./total_bkgd);
                 vhc_bkgds.push_back(hc_bkgd);
             }
         }
     }
     else
     {
-        vbkgds.assign(bkgds_all, bkgds_all + arraysize(bkgds_all));
         if (combine_bkgds)
         {
             for (unsigned int idx = 0; idx < vbkgds.size(); idx++)
             {
                 if (std::find(vsignals.begin(), vsignals.end(), vbkgds.at(idx)) != vsignals.end()) continue;
 
+                hc_bkgd = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+
+                if (normalize)
+                    hc_bkgd.Scale(1./total_bkgd);
+
                 if (vbkgds.at(idx).compare("ttdil") == 0 || vbkgds.at(idx).compare("ttslb") == 0 || vbkgds.at(idx).compare("ttslo") == 0 ||
                     vbkgds.at(idx).compare("ttotr") == 0 || vbkgds.at(idx).compare("t_tw") == 0 || vbkgds.at(idx).compare("t_schan") == 0 ||
                     vbkgds.at(idx).compare("t_tchan") == 0)
-                    hc_top_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_top_bkgd += hc_bkgd;
                 else if (vbkgds.at(idx).compare("ww") == 0 || vbkgds.at(idx).compare("wz") == 0 || vbkgds.at(idx).compare("zz") == 0 ||
                          vbkgds.at(idx).compare("wgstar2m") == 0 || vbkgds.at(idx).compare("wgstar2t") == 0)
-                    hc_vv_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_vv_bkgd += hc_bkgd;
                 else if (vbkgds.at(idx).compare("www") == 0 || vbkgds.at(idx).compare("wwz") == 0 || vbkgds.at(idx).compare("wzz") == 0 ||
                          vbkgds.at(idx).compare("zzz") == 0 || vbkgds.at(idx).compare("wwg") == 0)
-                    hc_vvv_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));                    
+                    hc_vvv_bkgd += hc_bkgd;                    
                 else if (vbkgds.at(idx).compare("wpwpqq") == 0 || vbkgds.at(idx).compare("wmwmqq") == 0 || vbkgds.at(idx).compare("ww_ds") == 0)
-                    hc_qqww_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_qqww_bkgd += hc_bkgd;
                 else if (vbkgds.at(idx).compare("ttw") == 0 || vbkgds.at(idx).compare("ttz") == 0 || vbkgds.at(idx).compare("tbz") == 0 ||
                          vbkgds.at(idx).compare("ttg") == 0 || vbkgds.at(idx).compare("ttww") == 0)
-                    hc_rare_top_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_rare_top_bkgd += hc_bkgd;
                 else if (rt::string_contains(vbkgds.at(idx), "wh_zh_tth"))
-                    hc_higgs_bkgd += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
+                    hc_higgs_bkgd += hc_bkgd;
                 else
                 {
-                    hc_bkgd = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds.at(idx).c_str(), charge_stem.c_str()));
                     vhc_bkgds.push_back(hc_bkgd);
                     vbkgd_names.push_back(vbkgds.at(idx));
                 }
@@ -350,7 +352,52 @@ void OverlaySSPlotsMC
                 }
                 hc_bkgd.Clear();
                 hc_bkgd = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vbkgds_tmp.at(idx).c_str(), charge_stem.c_str()));
+                if (normalize)
+                    hc_bkgd.Scale(1./total_bkgd);
                 vhc_bkgds.push_back(hc_bkgd);
+            }
+        }
+    }
+
+    std::vector<rt::TH1Container> vhc_signals;
+    rt::TH1Container hc_signal;
+    if (!vsignals.empty())
+    {       
+        if (combine_signals)
+        {
+            float tmp_integral = 0.;
+            for (unsigned int idx = 0; idx < vsignals.size(); idx++)
+            {
+                rt::TH1Container tmp_hist_container = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(0).c_str(), charge_stem.c_str()));
+                tmp_integral += tmp_hist_container["h_yield_ll"]->Integral();
+            }
+
+            for (unsigned int idx = 0; idx < vsignals.size(); idx++)
+            {
+                if (normalize)
+                {
+                    rt::TH1Container tmp_hist_container = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(0).c_str(), charge_stem.c_str()));
+                    tmp_hist_container.Scale(1./tmp_integral);
+                    hc_signal += tmp_hist_container;
+                }
+                else
+                    hc_signal += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(idx).c_str(), charge_stem.c_str()));
+            }
+            vhc_signals.push_back(hc_signal);
+        }
+        else
+        {
+            for (unsigned int idx = 0; idx < vsignals.size(); idx++)
+            {
+                hc_signal.Clear();
+                hc_signal = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(idx).c_str(), charge_stem.c_str()));
+                if (normalize)
+                {
+                    // hc_signal.Normalize();
+                    float tmp_integral = hc_signal["h_yield_ll"]->Integral();
+                    hc_signal.Scale(1./tmp_integral);
+                }
+                vhc_signals.push_back(hc_signal);
             }
         }
     }
@@ -384,46 +431,59 @@ void OverlaySSPlotsMC
     // overlays
     map<string, rt::TH1Overlay> p;
     rt::TH1Overlay::profile_marker_size_default = 10.0;
-    p["p_yield"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "yield"        , Form("%s;channel;Events"                    , title.c_str()), "sb::off dt::stack lg::left" );
-    p["p_dilep_mass"   ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dilep_mass"   , Form("%s;m_{ll} (GeV);Events"               , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt1"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt1"          , Form("%s;p^{lep1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt2"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt2"          , Form("%s;p^{lep2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt1_el"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt1_el"       , Form("%s;p^{lep1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt2_el"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt2_el"       , Form("%s;p^{lep2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt1_mu"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt1_mu"       , Form("%s;p^{lep1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt2_mu"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt2_mu"       , Form("%s;p^{lep2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_met"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "met"          , Form("%s;E^{miss}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_ht"           ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "ht"           , Form("%s;H_{T} (GeV);Events"                , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_mt"           ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "mt"           , Form("%s;m_{T} (GeV);Events"                , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_njets"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "njets"        , Form("%s;number of jets;Events"             , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lepdphi"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lepdphi"      , Form("%s;#Delta#Phi(lep1, lep2);Events"     , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lepdeta"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lepdeta"      , Form("%s;#Delta#eta(lep1, lep2);Events"     , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lepdr"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lepdr"        , Form("%s;#DeltaR(lep1, lep2);Events"        , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_ptjetlep"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "ptjetlep"     , Form("%s;jet p_{T} / lep p_{T} - 1;Events"  , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_drlep3rdlep"  ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "drlep3rdlep"  , Form("%s;#DeltaR(lep, 3rd lep);Events"      , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_ml3l"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "ml3l"         , Form("%s;M(l,3l);Events"                    , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_jet1_pt"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "jet1_pt"      , Form("%s;p^{jet1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");    
-    p["p_jet2_pt"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "jet2_pt"      , Form("%s;p^{jet2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");    
-    p["p_jet3_pt"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "jet3_pt"      , Form("%s;p^{jet3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");        
-    p["p_mjj"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "mjj"          , Form("%s;M_{jj} (GeV);Events"               , title.c_str()), "sb::off dt::stack lg::right");        
-    p["p_dijet_dphi"   ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_dphi"   , Form("%s;#Delta#phi_{jj};Events"            , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dijet_deta"   ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_deta"   , Form("%s;#Delta#eta_{jj};Events"            , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dijet_dr"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_dr"     , Form("%s;#DeltaR_{jj};Events"               , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_nbtags"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "nbtags"       , Form("%s;number of loose btags;Events"      , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_htpv"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "htpv"         , Form("%s;PV H_{T} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_mt2"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "mt2"          , Form("%s;m_{T2} (GeV);Events"               , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lep1_mt"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lep1_mt"      , Form("%s;lep1 m_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lep2_mt"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lep2_mt"      , Form("%s;lep2 m_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dijet_pt"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_pt"     , Form("%s;p^{jj}_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dijet_eta"    ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_eta"    , Form("%s;#eta_{jj};Events"                  , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_minjpt_jjpt"  ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "minjpt_jjpt"  , Form("%s;min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T};Events", title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt3"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt3"          , Form("%s;p^{lep3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt3_el"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt3_el"       , Form("%s;p^{lep3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt3_mu"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt3_mu"       , Form("%s;p^{lep3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dilep_pt"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dilep_pt"     , Form("%s;p^{ll}_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dilep_eta"    ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dilep_eta"    , Form("%s;#eta_{ll};Events"                  , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dijet_pt_mass"] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_pt_mass", Form("%s;p^{jj}_{T}/M_{jj};Events"          , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_max_mt"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "max_mt"       , Form("%s;m_{T} (GeV);Events"                , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_yield"           ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "yield"        , Form("%s;channel;Events"                    , title.c_str()), "sb::off dt::stack lg::left" );
+    p["p_dilep_mass"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dilep_mass"   , Form("%s;m_{ll} (GeV);Events"               , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt1"             ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt1"          , Form("%s;p^{lep1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt2"             ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt2"          , Form("%s;p^{lep2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt1_el"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt1_el"       , Form("%s;p^{lep1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt2_el"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt2_el"       , Form("%s;p^{lep2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt1_mu"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt1_mu"       , Form("%s;p^{lep1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt2_mu"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt2_mu"       , Form("%s;p^{lep2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_met"             ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "met"          , Form("%s;E^{miss}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_ht"              ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "ht"           , Form("%s;H_{T} (GeV);Events"                , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_mt"              ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "mt"           , Form("%s;m_{T} (GeV);Events"                , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_njets"           ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "njets"        , Form("%s;number of jets;Events"             , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_lepdphi"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lepdphi"      , Form("%s;#Delta#Phi(lep1, lep2);Events"     , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_lepdeta"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lepdeta"      , Form("%s;#Delta#eta(lep1, lep2);Events"     , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_lepdr"           ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lepdr"        , Form("%s;#DeltaR(lep1, lep2);Events"        , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_ptjetlep"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "ptjetlep"     , Form("%s;jet p_{T} / lep p_{T} - 1;Events"  , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_drlep3rdlep"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "drlep3rdlep"  , Form("%s;#DeltaR(lep, 3rd lep);Events"      , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_ml3l"            ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "ml3l"         , Form("%s;M(l,3l);Events"                    , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_jet1_pt"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "jet1_pt"      , Form("%s;p^{jet1}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");    
+    p["p_jet2_pt"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "jet2_pt"      , Form("%s;p^{jet2}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");    
+    p["p_jet3_pt"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "jet3_pt"      , Form("%s;p^{jet3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");        
+    p["p_mjj"             ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "mjj"          , Form("%s;M_{jj} (GeV);Events"               , title.c_str()), "sb::off dt::stack lg::right");        
+    p["p_dijet_dphi"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_dphi"   , Form("%s;#Delta#phi_{jj};Events"            , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dijet_deta"      ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_deta"   , Form("%s;#Delta#eta_{jj};Events"            , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dijet_dr"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_dr"     , Form("%s;#DeltaR_{jj};Events"               , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_nbtags"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "nbtags"       , Form("%s;number of loose btags;Events"      , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_htpv"            ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "htpv"         , Form("%s;PV H_{T} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_mt2"             ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "mt2"          , Form("%s;m_{T2} (GeV);Events"               , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_lep1_mt"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lep1_mt"      , Form("%s;lep1 m_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_lep2_mt"         ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "lep2_mt"      , Form("%s;lep2 m_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dijet_pt"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_pt"     , Form("%s;p^{jj}_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dijet_eta"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_eta"    , Form("%s;#eta_{jj};Events"                  , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_minjpt_jjpt"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "minjpt_jjpt"  , Form("%s;min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T};Events", title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt3"             ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt3"          , Form("%s;p^{lep3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt3_el"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt3_el"       , Form("%s;p^{lep3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_pt3_mu"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "pt3_mu"       , Form("%s;p^{lep3}_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dilep_pt"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dilep_pt"     , Form("%s;p^{ll}_{T} (GeV);Events"           , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dilep_eta"       ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dilep_eta"    , Form("%s;#eta_{ll};Events"                  , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dijet_pt_mass"   ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_pt_mass", Form("%s;p^{jj}_{T}/M_{jj};Events"          , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_max_mt"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "max_mt"       , Form("%s;m_{T} (GeV);Events"                , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_isotrk_veto"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "isotrk_veto"  , Form("%s;iso trk veto;Events"               , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_tau_veto"        ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "tau_veto"     , Form("%s;tau veto;Events"                   , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dphi_met_ll"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dphi_met_ll"     , Form("%s;#Delta#phi(ll,met);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dphi_met_jj"     ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dphi_met_jj"     , Form("%s;#Delta#phi(jj,met);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_min_dphi_met_lep"] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "min_dphi_met_lep"     , Form("%s;min #Delta#phi(lep,met);Events"    , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_max_dphi_met_lep"] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "max_dphi_met_lep"     , Form("%s;max #Delta#phi(lep,met);Events"    , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_min_dphi_met_jet"] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "min_dphi_met_jet"     , Form("%s;min #Delta#phi(jet,met);Events"    , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_max_dphi_met_jet"] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "max_dphi_met_jet"     , Form("%s;max #Delta#phi(jet,met);Events"    , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_didphi"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "didphi"     , Form("%s;#Delta#phi(ll,jj);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dideta"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dideta"     , Form("%s;#Delta#eta(ll,jj);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_didr"          ] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "didr"     , Form("%s;#DeltaR(ll,jj);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+
+    p["p_dijet_mass_pt_dr"] = CreateOverlay(vhc_signals, vsignals, vhc_bkgds, vbkgd_names, "dijet_mass_pt_dr", Form("%s;M_{jj}/p^{jj}_{T}/#DeltaR_{jj};Events", title.c_str()), "sb::off dt::stack lg::right");
 
     // overlay individual channels
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
@@ -463,11 +523,13 @@ void OverlaySSPlotsMC
     }
 
     // write
-    rt::Print(p, Form("%s/kin_mc", plots_path.c_str()), suffix);
+    std::string plots_subdir = normalize ? "kin_mc_norm" : "kin_mc";
+    rt::Print(p, Form("%s/%s", plots_path.c_str(), plots_subdir.c_str()), suffix, /*option = */"", /*logy = */false, /*normalize = */false);
+    // rt::Print(p, Form("%s/%s", plots_path.c_str(), plots_subdir.c_str()), suffix, /*option = */"", /*logy = */false, /*normalize = */normalize);
 
     // print yield explicitly
     // this is a kludge to the the x error bars the right size for the yeild plot
     gStyle->SetErrorX(0.3);
-    rt::Print(p["p_yield"], Form("%s/kin_mc/p_yield", plots_path.c_str()), suffix);
+    rt::Print(p["p_yield"], Form("%s/%s/p_yield", plots_path.c_str(), plots_subdir.c_str()), suffix, /*option = */"", /*logy = */false, /*normalize = */false);
     gStyle->SetErrorX();
 }

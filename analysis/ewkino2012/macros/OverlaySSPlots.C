@@ -104,7 +104,7 @@ void OverlaySSPlots
     const std::string& suffix = "png"
 )
 {
-    ss::SignalRegionInfo sr = ss::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
+    ewkino::SignalRegionInfo sr = ewkino::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
 
     // charge type
     string charge_stem = "";
@@ -157,44 +157,59 @@ void OverlaySSPlots
     // overlays
     map<string, rt::TH1Overlay> p;
     rt::TH1Overlay::profile_marker_size_default = 10.0;
-    p["p_yield"       ] = CreateOverlay(hc_data, hc_mc, "yield"      , Form("%s;channel;Events"                  , title.c_str()), "sb::off dt::stack lg::left" );
-    p["p_dilep_mass"  ] = CreateOverlay(hc_data, hc_mc, "dilep_mass" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt1"         ] = CreateOverlay(hc_data, hc_mc, "pt1"        , Form("%s;p^{lep1}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_pt2"         ] = CreateOverlay(hc_data, hc_mc, "pt2"        , Form("%s;p^{lep2}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_met"         ] = CreateOverlay(hc_data, hc_mc, "met"        , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_ht"          ] = CreateOverlay(hc_data, hc_mc, "ht"         , Form("%s;H_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_mt"          ] = CreateOverlay(hc_data, hc_mc, "mt"         , Form("%s;m_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_nbtags"      ] = CreateOverlay(hc_data, hc_mc, "nbtags"     , Form("%s;number of b-tagged jets;Events"  , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_njets"       ] = CreateOverlay(hc_data, hc_mc, "njets"      , Form("%s;number of jets;Events"           , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lepdphi"     ] = CreateOverlay(hc_data, hc_mc, "lepdphi"    , Form("%s;#Delta#Phi(lep1, lep2);Events"   , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lepdeta"     ] = CreateOverlay(hc_data, hc_mc, "lepdeta"    , Form("%s;#Delta#eta(lep1, lep2);Events"   , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_lepdr"       ] = CreateOverlay(hc_data, hc_mc, "lepdr"      , Form("%s;#DeltaR(lep1, lep2);Events"      , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_drlepb"      ] = CreateOverlay(hc_data, hc_mc, "drlepb"     , Form("%s;#DeltaR(lep, btag);Events"       , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_btagdr"      ] = CreateOverlay(hc_data, hc_mc, "btagdr"     , Form("%s;#DeltaR(btag1, btag2);Events"    , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_drjetb"      ] = CreateOverlay(hc_data, hc_mc, "drjetb"     , Form("%s;#DeltaR(btag, jet);Events"       , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_ptjetlep"    ] = CreateOverlay(hc_data, hc_mc, "ptjetlep"   , Form("%s;jet p_{T} / lep p_{T} - 1;Events", title.c_str()), "sb::off dt::stack lg::right");
-    p["p_drlep3rdlep" ] = CreateOverlay(hc_data, hc_mc, "drlep3rdlep", Form("%s;#DeltaR(lep, 3rd lep);Events"    , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_yield"           ] = CreateOverlay(hc_data , hc_mc , "yield"            , Form("%s;channel;Events"                   , title.c_str())                , "sb::off dt::stack lg::left" );
+    p["p_dilep_mass"      ] = CreateOverlay(hc_data , hc_mc , "dilep_mass"       , Form("%s;m_{ll} (GeV);Events"              , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt1"             ] = CreateOverlay(hc_data , hc_mc , "pt1"              , Form("%s;p^{lep1}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt2"             ] = CreateOverlay(hc_data , hc_mc , "pt2"              , Form("%s;p^{lep2}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt1_el"          ] = CreateOverlay(hc_data , hc_mc , "pt1_el"           , Form("%s;p^{lep1}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt2_el"          ] = CreateOverlay(hc_data , hc_mc , "pt2_el"           , Form("%s;p^{lep2}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt1_mu"          ] = CreateOverlay(hc_data , hc_mc , "pt1_mu"           , Form("%s;p^{lep1}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt2_mu"          ] = CreateOverlay(hc_data , hc_mc , "pt2_mu"           , Form("%s;p^{lep2}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_met"             ] = CreateOverlay(hc_data , hc_mc , "met"              , Form("%s;E^{miss}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_ht"              ] = CreateOverlay(hc_data , hc_mc , "ht"               , Form("%s;H_{T} (GeV);Events"               , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_mt"              ] = CreateOverlay(hc_data , hc_mc , "mt"               , Form("%s;m_{T} (GeV);Events"               , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_njets"           ] = CreateOverlay(hc_data , hc_mc , "njets"            , Form("%s;number of jets;Events"            , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_lepdphi"         ] = CreateOverlay(hc_data , hc_mc , "lepdphi"          , Form("%s;#Delta#Phi(lep1                   , lep2);Events"                 , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_lepdeta"         ] = CreateOverlay(hc_data , hc_mc , "lepdeta"          , Form("%s;#Delta#eta(lep1                   , lep2);Events"                 , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_lepdr"           ] = CreateOverlay(hc_data , hc_mc , "lepdr"            , Form("%s;#DeltaR(lep1                      , lep2);Events"                 , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_ptjetlep"        ] = CreateOverlay(hc_data , hc_mc , "ptjetlep"         , Form("%s;jet p_{T} / lep p_{T} - 1;Events" , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_drlep3rdlep"     ] = CreateOverlay(hc_data , hc_mc , "drlep3rdlep"      , Form("%s;#DeltaR(lep                       , 3rd lep);Events"              , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_ml3l"            ] = CreateOverlay(hc_data , hc_mc , "ml3l"             , Form("%s;M(l                               ,3l);Events"                    , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_jet1_pt"         ] = CreateOverlay(hc_data , hc_mc , "jet1_pt"          , Form("%s;p^{jet1}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");    
+    p["p_jet2_pt"         ] = CreateOverlay(hc_data , hc_mc , "jet2_pt"          , Form("%s;p^{jet2}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");    
+    p["p_jet3_pt"         ] = CreateOverlay(hc_data , hc_mc , "jet3_pt"          , Form("%s;p^{jet3}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");        
+    p["p_mjj"             ] = CreateOverlay(hc_data , hc_mc , "mjj"              , Form("%s;M_{jj} (GeV);Events"              , title.c_str())                , "sb::off dt::stack lg::right");        
+    p["p_dijet_dphi"      ] = CreateOverlay(hc_data , hc_mc , "dijet_dphi"       , Form("%s;#Delta#phi_{jj};Events"           , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dijet_deta"      ] = CreateOverlay(hc_data , hc_mc , "dijet_deta"       , Form("%s;#Delta#eta_{jj};Events"           , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dijet_dr"        ] = CreateOverlay(hc_data , hc_mc , "dijet_dr"         , Form("%s;#DeltaR_{jj};Events"              , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_nbtags"          ] = CreateOverlay(hc_data , hc_mc , "nbtags"           , Form("%s;number of loose btags;Events"     , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_htpv"            ] = CreateOverlay(hc_data , hc_mc , "htpv"             , Form("%s;PV H_{T} (GeV);Events"            , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_mt2"             ] = CreateOverlay(hc_data , hc_mc , "mt2"              , Form("%s;m_{T2} (GeV);Events"              , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_lep1_mt"         ] = CreateOverlay(hc_data , hc_mc , "lep1_mt"          , Form("%s;lep1 m_{T} (GeV);Events"          , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_lep2_mt"         ] = CreateOverlay(hc_data , hc_mc , "lep2_mt"          , Form("%s;lep2 m_{T} (GeV);Events"          , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dijet_pt"        ] = CreateOverlay(hc_data , hc_mc , "dijet_pt"         , Form("%s;p^{jj}_{T} (GeV);Events"          , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dijet_eta"       ] = CreateOverlay(hc_data , hc_mc , "dijet_eta"        , Form("%s;#eta_{jj};Events"                 , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_minjpt_jjpt"     ] = CreateOverlay(hc_data , hc_mc , "minjpt_jjpt"      , Form("%s;min(p^{j1}_{T}                    ,p^{j2}_{t})/p^{jj}_{T};Events" , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_pt3"             ] = CreateOverlay(hc_data , hc_mc , "pt3"              , Form("%s;p^{lep3}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt3_el"          ] = CreateOverlay(hc_data , hc_mc , "pt3_el"           , Form("%s;p^{lep3}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_pt3_mu"          ] = CreateOverlay(hc_data , hc_mc , "pt3_mu"           , Form("%s;p^{lep3}_{T} (GeV);Events"        , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dilep_pt"        ] = CreateOverlay(hc_data , hc_mc , "dilep_pt"         , Form("%s;p^{ll}_{T} (GeV);Events"          , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dilep_eta"       ] = CreateOverlay(hc_data , hc_mc , "dilep_eta"        , Form("%s;#eta_{ll};Events"                 , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dijet_pt_mass"   ] = CreateOverlay(hc_data , hc_mc , "dijet_pt_mass"    , Form("%s;p^{jj}_{T}/M_{jj};Events"         , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_max_mt"          ] = CreateOverlay(hc_data , hc_mc , "max_mt"           , Form("%s;m_{T} (GeV);Events"               , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_isotrk_veto"     ] = CreateOverlay(hc_data , hc_mc , "isotrk_veto"      , Form("%s;iso trk veto;Events"              , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_tau_veto"        ] = CreateOverlay(hc_data , hc_mc , "tau_veto"         , Form("%s;tau veto;Events"                  , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_dphi_met_ll"     ] = CreateOverlay(hc_data , hc_mc , "dphi_met_ll"      , Form("%s;#Delta#phi(ll                     ,met);Events"                   , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_dphi_met_jj"     ] = CreateOverlay(hc_data , hc_mc , "dphi_met_jj"      , Form("%s;#Delta#phi(jj                     ,met);Events"                   , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_min_dphi_met_lep"] = CreateOverlay(hc_data , hc_mc , "min_dphi_met_lep" , Form("%s;min #Delta#phi(lep                ,met);Events"                   , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_max_dphi_met_lep"] = CreateOverlay(hc_data , hc_mc , "max_dphi_met_lep" , Form("%s;max #Delta#phi(lep                ,met);Events"                   , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_min_dphi_met_jet"] = CreateOverlay(hc_data , hc_mc , "min_dphi_met_jet" , Form("%s;min #Delta#phi(jet                ,met);Events"                   , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_max_dphi_met_jet"] = CreateOverlay(hc_data , hc_mc , "max_dphi_met_jet" , Form("%s;max #Delta#phi(jet                ,met);Events"                   , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_didphi"          ] = CreateOverlay(hc_data , hc_mc , "didphi"           , Form("%s;#Delta#phi(ll                     ,jj);Events"                    , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_dideta"          ] = CreateOverlay(hc_data , hc_mc , "dideta"           , Form("%s;#Delta#eta(ll                     ,jj);Events"                    , title.c_str()) , "sb::off dt::stack lg::right");
+    p["p_didr"            ] = CreateOverlay(hc_data , hc_mc , "didr"             , Form("%s;#DeltaR(ll                        ,jj);Events"                    , title.c_str()) , "sb::off dt::stack lg::right");
 
-    // for pass
-    p["p_pas_met"   ] = CreateOverlay(hc_data, hc_mc, "pas_met"   , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::right"    );
-    p["p_pas_ht"    ] = CreateOverlay(hc_data, hc_mc, "pas_ht"    , Form("%s;H_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::top_right");
-    p["p_pas_nbtags"] = CreateOverlay(hc_data, hc_mc, "pas_nbtags", Form("%s;number of b-tagged jets;Events"  , title.c_str()), "sb::off dt::stack lg::right"    );
-    p["p_pas_njets" ] = CreateOverlay(hc_data, hc_mc, "pas_njets" , Form("%s;number of jets;Events"           , title.c_str()), "sb::off dt::stack lg::right"    );
-
-    // keep the legend off the label the top
-    p["p_pas_ht"    ].SetLegendOffset(0.031);
-    p["p_pas_met"   ].SetLegendOffset(0.031);
-    p["p_pas_nbtags"].SetLegendOffset(0.031);
-    p["p_pas_njets" ].SetLegendOffset(0.031);
-
-    p["p_pas_ht"    ].SetLegendTextSize(0.025);
-    p["p_pas_met"   ].SetLegendTextSize(0.025);
-    p["p_pas_nbtags"].SetLegendTextSize(0.025);
-    p["p_pas_njets" ].SetLegendTextSize(0.025);
-
-    p["p_dilep_mass_nj0"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dilep_mass_nj1"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::right");
-    p["p_dilep_mass_nj2"] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2" , Form("%s;m_{ll} (GeV);Events"             , title.c_str()), "sb::off dt::stack lg::right");
+    p["p_dijet_mass_pt_dr"] = CreateOverlay(hc_data, hc_mc, "dijet_mass_pt_dr", Form("%s;M_{jj}/p^{jj}_{T}/#DeltaR_{jj};Events", title.c_str()), "sb::off dt::stack lg::right");
 
     // overlay individual channels
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
@@ -211,12 +226,9 @@ void OverlaySSPlots
         p["p_met"       +hn] = CreateOverlay(hc_data, hc_mc, "met"       +hn , Form("%s;E^{miss}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::right");
         p["p_ht"        +hn] = CreateOverlay(hc_data, hc_mc, "ht"        +hn , Form("%s;H_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::right");
         p["p_mt"        +hn] = CreateOverlay(hc_data, hc_mc, "mt"        +hn , Form("%s;m_{T} (GeV);Events"              , title.c_str()), "sb::off dt::stack lg::right");
-        p["p_nbtags"    +hn] = CreateOverlay(hc_data, hc_mc, "nbtags"    +hn , Form("%s;number of b-tagged jets;Events"  , title.c_str()), "sb::off dt::stack lg::right");
-        p["p_njets"     +hn] = CreateOverlay(hc_data, hc_mc, "njets"     +hn , Form("%s;number of jets;Events"           , title.c_str()), "sb::off dt::stack lg::right");
-
-        p["p_dilep_mass_nj0"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj0"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::right");
-        p["p_dilep_mass_nj1"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj1"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::right");
-        p["p_dilep_mass_nj2"+hn] = CreateOverlay(hc_data, hc_mc, "dilep_mass_nj2"+hn , Form("%s;m_{ll} (GeV);Events", title.c_str()), "sb::off dt::stack lg::right");
+        p["p_lep1_mt"   +hn] = CreateOverlay(hc_data, hc_mc, "lep1_mt"   +hn , Form("%s;lep1 m_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+        p["p_lep2_mt"   +hn] = CreateOverlay(hc_data, hc_mc, "lep2_mt"   +hn , Form("%s;lep2 m_{T} (GeV);Events"         , title.c_str()), "sb::off dt::stack lg::right");
+        p["p_pt3"       +hn] = CreateOverlay(hc_data, hc_mc, "pt3"       +hn , Form("%s;p^{lep3}_{T} (GeV);Events"       , title.c_str()), "sb::off dt::stack lg::right");
     }
 
     // SR label
