@@ -46,7 +46,7 @@ try
     bool sync_print                 = false;
     bool sparms                     = false;
     //bool switchSigns                = false;
-    int num_jets                    = 2;
+    int num_jets                    = 0;
     int jetMetScale                 = 0;
     bool isFastSim                  = false;
     std::string apply_jec_otf       = "";
