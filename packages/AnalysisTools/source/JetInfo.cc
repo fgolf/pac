@@ -54,19 +54,19 @@ namespace at
     }
 
     // methods
-    LorentzVector JetInfo::P4()     const {return m_p4;            } 
-    LorentzVector JetInfo::CorrP4() const {return m_corr_p4;       } 
-    LorentzVector JetInfo::MC3P4()  const {return m_mc3_p4;        } 
-    float JetInfo::Pt()             const {return m_p4.pt();       } 
-    float JetInfo::CorrPt()         const {return m_corr_p4.pt();  } 
-    float JetInfo::Eta()            const {return m_p4.eta();      } 
-    float JetInfo::Phi()            const {return m_p4.phi();      } 
-    float JetInfo::BtagDisc()       const {return m_btag_disc;     } 
-    bool JetInfo::IsBtagged()       const {return m_is_btagged;    } 
-    int JetInfo::MCFlavorAlgo()     const {return m_mc_flavor_algo;} 
-    int JetInfo::MCFlavorPhys()     const {return m_mc_flavor_phys;} 
-    int JetInfo::MC3Id()            const {return m_mc3_id;        } 
-    int JetInfo::MomId()            const {return m_mom_id;        } 
+    const LorentzVector& JetInfo::P4()     const {return m_p4;            } 
+    const LorentzVector& JetInfo::CorrP4() const {return m_corr_p4;       } 
+    const LorentzVector& JetInfo::MC3P4()  const {return m_mc3_p4;        } 
+    float JetInfo::Pt()                    const {return m_p4.pt();       } 
+    float JetInfo::CorrPt()                const {return m_corr_p4.pt();  } 
+    float JetInfo::Eta()                   const {return m_p4.eta();      } 
+    float JetInfo::Phi()                   const {return m_p4.phi();      } 
+    float JetInfo::BtagDisc()              const {return m_btag_disc;     } 
+    bool JetInfo::IsBtagged()              const {return m_is_btagged;    } 
+    int JetInfo::MCFlavorAlgo()            const {return m_mc_flavor_algo;} 
+    int JetInfo::MCFlavorPhys()            const {return m_mc_flavor_phys;} 
+    int JetInfo::MC3Id()                   const {return m_mc3_id;        } 
+    int JetInfo::MomId()                   const {return m_mom_id;        } 
 
     // non member methods
 
@@ -89,6 +89,22 @@ namespace at
     bool operator < (const JetInfo& lhs, const JetInfo& rhs)
     {
         return (lhs.CorrPt() < rhs.CorrPt());
+    }
+
+    std::ostream& operator << (std::ostream& os, const JetInfo& jet_info)
+    {
+        os << "JetInfo:" << endl;
+        os << "jet_pt             = " << jet_info.Pt()           << endl;
+        os << "jet_corr_pt        = " << jet_info.CorrPt()       << endl;
+        os << "jet_eta            = " << jet_info.CorrP4().eta() << endl;
+        os << "jet_phi            = " << jet_info.CorrP4().phi() << endl;
+        os << "jet_is_btagged     = " << jet_info.IsBtagged()    << endl;
+        os << "jet_btag_disc      = " << jet_info.BtagDisc()     << endl;
+        os << "jet_mc_flavor_aglo = " << jet_info.MCFlavorAlgo() << endl;
+        os << "jet_mc_flavor_phys = " << jet_info.MCFlavorPhys() << endl;
+        os << "jet_mc3_id         = " << jet_info.MC3Id()        << endl;
+        os << "jet_mom_id         = " << jet_info.MomId()        << endl;
+        return os;
     }
 
     // determine if btagged (needed for boost::bind)
@@ -306,6 +322,12 @@ namespace at
         {
             for (size_t jidx = 0; jidx != pfjets_p4().size(); jidx++)
             {
+                // does this jet pass the ID?
+                if (not passesPFJetID(jidx)) 
+                {
+                    continue;
+                }
+
                 // uncorrected p4
                 const LorentzVector& jet_p4 = pfjets_p4().at(jidx);
 

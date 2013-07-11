@@ -148,19 +148,19 @@ namespace at
             );
             
             // methods
-            LorentzVector P4()        const; 
-            LorentzVector CorrP4()    const; 
-            LorentzVector MC3P4()     const; 
-            float Pt()                const; 
-            float CorrPt()            const; 
-            float Eta()               const; 
-            float Phi()               const; 
-            float BtagDisc()          const; 
-            bool IsBtagged()          const; 
-            int MCFlavorAlgo()        const;
-            int MCFlavorPhys()        const;
-            int MC3Id()               const;
-            int MomId()               const;
+            const LorentzVector& P4()     const; 
+            const LorentzVector& CorrP4() const; 
+            const LorentzVector& MC3P4()  const; 
+            float Pt()                    const; 
+            float CorrPt()                const; 
+            float Eta()                   const; 
+            float Phi()                   const; 
+            float BtagDisc()              const; 
+            bool IsBtagged()              const; 
+            int MCFlavorAlgo()            const;
+            int MCFlavorPhys()            const;
+            int MC3Id()                   const;
+            int MomId()                   const;
 
         private:
     
@@ -180,6 +180,7 @@ namespace at
     // operators 
     bool operator == (const JetInfo& lhs, const JetInfo& rhs);
     bool operator <  (const JetInfo& lhs, const JetInfo& rhs);
+    std::ostream& operator << (std::ostream& os, const JetInfo& jet_info);
     
     // determine if btagged (needed for boost::bind)
     bool IsBtagged(const JetInfo& jet_info);
