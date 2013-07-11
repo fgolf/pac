@@ -233,7 +233,7 @@ namespace tas {
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &els_p4Out() { return cms2.els_p4Out(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &els_trk_p4() { return cms2.els_trk_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &els_vertex_p4() { return cms2.els_vertex_p4(); }
-	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genjets_p4NoMuNoNu() { return cms2.genjets_p4NoMuNoNu(); }
+// 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genjets_p4NoMuNoNu() { return cms2.genjets_p4NoMuNoNu(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genps_p4() { return cms2.genps_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genps_prod_vtx() { return cms2.genps_prod_vtx(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &genjets_p4() { return cms2.genjets_p4(); }
@@ -1280,7 +1280,7 @@ namespace tas {
 	const unsigned int &evt_lumiBlock() { return cms2.evt_lumiBlock(); }
 	const unsigned int &evt_run() { return cms2.evt_run(); }
 	const unsigned int &genps_flavorHistoryFilterResult() { return cms2.genps_flavorHistoryFilterResult(); }
-	const unsigned int &evt_ngenjetsNoMuNoNu() { return cms2.evt_ngenjetsNoMuNoNu(); }
+// 	const unsigned int &evt_ngenjetsNoMuNoNu() { return cms2.evt_ngenjetsNoMuNoNu(); }
 	const unsigned int &genps_signalProcessID() { return cms2.genps_signalProcessID(); }
 	const unsigned int &evt_ngenjets() { return cms2.evt_ngenjets(); }
 	const unsigned int &evt_njets() { return cms2.evt_njets(); }

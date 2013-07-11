@@ -90,7 +90,6 @@ class JetInfoTree
         // generator level bjets
         int gen_nbjets;
         vecLorentzVector gen_vbjets_p4;
-
 };
 
 // template function definitiions

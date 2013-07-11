@@ -13,6 +13,8 @@ namespace at
         using namespace std;
         using namespace tas;
 
+        cout << "front = " << evt_CMS2tag().front() << endl; 
+        cout << "size  = " << evt_CMS2tag().size()  << endl; 
         vector<string> cms2_tag = rt::string_split(evt_CMS2tag().front().Data(), "-");
         if (cms2_tag.size() < 3)
         {
