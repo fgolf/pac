@@ -353,8 +353,8 @@ namespace at
         const int nbins = sizeof(ptmin)/sizeof(int)-1;
         const int binnumber = (jet_pt > ptmax[nbins] ? nbins : rt::find_bin(jet_pt, ptmin)); //take the last bin for very energetic jets... no increase of unc_option for now.
 
-        scale_factor.value  = vecSF[binnumber];
-        scale_factor.error = sqrt(vecErr[binnumber]*vecErr[binnumber] + vec[binnumber]*vec[binnumber]);
+        scale_factor.value  = vecSF.at(binnumber);
+        scale_factor.error = sqrt(vecErr.at(binnumber)*vecErr.at(binnumber) + vec.at(binnumber)*vec.at(binnumber));
         return scale_factor;
     }
 

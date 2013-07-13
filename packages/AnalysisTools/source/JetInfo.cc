@@ -376,7 +376,7 @@ namespace at
                 if (ja.scale_type == JetScaleType::JER)
                 {
                     // JER doesn't work at eta > 2.5 (gives nan)
-                    if (fabs(jet_corr_p4.eta()) > 2.5)
+                    if (fabs(jet_corr_p4.eta()) > 2.499999)
                     {
                         continue;
                     }
