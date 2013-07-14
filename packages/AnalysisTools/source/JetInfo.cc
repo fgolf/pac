@@ -355,6 +355,13 @@ namespace at
                 }
                 LorentzVector jet_corr_p4 = jet_p4 * jet_corr; 
 
+                // JEC uncertainty correction is not defined above |eta| > 5.0
+                // never really care about jets above 5.0 anyway
+                if (fabs(jet_corr_p4.eta()) > 4.999999)
+                {
+                    continue;
+                }
+
                 // jet uncertainty up/down
                 if (ja.scale_type == JetScaleType::JEC_UP or ja.scale_type == JetScaleType::JEC_DOWN)  // if pointer not NULL, use the OTF JEC uncertainty
                 {
@@ -372,10 +379,10 @@ namespace at
                     }
                 }
 
-                // jet energy resolution smeearing
+                // jet energy resolution smearing
                 if (ja.scale_type == JetScaleType::JER)
                 {
-                    // JER doesn't work at eta > 2.5 (gives nan)
+                    // JER doesn't work at |eta| > 2.5 (gives nan)
                     if (fabs(jet_corr_p4.eta()) > 2.499999)
                     {
                         continue;
