@@ -11,6 +11,8 @@
 #include "rt/MiscTools.h"
 #include "at/DileptonHypType.h"
 #include "SignalRegion.h"
+#include "SSYields.h"
+#include "ScaleFactors.h"
 
 using namespace std;
 
@@ -85,7 +87,6 @@ void CreatePasPlots
     hc_mc += rt::TH1Container(Form("%s/wgstar2m%s.root"     , plots_path.c_str(), charge_stem.c_str()));
     hc_mc += rt::TH1Container(Form("%s/wz%s.root"           , plots_path.c_str(), charge_stem.c_str()));
     hc_mc += rt::TH1Container(Form("%s/zz%s.root"           , plots_path.c_str(), charge_stem.c_str()));
-    hc_mc += rt::TH1Container(Form("%s/ttg%s.root"          , plots_path.c_str(), charge_stem.c_str()));
     hc_mc += rt::TH1Container(Form("%s/ttw%s.root"          , plots_path.c_str(), charge_stem.c_str()));
     hc_mc += rt::TH1Container(Form("%s/ttz%s.root"          , plots_path.c_str(), charge_stem.c_str()));
     hc_mc += rt::TH1Container(Form("%s/tbz%s.root"          , plots_path.c_str(), charge_stem.c_str()));
@@ -101,6 +102,28 @@ void CreatePasPlots
     hc_mc += rt::TH1Container(Form("%s/wh_zh_tth_hww%s.root", plots_path.c_str(), charge_stem.c_str()));
     hc_mc += rt::TH1Container(Form("%s/wh_zh_tth_hzz%s.root", plots_path.c_str(), charge_stem.c_str()));
     hc_mc += rt::TH1Container(Form("%s/wh_zh_tth_htt%s.root", plots_path.c_str(), charge_stem.c_str()));
+
+    // handle ttg seperately because of SF
+    rt::TH1Container hc_ttg(Form("%s/ttg%s.root", plots_path.c_str(), charge_stem.c_str()));
+    
+    const ss::SignalRegion::value_type signal_region          = ss::GetSignalRegionFromName(signal_region_name, analysis_type_name, signal_region_type_name); 
+    const ss::AnalysisType::value_type analysis_type          = ss::GetAnalysisTypeFromName(analysis_type_name);
+    const ss::SignalRegionType::value_type signal_region_type = ss::GetSignalRegionTypeFromName(signal_region_type_name); 
+    const bool apply_ttg_sf = (((0 < signal_region && signal_region < 36 and analysis_type == ss::AnalysisType::high_pt) or 
+                               (0 < signal_region && signal_region < 29 and (analysis_type == ss::AnalysisType::low_pt or analysis_type == ss::AnalysisType::vlow_pt))) and
+                               (signal_region_type == ss::SignalRegionType::exclusive));
+    if (apply_ttg_sf)
+    {
+        const ss::Yield ttg_sr0 = ss::GetYield("ss", at::Sample::ttg, ss::SignalRegion::sr0, analysis_type, signal_region_type, 0, output_name);
+        const ss::Yield ttg_srn = ss::GetYield("ss", at::Sample::ttg, signal_region        , analysis_type, signal_region_type, 0, output_name);
+
+        // assign value
+        const float ttg_sf = (ttg_sr0.ll > 0 ? ApplyTTGammaScaleFactor(signal_region, analysis_type, ttg_sr0.ll, ttg_sr0.dll).first : ttg_srn.ll)/ttg_srn.ll; 
+
+        // scale the predictions with the scale factor
+        hc_ttg.Scale(ttg_sf);
+    }
+    hc_mc += hc_ttg;
     
     // set style
     rt::SetTDRStyle();
@@ -137,6 +160,6 @@ void CreatePasPlots
 
     // results
     hc_result.Write       (Form("plots/pas/pas_%s_%s_%s.root"        , analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str()));
-    hc_result_hthigh.Write(Form("plots/pas/pas_high_ht_%s_%s_%s.root", analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str()));
-    hc_result_htlow.Write (Form("plots/pas/pas_low_ht_%s_%s_%s.root" , analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str()));
+/*     hc_result_hthigh.Write(Form("plots/pas/pas_high_ht_%s_%s_%s.root", analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str())); */
+/*     hc_result_htlow.Write (Form("plots/pas/pas_low_ht_%s_%s_%s.root" , analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str())); */
 }
