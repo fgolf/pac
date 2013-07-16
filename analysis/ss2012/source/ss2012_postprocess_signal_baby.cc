@@ -45,24 +45,27 @@ using namespace ss;
 int main(int argc, char* argv[])
 try
 {
-
     // inputs
     // -------------------------------------------------------------------------------------------------//
 
-    std::string output_file = "";
-    std::string input_file  = "";
-    std::string xsec_file   = "data/xsec/susy_xsec.root";
-    std::string sample_name = "";
+    std::string output_file  = "";
+    std::string input_file   = "";
+    std::string xsec_file    = "data/xsec/susy_xsec.root";
+    std::string sample_name  = "";
+    long long max_tree_size  = 214748364800LL; // 200 GB 
+    bool gen_count_from_tree = false;
 
     // define inputs
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
-        ("help"  , "print this menu")
-        ("input" , po::value<std::string>(&input_file)->required()  , "REQUIRED: input ntuple file (or files in a comma sperareted list)")
-        ("output", po::value<std::string>(&output_file)->required() , "REQUIRED: output ntuple file"                                     )
-        ("sample", po::value<std::string>(&sample_name)->required() , "REQUIRED: sample to post process (at/Sample.h)"                   )
-        ("xsec"  , po::value<std::string>(&xsec_file)               , "cross section file path (data/xsec/susy_xsec.root)"               )
+        ("help"               , "print this menu")
+        ("input"              , po::value<std::string>(&input_file)->required()  , "REQUIRED: input ntuple file (or files in a comma sperareted list)")
+        ("output"             , po::value<std::string>(&output_file)->required() , "REQUIRED: output ntuple file"                                     )
+        ("sample"             , po::value<std::string>(&sample_name)->required() , "REQUIRED: sample to post process (at/Sample.h)"                   )
+        ("xsec"               , po::value<std::string>(&xsec_file)               , "cross section file path (data/xsec/susy_xsec.root)"               )
+        ("maxsize"            , po::value<long long>(&max_tree_size)             , "Maximum Tree File size before it makes a new file"                )
+        ("gen_count_from_tree", po::value<bool>(&gen_count_from_tree)            , "Get the gen count from the Tree (assumes there was no filter)"    )
         ;
 
     // parse it
@@ -92,10 +95,12 @@ try
     }
 
     cout << "[ss2012_postprocess_signal_baby] post processing with the following inputs:" << endl;
-    cout << "input_file  :\t" << input_file  << endl;
-    cout << "output_file :\t" << output_file << endl;
-    cout << "sample_name :\t" << sample_name << endl;
-    cout << "xsec_file   :\t" << xsec_file   << endl;
+    cout << "input_file  :\t"  << input_file    << endl;
+    cout << "output_file :\t"  << output_file   << endl;
+    cout << "sample_name :\t"  << sample_name   << endl;
+    cout << "xsec_file   :\t"  << xsec_file     << endl;
+    cout << "maxtreesize:\t" << max_tree_size << endl;
+    cout << "gen_count_from_tree:\t" << gen_count_from_tree << endl;
 
     // check the sample to post process
     // -------------------------------------------------------------------------------------------------//
@@ -113,45 +118,12 @@ try
     }
     SampleInfo sample_info = GetSampleInfo(sample);
 
-    // create the # generated events histogram 
-    // -------------------------------------------------------------------------------------------------//
-
-    ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(sample);
-    TH2F h_gen_count("h_gen_count", Form("# Generated Events - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
-
-    vector<string> vfile_names = rt::ls(input_file);
-    for (size_t i = 0; i != vfile_names.size(); i++)
-    {
-        //cout << vfile_names.at(i) << endl;
-        TH2F* h_temp = rt::GetHistFromRootFile<TH2F>(vfile_names.at(i), "h_gen_count");
-        h_gen_count.Add(h_temp);
-        delete h_temp;
-    }
-
-    // create the # scale 1fb histogram 
-    // -------------------------------------------------------------------------------------------------//
-
-    TH1F* h_xsec = rt::GetHistFromRootFile<TH1F>(xsec_file, Form("h_xsec_%s", sample_name.c_str()));
-    h_xsec->SetName("h_xsec");
-    //cout << Form("nx %d, x- %f, x+ %f, ny %d, y- %f, y+ %f", bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax) << endl;
-
-    TH2F h_scale1fb("h_scale1fb", Form("# Scale to 1 fb^{-1} - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
-    for (int xbin = 1; xbin != h_scale1fb.GetNbinsX()+1; xbin++)
-    {
-        const float xsec     = h_xsec->GetBinContent(xbin);
-        const float xsec_err = h_xsec->GetBinError(xbin);
-        for (int ybin = 1; ybin != h_scale1fb.GetNbinsY()+1; ybin++)
-        {
-            const float num_gen      = static_cast<float>(h_gen_count.GetBinContent(xbin, ybin));
-            const float scale1fb     = (num_gen > 0 ? (xsec * 1000.0f)/num_gen : 0.0f);
-            const float scale1fb_err = (num_gen > 0 ? (xsec_err * 1000.0f)/num_gen : 0.0f);
-            h_scale1fb.SetBinContent(xbin, ybin, scale1fb    );
-            h_scale1fb.SetBinError  (xbin, ybin, scale1fb_err);
-        }
-    }
-
     // Merge the Chains
     // -------------------------------------------------------------------------------------------------//
+
+    // maximum output tree limit
+    TTree::SetMaxTreeSize(max_tree_size); 
+    cout << "[ss2012_postprocess_signal_baby] TTree::GetMaxTreeSize() = " << TTree::GetMaxTreeSize() << endl;
 
     TChain chain("tree");
     chain.Add(input_file.c_str());
@@ -165,9 +137,64 @@ try
     chain.SetBranchStatus("scale1fb", 0); 
 
     // clone it
-    TFile output(output_file.c_str(), "RECREATE");
+    TFile* output = TFile::Open(output_file.c_str(), "RECREATE");
     TTree* clone = chain.CloneTree(-1, "fast");
-    clone->SetDirectory(&output);  // "output" object is in charge of deleting now
+
+    // create the # generated events histogram 
+    // -------------------------------------------------------------------------------------------------//
+
+    ss::SignalBinInfo bin_info = ss::GetSignalBinInfo(sample);
+    TH2F* h_gen_count = new TH2F("h_gen_count", Form("# Generated Events - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
+    h_gen_count->SetDirectory(NULL); // taking ownership
+
+    if (gen_count_from_tree)
+    {
+        h_gen_count->SetDirectory(gDirectory); // needed by TTree::Draw
+        chain.Draw("sparm1:sparm0>>h_gen_count", "", "goff");
+        h_gen_count->SetDirectory(NULL);
+    }
+    else
+    {
+        const vector<string> vfile_names = rt::ls(input_file);
+        for (size_t i = 0; i != vfile_names.size(); i++)
+        {
+            //cout << vfile_names.at(i) << endl;
+            try
+            {
+                TH2F* h_temp = rt::GetHistFromRootFile<TH2F>(vfile_names.at(i), "h_gen_count");
+                h_gen_count->Add(h_temp);
+                delete h_temp;
+            }
+            catch (std::exception& e)
+            {
+                cout << "[ss2012_post_process_signal_baby] Error: " << vfile_names.at(i) << " does not have h_gen_count!" << endl;
+                throw e; 
+            }
+        }
+    }
+
+    // create the # scale 1fb histogram 
+    // -------------------------------------------------------------------------------------------------//
+
+    TH1F* h_xsec = rt::GetHistFromRootFile<TH1F>(xsec_file, Form("h_xsec_%s", sample_name.c_str()));
+    h_xsec->SetName("h_xsec");
+    h_xsec->SetDirectory(NULL); // taking ownership
+
+    TH2F* h_scale1fb = new TH2F("h_scale1fb", Form("# Scale to 1 fb^{-1} - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
+    h_scale1fb->SetDirectory(NULL);
+    for (int xbin = 1; xbin != h_scale1fb->GetNbinsX()+1; xbin++)
+    {
+        const float xsec     = h_xsec->GetBinContent(xbin);
+        const float xsec_err = h_xsec->GetBinError(xbin);
+        for (int ybin = 1; ybin != h_scale1fb->GetNbinsY()+1; ybin++)
+        {
+            const float num_gen      = static_cast<float>(h_gen_count->GetBinContent(xbin, ybin));
+            const float scale1fb     = (num_gen > 0 ? (xsec * 1000.0f)/num_gen : 0.0f);
+            const float scale1fb_err = (num_gen > 0 ? (xsec_err * 1000.0f)/num_gen : 0.0f);
+            h_scale1fb->SetBinContent(xbin, ybin, scale1fb    );
+            h_scale1fb->SetBinError  (xbin, ybin, scale1fb_err);
+        }
+    }
 
     // add the cross section
     // -------------------------------------------------------------------------------------------------//
@@ -196,7 +223,8 @@ try
     size_t i_permilleOld          = 0;
     size_t num_events_total       = 0;
 
-    for (size_t i = 0; i != num_events_chain; i++) 
+    //for (size_t i = 0; i != num_events_chain; i++) 
+    for (size_t i = 0; i != 100; i++) 
     {
         // get the current TTree entry
         clone->GetEntry(i);
@@ -205,17 +233,17 @@ try
         // set the values
         switch (sample)
         {
-            case at::Sample::t1tttt:
-                // m_gluino vs m_lsp
+            case at::Sample::t1tttt:       // m_gluino vs m_lsp
+            case at::Sample::t1tttt_scans: // m_gluino vs m_lsp
                 xsec     = rt::GetBinContent1D(h_xsec, sparm0);
-                scale1fb = rt::GetBinContent2D(&h_scale1fb, sparm0, sparm1);
-                nevts    = static_cast<unsigned int>(rt::GetBinContent2D(&h_gen_count, sparm0, sparm1));
+                scale1fb = rt::GetBinContent2D(h_scale1fb, sparm0, sparm1);
+                nevts    = static_cast<unsigned int>(rt::GetBinContent2D(h_gen_count, sparm0, sparm1));
                 break;
             case at::Sample::sbottomtop:
                 // m_sbottom vs m_chargino
                 xsec     = rt::GetBinContent1D(h_xsec, sparm0);
-                scale1fb = rt::GetBinContent2D(&h_scale1fb, sparm0, sparm1);
-                nevts    = static_cast<unsigned int>(rt::GetBinContent2D(&h_gen_count, sparm0, sparm1));
+                scale1fb = rt::GetBinContent2D(h_scale1fb, sparm0, sparm1);
+                nevts    = static_cast<unsigned int>(rt::GetBinContent2D(h_gen_count, sparm0, sparm1));
                 break;
             default:
                 {/* do nothing */}
@@ -238,14 +266,30 @@ try
 
     // save output
     // -------------------------------------------------------------------------------------------------//
+    // this is tricky because you have to save the histogram and the baby could potentially be
+    // large enough to spill to another file
 
-    h_gen_count.Write();
-    h_scale1fb.Write();
-    h_xsec->Write();
-    clone->Write();
-    output.Close();
+    // write the tree;
+    output = clone->GetCurrentFile();
+    output->Write();
+    output->Close();
 
+    // save the hists in each root file
+    const string output_file_star           = rt::string_replace_first(output_file, ".root", "*.root");
+    const vector<string> voutput_file_names = rt::ls(output_file_star);
+    for (size_t i = 0; i != voutput_file_names.size(); i++)
+    {
+        cout << "putting hists in file " << voutput_file_names.at(i).c_str() << endl;
+        TFile file(voutput_file_names.at(i).c_str(), "UPDATE");
+        h_gen_count->Write();
+        h_scale1fb->Write();
+        h_xsec->Write();
+        file.Close();
+    }
     cout << "[ss2012_postprocess_signal_baby] complete..." << endl;
+
+    // cleanup
+    delete h_xsec;
 
     // done
     return 0;

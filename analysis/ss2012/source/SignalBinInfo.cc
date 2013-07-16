@@ -51,12 +51,22 @@ namespace ss
         const float y_bin_width,
         const float y_min,
         const float y_max,
-        const float offset
+        const float offset,
+        const bool center_bin
     )
     {
-        const unsigned int x_num_bins = static_cast<unsigned int>((x_max - x_min)/x_bin_width);
-        const unsigned int y_num_bins = static_cast<unsigned int>((y_max - y_min)/y_bin_width);
-        return SignalBinInfo(x_num_bins, x_min, x_max, y_num_bins, y_min, y_max, offset); 
+        if (center_bin)
+        {
+            const unsigned int x_num_bins = static_cast<unsigned int>((x_max - x_min)/x_bin_width + 1); // +1 to center the bin
+            const unsigned int y_num_bins = static_cast<unsigned int>((y_max - y_min)/y_bin_width + 1); // +1 to center the bin
+            return SignalBinInfo(x_num_bins, x_min-0.5*x_bin_width, x_max+0.5*x_bin_width, y_num_bins, y_min-0.5*y_bin_width, y_max+0.5*y_bin_width, offset); 
+        }
+        else
+        {
+            const unsigned int x_num_bins = static_cast<unsigned int>((x_max - x_min)/x_bin_width);
+            const unsigned int y_num_bins = static_cast<unsigned int>((y_max - y_min)/y_bin_width);
+            return SignalBinInfo(x_num_bins, x_min, x_max, y_num_bins, y_min, y_max, offset); 
+        }
     }
 
     // return the binning info for a specific signal sample 
@@ -70,12 +80,10 @@ namespace ss
                 return MakeSignalBinInfo(1, 0, 1, 1, 0, 1, 0);  
                 break;
             case Sample::t1tttt:
-                // /SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z/StoreResults-PU_START52_V9_FastSim-v1/USER 
-                // m_gluino:  350-1200
-                // m_lsp: 0-850
-                // return MakeSignalBinInfo(25.0f, 325.0f, 1225.0f, 25.0f, 0.0f, 875.f);
-                //return MakeSignalBinInfo(25.0f, 400.0f, 1425.0f, 25.0f, 0.0f, 1225.0f);  // use the same binning for both t1tttt scans
-                return MakeSignalBinInfo(25.0f, 800.0f, 1525.0f, 25.0f, 0.0f, 1175.0f, 475.0f);  // RA5's binning
+                // /SMS-T1tttt_Mgluino-350to2000_mLSP-0to1650_8TeV-Pythia6Z/StoreResults-PU_START52_V9_FastSim-v1/USER
+                // m_gluino:  350-2000
+                // m_lsp: 0-1650
+                return MakeSignalBinInfo(50.0f, 350.0f, 2000.0f, 50.0f, 0.0f, 1660.0f, 100.0f, /*center_bins=*/true);
                 break;
             case Sample::t1tttt_scans:
                 // using same binning for all the mass poonts points
@@ -93,7 +101,7 @@ namespace ss
                 // LSP mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 800.0f, 1525.0f, 25.0f, 0.0f, 1175.0f, 475.0f);
+                return MakeSignalBinInfo(25.0f, 400.0f, 1400.0f, 25.0f, 0.0f, 1200.0f, 150.0f, /*center_bins=*/true);  // RA5's new binning
                 break;
             case Sample::sbottomtop:
                 // /SMS-T4tW_Msbottom-325to700_mChargino-150to625_8TeV-Madgraph/Summer12-START52_V9_FSIM/USER
@@ -104,7 +112,7 @@ namespace ss
                 // chargino mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 325.0f, 725.0f, 25.0f, 150.0f, 550.0f, 0.0f);
+                return MakeSignalBinInfo(25.0f, 325.0f, 700.0f, 25.0f, 150.0f, 675.0f, 0.0f, /*center_bins=*/true);
                 break;
             case Sample::t6ttww_x05:
                 // //SMS-T6ttWW_mSbottom-200to700_mChargino-50to600_mLSP_25to300_x05_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER
@@ -115,7 +123,7 @@ namespace ss
                 // chargino mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 200.0f, 725.0f, 25.0f, 25.0f, 300.0f, 0.0f);
+                return MakeSignalBinInfo(50.0f, 325.0f, 700.0f, 50.0f, 0.0f, 675.0f, 100.0f, /*center_bins=*/true);
                 break;
             case Sample::t6ttww_x08:
                 // //SMS-T6ttWW_mSbottom-200to700_mChargino-50to600_mLSP_25to300_x08_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER
@@ -126,7 +134,7 @@ namespace ss
                 // chargino mass is [150, msbottom -175] GeV with 25 GeV steps
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 200.0f, 725.0f, 25.0f, 25.0f, 500.0f, 100.0f);
+                return MakeSignalBinInfo(50.0f, 325.0f, 700.0f, 50.0f, 0.0f, 675.0f, 150.0f, /*center_bins=*/true);
                 break;
             case Sample::t5tttt:
                 // /SMS-T5tttt_mGo-800to1200_mStop-225to1025_mLSP_50_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER
@@ -141,7 +149,7 @@ namespace ss
                 // stop mass in [225, gluino -175] GeV with 25 GeV step
                 // neutralino mass is fixed to 50 GeV
                 // ~120k events per grid point
-                return MakeSignalBinInfo(25.0f, 800.0f, 1225.0f, 25.0f, 225.0f, 1050.0f, 625.0f);
+                return MakeSignalBinInfo(25.0f, 800.0f, 1200.0f, 25.0f, 225.0f, 1025.0f, 625.0f, /*center_bins=*/true);
                 break;
             case Sample::t5lnu:
                 // /SMS-T5lnuPlusPlus_mGo-400to1400_mLSP_300to1300_8TeV-Madgraph/Summer12-START52_V9_FSIM_UFL/USER 
@@ -150,7 +158,7 @@ namespace ss
                 // LSP mass in [0, mGluino-100] GeV with 25 GeV step
                 // m_chi_pm = x * m_chi0 + (1 - x)*m_glu, x = 0.8
                 //~12k events per grid point
-                return MakeSignalBinInfo(25.0f, 800.0f, 1425.0f, 25.0f, 300.0f, 1325.0f, 700.0f);
+                return MakeSignalBinInfo(25.0f, 600.0f, 1100.0f, 25.0f, 0.0f, 1050.0f, 500.0f, /*center_bins=*/true);
                 break;
             case Sample::t7btw:
                 // /SMS-T7btw_2J_mGo-800to1400_mSbottom-400to1350_mChi-150_mLSP-50_TuneZ2star_8TeV-madgraph-tauola/Summer12-START53_V7C_FSIM-v1/AODSIM
@@ -163,7 +171,7 @@ namespace ss
                 //      gluino mass in [800,1400] GeV in steps of 50 GeV
                 //      sbottom mass in [500,mgluino-50] GeV in steps of 50 GeV
                 //      chargino mass = 300 GeV
-                return MakeSignalBinInfo(50.0f, 800.0f, 1450.0f, 50.0f, 400.0f, 1400.0f, 750.0f);
+                return MakeSignalBinInfo(50.0f, 800.0f, 1300.0f, 50.0f, 400.0f, 1400.0f, 200.0f, /*center_bins=*/true);
                 break;
             case Sample::tchiwh:
                 // /TChiwh-test/fgolf-TChiwh-test-6138c231f814ac3df24f1150dfcad736/USER
