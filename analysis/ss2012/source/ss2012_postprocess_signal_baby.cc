@@ -108,10 +108,12 @@ try
     Sample::value_type sample = GetSampleFromName(sample_name);
     switch (sample)
     {
-        case Sample::t1tttt:     break;
-        case Sample::sbottomtop: break;
-        case Sample::t6ttww_x08: break;
-        case Sample::tchiwh:     break;
+        case Sample::t1tttt:       break;
+        case Sample::t1tttt_scans: break;
+        case Sample::sbottomtop:   break;
+        case Sample::t6ttww_x08:   break;
+        case Sample::t6ttww_x05:   break;
+        case Sample::tchiwh:       break;
         default: 
             cout << "[ss2012_postprocess_signal_baby] Error: Sample " << sample_name << " is not supported" << endl;
             return 1;
@@ -125,8 +127,9 @@ try
     TTree::SetMaxTreeSize(max_tree_size); 
     cout << "[ss2012_postprocess_signal_baby] TTree::GetMaxTreeSize() = " << TTree::GetMaxTreeSize() << endl;
 
-    TChain chain("tree");
-    chain.Add(input_file.c_str());
+    TChain* chain_ptr = rt::CreateTChainFromCommaSeperatedList(input_file, "tree");
+    TChain& chain = *chain_ptr;
+    chain.SetDirectory(NULL);
     cout << "Merging TTree(s) for " << sample_name << " -- please wait..." << endl;
     cout << "tree has " << chain.GetEntries() << " entries" << endl;
 
@@ -155,7 +158,13 @@ try
     }
     else
     {
-        const vector<string> vfile_names = rt::ls(input_file);
+        const vector<string> vfile_names_glob = rt::string_split(input_file, ",");
+        vector<string> vfile_names;
+        for (size_t i = 0; i != vfile_names_glob.size(); i++)
+        {
+            vector<string> vfile_names_temp = rt::ls(vfile_names_glob.at(i));
+            vfile_names.insert(vfile_names.end(), vfile_names_temp.begin(), vfile_names_temp.end());
+        }
         for (size_t i = 0; i != vfile_names.size(); i++)
         {
             //cout << vfile_names.at(i) << endl;
@@ -239,8 +248,9 @@ try
                 scale1fb = rt::GetBinContent2D(h_scale1fb, sparm0, sparm1);
                 nevts    = static_cast<unsigned int>(rt::GetBinContent2D(h_gen_count, sparm0, sparm1));
                 break;
-            case at::Sample::sbottomtop:
-                // m_sbottom vs m_chargino
+            case at::Sample::sbottomtop: // m_sbottom vs m_chargino
+            case Sample::t6ttww_x08:     // m_sbottom vs m_chargino
+            case Sample::t6ttww_x05:     // m_sbottom vs m_chargino
                 xsec     = rt::GetBinContent1D(h_xsec, sparm0);
                 scale1fb = rt::GetBinContent2D(h_scale1fb, sparm0, sparm1);
                 nevts    = static_cast<unsigned int>(rt::GetBinContent2D(h_gen_count, sparm0, sparm1));
@@ -290,6 +300,7 @@ try
 
     // cleanup
     delete h_xsec;
+    delete chain_ptr;
 
     // done
     return 0;
