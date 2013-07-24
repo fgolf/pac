@@ -228,7 +228,8 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
                 classname.ReplaceAll("edm::Wrapper<","");
                 headerf << "\t" << classname << " " << aliasname << "_;" << endl;
             } 
-            else if (classname.Contains("TString") || classname.Contains("vector<float>")) {
+            //else if (classname.Contains("TString") || classname.Contains("vector<float>")) {
+            else if (classname.Contains("TString")) {
                 headerf << "\t" << classname << " " << aliasname << "_;" << endl;
             }
             else {
@@ -242,7 +243,8 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
                     classname.ReplaceAll("edm::Wrapper<","");
                     headerf << "\t" << classname << " " << aliasname << "_;" << endl;
                 }
-                else if (classname.Contains("TString") || classname.Contains("vector<float>")) {
+                //else if (classname.Contains("TString") || classname.Contains("vector<float>")) {
+                else if (classname.Contains("TString")) {
                     headerf << "\t" << classname << " " << aliasname << "_;" << endl;
                 } 
                 else {
