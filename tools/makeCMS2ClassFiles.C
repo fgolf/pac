@@ -168,7 +168,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
 
     TList *aliasarray = new TList();
     
-    for(Int_t i = 0; i < fullarray->GetSize(); ++i) {
+    for(Int_t i = 0; i < fullarray->GetEntries(); ++i) {
         TString aliasname(fullarray->At(i)->GetName());
         // TBranch *branch = ev->GetBranch(ev->GetAlias(aliasname.Data()));
         TBranch *branch = 0;
@@ -209,7 +209,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
         aliasarray->Add(fullarray->At(i));
     }
   
-    for(Int_t i = 0; i< aliasarray->GetSize(); ++i) {
+    for(Int_t i = 0; i< aliasarray->GetEntries(); ++i) {
     
         //Class name is blank for a int of float
         TString aliasname(aliasarray->At(i)->GetName());
@@ -228,9 +228,9 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
                 classname.ReplaceAll("edm::Wrapper<","");
                 headerf << "\t" << classname << " " << aliasname << "_;" << endl;
             } 
-            //else if (classname.Contains("TString")) {
-            //    headerf << "\t" << classname << " " << aliasname << "_;" << endl;
-            //} 
+            else if (classname.Contains("TString") || classname.Contains("vector<float>")) {
+                headerf << "\t" << classname << " " << aliasname << "_;" << endl;
+            }
             else {
                 headerf << "\t" << classname << " *" << aliasname << "_;" << endl;
             }
@@ -242,9 +242,9 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
                     classname.ReplaceAll("edm::Wrapper<","");
                     headerf << "\t" << classname << " " << aliasname << "_;" << endl;
                 }
-                //else if (classname.Contains("TString")) {
-                //    headerf << "\t" << classname << " " << aliasname << "_;" << endl;
-                //} 
+                else if (classname.Contains("TString") || classname.Contains("vector<float>")) {
+                    headerf << "\t" << classname << " " << aliasname << "_;" << endl;
+                } 
                 else {
                     headerf << "\t" << classname << " *" << aliasname << "_;" << endl;
                 }
@@ -270,7 +270,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
 
     // SetBranchAddresses for LorentzVectors
     // TBits also needs SetMakeClass(0)...
-    for(Int_t i = 0; i< aliasarray->GetSize(); i++) {
+    for(Int_t i = 0; i< aliasarray->GetEntries(); i++) {
         TString aliasname(aliasarray->At(i)->GetName());
         // TBranch *branch = ev->GetBranch(ev->GetAlias(aliasname.Data()));
         TBranch *branch = 0;
@@ -303,7 +303,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
 
     // SetBranchAddresses for everything else
     headerf << "  tree->SetMakeClass(1);" << endl;
-    for(Int_t i = 0; i< aliasarray->GetSize(); i++) {
+    for(Int_t i = 0; i< aliasarray->GetEntries(); i++) {
         TString aliasname(aliasarray->At(i)->GetName());
         // TBranch *branch = ev->GetBranch(ev->GetAlias(aliasname.Data()));
         TBranch *branch = 0;
@@ -338,7 +338,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
     headerf << "void GetEntry(unsigned int idx) " << endl;
     headerf << "\t// this only marks branches as not loaded, saving a lot of time" << endl << "\t{" << endl;
     headerf << "\t\tindex = idx;" << endl;
-    for(Int_t i = 0; i< aliasarray->GetSize(); i++) {
+    for(Int_t i = 0; i< aliasarray->GetEntries(); i++) {
         TString aliasname(aliasarray->At(i)->GetName());
         headerf << "\t\t" << Form("%s_isLoaded",aliasname.Data()) << " = false;" << endl;
     }
@@ -347,14 +347,14 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
     // LoadAllBranches
     headerf << "void LoadAllBranches() " << endl;
     headerf << "\t// load all branches" << endl << "{" << endl;
-    for(Int_t i = 0; i< aliasarray->GetSize(); i++) {
+    for(Int_t i = 0; i< aliasarray->GetEntries(); i++) {
         TString aliasname(aliasarray->At(i)->GetName());
         headerf << "\t" << "if (" << aliasname.Data() <<  "_branch != 0) " << Form("%s();",aliasname.Data()) << endl;
     }
     headerf << "}" << endl << endl;
 
     // accessor functions
-    for (Int_t i = 0; i< aliasarray->GetSize(); i++) {
+    for (Int_t i = 0; i< aliasarray->GetEntries(); i++) {
         TString aliasname(aliasarray->At(i)->GetName());
         // TBranch *branch = ev->GetBranch(ev->GetAlias(aliasname.Data()));
         TBranch *branch = 0;
@@ -500,6 +500,9 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
         if(isSkimmedNtuple) {
             headerf << "\t\t" << "return *" << aliasname << "_;" << endl << "\t}" << endl;
         }
+        else if(classname.Contains("vector<TString>") || classname.Contains("vector<float>")) {
+            headerf << "\t\t" << "return " << aliasname << "_;" << endl << "\t}" << endl;
+        }
         else if(classname == "TString") {
             headerf << "\t\t" << "return *" << aliasname << "_;" << endl << "\t}" << endl;
         }
@@ -511,7 +514,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
     bool haveHLTInfo = false;
     bool haveL1Info  = false;
     bool haveHLT8E29Info = false;
-    for(int i = 0; i < aliasarray->GetSize(); i++) {
+    for(int i = 0; i < aliasarray->GetEntries(); i++) {
         TString aliasname(aliasarray->At(i)->GetName());
         if(aliasname=="hlt_trigNames") 
             haveHLTInfo = true;
@@ -572,7 +575,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
         //get the list of branches that hold the L1 bitmasks
         //store in a set 'cause its automatically sorted
         set<TString> s_L1bitmasks;
-        for(int j = 0; j < aliasarray->GetSize(); j++) {
+        for(int j = 0; j < aliasarray->GetEntries(); j++) {
             TString aliasname(aliasarray->At(j)->GetName());
             // TBranch *branch = ev->GetBranch(ev->GetAlias(aliasname.Data()));
             TBranch *branch = 0;
@@ -643,7 +646,7 @@ void makeHeaderFile(TFile *f, const string& treeName, bool paranoid, const strin
     // it is healthy to leave those methods as they are
     headerf << "namespace " << nameSpace << " {" << endl;
     implf   << "namespace " << nameSpace << " {" << endl;
-    for (Int_t i = 0; i< aliasarray->GetSize(); i++) {
+    for (Int_t i = 0; i< aliasarray->GetEntries(); i++) {
         TString aliasname(aliasarray->At(i)->GetName());
         // TBranch *branch = ev->GetBranch(ev->GetAlias(aliasname.Data()));
         TBranch *branch = 0;
