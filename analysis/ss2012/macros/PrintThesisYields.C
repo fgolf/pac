@@ -59,25 +59,25 @@ std::string GetSigFigString(const float v, const float e, const int num_dec = 1)
     return (v_temp + " $\\pm$ " + e_temp);
 }
 
-void SetBinLabel(TH1F* hist, const int sr_offset = 0)
+void SetBinLabel(TH1F& hist, const int sr_offset = 0)
 {
-    hist->GetXaxis()->SetBinLabel(1, Form("SR%d", 1 + sr_offset));
-    hist->GetXaxis()->SetBinLabel(2, Form("SR%d", 2 + sr_offset));
-    hist->GetXaxis()->SetBinLabel(3, Form("SR%d", 3 + sr_offset));
-    hist->GetXaxis()->SetBinLabel(4, Form("SR%d", 4 + sr_offset));
-    hist->GetXaxis()->SetBinLabel(5, Form("SR%d", 5 + sr_offset));
-    hist->GetXaxis()->SetBinLabel(6, Form("SR%d", 6 + sr_offset));
-    hist->GetXaxis()->SetBinLabel(7, Form("SR%d", 7 + sr_offset));
-    hist->GetXaxis()->SetBinLabel(8, Form("SR%d", 8 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(1, Form("SR%d", 1 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(2, Form("SR%d", 2 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(3, Form("SR%d", 3 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(4, Form("SR%d", 4 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(5, Form("SR%d", 5 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(6, Form("SR%d", 6 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(7, Form("SR%d", 7 + sr_offset));
+    hist.GetXaxis()->SetBinLabel(8, Form("SR%d", 8 + sr_offset));
 }
 
 rt::TH1Overlay CreateOverlay
 (
-    TH1F* h_data, 
-    TH1F* h_pred, 
-    TH1F* h_fake, 
-    TH1F* h_flip, 
-    TH1F* h_rare, 
+    TH1F& h_data, 
+    TH1F& h_pred, 
+    TH1F& h_fake, 
+    TH1F& h_flip, 
+    TH1F& h_rare, 
     const std::string& title, 
     const std::string& label = ""
 )
@@ -105,30 +105,30 @@ rt::TH1Overlay CreateOverlay
 /*     const float offset        = 0.2; */
     const float label_size    = 0.10;
 
-    h_data->SetMarkerSize(marker_size);
-    h_data->SetBarWidth(0);
-/*     h_fake->SetBarWidth(width); */
-/*     h_flip->SetBarWidth(width); */
-/*     h_rare->SetBarWidth(width); */
-/*     h_pred->SetBarWidth(width); */
-/*     h_data->SetBarOffset(offset); */
-/*     h_fake->SetBarOffset(offset); */
-/*     h_flip->SetBarOffset(offset); */
-/*     h_rare->SetBarOffset(offset); */
-/*     h_pred->SetBarOffset(offset); */
-    h_data->SetLabelSize(label_size);
-    h_fake->SetLabelSize(label_size);
-    h_flip->SetLabelSize(label_size);
-    h_rare->SetLabelSize(label_size);
-    h_pred->SetLabelSize(label_size);
+    h_data.SetMarkerSize(marker_size);
+    h_data.SetBarWidth(0);
+/*     h_fake.SetBarWidth(width); */
+/*     h_flip.SetBarWidth(width); */
+/*     h_rare.SetBarWidth(width); */
+/*     h_pred.SetBarWidth(width); */
+/*     h_data.SetBarOffset(offset); */
+/*     h_fake.SetBarOffset(offset); */
+/*     h_flip.SetBarOffset(offset); */
+/*     h_rare.SetBarOffset(offset); */
+/*     h_pred.SetBarOffset(offset); */
+    h_data.SetLabelSize(label_size);
+    h_fake.SetLabelSize(label_size);
+    h_flip.SetLabelSize(label_size);
+    h_rare.SetLabelSize(label_size);
+    h_pred.SetLabelSize(label_size);
 
     rt::TH1Overlay p(title, option);
-    const float max = std::max(h_data->GetMaximum(), h_pred->GetMaximum());
-    p.Add(h_data, /*no_stack=*/true, data_legend, data_color, 2, data_marker);
-    p.Add(h_fake, fake_legend, fake_color);
-    p.Add(h_flip, flip_legend, flip_color);
-    p.Add(h_rare, rare_legend, rare_color);
-    p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style);
+    const float max = std::max(h_data.GetMaximum(), h_pred.GetMaximum());
+    p.Add(&h_data, /*no_stack=*/true, data_legend, data_color, 2, data_marker);
+    p.Add(&h_fake, fake_legend, fake_color);
+    p.Add(&h_flip, flip_legend, flip_color);
+    p.Add(&h_rare, rare_legend, rare_color);
+    p.Add(&h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style);
     p.SetYAxisRange(0.0, max);
     if (not label.empty())
     {
@@ -212,28 +212,27 @@ void PrintThesisYields
     }
     latex.append("\\hline \\hline\n");
     latex.append("\\end{tabular}\n");
-    cout << latex << endl;
 
     // print summary
 
     // book
-    TH1F* h_data_nb0 = new TH1F("h_data_nb0", "h_data_nb0", 8, 0, 8); SetBinLabel(h_data_nb0, 0);
-    TH1F* h_pred_nb0 = new TH1F("h_pred_nb0", "h_pred_nb0", 8, 0, 8); SetBinLabel(h_pred_nb0, 0);
-    TH1F* h_fake_nb0 = new TH1F("h_fake_nb0", "h_fake_nb0", 8, 0, 8); SetBinLabel(h_fake_nb0, 0);
-    TH1F* h_flip_nb0 = new TH1F("h_flip_nb0", "h_flip_nb0", 8, 0, 8); SetBinLabel(h_flip_nb0, 0);
-    TH1F* h_rare_nb0 = new TH1F("h_rare_nb0", "h_rare_nb0", 8, 0, 8); SetBinLabel(h_rare_nb0, 0);
+    TH1F h_data_nb0("h_data_nb0", "h_data_nb0", 8, 0, 8); SetBinLabel(h_data_nb0, 0);
+    TH1F h_pred_nb0("h_pred_nb0", "h_pred_nb0", 8, 0, 8); SetBinLabel(h_pred_nb0, 0);
+    TH1F h_fake_nb0("h_fake_nb0", "h_fake_nb0", 8, 0, 8); SetBinLabel(h_fake_nb0, 0);
+    TH1F h_flip_nb0("h_flip_nb0", "h_flip_nb0", 8, 0, 8); SetBinLabel(h_flip_nb0, 0);
+    TH1F h_rare_nb0("h_rare_nb0", "h_rare_nb0", 8, 0, 8); SetBinLabel(h_rare_nb0, 0);
 
-    TH1F* h_data_nb1 = new TH1F("h_data_nb1", "h_data_nb1", 8, 0, 8); SetBinLabel(h_data_nb1, 10);
-    TH1F* h_pred_nb1 = new TH1F("h_pred_nb1", "h_pred_nb1", 8, 0, 8); SetBinLabel(h_pred_nb1, 10);
-    TH1F* h_fake_nb1 = new TH1F("h_fake_nb1", "h_fake_nb1", 8, 0, 8); SetBinLabel(h_fake_nb1, 10);
-    TH1F* h_flip_nb1 = new TH1F("h_flip_nb1", "h_flip_nb1", 8, 0, 8); SetBinLabel(h_flip_nb1, 10);
-    TH1F* h_rare_nb1 = new TH1F("h_rare_nb1", "h_rare_nb1", 8, 0, 8); SetBinLabel(h_rare_nb1, 10);
+    TH1F h_data_nb1("h_data_nb1", "h_data_nb1", 8, 0, 8); SetBinLabel(h_data_nb1, 10);
+    TH1F h_pred_nb1("h_pred_nb1", "h_pred_nb1", 8, 0, 8); SetBinLabel(h_pred_nb1, 10);
+    TH1F h_fake_nb1("h_fake_nb1", "h_fake_nb1", 8, 0, 8); SetBinLabel(h_fake_nb1, 10);
+    TH1F h_flip_nb1("h_flip_nb1", "h_flip_nb1", 8, 0, 8); SetBinLabel(h_flip_nb1, 10);
+    TH1F h_rare_nb1("h_rare_nb1", "h_rare_nb1", 8, 0, 8); SetBinLabel(h_rare_nb1, 10);
 
-    TH1F* h_data_nb2 = new TH1F("h_data_nb2", "h_data_nb1", 8, 0, 8); SetBinLabel(h_data_nb2, 20);
-    TH1F* h_pred_nb2 = new TH1F("h_pred_nb2", "h_pred_nb1", 8, 0, 8); SetBinLabel(h_pred_nb2, 20);
-    TH1F* h_fake_nb2 = new TH1F("h_fake_nb2", "h_fake_nb1", 8, 0, 8); SetBinLabel(h_fake_nb2, 20);
-    TH1F* h_flip_nb2 = new TH1F("h_flip_nb2", "h_flip_nb1", 8, 0, 8); SetBinLabel(h_flip_nb2, 20);
-    TH1F* h_rare_nb2 = new TH1F("h_rare_nb2", "h_rare_nb1", 8, 0, 8); SetBinLabel(h_rare_nb2, 20);
+    TH1F h_data_nb2("h_data_nb2", "h_data_nb1", 8, 0, 8); SetBinLabel(h_data_nb2, 20);
+    TH1F h_pred_nb2("h_pred_nb2", "h_pred_nb1", 8, 0, 8); SetBinLabel(h_pred_nb2, 20);
+    TH1F h_fake_nb2("h_fake_nb2", "h_fake_nb1", 8, 0, 8); SetBinLabel(h_fake_nb2, 20);
+    TH1F h_flip_nb2("h_flip_nb2", "h_flip_nb1", 8, 0, 8); SetBinLabel(h_flip_nb2, 20);
+    TH1F h_rare_nb2("h_rare_nb2", "h_rare_nb1", 8, 0, 8); SetBinLabel(h_rare_nb2, 20);
 
     // fill
     for (size_t i = 0; i != sr_nums.size(); i++)
@@ -244,72 +243,76 @@ void PrintThesisYields
         if (1 <= sr_num && sr_num <= 8)
         {
             int bin = sr_num;
-            h_data_nb0->SetBinContent(bin, yi.yield); h_data_nb0->SetBinError(bin, sqrt(yi.yield));
-            h_pred_nb0->SetBinContent(bin, yi.pred ); h_data_nb0->SetBinError(bin, yi.pred_unc   );
-            h_fake_nb0->SetBinContent(bin, yi.fake ); h_data_nb0->SetBinError(bin, yi.fake_unc   );
-            h_flip_nb0->SetBinContent(bin, yi.flip ); h_data_nb0->SetBinError(bin, yi.flip_unc   );
-            h_rare_nb0->SetBinContent(bin, yi.rare ); h_data_nb0->SetBinError(bin, yi.rare_unc   );
+            h_data_nb0.SetBinContent(bin, yi.yield); h_data_nb0.SetBinError(bin, sqrt(yi.yield));
+            h_pred_nb0.SetBinContent(bin, yi.pred ); h_data_nb0.SetBinError(bin, yi.pred_unc   );
+            h_fake_nb0.SetBinContent(bin, yi.fake ); h_data_nb0.SetBinError(bin, yi.fake_unc   );
+            h_flip_nb0.SetBinContent(bin, yi.flip ); h_data_nb0.SetBinError(bin, yi.flip_unc   );
+            h_rare_nb0.SetBinContent(bin, yi.rare ); h_data_nb0.SetBinError(bin, yi.rare_unc   );
         }
         if (11 <= sr_num && sr_num <= 18)
         {
             int bin = sr_num - 10;
-            h_data_nb1->SetBinContent(bin, yi.yield); h_data_nb1->SetBinError(bin, sqrt(yi.yield));
-            h_pred_nb1->SetBinContent(bin, yi.pred ); h_data_nb1->SetBinError(bin, yi.pred_unc   );
-            h_fake_nb1->SetBinContent(bin, yi.fake ); h_data_nb1->SetBinError(bin, yi.fake_unc   );
-            h_flip_nb1->SetBinContent(bin, yi.flip ); h_data_nb1->SetBinError(bin, yi.flip_unc   );
-            h_rare_nb1->SetBinContent(bin, yi.rare ); h_data_nb1->SetBinError(bin, yi.rare_unc   );
+            h_data_nb1.SetBinContent(bin, yi.yield); h_data_nb1.SetBinError(bin, sqrt(yi.yield));
+            h_pred_nb1.SetBinContent(bin, yi.pred ); h_data_nb1.SetBinError(bin, yi.pred_unc   );
+            h_fake_nb1.SetBinContent(bin, yi.fake ); h_data_nb1.SetBinError(bin, yi.fake_unc   );
+            h_flip_nb1.SetBinContent(bin, yi.flip ); h_data_nb1.SetBinError(bin, yi.flip_unc   );
+            h_rare_nb1.SetBinContent(bin, yi.rare ); h_data_nb1.SetBinError(bin, yi.rare_unc   );
         }
         if (21 <= sr_num && sr_num <= 28)
         {
             int bin = sr_num - 20;
-            h_data_nb2->SetBinContent(bin, yi.yield); h_data_nb2->SetBinError(bin, sqrt(yi.yield));
-            h_pred_nb2->SetBinContent(bin, yi.pred ); h_data_nb2->SetBinError(bin, yi.pred_unc   );
-            h_fake_nb2->SetBinContent(bin, yi.fake ); h_data_nb2->SetBinError(bin, yi.fake_unc   );
-            h_flip_nb2->SetBinContent(bin, yi.flip ); h_data_nb2->SetBinError(bin, yi.flip_unc   );
-            h_rare_nb2->SetBinContent(bin, yi.rare ); h_data_nb2->SetBinError(bin, yi.rare_unc   );
+            h_data_nb2.SetBinContent(bin, yi.yield); h_data_nb2.SetBinError(bin, sqrt(yi.yield));
+            h_pred_nb2.SetBinContent(bin, yi.pred ); h_data_nb2.SetBinError(bin, yi.pred_unc   );
+            h_fake_nb2.SetBinContent(bin, yi.fake ); h_data_nb2.SetBinError(bin, yi.fake_unc   );
+            h_flip_nb2.SetBinContent(bin, yi.flip ); h_data_nb2.SetBinError(bin, yi.flip_unc   );
+            h_rare_nb2.SetBinContent(bin, yi.rare ); h_data_nb2.SetBinError(bin, yi.rare_unc   );
         }
     }
 
     // overlay
     rt::SetTDRStyle();
     std::map<std::string, rt::TH1Overlay> p;
-    const char* stem = Form("%s_%s", at_info.short_name.c_str(), signal_region_type_name.c_str());
+    const std::string stem  = Form("%s_%s", at_info.short_name.c_str(), signal_region_type_name.c_str());
+    const std::string title = "Summary, #sqrt{s} = 8 TeV, L_{int} = 19.5 fb^{-1};Search Region;Events/bin";
 
-    p[Form("p_yields_%s_nb0", stem)] = CreateOverlay
+    p[Form("p_yields_%s_nb0", stem.c_str())] = CreateOverlay
     (
         h_data_nb0, 
         h_pred_nb0, 
         h_fake_nb0, 
         h_flip_nb0, 
         h_rare_nb0, 
-        "Summary, #sqrt{s} = 8 TeV, L_{int} = 19.5 fb^{-1};Search Region;Events/bin",
+        title,
         Form("%s leptons with 0 b-tags", at_info.title.c_str())
     );
 
-    p[Form("p_yields_%s_nb1", stem)] = CreateOverlay
+    p[Form("p_yields_%s_nb1", stem.c_str())] = CreateOverlay
     (
         h_data_nb1, 
         h_pred_nb1, 
         h_fake_nb1, 
         h_flip_nb1, 
         h_rare_nb1, 
-        "Summary, #sqrt{s} = 8 TeV, L_{int} = 19.5 fb^{-1};Search Region;Events/bin",
+        title,
         Form("%s leptons with 1 b-tag", at_info.title.c_str())
     );
 
-    p[Form("p_yields_%s_nb2", stem)] = CreateOverlay
+    p[Form("p_yields_%s_nb2", stem.c_str())] = CreateOverlay
     (
         h_data_nb2, 
         h_pred_nb2, 
         h_fake_nb2, 
         h_flip_nb2, 
         h_rare_nb2, 
-        "Summary, #sqrt{s} = 8 TeV, L_{int} = 19.5 fb^{-1};Search Region;Events/bin",
+        title,
         Form("%s leptons with #geq 2 b-tags", at_info.title.c_str())
     );
 
     // print
     rt::Print(p, "plots/thesis/pdf", "pdf");
+    
+    ofstream out(Form("tables/thesis/summary_%s.tex", stem.c_str()));
+    out << latex << endl;
 
     // done
     return;
