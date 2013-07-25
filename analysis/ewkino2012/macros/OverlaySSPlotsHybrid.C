@@ -453,6 +453,8 @@ void OverlaySSPlotsHybrid
     p["p_minjpt_jjpt"     ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "minjpt_jjpt"     , Form("%s;min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T};Events", title.c_str()), roption);
     p["p_min_iso"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "min_iso"         , Form("%s;min lep iso;Events"                          , title.c_str()), loption);
     p["p_max_iso"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "max_iso"         , Form("%s;max lep iso;Events"                          , title.c_str()), loption);
+    p["p_dijet_lep_mass"  ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_lep_mass"  , Form("%s;M_{jjl} (GeV);Events"                        , title.c_str()), roption);
+    p["p_min_dijet_lep_mass"] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "min_dijet_lep_mass"  , Form("%s;min M_{jjl} (GeV);Events"              , title.c_str()), roption);
 
     // overlay individual channels
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
