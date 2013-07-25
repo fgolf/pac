@@ -1,10 +1,11 @@
 #!/bin/bash
 
-out_name=sswh_v6
+out_name=sswh_v7_data
 lumi=19.5
 sr=-1
-nev=-1
+nev=--1
 #options="--no_hist"
-options=""
+options="--print_evt_list --verbose"
 
-./scripts/ewkino2012_plot_all.py --sr $sr --anal_type ss --out_name $out_name --lumi $lumi ${options} >& logs/yields_${out_name}_incl_ss.log & 
+./scripts/ewkino2012_plot_all.py --sr $sr --anal_type ss --out_name $out_name --lumi $lumi ${options} --suffix all >& logs/yields_${out_name}_incl_ss.log &
+#./scripts/ewkino2012_plot_all.py --sr $sr --anal_type ss --out_name $out_name --lumi $lumi ${options}
