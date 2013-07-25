@@ -1,8 +1,9 @@
 #!/bin/bash
 
+
 verbose=0
 njets=2
-tag=v7
+tag=v8
 analysis=ss
 path=/nfs-7/userdata/${USER}/babies/ewkino2012/$analysis/$tag/
 
@@ -81,7 +82,7 @@ merge ss zzz            ZZZNoGstarJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START
 merge ss wmwmqq         WmWmqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss wpwpqq         WpWpqq_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss ww_ds          WW_DoubleScattering_8TeV-pythia8_Summer12_DR53X-PU_S10_START53_V7A-v1
-# merge ss wgstar2e       WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+#merge ss wgstar2e       WGstarToLNu2E_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss wgstar2m       WGstarToLNu2Mu_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss wgstar2t       WGstarToLNu2Tau_TuneZ2star_7TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge2 ss t_schan       "${input_path}/Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,${input_path}/T_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
@@ -102,4 +103,4 @@ merge2 ss wjets         "${input_path}/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summ
 merge ss wh_zh_tth_hzz WH_ZH_TTH_HToZZ_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss wh_zh_tth_hww WH_ZH_TTH_HToWW_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss wh_zh_tth_htt WH_ZH_TTH_HToTauTau_M-125_lepdecay_8TeV-pythia6-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1 
-#
+
