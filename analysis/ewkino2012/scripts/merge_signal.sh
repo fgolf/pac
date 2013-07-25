@@ -1,7 +1,7 @@
 #!/bin/bash
 
 verbose=0
-tag=v7
+tag=v8
 ana_type=ss
 path=/nfs-7/userdata/${USER}/babies/ewkino2012/${ana_type}/$tag
 
