@@ -14,6 +14,9 @@ namespace ewkino_ss {
 	const float &uncorpfmet_phi() { return ewk12ss.uncorpfmet_phi(); }
 	const float &pu_nvtxs() { return ewk12ss.pu_nvtxs(); }
 	const float &pu_ntrueint() { return ewk12ss.pu_ntrueint(); }
+	const float &scale1fb() { return ewk12ss.scale1fb(); }
+	const float &xsec() { return ewk12ss.xsec(); }
+	const unsigned int &nevts() { return ewk12ss.nevts(); }
 	const float &kfactor() { return ewk12ss.kfactor(); }
 	const float &gen_met() { return ewk12ss.gen_met(); }
 	const float &gen_met_phi() { return ewk12ss.gen_met_phi(); }
@@ -40,6 +43,9 @@ namespace ewkino_ss {
 	const bool &lep1_is_num() { return ewk12ss.lep1_is_num(); }
 	const bool &lep1_is_den() { return ewk12ss.lep1_is_den(); }
 	const bool &lep1_is_fo() { return ewk12ss.lep1_is_fo(); }
+	const bool &lep1_is_mu() { return ewk12ss.lep1_is_mu(); }
+	const bool &lep1_is_el() { return ewk12ss.lep1_is_el(); }
+	const bool &lep1_exists() { return ewk12ss.lep1_exists(); }
 	const int &lep1_is_fromw() { return ewk12ss.lep1_is_fromw(); }
 	const int &lep1_charge() { return ewk12ss.lep1_charge(); }
 	const int &lep1_pdgid() { return ewk12ss.lep1_pdgid(); }
@@ -91,6 +97,10 @@ namespace ewkino_ss {
 	const int &lep1_eleid_loose() { return ewk12ss.lep1_eleid_loose(); }
 	const int &lep1_eleid_medium() { return ewk12ss.lep1_eleid_medium(); }
 	const int &lep1_eleid_tight() { return ewk12ss.lep1_eleid_tight(); }
+	const bool &lep1_is_eleid_veto() { return ewk12ss.lep1_is_eleid_veto(); }
+	const bool &lep1_is_eleid_loose() { return ewk12ss.lep1_is_eleid_loose(); }
+	const bool &lep1_is_eleid_medium() { return ewk12ss.lep1_is_eleid_medium(); }
+	const bool &lep1_is_eleid_tight() { return ewk12ss.lep1_is_eleid_tight(); }
 	const float &lep1_dphiin() { return ewk12ss.lep1_dphiin(); }
 	const float &lep1_detain() { return ewk12ss.lep1_detain(); }
 	const float &lep1_sieie() { return ewk12ss.lep1_sieie(); }
@@ -127,6 +137,9 @@ namespace ewkino_ss {
 	const bool &lep2_is_num() { return ewk12ss.lep2_is_num(); }
 	const bool &lep2_is_den() { return ewk12ss.lep2_is_den(); }
 	const bool &lep2_is_fo() { return ewk12ss.lep2_is_fo(); }
+	const bool &lep2_is_mu() { return ewk12ss.lep2_is_mu(); }
+	const bool &lep2_is_el() { return ewk12ss.lep2_is_el(); }
+	const bool &lep2_exists() { return ewk12ss.lep2_exists(); }
 	const int &lep2_is_fromw() { return ewk12ss.lep2_is_fromw(); }
 	const int &lep2_charge() { return ewk12ss.lep2_charge(); }
 	const int &lep2_pdgid() { return ewk12ss.lep2_pdgid(); }
@@ -178,6 +191,10 @@ namespace ewkino_ss {
 	const int &lep2_eleid_loose() { return ewk12ss.lep2_eleid_loose(); }
 	const int &lep2_eleid_medium() { return ewk12ss.lep2_eleid_medium(); }
 	const int &lep2_eleid_tight() { return ewk12ss.lep2_eleid_tight(); }
+	const bool &lep2_is_eleid_veto() { return ewk12ss.lep2_is_eleid_veto(); }
+	const bool &lep2_is_eleid_loose() { return ewk12ss.lep2_is_eleid_loose(); }
+	const bool &lep2_is_eleid_medium() { return ewk12ss.lep2_is_eleid_medium(); }
+	const bool &lep2_is_eleid_tight() { return ewk12ss.lep2_is_eleid_tight(); }
 	const float &lep2_dphiin() { return ewk12ss.lep2_dphiin(); }
 	const float &lep2_detain() { return ewk12ss.lep2_detain(); }
 	const float &lep2_sieie() { return ewk12ss.lep2_sieie(); }
@@ -227,6 +244,9 @@ namespace ewkino_ss {
 	const bool &lep3_is_num() { return ewk12ss.lep3_is_num(); }
 	const bool &lep3_is_den() { return ewk12ss.lep3_is_den(); }
 	const bool &lep3_is_fo() { return ewk12ss.lep3_is_fo(); }
+	const bool &lep3_is_mu() { return ewk12ss.lep3_is_mu(); }
+	const bool &lep3_is_el() { return ewk12ss.lep3_is_el(); }
+	const bool &lep3_exists() { return ewk12ss.lep3_exists(); }
 	const int &lep3_is_fromw() { return ewk12ss.lep3_is_fromw(); }
 	const int &lep3_charge() { return ewk12ss.lep3_charge(); }
 	const int &lep3_pdgid() { return ewk12ss.lep3_pdgid(); }
@@ -278,6 +298,10 @@ namespace ewkino_ss {
 	const int &lep3_eleid_loose() { return ewk12ss.lep3_eleid_loose(); }
 	const int &lep3_eleid_medium() { return ewk12ss.lep3_eleid_medium(); }
 	const int &lep3_eleid_tight() { return ewk12ss.lep3_eleid_tight(); }
+	const bool &lep3_is_eleid_veto() { return ewk12ss.lep3_is_eleid_veto(); }
+	const bool &lep3_is_eleid_loose() { return ewk12ss.lep3_is_eleid_loose(); }
+	const bool &lep3_is_eleid_medium() { return ewk12ss.lep3_is_eleid_medium(); }
+	const bool &lep3_is_eleid_tight() { return ewk12ss.lep3_is_eleid_tight(); }
 	const float &lep3_dphiin() { return ewk12ss.lep3_dphiin(); }
 	const float &lep3_detain() { return ewk12ss.lep3_detain(); }
 	const float &lep3_sieie() { return ewk12ss.lep3_sieie(); }
@@ -313,13 +337,17 @@ namespace ewkino_ss {
 	const bool &is_good_lumi() { return ewk12ss.is_good_lumi(); }
 	const bool &charge_type() { return ewk12ss.charge_type(); }
 	const int &njets() { return ewk12ss.njets(); }
-	const int &nbtags() { return ewk12ss.nbtags(); }
-	const int &nbtags_loose() { return ewk12ss.nbtags_loose(); }
+	const int &nlbtags() { return ewk12ss.nlbtags(); }
+	const int &nmbtags() { return ewk12ss.nmbtags(); }
+	const int &ntbtags() { return ewk12ss.ntbtags(); }
 	const int &ttbar_bkdn() { return ewk12ss.ttbar_bkdn(); }
 	const float &vtxw() { return ewk12ss.vtxw(); }
 	const float &mt() { return ewk12ss.mt(); }
 	const float &mt2() { return ewk12ss.mt2(); }
 	const float &mt2j() { return ewk12ss.mt2j(); }
+	const float &mt2j_up() { return ewk12ss.mt2j_up(); }
+	const float &mt2j_dn() { return ewk12ss.mt2j_dn(); }
+	const float &mt2j_jer() { return ewk12ss.mt2j_jer(); }
 	const float &ht() { return ewk12ss.ht(); }
 	const float &rho() { return ewk12ss.rho(); }
 	const float &rho_iso() { return ewk12ss.rho_iso(); }
@@ -333,24 +361,42 @@ namespace ewkino_ss {
 	const int &njets_dn() { return ewk12ss.njets_dn(); }
 	const int &njets_up() { return ewk12ss.njets_up(); }
 	const int &njets_jer() { return ewk12ss.njets_jer(); }
-	const int &nbtags_dn() { return ewk12ss.nbtags_dn(); }
-	const int &nbtags_up() { return ewk12ss.nbtags_up(); }
-	const int &nbtags_jer() { return ewk12ss.nbtags_jer(); }
+	const int &nlbtags_dn() { return ewk12ss.nlbtags_dn(); }
+	const int &nlbtags_up() { return ewk12ss.nlbtags_up(); }
+	const int &nlbtags_jer() { return ewk12ss.nlbtags_jer(); }
+	const int &nmbtags_dn() { return ewk12ss.nmbtags_dn(); }
+	const int &nmbtags_up() { return ewk12ss.nmbtags_up(); }
+	const int &nmbtags_jer() { return ewk12ss.nmbtags_jer(); }
+	const int &ntbtags_dn() { return ewk12ss.ntbtags_dn(); }
+	const int &ntbtags_up() { return ewk12ss.ntbtags_up(); }
+	const int &ntbtags_jer() { return ewk12ss.ntbtags_jer(); }
 	const float &ht_dn() { return ewk12ss.ht_dn(); }
 	const float &ht_up() { return ewk12ss.ht_up(); }
 	const float &ht_jer() { return ewk12ss.ht_jer(); }
-	const int &nbtags_reweighted() { return ewk12ss.nbtags_reweighted(); }
-	const int &nbtags_reweighted_dn() { return ewk12ss.nbtags_reweighted_dn(); }
-	const int &nbtags_reweighted_up() { return ewk12ss.nbtags_reweighted_up(); }
-	const int &nbtags_reweighted_jer() { return ewk12ss.nbtags_reweighted_jer(); }
-	const int &nbtags_reweighted_jec_dn() { return ewk12ss.nbtags_reweighted_jec_dn(); }
-	const int &nbtags_reweighted_jec_up() { return ewk12ss.nbtags_reweighted_jec_up(); }
+	const int &nlbtags_reweighted() { return ewk12ss.nlbtags_reweighted(); }
+	const int &nlbtags_reweighted_dn() { return ewk12ss.nlbtags_reweighted_dn(); }
+	const int &nlbtags_reweighted_up() { return ewk12ss.nlbtags_reweighted_up(); }
+	const int &nlbtags_reweighted_jer() { return ewk12ss.nlbtags_reweighted_jer(); }
+	const int &nlbtags_reweighted_jec_dn() { return ewk12ss.nlbtags_reweighted_jec_dn(); }
+	const int &nlbtags_reweighted_jec_up() { return ewk12ss.nlbtags_reweighted_jec_up(); }
+	const int &nmbtags_reweighted() { return ewk12ss.nmbtags_reweighted(); }
+	const int &nmbtags_reweighted_dn() { return ewk12ss.nmbtags_reweighted_dn(); }
+	const int &nmbtags_reweighted_up() { return ewk12ss.nmbtags_reweighted_up(); }
+	const int &nmbtags_reweighted_jer() { return ewk12ss.nmbtags_reweighted_jer(); }
+	const int &nmbtags_reweighted_jec_dn() { return ewk12ss.nmbtags_reweighted_jec_dn(); }
+	const int &nmbtags_reweighted_jec_up() { return ewk12ss.nmbtags_reweighted_jec_up(); }
+	const int &ntbtags_reweighted() { return ewk12ss.ntbtags_reweighted(); }
+	const int &ntbtags_reweighted_dn() { return ewk12ss.ntbtags_reweighted_dn(); }
+	const int &ntbtags_reweighted_up() { return ewk12ss.ntbtags_reweighted_up(); }
+	const int &ntbtags_reweighted_jer() { return ewk12ss.ntbtags_reweighted_jer(); }
+	const int &ntbtags_reweighted_jec_dn() { return ewk12ss.ntbtags_reweighted_jec_dn(); }
+	const int &ntbtags_reweighted_jec_up() { return ewk12ss.ntbtags_reweighted_jec_up(); }
 	const float &pfmet_dn() { return ewk12ss.pfmet_dn(); }
 	const float &pfmet_up() { return ewk12ss.pfmet_up(); }
 	const float &pfmet_phi_dn() { return ewk12ss.pfmet_phi_dn(); }
 	const float &pfmet_phi_up() { return ewk12ss.pfmet_phi_up(); }
 	const float &pfmet_jer() { return ewk12ss.pfmet_jer(); }
-	const float &pfmet_jer_phi() { return ewk12ss.pfmet_jer_phi(); }
+	const float &pfmet_phi_jer() { return ewk12ss.pfmet_phi_jer(); }
 	const float &pfmet_uncl_dn() { return ewk12ss.pfmet_uncl_dn(); }
 	const float &pfmet_uncl_up() { return ewk12ss.pfmet_uncl_up(); }
 	const float &sf_dileptrig() { return ewk12ss.sf_dileptrig(); }
@@ -402,17 +448,23 @@ namespace ewkino_ss {
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4() { return ewk12ss.vjets_p4(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4_up() { return ewk12ss.vjets_p4_up(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4_dn() { return ewk12ss.vjets_p4_dn(); }
-	const vector<bool> &vjets_btagged() { return ewk12ss.vjets_btagged(); }
-	const vector<bool> &vjets_btagged_up() { return ewk12ss.vjets_btagged_up(); }
-	const vector<bool> &vjets_btagged_dn() { return ewk12ss.vjets_btagged_dn(); }
+	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_p4_jer() { return ewk12ss.vjets_p4_jer(); }
 	const vector<bool> &vjets_matched_pv() { return ewk12ss.vjets_matched_pv(); }
+	const vector<bool> &vjets_matched_pv_up() { return ewk12ss.vjets_matched_pv_up(); }
+	const vector<bool> &vjets_matched_pv_dn() { return ewk12ss.vjets_matched_pv_dn(); }
+	const vector<bool> &vjets_matched_pv_jer() { return ewk12ss.vjets_matched_pv_jer(); }
 	const vector<int> &vjets_mcflavor_phys() { return ewk12ss.vjets_mcflavor_phys(); }
 	const vector<int> &vjets_mcflavor_algo() { return ewk12ss.vjets_mcflavor_algo(); }
 	const vector<int> &vjets_mcflavor_phys_up() { return ewk12ss.vjets_mcflavor_phys_up(); }
 	const vector<int> &vjets_mcflavor_algo_up() { return ewk12ss.vjets_mcflavor_algo_up(); }
 	const vector<int> &vjets_mcflavor_phys_dn() { return ewk12ss.vjets_mcflavor_phys_dn(); }
 	const vector<int> &vjets_mcflavor_algo_dn() { return ewk12ss.vjets_mcflavor_algo_dn(); }
+	const vector<int> &vjets_mcflavor_phys_jer() { return ewk12ss.vjets_mcflavor_phys_jer(); }
+	const vector<int> &vjets_mcflavor_algo_jer() { return ewk12ss.vjets_mcflavor_algo_jer(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vjets_mc3p4() { return ewk12ss.vjets_mc3p4(); }
+	const vector<bool> &vjets_lbtagged() { return ewk12ss.vjets_lbtagged(); }
+	const vector<bool> &vjets_mbtagged() { return ewk12ss.vjets_mbtagged(); }
+	const vector<bool> &vjets_tbtagged() { return ewk12ss.vjets_tbtagged(); }
 	const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > &vgenjets_p4() { return ewk12ss.vgenjets_p4(); }
 	const vector<int> &vjets_mc3id() { return ewk12ss.vjets_mc3id(); }
 	const vector<int> &vjets_momid() { return ewk12ss.vjets_momid(); }
@@ -421,6 +473,17 @@ namespace ewkino_ss {
 	const vector<float> &vjets_bdisc() { return ewk12ss.vjets_bdisc(); }
 	const vector<float> &vjets_bdisc_up() { return ewk12ss.vjets_bdisc_up(); }
 	const vector<float> &vjets_bdisc_dn() { return ewk12ss.vjets_bdisc_dn(); }
+	const vector<float> &vjets_bdisc_jer() { return ewk12ss.vjets_bdisc_jer(); }
+	const vector<bool> &vjets_qgdisc() { return ewk12ss.vjets_qgdisc(); }
+	const vector<bool> &vjets_qgdisc_up() { return ewk12ss.vjets_qgdisc_up(); }
+	const vector<bool> &vjets_qgdisc_dn() { return ewk12ss.vjets_qgdisc_dn(); }
+	const vector<bool> &vjets_qgdisc_jer() { return ewk12ss.vjets_qgdisc_jer(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep1_jj_p4() { return ewk12ss.lep1_jj_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lep2_jj_p4() { return ewk12ss.lep2_jj_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &jjl_p4() { return ewk12ss.jjl_p4(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &jjl_p4_up() { return ewk12ss.jjl_p4_up(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &jjl_p4_dn() { return ewk12ss.jjl_p4_dn(); }
+	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &jjl_p4_jer() { return ewk12ss.jjl_p4_jer(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep1_p4() { return ewk12ss.gen_lep1_p4(); }
 	const int &gen_lep1_pdgid() { return ewk12ss.gen_lep1_pdgid(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &gen_lep2_p4() { return ewk12ss.gen_lep2_p4(); }
@@ -545,16 +608,18 @@ namespace ewkino_ss {
 	const vector<float> &pfjets_beta2_0p5() { return ewk12ss.pfjets_beta2_0p5(); }
 	const vector<float> &pfjets_mvaPUid() { return ewk12ss.pfjets_mvaPUid(); }
 	const vector<float> &pfjets_mva5xPUid() { return ewk12ss.pfjets_mva5xPUid(); }
+	const vector<float> &pfjets_up_mva5xPUid() { return ewk12ss.pfjets_up_mva5xPUid(); }
+	const vector<float> &pfjets_dn_mva5xPUid() { return ewk12ss.pfjets_dn_mva5xPUid(); }
+	const vector<float> &pfjets_jer_mva5xPUid() { return ewk12ss.pfjets_jer_mva5xPUid(); }
 	const vector<float> &pfjets_mvaBeta() { return ewk12ss.pfjets_mvaBeta(); }
 	const bool &passes_isotrk_veto() { return ewk12ss.passes_isotrk_veto(); }
 	const bool &passes_tau_veto() { return ewk12ss.passes_tau_veto(); }
 	const int &njets_pv_tight0() { return ewk12ss.njets_pv_tight0(); }
+	const int &njets_pv_tight0_up() { return ewk12ss.njets_pv_tight0_up(); }
+	const int &njets_pv_tight0_dn() { return ewk12ss.njets_pv_tight0_dn(); }
+	const int &njets_pv_tight0_jer() { return ewk12ss.njets_pv_tight0_jer(); }
 	const int &njets_pv_tight1() { return ewk12ss.njets_pv_tight1(); }
 	const int &njets_pv_tight2() { return ewk12ss.njets_pv_tight2(); }
 	const bool &leptonic_offshell_w() { return ewk12ss.leptonic_offshell_w(); }
 	const bool &hadronic_offshell_w() { return ewk12ss.hadronic_offshell_w(); }
-	const float &scale1fb() { return ewk12ss.scale1fb(); }
-	const float &xsec() { return ewk12ss.xsec(); }
-	const unsigned int &nevts() { return ewk12ss.nevts(); }
-	const float &br() { return ewk12ss.br(); }
 }
