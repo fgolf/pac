@@ -33,7 +33,8 @@ namespace ewkino
         float& met,
         float& ht,
         int& njets,
-        int& nbtags,
+        int& nlbtags,
+        int& ntbtags,
         const bool do_beff_sf,
         const SystematicType::value_type syst_type,
         const at::Sample::value_type sample,
@@ -48,19 +49,22 @@ namespace ewkino
                     met    = ewkino_ss::pfmet();
                     ht     = ewkino_ss::ht();
                     njets  = ewkino_ss::njets();
-                    nbtags = (do_beff_sf ? ewkino_ss::nbtags_reweighted() : ewkino_ss::nbtags());  // reweighted # btags (random #)
+                    nlbtags = (do_beff_sf ? ewkino_ss::nlbtags_reweighted() : ewkino_ss::nlbtags());  // reweighted # btags (random #)
+                    ntbtags = (do_beff_sf ? ewkino_ss::ntbtags_reweighted() : ewkino_ss::ntbtags());  // reweighted # btags (random #)
                     break;
                 case SystematicType::JES_UP: 
                     met    = ewkino_ss::pfmet_up();  
                     ht     = ewkino_ss::ht_up();
                     njets  = ewkino_ss::njets_up();
-                    nbtags = (do_beff_sf ? ewkino_ss::nbtags_reweighted_jec_up() : ewkino_ss::nbtags_up()); // reweighted # btags (random #) using JES+ jets
+                    nlbtags = (do_beff_sf ? ewkino_ss::nlbtags_reweighted_jec_up() : ewkino_ss::nlbtags_up()); // reweighted # btags (random #) using JES+ jets
+                    ntbtags = (do_beff_sf ? ewkino_ss::ntbtags_reweighted_jec_up() : ewkino_ss::ntbtags_up()); // reweighted # btags (random #) using JES+ jets
                     break;
                 case SystematicType::JES_DN:
                     met    = ewkino_ss::pfmet_dn();
                     ht     = ewkino_ss::ht_dn();
                     njets  = ewkino_ss::njets_dn();
-                    nbtags = (do_beff_sf ? ewkino_ss::nbtags_reweighted_jec_dn() : ewkino_ss::nbtags_dn()); // reweighted # btags (random #) using JES- jets
+                    nlbtags = (do_beff_sf ? ewkino_ss::nlbtags_reweighted_jec_dn() : ewkino_ss::nlbtags_dn()); // reweighted # btags (random #) using JES- jets
+                    ntbtags = (do_beff_sf ? ewkino_ss::ntbtags_reweighted_jec_dn() : ewkino_ss::ntbtags_dn()); // reweighted # btags (random #) using JES- jets
                     break;
                 // case SystematicType::JER:
                 //     met    = ewkino_ss::pfmet_jer();
@@ -100,10 +104,11 @@ namespace ewkino
         }
         else
         {
-            met    = ewkino_ss::pfmet();
-            ht     = ewkino_ss::ht();
-            njets  = ewkino_ss::njets();
-            nbtags = ewkino_ss::nbtags();
+            met     = ewkino_ss::pfmet();
+            ht      = ewkino_ss::ht();
+            njets   = ewkino_ss::njets();
+            nlbtags = ewkino_ss::nlbtags();
+            ntbtags = ewkino_ss::ntbtags();
         }
 
         // done
