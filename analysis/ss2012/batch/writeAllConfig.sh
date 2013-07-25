@@ -19,7 +19,11 @@
 #TAG=V02-05-17 # 05-31-2013
 #TAG=V02-05-19 # 06-18-2013
 #TAG=V03-00-00 # 06-25-2013
-TAG=V03-01-00 # 07-01-2013
+#TAG=V03-01-00 # 07-01-2013
+#TAG=V03-01-05 # 07-06-2013
+#TAG=V03-02-01 # 07-08-2013
+#TAG=V03-02-02 # 07-11-2013
+TAG=V03-02-04 # 07-14-2013
 
 #~/~/~/~~/~/~/~~/~/~/~~/~/~/~~/~/
 # DATA TAG V05-03-24 (slimCMS2) # 
@@ -174,6 +178,7 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 ./writeConfig.sh ttdil $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_FullLeptMGDecays_8TeV-madgraph_${CAMPAIGN}-v2/$CMS2TAG/     $OUTPUT_PATH/TTJets_FullLeptMGDecays_8TeV-madgraph_${CAMPAIGN}-v2
 ./writeConfig.sh ttslq $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1/$CMS2TAG/ $OUTPUT_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1
 ./writeConfig.sh ttotr $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_HadronicMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1/$CMS2TAG/ $OUTPUT_PATH/TTJets_HadronicMGDecays_8TeV-madgraph_${CAMPAIGN}_ext-v1
+./writeConfig.sh tttt  $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTTT_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1/$CMS2TAG/      $OUTPUT_PATH/TTTT_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1
 
 CMS2TAG="V05-03-25"
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
@@ -208,8 +213,8 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7C
 #CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 #./writeConfig.sh wjets $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_${CAMPAIGN}-v1/$CMS2TAG/ $OUTPUT_PATH/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_${CAMPAIGN}-v1
 
-CMS2TAG="V05-03-20_slim"
-CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
+#CMS2TAG="V05-03-20_slim"
+#CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 
 # QCD
 #CMS2TAG=V05-03-18_slim
@@ -227,7 +232,7 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 #./writeConfig.sh qcd $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2/$CMS2TAG/                 $OUTPUT_PATH/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2
 #./writeConfig.sh qcd $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v3/$CMS2TAG/                $OUTPUT_PATH/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v3
 #./writeConfig.sh qcd $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v3/$CMS2TAG/               $OUTPUT_PATH/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v3
-#./writeConfig.sh qcd $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/QCD_Pt-170to300_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2/$CMS2TAG/               $OUTPUT_PATH/QCD_Pt-170to300_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2
+# /writeConfig.sh qcd $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/QCD_Pt-170to300_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2/$CMS2TAG/               $OUTPUT_PATH/QCD_Pt-170to300_TuneZ2star_8TeV_pythia6_${CAMPAIGN}-v2
 
 # fast sim -- SM
 # depricated: creating babies directly from crab

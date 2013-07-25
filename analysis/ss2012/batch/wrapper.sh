@@ -70,6 +70,7 @@ echo
 ls -l ${FILE}
 if [ $? -ne 0 ]; then
     echo ${FILE} "[wrapper] is missing or is inaccessable" | ./appendTimeStamp.sh
+    sleep 60 
     exit 99
 fi
 
@@ -169,16 +170,34 @@ if [ $(./sweepRoot -o tree $OUTPUT 2>&1 | grep SUMMARY | awk '{print $2}') == 0 
 then 
     echo "[wrapper] preparing to transfer $OUTPUT to ${COPYDIR}/${OUTPUT}..." | ./appendTimeStamp.sh
     lcg-cp -b -D srmv2 --vo cms -t 2400 --verbose file:`pwd`/${OUTPUT} srm://bsrm-3.t2.ucsd.edu:8443/srm/v2/server?SFN=${COPYDIR}/${OUTPUT}
+    echo "[wrapper] copy complete" | ./appendTimeStamp.sh
 else
+    JOB_EXIT_CODE=98
     echo "[wrapper] $OUTPUT is considered bad by sweepRoot..." | ./appendTimeStamp.sh
 fi
 echo
 
 #
+# wait if failed
+#
+echo JOB_EXIT_CODE = $JOB_EXIT_CODE | ./appendTimeStamp.sh
+if [[ $JOB_EXIT_CODE -ne 0 ]] ; 
+then
+    echo "[wrapper] waiting 60 seconds..." | ./appendTimeStamp.sh
+    sleep 60 
+fi 
+#
+
 # clean up
 #
 echo
+echo "[wrapper] files:" | ./appendTimeStamp.sh
+ls -l
 echo "[wrapper] cleaning up" | ./appendTimeStamp.sh
-for FILE in `find . -not -name "*stderr" -not -name "*stdout"`; do rm -rf $FILE; done
+for FILE in `find . -not -name "*stderr" -not -name "*stdout"`;
+do 
+    #echo "[wrapper] removing $FILE" | ./appendTimeStamp.sh
+    rm -rf $FILE; 
+done
 echo "[wrapper] cleaned up"
 ls

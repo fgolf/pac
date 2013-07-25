@@ -1,6 +1,7 @@
 #!/bin/bash
 
-UNIVERSE="grid"
+#UNIVERSE="grid"
+UNIVERSE="vanilla"
 EXE="wrapper.sh"
 INPUT="wrapper.sh, job_input/input.tgz, appendTimeStamp.sh"
 SITE="UCSD"
@@ -40,14 +41,14 @@ COPYDIR="/hadoop/cms/store/user/$USER/${COPYDIRBASE}"
 # write configuration
 #
 
+#Grid_Resource=gt2 osg-gw-7.t2.ucsd.edu:2119/jobmanager-condor
 echo "
-Grid_Resource=gt2 osg-gw-4.t2.ucsd.edu:2119/jobmanager-condor
 universe=${UNIVERSE}
 when_to_transfer_output = ON_EXIT
 #the actual executable to run is not transfered by its name.
 #In fact, some sites may do weird things like renaming it and such.
 transfer_input_files=${INPUT}
-+DESIRED_Sites=${SITE}
++DESIRED_Sites=\"${SITE}\"
 +Owner = undefined
 log=${LOG}
 output=${OUT}
