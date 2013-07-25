@@ -51,9 +51,8 @@ samples = [
 # supported signal regions
 # ---------------------------------------------------------------------------------- #
 
-#incl_signal_regions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-incl_signal_regions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-excl_signal_regions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+incl_signal_regions = [0, 1, 2, 3]
+excl_signal_regions = [0, 1, 2, 3]
 
 # parse inputs
 # ---------------------------------------------------------------------------------- #
@@ -264,8 +263,8 @@ def print_yield_table(signal_region, do_append):
                 cmd = "root -b -q -l \"macros/PrintYieldsHybrid.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, false); %s %s\" " \
                     % (options.out_name, sr_name, options.anal_type, str(signal_with_underscores), srt_name, int(options.charge), operator, text_name)
         else:
-                cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, false); %s %s\" " \
-                    % (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), operator, text_name)
+                cmd = "root -b -q -l \"macros/PrintYields.C+ (\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, false, %d); %s %s\" " \
+                    % (options.out_name, sr_name, options.anal_type, srt_name, int(options.charge), int (options.do_caption), operator, text_name)
 
 	if (options.verbose):
 		print cmd
