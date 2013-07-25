@@ -16,23 +16,10 @@ namespace ewkino
         enum value_type
         {
             // inclusive
-            sr0  = 0,  // baseline: pt > 20/20, njets_matched = 2,3 and MET > 30 GeV
-            sr1  = 1,  // sr0 + pt>30/20 + MET > 80 + HT < 200 + min MT > 80 + 0 CSVM + <2 CSVL + 3rd lepton veto + iso track veto + tau veto + dijet pt < 160 + dR(jet1,jet2) < 3 + dEta(lep1,lep2) < 2. + dR(ll,jj) < 3.2
-            sr2  = 2,  // sr1 + <= 1 CVSL b-tagged jets
-            sr3  = 3,  // sr2 + max[ M(11,31), M(21,3l) ] < 10 GeV
-            sr4  = 4,  // sr3 + jets from off-shell W 
-            sr5  = 5,  // sr3 + jets from on-shell W
-            sr6  = 6,  // sr5 + MET > 90 GeV
-            sr7  = 7,  // sr6 + no third muon w/ pt > 5 + no third electron w/ pt > 10
-            sr8  = 8,  // sr7 + |deta(lep1,lep2)| < 2.0
-            sr9  = 9,  // sr8 + max(pt1,pt2) > 30
-            sr10 = 10, // sr9 + ht < 160
-            sr11 = 11, // sr10 + pfmet > 90
-            sr12 = 12, // sr8 + max(lep1_mt,lep2_mt) > 70.
-            sr13 = 13, // sr12 + 0.4 < min(jet1_pt,jet2_pt)/pt_jj < 1.1
-            sr14 = 14, // sr0 + dR(j,j) < 3. && pt(jj) < 160 && ht < 200 && dR(ll) < 2.4 && met > 20
-            sr15 = 15, // pt > 20/20, njets_matched = 2,3 and MET > 30 GeV
-            sr16 = 16, // pt > 20/20, njets_matched = 2,3 and MET > 30 GeV
+            sr0  = 0,  // baseline: pt > 20/20, njets_matched = 2,3 and MET > 40 GeV
+            sr1  = 1,  // sr0 + max_MT > 110 GeV + 0 CVST + <2 CSVL + third lepton veto + hadronic tau veto + dEta(lep1, lep2) < 1.6 + MT2J > 100 GeV
+            sr2  = 2,  // sr1 + M(jjl) < 120 GeV
+            sr3  = 3,  // sr1 + M(jjl) > 120 GeV
             // keep track of the size
             static_size
         };
@@ -103,13 +90,9 @@ namespace ewkino
     bool PassesSignalRegion
     (
         const float met,
-        const float ht,
         const int njets,
-        const int nbtags,
-        const float l1_pt,
-        const float l2_pt,
-        const int l1_id,
-        const int l2_id,
+        const int nlbtags,
+        const int ntbtags,
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type& anal_type,
         const SignalRegionType::value_type& signal_region_type = SignalRegionType::inclusive

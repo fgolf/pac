@@ -31,121 +31,17 @@ const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] =
         // name
         "sr2",
         // title
-        "sr2: sr1 + <= 1 CVSL jet",
+        "SR2",
         // latex
-        "SR1 + \\le 1 CVSL jet"
+        "SR2"
     },
     { 
         // name
         "sr3",
         // title
-        "sr3: sr2 + not 76 < mee < 106 GeV",
+        "SR3",
         // latex
-        "SR2 + $M_{ee} < 76 || M_{ee} > 106$ GeV"
-    },
-    { 
-        // name
-        "sr4",
-        // title
-        "sr4: sr3 + njets==2",
-        // latex
-        "SR3 + njets==2"
-    },
-    { 
-        // name
-        "sr5",
-        // title
-        "sr5: sr3 + no loose btags",
-        // latex
-        "SR3 + no loose btags"
-    },
-    { 
-        // name
-        "sr6",
-        // title
-        "sr6: sr5 + HT < 200 GeV + met > 30 GeV",
-        // latex
-        "SR5 + $H_{T} < 200$ GeV + met $> 30$ GeV"
-    },
-    { 
-        // name
-        "sr7",
-        // title
-        "sr7: sr6 + no third muon",
-        // latex
-        "SR6 + no third muon"
-    },
-    { 
-        // name
-        "sr8",
-        // title
-        "sr8: sr7 + |#Delta#eta_{ll}| < 2.0",
-        // latex
-        "SR7 + $\\abs{\\Delta\\eta_{\\ell\\ell}} < 2.0$"
-    },
-    { 
-        // name
-        "sr9",
-        // title
-        "sr9: sr8 + max(pt1,pt2)>30 GeV",
-        // latex
-        "SR8 + max$(p^{l1}_{T},p^{l2}_{T}) > 30$ GeV"
-    },
-    { 
-        // name
-        "sr10",
-        // title
-        "sr10: sr9 + HT < 160 GeV",
-        // latex
-        "SR9 + $H_{T} < 160$ GeV"
-    },
-    { 
-        // name
-        "sr11",
-        // title
-        "sr11: sr10 + pfmet > 90 GeV",
-        // latex
-        "SR10 + $met > 90$ GeV"
-    },
-    { 
-        // name
-        "sr12",
-        // title
-        "sr12: sr8 + max_mt > 70 GeV",
-        // latex
-        "SR8 + max$(M^{\\ell_{1}}_{T},\\ell_{2}}_{T}) > 70$ GeV"
-    },
-    { 
-        // name
-        "sr13",
-        // title
-        "sr13: sr12 + 0.4 < min(jet1_pt,jet2_pt)/M_{jj} < 1.1",
-        // latex
-        "SR12 + $0.4 < min(p^{j_{1}}_{T},p^{j_{2}}_{T})/M_{jj} < 1.1$"
-    },
-    { 
-        // name
-        "sr14",
-        // title
-        "sr14: sr0 + jet-PV matching + M_{jj} < 120 GeV",
-        // latex
-        "SR0 + jet-PV matching + $M_{jj} < 120$ GeV"
-    },
-    { 
-        // name
-        "sr15",
-        // title
-        "sr15: pt > 20/20, njets=2,3 and MET > 30 GeV",
-        // latex
-        "$p_{T} > 20/20 GeV, njets=2,3 and MET > 30 GeV$"
-    },
-    { 
-        // name
-        "sr16",
-        // title
-        "sr16: pt > 20/20, njets=2,3 and MET > 30 GeV",
-        // latex
-        "$p_{T} > 20/20 GeV, njets=2,3 and MET > 30 GeV$"
+        "SR3"
     },
 };
 
@@ -223,13 +119,9 @@ namespace ewkino
     bool PassesSignalRegion
     (
         const float met,
-        const float ht,
         const int njets,
-        const int nbtags,
-        const float l1_pt,
-        const float l2_pt,
-        const int l1_id,
-        const int l2_id,
+        const int nlbtags,
+        const int ntbtags,
         const SignalRegion::value_type& signal_region,
         const AnalysisType::value_type& anal_type,
         const SignalRegionType::value_type& signal_region_type
@@ -238,38 +130,13 @@ namespace ewkino
         switch(anal_type)
         {
             case AnalysisType::ss:
-                if (l1_pt < 20.0) return false;
-                if (l2_pt < 20.0) return false;
+                if (lep1_p4().pt() < 20.0) return false;
+                if (lep2_p4().pt() < 20.0) return false;
                 break;
             default:
                 return false;
         }
 
-        std::vector<LorentzVector> matched_jets;
-        float matched_ht = 0.;
-        for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
-        {
-            if (!vjets_matched_pv().at(idx)) continue;
-            matched_jets.push_back(vjets_p4().at(idx));
-            matched_ht += vjets_p4().at(idx).pt();
-        }
-
-        LorentzVector dijet_p4 = LorentzVector(0,0,0,0);        
-        if (matched_jets.size() > 1)
-            dijet_p4 = matched_jets.at(0) + matched_jets.at(1);
-
-        int num_loose_btags = nMatchedBtags(0, 0);
-
-        int tmp_nlbtags = 0;
-        int tmp_nmbtags = 0;
-        int tmp_ntbtags = 0;
-        for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
-        {
-            if (!vjets_matched_pv().at(idx)) continue;
-            if (vjets_bdisc().at(idx) > 0.244) ++tmp_nlbtags;
-            if (vjets_bdisc().at(idx) > 0.679) ++tmp_nmbtags;
-            if (vjets_bdisc().at(idx) > 0.898) ++tmp_ntbtags;
-        }
 
         float max_ml3l = 0.;
         if (lep1_nearlep_dr() > -1)
@@ -283,34 +150,14 @@ namespace ewkino
             max_ml3l = max(tmp_p4.mass(), max_ml3l);
         }
 
-        bool is_offshell_wjj = is_real_data() || (!is_real_data() && hadronic_offshell_w());
-        bool not_offshell_wjj = is_real_data() || (!is_real_data() && !hadronic_offshell_w());
-
-        bool passes_third_lepton_veto = not ((abs(lep3_pdgid()) == 11 && lep3_p4().pt()>40.) || (abs(lep3_pdgid()) == 13 && lep3_p4().pt()>5.));
-
-        
         // SS WH
         if (anal_type==AnalysisType::ss)
         {
             const bool baseline      = (min(lep1_p4().pt(), lep2_p4().pt()) > 20.);
-            const bool pass_zee_veto = (not (dilep_type() == at::DileptonHypType::EE && dilep_mass() > 76. && dilep_mass() < 106.));
-            const bool pass_sr0      = (baseline && (njets_pv_tight0()==2 || njets_pv_tight0()==3) && pfmet() > 30);
-            const bool pass_sr1      = (pass_sr0 && tmp_nmbtags == 0 && tmp_nlbtags < 2 && matched_ht < 200. && pfmet() > 80. && mt() > 80. && max(lep1_p4().pt(), lep2_p4().pt()) > 30. && passes_isotrk_veto() && passes_tau_veto() && dijet_p4.pt() < 160. && rt::DeltaR(matched_jets.at(0),matched_jets.at(1)) < 3. && rt::DeltaEta(lep1_p4(),lep2_p4()) < 2. && rt::DeltaR(dilep_p4(),dijet_p4) < 3.2 && passes_third_lepton_veto);
-            const bool pass_sr2      = (pass_sr1 && tmp_nlbtags <= 1);
-            const bool pass_sr3      = (pass_sr2 && max_ml3l < 10.);
-            const bool pass_sr4      = (pass_sr3 && passes_tau_veto());
-            const bool pass_sr5      = (pass_sr4 && matched_ht < 180.);
-            const bool pass_sr6      = (pass_sr5 && njets_pv_tight0()==2);
-            const bool pass_sr7      = (pass_sr5 && njets_pv_tight0()==3);
-            const bool pass_sr8      = (pass_sr6 && matched_ht < 160);
-            const bool pass_sr9      = (pass_sr8 && max(lep1_mt(),lep2_mt()) > 70.);
-            const bool pass_sr10     = (pass_sr9 && matched_ht < 160);
-            const bool pass_sr11     = (pass_sr10 && pfmet() > 90);
-            const bool pass_sr12     = (pass_sr8 && std::max(lep1_mt(),lep2_mt()) > 70);
-            const bool pass_sr13     = (pass_sr12 && std::min(matched_jets.at(0).pt(),matched_jets.at(1).pt())/dijet_p4.pt() > 0.4 && std::min(matched_jets.at(0).pt(),matched_jets.at(1).pt())/dijet_p4.pt() < 1.1);
-            const bool pass_sr14     = (pass_sr0 && matched_ht < 200 && (njets_pv_tight0() == 2 || njets_pv_tight0()==3) && dijet_p4.pt() < 160 && fabs(dilep_deta()) < 2.4 && rt::DeltaR(matched_jets.at(0), matched_jets.at(1)) < 3 && pfmet() > 60. && not (lep3_p4().pt() > 40 && abs(lep3_pdgid())==11) && not (lep3_p4().pt() > 5 && abs(lep3_pdgid())==13) && passes_isotrk_veto() && passes_tau_veto() && mt() > 40 && num_loose_btags<2 && std::max(rt::DeltaPhi(lep1_p4().phi(), pfmet_phi()), rt::DeltaPhi(lep2_p4().phi(), pfmet_phi())) > 2 && rt::DeltaEta(dijet_p4,dilep_p4()) < 2.4 && rt::DeltaR(dijet_p4,dilep_p4()) < 3.2 && pfmet() > 80 && fabs(dilep_deta()) < 2.);
-            const bool pass_sr15     = (min(lep1_p4().pt(), lep2_p4().pt()) > 20. && (njets_pv_tight0() == 2 || njets_pv_tight0() == 3) && pfmet() > 30);
-            const bool pass_sr16     = (pass_sr15 && tmp_ntbtags == 0 && passes_tau_veto());
+            const bool pass_sr0      = (baseline && (njets == 2 || njets == 3) && met > 40);
+            const bool pass_sr1      = (pass_sr0 && std::max(lep1_mt(), lep2_mt()) > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6 && mt2j() > 100);
+            const bool pass_sr2      = (pass_sr1 && jjl_p4().mass() < 120);
+            const bool pass_sr3      = (pass_sr1 && jjl_p4().mass() > 120);
             
             if (signal_region_type==SignalRegionType::inclusive)
             {
@@ -320,19 +167,6 @@ namespace ewkino
                 case SignalRegion::sr1 : return (pass_sr1);
                 case SignalRegion::sr2 : return (pass_sr2);
                 case SignalRegion::sr3 : return (pass_sr3);
-                case SignalRegion::sr4 : return (pass_sr4);
-                case SignalRegion::sr5 : return (pass_sr5);
-                case SignalRegion::sr6 : return (pass_sr6);
-                case SignalRegion::sr7 : return (pass_sr7);
-                case SignalRegion::sr8 : return (pass_sr8);
-                case SignalRegion::sr9 : return (pass_sr9);
-                case SignalRegion::sr10 : return (pass_sr10);
-                case SignalRegion::sr11 : return (pass_sr11);
-                case SignalRegion::sr12 : return (pass_sr12);
-                case SignalRegion::sr13 : return (pass_sr13);
-                case SignalRegion::sr14 : return (pass_sr14);
-                case SignalRegion::sr15 : return (pass_sr15);
-                case SignalRegion::sr16 : return (pass_sr16);
                 };
             }
 
@@ -354,21 +188,16 @@ namespace ewkino
         const bool is_fast_sim
     )
     {
-        // lepton pt cuts
-        const unsigned int l1_id = abs(lep1_pdgid());
-        const unsigned int l2_id = abs(lep2_pdgid());
-        const float l1_pt        = lep1_p4().pt();
-        const float l2_pt        = lep2_p4().pt();
-
         // kinematic variables that define the signal region
         float met   = -999999;
         float ht    = -999999;
-        int nbtags  = -999999;
+        int nlbtags = -999999;
+        int ntbtags = -999999;
         int njets   = -999999;
-        ewkino::GetReweightedKinematicVariables(met, ht, njets, nbtags, do_beff_sf, syst_type, sample, is_fast_sim);
+        ewkino::GetReweightedKinematicVariables(met, ht, njets, nlbtags, ntbtags, do_beff_sf, syst_type, sample, is_fast_sim);
 
         // call main fucntion with this ht/met/njets/nbtags
-        return PassesSignalRegion(met, ht, njets, nbtags, l1_pt, l2_pt, l1_id, l2_id, signal_region, anal_type, signal_region_type);
+        return PassesSignalRegion(met, njets, nlbtags, ntbtags, signal_region, anal_type, signal_region_type);
     }
 
     // set aliases for TTree
@@ -442,6 +271,10 @@ namespace ewkino
 
         tree.SetAlias("min_jet_pt_over_mass", "min(vjets_p4.at(0).pt(),vjets_p4.at(1).pt())/dijet_mass");
 
+        tree.SetAlias("max_ml3l_lep1","lep1_nearlep_dr > -1 ? sqrt(pow(lep1_p4.E()+lep1_nearlep_p4.E(),2) - pow(lep1_p4.pz()+lep1_nearlep_p4.pz(),2) - pow(lep1_p4.py()+lep1_nearlep_p4.py(),2) - pow(lep1_p4.px()+lep1_nearlep_p4.px(),2)) : -1");
+        tree.SetAlias("max_ml3l_lep2","lep2_nearlep_dr > -1 ? sqrt(pow(lep2_p4.E()+lep2_nearlep_p4.E(),2) - pow(lep2_p4.pz()+lep2_nearlep_p4.pz(),2) - pow(lep2_p4.py()+lep2_nearlep_p4.py(),2) - pow(lep2_p4.px()+lep2_nearlep_p4.px(),2)) : -1");
+        tree.SetAlias("max_ml3l", "max(max_ml3l_lep1,max_ml3l_lep2)");
+
         // trigger
         switch (anal_type)
         {
@@ -457,23 +290,11 @@ namespace ewkino
         switch (anal_type)
         {
             case AnalysisType::ss:
-                tree.SetAlias("sr0" , "lep_pt && nbs==0 && (njets==2 || njets==3)"); 
-                tree.SetAlias("sr1" , "lep_pt && nbs==0 && passes_isotrk_veto && passes_tau_veto && (njets_pv_tight0==2 || njets_pv_tight0==3)"); 
-                tree.SetAlias("sr2" , "sr1 && dijet_mass<120.");
-                tree.SetAlias("sr3" , "sr2 && pass_zee_veto");
-                tree.SetAlias("sr4" , "sr3 && njets_pv_tight0==2");
-                tree.SetAlias("sr5" , "sr3 && nbtags_loose==2");
-                tree.SetAlias("sr6" , "sr5 && ht < 200 && pfmet > 30");
-                tree.SetAlias("sr7" , "sr6 && !((abs(l3_id)==13) && l3_pt>5) && !((abs(l3_id)==11) && l3_pt>15)");
-                tree.SetAlias("sr8" , "sr7 && abs(l1_eta-l2_eta) < 2.0");
-                tree.SetAlias("sr9" , "sr8 && max(l1_pt,l2_pt)>30.");
-                tree.SetAlias("sr10" , "sr9 && pfmet > 90");
-                tree.SetAlias("sr11" , "sr10 && ht < 160");
-                tree.SetAlias("sr12" , "sr8 && max(lep1_mt,lep2_mt)>70");
-                tree.SetAlias("sr13" , "sr12 && min_jet_pt_over_mass > 0.4 && min_jet_pt_over_mass < 1.1");
-                tree.SetAlias("sr14" , "sr0 && (njets_pv_tight0==2 || njets_pv_tight0==3)");
-                tree.SetAlias("sr15" , "lep_pt && lep_eta && (njets_pv_tight0==2 || njets_pv_tight0==3) && pfmet > 30");
-                break;
+                tree.SetAlias("sr0" , "lep_pt && (njets_pv_tight0==2 || njets_pv_tight0==3) && pfmet > 40"); 
+                tree.SetAlias("sr1" , "sr1 && max(lep1_mt,lep2_mt) > 110 && nlbtags < 2 && ntbtags == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && mt2j > 100 && max_ml3l < 30."); 
+                tree.SetAlias("sr2" , "sr1 && jjl_p4.mass() < 120.");
+                tree.SetAlias("sr3" , "sr1 && jjl_p4.mass() > 120.");
+               break;
             case AnalysisType::static_size:
                 /*do nothing*/
                 break;
