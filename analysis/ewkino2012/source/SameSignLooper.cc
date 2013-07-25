@@ -50,7 +50,7 @@ typedef std::vector<LorentzVector> vecLorentzVector;
 
 using namespace tas;
 using namespace std;
-using namespace at;
+// using namespace at;
 using namespace ewkino;
 
 // get the best hyp
@@ -268,7 +268,7 @@ void PrintForSync(int ihyp, float mu_min_pt, float el_min_pt, enum JetType jet_t
 EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
 (
     const std::string& root_file_name,
-    const Sample::value_type& sample,
+    const at::Sample::value_type& sample,
     const AnalysisType::value_type& analysis_type,
     const std::string& fake_rate_file_name,
     const std::string& flip_rate_file_name,
@@ -672,7 +672,8 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                     }                    
                 }
 
-                if (fabs(genps_p4().at(w_indices.at(1)).mass() - 80.) > 10.)
+                
+                if (w_indices.size() > 1 && fabs(genps_p4().at(w_indices.at(1)).mass() - 80.) > 10.)
                 {
                     if (abs(genps_id().at(w_daughter_indices.at(1).first)) > 10 && abs(genps_id().at(w_daughter_indices.at(1).first)) < 17)
                     {
@@ -684,7 +685,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                     }
                 }
 
-                if (fabs(genps_p4().at(w_indices.at(2)).mass() - 80.) > 10.)
+                if (w_indices.size() > 2 && fabs(genps_p4().at(w_indices.at(2)).mass() - 80.) > 10.)
                 {
                     if (abs(genps_id().at(w_daughter_indices.at(2).first)) > 10 && abs(genps_id().at(w_daughter_indices.at(2).first)) < 17)
                     {
@@ -712,7 +713,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             }
 
             // lepton variables
-            std::pair<GenParticleStruct, GenParticleStruct> best_gen_hyp = efftools::getGenHyp(min_pt, min_pt, DileptonChargeType::static_size);
+            std::pair<GenParticleStruct, GenParticleStruct> best_gen_hyp = efftools::getGenHyp(min_pt, min_pt, at::DileptonChargeType::static_size);
             if (best_gen_hyp.first.id_ == 0 || best_gen_hyp.second.id_ == 0)
             {
                 if (m_verbose) {cout << "AnalysisLooper: does not have a good gen hyp" << endl;} 
@@ -831,7 +832,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         }
 
         // loop over hypotheses
-        HypInfo best_hyp((hyp_type().empty() ? -1 : 0), DileptonChargeType::static_size, DileptonHypType::static_size);
+        HypInfo best_hyp((hyp_type().empty() ? -1 : 0), at::DileptonChargeType::static_size, at::DileptonHypType::static_size);
         for (size_t ihyp = 0; ihyp != hyp_type().size(); ihyp++)
         {                
             // leptons variables
@@ -916,7 +917,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             }
 
             // get the hyp type
-            DileptonHypType::value_type type = hyp_typeToHypType(hyp_type().at(ihyp));
+            at::DileptonHypType::value_type type = at::hyp_typeToHypType(hyp_type().at(ihyp));
 
             // OS (Here a kludge by Claudio to quickly change the meaning of SS and OS .... useful for ttbar as sstop)
             int dummy = 1;
@@ -930,7 +931,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                     if (m_verbose) {std::cout << "OS hyp doesn't pass ID/ISO requirement" << std::endl;}
                     continue; 
                 }
-                best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::OS, type));
+                best_hyp = std::min(best_hyp, HypInfo(ihyp, at::DileptonChargeType::OS, type));
             }
             else if (hyp_q > 0)
             {
@@ -939,19 +940,19 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 {
                     m_hyp_count++;
                     if (m_verbose) {std::cout << "selected SS hyp" << std::endl;}
-                    best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SS, type));
+                    best_hyp = std::min(best_hyp, HypInfo(ihyp, at::DileptonChargeType::SS, type));
                 }
                 // single fake event (SF)
                 else if (samesign::isNumeratorLepton(lt_id, lt_idx, false) || samesign::isNumeratorLepton(ll_id, ll_idx, false))
                 {
                     if (m_verbose) {std::cout << "selected SF hyp" << std::endl;}
-                    best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SF, type));
+                    best_hyp = std::min(best_hyp, HypInfo(ihyp, at::DileptonChargeType::SF, type));
                 }
                 // double fake event (DF)
                 else
                 {
                     if (m_verbose) {std::cout << "selected DF hyp" << std::endl;}
-                    best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::DF, type));
+                    best_hyp = std::min(best_hyp, HypInfo(ihyp, at::DileptonChargeType::DF, type));
                 }
             }
 
@@ -964,18 +965,18 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
         // best hyp index
         int hyp_idx = best_hyp.idx;
-        DileptonChargeType::value_type charge_type = best_hyp.charge_type;
+        at::DileptonChargeType::value_type charge_type = best_hyp.charge_type;
 
         // all: 0, mm: 1, em: 2, ee: 3
-        const DileptonHypType::value_type dilepton_type = ((hyp_idx < 0 or hyp_p4().empty()) ? DileptonHypType::static_size : hyp_typeToHypType(hyp_type().at(hyp_idx)));
+        const at::DileptonHypType::value_type dilepton_type = ((hyp_idx < 0 or hyp_p4().empty()) ? at::DileptonHypType::static_size : at::hyp_typeToHypType(hyp_type().at(hyp_idx)));
 
         // write events to the tree for book keeping
-        if (charge_type == DileptonChargeType::static_size)
+        if (charge_type == at::DileptonChargeType::static_size)
         {
             if (m_verbose) {std::cout << "fails good event type requirement" << std::endl;}
 
             // fill event level info 
-            m_evt.dilep_type = DileptonHypType::static_size;
+            m_evt.dilep_type = at::DileptonHypType::static_size;
             m_evt.charge_type = -999999;
             m_evt.event_info.FillCommon(m_sample, filename);
 
@@ -1073,16 +1074,18 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         {
             m_evt.ht           = samesign::sumJetPt    (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.njets        = samesign::nJets       (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags_loose = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nlbtags      = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nmbtags      = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.ntbtags      = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
         }
         else
         {
             FactorizedJetCorrector* const jc = m_jet_corrector.get();
             m_evt.ht           = samesign::sumJetPt    (hyp_idx, jc, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
             m_evt.njets        = samesign::nJets       (hyp_idx, jc, jet_type,                /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags       = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
-            m_evt.nbtags_loose = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVL,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nlbtags      = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVL,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.nmbtags      = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
+            m_evt.ntbtags      = samesign::nBtaggedJets(hyp_idx, jc, jet_type, JETS_BTAG_CSVT,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 0);
         }
 
         m_evt.no_extrag    = (not samesign::makesExtraGammaStar(hyp_idx));
@@ -1192,11 +1195,15 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 {
                     m_evt.ht_up       = samesign::sumJetPt    (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
                     m_evt.njets_up    = samesign::nJets       (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                    m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                    m_evt.nlbtags_up  = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                    m_evt.nmbtags_up  = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                    m_evt.ntbtags_up  = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
 
                     m_evt.ht_dn       = samesign::sumJetPt    (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                     m_evt.njets_dn    = samesign::nJets       (hyp_idx, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                    m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                    m_evt.nlbtags_dn  = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                    m_evt.nmbtags_dn  = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                    m_evt.ntbtags_dn  = samesign::nBtaggedJets(hyp_idx, jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                 }
                 else
                 {
@@ -1206,11 +1213,15 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
                     m_evt.ht_up       = samesign::sumJetPt    (hyp_idx, jcu, scale_up, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
                     m_evt.njets_up    = samesign::nJets       (hyp_idx, jcu, scale_up, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-                    m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jcu, scale_up, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nlbtags_up  = samesign::nBtaggedJets(hyp_idx, jcu, scale_up, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nmbtags_up  = samesign::nBtaggedJets(hyp_idx, jcu, scale_up, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.ntbtags_up  = samesign::nBtaggedJets(hyp_idx, jcu, scale_up, jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
 
                     m_evt.ht_dn       = samesign::sumJetPt    (hyp_idx, jcu, scale_dn, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
                     m_evt.njets_dn    = samesign::nJets       (hyp_idx, jcu, scale_dn, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-                    m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jcu, scale_dn, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nlbtags_dn  = samesign::nBtaggedJets(hyp_idx, jcu, scale_dn, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nmbtags_dn  = samesign::nBtaggedJets(hyp_idx, jcu, scale_dn, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.ntbtags_dn  = samesign::nBtaggedJets(hyp_idx, jcu, scale_dn, jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
                 }
 
                 ROOT::Math::XYVector cmet_up;
@@ -1260,11 +1271,15 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 {
                     m_evt.ht_up       = samesign::sumJetPt    (hyp_idx, m_jet_corrector.get(), jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
                     m_evt.njets_up    = samesign::nJets       (hyp_idx, m_jet_corrector.get(), jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
-                    m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                    m_evt.nlbtags_up  = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                    m_evt.nmbtags_up  = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
+                    m_evt.ntbtags_up  = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/1);
 
                     m_evt.ht_dn       = samesign::sumJetPt    (hyp_idx, m_jet_corrector.get(), jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                     m_evt.njets_dn    = samesign::nJets       (hyp_idx, m_jet_corrector.get(), jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
-                    m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                    m_evt.nlbtags_dn  = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                    m_evt.nmbtags_dn  = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
+                    m_evt.ntbtags_dn  = samesign::nBtaggedJets(hyp_idx, m_jet_corrector.get(), jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, /*jetMetScale*/-1);
                 }
                 else
                 {
@@ -1275,11 +1290,15 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
                     m_evt.ht_up       = samesign::sumJetPt    (hyp_idx, jc, jcu, scale_up, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
                     m_evt.njets_up    = samesign::nJets       (hyp_idx, jc, jcu, scale_up, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-                    m_evt.nbtags_up   = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_up, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nlbtags_up  = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_up, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nmbtags_up  = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_up, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.ntbtags_up  = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_up, jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
 
                     m_evt.ht_dn       = samesign::sumJetPt    (hyp_idx, jc, jcu, scale_dn, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
                     m_evt.njets_dn    = samesign::nJets       (hyp_idx, jc, jcu, scale_dn, jet_type,                 /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
-                    m_evt.nbtags_dn   = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_dn, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nlbtags_dn  = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_dn, jet_type, JETS_BTAG_CSVL, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.nmbtags_dn  = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_dn, jet_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
+                    m_evt.ntbtags_dn  = samesign::nBtaggedJets(hyp_idx, jc, jcu, scale_dn, jet_type, JETS_BTAG_CSVT, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
                 }
 
                 // MET
@@ -1350,7 +1369,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         if (!evt_isRealData())
         {
             // gen Lep p4
-            std::pair<GenParticleStruct, GenParticleStruct> gen_hyp = efftools::getGenHyp(/*pt1=*/mu_min_pt, /*pt2=*/el_min_pt, DileptonChargeType::SS);
+            std::pair<GenParticleStruct, GenParticleStruct> gen_hyp = efftools::getGenHyp(/*pt1=*/mu_min_pt, /*pt2=*/el_min_pt, at::DileptonChargeType::SS);
             if (gen_hyp.first.idx_!=999999 && gen_hyp.second.idx_!=999999)
             {
                 m_evt.is_gen_mm = gen_hyp.first.id_>0 && gen_hyp.second.id_>0;
@@ -1383,10 +1402,10 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         }
         
         // classification
-        m_evt.is_ss   = (charge_type==DileptonChargeType::SS);
-        m_evt.is_sf   = (charge_type==DileptonChargeType::SF);
-        m_evt.is_df   = (charge_type==DileptonChargeType::DF);
-        m_evt.is_os   = (charge_type==DileptonChargeType::OS);
+        m_evt.is_ss   = (charge_type==at::DileptonChargeType::SS);
+        m_evt.is_sf   = (charge_type==at::DileptonChargeType::SF);
+        m_evt.is_df   = (charge_type==at::DileptonChargeType::DF);
+        m_evt.is_os   = (charge_type==at::DileptonChargeType::OS);
         m_evt.em_mufo = m_evt.em && ((lep1_fo && lep1_is_mu) || (lep2_fo && lep2_is_mu));  
         m_evt.em_elfo = m_evt.em && ((lep1_fo && lep1_is_el) || (lep2_fo && lep2_is_el));
         m_evt.is_pp   = hyp_lt_charge().at(hyp_idx)>0 && hyp_ll_charge().at(hyp_idx)>0; 
@@ -1478,14 +1497,6 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         assert(m_evt.vjets_bdisc_up.size() == m_evt.vjets_p4_up.size());
         assert(m_evt.vjets_bdisc_dn.size() == m_evt.vjets_p4_dn.size());
 
-        m_evt.vjets_btagged    = samesign::getSortedBtaggedFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, m_jetMetScale);
-        m_evt.vjets_btagged_up = samesign::getSortedBtaggedFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, 1);
-        m_evt.vjets_btagged_dn = samesign::getSortedBtaggedFlags(hyp_idx, jet_type, JETS_BTAG_CSVM,/*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
-
-        assert(m_evt.vjets_p4.size() == m_evt.vjets_btagged.size());
-        assert(m_evt.vjets_p4_up.size() == m_evt.vjets_btagged_up.size());
-        assert(m_evt.vjets_p4_dn.size() == m_evt.vjets_btagged_dn.size());
-
         // fill dijet_mass
         if (m_evt.vjets_p4.size() > 1)
         {
@@ -1495,7 +1506,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
         //cout << jet_flags.size() << "\t" << bjet_flags.size() << endl;
         // jet btag flag and mc flavor matching
-        const CMS2Tag cms2_tag = at::GetCMS2Tag();
+        const at::CMS2Tag cms2_tag = at::GetCMS2Tag();
         if (cms2_tag.version > 21 && not evt_isRealData())
         {
             if (not m_jet_corrector)
@@ -1530,16 +1541,76 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         const unsigned int seed = evt_event();
 
         // calculate the "reweighted" MC btag yields
+        std::vector<bool> tmp_vjets_lbtagged;
+        std::vector<bool> tmp_vjets_mbtagged;
+        std::vector<bool> tmp_vjets_tbtagged;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
+        {
+            bool is_loose_btag  = (m_evt.vjets_bdisc.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc.at(idx) > 0.898);
+            
+            tmp_vjets_lbtagged.push_back(is_loose_btag);
+            tmp_vjets_mbtagged.push_back(is_medium_btag);
+            tmp_vjets_tbtagged.push_back(is_tight_btag);
+        }
+
+        m_evt.vjets_lbtagged = tmp_vjets_lbtagged;
+        m_evt.vjets_mbtagged = tmp_vjets_mbtagged;
+        m_evt.vjets_tbtagged = tmp_vjets_tbtagged;
+
+        std::vector<bool> vjets_lbtagged_up;
+        std::vector<bool> vjets_mbtagged_up;
+        std::vector<bool> vjets_tbtagged_up;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_up.size(); idx++)
+        {
+            bool is_loose_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc_up.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.898);
+            
+            vjets_lbtagged_up.push_back(is_loose_btag);
+            vjets_mbtagged_up.push_back(is_medium_btag);
+            vjets_tbtagged_up.push_back(is_tight_btag);
+        }
+
+        std::vector<bool> vjets_lbtagged_dn;
+        std::vector<bool> vjets_mbtagged_dn;
+        std::vector<bool> vjets_tbtagged_dn;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_dn.size(); idx++)
+        {
+            bool is_loose_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc_dn.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.898);
+            
+            vjets_lbtagged_dn.push_back(is_loose_btag);
+            vjets_mbtagged_dn.push_back(is_medium_btag);
+            vjets_tbtagged_dn.push_back(is_tight_btag);
+        }
+
         if (not evt_isRealData() && (cms2_tag.version > 21))
         {
             // # btags reweighted
-            m_evt.nbtags_reweighted    = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
-            m_evt.nbtags_reweighted_up = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
-            m_evt.nbtags_reweighted_dn = at::MCBtagCount(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+            m_evt.nlbtags_reweighted    = at::MCBtagCount(JETS_BTAG_CSVL, m_evt.vjets_p4, m_evt.vjets_lbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nlbtags_reweighted_up = at::MCBtagCount(JETS_BTAG_CSVL, m_evt.vjets_p4, m_evt.vjets_lbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.nlbtags_reweighted_dn = at::MCBtagCount(JETS_BTAG_CSVL, m_evt.vjets_p4, m_evt.vjets_lbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+
+            m_evt.nmbtags_reweighted    = at::MCBtagCount(JETS_BTAG_CSVM, m_evt.vjets_p4, m_evt.vjets_mbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nmbtags_reweighted_up = at::MCBtagCount(JETS_BTAG_CSVM, m_evt.vjets_p4, m_evt.vjets_mbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.nmbtags_reweighted_dn = at::MCBtagCount(JETS_BTAG_CSVM, m_evt.vjets_p4, m_evt.vjets_mbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+
+            m_evt.ntbtags_reweighted    = at::MCBtagCount(JETS_BTAG_CSVT, m_evt.vjets_p4, m_evt.vjets_tbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.ntbtags_reweighted_up = at::MCBtagCount(JETS_BTAG_CSVT, m_evt.vjets_p4, m_evt.vjets_tbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.ntbtags_reweighted_dn = at::MCBtagCount(JETS_BTAG_CSVT, m_evt.vjets_p4, m_evt.vjets_tbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
 
             // # btags reweighted and JES +/-
-            m_evt.nbtags_reweighted_jec_up = at::MCBtagCount(m_evt.vjets_p4_up, m_evt.vjets_btagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
-            m_evt.nbtags_reweighted_jec_dn = at::MCBtagCount(m_evt.vjets_p4_dn, m_evt.vjets_btagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nlbtags_reweighted_jec_up = at::MCBtagCount(JETS_BTAG_CSVL, m_evt.vjets_p4_up, vjets_lbtagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nlbtags_reweighted_jec_dn = at::MCBtagCount(JETS_BTAG_CSVL, m_evt.vjets_p4_dn, vjets_lbtagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+
+            m_evt.nmbtags_reweighted_jec_up = at::MCBtagCount(JETS_BTAG_CSVM, m_evt.vjets_p4_up, vjets_mbtagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nmbtags_reweighted_jec_dn = at::MCBtagCount(JETS_BTAG_CSVM, m_evt.vjets_p4_dn, vjets_mbtagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+
+            m_evt.ntbtags_reweighted_jec_up = at::MCBtagCount(JETS_BTAG_CSVT, m_evt.vjets_p4_up, vjets_tbtagged_up, m_evt.vjets_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.ntbtags_reweighted_jec_dn = at::MCBtagCount(JETS_BTAG_CSVT, m_evt.vjets_p4_dn, vjets_tbtagged_dn, m_evt.vjets_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
         }
 
         // scale the JER 
@@ -1548,31 +1619,51 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             // set initial values
             m_evt.ht_jer        = m_evt.ht;
             m_evt.pfmet_jer     = met;
-            m_evt.pfmet_jer_phi = met_phi;
+            m_evt.pfmet_phi_jer = met_phi;
             vector<LorentzVector> vjets_jer_p4  = m_evt.vjets_p4;
-            vector<LorentzVector> tmp_vbjets_p4;
+            vector<LorentzVector> tmp_vlbjets_p4;
+            vector<LorentzVector> tmp_vmbjets_p4;
+            vector<LorentzVector> tmp_vtbjets_p4;
             for (unsigned int ib = 0; ib < m_evt.vjets_p4.size(); ib++)
             {
-                if (m_evt.vjets_btagged.at(ib)) tmp_vbjets_p4.push_back(m_evt.vjets_p4.at(ib));
+                if (m_evt.vjets_lbtagged.at(ib)) tmp_vlbjets_p4.push_back(m_evt.vjets_p4.at(ib));
+                if (m_evt.vjets_mbtagged.at(ib)) tmp_vmbjets_p4.push_back(m_evt.vjets_p4.at(ib));
+                if (m_evt.vjets_tbtagged.at(ib)) tmp_vtbjets_p4.push_back(m_evt.vjets_p4.at(ib));
             }
-            vector<LorentzVector> vbjets_jer_p4 = tmp_vbjets_p4;
+            vector<LorentzVector> vlbjets_jer_p4 = tmp_vlbjets_p4;
+            vector<LorentzVector> vmbjets_jer_p4 = tmp_vmbjets_p4;
+            vector<LorentzVector> vtbjets_jer_p4 = tmp_vtbjets_p4;
 
             // update the values by scaling the JER
-            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_jer_phi, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/40, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
-            vector<LorentzVector> vbjets_reweighted_jer_p4 = at::RecountedBjets(m_evt.vjets_p4, m_evt.vjets_btagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
-            samesign::smearJETScaleJets(vbjets_jer_p4, seed);
-            samesign::smearJETScaleJets(vbjets_reweighted_jer_p4, seed);
+            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_phi_jer, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/30, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);            
+            vector<LorentzVector> vlbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVL, m_evt.vjets_p4, m_evt.vjets_lbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            vector<LorentzVector> vmbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVM, m_evt.vjets_p4, m_evt.vjets_mbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            vector<LorentzVector> vtbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVT, m_evt.vjets_p4, m_evt.vjets_tbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            samesign::smearJETScaleJets(vlbjets_jer_p4, seed, m_jet_pt_cut);
+            samesign::smearJETScaleJets(vlbjets_reweighted_jer_p4, seed, m_jet_pt_cut);
+            samesign::smearJETScaleJets(vmbjets_jer_p4, seed, m_jet_pt_cut);
+            samesign::smearJETScaleJets(vmbjets_reweighted_jer_p4, seed, m_jet_pt_cut);
+            samesign::smearJETScaleJets(vtbjets_jer_p4, seed, m_jet_pt_cut);
+            samesign::smearJETScaleJets(vtbjets_reweighted_jer_p4, seed, m_jet_pt_cut);
 
             // set the branches 
-            m_evt.njets_jer             = vjets_jer_p4.size();
-            m_evt.nbtags_jer            = vbjets_jer_p4.size();
-            m_evt.nbtags_reweighted_jer = vbjets_reweighted_jer_p4.size();
-            m_evt.vjets_p4_jer          = vjets_jer_p4;
+            m_evt.njets_jer              = vjets_jer_p4.size();
+            m_evt.nlbtags_jer            = vlbjets_jer_p4.size();
+            m_evt.nmbtags_jer            = vmbjets_jer_p4.size();
+            m_evt.ntbtags_jer            = vtbjets_jer_p4.size();
+            m_evt.nlbtags_reweighted_jer = vlbjets_reweighted_jer_p4.size();
+            m_evt.nmbtags_reweighted_jer = vmbjets_reweighted_jer_p4.size();
+            m_evt.ntbtags_reweighted_jer = vtbjets_reweighted_jer_p4.size();
+            m_evt.vjets_p4_jer           = vjets_jer_p4;
         }
 
         // scale the unclustered MET
-        m_evt.pfmet_uncl_up = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/1 , /*scale=*/0.1);
-        m_evt.pfmet_uncl_dn = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/-1, /*scale=*/0.1);
+        float pfmet_uncl    = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/1 , /*scale=*/0.0);
+        float pfmet_uncl_up = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/1 , /*scale=*/0.1);
+        float pfmet_uncl_dn = samesign::scaleMET(met, met_phi, hyp_idx, jet_type, /*dR=*/0.4, /*jet_pt>*/15, /*|eta|<*/2.5, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt, /*scale_type=*/-1, /*scale=*/0.1);
+
+        m_evt.pfmet_up = m_evt.pfmet_up + pfmet_uncl - pfmet_uncl_up;
+        m_evt.pfmet_dn = m_evt.pfmet_dn + pfmet_uncl - pfmet_uncl_dn;
 
         m_evt.jets_dr12  = (m_evt.njets>=2 ) ? rt::DeltaR(m_evt.vjets_p4.at(0) , m_evt.vjets_p4.at(1) ) : -999999.0;
         
@@ -1597,7 +1688,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                     continue;
                 }
                 const LorentzVector& p4 = m_evt.vjets_p4.at(i);
-                std::sort(temp_jets_nontagged_p4.begin(), temp_jets_nontagged_p4.end(), SortByDeltaR<LorentzVector>(p4));
+                std::sort(temp_jets_nontagged_p4.begin(), temp_jets_nontagged_p4.end(), at::SortByDeltaR<LorentzVector>(p4));
 
                 // check if closest is the same jet?
                 if (rt::DeltaR(temp_jets_nontagged_p4.front(), p4) < 0.0001)
@@ -1621,12 +1712,12 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             }
             
             // nearest to lep1
-            std::sort(temp_jets_p4.begin(), temp_jets_p4.end(), SortByDeltaR<LorentzVector>(m_evt.lep1.p4));
+            std::sort(temp_jets_p4.begin(), temp_jets_p4.end(), at::SortByDeltaR<LorentzVector>(m_evt.lep1.p4));
             m_evt.lep1_nearjet_p4 = temp_jets_p4.front();
             m_evt.lep1_nearjet_dr = rt::DeltaR(m_evt.lep1.p4, temp_jets_p4.front());
 
             // nearest to lep2
-            std::sort(temp_jets_p4.begin(), temp_jets_p4.end(), SortByDeltaR<LorentzVector>(m_evt.lep2.p4));
+            std::sort(temp_jets_p4.begin(), temp_jets_p4.end(), at::SortByDeltaR<LorentzVector>(m_evt.lep2.p4));
             m_evt.lep2_nearjet_p4 = temp_jets_p4.front();
             m_evt.lep2_nearjet_dr = rt::DeltaR(m_evt.lep2.p4, temp_jets_p4.front());
         }
@@ -2179,9 +2270,11 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         //
         if (cms2_tag.version > 13)
         {
-            m_evt.pfjets_mvaPUid   = sortJetValues(jet_flags, all_jet_p4s, cms2.pfjets_full53xmvavalue());
-            m_evt.pfjets_mva5xPUid = sortJetValues(jet_flags, all_jet_p4s, cms2.pfjets_full5xmvavalue() );
-            m_evt.pfjets_mvaBeta   = sortJetValues(jet_flags, all_jet_p4s, cms2.pfjets_full53xmva_beta());
+            m_evt.pfjets_mvaPUid      = sortJetValues(jet_flags    , all_jet_p4s , cms2.pfjets_full53xmvavalue());
+            m_evt.pfjets_mva5xPUid    = sortJetValues(jet_flags    , all_jet_p4s , cms2.pfjets_full5xmvavalue() );
+            m_evt.pfjets_up_mva5xPUid = sortJetValues(jet_flags_up , all_jet_p4s , cms2.pfjets_full5xmvavalue() );
+            m_evt.pfjets_dn_mva5xPUid = sortJetValues(jet_flags_dn , all_jet_p4s , cms2.pfjets_full5xmvavalue() );
+            m_evt.pfjets_mvaBeta      = sortJetValues(jet_flags    , all_jet_p4s , cms2.pfjets_full53xmva_beta());
         }
 
         vecd tmp_pfjets_beta;
@@ -2244,14 +2337,39 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         m_evt.lep3.FillCommon(lep3id, lep3idx);
 
         //
+        // get matching info for jets after JER smearing
+        //
+        std::vector<LorentzVector> all_pfjets = samesign::getAllCorrectedJets(jet_type);
+        vecd tmp_pfjets_jer_mva5xPUid;
+        for (size_t jidx = 0; jidx < m_evt.vjets_p4_jer.size(); jidx++)
+        {
+            LorentzVector jer_p4 = m_evt.vjets_p4_jer.at(jidx);
+
+            for (size_t kidx = 0; kidx < all_pfjets.size(); kidx++)
+            {
+                if (rt::DeltaR(jer_p4, all_pfjets.at(kidx)) > 0.01) continue;
+                tmp_pfjets_jer_mva5xPUid.push_back(cms2.pfjets_full5xmvavalue().at(kidx));
+            }
+        }
+
+        m_evt.pfjets_jer_mva5xPUid = tmp_pfjets_jer_mva5xPUid;
+        assert(m_evt.pfjets_jer_mva5xPUid.size() == m_evt.vjets_p4_jer.size());
+
+        //
         // add branches for convenience
         //
         m_evt.passes_isotrk_veto = passesIsoTrkVeto();
         m_evt.passes_tau_veto    = passesTauVeto();
-        int njets_pv_tmp0 = 0;
-        int njets_pv_tmp1 = 0;
-        int njets_pv_tmp2 = 0;
+        int njets_pv_tmp0     = 0;
+        int njets_pv_up_tmp0  = 0;
+        int njets_pv_dn_tmp0  = 0;
+        int njets_pv_jer_tmp0 = 0;
+        int njets_pv_tmp1     = 0;
+        int njets_pv_tmp2     = 0;
         std::vector<bool> tmp_vjets_matched_pv;
+        std::vector<bool> tmp_vjets_matched_pv_up;
+        std::vector<bool> tmp_vjets_matched_pv_dn;
+        std::vector<bool> tmp_vjets_matched_pv_jer;
         if (cms2_tag.version > 13)
         {
             for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4.size(); jetpvidx++)
@@ -2263,24 +2381,246 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 if (passesMVAJetId(m_evt.vjets_p4.at(jetpvidx), m_evt.pfjets_mva5xPUid.at(jetpvidx), 2)) ++njets_pv_tmp2;                
             }
             m_evt.vjets_matched_pv = tmp_vjets_matched_pv;
+
+            for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4_up.size(); jetpvidx++)
+            {
+                bool jet_is_matched = passesMVAJetId(m_evt.vjets_p4_up.at(jetpvidx), m_evt.pfjets_up_mva5xPUid.at(jetpvidx), 0);
+                tmp_vjets_matched_pv_up.push_back(jet_is_matched);
+                if (jet_is_matched) ++njets_pv_up_tmp0;
+            }
+            m_evt.vjets_matched_pv_up = tmp_vjets_matched_pv_up;
+
+            for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4_dn.size(); jetpvidx++)
+            {
+                bool jet_is_matched = passesMVAJetId(m_evt.vjets_p4_dn.at(jetpvidx), m_evt.pfjets_up_mva5xPUid.at(jetpvidx), 0);
+                tmp_vjets_matched_pv_dn.push_back(jet_is_matched);
+                if (jet_is_matched) ++njets_pv_dn_tmp0;
+            }
+            m_evt.vjets_matched_pv_dn = tmp_vjets_matched_pv_dn;
+
+            for (unsigned int jetpvidx = 0; jetpvidx < m_evt.vjets_p4_jer.size(); jetpvidx++)
+            {
+                bool jet_is_matched = passesMVAJetId(m_evt.vjets_p4_jer.at(jetpvidx), m_evt.pfjets_jer_mva5xPUid.at(jetpvidx), 0);
+                tmp_vjets_matched_pv_jer.push_back(jet_is_matched);
+                if (jet_is_matched) ++njets_pv_jer_tmp0;
+            }
+            m_evt.vjets_matched_pv_jer = tmp_vjets_matched_pv_jer;
         }
 
         m_evt.njets_pv_tight0 = njets_pv_tmp0;
         m_evt.njets_pv_tight1 = njets_pv_tmp1;
         m_evt.njets_pv_tight2 = njets_pv_tmp2;
+        m_evt.njets_pv_tight0_up = njets_pv_up_tmp0;
+        m_evt.njets_pv_tight0_dn = njets_pv_dn_tmp0;
+        m_evt.njets_pv_tight0_jer = njets_pv_jer_tmp0;
 
         std::vector<LorentzVector> vjets_matched_p4;
+        std::vector<LorentzVector> vjets_matched_p4_up;
+        std::vector<LorentzVector> vjets_matched_p4_dn;
+        std::vector<LorentzVector> vjets_matched_p4_jer;
         for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
         {
             if (!m_evt.vjets_matched_pv.at(idx)) continue;
             vjets_matched_p4.push_back(m_evt.vjets_p4.at(idx));
         }
 
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_up.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv_up.at(idx)) continue;
+            vjets_matched_p4_up.push_back(m_evt.vjets_p4_up.at(idx));
+        }
+
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_dn.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv_dn.at(idx)) continue;
+            vjets_matched_p4_dn.push_back(m_evt.vjets_p4_dn.at(idx));
+        }
+
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_jer.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv_jer.at(idx)) continue;
+            vjets_matched_p4_jer.push_back(m_evt.vjets_p4_jer.at(idx));
+        }
+
         if (vjets_matched_p4.size() > 1)
         {
             LorentzVector p4_dijet = vjets_matched_p4.at(0) + vjets_matched_p4.at(1);
-            m_evt.mt2j = MT2J(met, met_phi, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4);
+            m_evt.mt2j          = MT2J(met, met_phi, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4);
             m_evt.dijet_mass_pv = p4_dijet.mass();
+        }
+
+        if (vjets_matched_p4_up.size() > 1)
+        {
+            LorentzVector p4_dijet = vjets_matched_p4_up.at(0) + vjets_matched_p4_up.at(1);
+            m_evt.mt2j_up       = MT2J(m_evt.pfmet_up, m_evt.pfmet_phi_up, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4_up);
+        }
+
+        if (vjets_matched_p4_dn.size() > 1)
+        {
+            LorentzVector p4_dijet = vjets_matched_p4_dn.at(0) + vjets_matched_p4_dn.at(1);
+            m_evt.mt2j_dn       = MT2J(m_evt.pfmet_dn, m_evt.pfmet_phi_dn, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4_dn);
+        }
+
+        if (vjets_matched_p4_jer.size() > 1)
+        {
+            LorentzVector p4_dijet = vjets_matched_p4_jer.at(0) + vjets_matched_p4_jer.at(1);
+            m_evt.mt2j_jer      = MT2J(m_evt.pfmet_jer, m_evt.pfmet_phi_jer, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4_jer);
+        }
+
+        // get invariant mass between leptons and two leading jets in the event
+        if (m_evt.vjets_p4.size() > 1)
+        {
+            LorentzVector dijet_p4 = m_evt.vjets_p4.at(0) + m_evt.vjets_p4.at(1);
+            m_evt.lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
+            m_evt.lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
+            m_evt.jjl_p4 = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? m_evt.lep1_jj_p4 : m_evt.lep2_jj_p4;            
+        }
+
+        if (m_evt.vjets_p4_up.size() > 1)
+        {
+            LorentzVector dijet_p4 = m_evt.vjets_p4_up.at(0) + m_evt.vjets_p4_up.at(1);
+            LorentzVector tmp_lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
+            LorentzVector tmp_lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
+            m_evt.jjl_p4_up = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? tmp_lep1_jj_p4 : tmp_lep2_jj_p4;            
+        }
+
+        if (m_evt.vjets_p4_dn.size() > 1)
+        {
+            LorentzVector dijet_p4 = m_evt.vjets_p4_dn.at(0) + m_evt.vjets_p4_dn.at(1);
+            LorentzVector tmp_lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
+            LorentzVector tmp_lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
+            m_evt.jjl_p4_dn = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? tmp_lep1_jj_p4 : tmp_lep2_jj_p4;            
+        }
+
+        if (m_evt.vjets_p4_jer.size() > 1)
+        {
+            LorentzVector dijet_p4 = m_evt.vjets_p4_jer.at(0) + m_evt.vjets_p4_jer.at(1);
+            LorentzVector tmp_lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
+            LorentzVector tmp_lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
+            m_evt.jjl_p4_jer = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? tmp_lep1_jj_p4 : tmp_lep2_jj_p4;            
+        }
+
+        //
+        // now let's do the same things for btags matched to the PV
+        //
+        // calculate the "reweighted" MC btag yields
+        std::vector<bool> tmp_vjets_pv_lbtagged;
+        std::vector<bool> tmp_vjets_pv_mbtagged;
+        std::vector<bool> tmp_vjets_pv_tbtagged;
+        veci tmp_vjets_pv_mcflavor_algo;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
+        {           
+            if (!m_evt.vjets_matched_pv.at(idx)) continue;
+
+            bool is_loose_btag  = (m_evt.vjets_bdisc.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc.at(idx) > 0.898);
+
+            tmp_vjets_pv_mcflavor_algo.push_back(m_evt.vjets_mcflavor_algo.at(idx));
+            
+            tmp_vjets_pv_lbtagged.push_back(is_loose_btag);
+            tmp_vjets_pv_mbtagged.push_back(is_medium_btag);
+            tmp_vjets_pv_tbtagged.push_back(is_tight_btag);
+        }
+
+        std::vector<bool> vjets_pv_lbtagged_up;
+        std::vector<bool> vjets_pv_mbtagged_up;
+        std::vector<bool> vjets_pv_tbtagged_up;
+        veci vjets_pv_mcflavor_algo_up;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_up.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv_up.at(idx)) continue;
+
+            bool is_loose_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc_up.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.898);
+
+            vjets_pv_mcflavor_algo_up.push_back(m_evt.vjets_mcflavor_algo_up.at(idx));
+            
+            vjets_pv_lbtagged_up.push_back(is_loose_btag);
+            vjets_pv_mbtagged_up.push_back(is_medium_btag);
+            vjets_pv_tbtagged_up.push_back(is_tight_btag);
+        }
+
+        std::vector<bool> vjets_pv_lbtagged_dn;
+        std::vector<bool> vjets_pv_mbtagged_dn;
+        std::vector<bool> vjets_pv_tbtagged_dn;
+        veci vjets_pv_mcflavor_algo_dn;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_dn.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv_dn.at(idx)) continue;
+
+            bool is_loose_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc_dn.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.898);
+
+            vjets_pv_mcflavor_algo_dn.push_back(m_evt.vjets_mcflavor_algo_dn.at(idx));
+            
+            vjets_pv_lbtagged_dn.push_back(is_loose_btag);
+            vjets_pv_mbtagged_dn.push_back(is_medium_btag);
+            vjets_pv_tbtagged_dn.push_back(is_tight_btag);
+        }
+
+        if (not evt_isRealData() && (cms2_tag.version > 21))
+        {
+            // # btags reweighted
+            m_evt.nlbtags_pv_reweighted    = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nlbtags_pv_reweighted_up = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.nlbtags_pv_reweighted_dn = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+
+            m_evt.nmbtags_pv_reweighted    = at::MCBtagCount(JETS_BTAG_CSVM, vjets_matched_p4, tmp_vjets_pv_mbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nmbtags_pv_reweighted_up = at::MCBtagCount(JETS_BTAG_CSVM, vjets_matched_p4, tmp_vjets_pv_mbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.nmbtags_pv_reweighted_dn = at::MCBtagCount(JETS_BTAG_CSVM, vjets_matched_p4, tmp_vjets_pv_mbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+
+            m_evt.ntbtags_pv_reweighted    = at::MCBtagCount(JETS_BTAG_CSVT, vjets_matched_p4, tmp_vjets_pv_tbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.ntbtags_pv_reweighted_up = at::MCBtagCount(JETS_BTAG_CSVT, vjets_matched_p4, tmp_vjets_pv_tbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
+            m_evt.ntbtags_pv_reweighted_dn = at::MCBtagCount(JETS_BTAG_CSVT, vjets_matched_p4, tmp_vjets_pv_tbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::down, seed);
+
+            // # btags reweighted and JES +/-
+            m_evt.nlbtags_pv_reweighted_jec_up = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4_up, vjets_pv_lbtagged_up, vjets_pv_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nlbtags_pv_reweighted_jec_dn = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4_dn, vjets_pv_lbtagged_dn, vjets_pv_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+
+            m_evt.nmbtags_pv_reweighted_jec_up = at::MCBtagCount(JETS_BTAG_CSVM, vjets_matched_p4_up, vjets_pv_mbtagged_up, vjets_pv_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.nmbtags_pv_reweighted_jec_dn = at::MCBtagCount(JETS_BTAG_CSVM, vjets_matched_p4_dn, vjets_pv_mbtagged_dn, vjets_pv_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+
+            m_evt.ntbtags_pv_reweighted_jec_up = at::MCBtagCount(JETS_BTAG_CSVT, vjets_matched_p4_up, vjets_pv_tbtagged_up, vjets_pv_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            m_evt.ntbtags_pv_reweighted_jec_dn = at::MCBtagCount(JETS_BTAG_CSVT, vjets_matched_p4_dn, vjets_pv_tbtagged_dn, vjets_pv_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+        }
+
+        // scale the JER for jets matched to PV
+        if (not evt_isRealData() && (cms2_tag.version > 21))
+        {
+            // set initial values
+            float tmp_ht = m_evt.ht;
+            float tmp_pfmet = met;
+            float tmp_pfmet_phi = met_phi;
+            vector<LorentzVector> vjets_jer_p4  = vjets_matched_p4;
+            vector<LorentzVector> tmp_vlbjets_p4;
+            vector<LorentzVector> tmp_vmbjets_p4;
+            vector<LorentzVector> tmp_vtbjets_p4;
+            for (unsigned int ib = 0; ib < vjets_matched_p4.size(); ib++)
+            {
+                if (tmp_vjets_pv_lbtagged.at(ib)) tmp_vlbjets_p4.push_back(vjets_matched_p4.at(ib));
+                if (tmp_vjets_pv_mbtagged.at(ib)) tmp_vmbjets_p4.push_back(vjets_matched_p4.at(ib));
+                if (tmp_vjets_pv_tbtagged.at(ib)) tmp_vtbjets_p4.push_back(vjets_matched_p4.at(ib));
+            }
+            vector<LorentzVector> vlbjets_jer_p4 = tmp_vlbjets_p4;
+            vector<LorentzVector> vmbjets_jer_p4 = tmp_vmbjets_p4;
+            vector<LorentzVector> vtbjets_jer_p4 = tmp_vtbjets_p4;
+
+            // update the values by scaling the JER
+            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, tmp_pfmet, tmp_pfmet_phi, tmp_ht, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/30, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);            
+            vector<LorentzVector> vlbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            vector<LorentzVector> vmbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVM, vjets_matched_p4, tmp_vjets_pv_mbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            vector<LorentzVector> vtbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVT, vjets_matched_p4, tmp_vjets_pv_tbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
+            samesign::smearJETScaleJets(vlbjets_reweighted_jer_p4, seed, m_jet_pt_cut);
+            samesign::smearJETScaleJets(vmbjets_reweighted_jer_p4, seed, m_jet_pt_cut);
+            samesign::smearJETScaleJets(vtbjets_reweighted_jer_p4, seed, m_jet_pt_cut);
+
+            // set the branches 
+            m_evt.nlbtags_pv_reweighted_jer = vlbjets_reweighted_jer_p4.size();
+            m_evt.nmbtags_pv_reweighted_jer = vmbjets_reweighted_jer_p4.size();
+            m_evt.ntbtags_pv_reweighted_jer = vtbjets_reweighted_jer_p4.size();
         }
 
         // Fill the tree
@@ -2290,52 +2630,52 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         if (m_evt.is_good_lumi && m_evt.njets >= 2)
         {
             scale = 1.0;
-            if (dilepton_type==DileptonHypType::MUMU)
+            if (dilepton_type==at::DileptonHypType::MUMU)
             {
                 if (m_verbose) {cout << "type == mm" << endl;}
-                if (charge_type==DileptonChargeType::SS) m_count_nobtag_ss[0] += scale;
-                if (charge_type==DileptonChargeType::SF) m_count_nobtag_sf[0] += scale;
-                if (charge_type==DileptonChargeType::DF) m_count_nobtag_df[0] += scale;
-                if (charge_type==DileptonChargeType::OS) m_count_nobtag_os[0] += scale;
-                if (charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[0] += scale;
-                if (charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[0] += scale;
-                if (charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[0] += scale;
-                if (charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[0] += scale;
+                if (charge_type==at::DileptonChargeType::SS) m_count_ss[0] += scale;
+                if (charge_type==at::DileptonChargeType::SF) m_count_sf[0] += scale;
+                if (charge_type==at::DileptonChargeType::DF) m_count_df[0] += scale;
+                if (charge_type==at::DileptonChargeType::OS) m_count_os[0] += scale;
+                if (charge_type==at::DileptonChargeType::SS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_ss[0] += scale;
+                if (charge_type==at::DileptonChargeType::SF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_sf[0] += scale;
+                if (charge_type==at::DileptonChargeType::DF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_df[0] += scale;
+                if (charge_type==at::DileptonChargeType::OS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_os[0] += scale;
             }
-            if (dilepton_type==DileptonHypType::EMU)
+            if (dilepton_type==at::DileptonHypType::EMU)
             {
                 if (m_verbose) {cout << "type == em" << endl;}
-                if (charge_type==DileptonChargeType::SS) m_count_nobtag_ss[1] += scale;
-                if (charge_type==DileptonChargeType::SF) m_count_nobtag_sf[1] += scale;
-                if (charge_type==DileptonChargeType::DF) m_count_nobtag_df[1] += scale;
-                if (charge_type==DileptonChargeType::OS) m_count_nobtag_os[1] += scale;
-                if (charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[1] += scale;
-                if (charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[1] += scale;
-                if (charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[1] += scale;
-                if (charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[1] += scale;
+                if (charge_type==at::DileptonChargeType::SS) m_count_ss[1] += scale;
+                if (charge_type==at::DileptonChargeType::SF) m_count_sf[1] += scale;
+                if (charge_type==at::DileptonChargeType::DF) m_count_df[1] += scale;
+                if (charge_type==at::DileptonChargeType::OS) m_count_os[1] += scale;
+                if (charge_type==at::DileptonChargeType::SS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_ss[1] += scale;
+                if (charge_type==at::DileptonChargeType::SF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_sf[1] += scale;
+                if (charge_type==at::DileptonChargeType::DF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_df[1] += scale;
+                if (charge_type==at::DileptonChargeType::OS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_os[1] += scale;
             }
-            if (dilepton_type==DileptonHypType::EE)
+            if (dilepton_type==at::DileptonHypType::EE)
             {
                 if (m_verbose) {cout << "type == ee" << endl;}
-                if (charge_type==DileptonChargeType::SS) m_count_nobtag_ss[2] += scale;
-                if (charge_type==DileptonChargeType::SF) m_count_nobtag_sf[2] += scale;
-                if (charge_type==DileptonChargeType::DF) m_count_nobtag_df[2] += scale;
-                if (charge_type==DileptonChargeType::OS) m_count_nobtag_os[2] += scale;
-                if (charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[2] += scale;
-                if (charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[2] += scale;
-                if (charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[2] += scale;
-                if (charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[2] += scale;
+                if (charge_type==at::DileptonChargeType::SS) m_count_ss[2] += scale;
+                if (charge_type==at::DileptonChargeType::SF) m_count_sf[2] += scale;
+                if (charge_type==at::DileptonChargeType::DF) m_count_df[2] += scale;
+                if (charge_type==at::DileptonChargeType::OS) m_count_os[2] += scale;
+                if (charge_type==at::DileptonChargeType::SS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_ss[2] += scale;
+                if (charge_type==at::DileptonChargeType::SF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_sf[2] += scale;
+                if (charge_type==at::DileptonChargeType::DF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_df[2] += scale;
+                if (charge_type==at::DileptonChargeType::OS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_os[2] += scale;
             }
             // count all 
             {
-                if (charge_type==DileptonChargeType::SS) m_count_nobtag_ss[3] += scale;
-                if (charge_type==DileptonChargeType::SF) m_count_nobtag_sf[3] += scale;
-                if (charge_type==DileptonChargeType::DF) m_count_nobtag_df[3] += scale;
-                if (charge_type==DileptonChargeType::OS) m_count_nobtag_os[3] += scale;
-                if (charge_type==DileptonChargeType::SS && m_evt.nbtags > 1) m_count_ss[3] += scale;
-                if (charge_type==DileptonChargeType::SF && m_evt.nbtags > 1) m_count_sf[3] += scale;
-                if (charge_type==DileptonChargeType::DF && m_evt.nbtags > 1) m_count_df[3] += scale;
-                if (charge_type==DileptonChargeType::OS && m_evt.nbtags > 1) m_count_os[3] += scale;
+                if (charge_type==at::DileptonChargeType::SS) m_count_ss[3] += scale;
+                if (charge_type==at::DileptonChargeType::SF) m_count_sf[3] += scale;
+                if (charge_type==at::DileptonChargeType::DF) m_count_df[3] += scale;
+                if (charge_type==at::DileptonChargeType::OS) m_count_os[3] += scale;
+                if (charge_type==at::DileptonChargeType::SS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_ss[3] += scale;
+                if (charge_type==at::DileptonChargeType::SF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_sf[3] += scale;
+                if (charge_type==at::DileptonChargeType::DF && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_df[3] += scale;
+                if (charge_type==at::DileptonChargeType::OS && m_evt.ntbtags == 0 && m_evt.nlbtags < 2) m_count_nobtag_os[3] += scale;
             }
         }
     }
@@ -2498,7 +2838,7 @@ bool EwkinoSSAnalysisLooper::passesMVAJetId(LorentzVector p4, float mva_value, i
 std::vector<float> EwkinoSSAnalysisLooper::sortJetValues(const std::vector<bool>& all_jet_flags, const std::vector<LorentzVector>& all_jet_p4s, const std::vector<float>& vals_to_sort)
 {
     assert(all_jet_flags.size() == all_jet_p4s.size());
-    assert(all_jet_flags.size() == vals_to_sort.size());    
+//    assert(all_jet_flags.size() == vals_to_sort.size());    
 
     std::vector<std::pair<LorentzVector, float> > tmp_vec_p4_val;
     for (unsigned int idx = 0; idx < all_jet_flags.size(); idx++)

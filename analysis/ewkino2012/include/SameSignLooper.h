@@ -87,7 +87,7 @@ private:
     std::tr1::array<float, 4> m_count_sf;
     std::tr1::array<float, 4> m_count_df;
     std::tr1::array<float, 4> m_count_os;
-
+ 
     std::tr1::array<float, 4> m_count_nobtag_ss;
     std::tr1::array<float, 4> m_count_nobtag_sf;
     std::tr1::array<float, 4> m_count_nobtag_df;

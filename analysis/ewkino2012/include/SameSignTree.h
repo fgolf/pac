@@ -69,13 +69,17 @@ public:
     bool is_good_lumi;
     int charge_type;
     int njets;
-    int nbtags;
-    int nbtags_loose;
+    int nlbtags;
+    int nmbtags;
+    int ntbtags;
     int ttbar_bkdn;
     float vtxw;
     float mt;
     float mt2;
     float mt2j;
+    float mt2j_up;
+    float mt2j_dn;
+    float mt2j_jer;
     float ht;
     float rho;
     float rho_iso;
@@ -90,35 +94,71 @@ public:
     bool trig_em_mu8_el17_id_iso;
 
     //
-    // for JES sysetmatics
+    // for JES and JER sysetmatics
     //
     int njets_dn;
     int njets_up;
-    int nbtags_dn;
-    int nbtags_up;
-    int nbtags_reweighted;
-    int nbtags_reweighted_dn;
-    int nbtags_reweighted_up;
-    int nbtags_reweighted_jec_up;
-    int nbtags_reweighted_jec_dn;
+    int njets_jer;
+    int nlbtags_dn;
+    int nlbtags_up;
+    int nlbtags_jer;
+    int nlbtags_reweighted;
+    int nlbtags_reweighted_dn;
+    int nlbtags_reweighted_up;
+    int nlbtags_reweighted_jer;
+    int nlbtags_reweighted_jec_up;
+    int nlbtags_reweighted_jec_dn;
+    int nmbtags_dn;
+    int nmbtags_up;
+    int nmbtags_jer;
+    int nmbtags_reweighted;
+    int nmbtags_reweighted_dn;
+    int nmbtags_reweighted_up;
+    int nmbtags_reweighted_jer;
+    int nmbtags_reweighted_jec_up;
+    int nmbtags_reweighted_jec_dn;
+    int ntbtags_dn;
+    int ntbtags_up;
+    int ntbtags_jer;
+    int ntbtags_reweighted;
+    int ntbtags_reweighted_dn;
+    int ntbtags_reweighted_up;
+    int ntbtags_reweighted_jer;
+    int ntbtags_reweighted_jec_up;
+    int ntbtags_reweighted_jec_dn;
+    int nlbtags_pv_reweighted;
+    int nlbtags_pv_reweighted_dn;
+    int nlbtags_pv_reweighted_up;
+    int nlbtags_pv_reweighted_jer;
+    int nlbtags_pv_reweighted_jec_up;
+    int nlbtags_pv_reweighted_jec_dn;
+    int nmbtags_pv_dn;
+    int nmbtags_pv_up;
+    int nmbtags_pv_jer;
+    int nmbtags_pv_reweighted;
+    int nmbtags_pv_reweighted_dn;
+    int nmbtags_pv_reweighted_up;
+    int nmbtags_pv_reweighted_jer;
+    int nmbtags_pv_reweighted_jec_up;
+    int nmbtags_pv_reweighted_jec_dn;
+    int ntbtags_pv_dn;
+    int ntbtags_pv_up;
+    int ntbtags_pv_jer;
+    int ntbtags_pv_reweighted;
+    int ntbtags_pv_reweighted_dn;
+    int ntbtags_pv_reweighted_up;
+    int ntbtags_pv_reweighted_jer;
+    int ntbtags_pv_reweighted_jec_up;
+    int ntbtags_pv_reweighted_jec_dn;
     float ht_dn;
     float ht_up;
+    float ht_jer;
     float pfmet_dn;
     float pfmet_up;
+    float pfmet_jer;
     float pfmet_phi_dn;
     float pfmet_phi_up;
-    float pfmet_uncl_up;
-    float pfmet_uncl_dn;
-
-    //
-    // for JER systematics
-    //
-    int njets_jer;
-    int nbtags_jer;
-    int nbtags_reweighted_jer;    
-    float ht_jer;
-    float pfmet_jer;
-    float pfmet_jer_phi;
+    float pfmet_phi_jer;
 
     //
     // susy parameters
@@ -163,6 +203,7 @@ public:
     //
     LorentzVector lep1_nearjet_p4;
     LorentzVector lep1_nearlep_p4;
+    LorentzVector lep1_jj_p4;
     float lep1_wfr;
     float lep1_wflip;
     float lep1_nearjet_dr;
@@ -175,6 +216,7 @@ public:
     //
     LorentzVector lep2_nearjet_p4;
     LorentzVector lep2_nearlep_p4;
+    LorentzVector lep2_jj_p4;
     float lep2_wfr;
     float lep2_wflip;
     float lep2_nearjet_dr;
@@ -191,11 +233,9 @@ public:
     vecLorentzVector vjets_p4_jer;
     vecLorentzVector vjets_mc3p4;
     vecLorentzVector vgenjets_p4;
-    vecLorentzVector vjets_nearjet_p4;
-    std::vector<bool> vjets_btagged;
-    std::vector<bool> vjets_btagged_up;
-    std::vector<bool> vjets_btagged_dn;
-    std::vector<bool> vjets_btagged_jer;
+    std::vector<bool> vjets_lbtagged;
+    std::vector<bool> vjets_mbtagged;
+    std::vector<bool> vjets_tbtagged;
     std::vector<bool> vjets_matched_pv;
     std::vector<bool> vjets_matched_pv_up;
     std::vector<bool> vjets_matched_pv_dn;
@@ -204,7 +244,7 @@ public:
     std::vector<bool> vjets_qgdisc_up;
     std::vector<bool> vjets_qgdisc_dn;
     std::vector<bool> vjets_qgdisc_jer;
-    float jets_dr12;
+    vecLorentzVector vjets_nearjet_p4;
     vecd vjets_nearjet_dr;
     veci vjets_mcflavor_phys;
     veci vjets_mcflavor_algo;
@@ -220,8 +260,13 @@ public:
     vecd vjets_bdisc_jer;
     veci vjets_momid;
     veci vjets_mc3id;
+    float jets_dr12;
     float dijet_mass;
     float dijet_mass_pv;
+    LorentzVector jjl_p4;
+    LorentzVector jjl_p4_up;
+    LorentzVector jjl_p4_dn;
+    LorentzVector jjl_p4_jer;
 
     //
     // gen lep1 info
@@ -388,7 +433,7 @@ public:
     vecd pfjets_mvaBeta;
 
     //
-    // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
+    // store info for third lepton (choose highest pt that passes loose ID, separated from hyp leptons by dR=0.1)
     //
     SingleLeptonTree lep3;
 
@@ -398,6 +443,9 @@ public:
     bool passes_isotrk_veto;
     bool passes_tau_veto;
     int njets_pv_tight0;
+    int njets_pv_tight0_up;
+    int njets_pv_tight0_dn;
+    int njets_pv_tight0_jer;
     int njets_pv_tight1;
     int njets_pv_tight2;
 
