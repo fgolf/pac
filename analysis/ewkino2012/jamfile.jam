@@ -102,25 +102,25 @@ exe ewkino2012_ss_plots
   : # usage-requirements
   ;
 
-# exe ss2012_interp_hists
-#   : # sources
-#     ./source/ss2012_interp_hists.cc
-#     ./source/InterpLooper.cc
-#     # dependent packages
-#     /ROOT
-#     ss2012_tools/<link>static
-#     /MiniFWLite//libMiniFWLite/<link>shared
-#     /AnalysisTools//AnalysisTools/<link>static
-#     /RootTools//RootTools/<link>static
-#     /boost//program_options/<link>static
-#     /SimpleTable//SimpleTable/<link>static
-#   : # requirements
-#     <define>__NON_ROOT_BUILD__
-#     <include>./include
-#     <include>./source
-#   : # default-build
-#   : # usage-requirements
-#   ;
+exe ewkino2012_ss_interp_hists
+  : # sources
+    ./source/ewkino2012_ss_interp_hists.cc
+    ./source/InterpLooper.cc
+    # dependent packages
+    /ROOT
+    ewkino2012_tools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
 
 # #exe ss2012_outreach
 # #  : # sources
@@ -404,7 +404,7 @@ default-install ewkino2012_ss_create_fakerate ;
 default-install ewkino2012_ss_make_fr_from_hists ;
 default-install ewkino2012_ss_closure_test ;
 default-install ewkino2012_postprocess_signal_baby ;
-# default-install ss2012_interp_hists ;
+default-install ewkino2012_ss_interp_hists ;
 # default-install ss2012_fr_closure ;
 # default-install test_frb ;
 # default-install test_btagsf ;
