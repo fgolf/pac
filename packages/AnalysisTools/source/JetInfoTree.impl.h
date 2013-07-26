@@ -58,7 +58,7 @@ void JetInfoTree::FillCommon
 
     // # btags reweighted
     const unsigned int seed = tas::evt_event();
-    nbtags_reweighted         = at::MCBtagCount(vjets_p4, vjets_btagged, vjets_mcflavor_algo, sample, is_fast_sim, at::YieldType::base, seed);
-    nbtags_reweighted_beff_up = at::MCBtagCount(vjets_p4, vjets_btagged, vjets_mcflavor_algo, sample, is_fast_sim, at::YieldType::up  , seed);
-    nbtags_reweighted_beff_dn = at::MCBtagCount(vjets_p4, vjets_btagged, vjets_mcflavor_algo, sample, is_fast_sim, at::YieldType::down, seed);
+    nbtags_reweighted         = at::MCBtagCount(jet_args.btag_type, vjets_p4, vjets_btagged, vjets_mcflavor_algo, sample, is_fast_sim, at::YieldType::base, seed);
+    nbtags_reweighted_beff_up = at::MCBtagCount(jet_args.btag_type, vjets_p4, vjets_btagged, vjets_mcflavor_algo, sample, is_fast_sim, at::YieldType::up  , seed);
+    nbtags_reweighted_beff_dn = at::MCBtagCount(jet_args.btag_type, vjets_p4, vjets_btagged, vjets_mcflavor_algo, sample, is_fast_sim, at::YieldType::down, seed);
 }
