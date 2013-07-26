@@ -4,9 +4,13 @@
 #include <vector>
 #include "at/Sample.h"
 #include "at/YieldType.h"
+#include "at/JetInfo.h"
 
 // ROOT
 #include "Math/LorentzVector.h"
+
+// CORE
+#include "jetSelections.h"
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
 
@@ -31,6 +35,7 @@ namespace at
     // btag efficiency number
     double BtagEfficiency
     (
+        const BtagType btag_type,
         const int flavor,
         const double jet_pt,
         const int unc_option = 0,
@@ -40,6 +45,7 @@ namespace at
     //// btag scale factor number
     double BtagScaleFactor
     (
+        const BtagType btag_type,
         const int flavor,
         const float jet_pt, 
         const float jet_eta, 
@@ -60,6 +66,7 @@ namespace at
     // I only implemented the samples we need for SameSign and commented the rest out
     scale_factor_t GetSMSScaleFactorAndError
     (
+        const BtagType btag_type,
         const float jet_pt, 
         const float jet_eta, 
         const int flavor, 
@@ -69,6 +76,19 @@ namespace at
     // get the count of the MC btags using the random number procedure
     unsigned int MCBtagCount
     (
+        const BtagType btag_type,
+        const std::vector<LorentzVector>& vjets_p4,
+        const std::vector<bool>& vjets_btags,
+        const std::vector<int>& vjets_mcflavor,
+        const at::Sample::value_type sample,
+        const bool is_fastsim = false,
+        const YieldType::value_type yield_type = YieldType::base,
+        const unsigned int seed = 123456
+    );
+
+    unsigned int MCBtagCount
+    (
+        const at::JetBtagType::value_type btag_type,
         const std::vector<LorentzVector>& vjets_p4,
         const std::vector<bool>& vjets_btags,
         const std::vector<int>& vjets_mcflavor,
@@ -81,6 +101,7 @@ namespace at
     // get a vector of the new of the MC btags using the random number procedure
     std::vector<LorentzVector> RecountedBjets
     (
+        const BtagType btag_type,
         const std::vector<LorentzVector>& vjets_p4,
         const std::vector<bool>& vjets_btags,
         const std::vector<int>& vjets_mcflavor,
