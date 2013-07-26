@@ -650,7 +650,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         if (not evt_isRealData())
         {
             // if sample is tchiwh, figure out which W from Higgs decayed leptonically, which hadronically
-            if (m_sample == at::Sample::tchiwh || m_sample == at::Sample::tchiwh_150_1 || m_sample == at::Sample::tchiwh_200_1)
+            if (m_sample == at::Sample::tchiwh)
             {
                 bool found_higgs = false;
                 std::vector<int> w_indices;
