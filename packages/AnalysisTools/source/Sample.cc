@@ -1136,42 +1136,6 @@ namespace at
         },
         {
             // name
-            "tchiwh_150_1", 
-            // title
-            "tchiwh, mchi = 150 GeV, mlsp = 0. GeV", 
-            // latex
-            "$\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H, M_{\\Chi} = 150 GeV, M_{LSP} = 0 GeV$",
-            // ntuple_path
-            "TChiwh",
-            // tag
-            "V05-03-27",
-            // SampleType 
-            SampleType::susy,
-            // Sample
-            Sample::tchiwh_150_1,
-            // color
-            kBlack
-        },
-        {
-            // name
-            "tchiwh_200_1", 
-            // title
-            "tchiwh, mchi = 200 GeV, mlsp = 0. GeV",
-            // latex
-            "$\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H, M_{\\Chi} = 200 GeV, M_{LSP} = 0 GeV$",
-            // ntuple_path
-            "TChiwh",
-            // tag
-            "V05-03-27",
-            // SampleType 
-            SampleType::susy,
-            // Sample
-            Sample::tchiwh_200_1,
-            // color
-            kBlack
-        },
-        {
-            // name
             "wh_zh_tth_hzz", 
             // title
             "WH, ZH, t#bar{t}H; H #rightarrow ZZ", 
@@ -1182,7 +1146,7 @@ namespace at
             // tag
             "V05-03-28",
             // SampleType 
-            SampleType::bkgd,
+            SampleType::rare,
             // Sample
             Sample::wh_zh_tth_htt,
             // color
@@ -1200,7 +1164,7 @@ namespace at
             // tag
             "V05-03-28",
             // SampleType 
-            SampleType::bkgd,
+            SampleType::rare,
             // Sample
             Sample::wh_zh_tth_hww,
             // color
@@ -1218,7 +1182,7 @@ namespace at
             // tag
             "V05-03-28",
             // SampleType 
-            SampleType::bkgd,
+            SampleType::rare,
             // Sample
             Sample::wh_zh_tth_hww,
             // color
