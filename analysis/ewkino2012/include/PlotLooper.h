@@ -41,6 +41,7 @@ public:
         float fl_unc = 0.3,
         float mc_unc = 0.5,
         float lumi = 1.0,
+        bool use_cp_unc = true,
         bool verbose = false
     );
 
@@ -63,6 +64,7 @@ private:
     bool m_do_vtx_reweight;
     bool m_do_scale_factors;
     bool m_check_good_lumi;
+    bool m_use_cp_unc;
     int m_charge_option;
     float m_sparm0;
     float m_sparm1;
@@ -72,7 +74,7 @@ private:
     float m_sf_flip;
     float m_fr_unc;
     float m_fl_unc;
-    float m_mc_unc;
+    float m_mc_unc;    
     at::Sample::value_type m_sample;
     ewkino::SignalRegion::value_type m_signal_region;
     ewkino::AnalysisType::value_type m_analysis_type;

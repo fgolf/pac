@@ -55,6 +55,7 @@ PlotLooper::PlotLooper
     float fl_unc,
     float mc_unc,
     float lumi,
+    bool use_cp_unc,
     bool verbose
 )
     : at::AnalysisWithHist(root_file_name)
@@ -64,6 +65,7 @@ PlotLooper::PlotLooper
     , m_do_vtx_reweight(not vtxreweight_file_name.empty())
     , m_do_scale_factors(do_scale_factors)
     , m_check_good_lumi(check_good_lumi)
+    , m_use_cp_unc(use_cp_unc)
     , m_charge_option(charge_option)
     , m_sparm0(sparm0)
     , m_sparm1(sparm1)
@@ -141,6 +143,8 @@ PlotLooper::PlotLooper
                     "MET | HT | nJets | weight" << endl;
         }
     }
+
+    if (m_sample == at::Sample::data) m_do_scale_factors = false;
 
     // begin job
     BeginJob();
@@ -239,16 +243,32 @@ void PlotLooper::EndJob()
     if (m_sample != at::Sample::data && m_nevts > 0)
     {
         const float weight = (m_lumi * m_scale1fb);
-        hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_mm"]->GetEntries()), m_nevts));
-        hc["h_yield_ee"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ee"]->GetEntries()), m_nevts));
-        hc["h_yield_em"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_em"]->GetEntries()), m_nevts));
-        hc["h_yield_ll"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ll"]->GetEntries()), m_nevts));
+        if (m_use_cp_unc)
+        {
+            hc["h_yield_mm"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_mm"]->GetEntries()), m_nevts));
+            hc["h_yield_ee"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ee"]->GetEntries()), m_nevts));
+            hc["h_yield_em"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_em"]->GetEntries()), m_nevts));
+            hc["h_yield_ll"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ll"]->GetEntries()), m_nevts));
+            
+            // yields in a signal used for overlaying
+            hc["h_yield_ss"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+            hc["h_yield_ss"]->SetBinError(3, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+            hc["h_yield_ss"]->SetBinError(4, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+            hc["h_yield_ss"]->SetBinError(5, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+        }
+        else
+        {
+            if (rt::Integral(hc["h_yield_mm"]) < (weight * 0.5)) {hc["h_yield_mm"]->SetBinError(2, weight);}
+            if (rt::Integral(hc["h_yield_ee"]) < (weight * 0.5)) {hc["h_yield_ee"]->SetBinError(2, weight);}
+            if (rt::Integral(hc["h_yield_em"]) < (weight * 0.5)) {hc["h_yield_em"]->SetBinError(2, weight);}
+            if (rt::Integral(hc["h_yield_ll"]) < (weight * 0.5)) {hc["h_yield_ll"]->SetBinError(2, weight);}
 
-        // yields in a signal used for overlaying
-        hc["h_yield_ss"]->SetBinError(2, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
-        hc["h_yield_ss"]->SetBinError(3, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
-        hc["h_yield_ss"]->SetBinError(4, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
-        hc["h_yield_ss"]->SetBinError(5, weight * rt::GetClopperPearsonUncertainty(static_cast<int>(hc["h_yield_ss"]->GetEntries()), m_nevts));
+            // yields in a signal used for overlaying
+            if (hc["h_yield_ss"]->GetBinContent(2) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(2, weight);}
+            if (hc["h_yield_ss"]->GetBinContent(3) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(3, weight);}
+            if (hc["h_yield_ss"]->GetBinContent(4) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(4, weight);}
+            if (hc["h_yield_ss"]->GetBinContent(5) < (weight * 0.5)) {hc["h_yield_ss"]->SetBinError(5, weight);}        
+        }
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll
@@ -429,6 +449,8 @@ void PlotLooper::EndJob()
     SetPredictionAndUncertainty(m_sample, hc, "didr"              ,"#DeltaR(ll,jj);#DeltaR(ll,jj);Events"                                 , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "min_iso"           ,"min lep iso; min lep iso;Events"                                      , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "max_iso"           ,"max lep iso; max lep iso;Events"                                      , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "dijet_lep_mass"    ,"M_{jjl} (X);M_{jjl} (GeV);Events"                                     , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "min_dijet_lep_mass","min M_{jjl} (X);min M_{jjl} (GeV);Events"                             , m_fr_unc, m_fl_unc, m_mc_unc, m_sf_flip);
 
     SetPredictionAndUncertainty(m_sample, hc, "pas_ht"            ,"H_{T};H_{T} (GeV);Events"                                             , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_met"           ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
@@ -649,7 +671,7 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_pt3_el%s"          , ns.c_str()), Form("Extra electron p_{T}%s;p_{T} (GeV);Events"                     , ts.c_str()), 10 , 0   , 100 ));
             hc.Add(new TH1F(Form("h_pt3_mu%s"          , ns.c_str()), Form("Extra muon p_{T}%s;p_{T} (GeV);Events"                         , ts.c_str()), 10 , 0   , 100 ));
             hc.Add(new TH1F(Form("h_dilep_pt%s"        , ns.c_str()), Form("dilepton p_{T}%s;p^{ll}_{T} (GeV);Events"                      , ts.c_str()), 20 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_dilep_eta%s"       , ns.c_str()), Form("dilepton #eta%s;#eta_{ll};Events"                              , ts.c_str()), 15 , 0   , 3.0 ));
+            hc.Add(new TH1F(Form("h_dilep_eta%s"       , ns.c_str()), Form("dilepton #eta%s;#eta_{ll};Events"                              , ts.c_str()), 30 , -3.0, 3.0 ));
             hc.Add(new TH1F(Form("h_dijet_pt_mass%s"   , ns.c_str()), Form("dijet p_{T}/mass%s;p^{jJ}_{T}/M_{jj};Events"                   , ts.c_str()), 30 , 0   , 3.0 ));            
             hc.Add(new TH1F(Form("h_max_mt%s"          , ns.c_str()), Form("max m_{T}%s;m_{T} (GeV);Events"                                , ts.c_str()), 20 , 0   , 200 ));
             hc.Add(new TH1F(Form("h_isotrk_veto%s"     , ns.c_str()), Form("iso trk veto%s;iso trk veto;Events"                            , ts.c_str()), 4  , -1.5, 2.5 ));
@@ -665,6 +687,8 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_max_dphi_met_jet%s", ns.c_str()), Form("max #Delta#phi(jet,met)%s;max #Delta#phi(jet,met);Events"      , ts.c_str()), 32 ,    0, 3.2 ));
             hc.Add(new TH1F(Form("h_min_iso%s"         , ns.c_str()), Form("min(lep1_iso,lep2_iso)%s;min(lep1_iso,lep2_iso);Events"        , ts.c_str()), 15 ,    0, 0.15));
             hc.Add(new TH1F(Form("h_max_iso%s"         , ns.c_str()), Form("max(lep1_iso,lep2_iso)%s;max(lep1_iso,lep2_iso);Events"        , ts.c_str()), 15 ,    0, 0.15));
+            hc.Add(new TH1F(Form("h_dijet_lep_mass%s"    , ns.c_str()), Form("M_{jjl}%s;M_{jjl};Events"                                    , ts.c_str()), 20 ,    0, 300 ));
+            hc.Add(new TH1F(Form("h_min_dijet_lep_mass%s", ns.c_str()), Form("min M_{jjl}%s;min M_{jjl};Events"                            , ts.c_str()), 20 ,    0, 300 ));
 
             hc.Add(new TH1F(Form("h_minjpt_jjpt%s"     , ns.c_str()), Form("min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T}%s;min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T};Events", ts.c_str()), 20 , 0   , 4 ));
             hc.Add(new TH1F(Form("h_dijet_mass_pt_dr%s", ns.c_str()), Form("M_{jj}/p^{jj}_{T}/#DeltaR_{jj}%s;M_{jj}/p^{jj}_{T}/#DeltaR_{jj};Events",               ts.c_str()), 20 , 0   , 4 ));
@@ -1073,7 +1097,7 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_ht"     +qs], ht()        , evt_weight);
         rt::Fill(hc["h_mt"     +qs], mt()        , evt_weight);
         rt::Fill(hc["h_met"    +qs], pfmet()     , evt_weight);
-        rt::Fill(hc["h_njets"  +qs], njets()     , evt_weight);
+        rt::Fill(hc["h_njets"  +qs], njets_pv_tight0()     , evt_weight);
         rt::Fill(hc["h_lep1_mt"+qs], lep1_mt()  , evt_weight);
         rt::Fill(hc["h_lep2_mt"+qs], lep2_mt()  , evt_weight);
         rt::Fill(hc["h_max_mt" +qs], std::max(lep1_mt(),lep2_mt()), evt_weight);
@@ -1083,7 +1107,7 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_ht"     +hs+qs], ht()        , evt_weight);
         rt::Fill(hc["h_mt"     +hs+qs], mt()        , evt_weight);
         rt::Fill(hc["h_met"    +hs+qs], pfmet()     , evt_weight);
-        rt::Fill(hc["h_njets"  +hs+qs], njets()     , evt_weight);
+        rt::Fill(hc["h_njets"  +hs+qs], njets_pv_tight0()     , evt_weight);
         rt::Fill(hc["h_lep1_mt"+hs+qs], lep1_mt()  , evt_weight);
         rt::Fill(hc["h_lep2_mt"+hs+qs], lep2_mt()  , evt_weight);
         rt::Fill(hc["h_max_mt" +hs+qs], std::max(lep1_mt(),lep2_mt()), evt_weight);
@@ -1094,7 +1118,7 @@ int PlotLooper::operator()(long event)
         // PAS plots
         rt::Fill(hc["h_pas_ht"    +qs], ht()     , evt_weight);
         rt::Fill(hc["h_pas_met"   +qs], pfmet()  , evt_weight);
-        rt::Fill(hc["h_pas_njets" +qs], njets()  , evt_weight);
+        rt::Fill(hc["h_pas_njets" +qs], njets_pv_tight0()  , evt_weight);
 
         rt::Fill(hc["h_dphi_met_ll"+qs], rt::DeltaPhi(dilep_p4().phi(), pfmet_phi()), evt_weight);
         rt::Fill(hc["h_min_dphi_met_lep"+qs], std::min(rt::DeltaPhi(lep1_p4().phi(), pfmet_phi()), rt::DeltaPhi(lep2_p4().phi(), pfmet_phi())), evt_weight);
@@ -1212,6 +1236,14 @@ int PlotLooper::operator()(long event)
             rt::Fill(hc["h_didphi"+qs], rt::DeltaPhi(dilep_p4().phi(), dijet_p4.phi()), evt_weight);
             rt::Fill(hc["h_dideta"+qs], rt::DeltaEta(dilep_p4(), dijet_p4), evt_weight);
             rt::Fill(hc["h_didr"+qs], rt::DeltaR(dilep_p4(), dijet_p4), evt_weight);
+
+            LorentzVector dijet_lep1_p4 = dijet_p4 + lep1_p4();
+            LorentzVector dijet_lep2_p4 = dijet_p4 + lep2_p4();
+            rt::Fill(hc["h_min_dijet_lep_mass"+qs], min(dijet_lep1_p4.mass(), dijet_lep2_p4.mass()), evt_weight);
+
+            LorentzVector dijet_lep_p4 = LorentzVector(0,0,0,0);
+            rt::DeltaR(dijet_p4, lep1_p4()) < rt::DeltaR(dijet_p4, lep2_p4()) ? dijet_lep_p4 = dijet_lep1_p4 : dijet_lep_p4 = dijet_lep2_p4;
+            rt::Fill(hc["h_dijet_lep_mass"+qs], dijet_lep_p4.mass(), evt_weight);
         }
 
         if (matched_jets_p4.size() > 1)
@@ -1238,19 +1270,9 @@ int PlotLooper::operator()(long event)
         //
         // number of btags
         //
-        int tmp_nlbtags = 0;
-        int tmp_nmbtags = 0;
-        int tmp_ntbtags = 0;
-        for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
-        {
-            if (!vjets_matched_pv().at(idx)) continue;
-            if (vjets_bdisc().at(idx) > 0.244) ++tmp_nlbtags;
-            if (vjets_bdisc().at(idx) > 0.679) ++tmp_nmbtags;
-            if (vjets_bdisc().at(idx) > 0.898) ++tmp_ntbtags;
-        }
-        rt::Fill(hc["h_nlbtags"+qs], tmp_nlbtags, evt_weight);
-        rt::Fill(hc["h_nmbtags"+qs], tmp_nmbtags, evt_weight);
-        rt::Fill(hc["h_ntbtags"+qs], tmp_ntbtags, evt_weight);
+        rt::Fill(hc["h_nlbtags"+qs], nlbtags_pv_reweighted(), evt_weight);
+        rt::Fill(hc["h_nmbtags"+qs], nmbtags_pv_reweighted(), evt_weight);
+        rt::Fill(hc["h_ntbtags"+qs], ntbtags_pv_reweighted(), evt_weight);
     }
     catch (std::exception& e)
     {
