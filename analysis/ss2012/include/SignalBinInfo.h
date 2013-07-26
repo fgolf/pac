@@ -44,7 +44,8 @@ namespace ss
         const float y_bin_width,
         const float y_min,
         const float y_max,
-        const float offset
+        const float offset,
+        const bool center_bins = false
     );
 
     // return the binning info for a specific signal sample 

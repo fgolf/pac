@@ -85,14 +85,14 @@ namespace ss
                     ht     = ssb::ht();
                     njets  = ssb::njets();
                     //nbtags = ssb::nbtags_reweighted_up(); // reweighted # btags (random #) scaling up B-tag efficiency
-                    nbtags = at::MCBtagCount(ssb::vjets_p4(), ssb::vjets_btagged(), ssb::vjets_mcflavor_algo(), sample, is_fast_sim, at::YieldType::up, ssb::evt());
+                    nbtags = at::MCBtagCount(JETS_BTAG_CSVM, ssb::vjets_p4(), ssb::vjets_btagged(), ssb::vjets_mcflavor_algo(), sample, is_fast_sim, at::YieldType::up, ssb::evt());
                     break;
                 case SystematicType::BEFF_DN:
                     met    = ssb::pfmet();
                     ht     = ssb::ht();
                     njets  = ssb::njets();
                     //nbtags = ssb::nbtags_reweighted_dn(); // reweighted # btags (random #) scaling down B-tag efficiency
-                    nbtags = at::MCBtagCount(ssb::vjets_p4(), ssb::vjets_btagged(), ssb::vjets_mcflavor_algo(), sample, is_fast_sim, at::YieldType::down, ssb::evt());
+                    nbtags = at::MCBtagCount(JETS_BTAG_CSVM, ssb::vjets_p4(), ssb::vjets_btagged(), ssb::vjets_mcflavor_algo(), sample, is_fast_sim, at::YieldType::down, ssb::evt());
                     break;
                 default:
                     throw std::invalid_argument("[ss::GetReweightedKinematicVariables] Error: SystematicType invalid");

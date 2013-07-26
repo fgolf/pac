@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #out_name=AN_draft_19p5fb_v5
-#out_name=V02-05-19
-out_name=3lep_veto
+#out_name=V03-02-02
+out_name=V03-02-02_3lep_veto
 lumi=19.5
 sr=-1
 nev=-1

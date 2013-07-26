@@ -45,3 +45,7 @@ clean_up vocms20.cern.ch kelley_SMS-MadGraph_Pythia6Zstar_8TeV_T1tttt_2J_mGo-775
 clean_up vocms20.cern.ch kelley_SMS-MadGraph_Pythia6Zstar_8TeV_T1tttt_2J_mGo-775to1075_mLSP-25to500_50GeVX50GeV_Binning_Summer12-START52_V9_FSIM-v3_k3s7u9
 clean_up vocms20.cern.ch kelley_SMS-MadGraph_Pythia6Zstar_8TeV_T1tttt_2J_mGo-400to750_mLSP-25to550_50GeVX50GeV_Binning_Summer12-START52_V9_FSIM-v1_h61q7n
 clean_up vocms20.cern.ch kelley_SMS-MadGraph_Pythia6Zstar_8TeV_T1tttt_2J_mGo-775to1075_mLSP-25to500_50GeVX50GeV_Binning_Summer12-START52_V9_FSIM-v3_guc561
+
+hcc-crabserver.unl.edu
+vocms83.cern.ch
+vocms20.cern.ch

@@ -399,7 +399,7 @@ int SingleLeptonTreeLooper::operator() (long event, const std::string& filename)
         // jet related info
         // --------------------------------------------------------------------------------------------------------- //
 
-        const JetType jet_type        = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
+        const ::JetType jet_type      = evt_isRealData() ? JETS_TYPE_PF_FAST_CORR_RESIDUAL : JETS_TYPE_PF_FAST_CORR;
         const CleaningType clean_type = (lep_is_mu ? JETS_CLEAN_SINGLE_MU : JETS_CLEAN_SINGLE_E);
         std::vector<bool> jet_flags   = getJetFlags       (lep_idx, jet_type, clean_type,                 /*dR=*/0.4, /*pt>*/0.0, /*eta>*/2.4);
         std::vector<bool> bjet_flags  = getBtaggedJetFlags(lep_idx, jet_type, clean_type, JETS_BTAG_CSVM, /*dR=*/0.4, /*pt>*/0.0, /*eta>*/2.4);
@@ -455,7 +455,7 @@ int SingleLeptonTreeLooper::operator() (long event, const std::string& filename)
         m_evt.ht = 0.0; for (size_t jidx = 0; jidx != vjets_p4.size(); jidx++) {m_evt.ht += vjets_p4.at(jidx).pt();}
         m_evt.njets             = vjets_p4.size();
         m_evt.nbtags            = vbjets_p4.size();
-        m_evt.nbtags_reweighted = at::MCBtagCount(vjets_p4, vjets_btagged, vjets_mcflavor_algo, m_sample, /*is_fast_sim=*/false);
+        m_evt.nbtags_reweighted = at::MCBtagCount(JETS_BTAG_CSVM, vjets_p4, vjets_btagged, vjets_mcflavor_algo, m_sample, /*is_fast_sim=*/false);
 
         // save the result to the tree 
         // --------------------------------------------------------------------------------------------------------- //
