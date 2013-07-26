@@ -74,10 +74,10 @@ protected:
 	float	gen_met_phi_;
 	TBranch *gen_met_phi_branch;
 	bool gen_met_phi_isLoaded;
-	TString *dataset_;
+	TString dataset_;
 	TBranch *dataset_branch;
 	bool dataset_isLoaded;
-	TString *filename_;
+	TString filename_;
 	TBranch *filename_branch;
 	bool filename_isLoaded;
 	int	gen_nleps_;
@@ -1187,6 +1187,60 @@ protected:
 	int	ntbtags_reweighted_jec_up_;
 	TBranch *ntbtags_reweighted_jec_up_branch;
 	bool ntbtags_reweighted_jec_up_isLoaded;
+	int	nlbtags_pv_reweighted_;
+	TBranch *nlbtags_pv_reweighted_branch;
+	bool nlbtags_pv_reweighted_isLoaded;
+	int	nlbtags_pv_reweighted_dn_;
+	TBranch *nlbtags_pv_reweighted_dn_branch;
+	bool nlbtags_pv_reweighted_dn_isLoaded;
+	int	nlbtags_pv_reweighted_up_;
+	TBranch *nlbtags_pv_reweighted_up_branch;
+	bool nlbtags_pv_reweighted_up_isLoaded;
+	int	nlbtags_pv_reweighted_jer_;
+	TBranch *nlbtags_pv_reweighted_jer_branch;
+	bool nlbtags_pv_reweighted_jer_isLoaded;
+	int	nlbtags_pv_reweighted_jec_dn_;
+	TBranch *nlbtags_pv_reweighted_jec_dn_branch;
+	bool nlbtags_pv_reweighted_jec_dn_isLoaded;
+	int	nlbtags_pv_reweighted_jec_up_;
+	TBranch *nlbtags_pv_reweighted_jec_up_branch;
+	bool nlbtags_pv_reweighted_jec_up_isLoaded;
+	int	nmbtags_pv_reweighted_;
+	TBranch *nmbtags_pv_reweighted_branch;
+	bool nmbtags_pv_reweighted_isLoaded;
+	int	nmbtags_pv_reweighted_dn_;
+	TBranch *nmbtags_pv_reweighted_dn_branch;
+	bool nmbtags_pv_reweighted_dn_isLoaded;
+	int	nmbtags_pv_reweighted_up_;
+	TBranch *nmbtags_pv_reweighted_up_branch;
+	bool nmbtags_pv_reweighted_up_isLoaded;
+	int	nmbtags_pv_reweighted_jer_;
+	TBranch *nmbtags_pv_reweighted_jer_branch;
+	bool nmbtags_pv_reweighted_jer_isLoaded;
+	int	nmbtags_pv_reweighted_jec_dn_;
+	TBranch *nmbtags_pv_reweighted_jec_dn_branch;
+	bool nmbtags_pv_reweighted_jec_dn_isLoaded;
+	int	nmbtags_pv_reweighted_jec_up_;
+	TBranch *nmbtags_pv_reweighted_jec_up_branch;
+	bool nmbtags_pv_reweighted_jec_up_isLoaded;
+	int	ntbtags_pv_reweighted_;
+	TBranch *ntbtags_pv_reweighted_branch;
+	bool ntbtags_pv_reweighted_isLoaded;
+	int	ntbtags_pv_reweighted_dn_;
+	TBranch *ntbtags_pv_reweighted_dn_branch;
+	bool ntbtags_pv_reweighted_dn_isLoaded;
+	int	ntbtags_pv_reweighted_up_;
+	TBranch *ntbtags_pv_reweighted_up_branch;
+	bool ntbtags_pv_reweighted_up_isLoaded;
+	int	ntbtags_pv_reweighted_jer_;
+	TBranch *ntbtags_pv_reweighted_jer_branch;
+	bool ntbtags_pv_reweighted_jer_isLoaded;
+	int	ntbtags_pv_reweighted_jec_dn_;
+	TBranch *ntbtags_pv_reweighted_jec_dn_branch;
+	bool ntbtags_pv_reweighted_jec_dn_isLoaded;
+	int	ntbtags_pv_reweighted_jec_up_;
+	TBranch *ntbtags_pv_reweighted_jec_up_branch;
+	bool ntbtags_pv_reweighted_jec_up_isLoaded;
 	float	pfmet_dn_;
 	TBranch *pfmet_dn_branch;
 	bool pfmet_dn_isLoaded;
@@ -1205,12 +1259,6 @@ protected:
 	float	pfmet_phi_jer_;
 	TBranch *pfmet_phi_jer_branch;
 	bool pfmet_phi_jer_isLoaded;
-	float	pfmet_uncl_dn_;
-	TBranch *pfmet_uncl_dn_branch;
-	bool pfmet_uncl_dn_isLoaded;
-	float	pfmet_uncl_up_;
-	TBranch *pfmet_uncl_up_branch;
-	bool pfmet_uncl_up_isLoaded;
 	float	sf_dileptrig_;
 	TBranch *sf_dileptrig_branch;
 	bool sf_dileptrig_isLoaded;
@@ -1229,16 +1277,16 @@ protected:
 	float	sparm3_;
 	TBranch *sparm3_branch;
 	bool sparm3_isLoaded;
-	TString *sparm0_name_;
+	TString sparm0_name_;
 	TBranch *sparm0_name_branch;
 	bool sparm0_name_isLoaded;
-	TString *sparm1_name_;
+	TString sparm1_name_;
 	TBranch *sparm1_name_branch;
 	bool sparm1_name_isLoaded;
-	TString *sparm2_name_;
+	TString sparm2_name_;
 	TBranch *sparm2_name_branch;
 	bool sparm2_name_isLoaded;
-	TString *sparm3_name_;
+	TString sparm3_name_;
 	TBranch *sparm3_name_branch;
 	bool sparm3_name_isLoaded;
 	bool	is_pp_;
@@ -4008,6 +4056,96 @@ void Init(TTree *tree) {
 		ntbtags_reweighted_jec_up_branch = tree->GetBranch("ntbtags_reweighted_jec_up");
 		if (ntbtags_reweighted_jec_up_branch) {ntbtags_reweighted_jec_up_branch->SetAddress(&ntbtags_reweighted_jec_up_);}
 	}
+	nlbtags_pv_reweighted_branch = 0;
+	if (tree->GetBranch("nlbtags_pv_reweighted") != 0) {
+		nlbtags_pv_reweighted_branch = tree->GetBranch("nlbtags_pv_reweighted");
+		if (nlbtags_pv_reweighted_branch) {nlbtags_pv_reweighted_branch->SetAddress(&nlbtags_pv_reweighted_);}
+	}
+	nlbtags_pv_reweighted_dn_branch = 0;
+	if (tree->GetBranch("nlbtags_pv_reweighted_dn") != 0) {
+		nlbtags_pv_reweighted_dn_branch = tree->GetBranch("nlbtags_pv_reweighted_dn");
+		if (nlbtags_pv_reweighted_dn_branch) {nlbtags_pv_reweighted_dn_branch->SetAddress(&nlbtags_pv_reweighted_dn_);}
+	}
+	nlbtags_pv_reweighted_up_branch = 0;
+	if (tree->GetBranch("nlbtags_pv_reweighted_up") != 0) {
+		nlbtags_pv_reweighted_up_branch = tree->GetBranch("nlbtags_pv_reweighted_up");
+		if (nlbtags_pv_reweighted_up_branch) {nlbtags_pv_reweighted_up_branch->SetAddress(&nlbtags_pv_reweighted_up_);}
+	}
+	nlbtags_pv_reweighted_jer_branch = 0;
+	if (tree->GetBranch("nlbtags_pv_reweighted_jer") != 0) {
+		nlbtags_pv_reweighted_jer_branch = tree->GetBranch("nlbtags_pv_reweighted_jer");
+		if (nlbtags_pv_reweighted_jer_branch) {nlbtags_pv_reweighted_jer_branch->SetAddress(&nlbtags_pv_reweighted_jer_);}
+	}
+	nlbtags_pv_reweighted_jec_dn_branch = 0;
+	if (tree->GetBranch("nlbtags_pv_reweighted_jec_dn") != 0) {
+		nlbtags_pv_reweighted_jec_dn_branch = tree->GetBranch("nlbtags_pv_reweighted_jec_dn");
+		if (nlbtags_pv_reweighted_jec_dn_branch) {nlbtags_pv_reweighted_jec_dn_branch->SetAddress(&nlbtags_pv_reweighted_jec_dn_);}
+	}
+	nlbtags_pv_reweighted_jec_up_branch = 0;
+	if (tree->GetBranch("nlbtags_pv_reweighted_jec_up") != 0) {
+		nlbtags_pv_reweighted_jec_up_branch = tree->GetBranch("nlbtags_pv_reweighted_jec_up");
+		if (nlbtags_pv_reweighted_jec_up_branch) {nlbtags_pv_reweighted_jec_up_branch->SetAddress(&nlbtags_pv_reweighted_jec_up_);}
+	}
+	nmbtags_pv_reweighted_branch = 0;
+	if (tree->GetBranch("nmbtags_pv_reweighted") != 0) {
+		nmbtags_pv_reweighted_branch = tree->GetBranch("nmbtags_pv_reweighted");
+		if (nmbtags_pv_reweighted_branch) {nmbtags_pv_reweighted_branch->SetAddress(&nmbtags_pv_reweighted_);}
+	}
+	nmbtags_pv_reweighted_dn_branch = 0;
+	if (tree->GetBranch("nmbtags_pv_reweighted_dn") != 0) {
+		nmbtags_pv_reweighted_dn_branch = tree->GetBranch("nmbtags_pv_reweighted_dn");
+		if (nmbtags_pv_reweighted_dn_branch) {nmbtags_pv_reweighted_dn_branch->SetAddress(&nmbtags_pv_reweighted_dn_);}
+	}
+	nmbtags_pv_reweighted_up_branch = 0;
+	if (tree->GetBranch("nmbtags_pv_reweighted_up") != 0) {
+		nmbtags_pv_reweighted_up_branch = tree->GetBranch("nmbtags_pv_reweighted_up");
+		if (nmbtags_pv_reweighted_up_branch) {nmbtags_pv_reweighted_up_branch->SetAddress(&nmbtags_pv_reweighted_up_);}
+	}
+	nmbtags_pv_reweighted_jer_branch = 0;
+	if (tree->GetBranch("nmbtags_pv_reweighted_jer") != 0) {
+		nmbtags_pv_reweighted_jer_branch = tree->GetBranch("nmbtags_pv_reweighted_jer");
+		if (nmbtags_pv_reweighted_jer_branch) {nmbtags_pv_reweighted_jer_branch->SetAddress(&nmbtags_pv_reweighted_jer_);}
+	}
+	nmbtags_pv_reweighted_jec_dn_branch = 0;
+	if (tree->GetBranch("nmbtags_pv_reweighted_jec_dn") != 0) {
+		nmbtags_pv_reweighted_jec_dn_branch = tree->GetBranch("nmbtags_pv_reweighted_jec_dn");
+		if (nmbtags_pv_reweighted_jec_dn_branch) {nmbtags_pv_reweighted_jec_dn_branch->SetAddress(&nmbtags_pv_reweighted_jec_dn_);}
+	}
+	nmbtags_pv_reweighted_jec_up_branch = 0;
+	if (tree->GetBranch("nmbtags_pv_reweighted_jec_up") != 0) {
+		nmbtags_pv_reweighted_jec_up_branch = tree->GetBranch("nmbtags_pv_reweighted_jec_up");
+		if (nmbtags_pv_reweighted_jec_up_branch) {nmbtags_pv_reweighted_jec_up_branch->SetAddress(&nmbtags_pv_reweighted_jec_up_);}
+	}
+	ntbtags_pv_reweighted_branch = 0;
+	if (tree->GetBranch("ntbtags_pv_reweighted") != 0) {
+		ntbtags_pv_reweighted_branch = tree->GetBranch("ntbtags_pv_reweighted");
+		if (ntbtags_pv_reweighted_branch) {ntbtags_pv_reweighted_branch->SetAddress(&ntbtags_pv_reweighted_);}
+	}
+	ntbtags_pv_reweighted_dn_branch = 0;
+	if (tree->GetBranch("ntbtags_pv_reweighted_dn") != 0) {
+		ntbtags_pv_reweighted_dn_branch = tree->GetBranch("ntbtags_pv_reweighted_dn");
+		if (ntbtags_pv_reweighted_dn_branch) {ntbtags_pv_reweighted_dn_branch->SetAddress(&ntbtags_pv_reweighted_dn_);}
+	}
+	ntbtags_pv_reweighted_up_branch = 0;
+	if (tree->GetBranch("ntbtags_pv_reweighted_up") != 0) {
+		ntbtags_pv_reweighted_up_branch = tree->GetBranch("ntbtags_pv_reweighted_up");
+		if (ntbtags_pv_reweighted_up_branch) {ntbtags_pv_reweighted_up_branch->SetAddress(&ntbtags_pv_reweighted_up_);}
+	}
+	ntbtags_pv_reweighted_jer_branch = 0;
+	if (tree->GetBranch("ntbtags_pv_reweighted_jer") != 0) {
+		ntbtags_pv_reweighted_jer_branch = tree->GetBranch("ntbtags_pv_reweighted_jer");
+		if (ntbtags_pv_reweighted_jer_branch) {ntbtags_pv_reweighted_jer_branch->SetAddress(&ntbtags_pv_reweighted_jer_);}
+	}
+	ntbtags_pv_reweighted_jec_dn_branch = 0;
+	if (tree->GetBranch("ntbtags_pv_reweighted_jec_dn") != 0) {
+		ntbtags_pv_reweighted_jec_dn_branch = tree->GetBranch("ntbtags_pv_reweighted_jec_dn");
+		if (ntbtags_pv_reweighted_jec_dn_branch) {ntbtags_pv_reweighted_jec_dn_branch->SetAddress(&ntbtags_pv_reweighted_jec_dn_);}
+	}
+	ntbtags_pv_reweighted_jec_up_branch = 0;
+	if (tree->GetBranch("ntbtags_pv_reweighted_jec_up") != 0) {
+		ntbtags_pv_reweighted_jec_up_branch = tree->GetBranch("ntbtags_pv_reweighted_jec_up");
+		if (ntbtags_pv_reweighted_jec_up_branch) {ntbtags_pv_reweighted_jec_up_branch->SetAddress(&ntbtags_pv_reweighted_jec_up_);}
+	}
 	pfmet_dn_branch = 0;
 	if (tree->GetBranch("pfmet_dn") != 0) {
 		pfmet_dn_branch = tree->GetBranch("pfmet_dn");
@@ -4037,16 +4175,6 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("pfmet_phi_jer") != 0) {
 		pfmet_phi_jer_branch = tree->GetBranch("pfmet_phi_jer");
 		if (pfmet_phi_jer_branch) {pfmet_phi_jer_branch->SetAddress(&pfmet_phi_jer_);}
-	}
-	pfmet_uncl_dn_branch = 0;
-	if (tree->GetBranch("pfmet_uncl_dn") != 0) {
-		pfmet_uncl_dn_branch = tree->GetBranch("pfmet_uncl_dn");
-		if (pfmet_uncl_dn_branch) {pfmet_uncl_dn_branch->SetAddress(&pfmet_uncl_dn_);}
-	}
-	pfmet_uncl_up_branch = 0;
-	if (tree->GetBranch("pfmet_uncl_up") != 0) {
-		pfmet_uncl_up_branch = tree->GetBranch("pfmet_uncl_up");
-		if (pfmet_uncl_up_branch) {pfmet_uncl_up_branch->SetAddress(&pfmet_uncl_up_);}
 	}
 	sf_dileptrig_branch = 0;
 	if (tree->GetBranch("sf_dileptrig") != 0) {
@@ -5384,14 +5512,30 @@ void GetEntry(unsigned int idx)
 		ntbtags_reweighted_jer_isLoaded = false;
 		ntbtags_reweighted_jec_dn_isLoaded = false;
 		ntbtags_reweighted_jec_up_isLoaded = false;
+		nlbtags_pv_reweighted_isLoaded = false;
+		nlbtags_pv_reweighted_dn_isLoaded = false;
+		nlbtags_pv_reweighted_up_isLoaded = false;
+		nlbtags_pv_reweighted_jer_isLoaded = false;
+		nlbtags_pv_reweighted_jec_dn_isLoaded = false;
+		nlbtags_pv_reweighted_jec_up_isLoaded = false;
+		nmbtags_pv_reweighted_isLoaded = false;
+		nmbtags_pv_reweighted_dn_isLoaded = false;
+		nmbtags_pv_reweighted_up_isLoaded = false;
+		nmbtags_pv_reweighted_jer_isLoaded = false;
+		nmbtags_pv_reweighted_jec_dn_isLoaded = false;
+		nmbtags_pv_reweighted_jec_up_isLoaded = false;
+		ntbtags_pv_reweighted_isLoaded = false;
+		ntbtags_pv_reweighted_dn_isLoaded = false;
+		ntbtags_pv_reweighted_up_isLoaded = false;
+		ntbtags_pv_reweighted_jer_isLoaded = false;
+		ntbtags_pv_reweighted_jec_dn_isLoaded = false;
+		ntbtags_pv_reweighted_jec_up_isLoaded = false;
 		pfmet_dn_isLoaded = false;
 		pfmet_up_isLoaded = false;
 		pfmet_phi_dn_isLoaded = false;
 		pfmet_phi_up_isLoaded = false;
 		pfmet_jer_isLoaded = false;
 		pfmet_phi_jer_isLoaded = false;
-		pfmet_uncl_dn_isLoaded = false;
-		pfmet_uncl_up_isLoaded = false;
 		sf_dileptrig_isLoaded = false;
 		sf_lepeff_isLoaded = false;
 		sparm0_isLoaded = false;
@@ -6010,14 +6154,30 @@ void LoadAllBranches()
 	if (ntbtags_reweighted_jer_branch != 0) ntbtags_reweighted_jer();
 	if (ntbtags_reweighted_jec_dn_branch != 0) ntbtags_reweighted_jec_dn();
 	if (ntbtags_reweighted_jec_up_branch != 0) ntbtags_reweighted_jec_up();
+	if (nlbtags_pv_reweighted_branch != 0) nlbtags_pv_reweighted();
+	if (nlbtags_pv_reweighted_dn_branch != 0) nlbtags_pv_reweighted_dn();
+	if (nlbtags_pv_reweighted_up_branch != 0) nlbtags_pv_reweighted_up();
+	if (nlbtags_pv_reweighted_jer_branch != 0) nlbtags_pv_reweighted_jer();
+	if (nlbtags_pv_reweighted_jec_dn_branch != 0) nlbtags_pv_reweighted_jec_dn();
+	if (nlbtags_pv_reweighted_jec_up_branch != 0) nlbtags_pv_reweighted_jec_up();
+	if (nmbtags_pv_reweighted_branch != 0) nmbtags_pv_reweighted();
+	if (nmbtags_pv_reweighted_dn_branch != 0) nmbtags_pv_reweighted_dn();
+	if (nmbtags_pv_reweighted_up_branch != 0) nmbtags_pv_reweighted_up();
+	if (nmbtags_pv_reweighted_jer_branch != 0) nmbtags_pv_reweighted_jer();
+	if (nmbtags_pv_reweighted_jec_dn_branch != 0) nmbtags_pv_reweighted_jec_dn();
+	if (nmbtags_pv_reweighted_jec_up_branch != 0) nmbtags_pv_reweighted_jec_up();
+	if (ntbtags_pv_reweighted_branch != 0) ntbtags_pv_reweighted();
+	if (ntbtags_pv_reweighted_dn_branch != 0) ntbtags_pv_reweighted_dn();
+	if (ntbtags_pv_reweighted_up_branch != 0) ntbtags_pv_reweighted_up();
+	if (ntbtags_pv_reweighted_jer_branch != 0) ntbtags_pv_reweighted_jer();
+	if (ntbtags_pv_reweighted_jec_dn_branch != 0) ntbtags_pv_reweighted_jec_dn();
+	if (ntbtags_pv_reweighted_jec_up_branch != 0) ntbtags_pv_reweighted_jec_up();
 	if (pfmet_dn_branch != 0) pfmet_dn();
 	if (pfmet_up_branch != 0) pfmet_up();
 	if (pfmet_phi_dn_branch != 0) pfmet_phi_dn();
 	if (pfmet_phi_up_branch != 0) pfmet_phi_up();
 	if (pfmet_jer_branch != 0) pfmet_jer();
 	if (pfmet_phi_jer_branch != 0) pfmet_phi_jer();
-	if (pfmet_uncl_dn_branch != 0) pfmet_uncl_dn();
-	if (pfmet_uncl_up_branch != 0) pfmet_uncl_up();
 	if (sf_dileptrig_branch != 0) sf_dileptrig();
 	if (sf_lepeff_branch != 0) sf_lepeff();
 	if (sparm0_branch != 0) sparm0();
@@ -6501,7 +6661,7 @@ void LoadAllBranches()
 			}
 			dataset_isLoaded = true;
 		}
-		return *dataset_;
+		return dataset_;
 	}
 	TString &filename()
 	{
@@ -6514,7 +6674,7 @@ void LoadAllBranches()
 			}
 			filename_isLoaded = true;
 		}
-		return *filename_;
+		return filename_;
 	}
 	int &gen_nleps()
 	{
@@ -11313,6 +11473,240 @@ void LoadAllBranches()
 		}
 		return ntbtags_reweighted_jec_up_;
 	}
+	int &nlbtags_pv_reweighted()
+	{
+		if (not nlbtags_pv_reweighted_isLoaded) {
+			if (nlbtags_pv_reweighted_branch != 0) {
+				nlbtags_pv_reweighted_branch->GetEntry(index);
+			} else { 
+				printf("branch nlbtags_pv_reweighted_branch does not exist!\n");
+				exit(1);
+			}
+			nlbtags_pv_reweighted_isLoaded = true;
+		}
+		return nlbtags_pv_reweighted_;
+	}
+	int &nlbtags_pv_reweighted_dn()
+	{
+		if (not nlbtags_pv_reweighted_dn_isLoaded) {
+			if (nlbtags_pv_reweighted_dn_branch != 0) {
+				nlbtags_pv_reweighted_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch nlbtags_pv_reweighted_dn_branch does not exist!\n");
+				exit(1);
+			}
+			nlbtags_pv_reweighted_dn_isLoaded = true;
+		}
+		return nlbtags_pv_reweighted_dn_;
+	}
+	int &nlbtags_pv_reweighted_up()
+	{
+		if (not nlbtags_pv_reweighted_up_isLoaded) {
+			if (nlbtags_pv_reweighted_up_branch != 0) {
+				nlbtags_pv_reweighted_up_branch->GetEntry(index);
+			} else { 
+				printf("branch nlbtags_pv_reweighted_up_branch does not exist!\n");
+				exit(1);
+			}
+			nlbtags_pv_reweighted_up_isLoaded = true;
+		}
+		return nlbtags_pv_reweighted_up_;
+	}
+	int &nlbtags_pv_reweighted_jer()
+	{
+		if (not nlbtags_pv_reweighted_jer_isLoaded) {
+			if (nlbtags_pv_reweighted_jer_branch != 0) {
+				nlbtags_pv_reweighted_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch nlbtags_pv_reweighted_jer_branch does not exist!\n");
+				exit(1);
+			}
+			nlbtags_pv_reweighted_jer_isLoaded = true;
+		}
+		return nlbtags_pv_reweighted_jer_;
+	}
+	int &nlbtags_pv_reweighted_jec_dn()
+	{
+		if (not nlbtags_pv_reweighted_jec_dn_isLoaded) {
+			if (nlbtags_pv_reweighted_jec_dn_branch != 0) {
+				nlbtags_pv_reweighted_jec_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch nlbtags_pv_reweighted_jec_dn_branch does not exist!\n");
+				exit(1);
+			}
+			nlbtags_pv_reweighted_jec_dn_isLoaded = true;
+		}
+		return nlbtags_pv_reweighted_jec_dn_;
+	}
+	int &nlbtags_pv_reweighted_jec_up()
+	{
+		if (not nlbtags_pv_reweighted_jec_up_isLoaded) {
+			if (nlbtags_pv_reweighted_jec_up_branch != 0) {
+				nlbtags_pv_reweighted_jec_up_branch->GetEntry(index);
+			} else { 
+				printf("branch nlbtags_pv_reweighted_jec_up_branch does not exist!\n");
+				exit(1);
+			}
+			nlbtags_pv_reweighted_jec_up_isLoaded = true;
+		}
+		return nlbtags_pv_reweighted_jec_up_;
+	}
+	int &nmbtags_pv_reweighted()
+	{
+		if (not nmbtags_pv_reweighted_isLoaded) {
+			if (nmbtags_pv_reweighted_branch != 0) {
+				nmbtags_pv_reweighted_branch->GetEntry(index);
+			} else { 
+				printf("branch nmbtags_pv_reweighted_branch does not exist!\n");
+				exit(1);
+			}
+			nmbtags_pv_reweighted_isLoaded = true;
+		}
+		return nmbtags_pv_reweighted_;
+	}
+	int &nmbtags_pv_reweighted_dn()
+	{
+		if (not nmbtags_pv_reweighted_dn_isLoaded) {
+			if (nmbtags_pv_reweighted_dn_branch != 0) {
+				nmbtags_pv_reweighted_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch nmbtags_pv_reweighted_dn_branch does not exist!\n");
+				exit(1);
+			}
+			nmbtags_pv_reweighted_dn_isLoaded = true;
+		}
+		return nmbtags_pv_reweighted_dn_;
+	}
+	int &nmbtags_pv_reweighted_up()
+	{
+		if (not nmbtags_pv_reweighted_up_isLoaded) {
+			if (nmbtags_pv_reweighted_up_branch != 0) {
+				nmbtags_pv_reweighted_up_branch->GetEntry(index);
+			} else { 
+				printf("branch nmbtags_pv_reweighted_up_branch does not exist!\n");
+				exit(1);
+			}
+			nmbtags_pv_reweighted_up_isLoaded = true;
+		}
+		return nmbtags_pv_reweighted_up_;
+	}
+	int &nmbtags_pv_reweighted_jer()
+	{
+		if (not nmbtags_pv_reweighted_jer_isLoaded) {
+			if (nmbtags_pv_reweighted_jer_branch != 0) {
+				nmbtags_pv_reweighted_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch nmbtags_pv_reweighted_jer_branch does not exist!\n");
+				exit(1);
+			}
+			nmbtags_pv_reweighted_jer_isLoaded = true;
+		}
+		return nmbtags_pv_reweighted_jer_;
+	}
+	int &nmbtags_pv_reweighted_jec_dn()
+	{
+		if (not nmbtags_pv_reweighted_jec_dn_isLoaded) {
+			if (nmbtags_pv_reweighted_jec_dn_branch != 0) {
+				nmbtags_pv_reweighted_jec_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch nmbtags_pv_reweighted_jec_dn_branch does not exist!\n");
+				exit(1);
+			}
+			nmbtags_pv_reweighted_jec_dn_isLoaded = true;
+		}
+		return nmbtags_pv_reweighted_jec_dn_;
+	}
+	int &nmbtags_pv_reweighted_jec_up()
+	{
+		if (not nmbtags_pv_reweighted_jec_up_isLoaded) {
+			if (nmbtags_pv_reweighted_jec_up_branch != 0) {
+				nmbtags_pv_reweighted_jec_up_branch->GetEntry(index);
+			} else { 
+				printf("branch nmbtags_pv_reweighted_jec_up_branch does not exist!\n");
+				exit(1);
+			}
+			nmbtags_pv_reweighted_jec_up_isLoaded = true;
+		}
+		return nmbtags_pv_reweighted_jec_up_;
+	}
+	int &ntbtags_pv_reweighted()
+	{
+		if (not ntbtags_pv_reweighted_isLoaded) {
+			if (ntbtags_pv_reweighted_branch != 0) {
+				ntbtags_pv_reweighted_branch->GetEntry(index);
+			} else { 
+				printf("branch ntbtags_pv_reweighted_branch does not exist!\n");
+				exit(1);
+			}
+			ntbtags_pv_reweighted_isLoaded = true;
+		}
+		return ntbtags_pv_reweighted_;
+	}
+	int &ntbtags_pv_reweighted_dn()
+	{
+		if (not ntbtags_pv_reweighted_dn_isLoaded) {
+			if (ntbtags_pv_reweighted_dn_branch != 0) {
+				ntbtags_pv_reweighted_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch ntbtags_pv_reweighted_dn_branch does not exist!\n");
+				exit(1);
+			}
+			ntbtags_pv_reweighted_dn_isLoaded = true;
+		}
+		return ntbtags_pv_reweighted_dn_;
+	}
+	int &ntbtags_pv_reweighted_up()
+	{
+		if (not ntbtags_pv_reweighted_up_isLoaded) {
+			if (ntbtags_pv_reweighted_up_branch != 0) {
+				ntbtags_pv_reweighted_up_branch->GetEntry(index);
+			} else { 
+				printf("branch ntbtags_pv_reweighted_up_branch does not exist!\n");
+				exit(1);
+			}
+			ntbtags_pv_reweighted_up_isLoaded = true;
+		}
+		return ntbtags_pv_reweighted_up_;
+	}
+	int &ntbtags_pv_reweighted_jer()
+	{
+		if (not ntbtags_pv_reweighted_jer_isLoaded) {
+			if (ntbtags_pv_reweighted_jer_branch != 0) {
+				ntbtags_pv_reweighted_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch ntbtags_pv_reweighted_jer_branch does not exist!\n");
+				exit(1);
+			}
+			ntbtags_pv_reweighted_jer_isLoaded = true;
+		}
+		return ntbtags_pv_reweighted_jer_;
+	}
+	int &ntbtags_pv_reweighted_jec_dn()
+	{
+		if (not ntbtags_pv_reweighted_jec_dn_isLoaded) {
+			if (ntbtags_pv_reweighted_jec_dn_branch != 0) {
+				ntbtags_pv_reweighted_jec_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch ntbtags_pv_reweighted_jec_dn_branch does not exist!\n");
+				exit(1);
+			}
+			ntbtags_pv_reweighted_jec_dn_isLoaded = true;
+		}
+		return ntbtags_pv_reweighted_jec_dn_;
+	}
+	int &ntbtags_pv_reweighted_jec_up()
+	{
+		if (not ntbtags_pv_reweighted_jec_up_isLoaded) {
+			if (ntbtags_pv_reweighted_jec_up_branch != 0) {
+				ntbtags_pv_reweighted_jec_up_branch->GetEntry(index);
+			} else { 
+				printf("branch ntbtags_pv_reweighted_jec_up_branch does not exist!\n");
+				exit(1);
+			}
+			ntbtags_pv_reweighted_jec_up_isLoaded = true;
+		}
+		return ntbtags_pv_reweighted_jec_up_;
+	}
 	float &pfmet_dn()
 	{
 		if (not pfmet_dn_isLoaded) {
@@ -11390,32 +11784,6 @@ void LoadAllBranches()
 			pfmet_phi_jer_isLoaded = true;
 		}
 		return pfmet_phi_jer_;
-	}
-	float &pfmet_uncl_dn()
-	{
-		if (not pfmet_uncl_dn_isLoaded) {
-			if (pfmet_uncl_dn_branch != 0) {
-				pfmet_uncl_dn_branch->GetEntry(index);
-			} else { 
-				printf("branch pfmet_uncl_dn_branch does not exist!\n");
-				exit(1);
-			}
-			pfmet_uncl_dn_isLoaded = true;
-		}
-		return pfmet_uncl_dn_;
-	}
-	float &pfmet_uncl_up()
-	{
-		if (not pfmet_uncl_up_isLoaded) {
-			if (pfmet_uncl_up_branch != 0) {
-				pfmet_uncl_up_branch->GetEntry(index);
-			} else { 
-				printf("branch pfmet_uncl_up_branch does not exist!\n");
-				exit(1);
-			}
-			pfmet_uncl_up_isLoaded = true;
-		}
-		return pfmet_uncl_up_;
 	}
 	float &sf_dileptrig()
 	{
@@ -11506,7 +11874,7 @@ void LoadAllBranches()
 			}
 			sparm0_name_isLoaded = true;
 		}
-		return *sparm0_name_;
+		return sparm0_name_;
 	}
 	TString &sparm1_name()
 	{
@@ -11519,7 +11887,7 @@ void LoadAllBranches()
 			}
 			sparm1_name_isLoaded = true;
 		}
-		return *sparm1_name_;
+		return sparm1_name_;
 	}
 	TString &sparm2_name()
 	{
@@ -11532,7 +11900,7 @@ void LoadAllBranches()
 			}
 			sparm2_name_isLoaded = true;
 		}
-		return *sparm2_name_;
+		return sparm2_name_;
 	}
 	TString &sparm3_name()
 	{
@@ -11545,7 +11913,7 @@ void LoadAllBranches()
 			}
 			sparm3_name_isLoaded = true;
 		}
-		return *sparm3_name_;
+		return sparm3_name_;
 	}
 	bool &	is_pp()
 	{
@@ -14734,14 +15102,30 @@ namespace ewkino_ss {
 	const int &ntbtags_reweighted_jer();
 	const int &ntbtags_reweighted_jec_dn();
 	const int &ntbtags_reweighted_jec_up();
+	const int &nlbtags_pv_reweighted();
+	const int &nlbtags_pv_reweighted_dn();
+	const int &nlbtags_pv_reweighted_up();
+	const int &nlbtags_pv_reweighted_jer();
+	const int &nlbtags_pv_reweighted_jec_dn();
+	const int &nlbtags_pv_reweighted_jec_up();
+	const int &nmbtags_pv_reweighted();
+	const int &nmbtags_pv_reweighted_dn();
+	const int &nmbtags_pv_reweighted_up();
+	const int &nmbtags_pv_reweighted_jer();
+	const int &nmbtags_pv_reweighted_jec_dn();
+	const int &nmbtags_pv_reweighted_jec_up();
+	const int &ntbtags_pv_reweighted();
+	const int &ntbtags_pv_reweighted_dn();
+	const int &ntbtags_pv_reweighted_up();
+	const int &ntbtags_pv_reweighted_jer();
+	const int &ntbtags_pv_reweighted_jec_dn();
+	const int &ntbtags_pv_reweighted_jec_up();
 	const float &pfmet_dn();
 	const float &pfmet_up();
 	const float &pfmet_phi_dn();
 	const float &pfmet_phi_up();
 	const float &pfmet_jer();
 	const float &pfmet_phi_jer();
-	const float &pfmet_uncl_dn();
-	const float &pfmet_uncl_up();
 	const float &sf_dileptrig();
 	const float &sf_lepeff();
 	const float &sparm0();
