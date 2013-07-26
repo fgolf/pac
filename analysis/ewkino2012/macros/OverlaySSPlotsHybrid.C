@@ -176,7 +176,7 @@ rt::TH1Overlay CreateOverlay
     {
         p.Add(vsignals.at(idx), /*no_stack=*/true, vhc_signal_names.at(idx), signal_color, line_size, markers[idx], 0);
     }
-    p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style); 
+    // p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style); 
     return p;
 }
 

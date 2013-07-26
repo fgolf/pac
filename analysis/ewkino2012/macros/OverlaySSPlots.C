@@ -84,11 +84,13 @@ rt::TH1Overlay CreateOverlay
     }
 
     rt::TH1Overlay p(title, option);
+    const float max = std::max(h_data->GetMaximum(), h_pred->GetMaximum());
     p.Add(h_data, /*no_stack=*/true, data_legend, data_color, 2, data_marker);
     p.Add(h_fake, fake_legend, fake_color);
     p.Add(h_flip, flip_legend, flip_color);
     p.Add(h_rare, rare_legend, rare_color);
-    p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style); 
+    p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style);
+    p.SetYAxisRange(0.0, max);
     return p;
 }
 
@@ -187,6 +189,7 @@ void OverlaySSPlots
     p["p_ntbtags"         ] = CreateOverlay(hc_data , hc_mc , "ntbtags"          , Form("%s;number of tight btags;Events"     , title.c_str())                , "sb::off dt::stack lg::right");
     p["p_htpv"            ] = CreateOverlay(hc_data , hc_mc , "htpv"             , Form("%s;PV H_{T} (GeV);Events"            , title.c_str())                , "sb::off dt::stack lg::right");
     p["p_mt2"             ] = CreateOverlay(hc_data , hc_mc , "mt2"              , Form("%s;m_{T2} (GeV);Events"              , title.c_str())                , "sb::off dt::stack lg::right");
+    p["p_mt2j"            ] = CreateOverlay(hc_data , hc_mc , "mt2j"             , Form("%s;m_{T2J} (GeV);Events"             , title.c_str())                , "sb::off dt::stack lg::right");
     p["p_lep1_mt"         ] = CreateOverlay(hc_data , hc_mc , "lep1_mt"          , Form("%s;lep1 m_{T} (GeV);Events"          , title.c_str())                , "sb::off dt::stack lg::right");
     p["p_lep2_mt"         ] = CreateOverlay(hc_data , hc_mc , "lep2_mt"          , Form("%s;lep2 m_{T} (GeV);Events"          , title.c_str())                , "sb::off dt::stack lg::right");
     p["p_dijet_pt"        ] = CreateOverlay(hc_data , hc_mc , "dijet_pt"         , Form("%s;p^{jj}_{T} (GeV);Events"          , title.c_str())                , "sb::off dt::stack lg::right");
