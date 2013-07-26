@@ -309,6 +309,7 @@ namespace at
                     vec.assign(err, err + sizeof(err) / sizeof(err[0]));
                     break;
                 }
+                default: {return scale_factor;}
                 } // end switch(sample)
             } // end case JETS_BTAG_CSVT
             default: {return scale_factor;}
@@ -774,6 +775,10 @@ namespace at
 
                 vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
             }
+            default: // no scale factor defined
+            {
+                return 1.0;
+            }
             } // end switch(btag_type)
 
             // for jets with pT > 800, use twice the unc_option on the last SF
@@ -864,6 +869,10 @@ namespace at
                     };
 
                 vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
+            }
+            default: // no scale factor defined
+            {
+                return 1.0;
             }
             } // end switch(btag_type)
 
