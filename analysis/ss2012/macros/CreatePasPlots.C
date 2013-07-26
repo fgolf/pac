@@ -160,6 +160,6 @@ void CreatePasPlots
 
     // results
     hc_result.Write       (Form("plots/pas/pas_%s_%s_%s.root"        , analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str()));
-/*     hc_result_hthigh.Write(Form("plots/pas/pas_high_ht_%s_%s_%s.root", analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str())); */
-/*     hc_result_htlow.Write (Form("plots/pas/pas_low_ht_%s_%s_%s.root" , analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str())); */
+    hc_result_hthigh.Write(Form("plots/pas/pas_high_ht_%s_%s_%s.root", analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str()));
+    hc_result_htlow.Write (Form("plots/pas/pas_low_ht_%s_%s_%s.root" , analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str()));
 }

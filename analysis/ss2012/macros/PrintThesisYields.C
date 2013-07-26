@@ -310,7 +310,8 @@ void PrintThesisYields
 
     // print
     rt::Print(p, "plots/thesis/pdf", "pdf");
-    
+
+    rt::mkdir("tables/thesis/", /*force=*/true);
     ofstream out(Form("tables/thesis/summary_%s.tex", stem.c_str()));
     out << latex << endl;
 
