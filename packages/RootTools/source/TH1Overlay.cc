@@ -322,50 +322,50 @@ namespace rt
 
     HistAttributes::HistAttributes(TH1* h, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-          , legend_value("")
-          , color(c != -1 ? c : h->GetLineColor())
-              , width(w != -1 ? w : h->GetLineWidth())
-              , style(s != -1 ? s : h->GetLineStyle())
-              , fill (f != -1 ? f : h->GetFillStyle())
-              , nostack(false)
-              {
-              }
+        , legend_value("")
+        , color(c != -1 ? c : h->GetLineColor())
+        , width(w != -1 ? w : h->GetLineWidth())
+        , style(s != -1 ? s : h->GetLineStyle())
+        , fill (f != -1 ? f : h->GetFillStyle())
+        , nostack(false)
+   {
+   }
 
 
     HistAttributes::HistAttributes(TH1* h, const string& l, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-          , legend_value(l)
-          , color(c != -1 ? c : h->GetLineColor()) 
-              , width(w != -1 ? w : h->GetLineWidth())
-              , style(s != -1 ? s : h->GetLineStyle())
-              , fill (f != -1 ? f : h->GetFillStyle())
-              , nostack(false)
-              {
-              }
+        , legend_value(l)
+        , color(c != -1 ? c : h->GetLineColor()) 
+        , width(w != -1 ? w : h->GetLineWidth())
+        , style(s != -1 ? s : h->GetLineStyle())
+        , fill (f != -1 ? f : h->GetFillStyle())
+        , nostack(false)
+    {
+    }
 
 
     HistAttributes::HistAttributes(TH1* h, bool d, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-          , legend_value("")
-          , color(c != -1 ? c : h->GetLineColor())
-              , width(w != -1 ? w : h->GetLineWidth())
-              , style(s != -1 ? s : h->GetLineStyle())
-              , fill (s != -1 ? f : h->GetFillStyle())
-              , nostack(d)
-              {
-              }
+        , legend_value("")
+        , color(c != -1 ? c : h->GetLineColor())
+        , width(w != -1 ? w : h->GetLineWidth())
+        , style(s != -1 ? s : h->GetLineStyle())
+        , fill (s != -1 ? f : h->GetFillStyle())
+        , nostack(d)
+    {
+    }
 
 
     HistAttributes::HistAttributes(TH1* h, bool d, const string& l, Color_t c, Width_t w, Style_t s, Style_t f)
         : hist(h)
-          , legend_value(l)
-          , color(c != -1 ? c : h->GetLineColor()) 
-              , width(w != -1 ? w : h->GetLineWidth())
-              , style(s != -1 ? s : h->GetLineStyle())
-              , fill (s != -1 ? f : h->GetFillStyle())
-              , nostack(d)
-              {
-              }
+        , legend_value(l)
+        , color(c != -1 ? c : h->GetLineColor()) 
+        , width(w != -1 ? w : h->GetLineWidth())
+        , style(s != -1 ? s : h->GetLineStyle())
+        , fill (s != -1 ? f : h->GetFillStyle())
+        , nostack(d)
+   {
+   }
 
 
     void HistAttributes::SetAttributes(float min, float max, bool is_stack, bool is_norm)
@@ -430,12 +430,12 @@ namespace rt
         // construct
         impl();
         impl
-            (
+        (
              const string& title,
              StatBoxPlacement::value_type sb_place,
              LegendPlacement::value_type leg_place,
              DrawType::value_type DrawType
-            );
+        );
         impl(const string& title, const string& option);
 
         // Overlay data
@@ -476,84 +476,84 @@ namespace rt
 
     TH1Overlay::impl::impl()
         : title("")
-          , option("")
-          , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
-          , LegendPlacement(LegendPlacement::LegendPlacementDefault)
-          , DrawType(DrawType::DrawTypeDefault)
-          , logx(false)
-          , logy(false)
-          , yaxis_min(1.0)
-          , yaxis_max(-1.0)
-          , xaxis_min(1.0)
-          , xaxis_max(-1.0)
-          , legend_width(TH1Overlay::legend_width_default)
-          , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
-          , legend_offset(TH1Overlay::legend_offset_default)
-          , legend_text_size(TH1Overlay::legend_text_size_default)
-          , legend_option(TH1Overlay::legend_option_default)
-          , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
-          , profile_marker_size(TH1Overlay::profile_marker_size_default)
-          , profile_marker_style(TH1Overlay::profile_marker_style_default)
-          , hist_stack(new THStack) 
-          , legend(new TLegend) 
+        , option("")
+        , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
+        , LegendPlacement(LegendPlacement::LegendPlacementDefault)
+        , DrawType(DrawType::DrawTypeDefault)
+        , logx(false)
+        , logy(false)
+        , yaxis_min(1.0)
+        , yaxis_max(-1.0)
+        , xaxis_min(1.0)
+        , xaxis_max(-1.0)
+        , legend_width(TH1Overlay::legend_width_default)
+        , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
+        , legend_offset(TH1Overlay::legend_offset_default)
+        , legend_text_size(TH1Overlay::legend_text_size_default)
+        , legend_option(TH1Overlay::legend_option_default)
+        , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
+        , profile_marker_size(TH1Overlay::profile_marker_size_default)
+        , profile_marker_style(TH1Overlay::profile_marker_style_default)
+        , hist_stack(new THStack) 
+        , legend(new TLegend) 
     {
     }
 
 
     TH1Overlay::impl::impl
-        (
+    (
          const string& title,
          StatBoxPlacement::value_type sb_place,
          LegendPlacement::value_type leg_place,
          DrawType::value_type DrawType
-        )
+    )
         : title(title)
-          , option("")
-          , StatBoxPlacement(sb_place)
-          , LegendPlacement(leg_place)
-          , DrawType(DrawType)
-          , logx(false)
-          , logy(false)
-          , yaxis_min(1.0)
-          , yaxis_max(-1.0) 
-          , xaxis_min(1.0)
-          , xaxis_max(-1.0) 
-          , legend_width(TH1Overlay::legend_width_default)
-          , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
-          , legend_offset(TH1Overlay::legend_offset_default)
-          , legend_text_size(TH1Overlay::legend_text_size_default)
-          , legend_option(TH1Overlay::legend_option_default)
-          , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
-          , profile_marker_size(TH1Overlay::profile_marker_size_default)
-          , profile_marker_style(TH1Overlay::profile_marker_style_default)
-          , hist_stack(new THStack)
-          , legend(new TLegend) 
+        , option("")
+        , StatBoxPlacement(sb_place)
+        , LegendPlacement(leg_place)
+        , DrawType(DrawType)
+        , logx(false)
+        , logy(false)
+        , yaxis_min(1.0)
+        , yaxis_max(-1.0) 
+        , xaxis_min(1.0)
+        , xaxis_max(-1.0) 
+        , legend_width(TH1Overlay::legend_width_default)
+        , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
+        , legend_offset(TH1Overlay::legend_offset_default)
+        , legend_text_size(TH1Overlay::legend_text_size_default)
+        , legend_option(TH1Overlay::legend_option_default)
+        , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
+        , profile_marker_size(TH1Overlay::profile_marker_size_default)
+        , profile_marker_style(TH1Overlay::profile_marker_style_default)
+        , hist_stack(new THStack)
+        , legend(new TLegend) 
     {
     }
 
 
     TH1Overlay::impl::impl(const string& title, const string& option)
         : title(title)
-          , option(option)
-          , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
-          , LegendPlacement(LegendPlacement::LegendPlacementDefault)
-          , DrawType(DrawType::DrawTypeDefault)
-          , logx(false)
-          , logy(false)
-          , yaxis_min(1.0)
-          , yaxis_max(-1.0) 
-          , xaxis_min(1.0)
-          , xaxis_max(-1.0) 
-          , legend_width(TH1Overlay::legend_width_default)
-          , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
-          , legend_offset(TH1Overlay::legend_offset_default)
-          , legend_text_size(TH1Overlay::legend_text_size_default)
-          , legend_option(TH1Overlay::legend_option_default)
-          , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
-          , profile_marker_size(TH1Overlay::profile_marker_size_default)
-          , profile_marker_style(TH1Overlay::profile_marker_style_default)
-          , hist_stack(new THStack)
-          , legend(new TLegend) 
+        , option(option)
+        , StatBoxPlacement(StatBoxPlacement::StatBoxPlacementDefault)
+        , LegendPlacement(LegendPlacement::LegendPlacementDefault)
+        , DrawType(DrawType::DrawTypeDefault)
+        , logx(false)
+        , logy(false)
+        , yaxis_min(1.0)
+        , yaxis_max(-1.0) 
+        , xaxis_min(1.0)
+        , xaxis_max(-1.0) 
+        , legend_width(TH1Overlay::legend_width_default)
+        , legend_height_per_entry(TH1Overlay::legend_height_per_entry_default)
+        , legend_offset(TH1Overlay::legend_offset_default)
+        , legend_text_size(TH1Overlay::legend_text_size_default)
+        , legend_option(TH1Overlay::legend_option_default)
+        , statbox_fill_color(TH1Overlay::statbox_fill_color_default)
+        , profile_marker_size(TH1Overlay::profile_marker_size_default)
+        , profile_marker_style(TH1Overlay::profile_marker_style_default)
+        , hist_stack(new THStack)
+        , legend(new TLegend) 
     {
     }
 
@@ -668,15 +668,15 @@ namespace rt
 
         // copy the map
         for 
-            (
+        (
              vector<HistAttributes>::const_iterator iter = rhs.m_pimpl->hist_vec.begin();
              iter != rhs.m_pimpl->hist_vec.end(); 
              iter++
-            )
-            {
-                const HistAttributes& ha = *iter;
-                Add(ha.hist.get(), ha.nostack, ha.legend_value, ha.color, ha.width, ha.style, ha.fill);
-            }
+        )
+        {
+            const HistAttributes& ha = *iter;
+            Add(ha.hist.get(), ha.nostack, ha.legend_value, ha.color, ha.width, ha.style, ha.fill);
+        }
 
         // copy the text
         for (size_t i = 0; i != rhs.m_pimpl->text_vector.size(); i++)
@@ -710,15 +710,15 @@ namespace rt
 
 
     TH1Overlay::TH1Overlay
-        (
+    (
          const string& title,
          StatBoxPlacement::value_type sb_place,
          LegendPlacement::value_type leg_place,
          DrawType::value_type DrawType
-        )
+    )
         : m_pimpl(new TH1Overlay::impl(title, sb_place, leg_place, DrawType))
-        {
-        }
+    {
+    }
 
     TH1Overlay::TH1Overlay(const string& title, const string& option)
         : m_pimpl(new TH1Overlay::impl(title, option))
@@ -735,7 +735,6 @@ namespace rt
         {
             TH1* temp_hist = dynamic_cast<TH1*>(h->Clone());
             temp_hist->SetDirectory(0);
-
             Color_t color = c != -1 ? c : m_pimpl->unique_hist_color(h->GetLineColor());
             m_pimpl->hist_vec.push_back(HistAttributes(temp_hist, no_stack, legend_value, color, w, s, f));
         }
@@ -1222,7 +1221,7 @@ namespace rt
             {
                 temp_option += " same ";
             }
-            temp_option += option + string(hists_to_draw[i]->GetOption());
+            temp_option += option + string(hists_to_draw[i]->GetOption()) + string(hists_to_draw[i]->GetDrawOption());
             hists_to_draw[i]->Draw(temp_option.c_str());  
         }
     }
