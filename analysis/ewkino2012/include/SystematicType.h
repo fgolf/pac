@@ -14,8 +14,6 @@ namespace ewkino
             JES_UP,  // Jet Energy Scale +/-
             JES_DN,  // Jet Energy Scale +/-
             JER,     // Jet Energy Resolution
-            MET_UP,  // unclustered MET +/-
-            MET_DN,  // unclustered MET +/-
             BEFF_UP, // B-tagged efficiency +/-
             BEFF_DN, // B-tagged efficiency +/-
             static_size
@@ -30,7 +28,9 @@ namespace ewkino
     void GetReweightedKinematicVariables
     (
         float& met,
-        float& ht,
+        float& mt,
+        float& mt2j,
+        float& mljj,
         int& njets,
         int& nlbtags,
         int& ntbtags,
