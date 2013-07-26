@@ -43,6 +43,14 @@ const ewkino::SignalRegionInfo s_SsInclSignalRegionInfos[] =
         // latex
         "SR3"
     },
+    { 
+        // name
+        "sr4",
+        // title
+        "SR4",
+        // latex
+        "SR4"
+    },
 };
 
 // check that the SignalRegionInfoArray is the same size as the enum
@@ -119,6 +127,9 @@ namespace ewkino
     bool PassesSignalRegion
     (
         const float met,
+        const float mt,
+        const float mt2j,
+        const float mljj,
         const int njets,
         const int nlbtags,
         const int ntbtags,
@@ -155,9 +166,10 @@ namespace ewkino
         {
             const bool baseline      = (min(lep1_p4().pt(), lep2_p4().pt()) > 20.);
             const bool pass_sr0      = (baseline && (njets == 2 || njets == 3) && met > 40);
-            const bool pass_sr1      = (pass_sr0 && std::max(lep1_mt(), lep2_mt()) > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6 && mt2j() > 100);
-            const bool pass_sr2      = (pass_sr1 && jjl_p4().mass() < 120);
-            const bool pass_sr3      = (pass_sr1 && jjl_p4().mass() > 120);
+            const bool pass_sr1      = (pass_sr0 && mt > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6 && mt2j > 100);
+            const bool pass_sr2      = (pass_sr1 && mljj < 120);
+            const bool pass_sr3      = (pass_sr1 && mljj > 120);
+            const bool pass_sr4      = (pass_sr0 && mt > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6);
             
             if (signal_region_type==SignalRegionType::inclusive)
             {
@@ -167,6 +179,7 @@ namespace ewkino
                 case SignalRegion::sr1 : return (pass_sr1);
                 case SignalRegion::sr2 : return (pass_sr2);
                 case SignalRegion::sr3 : return (pass_sr3);
+                case SignalRegion::sr4 : return (pass_sr4);
                 };
             }
 
@@ -190,14 +203,16 @@ namespace ewkino
     {
         // kinematic variables that define the signal region
         float met   = -999999;
-        float ht    = -999999;
+        float mt    = -999999;
+        float mt2j  = -999999;
+        float mljj  = -999999;
         int nlbtags = -999999;
         int ntbtags = -999999;
         int njets   = -999999;
-        ewkino::GetReweightedKinematicVariables(met, ht, njets, nlbtags, ntbtags, do_beff_sf, syst_type, sample, is_fast_sim);
+        ewkino::GetReweightedKinematicVariables(met, mt, mt2j, mljj, njets, nlbtags, ntbtags, do_beff_sf, syst_type, sample, is_fast_sim);
 
         // call main fucntion with this ht/met/njets/nbtags
-        return PassesSignalRegion(met, njets, nlbtags, ntbtags, signal_region, anal_type, signal_region_type);
+        return PassesSignalRegion(met, mt, mt2j, mljj, njets, nlbtags, ntbtags, signal_region, anal_type, signal_region_type);
     }
 
     // set aliases for TTree
@@ -291,9 +306,10 @@ namespace ewkino
         {
             case AnalysisType::ss:
                 tree.SetAlias("sr0" , "lep_pt && (njets_pv_tight0==2 || njets_pv_tight0==3) && pfmet > 40"); 
-                tree.SetAlias("sr1" , "sr1 && max(lep1_mt,lep2_mt) > 110 && nlbtags < 2 && ntbtags == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && mt2j > 100 && max_ml3l < 30."); 
+                tree.SetAlias("sr1" , "sr0 && max(lep1_mt,lep2_mt) > 110 && nlbtags_pv_reweighted < 2 && ntbtags_pv_reweighted == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && mt2j > 100 && max_ml3l < 30."); 
                 tree.SetAlias("sr2" , "sr1 && jjl_p4.mass() < 120.");
                 tree.SetAlias("sr3" , "sr1 && jjl_p4.mass() > 120.");
+                tree.SetAlias("sr4" , "sr0 && max(lep1_mt,lep2_mt) > 110 && nlbtags_pv_reweighted < 2 && ntbtags_pv_reweighted == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && max_ml3l < 30."); 
                break;
             case AnalysisType::static_size:
                 /*do nothing*/

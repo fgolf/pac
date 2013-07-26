@@ -20,6 +20,7 @@ namespace ewkino
             sr1  = 1,  // sr0 + max_MT > 110 GeV + 0 CVST + <2 CSVL + third lepton veto + hadronic tau veto + dEta(lep1, lep2) < 1.6 + MT2J > 100 GeV
             sr2  = 2,  // sr1 + M(jjl) < 120 GeV
             sr3  = 3,  // sr1 + M(jjl) > 120 GeV
+            sr4  = 4,  // sr0 + max_MT > 110 GeV + 0 CVST + <2 CSVL + third lepton veto + hadronic tau veto + dEta(lep1, lep2) < 1.6
             // keep track of the size
             static_size
         };
@@ -90,6 +91,9 @@ namespace ewkino
     bool PassesSignalRegion
     (
         const float met,
+        const float mt,
+        const float mt2j,
+        const float mljj,
         const int njets,
         const int nlbtags,
         const int ntbtags,
