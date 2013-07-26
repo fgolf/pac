@@ -3,7 +3,7 @@
 
 verbose=0
 njets=2
-tag=v8
+tag=v9
 analysis=ss
 path=/nfs-7/userdata/${USER}/babies/ewkino2012/$analysis/$tag/
 
@@ -69,7 +69,7 @@ output_path=$path
 merge ss wz             WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss zz             ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss ww             WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge ss ttg            TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge ss ttg            TTGJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V19-v1
 merge ss ttw            TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss ttww           TTWWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 merge ss ttz            TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1
