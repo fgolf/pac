@@ -51,8 +51,8 @@ samples = [
 # supported signal regions
 # ---------------------------------------------------------------------------------- #
 
-incl_signal_regions = [0, 1, 2, 3]
-excl_signal_regions = [0, 1, 2, 3]
+incl_signal_regions = [0, 1, 2, 3, 4]
+excl_signal_regions = [0, 1, 2, 3, 4]
 
 # parse inputs
 # ---------------------------------------------------------------------------------- #
