@@ -487,7 +487,7 @@ namespace ewkino_ss
         m["wh_zh_tth_htt"] = GetYield(option, Sample::wh_zh_tth_htt, signal_region, analysis_type, signal_region_type, charge_option, output_path);
 
         // handle ttg differently --> apply SF (until we get a larger dataset)
-        const bool apply_ttg_sf = true;
+        const bool apply_ttg_sf = false;
 
         if (apply_ttg_sf)
         {
