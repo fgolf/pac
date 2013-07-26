@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
     int charge_option               = 0;
     unsigned int signal_region_num  = 0;
     float lumi                      = 1.0;
+    bool use_cp_unc                 = true;
     bool verbose                    = false;
 
     namespace po = boost::program_options;
@@ -71,6 +72,7 @@ int main(int argc, char* argv[])
         ("fl_unc"   , po::value<float>(&flip_sys_unc)                         , Form("systematic uncertainty for flip prediction (default is %f)", flip_sys_unc))
         ("mc_unc"   , po::value<float>(&mc_sys_unc)                           , Form("systematic uncertainty for MC prediction (default is %f)", mc_sys_unc)    )
         ("lumi"     , po::value<float>(&lumi)                                 , "luminosity"                                                                    )
+        ("use_cp"   , po::value<bool>(&use_cp_unc)                            , "use Clopper-Pearson for statistical uncertainty"                               )
         ("charge"   , po::value<int>(&charge_option)                          , "charge option (1 is ++ events, -1 is -- events, 0 is both)"                    )
         ("verbose"  , po::value<bool>(&verbose)                               , "verbosity"                                                                     )
         ;
@@ -135,6 +137,7 @@ int main(int argc, char* argv[])
     cout << "flip_sys_unc        :\t" << flip_sys_unc        << endl;
     cout << "mc_sys_unc          :\t" << mc_sys_unc          << endl;
     cout << "lumi                :\t" << lumi                << endl;
+    cout << "use_cp              :\t" << use_cp_unc          << endl;
     cout << "charge_option       :\t" << charge_option       << endl;
     cout << "verbose             :\t" << verbose             << endl;
 
@@ -231,6 +234,7 @@ int main(int argc, char* argv[])
             flip_sys_unc,
             mc_sys_unc,
             lumi,
+            use_cp_unc,
             verbose
         ),
         ewk12ss,
