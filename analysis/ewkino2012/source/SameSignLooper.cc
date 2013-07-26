@@ -1531,11 +1531,11 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 m_evt.vjets_mcflavor_phys_dn = samesign::getJetMcPhysMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
                 m_evt.vjets_mcflavor_algo_dn = samesign::getJetMcAlgoMatch(hyp_idx, m_jet_corrector.get(), jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt, 1.0, -1);
             }
-        }
 
-        assert(m_evt.vjets_mcflavor_algo.size() == m_evt.vjets_p4.size());
-        assert(m_evt.vjets_mcflavor_algo_up.size() == m_evt.vjets_p4_up.size());
-        assert(m_evt.vjets_mcflavor_algo_dn.size() == m_evt.vjets_p4_dn.size());
+            assert(m_evt.vjets_mcflavor_algo.size() == m_evt.vjets_p4.size());
+            assert(m_evt.vjets_mcflavor_algo_up.size() == m_evt.vjets_p4_up.size());
+            assert(m_evt.vjets_mcflavor_algo_dn.size() == m_evt.vjets_p4_dn.size());
+        }
 
         // set the seed
         const unsigned int seed = evt_event();
@@ -2298,9 +2298,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         m_evt.pfjets_beta_0p1  = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta_0p1 );
         m_evt.pfjets_beta_0p2  = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta_0p2 );
         m_evt.pfjets_beta2_0p1 = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta2_0p1);
-        m_evt.pfjets_beta2_0p5 = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta2_0p5);        
-
-        // assert(m_evt.vjets_p4.size() == m_evt.pfjets_mva5xPUid.size());
+        m_evt.pfjets_beta2_0p5 = sortJetValues(jet_flags, all_jet_p4s, tmp_pfjets_beta2_0p5);
         
         //
         // store info for third lepton (choose highest pt, separated from hyp leptons by dR=0.1)
@@ -2503,66 +2501,66 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         //
         // now let's do the same things for btags matched to the PV
         //
-        // calculate the "reweighted" MC btag yields
-        std::vector<bool> tmp_vjets_pv_lbtagged;
-        std::vector<bool> tmp_vjets_pv_mbtagged;
-        std::vector<bool> tmp_vjets_pv_tbtagged;
-        veci tmp_vjets_pv_mcflavor_algo;
-        for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
-        {           
-            if (!m_evt.vjets_matched_pv.at(idx)) continue;
-
-            bool is_loose_btag  = (m_evt.vjets_bdisc.at(idx) > 0.244);
-            bool is_medium_btag = (m_evt.vjets_bdisc.at(idx) > 0.679);
-            bool is_tight_btag  = (m_evt.vjets_bdisc.at(idx) > 0.898);
-
-            tmp_vjets_pv_mcflavor_algo.push_back(m_evt.vjets_mcflavor_algo.at(idx));
-            
-            tmp_vjets_pv_lbtagged.push_back(is_loose_btag);
-            tmp_vjets_pv_mbtagged.push_back(is_medium_btag);
-            tmp_vjets_pv_tbtagged.push_back(is_tight_btag);
-        }
-
-        std::vector<bool> vjets_pv_lbtagged_up;
-        std::vector<bool> vjets_pv_mbtagged_up;
-        std::vector<bool> vjets_pv_tbtagged_up;
-        veci vjets_pv_mcflavor_algo_up;
-        for (unsigned int idx = 0; idx < m_evt.vjets_p4_up.size(); idx++)
-        {
-            if (!m_evt.vjets_matched_pv_up.at(idx)) continue;
-
-            bool is_loose_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.244);
-            bool is_medium_btag = (m_evt.vjets_bdisc_up.at(idx) > 0.679);
-            bool is_tight_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.898);
-
-            vjets_pv_mcflavor_algo_up.push_back(m_evt.vjets_mcflavor_algo_up.at(idx));
-            
-            vjets_pv_lbtagged_up.push_back(is_loose_btag);
-            vjets_pv_mbtagged_up.push_back(is_medium_btag);
-            vjets_pv_tbtagged_up.push_back(is_tight_btag);
-        }
-
-        std::vector<bool> vjets_pv_lbtagged_dn;
-        std::vector<bool> vjets_pv_mbtagged_dn;
-        std::vector<bool> vjets_pv_tbtagged_dn;
-        veci vjets_pv_mcflavor_algo_dn;
-        for (unsigned int idx = 0; idx < m_evt.vjets_p4_dn.size(); idx++)
-        {
-            if (!m_evt.vjets_matched_pv_dn.at(idx)) continue;
-
-            bool is_loose_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.244);
-            bool is_medium_btag = (m_evt.vjets_bdisc_dn.at(idx) > 0.679);
-            bool is_tight_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.898);
-
-            vjets_pv_mcflavor_algo_dn.push_back(m_evt.vjets_mcflavor_algo_dn.at(idx));
-            
-            vjets_pv_lbtagged_dn.push_back(is_loose_btag);
-            vjets_pv_mbtagged_dn.push_back(is_medium_btag);
-            vjets_pv_tbtagged_dn.push_back(is_tight_btag);
-        }
-
         if (not evt_isRealData() && (cms2_tag.version > 21))
         {
+            // calculate the "reweighted" MC btag yields
+            std::vector<bool> tmp_vjets_pv_lbtagged;
+            std::vector<bool> tmp_vjets_pv_mbtagged;
+            std::vector<bool> tmp_vjets_pv_tbtagged;
+            veci tmp_vjets_pv_mcflavor_algo;
+            for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
+            {           
+                if (!m_evt.vjets_matched_pv.at(idx)) continue;
+
+                bool is_loose_btag  = (m_evt.vjets_bdisc.at(idx) > 0.244);
+                bool is_medium_btag = (m_evt.vjets_bdisc.at(idx) > 0.679);
+                bool is_tight_btag  = (m_evt.vjets_bdisc.at(idx) > 0.898);
+
+                tmp_vjets_pv_mcflavor_algo.push_back(m_evt.vjets_mcflavor_algo.at(idx));
+            
+                tmp_vjets_pv_lbtagged.push_back(is_loose_btag);
+                tmp_vjets_pv_mbtagged.push_back(is_medium_btag);
+                tmp_vjets_pv_tbtagged.push_back(is_tight_btag);
+            }
+
+            std::vector<bool> vjets_pv_lbtagged_up;
+            std::vector<bool> vjets_pv_mbtagged_up;
+            std::vector<bool> vjets_pv_tbtagged_up;
+            veci vjets_pv_mcflavor_algo_up;
+            for (unsigned int idx = 0; idx < m_evt.vjets_p4_up.size(); idx++)
+            {
+                if (!m_evt.vjets_matched_pv_up.at(idx)) continue;
+
+                bool is_loose_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.244);
+                bool is_medium_btag = (m_evt.vjets_bdisc_up.at(idx) > 0.679);
+                bool is_tight_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.898);
+
+                vjets_pv_mcflavor_algo_up.push_back(m_evt.vjets_mcflavor_algo_up.at(idx));
+            
+                vjets_pv_lbtagged_up.push_back(is_loose_btag);
+                vjets_pv_mbtagged_up.push_back(is_medium_btag);
+                vjets_pv_tbtagged_up.push_back(is_tight_btag);
+            }
+
+            std::vector<bool> vjets_pv_lbtagged_dn;
+            std::vector<bool> vjets_pv_mbtagged_dn;
+            std::vector<bool> vjets_pv_tbtagged_dn;
+            veci vjets_pv_mcflavor_algo_dn;
+            for (unsigned int idx = 0; idx < m_evt.vjets_p4_dn.size(); idx++)
+            {
+                if (!m_evt.vjets_matched_pv_dn.at(idx)) continue;
+
+                bool is_loose_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.244);
+                bool is_medium_btag = (m_evt.vjets_bdisc_dn.at(idx) > 0.679);
+                bool is_tight_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.898);
+
+                vjets_pv_mcflavor_algo_dn.push_back(m_evt.vjets_mcflavor_algo_dn.at(idx));
+            
+                vjets_pv_lbtagged_dn.push_back(is_loose_btag);
+                vjets_pv_mbtagged_dn.push_back(is_medium_btag);
+                vjets_pv_tbtagged_dn.push_back(is_tight_btag);
+            }
+
             // # btags reweighted
             m_evt.nlbtags_pv_reweighted    = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
             m_evt.nlbtags_pv_reweighted_up = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::up  , seed);
@@ -2585,11 +2583,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
             m_evt.ntbtags_pv_reweighted_jec_up = at::MCBtagCount(JETS_BTAG_CSVT, vjets_matched_p4_up, vjets_pv_tbtagged_up, vjets_pv_mcflavor_algo_up, m_sample, m_is_fast_sim, at::YieldType::base, seed);
             m_evt.ntbtags_pv_reweighted_jec_dn = at::MCBtagCount(JETS_BTAG_CSVT, vjets_matched_p4_dn, vjets_pv_tbtagged_dn, vjets_pv_mcflavor_algo_dn, m_sample, m_is_fast_sim, at::YieldType::base, seed);
-        }
 
-        // scale the JER for jets matched to PV
-        if (not evt_isRealData() && (cms2_tag.version > 21))
-        {
             // set initial values
             float tmp_ht = m_evt.ht;
             float tmp_pfmet = met;
@@ -2838,7 +2832,6 @@ bool EwkinoSSAnalysisLooper::passesMVAJetId(LorentzVector p4, float mva_value, i
 std::vector<float> EwkinoSSAnalysisLooper::sortJetValues(const std::vector<bool>& all_jet_flags, const std::vector<LorentzVector>& all_jet_p4s, const std::vector<float>& vals_to_sort)
 {
     assert(all_jet_flags.size() == all_jet_p4s.size());
-//    assert(all_jet_flags.size() == vals_to_sort.size());    
 
     std::vector<std::pair<LorentzVector, float> > tmp_vec_p4_val;
     for (unsigned int idx = 0; idx < all_jet_flags.size(); idx++)
