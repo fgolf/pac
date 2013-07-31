@@ -146,7 +146,7 @@ CMS2TAG="V05-03-23"
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 ./writeConfig.sh ttww     $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTWWJets_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/                                  $OUTPUT_PATH/TTWWJets_8TeV-madgraph_${CAMPAIGN}-v1
 ./writeConfig.sh ttz      $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTZJets_8TeV-madgraph_v2_${CAMPAIGN}-v1/$CMS2TAG/                                $OUTPUT_PATH/TTZJets_8TeV-madgraph_v2_${CAMPAIGN}-v1
-./writeConfig.sh ttg      $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTGJets_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/                                   $OUTPUT_PATH/TTGJets_8TeV-madgraph_${CAMPAIGN}-v1
+#./writeConfig.sh ttg      $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTGJets_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/                                   $OUTPUT_PATH/TTGJets_8TeV-madgraph_${CAMPAIGN}-v1
 ./writeConfig.sh wz       $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_${CAMPAIGN}-v1/$CMS2TAG                 $OUTPUT_PATH/WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_${CAMPAIGN}-v1
 ./writeConfig.sh zz       $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1/$CMS2TAG/              $OUTPUT_PATH/ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1
 ./writeConfig.sh ww       $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1/$CMS2TAG/           $OUTPUT_PATH/WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1
@@ -208,6 +208,10 @@ CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7C
 ./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-200To250_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-200To250_8TeV-madgraph_${CAMPAIGN}-v1
 ./writeConfig.sh wjets         $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/WJetsToLNu_HT-150To200_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/             		  $OUTPUT_PATH/WJetsToLNu_HT-150To200_8TeV-madgraph_${CAMPAIGN}-v1
+
+CMS2TAG="V05-03-30"
+CAMPAIGN=Summer12_DR53X-PU_S10_START53_V19
+./writeConfig.sh ttg  $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTGJets_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/ $OUTPUT_PATH/TTGJets_8TeV-madgraph_${CAMPAIGN}-v1
 
 #CMS2TAG="V05-03-13_slim"
 #CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
