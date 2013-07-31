@@ -1,0 +1,50 @@
+# jamfile for the ss 2012 analysis 
+# -------------------------------------------------------------------- #
+
+exe eff_analysis
+  : # sources
+    ./source/eff_analysis.cc
+    ./source/EffAnalysisLooper.cc
+    ./source/EfficiencyTree.cc
+    # dependent packages
+    /ROOT
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    #/FGTools//FGTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe eff_plots
+  : # sources
+    ./source/eff_plots.cc
+    ./source/ESB.cc
+    ./source/ESBWrapper.cc
+    ./source/PlotLooper.cc
+    #./source/PlotLooper.cc
+    # dependent packages
+    /ROOT
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+		<define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+
+# install libs/exes
+default-install eff_analysis ;
+default-install eff_plots ;
