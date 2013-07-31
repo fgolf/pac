@@ -1064,6 +1064,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         
         // SS specific event level info
         m_evt.mt           = min(rt::Mt(m_evt.lep1.p4, met, met_phi), rt::Mt(m_evt.lep2.p4, met, met_phi));  // calculated against the higher pT lepton
+
         //
         // to calculate MT2, need mass of invisible particle
         //
@@ -1665,6 +1666,11 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         m_evt.pfmet_up = m_evt.pfmet_up + pfmet_uncl - pfmet_uncl_up;
         m_evt.pfmet_dn = m_evt.pfmet_dn + pfmet_uncl - pfmet_uncl_dn;
 
+        m_evt.max_mt     = max(rt::Mt(m_evt.lep1.p4, met, met_phi), rt::Mt(m_evt.lep2.p4, met, met_phi));
+        m_evt.max_mt_up  = max(rt::Mt(m_evt.lep1.p4, m_evt.pfmet_up, m_evt.pfmet_phi_up), rt::Mt(m_evt.lep2.p4, m_evt.pfmet_up, m_evt.pfmet_phi_up));
+        m_evt.max_mt_dn  = max(rt::Mt(m_evt.lep1.p4, m_evt.pfmet_dn, m_evt.pfmet_phi_dn), rt::Mt(m_evt.lep2.p4, m_evt.pfmet_dn, m_evt.pfmet_phi_dn));
+        m_evt.max_mt_jer = max(rt::Mt(m_evt.lep1.p4, m_evt.pfmet_jer, m_evt.pfmet_phi_jer), rt::Mt(m_evt.lep2.p4, m_evt.pfmet_jer, m_evt.pfmet_phi_jer));
+
         m_evt.jets_dr12  = (m_evt.njets>=2 ) ? rt::DeltaR(m_evt.vjets_p4.at(0) , m_evt.vjets_p4.at(1) ) : -999999.0;
         
         vector<LorentzVector> temp_jets_p4 = m_evt.vjets_p4;
@@ -1839,7 +1845,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             for (size_t i = 0; i != m_evt.vjets_p4.size(); i++)
             {
                 const LorentzVector jet_p4 = m_evt.vjets_p4.at(i);
-                int idx = efftools::getGenParton(jet_p4, /*use status3 =*/true);
+                int idx = efftools::getGenParton(jet_p4, /*use status3 =*/true, /*pt_cut =*/0.0, /*eta_cut =*/999.);
                 int mc3id = idx>= 0 ? tas::genps_id().at(idx) : -999999;
                 int momid = idx>= 0 ? tas::genps_id_mother().at(idx) : -999999;
                 LorentzVector mc3p4 = idx>= 0 ? tas::genps_p4().at(idx) : LorentzVector(0,0,0,0);
@@ -2501,65 +2507,80 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         //
         // now let's do the same things for btags matched to the PV
         //
+        // calculate the "reweighted" MC btag yields
+        std::vector<bool> tmp_vjets_pv_lbtagged;
+        std::vector<bool> tmp_vjets_pv_mbtagged;
+        std::vector<bool> tmp_vjets_pv_tbtagged;
+        veci tmp_vjets_pv_mcflavor_algo;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
+        {           
+            if (!m_evt.vjets_matched_pv.at(idx)) continue;
+
+            bool is_loose_btag  = (m_evt.vjets_bdisc.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc.at(idx) > 0.898);
+
+            if (not evt_isRealData() && (cms2_tag.version > 21))
+            {
+                tmp_vjets_pv_mcflavor_algo.push_back(m_evt.vjets_mcflavor_algo.at(idx));
+            }
+
+            tmp_vjets_pv_lbtagged.push_back(is_loose_btag);
+            tmp_vjets_pv_mbtagged.push_back(is_medium_btag);
+            tmp_vjets_pv_tbtagged.push_back(is_tight_btag);
+        }
+
+        std::vector<bool> vjets_pv_lbtagged_up;
+        std::vector<bool> vjets_pv_mbtagged_up;
+        std::vector<bool> vjets_pv_tbtagged_up;
+        veci vjets_pv_mcflavor_algo_up;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_up.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv_up.at(idx)) continue;
+
+            bool is_loose_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc_up.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.898);
+
+            if (not evt_isRealData() && (cms2_tag.version > 21))
+            {
+                vjets_pv_mcflavor_algo_up.push_back(m_evt.vjets_mcflavor_algo_up.at(idx));
+            }
+
+            vjets_pv_lbtagged_up.push_back(is_loose_btag);
+            vjets_pv_mbtagged_up.push_back(is_medium_btag);
+            vjets_pv_tbtagged_up.push_back(is_tight_btag);
+        }
+
+        std::vector<bool> vjets_pv_lbtagged_dn;
+        std::vector<bool> vjets_pv_mbtagged_dn;
+        std::vector<bool> vjets_pv_tbtagged_dn;
+        veci vjets_pv_mcflavor_algo_dn;
+        for (unsigned int idx = 0; idx < m_evt.vjets_p4_dn.size(); idx++)
+        {
+            if (!m_evt.vjets_matched_pv_dn.at(idx)) continue;
+
+            bool is_loose_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.244);
+            bool is_medium_btag = (m_evt.vjets_bdisc_dn.at(idx) > 0.679);
+            bool is_tight_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.898);
+
+            if (not evt_isRealData() && (cms2_tag.version > 21))
+            {
+                vjets_pv_mcflavor_algo_dn.push_back(m_evt.vjets_mcflavor_algo_dn.at(idx));
+            }
+
+            vjets_pv_lbtagged_dn.push_back(is_loose_btag);
+            vjets_pv_mbtagged_dn.push_back(is_medium_btag);
+            vjets_pv_tbtagged_dn.push_back(is_tight_btag);
+        }
+
+        for (size_t vidx = 0; vidx < vjets_matched_p4.size(); vidx++)
+        {
+            std::cout << "lbtag, algo: " << tmp_vjets_pv_lbtagged.at(vidx) << ", " << tmp_vjets_pv_mcflavor_algo.at(vidx) << std::endl;
+        }
+
         if (not evt_isRealData() && (cms2_tag.version > 21))
         {
-            // calculate the "reweighted" MC btag yields
-            std::vector<bool> tmp_vjets_pv_lbtagged;
-            std::vector<bool> tmp_vjets_pv_mbtagged;
-            std::vector<bool> tmp_vjets_pv_tbtagged;
-            veci tmp_vjets_pv_mcflavor_algo;
-            for (unsigned int idx = 0; idx < m_evt.vjets_p4.size(); idx++)
-            {           
-                if (!m_evt.vjets_matched_pv.at(idx)) continue;
-
-                bool is_loose_btag  = (m_evt.vjets_bdisc.at(idx) > 0.244);
-                bool is_medium_btag = (m_evt.vjets_bdisc.at(idx) > 0.679);
-                bool is_tight_btag  = (m_evt.vjets_bdisc.at(idx) > 0.898);
-
-                tmp_vjets_pv_mcflavor_algo.push_back(m_evt.vjets_mcflavor_algo.at(idx));
-            
-                tmp_vjets_pv_lbtagged.push_back(is_loose_btag);
-                tmp_vjets_pv_mbtagged.push_back(is_medium_btag);
-                tmp_vjets_pv_tbtagged.push_back(is_tight_btag);
-            }
-
-            std::vector<bool> vjets_pv_lbtagged_up;
-            std::vector<bool> vjets_pv_mbtagged_up;
-            std::vector<bool> vjets_pv_tbtagged_up;
-            veci vjets_pv_mcflavor_algo_up;
-            for (unsigned int idx = 0; idx < m_evt.vjets_p4_up.size(); idx++)
-            {
-                if (!m_evt.vjets_matched_pv_up.at(idx)) continue;
-
-                bool is_loose_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.244);
-                bool is_medium_btag = (m_evt.vjets_bdisc_up.at(idx) > 0.679);
-                bool is_tight_btag  = (m_evt.vjets_bdisc_up.at(idx) > 0.898);
-
-                vjets_pv_mcflavor_algo_up.push_back(m_evt.vjets_mcflavor_algo_up.at(idx));
-            
-                vjets_pv_lbtagged_up.push_back(is_loose_btag);
-                vjets_pv_mbtagged_up.push_back(is_medium_btag);
-                vjets_pv_tbtagged_up.push_back(is_tight_btag);
-            }
-
-            std::vector<bool> vjets_pv_lbtagged_dn;
-            std::vector<bool> vjets_pv_mbtagged_dn;
-            std::vector<bool> vjets_pv_tbtagged_dn;
-            veci vjets_pv_mcflavor_algo_dn;
-            for (unsigned int idx = 0; idx < m_evt.vjets_p4_dn.size(); idx++)
-            {
-                if (!m_evt.vjets_matched_pv_dn.at(idx)) continue;
-
-                bool is_loose_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.244);
-                bool is_medium_btag = (m_evt.vjets_bdisc_dn.at(idx) > 0.679);
-                bool is_tight_btag  = (m_evt.vjets_bdisc_dn.at(idx) > 0.898);
-
-                vjets_pv_mcflavor_algo_dn.push_back(m_evt.vjets_mcflavor_algo_dn.at(idx));
-            
-                vjets_pv_lbtagged_dn.push_back(is_loose_btag);
-                vjets_pv_mbtagged_dn.push_back(is_medium_btag);
-                vjets_pv_tbtagged_dn.push_back(is_tight_btag);
-            }
 
             // # btags reweighted
             m_evt.nlbtags_pv_reweighted    = at::MCBtagCount(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
@@ -2616,6 +2637,23 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             m_evt.nmbtags_pv_reweighted_jer = vmbjets_reweighted_jer_p4.size();
             m_evt.ntbtags_pv_reweighted_jer = vtbjets_reweighted_jer_p4.size();
         }
+
+        //
+        // let's get the regular btags matched to PV
+        //
+        int tmp_nlbtags_pv = 0;
+        int tmp_nmbtags_pv = 0;
+        int tmp_ntbtags_pv = 0;
+        for (size_t midx = 0; midx < m_evt.vjets_p4.size(); midx++)
+        {
+            if (!m_evt.vjets_matched_pv.at(midx)) continue;
+            if (m_evt.vjets_bdisc_up.at(midx) > 0.244) ++tmp_nlbtags_pv;
+            if (m_evt.vjets_bdisc_up.at(midx) > 0.679) ++tmp_nmbtags_pv;
+            if (m_evt.vjets_bdisc_up.at(midx) > 0.898) ++tmp_ntbtags_pv;            
+        }
+        m_evt.nlbtags_pv = tmp_nlbtags_pv;
+        m_evt.nmbtags_pv = tmp_nmbtags_pv;
+        m_evt.ntbtags_pv = tmp_ntbtags_pv;        
 
         // Fill the tree
         m_tree->Fill();

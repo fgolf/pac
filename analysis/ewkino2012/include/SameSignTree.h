@@ -72,9 +72,16 @@ public:
     int nlbtags;
     int nmbtags;
     int ntbtags;
+    int nlbtags_pv;
+    int nmbtags_pv;
+    int ntbtags_pv;
     int ttbar_bkdn;
     float vtxw;
     float mt;
+    float max_mt;
+    float max_mt_up;
+    float max_mt_dn;
+    float max_mt_jer;
     float mt2;
     float mt2j;
     float mt2j_up;
