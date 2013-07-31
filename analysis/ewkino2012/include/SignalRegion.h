@@ -18,9 +18,9 @@ namespace ewkino
             // inclusive
             sr0  = 0,  // baseline: pt > 20/20, njets_matched = 2,3 and MET > 40 GeV
             sr1  = 1,  // sr0 + max_MT > 110 GeV + 0 CVST + <2 CSVL + third lepton veto + hadronic tau veto + dEta(lep1, lep2) < 1.6 + MT2J > 100 GeV
-            sr2  = 2,  // sr1 + M(jjl) < 120 GeV
-            sr3  = 3,  // sr1 + M(jjl) > 120 GeV
-            sr4  = 4,  // sr0 + max_MT > 110 GeV + 0 CVST + <2 CSVL + third lepton veto + hadronic tau veto + dEta(lep1, lep2) < 1.6
+            sr2  = 2,  // sr1 + M(ljj) < 120 GeV
+            sr3  = 3,  // sr1 + M(ljj) > 120 GeV
+            sr4  = 4,  // sr0 + max_MT > 110 GeV + 0 CVST + <2 CSVL + third lepton veto + hadronic tau veto + dEta(lep1, lep2) < 1.6 + M(ljj) < 120 GeV
             // keep track of the size
             static_size
         };

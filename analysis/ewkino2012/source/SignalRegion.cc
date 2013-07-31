@@ -169,7 +169,7 @@ namespace ewkino
             const bool pass_sr1      = (pass_sr0 && mt > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6 && mt2j > 100);
             const bool pass_sr2      = (pass_sr1 && mljj < 120);
             const bool pass_sr3      = (pass_sr1 && mljj > 120);
-            const bool pass_sr4      = (pass_sr0 && mt > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6);
+            const bool pass_sr4      = (pass_sr0 && mt > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6 && mljj < 120);
             
             if (signal_region_type==SignalRegionType::inclusive)
             {
@@ -309,7 +309,7 @@ namespace ewkino
                 tree.SetAlias("sr1" , "sr0 && max(lep1_mt,lep2_mt) > 110 && nlbtags_pv_reweighted < 2 && ntbtags_pv_reweighted == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && mt2j > 100 && max_ml3l < 30."); 
                 tree.SetAlias("sr2" , "sr1 && jjl_p4.mass() < 120.");
                 tree.SetAlias("sr3" , "sr1 && jjl_p4.mass() > 120.");
-                tree.SetAlias("sr4" , "sr0 && max(lep1_mt,lep2_mt) > 110 && nlbtags_pv_reweighted < 2 && ntbtags_pv_reweighted == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && max_ml3l < 30."); 
+                tree.SetAlias("sr4" , "sr0 && max(lep1_mt,lep2_mt) > 110 && nlbtags_pv_reweighted < 2 && ntbtags_pv_reweighted == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && max_ml3l < 30. && jjl_p4.mass() < 120."); 
                break;
             case AnalysisType::static_size:
                 /*do nothing*/
