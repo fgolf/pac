@@ -52,7 +52,7 @@ namespace efftools {
     int getRecoJet (const LorentzVector& p4);
 
     // get gen particle matched to a given reco jet
-    int getGenParton (const LorentzVector& p4, bool use_status3_only = false);
+    int getGenParton (const LorentzVector& p4, bool use_status3_only = false, float pt_cut = 40.0, float eta_cut = 2.4);
 
     // check if gen lepton overlaps with a status 3 parton (quark or gluon)
     bool leptonOverlapsWithParton(const LorentzVector& p4, float parton_pt = 20., float dr = 0.3);

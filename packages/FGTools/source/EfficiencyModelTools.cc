@@ -535,17 +535,20 @@ DileptonHypType::value_type efftools::getHypType (int id1, int id2) {
 }
 
 
-int efftools::getGenParton (const LorentzVector& p4, bool use_status3_only) {
+int efftools::getGenParton (const LorentzVector& p4, bool use_status3_only, float pt_cut, float eta_cut) {
 
     float tmp_dr = 99.;
     int index = -999999;
     for (unsigned int idx = 0; idx < cms2.genps_p4().size(); idx++) {
 
+        unsigned int id = abs(cms2.genps_id().at(idx));
+        if (id > 5 && id != 21) continue;
+
         if (use_status3_only && cms2.genps_status().at(idx) != 3)
             continue;
-        if (fabs(cms2.genps_p4().at(idx).eta()) > 2.4)
+        if (fabs(cms2.genps_p4().at(idx).eta()) > eta_cut)
             continue;
-        if (cms2.genps_p4().at(idx).pt() < 40.)
+        if (cms2.genps_p4().at(idx).pt() < pt_cut)
             continue;
 
         if (ROOT::Math::VectorUtil::DeltaR(cms2.genps_p4().at(idx), p4) < tmp_dr) {
