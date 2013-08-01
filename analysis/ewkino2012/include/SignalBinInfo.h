@@ -17,7 +17,17 @@ namespace ewkino
             const float x_max,
             const unsigned int y_num_bins,
             const float y_min,
-            const float y_max
+            const float y_max,
+            const float offset
+        );
+
+        SignalBinInfo
+        (
+            const unsigned int x_num_bins,
+            const float* x_bins,
+            const unsigned int y_num_bins,
+            const float* y_bins,
+            const float offset
         );
 
         // members:
@@ -29,6 +39,10 @@ namespace ewkino
         float ymin; 
         float ymax;
         float ywidth;
+        float offset;
+
+        std::vector<float> xbins;
+        std::vector<float> ybins;
     };
 
     // non-member methods:
@@ -41,7 +55,19 @@ namespace ewkino
         const float x_max,
         const float y_bin_width,
         const float y_min,
-        const float y_max
+        const float y_max,
+        const float offset,
+        const bool center_bins = false
+    );
+
+    SignalBinInfo MakeSignalBinInfo
+    (
+        const unsigned int x_num_bins,
+        const float* x_bins,
+        const unsigned int y_num_bins,
+        const float* y_bins,
+        const float offset,
+        const bool center_bins = false
     );
 
     // return the binning info for a specific signal sample 
