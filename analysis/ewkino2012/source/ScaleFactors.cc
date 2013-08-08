@@ -5,6 +5,8 @@
 #include <utility>
 #include <cmath>
 
+using namespace std;
+
 // only works on CMS2
 float DileptonTagAndProbeScaleFactor(const int hyp_idx)
 {
@@ -37,8 +39,8 @@ float DileptonTagAndProbeScaleFactor(const int l1_id, const float l1_pt, const f
 
 float DileptonTagAndProbeScaleFactorSystUnc(const int l1_id, const float l1_pt, const float l1_eta, const int l2_id, const float l2_pt, const float l2_eta)
 {
-    const float e1  = TagAndProbeScaleFactorSystUnc(l1_id, l1_pt, l1_eta);
-    const float e2  = TagAndProbeScaleFactorSystUnc(l2_id, l2_pt, l2_eta);
+    const float e1 = TagAndProbeScaleFactorSystUnc(l1_id, l1_pt, l1_eta);
+    const float e2 = TagAndProbeScaleFactorSystUnc(l2_id, l2_pt, l2_eta);
     return (e1 + e2); // fully correlated
 }
 
@@ -154,7 +156,7 @@ float TagAndProbeScaleFactor(int id, float pt, float eta)
 }
 
 // Data/MC scale factor for the ID/Iso efficiencies for electrons 
-// NOTE: the eta here is the super cluser eta
+// NOTE: the eta here is the super cluster eta
 float TagAndProbeScaleFactorSystUnc(int id, float pt, float eta)
 {
     if (abs(id)==11)

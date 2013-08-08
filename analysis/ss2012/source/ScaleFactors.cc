@@ -5,6 +5,8 @@
 #include <utility>
 #include <cmath>
 
+using namespace std;
+
 // only works on CMS2
 float DileptonTagAndProbeScaleFactor(const int hyp_idx)
 {

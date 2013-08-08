@@ -11,6 +11,7 @@
 #include <boost/program_options.hpp>
 
 using namespace ssb;
+using namespace std;
 
 struct event_info_t
 {

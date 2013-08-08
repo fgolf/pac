@@ -2071,8 +2071,8 @@ namespace ss
                 if (l2_pt < (l2_id==11 ? 10.0 : 5.0)) return false;
                 break;
             case AnalysisType::higgsino:
-                if (max(l1_pt, l2_pt) < 20.0) return false;
-                if (min(l1_pt, l2_pt) < 10.0) return false;
+                if (std::max(l1_pt, l2_pt) < 20.0) return false;
+                if (std::min(l1_pt, l2_pt) < 10.0) return false;
                 break;
             default:
                 return false;

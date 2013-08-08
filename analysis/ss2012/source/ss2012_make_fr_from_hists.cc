@@ -12,6 +12,8 @@
 #include <tr1/array>
 #include <boost/program_options.hpp>
 
+using namespace std;
+
 struct FakeScalingStruct
 {
     FakeScalingStruct(double sf_, double unc_stat_, double unc_syst_) : sf(sf_), unc_stat(unc_stat_), unc_syst(unc_syst_) {}

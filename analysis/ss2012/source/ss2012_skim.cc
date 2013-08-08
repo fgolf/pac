@@ -47,8 +47,8 @@ bool SelectSameSign(long event)
         // require 5/10 GeV muons/electrons 
         const float mu_minpt = 5.0;
         const float el_minpt = 10.0;
-        const float l1_pt = max(lt_pt, ll_pt);
-        const float l2_pt = min(lt_pt, ll_pt);
+        const float l1_pt = std::max(lt_pt, ll_pt);
+        const float l2_pt = std::min(lt_pt, ll_pt);
         const unsigned int l1_id = lt_pt > ll_pt ? abs(lt_id) : abs(ll_id);
         const unsigned int l2_id = lt_pt > ll_pt ? abs(ll_id) : abs(lt_id);
         const float minpt1 = l1_id == 13 ? mu_minpt : el_minpt; 

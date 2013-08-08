@@ -14,6 +14,8 @@
 #include "TRandom.h"
 //#include <boost/program_options.hpp>
 
+using namespace std;
+
 int main()
 try
 {

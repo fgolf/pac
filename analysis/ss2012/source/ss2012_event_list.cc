@@ -13,6 +13,7 @@
 #include <iostream>
 #include <boost/program_options.hpp>
 
+using namespace std;
 
 struct event_info_t
 {
