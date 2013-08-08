@@ -403,10 +403,9 @@ class CLASSNAME
         void GetEntry(const unsigned int entry);
 		void LoadAllBranches();
 
-TRIGGERS_DEFS
 		// trigger methods:
-    	const bool passHLTTrigger(const TString& trigName);
-		const bool passL1Trigger(const TString& trigName);
+    	bool passHLTTrigger(const TString& trigName);
+		bool passL1Trigger(const TString& trigName);
 
         // static methods:
         static void progress(const int nEventsTotal, const int nEventsChain);
@@ -425,9 +424,8 @@ HANDLES
 
 namespace NAMESPACE
 {
-TRIGGERS_WRAPPERS
-	const bool passHLTTrigger(const TString& trigName);
-	const bool passL1Trigger(const TString& trigName);
+	bool passHLTTrigger(const TString& trigName);
+	bool passL1Trigger(const TString& trigName);
 BRANCH_ACCESSORS_V2
 } // namespace NAMESPACE
 
@@ -463,8 +461,8 @@ namespace NAMESPACE
             const T& get();
 
 			// trigger methods:
-    		const bool passHLTTrigger(const TString& trigName);
-			const bool passL1Trigger(const TString& trigName);
+    		bool passHLTTrigger(const TString& trigName);
+			bool passL1Trigger(const TString& trigName);
 
         	// static methods:
         	static void progress(const int nEventsTotal, const int nEventsChain);
@@ -549,8 +547,8 @@ HANDLES_CMSSW
 
 namespace NAMESPACE
 {
-	const bool passHLTTrigger(const TString& trigName);
-	const bool passL1Trigger(const TString& trigName);
+	bool passHLTTrigger(const TString& trigName);
+	bool passL1Trigger(const TString& trigName);
 BRANCH_ACCESSORS_CMSSW_V2
 } // namespace NAMESPACE
 
@@ -784,8 +782,8 @@ class CLASSNAME
 		void LoadAllBranches();
 
     	// trigger methods:
-    	const bool passHLTTrigger(const TString& trigName);
-		const bool passL1Trigger(const TString& trigName);
+    	bool passHLTTrigger(const TString& trigName);
+		bool passL1Trigger(const TString& trigName);
 
        	// static methods:
        	static void progress(const int nEventsTotal, const int nEventsChain);
@@ -804,8 +802,8 @@ HANDLES
 
 namespace NAMESPACE
 {
-	const bool passHLTTrigger(const TString& trigName);
-	const bool passL1Trigger(const TString& trigName);
+	bool passHLTTrigger(const TString& trigName);
+	bool passL1Trigger(const TString& trigName);
 BRANCH_ACCESSORS_V2
 } // namespace NAMESPACE
 
@@ -891,7 +889,7 @@ HANDLES_LOADALLBRANCHES
 // branch accessor methods:
 BRANCH_ACCESSOR
 
-const bool CLASSNAME::passHLTTrigger(const TString& trigName)
+bool CLASSNAME::passHLTTrigger(const TString& trigName)
 {
     int trigIndx;
     std::vector<TString>::const_iterator begin_it = hlt_trigNames().begin();
@@ -909,7 +907,7 @@ const bool CLASSNAME::passHLTTrigger(const TString& trigName)
     return hlt_bits().TestBitNumber(trigIndx);
 }
 
-const bool CLASSNAME::passL1Trigger(const TString& trigName)
+bool CLASSNAME::passL1Trigger(const TString& trigName)
 {
     int trigIndx;
     std::vector<TString>::const_iterator begin_it = l1_trigNames().begin();
@@ -977,8 +975,8 @@ const bool CLASSNAME::passL1Trigger(const TString& trigName)
 
 namespace NAMESPACE
 {
-    const bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
-	const bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
+    bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
+	bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
 BRANCH_WRAPPER
 } // namespace NAMESPACE
 
@@ -1004,7 +1002,7 @@ void CLASSNAME::SetEvent(const edm::Event& event)
 HANDLES_SETEVENT_CMSSW
 }
 
-const bool CLASSNAME::passHLTTrigger(const TString& trigName)
+bool CLASSNAME::passHLTTrigger(const TString& trigName)
 {
     int trigIndx;
     std::vector<TString>::const_iterator begin_it = hlt_trigNames().begin();
@@ -1022,7 +1020,7 @@ const bool CLASSNAME::passHLTTrigger(const TString& trigName)
     return hlt_bits().TestBitNumber(trigIndx);
 }
 
-const bool CLASSNAME::passL1Trigger(const TString& trigName)
+bool CLASSNAME::passL1Trigger(const TString& trigName)
 {
     int trigIndx;
     std::vector<TString>::const_iterator begin_it = l1_trigNames().begin();
@@ -1097,8 +1095,8 @@ BRANCH_ACCESSOR_CMSSW
 
 namespace NAMESPACE
 {
-    const bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
-	const bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
+    bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
+	bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
 BRANCH_WRAPPER_CMSSW
 } // namespace NAMESPACE
 
@@ -1145,7 +1143,7 @@ HANDLES_LOADALLBRANCHES
 // branch accessor methods:
 BRANCH_ACCESSOR
 
-const bool CLASSNAME::passHLTTrigger(const TString& trigName)
+bool CLASSNAME::passHLTTrigger(const TString& trigName)
 {
     int trigIndx;
     std::vector<TString>::const_iterator begin_it = hlt_trigNames().begin();
@@ -1163,7 +1161,7 @@ const bool CLASSNAME::passHLTTrigger(const TString& trigName)
     return hlt_bits().TestBitNumber(trigIndx);
 }
 
-const bool CLASSNAME::passL1Trigger(const TString& trigName)
+bool CLASSNAME::passL1Trigger(const TString& trigName)
 {
     int trigIndx;
     std::vector<TString>::const_iterator begin_it = l1_trigNames().begin();
@@ -1322,17 +1320,6 @@ def main():
 		if not tree:
 			raise ValueError("%s not found in %s" % (options.tree_name, options.file_name))
 
-        TString aliasname(aliasarray->At(i)->GetName());
-        if(aliasname=="hlt_trigNames") 
-            haveHLTInfo = true;
-        if(aliasname=="l1_trigNames") 
-            haveL1Info = true;
-
-        if(aliasname=="hlt_trigNames") 
-            haveHLTInfo = true;
-        if(aliasname=="l1_trigNames") 
-            haveL1Info = true;
-
  		# create branch_infos 
 		branch_infos = list() 
 		aliases  = tree.GetListOfAliases()
@@ -1348,13 +1335,13 @@ def main():
 				branch_info = BranchInfo(alias, branch)
 				branch_infos.append(branch_info)
 
-		has_hlt_info = False:
-		if alias.GetListOfAliases().FindObject("hlt_trigNames"):
-			has_hlt_info = True:
-
-		has_l1_info = False:
-		if alias.GetListOfAliases().FindObject("l1_trigNames"):
-			has_l1_info = True:
+# 		has_hlt_info = False
+# 		if tree.GetListOfAliases().FindObject("hlt_trigNames"):
+# 			has_hlt_info = True
+# 
+# 		has_l1_info = False
+# 		if tree.GetListOfAliases().FindObject("l1_trigNames"):
+# 			has_l1_info = True
 			
 
 # 		alias  = tree.GetListOfAliases().FindObject("mus_p4")
@@ -1373,12 +1360,12 @@ def main():
 		# print the header
 # 		print HeaderString(branch_infos, options.use_cmssw)
 		header_file = open("%s.h" % options.class_name, "w")
-		header_file.write(HeaderString(branch_infos, options.use_cmssw, has_hlt_trigger, has_l1_trigger))
+		header_file.write(HeaderString(branch_infos, options.use_cmssw))
 
 		# print the header
 # 		print ImplString(branch_infos, True)
 		imple_file = open("%s.cc" % options.class_name, "w")
-		imple_file.write(ImplString(branch_infos, options.use_cmssw, has_hlt_trigger, has_l1_trigger))
+		imple_file.write(ImplString(branch_infos, options.use_cmssw))
 
 		print "finished"
 	except Exception, e:
