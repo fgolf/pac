@@ -55,8 +55,9 @@ int AddCMS2BranchesWithTag
 
     // Removes all non *_CMS2.* branches
     //-------------------------------------------------------------`
-    tree->SetBranchStatus("*"        , 0);
-    tree->SetBranchStatus("*_CMS2.*" , 1);
+    tree->SetBranchStatus("*"                , 0);
+    tree->SetBranchStatus("*_CMS2.*"         , 1);
+//     tree->SetBranchStatus("*NoMuNoNu_CMS2.*" , 0);
 
     // Removes the branches (if they exist) that we want to replace
     //-------------------------------------------------------------`
@@ -85,24 +86,25 @@ int AddCMS2BranchesWithTag
 
     // Add the new branches 
     //-------------------------------------------------------------
-    std::vector<TString> vcms2_tag;
-    vcms2_tag.push_back(TString(cms2_tag.c_str()));
+    std::vector<TString>* vcms2_tag = new std::vector<TString>;
+    vcms2_tag->push_back(TString(cms2_tag.c_str()));
+//     std::vector<TString>* vcms2_tag_ptr;
 
-    TBranch* b1 = clone->Branch("evtscale1fb" , const_cast<float*>(&scale1fb) , "evt_scale1fb/F"  ); 
-    TBranch* b2 = clone->Branch("evtxsecexcl" , const_cast<float*>(&xsec    ) , "evt_xsec_excl/F" ); 
-    TBranch* b3 = clone->Branch("evtxsecincl" , const_cast<float*>(&xsec    ) , "evt_xsec_incl/F" ); 
-    TBranch* b4 = clone->Branch("evtkfactor"  , const_cast<float*>(&kfactor ) , "evt_kfactor/F"   ); 
-    TBranch* b5 = clone->Branch("evtnEvts"    , const_cast<int*>(&events    ) , "evt_nEvts/I"     ); 
-    TBranch* b6 = clone->Branch("evtfilteff"  , const_cast<float*>(&filt_eff) , "evt_filt_eff/F"  ); 
-    TBranch* b7 = clone->Branch("evtCMS2tag"  , "std::vector<TString>"        , &vcms2_tag        , 32000, 0);
+    TBranch* b1 = clone->Branch("evtscale1fb"                            , const_cast<float*>(&scale1fb) , "evt_scale1fb/F"  ); 
+    TBranch* b2 = clone->Branch("evtxsecexcl"                            , const_cast<float*>(&xsec    ) , "evt_xsec_excl/F" ); 
+    TBranch* b3 = clone->Branch("evtxsecincl"                            , const_cast<float*>(&xsec    ) , "evt_xsec_incl/F" ); 
+    TBranch* b4 = clone->Branch("evtkfactor"                             , const_cast<float*>(&kfactor ) , "evt_kfactor/F"   ); 
+    TBranch* b5 = clone->Branch("evtnEvts"                               , const_cast<int*>(&events    ) , "evt_nEvts/I"     ); 
+    TBranch* b6 = clone->Branch("evtfilteff"                             , const_cast<float*>(&filt_eff) , "evt_filt_eff/F"  ); 
+    TBranch* b7 = clone->Branch("TStrings_eventMaker_evtCMS2tag_CMS2.obj", "std::vector<TString>"        , &vcms2_tag        );//, 32000, 0);
 
-    clone->SetAlias("evt_scale1fb"  , "evtscale1fb" ); 
-    clone->SetAlias("evt_xsec_excl" , "evtxsecexcl" ); 
-    clone->SetAlias("evt_xsec_incl" , "evtxsecincl" ); 
-    clone->SetAlias("evt_kfactor"   , "evtkfactor"  ); 
-    clone->SetAlias("evt_nEvts"     , "evtnEvts"    ); 
-    clone->SetAlias("evt_filt_eff"  , "evtfilteff"  ); 
-    clone->SetAlias("evt_CMS2tag"   , "evtCMS2tag"  );
+    clone->SetAlias("evt_scale1fb"  , "evtscale1fb"                            ); 
+    clone->SetAlias("evt_xsec_excl" , "evtxsecexcl"                            ); 
+    clone->SetAlias("evt_xsec_incl" , "evtxsecincl"                            ); 
+    clone->SetAlias("evt_kfactor"   , "evtkfactor"                             ); 
+    clone->SetAlias("evt_nEvts"     , "evtnEvts"                               ); 
+    clone->SetAlias("evt_filt_eff"  , "evtfilteff"                             ); 
+    clone->SetAlias("evt_CMS2tag"   , "TStrings_eventMaker_evtCMS2tag_CMS2.obj");
 
     for (Int_t i = 0, nentries = tree->GetEntries(); i < nentries; i++) 
     {

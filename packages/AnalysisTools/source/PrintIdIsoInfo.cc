@@ -8,6 +8,8 @@
 #include "electronSelections.h"
 #include "trackSelections.h"
 
+using namespace std;
+
 namespace at
 {
     void PrintIsoInfo(int id, int idx)

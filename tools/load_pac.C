@@ -47,7 +47,7 @@
     }
 
     // CMS2 header
-    gSystem->AddIncludePath("-I$PAC/packages/cms2/05.03.27/header");
+    gSystem->AddIncludePath("-I$PAC/packages/cms2/05.03.23/header");
     gSystem->Load(Form("%s/libcms2_header.so", pac_path.c_str()));
 
     // CMS2 CORE

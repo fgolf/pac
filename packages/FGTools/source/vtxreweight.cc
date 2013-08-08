@@ -34,7 +34,7 @@
 // WHERE NVTX IS THE NUMBER OF DA VERTICES PASSING isGoodDAVertex()
 //------------------------------------------------------------------------------
 
-// $Id: vtxreweight.cc,v 1.1 2011/07/08 09:17:39 fgolf Exp $
+// $Id: vtxreweight.cc,v 1.2 2012/08/24 04:13:58 kelley Exp $
 
 // CINT is allowed to see this, but nothing else:
 #include "vtxreweight.h"
@@ -54,6 +54,8 @@
 
 #include "CMS2.h"
 #include "CORE/eventSelections.h"
+
+using namespace std;
 
 bool loaded_vtxreweight_hist = false;
 

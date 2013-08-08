@@ -359,7 +359,7 @@ std::vector<std::pair<GenParticleStruct, GenParticleStruct> > efftools::makeGenH
     std::vector<std::pair<GenParticleStruct, GenParticleStruct> > glepPairs;
     for (unsigned int idx1 = 0; idx1 < gleps.size(); idx1++) {
         for (unsigned int idx2 = idx1 + 1; idx2 < gleps.size(); idx2++) {
-            glepPairs.push_back(make_pair(gleps.at(idx1), gleps.at(idx2)));
+            glepPairs.push_back(std::make_pair(gleps.at(idx1), gleps.at(idx2)));
         }
     } // loop to make gen pairs
 
