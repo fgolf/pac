@@ -17,7 +17,8 @@ parser.add_option("--obj_name"  , dest="obj_name"  , default="cms2"  , help="The
 parser.add_option("--class_name", dest="class_name", default="CMS2"  , help="The class name to use (default: \"CMS2\")"          )
 
 # boolean options
-parser.add_option("--use_cmssw", action="store_true", dest="use_cmssw", default=False , help="Toggle to support CMSSW (default: \"false\")")
+parser.add_option("--use_cmssw", action="store_true", dest="use_cmssw", default=False , help="Toggle to support CMSSW (default: \"false\")"                    )
+parser.add_option("--no_trig"  , action="store_true", dest="no_trig"  , default=False , help="Toggle to not include the trigger functions (default: \"false\")")
 
 (options, args) = parser.parse_args()
 
@@ -403,10 +404,7 @@ class CLASSNAME
         void GetEntry(const unsigned int entry);
 		void LoadAllBranches();
 
-		// trigger methods:
-    	bool passHLTTrigger(const TString& trigName);
-		bool passL1Trigger(const TString& trigName);
-
+TRIGGER_DEF_V1
         // static methods:
         static void progress(const int nEventsTotal, const int nEventsChain);
     
@@ -424,8 +422,7 @@ HANDLES
 
 namespace NAMESPACE
 {
-	bool passHLTTrigger(const TString& trigName);
-	bool passL1Trigger(const TString& trigName);
+TRIGGER_DEF_V2
 BRANCH_ACCESSORS_V2
 } // namespace NAMESPACE
 
@@ -459,13 +456,6 @@ namespace NAMESPACE
 
 			// get the data from the branch
             const T& get();
-
-			// trigger methods:
-    		bool passHLTTrigger(const TString& trigName);
-			bool passL1Trigger(const TString& trigName);
-
-        	// static methods:
-        	static void progress(const int nEventsTotal, const int nEventsChain);
 
         private:
 			// members:
@@ -531,8 +521,11 @@ class CLASSNAME
         void Init();
         void SetEvent(const edm::Event&);
 
+TRIGGER_DEF_V1
         // methods:
 BRANCH_ACCESSORS_CMSSW_V1
+        // static methods:
+        static void progress(const int nEventsTotal, const int nEventsChain);
 
     private:
         // members:
@@ -547,8 +540,7 @@ HANDLES_CMSSW
 
 namespace NAMESPACE
 {
-	bool passHLTTrigger(const TString& trigName);
-	bool passL1Trigger(const TString& trigName);
+TRIGGER_DEF_V2
 BRANCH_ACCESSORS_CMSSW_V2
 } // namespace NAMESPACE
 
@@ -781,10 +773,7 @@ class CLASSNAME
         void GetEntry(const unsigned int entry);
 		void LoadAllBranches();
 
-    	// trigger methods:
-    	bool passHLTTrigger(const TString& trigName);
-		bool passL1Trigger(const TString& trigName);
-
+TRIGGER_DEF_V1
        	// static methods:
        	static void progress(const int nEventsTotal, const int nEventsChain);
 
@@ -802,8 +791,7 @@ HANDLES
 
 namespace NAMESPACE
 {
-	bool passHLTTrigger(const TString& trigName);
-	bool passL1Trigger(const TString& trigName);
+TRIGGER_DEF_V2
 BRANCH_ACCESSORS_V2
 } // namespace NAMESPACE
 
@@ -814,9 +802,23 @@ extern CLASSNAME OBJNAME;
 
 #endif // CLASSNAME_H
 """
-	header_str = header_str.replace("CLASSNAME", options.class_name)
-	header_str = header_str.replace("OBJNAME"  , options.obj_name)
-	header_str = header_str.replace("NAMESPACE", options.namespace)
+	trigger_def_v1 = """        // trigger methods:
+        bool passHLTTrigger(const TString& trigName);
+        bool passL1Trigger(const TString& trigName);
+"""
+	trigger_def_v2 = """    bool passHLTTrigger(const TString& trigName);
+    bool passL1Trigger(const TString& trigName);
+"""
+
+	if options.no_trig:
+		header_str = header_str.replace("TRIGGER_DEF_V1", "")
+		header_str = header_str.replace("TRIGGER_DEF_V2", "")
+	else:
+		header_str = header_str.replace("TRIGGER_DEF_V1", trigger_def_v1)
+		header_str = header_str.replace("TRIGGER_DEF_V2", trigger_def_v2)
+	header_str = header_str.replace("CLASSNAME"  , options.class_name)
+	header_str = header_str.replace("OBJNAME"    , options.obj_name  )
+	header_str = header_str.replace("NAMESPACE"  , options.namespace )
 
 	branch_accessors_v1 = ""
 	branch_accessors_v2 = ""
@@ -889,66 +891,7 @@ HANDLES_LOADALLBRANCHES
 // branch accessor methods:
 BRANCH_ACCESSOR
 
-bool CLASSNAME::passHLTTrigger(const TString& trigName)
-{
-    int trigIndx;
-    std::vector<TString>::const_iterator begin_it = hlt_trigNames().begin();
-    std::vector<TString>::const_iterator end_it = hlt_trigNames().end();
-    std::vector<TString>::const_iterator found_it = find(begin_it, end_it, trigName);
-    if(found_it != end_it)
-    {
-        trigIndx = found_it - begin_it;
-    }
-    else
-    {
-        std::cout << "Cannot find Trigger " << trigName << std::endl; 
-        return false;
-    }
-    return hlt_bits().TestBitNumber(trigIndx);
-}
-
-bool CLASSNAME::passL1Trigger(const TString& trigName)
-{
-    int trigIndx;
-    std::vector<TString>::const_iterator begin_it = l1_trigNames().begin();
-    std::vector<TString>::const_iterator end_it = l1_trigNames().end();
-    std::vector<TString>::const_iterator found_it = find(begin_it, end_it, trigName);
-    if(found_it != end_it)
-    {
-        trigIndx = found_it - begin_it;
-    }
-    else 
-    {
-        std::cout << "Cannot find Trigger " << trigName << std::endl; 
-        return false;
-    }
-
-    if (trigIndx <= 31)
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= trigIndx;
-        return l1_bits1() & bitmask;
-    }
-    if (trigIndx >= 32 && trigIndx <= 63)
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= (trigIndx - 32); 
-        return l1_bits2() & bitmask;
-    }
-    if (trigIndx >= 64 && trigIndx <= 95)
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= (trigIndx - 64); 
-        return l1_bits3() & bitmask;
-    }
-    if (trigIndx >= 96 && trigIndx <= 127) 
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= (trigIndx - 96); 
-        return l1_bits4() & bitmask;
-    }
-    return false;
-}
+TRIGGER_IMPL
 
 /*static*/ void CLASSNAME::progress(const int nEventsTotal, const int nEventsChain)
 {
@@ -975,8 +918,7 @@ bool CLASSNAME::passL1Trigger(const TString& trigName)
 
 namespace NAMESPACE
 {
-    bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
-	bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
+TRIGGER_WRAPPER
 BRANCH_WRAPPER
 } // namespace NAMESPACE
 
@@ -1002,66 +944,7 @@ void CLASSNAME::SetEvent(const edm::Event& event)
 HANDLES_SETEVENT_CMSSW
 }
 
-bool CLASSNAME::passHLTTrigger(const TString& trigName)
-{
-    int trigIndx;
-    std::vector<TString>::const_iterator begin_it = hlt_trigNames().begin();
-    std::vector<TString>::const_iterator end_it = hlt_trigNames().end();
-    std::vector<TString>::const_iterator found_it = find(begin_it, end_it, trigName);
-    if(found_it != end_it)
-    {
-        trigIndx = found_it - begin_it;
-    }
-    else
-    {
-        std::cout << "Cannot find Trigger " << trigName << std::endl; 
-        return false;
-    }
-    return hlt_bits().TestBitNumber(trigIndx);
-}
-
-bool CLASSNAME::passL1Trigger(const TString& trigName)
-{
-    int trigIndx;
-    std::vector<TString>::const_iterator begin_it = l1_trigNames().begin();
-    std::vector<TString>::const_iterator end_it = l1_trigNames().end();
-    std::vector<TString>::const_iterator found_it = find(begin_it, end_it, trigName);
-    if(found_it != end_it)
-    {
-        trigIndx = found_it - begin_it;
-    }
-    else 
-    {
-        std::cout << "Cannot find Trigger " << trigName << std::endl; 
-        return false;
-    }
-
-    if (trigIndx <= 31)
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= trigIndx;
-        return l1_bits1() & bitmask;
-    }
-    if (trigIndx >= 32 && trigIndx <= 63)
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= (trigIndx - 32); 
-        return l1_bits2() & bitmask;
-    }
-    if (trigIndx >= 64 && trigIndx <= 95)
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= (trigIndx - 64); 
-        return l1_bits3() & bitmask;
-    }
-    if (trigIndx >= 96 && trigIndx <= 127) 
-    {
-        unsigned int bitmask = 1;
-        bitmask <<= (trigIndx - 96); 
-        return l1_bits4() & bitmask;
-    }
-    return false;
-}
+TRIGGER_IMPL
 
 /*static*/ void CLASSNAME::progress(const int nEventsTotal, const int nEventsChain)
 {
@@ -1095,8 +978,7 @@ BRANCH_ACCESSOR_CMSSW
 
 namespace NAMESPACE
 {
-    bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
-	bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
+TRIGGER_WRAPPER
 BRANCH_WRAPPER_CMSSW
 } // namespace NAMESPACE
 
@@ -1143,6 +1025,37 @@ HANDLES_LOADALLBRANCHES
 // branch accessor methods:
 BRANCH_ACCESSOR
 
+TRIGGER_IMPL
+
+/*static*/ void CLASSNAME::progress(const int nEventsTotal, const int nEventsChain)
+{
+    int period = 1000;
+    if (nEventsTotal%1000 == 0)
+    {
+        // xterm magic from L. Vacavant and A. Cerri
+        if (isatty(1))
+        {
+            if ((nEventsChain - nEventsTotal) > period)
+            {
+                float frac = (float)nEventsTotal/(nEventsChain*0.01);
+                printf(\"\\015\\033[32m ---> \\033[1m\\033[31m%4.1f%%\\033[0m\\033[32m <---\\033[0m\\015\", frac);
+                fflush(stdout);
+            }
+            else
+            {
+                printf(\"\\015\\033[32m ---> \\033[1m\\033[31m%4.1f%%\\033[0m\\033[32m <---\\033[0m\\015\", 100.0);
+                std::cout << std::endl;
+            }
+        }
+    }
+}
+namespace NAMESPACE
+{
+TRIGGER_WRAPPER
+BRANCH_WRAPPER
+} // namespace NAMESPACE
+"""
+	trigger_impl = """// trigger methods:
 bool CLASSNAME::passHLTTrigger(const TString& trigName)
 {
     int trigIndx;
@@ -1203,36 +1116,17 @@ bool CLASSNAME::passL1Trigger(const TString& trigName)
     }
     return false;
 }
-
-/*static*/ void CLASSNAME::progress(const int nEventsTotal, const int nEventsChain)
-{
-    int period = 1000;
-    if (nEventsTotal%1000 == 0)
-    {
-        // xterm magic from L. Vacavant and A. Cerri
-        if (isatty(1))
-        {
-            if ((nEventsChain - nEventsTotal) > period)
-            {
-                float frac = (float)nEventsTotal/(nEventsChain*0.01);
-                printf("\015\033[32m ---> \033[1m\033[31m%4.1f%%\033[0m\033[32m <---\033[0m\015", frac);
-                fflush(stdout);
-            }
-            else
-            {
-                printf("\015\033[32m ---> \033[1m\033[31m%4.1f%%\033[0m\033[32m <---\033[0m\015", 100.0);
-                std::cout << std::endl;
-            }
-        }
-    }
-}
-namespace NAMESPACE
-{
-    const bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
-	const bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
-BRANCH_WRAPPER
-} // namespace NAMESPACE
 """
+	trigger_wrapper = """    bool passHLTTrigger(const TString& trigName) {return OBJNAME.passHLTTrigger(trigName);}
+	bool passL1Trigger(const TString& trigName) {return OBJNAME.passL1Trigger(trigName);}
+"""
+
+	if options.no_trig:
+		impl_str = impl_str.replace("TRIGGER_IMPL"   , "")
+		impl_str = impl_str.replace("TRIGGER_WRAPPER", "")
+	else:
+		impl_str = impl_str.replace("TRIGGER_IMPL"   , trigger_impl   )
+		impl_str = impl_str.replace("TRIGGER_WRAPPER", trigger_wrapper)
 	impl_str = impl_str.replace("CLASSNAME", options.class_name)
 	impl_str = impl_str.replace("OBJNAME"  , options.obj_name)
 	impl_str = impl_str.replace("NAMESPACE", options.namespace)
@@ -1301,6 +1195,11 @@ def TestMethods(branch_info):
 	if branch_info.IsEdmBranch():
 		print branch_info.GetHandleDeclaration(options.namespace, True) 
 		print branch_info.GetAccessorDefinition(options.class_name, True) 
+
+	branch_infos = list()
+	branch_infos.append(branch_infos)
+	print HeaderString(branch_infos, options.use_cmssw)
+	print ImplString(branch_infos, True)
 	return
 
 # "main program" 
@@ -1335,46 +1234,23 @@ def main():
 				branch_info = BranchInfo(alias, branch)
 				branch_infos.append(branch_info)
 
-# 		has_hlt_info = False
-# 		if tree.GetListOfAliases().FindObject("hlt_trigNames"):
-# 			has_hlt_info = True
-# 
-# 		has_l1_info = False
-# 		if tree.GetListOfAliases().FindObject("l1_trigNames"):
-# 			has_l1_info = True
-			
-
-# 		alias  = tree.GetListOfAliases().FindObject("mus_p4")
-# 		branch = tree.GetBranch(alias.GetTitle())
-# 		alias  = None 
-# 		branch = tree.GetBranch("lep1_p4")
-# 		branch_info = BranchInfo(alias, branch)
-# 		branch_infos = list() 
-# 		branch_infos.append(branch_info)
-# 		branch = tree.GetBranch("is_ss")
-# 		branch_info = BranchInfo(alias, branch)
-# 		branch_infos.append(branch_info)
-# 		TestMethods(branch_info)
-
-
 		# print the header
-# 		print HeaderString(branch_infos, options.use_cmssw)
 		header_file = open("%s.h" % options.class_name, "w")
 		header_file.write(HeaderString(branch_infos, options.use_cmssw))
 
 		# print the header
-# 		print ImplString(branch_infos, True)
 		imple_file = open("%s.cc" % options.class_name, "w")
 		imple_file.write(ImplString(branch_infos, options.use_cmssw))
 
 		print "finished"
+		return 0
+
 	except Exception, e:
 		print "[makeTTreeClassFiles] ERROR:", e
 		return 1
 	except:
 		print "[makeTTreeClassFiles] ERROR:", sys.exc_info()[0]
 		return 1
-
 
 # do it
 if __name__ == '__main__':
