@@ -1,5 +1,9 @@
-
+#ifndef CMS2_USE_CMSSW
 #include "CMS2.h"
+#else
+#include "CMS2/NtupleMacrosHeader/interface/CMS2.h"
+#endif // CMS2_USE_CMSSW
+
 #include <iostream>
 
 // global object
