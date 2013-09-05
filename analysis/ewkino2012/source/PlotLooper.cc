@@ -633,10 +633,10 @@ void PlotLooper::BookHists()
             // SS kinematic plots
             hc.Add(new TH1F(Form("h_dilep_mass%s"      , ns.c_str()), Form("dilepton mass%s;mass (GeV);Events"                             , ts.c_str()), 25 , 0   , 250 ));
             hc.Add(new TH1F(Form("h_pt1%s"             , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events"                      , ts.c_str()), 20 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_pt2%s"             , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 20 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_pt2%s"             , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events"                       , ts.c_str()), 10 , 0   , 100 ));
             hc.Add(new TH1F(Form("h_ht%s"              , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"                                    , ts.c_str()), 20 , 0   , 400 ));
             hc.Add(new TH1F(Form("h_mt%s"              , ns.c_str()), Form("m_{T}%s;m_{T} (GeV);Events"                                    , ts.c_str()), 20 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_met%s"             , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"                               , ts.c_str()), 20 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_met%s"             , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"                               , ts.c_str()), 10 , 0   , 200 ));
             hc.Add(new TH1F(Form("h_njets%s"           , ns.c_str()), Form("# jets%s;# jets;Events"                                        , ts.c_str()), 10 , -0.5, 9.5 ));
             hc.Add(new TH1F(Form("h_lepdphi%s"         , ns.c_str()), Form("#Delta#Phi(lep1, lep2)%s;#Delta#Phi(lep1, lep2);Events"        , ts.c_str()), 32 , 0   , 3.2 ));
             hc.Add(new TH1F(Form("h_lepdeta%s"         , ns.c_str()), Form("#Delta#eta(lep1, lep2)%s;#Delta#eta(lep1, lep2);Events"        , ts.c_str()), 20 , 0   , 4.0 ));
@@ -657,12 +657,12 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_dijet_dphi%s"      , ns.c_str()), Form("dijet #Delta#phi%s;#Delta#phi_{jj};Events"                     , ts.c_str()), 32 , 0   , 3.2 ));
             hc.Add(new TH1F(Form("h_dijet_deta%s"      , ns.c_str()), Form("dijet #Delta#eta%s;#Delta#eta_{jj};Events"                     , ts.c_str()), 20 , 0   , 4.0 ));
             hc.Add(new TH1F(Form("h_dijet_dr%s"        , ns.c_str()), Form("dijet #DeltaR%s;#DeltaR_{jj};Events"                           , ts.c_str()), 30 , 0   , 6.0 ));
-            hc.Add(new TH1F(Form("h_nlbtags%s"         , ns.c_str()), Form("# CSVL btags%s;# CVSL btags;Events"                            , ts.c_str()), 6  , -0.5, 5.5 ));
-            hc.Add(new TH1F(Form("h_nmbtags%s"         , ns.c_str()), Form("# CSVM btags%s;# CVSM btags;Events"                            , ts.c_str()), 6  , -0.5, 5.5 ));
-            hc.Add(new TH1F(Form("h_ntbtags%s"         , ns.c_str()), Form("# CSVT btags%s;# CVST btags;Events"                            , ts.c_str()), 6  , -0.5, 5.5 ));
+            hc.Add(new TH1F(Form("h_nlbtags%s"         , ns.c_str()), Form("# CSVL btags%s;# CVSL btags;Events"                            , ts.c_str()), 4  , -0.5, 3.5 ));
+            hc.Add(new TH1F(Form("h_nmbtags%s"         , ns.c_str()), Form("# CSVM btags%s;# CVSM btags;Events"                            , ts.c_str()), 4  , -0.5, 3.5 ));
+            hc.Add(new TH1F(Form("h_ntbtags%s"         , ns.c_str()), Form("# CSVT btags%s;# CVST btags;Events"                            , ts.c_str()), 4  , -0.5, 3.5 ));
             hc.Add(new TH1F(Form("h_htpv%s"            , ns.c_str()), Form("PV H_{T}%s; PV H_{T} (GeV);Events"                             , ts.c_str()), 20 , 0   , 400 ));
             hc.Add(new TH1F(Form("h_mt2%s"             , ns.c_str()), Form("m_{T2}%s;m_{T2} (GeV);Events"                                  , ts.c_str()), 20 , 0   , 200 ));
-            hc.Add(new TH1F(Form("h_mt2j%s"            , ns.c_str()), Form("m_{T2J}%s;m_{T2J} (GeV);Events"                                , ts.c_str()), 20 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_mt2j%s"            , ns.c_str()), Form("m_{T2J}%s;m_{T2J} (GeV);Events"                                , ts.c_str()), 20 , 0   , 400 ));
             hc.Add(new TH1F(Form("h_lep1_mt%s"         , ns.c_str()), Form("lep1 m_{T}%s;m_{T} (GeV);Events"                               , ts.c_str()), 20 , 0   , 200 ));
             hc.Add(new TH1F(Form("h_lep2_mt%s"         , ns.c_str()), Form("lep2 m_{T}%s;m_{T} (GeV);Events"                               , ts.c_str()), 20 , 0   , 200 ));
             hc.Add(new TH1F(Form("h_dijet_pt%s"        , ns.c_str()), Form("dijet p_{T}%s;p^{jj}_{T} (GeV);Events"                         , ts.c_str()), 20 , 0   , 400 ));
@@ -673,7 +673,7 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_dilep_pt%s"        , ns.c_str()), Form("dilepton p_{T}%s;p^{ll}_{T} (GeV);Events"                      , ts.c_str()), 20 , 0   , 200 ));
             hc.Add(new TH1F(Form("h_dilep_eta%s"       , ns.c_str()), Form("dilepton #eta%s;#eta_{ll};Events"                              , ts.c_str()), 30 , -3.0, 3.0 ));
             hc.Add(new TH1F(Form("h_dijet_pt_mass%s"   , ns.c_str()), Form("dijet p_{T}/mass%s;p^{jJ}_{T}/M_{jj};Events"                   , ts.c_str()), 30 , 0   , 3.0 ));            
-            hc.Add(new TH1F(Form("h_max_mt%s"          , ns.c_str()), Form("max m_{T}%s;m_{T} (GeV);Events"                                , ts.c_str()), 20 , 0   , 200 ));
+            hc.Add(new TH1F(Form("h_max_mt%s"          , ns.c_str()), Form("max m_{T}%s;m_{T} (GeV);Events"                                , ts.c_str()), 30 , 0   , 300 ));
             hc.Add(new TH1F(Form("h_isotrk_veto%s"     , ns.c_str()), Form("iso trk veto%s;iso trk veto;Events"                            , ts.c_str()), 4  , -1.5, 2.5 ));
             hc.Add(new TH1F(Form("h_tau_veto%s"        , ns.c_str()), Form("tau veto%s;tau veto;Events"                                    , ts.c_str()), 4  , -1.5, 2.5 ));
             hc.Add(new TH1F(Form("h_dideta%s"          , ns.c_str()), Form("#Delta#eta(ll,jj)%s;#Delta#eta(ll,jj);Events"                  , ts.c_str()), 20 ,    0, 4.0 ));
@@ -687,8 +687,8 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_max_dphi_met_jet%s", ns.c_str()), Form("max #Delta#phi(jet,met)%s;max #Delta#phi(jet,met);Events"      , ts.c_str()), 32 ,    0, 3.2 ));
             hc.Add(new TH1F(Form("h_min_iso%s"         , ns.c_str()), Form("min(lep1_iso,lep2_iso)%s;min(lep1_iso,lep2_iso);Events"        , ts.c_str()), 15 ,    0, 0.15));
             hc.Add(new TH1F(Form("h_max_iso%s"         , ns.c_str()), Form("max(lep1_iso,lep2_iso)%s;max(lep1_iso,lep2_iso);Events"        , ts.c_str()), 15 ,    0, 0.15));
-            hc.Add(new TH1F(Form("h_dijet_lep_mass%s"    , ns.c_str()), Form("M_{jjl}%s;M_{jjl};Events"                                    , ts.c_str()), 20 ,    0, 300 ));
-            hc.Add(new TH1F(Form("h_min_dijet_lep_mass%s", ns.c_str()), Form("min M_{jjl}%s;min M_{jjl};Events"                            , ts.c_str()), 20 ,    0, 300 ));
+            hc.Add(new TH1F(Form("h_dijet_lep_mass%s"    , ns.c_str()), Form("M_{jjl}%s;M_{jjl};Events"                                    , ts.c_str()), 35 ,    0, 700 ));
+            hc.Add(new TH1F(Form("h_min_dijet_lep_mass%s", ns.c_str()), Form("min M_{jjl}%s;min M_{jjl};Events"                            , ts.c_str()), 35 ,    0, 700 ));
 
             hc.Add(new TH1F(Form("h_minjpt_jjpt%s"     , ns.c_str()), Form("min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T}%s;min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T};Events", ts.c_str()), 20 , 0   , 4 ));
             hc.Add(new TH1F(Form("h_dijet_mass_pt_dr%s", ns.c_str()), Form("M_{jj}/p^{jj}_{T}/#DeltaR_{jj}%s;M_{jj}/p^{jj}_{T}/#DeltaR_{jj};Events",               ts.c_str()), 20 , 0   , 4 ));
@@ -1270,9 +1270,18 @@ int PlotLooper::operator()(long event)
         //
         // number of btags
         //
-        rt::Fill(hc["h_nlbtags"+qs], nlbtags_pv_reweighted(), evt_weight);
-        rt::Fill(hc["h_nmbtags"+qs], nmbtags_pv_reweighted(), evt_weight);
-        rt::Fill(hc["h_ntbtags"+qs], ntbtags_pv_reweighted(), evt_weight);
+        if (m_is_data)
+        {
+            rt::Fill(hc["h_nlbtags"+qs], nlbtags_pv(), evt_weight);
+            rt::Fill(hc["h_nmbtags"+qs], nmbtags_pv(), evt_weight);
+            rt::Fill(hc["h_ntbtags"+qs], ntbtags_pv(), evt_weight);
+        }
+        else
+        {
+            rt::Fill(hc["h_nlbtags"+qs], nlbtags_pv_reweighted(), evt_weight);
+            rt::Fill(hc["h_nmbtags"+qs], nmbtags_pv_reweighted(), evt_weight);
+            rt::Fill(hc["h_ntbtags"+qs], ntbtags_pv_reweighted(), evt_weight);
+        }
     }
     catch (std::exception& e)
     {
