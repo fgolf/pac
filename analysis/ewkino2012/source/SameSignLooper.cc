@@ -528,7 +528,7 @@ void EwkinoSSAnalysisLooper::BookHists()
     {
         ewkino::SignalBinInfo bin_info = ewkino::GetSignalBinInfo(m_sample);
         const std::string title = Form("# of Generated Events - %s", ewkino::GetSignalBinHistLabel(m_sample).c_str());
-        hc.Add(new TH2F("h_gen_count", title.c_str(), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax));
+        hc.Add(new TH2F("h_gen_count", title.c_str(), bin_info.nbinsx, &bin_info.xbins[0], bin_info.nbinsy, &bin_info.ybins[0]));
     }
 }
 
@@ -657,7 +657,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
                 std::vector<std::pair<int, int> > w_daughter_indices;
                 for (unsigned int idx = 0; idx < genps_p4().size(); idx++)
                 {
-                    if (genps_status().at(idx) != 3) continue;
+//                    if (genps_status().at(idx) != 3) continue;
                     if (abs(genps_id().at(idx)) == 24) w_indices.push_back(idx);
                     if (abs(genps_id().at(idx)) != 25 && !found_higgs) continue;
                     if (abs(genps_id().at(idx)) == 25)
@@ -722,9 +722,9 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             else
             {
                 int   id1  = abs(best_gen_hyp.first.id_ ) == 15 ? best_gen_hyp.first.did_   : best_gen_hyp.first.id_;
-                int   idx1 = abs(best_gen_hyp.first.id_ ) == 15 ? best_gen_hyp.first.didx_  : best_gen_hyp.first.idx_;
+                unsigned int   idx1 = abs(best_gen_hyp.first.id_ ) == 15 ? best_gen_hyp.first.didx_  : best_gen_hyp.first.idx_;
                 int   id2  = abs(best_gen_hyp.second.id_) == 15 ? best_gen_hyp.second.did_  : best_gen_hyp.second.id_;
-                int   idx2 = abs(best_gen_hyp.second.id_) == 15 ? best_gen_hyp.second.didx_ : best_gen_hyp.second.idx_;
+                unsigned int   idx2 = abs(best_gen_hyp.second.id_) == 15 ? best_gen_hyp.second.didx_ : best_gen_hyp.second.idx_;
 
                 // get LorenzVectors
                 LorentzVector p41;
@@ -1494,6 +1494,15 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         assert(jet_flags_up.size() == bjet_flags_up.size());
         assert(jet_flags_dn.size() == bjet_flags_dn.size());
 
+        // unsigned int ngflags_dn = 0;
+        // for (size_t i = 0; i != jet_flags_dn.size(); i++)
+        // {
+        //     if (!jet_flags_dn.at(i)) continue;
+        //     ++ngflags_dn;
+        // }
+
+        // std::cout << "found " << ngflags_dn << " good jets" << std::endl;
+
         assert(m_evt.vjets_bdisc.size() == m_evt.vjets_p4.size());
         assert(m_evt.vjets_bdisc_up.size() == m_evt.vjets_p4_up.size());
         assert(m_evt.vjets_bdisc_dn.size() == m_evt.vjets_p4_dn.size());
@@ -1636,7 +1645,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             vector<LorentzVector> vtbjets_jer_p4 = tmp_vtbjets_p4;
 
             // update the values by scaling the JER
-            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_phi_jer, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/30, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);            
+            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, m_evt.pfmet_jer, m_evt.pfmet_phi_jer, m_evt.ht_jer, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);            
             vector<LorentzVector> vlbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVL, m_evt.vjets_p4, m_evt.vjets_lbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
             vector<LorentzVector> vmbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVM, m_evt.vjets_p4, m_evt.vjets_mbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
             vector<LorentzVector> vtbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVT, m_evt.vjets_p4, m_evt.vjets_tbtagged, m_evt.vjets_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
@@ -2472,33 +2481,33 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
         }
 
         // get invariant mass between leptons and two leading jets in the event
-        if (m_evt.vjets_p4.size() > 1)
+        if (vjets_matched_p4.size() > 1)
         {
-            LorentzVector dijet_p4 = m_evt.vjets_p4.at(0) + m_evt.vjets_p4.at(1);
+            LorentzVector dijet_p4 = vjets_matched_p4.at(0) + vjets_matched_p4.at(1);
             m_evt.lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
             m_evt.lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
             m_evt.jjl_p4 = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? m_evt.lep1_jj_p4 : m_evt.lep2_jj_p4;            
         }
 
-        if (m_evt.vjets_p4_up.size() > 1)
+        if (vjets_matched_p4_up.size() > 1)
         {
-            LorentzVector dijet_p4 = m_evt.vjets_p4_up.at(0) + m_evt.vjets_p4_up.at(1);
+            LorentzVector dijet_p4 = vjets_matched_p4_up.at(0) + vjets_matched_p4_up.at(1);
             LorentzVector tmp_lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
             LorentzVector tmp_lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
             m_evt.jjl_p4_up = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? tmp_lep1_jj_p4 : tmp_lep2_jj_p4;            
         }
 
-        if (m_evt.vjets_p4_dn.size() > 1)
+        if (vjets_matched_p4_dn.size() > 1)
         {
-            LorentzVector dijet_p4 = m_evt.vjets_p4_dn.at(0) + m_evt.vjets_p4_dn.at(1);
+            LorentzVector dijet_p4 = vjets_matched_p4_dn.at(0) + vjets_matched_p4_dn.at(1);
             LorentzVector tmp_lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
             LorentzVector tmp_lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
             m_evt.jjl_p4_dn = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? tmp_lep1_jj_p4 : tmp_lep2_jj_p4;            
         }
 
-        if (m_evt.vjets_p4_jer.size() > 1)
+        if (vjets_matched_p4_jer.size() > 1)
         {
-            LorentzVector dijet_p4 = m_evt.vjets_p4_jer.at(0) + m_evt.vjets_p4_jer.at(1);
+            LorentzVector dijet_p4 = vjets_matched_p4_jer.at(0) + vjets_matched_p4_jer.at(1);
             LorentzVector tmp_lep1_jj_p4 = dijet_p4 + m_evt.lep1.p4;
             LorentzVector tmp_lep2_jj_p4 = dijet_p4 + m_evt.lep2.p4;
             m_evt.jjl_p4_jer = (rt::DeltaR(dijet_p4, m_evt.lep1.p4) < rt::DeltaR(dijet_p4, m_evt.lep2.p4)) ? tmp_lep1_jj_p4 : tmp_lep2_jj_p4;            
@@ -2574,11 +2583,6 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             vjets_pv_tbtagged_dn.push_back(is_tight_btag);
         }
 
-        for (size_t vidx = 0; vidx < vjets_matched_p4.size(); vidx++)
-        {
-            std::cout << "lbtag, algo: " << tmp_vjets_pv_lbtagged.at(vidx) << ", " << tmp_vjets_pv_mcflavor_algo.at(vidx) << std::endl;
-        }
-
         if (not evt_isRealData() && (cms2_tag.version > 21))
         {
 
@@ -2624,7 +2628,7 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
             vector<LorentzVector> vtbjets_jer_p4 = tmp_vtbjets_p4;
 
             // update the values by scaling the JER
-            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, tmp_pfmet, tmp_pfmet_phi, tmp_ht, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/30, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);            
+            samesign::smearJETScaleJetsMetHt(vjets_jer_p4, tmp_pfmet, tmp_pfmet_phi, tmp_ht, hyp_idx, jet_type, seed, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);            
             vector<LorentzVector> vlbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVL, vjets_matched_p4, tmp_vjets_pv_lbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
             vector<LorentzVector> vmbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVM, vjets_matched_p4, tmp_vjets_pv_mbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
             vector<LorentzVector> vtbjets_reweighted_jer_p4 = at::RecountedBjets(JETS_BTAG_CSVT, vjets_matched_p4, tmp_vjets_pv_tbtagged, tmp_vjets_pv_mcflavor_algo, m_sample, m_is_fast_sim, at::YieldType::base, seed);
