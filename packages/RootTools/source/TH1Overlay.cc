@@ -616,7 +616,6 @@ namespace rt
 
     // static public constants
     // ---------------------------------------------------------------------------------------- //
-
     float       TH1Overlay::legend_width_default            = 0.295;
     float       TH1Overlay::legend_height_per_entry_default = 0.065;
     float       TH1Overlay::legend_offset_default           = 0.020;
@@ -972,7 +971,7 @@ namespace rt
             else
             {
                 m_pimpl->hist_stack->SetMinimum(min_height);
-                m_pimpl->hist_stack->SetMaximum(max_height*1.1);
+                m_pimpl->hist_stack->SetMaximum(max_height*1.4);
             }
         }
 
@@ -1010,10 +1009,10 @@ namespace rt
                 pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
                 break;
             case LegendPlacement::top_right:
-                pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*5.0 - m_pimpl->legend_width;
+                pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*2.0 - m_pimpl->legend_width;
                 pos.y1 = (1.0 - gStyle->GetPadTopMargin()) - height;
-                pos.x2 = (1.0 - gStyle->GetPadRightMargin()) + m_pimpl->legend_offset*5.0;
-                pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset);
+                pos.x2 = (1.0 - gStyle->GetPadRightMargin()) + m_pimpl->legend_offset*2.0;
+                pos.y2 = (1.0 - gStyle->GetPadTopMargin() - m_pimpl->legend_offset*2.0);
                 break;
             case LegendPlacement::right:
                 pos.x1 = (1.0 - gStyle->GetPadLeftMargin()) + m_pimpl->legend_offset*5.0 - m_pimpl->legend_width;
@@ -1206,7 +1205,7 @@ namespace rt
         if (m_pimpl->hist_stack->GetHists() && !m_pimpl->hist_stack->GetHists()->IsEmpty())
         {
             m_pimpl->hist_stack->SetMinimum(min_height);
-            m_pimpl->hist_stack->SetMaximum(max_height*1.1);
+            m_pimpl->hist_stack->SetMaximum(max_height*1.4);
         }
         for (size_t i = 0; i != hists_to_draw.size(); ++i)
         {
