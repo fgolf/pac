@@ -28,8 +28,8 @@ struct simple_skim
         switch(m_at)
         {
             case AnalysisType::ss:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
+                mu_min_pt = 10.0;
+                el_min_pt = 10.0;
                 break;
             default:
                 mu_min_pt = 20.0;
