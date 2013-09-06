@@ -1,6 +1,6 @@
 #!/bin/bash
 
-out_name=sswh_v9_data
+out_name=sswh_v10
 lumi=19.5
 sr=-1
 nev=--1
