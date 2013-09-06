@@ -168,7 +168,7 @@ namespace ewkino
             const bool pass_sr0      = (baseline && (njets == 2 || njets == 3) && met > 40);
             const bool pass_sr1      = (pass_sr0 && mt > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6 && mt2j > 100);
             const bool pass_sr2      = (pass_sr1 && mljj < 120);
-            const bool pass_sr3      = (pass_sr1 && mljj > 120);
+            const bool pass_sr3      = (pass_sr1 && mljj >= 120);
             const bool pass_sr4      = (pass_sr0 && mt > 110 && ntbtags == 0 && nlbtags < 2 && max_ml3l < 30 && passes_tau_veto() && rt::DeltaEta(lep1_p4(),lep2_p4()) < 1.6 && mljj < 120);
             
             if (signal_region_type==SignalRegionType::inclusive)
