@@ -310,6 +310,9 @@ namespace rt
     // Set style
     void SetStyle(const std::string& value = "emrou");
 
+    // Set style
+    void SetEwkinoHiggsStyle(const std::string& value = "emrou");
+
     // scale the histogram to scale 
     void Scale(TH1* hist, double scale = 1.0);
 

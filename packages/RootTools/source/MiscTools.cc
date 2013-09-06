@@ -2003,5 +2003,33 @@ namespace rt
         gStyle = myStyle;
     }
 
+    // set style
+    void SetEwkinoHiggsStyle(const string& option)
+    {
+        TStyle *myStyle = gROOT->GetStyle("Plain");
+        TGaxis::SetMaxDigits(5);
+
+        myStyle->SetOptFit(1);
+        myStyle->SetOptStat(0);
+        myStyle->SetOptTitle(0);
+        myStyle->SetCanvasDefH(600);
+        myStyle->SetCanvasDefW(600);
+        myStyle->SetCanvasColor(0);
+        myStyle->SetCanvasBorderMode(0);
+        myStyle->SetCanvasBorderSize(2);
+        myStyle->SetPadTickX(1);
+        myStyle->SetPadTickY(1);
+        myStyle->SetPadLeftMargin(0.16);
+        myStyle->SetPadRightMargin(0.05);
+        myStyle->SetPadTopMargin(0.05);
+        myStyle->SetPadBottomMargin(0.13);
+        myStyle->SetFrameFillStyle(0);
+        myStyle->SetFrameBorderMode(0);
+        myStyle->SetTitleOffset(1.3, "Y");
+
+        myStyle->cd();
+        gStyle = myStyle;
+    }
+
 } // end namespace rt
 
