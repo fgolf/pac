@@ -117,9 +117,25 @@ try
     // -------------------------------------------------------------------------------------------------//
 
     ewkino::SignalBinInfo bin_info = ewkino::GetSignalBinInfo(sample);
-    TH2F h_gen_count("h_gen_count", Form("# Generated Events - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
+    TH2F h_gen_count("h_gen_count", Form("# Generated Events - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, &bin_info.xbins[0], bin_info.nbinsy, &bin_info.ybins[0]);
 
-    vector<string> vfile_names = rt::ls(input_file);
+    vector<string> vdirs = rt::string_split(input_file, ",");
+    vector<string> vfile_names;
+    for (size_t i = 0; i != vdirs.size(); i++)
+    {
+        vector<string> tmp_vfiles = rt::ls(vdirs.at(i));
+        if (i == 0) vfile_names = tmp_vfiles;
+        else vfile_names.insert(vfile_names.end(), tmp_vfiles.begin(), tmp_vfiles.end());
+    }
+
+    std::cout << std::endl;
+    std::cout << "print list of directories:" << std::endl;
+    for (size_t i = 0; i != vdirs.size(); i++)
+    {
+        std::cout << "\t" << vdirs.at(i) << std::endl;
+    }
+    std::cout << std::endl;
+
     for (size_t i = 0; i != vfile_names.size(); i++)
     {
         //cout << vfile_names.at(i) << endl;
@@ -133,9 +149,8 @@ try
 
     TH1F* h_xsec = rt::GetHistFromRootFile<TH1F>(xsec_file, Form("h_xsec_%s", sample_name.c_str()));
     h_xsec->SetName("h_xsec");
-    cout << Form("nx %d, x- %f, x+ %f, ny %d, y- %f, y+ %f", bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax) << endl;
 
-    TH2F h_scale1fb("h_scale1fb", Form("# Scale to 1 fb^{-1} - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, bin_info.xmin, bin_info.xmax, bin_info.nbinsy, bin_info.ymin, bin_info.ymax);
+    TH2F h_scale1fb("h_scale1fb", Form("# Scale to 1 fb^{-1} - %s", GetSignalBinHistLabel(sample).c_str()), bin_info.nbinsx, &bin_info.xbins[0], bin_info.nbinsy, &bin_info.ybins[0]);
     for (int xbin = 1; xbin != h_scale1fb.GetNbinsX()+1; xbin++)
     {
         const float xsec     = h_xsec->GetBinContent(xbin);
@@ -153,20 +168,21 @@ try
     // Merge the Chains
     // -------------------------------------------------------------------------------------------------//
 
-    TChain chain("tree");
-    chain.Add(input_file.c_str());
+    TChain* chain = rt::CreateTChainFromCommaSeperatedList(input_file, "tree");
+    // TChain chain("tree");
+    // chain.Add(input_file.c_str());
     cout << "Merging TTree(s) for " << sample_name << " -- please wait..." << endl;
-    cout << "tree has " << chain.GetEntries() << " entries" << endl;
+    cout << "tree has " << chain->GetEntries() << " entries" << endl;
 
     // Removes the branches (if they exist) that we want to replace
-    chain.SetBranchStatus("*"       , 1);
-    chain.SetBranchStatus("xsec"    , 0);
-    chain.SetBranchStatus("nevts"   , 0); 
-    chain.SetBranchStatus("scale1fb", 0);
+    chain->SetBranchStatus("*"       , 1);
+    chain->SetBranchStatus("xsec"    , 0);
+    chain->SetBranchStatus("nevts"   , 0); 
+    chain->SetBranchStatus("scale1fb", 0);
 
     // clone it
     TFile output(output_file.c_str(), "RECREATE");
-    TTree* clone = chain.CloneTree(-1, "fast");
+    TTree* clone = chain->CloneTree(-1, "fast");
     clone->SetDirectory(&output);  // "output" object is in charge of deleting now
 
     // add the cross section
@@ -213,9 +229,9 @@ try
                 nevts    = static_cast<unsigned int>(rt::GetBinContent2D(&h_gen_count, sparm0, sparm1));
                 break;
             default:
-                {/* do nothing */}
+            {/* do nothing */}
         }
-
+          
         // progress
         size_t i_permille = static_cast<size_t>(floor(1000 * num_events_total / float(num_events_chain)));
         if (i_permille != i_permilleOld)
