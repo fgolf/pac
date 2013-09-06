@@ -87,3 +87,14 @@ for f in `ls /nfs-7/userdata/olivito/ewkinoHiggs_WHWW/*chargino400*.root` ; do
     outfile="/nfs-7/userdata/fgolf/susy_higgs/sswh_v2//$outfile"
     $PAC/bin/release/add_cms2_branches_signal_special --input $f --output $outfile --xsec 0.003 --kfactor 1 --filter_eff 1 --num_events 35048
 done
+
+##
+## 1D private, all
+##
+for f in `ls /hadoop/cms/store/user/fgolf/CMS2_V05-03-31/WinoNLSP_WinoNLSP/*.root` ; do
+    prepath=${f%/*}
+    outfile=${f##*/}
+    outfile=${outfile/.root/_out.root}
+    outfile="/nfs-7/userdata/fgolf/susy_higgs/sswh_v3/$outfile"
+    echo    $PAC/bin/release/add_cms2_branches_signal_special --input $f --output $outfile --xsec -999999.0 --num_events -999999 --kfactor 1.0 --filter_eff 1.0
+done
