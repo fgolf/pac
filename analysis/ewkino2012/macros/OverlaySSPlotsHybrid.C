@@ -39,7 +39,6 @@ const std::string rare_bkgds[] = {
     "wh_zh_tth_htt"
 };
 
-// const Int_t colors[] = {2,3,4,5,6,7,8,9,28,30,38,40,41,42,46,102,152,103,153,104,154,105,155,106,156,107,157,108,158,109,159};
 const Int_t colors[] = {2,3,4,5,6,7,8,9,28,30,38,40,41,42,46,kRed+2,kGreen+2,kBlue+2,kMagenta+2,kCyan+2};
 const Int_t markers[] = {1, 2, 3, 4, 5, 6};
 
@@ -98,25 +97,38 @@ rt::TH1Overlay CreateOverlay
     std::string option = "sb::off dt::stack lg::top_right"
     )
 {
+    // legend tweaks
+    rt::TH1Overlay::legend_width_default            = 0.25;
+    rt::TH1Overlay::legend_height_per_entry_default = 0.035;
+    rt::TH1Overlay::legend_text_size_default        = 0.025;
+    rt::TH1Overlay::legend_offset_default           = 0.010;
+
     // colors
     const Color_t signal_color  = kBlack;
-    const Color_t rare_color    = kCyan-5;
     const Color_t fake_color    = kRed-6;
     const Color_t flip_color    = kOrange-8;
-    const Style_t signal_marker = 20;
     const float line_size       = 4;
     const Style_t shade_style   = 3335;
-    const string flip_legend    = "Charge-flip";
-    const string fake_legend    = "Fakes";
+    const string flip_legend    = "Charge Mismeasurement";
+    const string fake_legend    = "Fake Leptons";
     const string unc_legend     = "Total Uncertainty";
 
     TH1* h_fake  = hc_data[Form("h_%s_fake", hist_stem.c_str())];
     TH1* h_flip  = hc_data[Form("h_%s_flip", hist_stem.c_str())];   
-    TH1* h_spil  = new TH1();
+    TH1* h_spil  = NULL;
     for (unsigned int idx = 0; idx < vhc_rare.size(); idx++)
     {
-        h_spil->Add(vhc_rare.at(idx)[Form("h_%s_fake", hist_stem.c_str())]);
+       TH1* hist_temp = vhc_rare.at(idx)[Form("h_%s_fake", hist_stem.c_str())];
+       if (idx == 0)
+       {
+           h_spil = dynamic_cast<TH1*>(hist_temp->Clone());
+       }
+       else
+       {
+           h_spil->Add(hist_temp);
+       }
     }
+    assert(h_spil != NULL);
     h_fake->Add(h_spil, -1.0);    
 
     std::vector<TH1*> vsignals;
@@ -127,12 +139,21 @@ rt::TH1Overlay CreateOverlay
     assert(vsignals.size() == vhc_signal_names.size());
     
     std::vector<TH1*> vrares;
-    TH1* h_rare = new TH1();
+    TH1* h_rare = NULL;
     for (unsigned int idx = 0; idx < vhc_rare.size(); idx++)
     {
-        vrares.push_back(vhc_rare.at(idx)[Form("h_%s_ss", hist_stem.c_str())]);
-        h_rare->Add(vhc_rare.at(idx)[Form("h_%s_ss", hist_stem.c_str())]);
+       TH1* hist_temp = vhc_rare.at(idx)[Form("h_%s_ss", hist_stem.c_str())];
+       vrares.push_back(hist_temp);
+       if (idx == 0)
+       {
+           h_rare = dynamic_cast<TH1*>(hist_temp->Clone());
+       }
+       else
+       {
+           h_rare->Add(hist_temp);
+       }
     }
+    assert(h_rare != NULL); 
     assert(vrares.size() == vhc_rare_names.size());
 
     TH1* h_pred = GetTotalPredHist(h_fake, h_flip, h_rare);
@@ -163,20 +184,35 @@ rt::TH1Overlay CreateOverlay
             vsignals.at(idx)->SetBarOffset(offset);
             vsignals.at(idx)->SetLabelSize(label_size);
         }
+
+        for (unsigned int idx = 0; idx < vrares.size(); idx++)
+        {
+            vrares.at(idx)->SetBarWidth(width);
+            vrares.at(idx)->SetBarOffset(offset);
+            vrares.at(idx)->SetLabelSize(label_size);
+        }
     }
 
     rt::TH1Overlay p(title, option);
-    p.Add(h_fake, fake_legend, fake_color);
-    p.Add(h_flip, flip_legend, flip_color);
+
     for (unsigned int idx = 0; idx < vrares.size(); idx++)
     {
         p.Add(vrares.at(idx), vhc_rare_names.at(idx), colors[idx]);
     }
+
+    p.Add(h_fake, fake_legend, fake_color);
+    p.Add(h_flip, flip_legend, flip_color);
+
     for (unsigned int idx = 0; idx < vsignals.size(); idx++)
     {
-        p.Add(vsignals.at(idx), /*no_stack=*/true, vhc_signal_names.at(idx), signal_color, line_size, markers[idx], 0);
+        TH1* hist_temp = vsignals.at(idx);
+        std::string hist_option = (hist_stem == "yield") ? "" : "hist";
+        hist_temp->SetOption(hist_option.c_str());
+        p.Add(hist_temp, /*no_stack=*/true, vhc_signal_names.at(idx), signal_color, line_size, markers[idx]);
     }
-    // p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style); 
+
+    p.Add(h_pred, /*no_stack=*/true, unc_legend, 1, 2, 1, shade_style); 
+    p.SetYAxisRange(0.0, h_pred->GetMaximum());
     return p;
 }
 
@@ -196,7 +232,7 @@ void OverlaySSPlotsHybrid
     int charge_type = 0, 
     const std::string& suffix = "png"
     )
-{
+{    
     ewkino::SignalRegionInfo sr = ewkino::GetSignalRegionInfo(signal_region_name, analysis_type_name, signal_region_type_name);
 
     // charge type
@@ -218,7 +254,6 @@ void OverlaySSPlotsHybrid
 
     std::vector<std::string> vrares;
     vrares.assign(rare_bkgds, rare_bkgds + arraysize(rare_bkgds));    
-    int num_bkgds = vrares.size();
 
     rt::TH1Container hc_mc;
     rt::TH1Container hc_top_bkgd;
@@ -226,17 +261,6 @@ void OverlaySSPlotsHybrid
     rt::TH1Container hc_vvv_bkgd;
     rt::TH1Container hc_qqww_bkgd;
     rt::TH1Container hc_higgs_bkgd;
-    float total_bkgd = 0.;
-
-    // rt::TH1Container tmp_data_container = rt::TH1Container(Form("%s/data%s.root", plots_path.c_str(), charge_stem.c_str()));
-    // total_bkgd += tmp_data_container["h_yield_fake"]->Integral();
-    // total_bkgd += tmp_data_container["h_yield_flip"]->Integral();
-
-    // for (unsigned int idx = 0; idx < vrares.size(); idx++)
-    // {
-    //     rt::TH1Container tmp_hist_container = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vrares.at(idx).c_str(), charge_stem.c_str()));
-    //     total_bkgd += tmp_hist_container["h_yield_ll"]->Integral();
-    // }
 
     std::vector<rt::TH1Container> vhc_rare;
     std::vector<std::string> vrare_names;    
@@ -245,22 +269,16 @@ void OverlaySSPlotsHybrid
         for (unsigned int idx = 0; idx < vrares.size(); idx++)
         {
             hc_mc += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vrares.at(idx).c_str(), charge_stem.c_str()));
-
-            // if (normalize)
-            //     hc_mc.Scale(1./total_bkgd);
         }
 
         vhc_rare.push_back(hc_mc);
-        vrare_names.push_back("Rare MC");
+        vrare_names.push_back("Genuine SM SS");
     }
     else if (categorize_rare)
     {
         for (unsigned int idx = 0; idx < vrares.size(); idx++)
         {
             hc_mc = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vrares.at(idx).c_str(), charge_stem.c_str()));
-
-            // if (normalize)
-            //     hc_mc.Scale(1./total_bkgd);
 
             if (vrares.at(idx).compare("wz") == 0 || vrares.at(idx).compare("zz") == 0 ||
                 vrares.at(idx).compare("wgstar2m") == 0 || vrares.at(idx).compare("wgstar2t") == 0 ||
@@ -313,8 +331,6 @@ void OverlaySSPlotsHybrid
         {
             hc_mc.Clear();
             hc_mc = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vrares.at(idx).c_str(), charge_stem.c_str()));
-            // if (normalize)
-            //     hc_mc.Scale(1./total_bkgd);
             vhc_rare.push_back(hc_mc);
         }
             
@@ -327,23 +343,9 @@ void OverlaySSPlotsHybrid
     {       
         if (combine_signals)
         {
-            // float tmp_integral = 0.;
-            // for (unsigned int idx = 0; idx < vsignals.size(); idx++)
-            // {
-            //     rt::TH1Container tmp_hist_container = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(0).c_str(), charge_stem.c_str()));
-            //     tmp_integral += tmp_hist_container["h_yield_ll"]->Integral();
-            // }
-
             for (unsigned int idx = 0; idx < vsignals.size(); idx++)
             {
-                // if (normalize)
-                // {
-                //     rt::TH1Container tmp_hist_container = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(0).c_str(), charge_stem.c_str()));
-                //     tmp_hist_container.Scale(1./tmp_integral);
-                //     hc_signal += tmp_hist_container;
-                // }
-                // else
-                    hc_signal += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(idx).c_str(), charge_stem.c_str()));
+                hc_signal += rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(idx).c_str(), charge_stem.c_str()));
             }
             vhc_signals.push_back(hc_signal);
         }
@@ -353,12 +355,6 @@ void OverlaySSPlotsHybrid
             {
                 hc_signal.Clear();
                 hc_signal = rt::TH1Container(Form("%s/%s%s.root", plots_path.c_str(), vsignals.at(idx).c_str(), charge_stem.c_str()));
-                // if (normalize)
-                // {
-                //     // hc_signal.Normalize();
-                //     float tmp_integral = hc_signal["h_yield_ll"]->Integral();
-                //     hc_signal.Scale(1./tmp_integral);
-                // }
                 vhc_signals.push_back(hc_signal);
             }
         }
@@ -390,23 +386,23 @@ void OverlaySSPlotsHybrid
     }
     std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}%s", lumi, charge_title.c_str());
 
-    std::string loption = Form("sb::off %s lg::top_left", normalize ? "dt::stack_norm" : "dt::stack");
+    std::string loption = Form("sb::off %s lg::top_left" , normalize ? "dt::stack_norm" : "dt::stack");
     std::string roption = Form("sb::off %s lg::top_right", normalize ? "dt::stack_norm" : "dt::stack");
 
     // overlays
     map<string, rt::TH1Overlay> p;
     rt::TH1Overlay::profile_marker_size_default = 10.0;
     p["p_yield"           ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "yield"           , Form("%s;channel;Events"                              , title.c_str()), loption);
-    p["p_dilep_mass"      ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dilep_mass"      , Form("%s;m_{ll} (GeV);Events"                         , title.c_str()), roption);
-    p["p_pt1"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1"             , Form("%s;p^{lep1}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_pt2"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2"             , Form("%s;p^{lep2}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_pt1_el"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1_el"          , Form("%s;p^{lep1}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_pt2_el"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2_el"          , Form("%s;p^{lep2}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_pt1_mu"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1_mu"          , Form("%s;p^{lep1}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_pt2_mu"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2_mu"          , Form("%s;p^{lep2}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_met"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "met"             , Form("%s;E^{miss}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_ht"              ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ht"              , Form("%s;H_{T} (GeV);Events"                          , title.c_str()), roption);
-    p["p_mt"              ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt"              , Form("%s;m_{T} (GeV);Events"                          , title.c_str()), roption);
+    p["p_dilep_mass"      ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dilep_mass"      , Form("%s;m_{ll} [GeV];Events"                         , title.c_str()), roption);
+    p["p_pt1"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1"             , Form("%s;p^{lep1}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_pt2"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2"             , Form("%s;p^{lep2}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_pt1_el"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1_el"          , Form("%s;p^{lep1}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_pt2_el"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2_el"          , Form("%s;p^{lep2}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_pt1_mu"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1_mu"          , Form("%s;p^{lep1}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_pt2_mu"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2_mu"          , Form("%s;p^{lep2}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_met"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "met"             , Form("%s;E^{miss}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_ht"              ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ht"              , Form("%s;H_{T} [GeV];Events"                          , title.c_str()), roption);
+    p["p_mt"              ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt"              , Form("%s;m_{T} [GeV];Events"                          , title.c_str()), roption);
     p["p_njets"           ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "njets"           , Form("%s;number of jets;Events"                       , title.c_str()), roption);
     p["p_lepdphi"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lepdphi"         , Form("%s;#Delta#Phi(lep1, lep2);Events"               , title.c_str()), roption);
     p["p_lepdeta"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lepdeta"         , Form("%s;#Delta#eta(lep1, lep2);Events"               , title.c_str()), roption);
@@ -414,30 +410,30 @@ void OverlaySSPlotsHybrid
     p["p_ptjetlep"        ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ptjetlep"        , Form("%s;jet p_{T} / lep p_{T} - 1;Events"            , title.c_str()), roption);
     p["p_ml3l"            ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ml3l"            , Form("%s;M(l,3l);Events"                              , title.c_str()), roption);
     p["p_ml3ldr"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ml3ldr"          , Form("%s;#DeltaR(l,3l);Events"                        , title.c_str()), roption);
-    p["p_jet1_pt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "jet1_pt"         , Form("%s;p^{jet1}_{T} (GeV);Events"                   , title.c_str()), roption);    
-    p["p_jet2_pt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "jet2_pt"         , Form("%s;p^{jet2}_{T} (GeV);Events"                   , title.c_str()), roption);    
-    p["p_jet3_pt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "jet3_pt"         , Form("%s;p^{jet3}_{T} (GeV);Events"                   , title.c_str()), roption);        
-    p["p_mjj"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mjj"             , Form("%s;M_{jj} (GeV);Events"                         , title.c_str()), loption);
+    p["p_jet1_pt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "jet1_pt"         , Form("%s;p^{jet1}_{T} [GeV];Events"                   , title.c_str()), roption);    
+    p["p_jet2_pt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "jet2_pt"         , Form("%s;p^{jet2}_{T} [GeV];Events"                   , title.c_str()), roption);    
+    p["p_jet3_pt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "jet3_pt"         , Form("%s;p^{jet3}_{T} [GeV];Events"                   , title.c_str()), roption);        
+    p["p_mjj"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mjj"             , Form("%s;M_{jj} [GeV];Events"                         , title.c_str()), loption);
     p["p_dijet_dphi"      ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_dphi"      , Form("%s;#Delta#phi_{jj};Events"                      , title.c_str()), roption);
     p["p_dijet_deta"      ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_deta"      , Form("%s;#Delta#eta_{jj};Events"                      , title.c_str()), roption);
     p["p_dijet_dr"        ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_dr"        , Form("%s;#DeltaR_{jj};Events"                         , title.c_str()), roption);
     p["p_nlbtags"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "nlbtags"         , Form("%s;# CSVL btags;Events"                         , title.c_str()), roption);
     p["p_nmbtags"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "nmbtags"         , Form("%s;# CSVM btags;Events"                         , title.c_str()), roption);
     p["p_ntbtags"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ntbtags"         , Form("%s;# CSVT btags;Events"                         , title.c_str()), roption);
-    p["p_htpv"            ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "htpv"            , Form("%s;PV H_{T} (GeV);Events"                       , title.c_str()), roption);
-    p["p_mt2"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt2"             , Form("%s;m_{T2} (GeV);Events"                         , title.c_str()), roption);
-    p["p_mt2j"            ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt2j"            , Form("%s;m_{T2J} (GeV);Events"                        , title.c_str()), roption);
-    p["p_lep1_mt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep1_mt"         , Form("%s;lep1 m_{T} (GeV);Events"                     , title.c_str()), roption);
-    p["p_lep2_mt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep2_mt"         , Form("%s;lep2 m_{T} (GeV);Events"                     , title.c_str()), roption);
-    p["p_dijet_pt"        ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_pt"        , Form("%s;p^{jj}_{T} (GeV);Events"                     , title.c_str()), roption);
+    p["p_htpv"            ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "htpv"            , Form("%s;PV H_{T} [GeV];Events"                       , title.c_str()), roption);
+    p["p_mt2"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt2"             , Form("%s;m_{T2} [GeV];Events"                         , title.c_str()), roption);
+    p["p_mt2j"            ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt2j"            , Form("%s;m_{T2J} [GeV];Events"                        , title.c_str()), roption);
+    p["p_lep1_mt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep1_mt"         , Form("%s;lep1 m_{T} [GeV];Events"                     , title.c_str()), roption);
+    p["p_lep2_mt"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep2_mt"         , Form("%s;lep2 m_{T} [GeV];Events"                     , title.c_str()), roption);
+    p["p_dijet_pt"        ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_pt"        , Form("%s;p^{jj}_{T} [GeV];Events"                     , title.c_str()), roption);
     p["p_dijet_eta"       ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_eta"       , Form("%s;#eta_{jj};Events"                            , title.c_str()), roption);
-    p["p_pt3"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3"             , Form("%s;p^{lep3}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_pt3_el"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3_el"          , Form("%s;p^{lep3}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_pt3_mu"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3_mu"          , Form("%s;p^{lep3}_{T} (GeV);Events"                   , title.c_str()), roption);
-    p["p_dilep_pt"        ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dilep_pt"        , Form("%s;p^{ll}_{T} (GeV);Events"                     , title.c_str()), roption);
+    p["p_pt3"             ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3"             , Form("%s;p^{lep3}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_pt3_el"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3_el"          , Form("%s;p^{lep3}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_pt3_mu"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3_mu"          , Form("%s;p^{lep3}_{T} [GeV];Events"                   , title.c_str()), roption);
+    p["p_dilep_pt"        ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dilep_pt"        , Form("%s;p^{ll}_{T} [GeV];Events"                     , title.c_str()), roption);
     p["p_dilep_eta"       ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dilep_eta"       , Form("%s;#eta_{ll};Events"                            , title.c_str()), roption);
     p["p_dijet_pt_mass"   ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_pt_mass"   , Form("%s;p^{jj}_{T}/M_{jj};Events"                    , title.c_str()), roption);
-    p["p_max_mt"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "max_mt"          , Form("%s;m_{T} (GeV);Events"                          , title.c_str()), loption);
+    p["p_max_mt"          ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "max_mt"          , Form("%s;m_{T} [GeV];Events"                          , title.c_str()), loption);
     p["p_isotrk_veto"     ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "isotrk_veto"     , Form("%s;iso trk veto;Events"                         , title.c_str()), loption);
     p["p_tau_veto"        ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "tau_veto"        , Form("%s;tau veto;Events"                             , title.c_str()), loption);
     p["p_dphi_met_ll"     ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dphi_met_ll"     , Form("%s;#Delta#phi(ll,met);Events"                   , title.c_str()), loption);
@@ -451,10 +447,8 @@ void OverlaySSPlotsHybrid
     p["p_didr"            ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "didr"            , Form("%s;#DeltaR(ll,jj);Events"                       , title.c_str()), roption);
     p["p_dijet_mass_pt_dr"] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_mass_pt_dr", Form("%s;M_{jj}/p^{jj}_{T}/#DeltaR_{jj};Events"       , title.c_str()), roption);
     p["p_minjpt_jjpt"     ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "minjpt_jjpt"     , Form("%s;min(p^{j1}_{T},p^{j2}_{t})/p^{jj}_{T};Events", title.c_str()), roption);
-    p["p_min_iso"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "min_iso"         , Form("%s;min lep iso;Events"                          , title.c_str()), loption);
-    p["p_max_iso"         ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "max_iso"         , Form("%s;max lep iso;Events"                          , title.c_str()), loption);
-    p["p_dijet_lep_mass"  ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_lep_mass"  , Form("%s;M_{jjl} (GeV);Events"                        , title.c_str()), roption);
-    p["p_min_dijet_lep_mass"] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "min_dijet_lep_mass"  , Form("%s;min M_{jjl} (GeV);Events"              , title.c_str()), roption);
+    p["p_dijet_lep_mass"  ] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dijet_lep_mass"  , Form("%s;M_{jjl} [GeV];Events"                        , title.c_str()), roption);
+    p["p_min_dijet_lep_mass"] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "min_dijet_lep_mass"  , Form("%s;min M_{jjl} [GeV];Events"              , title.c_str()), roption);
 
     // overlay individual channels
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
@@ -464,15 +458,15 @@ void OverlaySSPlotsHybrid
         // name and title suffixes
         string hn = Form("_%s" ,  GetDileptonHypTypeName(hyp_type).c_str());
 
-        p["p_dilep_mass"+hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dilep_mass"+hn , Form("%s;m_{ll} (GeV);Events"      , title.c_str()), roption);
-        p["p_pt1"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1"       +hn , Form("%s;p^{lep1}_{T} (GeV);Events", title.c_str()), roption);
-        p["p_pt2"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2"       +hn , Form("%s;p^{lep2}_{T} (GeV);Events", title.c_str()), roption);
-        p["p_met"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "met"       +hn , Form("%s;E^{miss}_{T} (GeV);Events", title.c_str()), roption);
-        p["p_ht"        +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ht"        +hn , Form("%s;H_{T} (GeV);Events"       , title.c_str()), roption);
-        p["p_mt"        +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt"        +hn , Form("%s;m_{T} (GeV);Events"       , title.c_str()), roption);
-        p["p_lep1_mt"   +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep1_mt"   +hn , Form("%s;lep1 m_{T} (GeV);Events"  , title.c_str()), roption);
-        p["p_lep2_mt"   +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep2_mt"   +hn , Form("%s;lep2 m_{T} (GeV);Events"  , title.c_str()), roption);
-        p["p_pt3"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3"       +hn , Form("%s;p^{lep3}_{T} (GeV);Events", title.c_str()), roption);
+        p["p_dilep_mass"+hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "dilep_mass"+hn , Form("%s;m_{ll} [GeV];Events"      , title.c_str()), roption);
+        p["p_pt1"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt1"       +hn , Form("%s;p^{lep1}_{T} [GeV];Events", title.c_str()), roption);
+        p["p_pt2"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt2"       +hn , Form("%s;p^{lep2}_{T} [GeV];Events", title.c_str()), roption);
+        p["p_met"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "met"       +hn , Form("%s;E^{miss}_{T} [GeV];Events", title.c_str()), roption);
+        p["p_ht"        +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "ht"        +hn , Form("%s;H_{T} [GeV];Events"       , title.c_str()), roption);
+        p["p_mt"        +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "mt"        +hn , Form("%s;m_{T} [GeV];Events"       , title.c_str()), roption);
+        p["p_lep1_mt"   +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep1_mt"   +hn , Form("%s;lep1 m_{T} [GeV];Events"  , title.c_str()), roption);
+        p["p_lep2_mt"   +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "lep2_mt"   +hn , Form("%s;lep2 m_{T} [GeV];Events"  , title.c_str()), roption);
+        p["p_pt3"       +hn] = CreateOverlay(hc_data, vhc_rare, vrare_names, vhc_signals, vsignals, "pt3"       +hn , Form("%s;p^{lep3}_{T} [GeV];Events", title.c_str()), roption);
     }
 
     // SR label
@@ -494,7 +488,7 @@ void OverlaySSPlotsHybrid
 
     // write
     std::string plots_subdir = normalize ? "kin_hybrid_norm" : "kin_hybrid";
-    rt::Print(p, Form("%s/%s", plots_path.c_str(), plots_subdir.c_str()), suffix, /*option = */"hist", /*logy = */false);
+    rt::Print(p, Form("%s/%s", plots_path.c_str(), plots_subdir.c_str()), suffix, /*option = */"", /*logy = */false);
 
     // print yield explicitly
     // this is a kludge to the the x error bars the right size for the yeild plot
