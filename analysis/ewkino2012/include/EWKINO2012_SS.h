@@ -1034,6 +1034,15 @@ protected:
 	int	ntbtags_;
 	TBranch *ntbtags_branch;
 	bool ntbtags_isLoaded;
+	int	nlbtags_pv_;
+	TBranch *nlbtags_pv_branch;
+	bool nlbtags_pv_isLoaded;
+	int	nmbtags_pv_;
+	TBranch *nmbtags_pv_branch;
+	bool nmbtags_pv_isLoaded;
+	int	ntbtags_pv_;
+	TBranch *ntbtags_pv_branch;
+	bool ntbtags_pv_isLoaded;
 	int	ttbar_bkdn_;
 	TBranch *ttbar_bkdn_branch;
 	bool ttbar_bkdn_isLoaded;
@@ -1043,6 +1052,18 @@ protected:
 	float	mt_;
 	TBranch *mt_branch;
 	bool mt_isLoaded;
+	float	max_mt_;
+	TBranch *max_mt_branch;
+	bool max_mt_isLoaded;
+	float	max_mt_up_;
+	TBranch *max_mt_up_branch;
+	bool max_mt_up_isLoaded;
+	float	max_mt_dn_;
+	TBranch *max_mt_dn_branch;
+	bool max_mt_dn_isLoaded;
+	float	max_mt_jer_;
+	TBranch *max_mt_jer_branch;
+	bool max_mt_jer_isLoaded;
 	float	mt2_;
 	TBranch *mt2_branch;
 	bool mt2_isLoaded;
@@ -3801,6 +3822,21 @@ void Init(TTree *tree) {
 		ntbtags_branch = tree->GetBranch("ntbtags");
 		if (ntbtags_branch) {ntbtags_branch->SetAddress(&ntbtags_);}
 	}
+	nlbtags_pv_branch = 0;
+	if (tree->GetBranch("nlbtags_pv") != 0) {
+		nlbtags_pv_branch = tree->GetBranch("nlbtags_pv");
+		if (nlbtags_pv_branch) {nlbtags_pv_branch->SetAddress(&nlbtags_pv_);}
+	}
+	nmbtags_pv_branch = 0;
+	if (tree->GetBranch("nmbtags_pv") != 0) {
+		nmbtags_pv_branch = tree->GetBranch("nmbtags_pv");
+		if (nmbtags_pv_branch) {nmbtags_pv_branch->SetAddress(&nmbtags_pv_);}
+	}
+	ntbtags_pv_branch = 0;
+	if (tree->GetBranch("ntbtags_pv") != 0) {
+		ntbtags_pv_branch = tree->GetBranch("ntbtags_pv");
+		if (ntbtags_pv_branch) {ntbtags_pv_branch->SetAddress(&ntbtags_pv_);}
+	}
 	ttbar_bkdn_branch = 0;
 	if (tree->GetBranch("ttbar_bkdn") != 0) {
 		ttbar_bkdn_branch = tree->GetBranch("ttbar_bkdn");
@@ -3815,6 +3851,26 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("mt") != 0) {
 		mt_branch = tree->GetBranch("mt");
 		if (mt_branch) {mt_branch->SetAddress(&mt_);}
+	}
+	max_mt_branch = 0;
+	if (tree->GetBranch("max_mt") != 0) {
+		max_mt_branch = tree->GetBranch("max_mt");
+		if (max_mt_branch) {max_mt_branch->SetAddress(&max_mt_);}
+	}
+	max_mt_up_branch = 0;
+	if (tree->GetBranch("max_mt_up") != 0) {
+		max_mt_up_branch = tree->GetBranch("max_mt_up");
+		if (max_mt_up_branch) {max_mt_up_branch->SetAddress(&max_mt_up_);}
+	}
+	max_mt_dn_branch = 0;
+	if (tree->GetBranch("max_mt_dn") != 0) {
+		max_mt_dn_branch = tree->GetBranch("max_mt_dn");
+		if (max_mt_dn_branch) {max_mt_dn_branch->SetAddress(&max_mt_dn_);}
+	}
+	max_mt_jer_branch = 0;
+	if (tree->GetBranch("max_mt_jer") != 0) {
+		max_mt_jer_branch = tree->GetBranch("max_mt_jer");
+		if (max_mt_jer_branch) {max_mt_jer_branch->SetAddress(&max_mt_jer_);}
 	}
 	mt2_branch = 0;
 	if (tree->GetBranch("mt2") != 0) {
@@ -5461,9 +5517,16 @@ void GetEntry(unsigned int idx)
 		nlbtags_isLoaded = false;
 		nmbtags_isLoaded = false;
 		ntbtags_isLoaded = false;
+		nlbtags_pv_isLoaded = false;
+		nmbtags_pv_isLoaded = false;
+		ntbtags_pv_isLoaded = false;
 		ttbar_bkdn_isLoaded = false;
 		vtxw_isLoaded = false;
 		mt_isLoaded = false;
+		max_mt_isLoaded = false;
+		max_mt_up_isLoaded = false;
+		max_mt_dn_isLoaded = false;
+		max_mt_jer_isLoaded = false;
 		mt2_isLoaded = false;
 		mt2j_isLoaded = false;
 		mt2j_up_isLoaded = false;
@@ -6103,9 +6166,16 @@ void LoadAllBranches()
 	if (nlbtags_branch != 0) nlbtags();
 	if (nmbtags_branch != 0) nmbtags();
 	if (ntbtags_branch != 0) ntbtags();
+	if (nlbtags_pv_branch != 0) nlbtags_pv();
+	if (nmbtags_pv_branch != 0) nmbtags_pv();
+	if (ntbtags_pv_branch != 0) ntbtags_pv();
 	if (ttbar_bkdn_branch != 0) ttbar_bkdn();
 	if (vtxw_branch != 0) vtxw();
 	if (mt_branch != 0) mt();
+	if (max_mt_branch != 0) max_mt();
+	if (max_mt_up_branch != 0) max_mt_up();
+	if (max_mt_dn_branch != 0) max_mt_dn();
+	if (max_mt_jer_branch != 0) max_mt_jer();
 	if (mt2_branch != 0) mt2();
 	if (mt2j_branch != 0) mt2j();
 	if (mt2j_up_branch != 0) mt2j_up();
@@ -10810,6 +10880,45 @@ void LoadAllBranches()
 		}
 		return ntbtags_;
 	}
+	int &nlbtags_pv()
+	{
+		if (not nlbtags_pv_isLoaded) {
+			if (nlbtags_pv_branch != 0) {
+				nlbtags_pv_branch->GetEntry(index);
+			} else { 
+				printf("branch nlbtags_pv_branch does not exist!\n");
+				exit(1);
+			}
+			nlbtags_pv_isLoaded = true;
+		}
+		return nlbtags_pv_;
+	}
+	int &nmbtags_pv()
+	{
+		if (not nmbtags_pv_isLoaded) {
+			if (nmbtags_pv_branch != 0) {
+				nmbtags_pv_branch->GetEntry(index);
+			} else { 
+				printf("branch nmbtags_pv_branch does not exist!\n");
+				exit(1);
+			}
+			nmbtags_pv_isLoaded = true;
+		}
+		return nmbtags_pv_;
+	}
+	int &ntbtags_pv()
+	{
+		if (not ntbtags_pv_isLoaded) {
+			if (ntbtags_pv_branch != 0) {
+				ntbtags_pv_branch->GetEntry(index);
+			} else { 
+				printf("branch ntbtags_pv_branch does not exist!\n");
+				exit(1);
+			}
+			ntbtags_pv_isLoaded = true;
+		}
+		return ntbtags_pv_;
+	}
 	int &ttbar_bkdn()
 	{
 		if (not ttbar_bkdn_isLoaded) {
@@ -10848,6 +10957,58 @@ void LoadAllBranches()
 			mt_isLoaded = true;
 		}
 		return mt_;
+	}
+	float &max_mt()
+	{
+		if (not max_mt_isLoaded) {
+			if (max_mt_branch != 0) {
+				max_mt_branch->GetEntry(index);
+			} else { 
+				printf("branch max_mt_branch does not exist!\n");
+				exit(1);
+			}
+			max_mt_isLoaded = true;
+		}
+		return max_mt_;
+	}
+	float &max_mt_up()
+	{
+		if (not max_mt_up_isLoaded) {
+			if (max_mt_up_branch != 0) {
+				max_mt_up_branch->GetEntry(index);
+			} else { 
+				printf("branch max_mt_up_branch does not exist!\n");
+				exit(1);
+			}
+			max_mt_up_isLoaded = true;
+		}
+		return max_mt_up_;
+	}
+	float &max_mt_dn()
+	{
+		if (not max_mt_dn_isLoaded) {
+			if (max_mt_dn_branch != 0) {
+				max_mt_dn_branch->GetEntry(index);
+			} else { 
+				printf("branch max_mt_dn_branch does not exist!\n");
+				exit(1);
+			}
+			max_mt_dn_isLoaded = true;
+		}
+		return max_mt_dn_;
+	}
+	float &max_mt_jer()
+	{
+		if (not max_mt_jer_isLoaded) {
+			if (max_mt_jer_branch != 0) {
+				max_mt_jer_branch->GetEntry(index);
+			} else { 
+				printf("branch max_mt_jer_branch does not exist!\n");
+				exit(1);
+			}
+			max_mt_jer_isLoaded = true;
+		}
+		return max_mt_jer_;
 	}
 	float &mt2()
 	{
@@ -15051,9 +15212,16 @@ namespace ewkino_ss {
 	const int &nlbtags();
 	const int &nmbtags();
 	const int &ntbtags();
+	const int &nlbtags_pv();
+	const int &nmbtags_pv();
+	const int &ntbtags_pv();
 	const int &ttbar_bkdn();
 	const float &vtxw();
 	const float &mt();
+	const float &max_mt();
+	const float &max_mt_up();
+	const float &max_mt_dn();
+	const float &max_mt_jer();
 	const float &mt2();
 	const float &mt2j();
 	const float &mt2j_up();

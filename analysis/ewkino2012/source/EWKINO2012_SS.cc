@@ -340,9 +340,16 @@ namespace ewkino_ss {
 	const int &nlbtags() { return ewk12ss.nlbtags(); }
 	const int &nmbtags() { return ewk12ss.nmbtags(); }
 	const int &ntbtags() { return ewk12ss.ntbtags(); }
+	const int &nlbtags_pv() { return ewk12ss.nlbtags_pv(); }
+	const int &nmbtags_pv() { return ewk12ss.nmbtags_pv(); }
+	const int &ntbtags_pv() { return ewk12ss.ntbtags_pv(); }
 	const int &ttbar_bkdn() { return ewk12ss.ttbar_bkdn(); }
 	const float &vtxw() { return ewk12ss.vtxw(); }
 	const float &mt() { return ewk12ss.mt(); }
+	const float &max_mt() { return ewk12ss.max_mt(); }
+	const float &max_mt_up() { return ewk12ss.max_mt_up(); }
+	const float &max_mt_dn() { return ewk12ss.max_mt_dn(); }
+	const float &max_mt_jer() { return ewk12ss.max_mt_jer(); }
 	const float &mt2() { return ewk12ss.mt2(); }
 	const float &mt2j() { return ewk12ss.mt2j(); }
 	const float &mt2j_up() { return ewk12ss.mt2j_up(); }
