@@ -139,9 +139,9 @@ namespace at
             // latex
             "$W+jets \\rightarrow \\ell \\nu$", 
             // ntuple_path
-            "WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1", 
+            "WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v2", 
             // tag
-            "V05-03-13_slim",
+            "V05-03-28",
             // SampleType 
             SampleType::bkgd,
             // Sample
