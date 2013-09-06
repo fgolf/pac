@@ -214,9 +214,9 @@ def overlay_hist(signal_region):
                     % (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(signal_with_underscores), str(bkgds), bool(options.combine_signals), bool(options.combine_bkgds), \
                                bool(options.normalize_hists), str(srt_name), int(options.charge), str(options.suffix))        
         elif (options.do_hybrid):
-                signal_with_underscores = options.signal.replace('-','_')
+#                signal_with_underscores = options.signal.replace('-','_')
                 cmd = "root -b -q -l \"macros/OverlaySSPlotsHybrid.C+ (%1.3f,\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, %d, %d, %d, \\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" \
-                    % (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(signal_with_underscores), bool(options.combine_signals), bool(options.categorize_rare), bool(options.combine_bkgds), \
+                    % (float(options.lumi), str(options.out_name), str(sr_name), str(options.anal_type), str(options.signal), bool(options.combine_signals), bool(options.categorize_rare), bool(options.combine_bkgds), \
                                bool(options.normalize_hists), str(srt_name), int(options.charge), str(options.suffix))
         else:
                 cmd = "root -b -q -l \"macros/OverlaySSPlots.C+ (%1.3f,\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",\\\"%s\\\", %d, \\\"%s\\\")\" 2> /dev/null" \
