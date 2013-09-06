@@ -54,8 +54,8 @@ namespace ewkino
                     mt2j    = ewkino_ss::mt2j();
                     mljj    = ewkino_ss::jjl_p4().mass();
                     njets   = ewkino_ss::njets_pv_tight0();
-                    nlbtags = (do_beff_sf ? ewkino_ss::nlbtags_pv_reweighted() : ewkino_ss::nlbtags());  // reweighted # btags (random #)
-                    ntbtags = (do_beff_sf ? ewkino_ss::ntbtags_pv_reweighted() : ewkino_ss::ntbtags());  // reweighted # btags (random #)
+                    nlbtags = (do_beff_sf ? ewkino_ss::nlbtags_pv_reweighted() : ewkino_ss::nlbtags_pv());  // reweighted # btags (random #)
+                    ntbtags = (do_beff_sf ? ewkino_ss::ntbtags_pv_reweighted() : ewkino_ss::ntbtags_pv());  // reweighted # btags (random #)
                     break;
                 case SystematicType::JES_UP: 
                     met     = ewkino_ss::pfmet_up();
@@ -119,16 +119,8 @@ namespace ewkino
             mt2j    = ewkino_ss::mt2j();
             mljj    = ewkino_ss::jjl_p4().mass();
             njets   = ewkino_ss::njets_pv_tight0();
-            int tmp_nlbtags = 0;
-            int tmp_ntbtags = 0;
-            for (size_t idx = 0; idx < ewkino_ss::vjets_p4().size(); idx++)
-            {
-                if (!ewkino_ss::vjets_matched_pv().at(idx)) continue;
-                if (ewkino_ss::vjets_lbtagged().at(idx)) ++tmp_nlbtags;
-                if (ewkino_ss::vjets_tbtagged().at(idx)) ++tmp_ntbtags;
-            }
-            nlbtags = tmp_nlbtags;
-            ntbtags = tmp_ntbtags;
+            nlbtags = ewkino_ss::nlbtags_pv();
+            ntbtags = ewkino_ss::ntbtags_pv();
         }
 
         // done
