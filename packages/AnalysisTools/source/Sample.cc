@@ -1126,7 +1126,25 @@ namespace at
             // ntuple_path
             "TChiwh",
             // tag
-            "V05-03-27",
+            "V05-03-31",
+            // SampleType 
+            SampleType::susy,
+            // Sample
+            Sample::tchiwh,
+            // color
+            kBlack
+        },
+        {
+            // name
+            "tchiwh_130_1", 
+            // title
+            "tchiwh_130_1", 
+            // latex
+            "$\\tilde{\\chi}^{0}_{2}\\tilde{\\chi}^{\\pm}_{1}\\rightarrow W^{\\pm}H$ (130/1)", 
+            // ntuple_path
+            "TChiwh",
+            // tag
+            "V05-03-31",
             // SampleType 
             SampleType::susy,
             // Sample

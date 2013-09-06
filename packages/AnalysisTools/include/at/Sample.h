@@ -72,6 +72,7 @@ namespace at
             qcd,
             qcd_mu15,
             tchiwh,
+            tchiwh_130_1,
             wh_zh_tth_hzz,
             wh_zh_tth_hww,
             wh_zh_tth_htt,
