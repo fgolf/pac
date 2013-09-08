@@ -145,18 +145,24 @@ void CreatePasPlots
     hc_result += GetPasPlots(hc_data, hc_mc, "pas_ht"    , "HT" );
     hc_result += GetPasPlots(hc_data, hc_mc, "pas_nbtags", "NBJ");
     hc_result += GetPasPlots(hc_data, hc_mc, "pas_njets" , "NJ" );
+    hc_result += GetPasPlots(hc_data, hc_mc, "pas_pt1"   , "PT1");
+    hc_result += GetPasPlots(hc_data, hc_mc, "pas_pt2"   , "PT2");
 
     rt::TH1Container hc_result_htlow;
     hc_result_htlow += GetPasPlots(hc_data, hc_mc, "pas_htlow_met"   , "MET");
     hc_result_htlow += GetPasPlots(hc_data, hc_mc, "pas_htlow_ht"    , "HT" );
     hc_result_htlow += GetPasPlots(hc_data, hc_mc, "pas_htlow_nbtags", "NBJ");
     hc_result_htlow += GetPasPlots(hc_data, hc_mc, "pas_htlow_njets" , "NJ" );
+    hc_result_htlow += GetPasPlots(hc_data, hc_mc, "pas_htlow_pt1"   , "PT1");
+    hc_result_htlow += GetPasPlots(hc_data, hc_mc, "pas_htlow_pt2"   , "PT2");
 
     rt::TH1Container hc_result_hthigh;
     hc_result_hthigh += GetPasPlots(hc_data, hc_mc, "pas_hthigh_met"   , "MET");
     hc_result_hthigh += GetPasPlots(hc_data, hc_mc, "pas_hthigh_ht"    , "HT" );
     hc_result_hthigh += GetPasPlots(hc_data, hc_mc, "pas_hthigh_nbtags", "NBJ");
     hc_result_hthigh += GetPasPlots(hc_data, hc_mc, "pas_hthigh_njets" , "NJ" );
+    hc_result_hthigh += GetPasPlots(hc_data, hc_mc, "pas_hthigh_pt1"   , "PT1");
+    hc_result_hthigh += GetPasPlots(hc_data, hc_mc, "pas_hthigh_pt2"   , "PT2");
 
     // results
     hc_result.Write       (Form("plots/pas/pas_%s_%s_%s.root"        , analysis_type_name.c_str(), signal_region_type_name.c_str(), signal_region_name.c_str()));

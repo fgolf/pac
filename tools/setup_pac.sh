@@ -65,8 +65,8 @@ echo externals install complete
 pushd $PAC/tools
 ./build_all_bjam.sh
 if [ $? -eq 0 ]; then
-    echo build successful
+    echo Build successful!
 else
-    echo build failed
+    echo Build failed...
 fi
 popd

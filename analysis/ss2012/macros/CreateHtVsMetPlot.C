@@ -97,7 +97,7 @@ void CreateHtVsMetPlot
     e1.Draw("pfmet:ht>>h2_ht_vs_pfmet_baseline_njge4_nb2", selection && "njets>=4 && nbtags>=2", "goff");
 
     // set style
-    const float marker_size        = 1.6; 
+    const float marker_size        = 1.0; 
     const unsigned int line_width  = 2; 
 
     h2_ht_vs_pfmet_baseline_njlt4_ee->SetMarkerColor(kBlack);
@@ -261,9 +261,12 @@ void CreateHtVsMetPlot
     l3->SetFillStyle(0);
     l3->SetBorderSize(0);
     //l2->SetTextSize(0.1);
-    l3->AddEntry(h2_ht_vs_pfmet_baseline_nb0, "# btags = 0"   , "p");
-    l3->AddEntry(h2_ht_vs_pfmet_baseline_nb1, "# btags = 1"   , "p");
-    l3->AddEntry(h2_ht_vs_pfmet_baseline_nb2, "# btags #geq 2", "p");
+    //l3->AddEntry(h2_ht_vs_pfmet_baseline_nb0, "# btags = 0"   , "p");
+    //l3->AddEntry(h2_ht_vs_pfmet_baseline_nb1, "# btags = 1"   , "p");
+    //l3->AddEntry(h2_ht_vs_pfmet_baseline_nb2, "# btags #geq 2", "p");
+    l3->AddEntry(h2_ht_vs_pfmet_baseline_nb0, "BSR0", "p");
+    l3->AddEntry(h2_ht_vs_pfmet_baseline_nb1, "BSR1", "p");
+    l3->AddEntry(h2_ht_vs_pfmet_baseline_nb2, "BSR2", "p");
 
     TLegend* l4 = new TLegend(0.65, 0.50, 0.95, 0.88);
     l4->SetFillColor(0);  // 0 makes it the background clear on the pad
@@ -312,9 +315,9 @@ void CreateHtVsMetPlot
     string at_label_str;
     switch (at)
     {
-        case ss::AnalysisType::high_pt: at_label_str = "high-p_{T} leptons";     break;
-        case ss::AnalysisType::low_pt : at_label_str = "low-p_{T} leptons";      break;
-        case ss::AnalysisType::vlow_pt: at_label_str = "very low-p_{T} leptons"; break;
+        case ss::AnalysisType::high_pt: at_label_str = "High-p_{T} leptons";     break;
+        case ss::AnalysisType::low_pt : at_label_str = "Low-p_{T} leptons";      break;
+        case ss::AnalysisType::vlow_pt: at_label_str = "Very Low-p_{T} leptons"; break;
         default: at_label_str = "";
     }
     TLatex* at_label = new TLatex(0.3, 0.82, at_label_str.c_str());
@@ -377,8 +380,8 @@ void CreateHtVsMetPlot
     cout << "em nj4 entried = " << h2_ht_vs_pfmet_baseline_njge4_em->GetEntries() << endl;
     cout << "mm nj4 entried = " << h2_ht_vs_pfmet_baseline_njge4_mm->GetEntries() << endl;
     cout << "ll entried = " << (h2_ht_vs_pfmet_baseline_njlt4_ee->GetEntries() + h2_ht_vs_pfmet_baseline_njge4_ee->GetEntries() +
-            h2_ht_vs_pfmet_baseline_njlt4_em->GetEntries() + h2_ht_vs_pfmet_baseline_njge4_em->GetEntries() +
-            h2_ht_vs_pfmet_baseline_njlt4_mm->GetEntries() + h2_ht_vs_pfmet_baseline_njge4_mm->GetEntries()) << endl;
+                                h2_ht_vs_pfmet_baseline_njlt4_em->GetEntries() + h2_ht_vs_pfmet_baseline_njge4_em->GetEntries() +
+                                h2_ht_vs_pfmet_baseline_njlt4_mm->GetEntries() + h2_ht_vs_pfmet_baseline_njge4_mm->GetEntries()) << endl;
 
     cout << "ee nb0 entried = " << h2_ht_vs_pfmet_baseline_nb0_ee->GetEntries() << endl;
     cout << "em nb0 entried = " << h2_ht_vs_pfmet_baseline_nb0_em->GetEntries() << endl;
@@ -390,8 +393,8 @@ void CreateHtVsMetPlot
     cout << "em nb0 entried = " << h2_ht_vs_pfmet_baseline_nb2_em->GetEntries() << endl;
     cout << "mm nb0 entried = " << h2_ht_vs_pfmet_baseline_nb2_mm->GetEntries() << endl;
     cout << "ll entried = " << (h2_ht_vs_pfmet_baseline_nb0_ee->GetEntries() + h2_ht_vs_pfmet_baseline_nb1_ee->GetEntries() + h2_ht_vs_pfmet_baseline_nb2_ee->GetEntries() +
-            h2_ht_vs_pfmet_baseline_nb0_em->GetEntries() + h2_ht_vs_pfmet_baseline_nb1_em->GetEntries() + h2_ht_vs_pfmet_baseline_nb2_em->GetEntries() +
-            h2_ht_vs_pfmet_baseline_nb0_mm->GetEntries() + h2_ht_vs_pfmet_baseline_nb1_mm->GetEntries() + h2_ht_vs_pfmet_baseline_nb2_mm->GetEntries()) << endl;
+                                h2_ht_vs_pfmet_baseline_nb0_em->GetEntries() + h2_ht_vs_pfmet_baseline_nb1_em->GetEntries() + h2_ht_vs_pfmet_baseline_nb2_em->GetEntries() +
+                                h2_ht_vs_pfmet_baseline_nb0_mm->GetEntries() + h2_ht_vs_pfmet_baseline_nb1_mm->GetEntries() + h2_ht_vs_pfmet_baseline_nb2_mm->GetEntries()) << endl;
 
     cout << "nb0 entried = " << h2_ht_vs_pfmet_baseline_nb0->GetEntries() << endl;
     cout << "nb1 entried = " << h2_ht_vs_pfmet_baseline_nb1->GetEntries() << endl;
@@ -411,7 +414,7 @@ void CreateAllHtVsMetPlots()
 {
     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr0" , "high_pt", "pdf");
 /*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr20", "high_pt", "pdf"); */
-/*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr0" , "low_pt" , "pdf"); */
+    CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr0" , "low_pt" , "pdf");
 /*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr20", "low_pt" , "pdf"); */
 /*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr0" , "vlow_pt", "pdf"); */
 /*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr20", "vlow_pt", "pdf"); */

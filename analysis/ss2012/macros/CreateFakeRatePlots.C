@@ -100,7 +100,7 @@ void PrintMuonFakeRatePlots(const std::string& suffix = "png")
     hc.SetMarkerSize(1.8);
 
 	//std::string title = Form("QCD derived FR, #sqrt{s} = 8 TeV", lumi);
-	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, #scale[0.6]{#int}Ldt = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("#mu^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("#mu^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("Muon Fake Rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
@@ -319,7 +319,7 @@ void PrintElectronFakeRatePlots(const std::string& suffix = "png")
 	gStyle->SetTitleBorderSize(0);
 
 	//std::string title = "QCD derived FR, #sqrt{s} = 8 TeV";
-	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, #scale[0.6]{#int}Ldt = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("e^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("e^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("Electron Fake Rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
@@ -453,9 +453,10 @@ void PrintFakeRatePlotsEWKCor(const std::string& suffix = "png")
 
 	// set style
 	rt::SetTDRStyle();
+    gStyle->SetTitleOffset(1.4, "Y");
 	gStyle->SetTitleBorderSize(0);
 
-	const std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	const std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, #scale[0.6]{#int}Ldt = %3.1f fb^{-1}", lumi);
 
     // Fake Rates
     const float max = 0.5;
@@ -578,7 +579,7 @@ void PrintElectronFakeRatePlotsETH(const std::string& suffix = "png")
 	gStyle->SetTitleBorderSize(0);
 
 	//std::string title = Form("QCD derived FR, #sqrt{s} = 8 TeV", lumi);
-	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, #scale[0.6]{#int}Ldt = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("#el^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 	//std::string title = Form("#el^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
 
