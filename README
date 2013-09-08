@@ -44,7 +44,10 @@ Setup:
 ----------------------------------------------------------------
 
 To check out the code:
-cvs co -P -d pac -r <tag> UserCode/FGolf/pac
+git init pac
+cd pac
+git remote add origin git@github.com:kelleyrw/pac.git
+git pull git@github.com:kelleyrw/pac.git master
 
 We will refer to the directory you chose to install PAC to as simply PAC (e.g.
 /home/users/rwkelley/Development/pac == PAC).
@@ -55,7 +58,7 @@ cd PAC
 ./tools/setup_boost.sh
 
 NOTE: This step is not necessary if you are running on the uaf since
-thre is a version of boost that all SnT can access installed at
+there is a version of boost that all SnT can access installed at
 /home/users/rwkelley/code/boost/1.49.0.
 
 Next, we run the setup script. This will check out off the code from
@@ -88,10 +91,14 @@ whevever you launch ROOT (or put it in your root logon script):
 
 You are now ready to run the analyses.  Currently there are:
 
+- $PAC/analysis/ewkino2012           :8 TeV ewkino analysis
 - $PAC/analysis/ss2012               :8 TeV SS analysis
 - $PAC/analysis/ttv2012              :8 TeV ttV analysis
-- $PAC/analysis/FakeRateAnalysis     :8 TeV and 7 TeV dilepton fake rate study (mostly directed for the SS analysis)
+- $PAC/analysis/RpvStop2012          :8 TeV RPV stop analysis
 - $PAC/analysis/FakeRateAnalysis2011 :Deprecated 7 TeV dilepton fake rate study (mostly directed for the SS analysis)
+- $PAC/analysis/FakeRateAnalysis2012 :8 TeV dilepton fake rate study (mostly directed for the SS analysis)
+- $PAC/analysis/EfficiencyStudy      :8 TeV simple lepton efficiency study
+- $PAC/analysis/TagAndProbe          :8 TeV simple tag and probe setup
 
 For instructions on running the specific analyses, see the README files in the specific analysis directories.
 
@@ -149,19 +156,23 @@ Under $PAC/external/build is all the scripts, Makefiles, etc. to build and link 
 
 The current external libraries are:
 
-- MiniFWLite:  MiniFWLite is for the CMS2 ntuples 
 - SimpleTable: A simple table class to print tables of numbers and strings
 - cms2_core:   CMS2/NtupleMacros/CORE
+- cms2_tools:  CMS2/NtupleMacros/Tools (contains MiniFWLite)
 - cms2_frb:    CMS2/NtupleMacros/fakeRAte/myBabyMaker.{h,cc} which are used to make the fake rate babies
 - root:        ROOT
 
 $PAC/analysis
 ----------------------------------------------------------------
 
+- $PAC/analysis/ewkino2012           :8 TeV ewkino analysis
 - $PAC/analysis/ss2012               :8 TeV SS analysis
 - $PAC/analysis/ttv2012              :8 TeV ttV analysis
-- $PAC/analysis/FakeRateAnalysis     :8 TeV and 7 TeV dilepton fake rate study (mostly directed for the SS analysis)
+- $PAC/analysis/RpvStop2012          :8 TeV RPV stop analysis
 - $PAC/analysis/FakeRateAnalysis2011 :Deprecated 7 TeV dilepton fake rate study (mostly directed for the SS analysis)
+- $PAC/analysis/FakeRateAnalysis2012 :8 TeV dilepton fake rate study (mostly directed for the SS analysis)
+- $PAC/analysis/EfficiencyStudy      :8 TeV simple lepton efficiency study
+- $PAC/analysis/TagAndProbe          :8 TeV simple tag and probe setup
 
 $PAC/lib
 ----------------------------------------------------------------
@@ -180,7 +191,7 @@ Directory to hold the object files and executables.
 
 There are two ways to build this code: using GNU Make an BOOST Build.
 
-GNU Make
+GNU Make (depricated)
 ----------------------------------------------------------------
 
 There makefiles are organized hierarchically starting with the Makefile in the
@@ -208,7 +219,7 @@ make clean
 make DEBUG=1
 
 
-BOOST Build (ADVANCED)
+BOOST Build (supported method)
 ----------------------------------------------------------------
 
 This is a build system that is a specific to C++ and offers more off the
