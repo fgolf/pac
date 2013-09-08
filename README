@@ -46,8 +46,8 @@ Setup:
 To check out the code:
 git init pac
 cd pac
-git remote add origin git@github.com:kelleyrw/pac.git
-git pull git@github.com:kelleyrw/pac.git master
+git remote add origin git@github.com:fgolf/pac.git
+git pull git@github.com:fgolf/pac.git master
 
 We will refer to the directory you chose to install PAC to as simply PAC (e.g.
 /home/users/rwkelley/Development/pac == PAC).
