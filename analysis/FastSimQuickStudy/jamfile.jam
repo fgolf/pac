@@ -1,0 +1,59 @@
+# jamfile for the ss 2012 analysis 
+# -------------------------------------------------------------------- #
+
+lib EFF 
+  : # sources
+    ./source/EFF.cc
+		./source/EFFWrapper.cc
+    # dependent packages
+    /ROOT
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+    <include>./include
+  ;
+
+exe lepton_eff_baby
+  : # sources
+    ./source/lepton_eff_baby.cc
+    # dependent packages
+    /ROOT
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+exe lepton_eff_plots
+  : # sources
+    ./source/lepton_eff_plots.cc
+    # dependent packages
+    /ROOT
+		EFF/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /AnalysisTools//AnalysisTools/<link>static
+    /RootTools//RootTools/<link>static
+    /boost//program_options/<link>static
+    /SimpleTable//SimpleTable/<link>static
+  : # requirements
+    <define>__NON_ROOT_BUILD__
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+
+# install libs/exes
+default-install lepton_eff_baby ;
+default-install lepton_eff_plots ;
