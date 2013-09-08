@@ -1,21 +1,34 @@
 #!/bin/bash
 
 # set the tag and destination folder
-tag=${1:-HEAD}
+tag=${1:-master}
 
-# checkout CORE
+# checkout fakeRate
 # ------------------------------------------------------------------------------------------ #
 
 path="../../source/cms2_frb"
 dest=${path}
 echo checking cout CMS2/NtupleMacros/fakeRate/myBabyMaker.{h,cc} with tag $tag
-echo destination: $dest
+echo destination: ${dest}
 
 mkdir -p $dest
 pushd $dest
 
-cvs co -r $tag -d ${tag} UserCode/JRibnik/CMS2/NtupleMacros/fakeRate/myBabyMaker.cc
-cvs co -r $tag -d ${tag} UserCode/JRibnik/CMS2/NtupleMacros/fakeRate/myBabyMaker.h
-cvs co -r $tag -d ${tag} UserCode/JRibnik/CMS2/NtupleMacros/fakeRate/ChangeLog
+# pull from git
+echo "git init fakeRate"
+git init fakeRate
+pushd fakeRate
 
-popd 
+echo "git remote add origin git@github.com:cmstas/fakeRate.git"
+git remote add origin git@github.com:cmstas/fakeRate.git
+
+if [[ "$tag" -eq "master" ]]; then
+    echo "git pull https://github.com/cmstas/fakeRate.git master"
+    git pull https://github.com/cmstas/fakeRate.git master
+else
+    echo "git pull https://github.com/cmstas/fakeRate.git tag $tag"
+    git pull https://github.com/cmstas/fakeRate.git tag $tag
+fi
+
+popd # fakeRate
+popd # $dest

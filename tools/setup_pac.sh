@@ -15,12 +15,23 @@ echo installing the externals...
 mkdir -p externals/source/
 echo
 
-# check out cms2 
+# check out cms2 CORE
 # --------------------------------------------------------------- #
 
 tag=$CMS2CORE_TAG
 echo Checking out cms2 with tag $tag
 pushd externals/build/cms2_core
+./checkout.sh $tag
+pushd
+echo
+
+# check out cms2 Tools
+# (mostly for MiniFWLite)
+# --------------------------------------------------------------- #
+
+tag=$CMS2TOOLS_TAG
+echo Checking out cms2 with tag $tag
+pushd externals/build/cms2_tools
 ./checkout.sh $tag
 pushd
 echo
@@ -34,16 +45,7 @@ pushd externals/build/cms2_frb
 ./checkout.sh $tag
 pushd
 echo
-
-# check out MiniFWLite 
-# --------------------------------------------------------------- #
-
-echo Checking out MiniFWLite
-pushd externals/build/MiniFWLite
-./checkout.sh 
-pushd
-echo
-
+ 
 # check out SimpleTable 
 # --------------------------------------------------------------- #
 
@@ -60,7 +62,6 @@ echo externals install complete
 # --------------------------------------------------------------- #
 
 # build the code
-#make -j20
 pushd $PAC/tools
 ./build_all_bjam.sh
 if [ $? -eq 0 ]; then

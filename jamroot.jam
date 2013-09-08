@@ -81,10 +81,6 @@ use-project /ROOT       : ./externals/build/root ;
 path-constant ROOFIT_PATH : $(rootsys) ;
 use-project /RooFit       : ./externals/build/RooFit ;
 
-# MiniFWLite
-path-constant MINIFWLITE_PATH : ./externals/source/MiniFWLite ;
-use-project /MiniFWLite       : ./externals/build/MiniFWLite ;
-
 # SimpleTable
 path-constant SIMPLETABLE_PATH : ./externals/source/SimpleTable ;
 use-project /SimpleTable       : ./externals/build/SimpleTable ;
@@ -92,13 +88,19 @@ use-project /SimpleTable       : ./externals/build/SimpleTable ;
 # CMS2_CORE
 #local cms2_core_tag = HEAD ;
 local cms2_core_tag = [ os.environ CMS2CORE_TAG ] ;
-path-constant CMS2_CORE : ./externals/source/cms2_core/$(cms2_core_tag) ;
+path-constant CMS2_CORE : ./externals/source/cms2_core ;
 use-project /CMS2_CORE  : ./externals/build/cms2_core ;
+
+# CMS2_TOOLS and MiniFWLite
+local cms2_tools_tag = [ os.environ CMS2TOOLS_TAG ] ;
+path-constant CMS2_TOOLS      : ./externals/source/cms2_tools/Tools ;
+path-constant MINIFWLITE_PATH : $(CMS2_TOOLS)/MiniFWLite ;
+use-project /MiniFWLite       : ./externals/build/MiniFWLite ;
 
 # CMS2_FRB
 #local cms2_frb_tag = HEAD ;
 local cms2_frb_tag = [ os.environ CMS2FRB_TAG ] ;
-path-constant CMS2_FRB : ./externals/source/cms2_frb/$(cms2_frb_tag) ;
+path-constant CMS2_FRB : ./externals/source/cms2_frb/fakeRate ;
 use-project /CMS2_FRB  : ./externals/build/cms2_frb ;
 
 # reusable packages 

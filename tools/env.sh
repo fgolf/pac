@@ -28,6 +28,10 @@ alias cdpac="cd $PAC"
 export CMS2CORE_TAG=ss2012_V03-02-03
 export CMS2CORE=$PAC/externals/source/cms2_core/$CMS2CORE_TAG/CORE
 
+# set the path to CMS2 CORE 
+export CMS2TOOLS_TAG=master
+export CMS2TOOLS=$PAC/externals/source/cms2_tools/$CMS2CORE_TAG/
+
 #set the path to CMS2 FRB
 export CMS2FRB_TAG=FakeRate14May2013
 export CMS2FRB=$PAC/externals/source/cms2_frb/$CMS2FRB_TAG/
@@ -39,6 +43,11 @@ export SS=$PAC/analysis/ss2012
 alias cdat="cd $AT"
 alias cdrt="cd $RT"
 alias cdss="cd $SS"
+
+# git locations
+export CORE_GIT=https://github.com/cmstas/CORE.git
+export FRB_GIT=https://github.com/cmstas/fakeRate.git
+export PAC_GIT=https://github.com/kelleyrw/pac.git
 
 PATH=$project_dir/bin:$PATH
 if [ ! -z $CMSSW_BASE ] ; then
