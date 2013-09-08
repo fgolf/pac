@@ -25,8 +25,10 @@ git remote add origin https://github.com/cmstas/Tools.git
 echo "git pull https://github.com/cmstas/Tools.git master"
 git pull https://github.com/cmstas/Tools.git master
 
-echo "git pull https://github.com/cmstas/Tools.git tag $tag"
-git pull https://github.com/cmstas/Tools.git tag $tag
+if [ "$tag" != "master" ]; then
+    echo "git pull https://github.com/cmstas/Tools.git tag $tag"
+    git pull https://github.com/cmstas/Tools.git tag $tag
+fi
 
 popd # Tools
 popd # $dest
