@@ -1,0 +1,4 @@
+# ingore the following files/dir in git
+analysis/ss2012/output/
+bin/
+externals/source/
