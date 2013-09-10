@@ -244,28 +244,28 @@ void PrintThesisYields
         {
             int bin = sr_num;
             h_data_nb0.SetBinContent(bin, yi.yield); h_data_nb0.SetBinError(bin, sqrt(yi.yield));
-            h_pred_nb0.SetBinContent(bin, yi.pred ); h_data_nb0.SetBinError(bin, yi.pred_unc   );
-            h_fake_nb0.SetBinContent(bin, yi.fake ); h_data_nb0.SetBinError(bin, yi.fake_unc   );
-            h_flip_nb0.SetBinContent(bin, yi.flip ); h_data_nb0.SetBinError(bin, yi.flip_unc   );
-            h_rare_nb0.SetBinContent(bin, yi.rare ); h_data_nb0.SetBinError(bin, yi.rare_unc   );
+            h_pred_nb0.SetBinContent(bin, yi.pred ); h_pred_nb0.SetBinError(bin, yi.pred_unc   );
+            h_fake_nb0.SetBinContent(bin, yi.fake ); h_fake_nb0.SetBinError(bin, yi.fake_unc   );
+            h_flip_nb0.SetBinContent(bin, yi.flip ); h_flip_nb0.SetBinError(bin, yi.flip_unc   );
+            h_rare_nb0.SetBinContent(bin, yi.rare ); h_rare_nb0.SetBinError(bin, yi.rare_unc   );
         }
         if (11 <= sr_num && sr_num <= 18)
         {
             int bin = sr_num - 10;
             h_data_nb1.SetBinContent(bin, yi.yield); h_data_nb1.SetBinError(bin, sqrt(yi.yield));
-            h_pred_nb1.SetBinContent(bin, yi.pred ); h_data_nb1.SetBinError(bin, yi.pred_unc   );
-            h_fake_nb1.SetBinContent(bin, yi.fake ); h_data_nb1.SetBinError(bin, yi.fake_unc   );
-            h_flip_nb1.SetBinContent(bin, yi.flip ); h_data_nb1.SetBinError(bin, yi.flip_unc   );
-            h_rare_nb1.SetBinContent(bin, yi.rare ); h_data_nb1.SetBinError(bin, yi.rare_unc   );
+            h_pred_nb1.SetBinContent(bin, yi.pred ); h_pred_nb1.SetBinError(bin, yi.pred_unc   );
+            h_fake_nb1.SetBinContent(bin, yi.fake ); h_fake_nb1.SetBinError(bin, yi.fake_unc   );
+            h_flip_nb1.SetBinContent(bin, yi.flip ); h_flip_nb1.SetBinError(bin, yi.flip_unc   );
+            h_rare_nb1.SetBinContent(bin, yi.rare ); h_rare_nb1.SetBinError(bin, yi.rare_unc   );
         }
         if (21 <= sr_num && sr_num <= 28)
         {
             int bin = sr_num - 20;
             h_data_nb2.SetBinContent(bin, yi.yield); h_data_nb2.SetBinError(bin, sqrt(yi.yield));
-            h_pred_nb2.SetBinContent(bin, yi.pred ); h_data_nb2.SetBinError(bin, yi.pred_unc   );
-            h_fake_nb2.SetBinContent(bin, yi.fake ); h_data_nb2.SetBinError(bin, yi.fake_unc   );
-            h_flip_nb2.SetBinContent(bin, yi.flip ); h_data_nb2.SetBinError(bin, yi.flip_unc   );
-            h_rare_nb2.SetBinContent(bin, yi.rare ); h_data_nb2.SetBinError(bin, yi.rare_unc   );
+            h_pred_nb2.SetBinContent(bin, yi.pred ); h_pred_nb2.SetBinError(bin, yi.pred_unc   );
+            h_fake_nb2.SetBinContent(bin, yi.fake ); h_fake_nb2.SetBinError(bin, yi.fake_unc   );
+            h_flip_nb2.SetBinContent(bin, yi.flip ); h_flip_nb2.SetBinError(bin, yi.flip_unc   );
+            h_rare_nb2.SetBinContent(bin, yi.rare ); h_rare_nb2.SetBinError(bin, yi.rare_unc   );
         }
     }
 
