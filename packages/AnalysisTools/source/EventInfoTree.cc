@@ -130,7 +130,7 @@ void EventInfoTree::SetBranches(TTree &tree)
     tree.Branch(Form("%spfmet_phi"              , prefix_.c_str()) , &pfmet_phi              , "pfmet_phi/F"             );
     tree.Branch(Form("%suncorpfmet"             , prefix_.c_str()) , &uncorpfmet             , "uncorpfmet/F"            );
     tree.Branch(Form("%suncorpfmet_phi"         , prefix_.c_str()) , &uncorpfmet_phi         , "uncorpfmet_phi/F"        );
-    tree.Branch(Form("%spu_nvtxs"               , prefix_.c_str()) , &pu_nvtxs               , "pu_nvtxs/F"              );
+    tree.Branch(Form("%spu_nvtxs"               , prefix_.c_str()) , &pu_nvtxs               , "pu_nvtxs/I"              );
     tree.Branch(Form("%spu_ntrueint"            , prefix_.c_str()) , &pu_ntrueint            , "pu_ntrueint/F"           );
     tree.Branch(Form("%sscale1fb"               , prefix_.c_str()) , &scale1fb               , "scale1fb/F"              );
     tree.Branch(Form("%sxsec"                   , prefix_.c_str()) , &xsec                   , "xsec/F"                  );
