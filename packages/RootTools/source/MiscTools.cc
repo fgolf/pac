@@ -1652,14 +1652,14 @@ namespace rt
         return result;
     }
 
-    // get a root file
+    // copy a file
     bool copy_file(const string& source, const string& destination)
     {
         // TODO --> use boost
         return gSystem->Exec(("cp " + source + " " + destination).c_str()) == 0;
     }
 
-    // get a root file
+    // mv a file
     bool move_file(const string& source, const string& destination)
     {
         // TODO --> use boost
