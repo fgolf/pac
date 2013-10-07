@@ -66,7 +66,8 @@ bool IsGoodEvent
     const ss::SignalRegion::value_type signal_region,
     const ss::SignalRegionType::value_type signal_region_type,
     const ss::SystematicType::value_type syst_type,
-    const bool do_beff_sf
+    const bool do_beff_sf,
+    const bool do_3lep_veto
 )
 {
     using namespace ssb;
@@ -83,6 +84,9 @@ bool IsGoodEvent
     const bool is_sig_mc  = (at::GetSampleInfo(sample).type == at::SampleType::susy);
     if ((not is_real_data()) && (not true_ss_event) && (is_rare_mc or is_sig_mc)) {return false;}
 
+    // 3rd lepton veto
+    if (do_3lep_veto and not passes_3lep_veto()) {return false;}
+
     // if here, then select
     return true;
 }
@@ -97,6 +101,7 @@ CTable EventLists
     const at::DileptonChargeType::value_type& c_type           = at::DileptonChargeType::SS,
     const ss::SystematicType::value_type syst_type             = ss::SystematicType::None,
     const bool do_beff_sf                                      = true,
+    const bool do_3lep_veto                                    = false,
     const float sparm0                                         = -999999,
     const float sparm1                                         = -999999,
     const float sparm2                                         = -999999,
@@ -118,7 +123,7 @@ CTable EventLists
         samesignbtag.GetEntry(entry);
 
         // selection
-        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, syst_type, do_beff_sf))
+        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, syst_type, do_beff_sf, do_3lep_veto))
         {
             continue; 
         }
@@ -274,6 +279,7 @@ CTable EventCounts
     const ss::SignalRegionType::value_type& signal_region_type = ss::SignalRegionType::exclusive,
     const ss::SystematicType::value_type syst_type             = ss::SystematicType::None,
     const bool do_beff_sf                                      = true,
+    const bool do_3lep_veto                                    = false,
     const float sparm0                                         = -999999,
     const float sparm1                                         = -999999,
     const float sparm2                                         = -999999,
@@ -301,7 +307,7 @@ CTable EventCounts
         //cout << Form("run: %d, ls: %d, event: %d", run(), ls(), evt()) << endl;
 
         // selection
-        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, syst_type, do_beff_sf))
+        if (not IsGoodEvent(sample, analysis_type, signal_region, signal_region_type, syst_type, do_beff_sf, do_3lep_veto))
         {
             continue; 
         }
@@ -375,6 +381,7 @@ try
     std::string output_file             = "";
     std::string charge_option           = "ss";
     bool do_beff_sf                     = false;
+    bool do_3lep_veto                   = false;
     bool print_list                     = true;
     float sparm0                        = -999999.0;
     float sparm1                        = -999999.0;
@@ -384,21 +391,22 @@ try
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
     desc.add_options()
-        ("help"      , "print this menu")
-        ("sample"    , po::value<std::string>(&sample_name)             , "sample to run on (from at/Samples.h)"                           )
-        ("input"    , po::value<std::string>(&input_file)               , "name of input root file (optional)"                             )
-        ("output"    , po::value<std::string>(&output_file)             , "output file name for lists (blank means print to screen)"       )
-        ("sr"        , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                            )
-        ("sr_type"   , po::value<std::string>(&signal_region_type_name) , "signal region type (default is exclusive)"                      )
-        ("anal_type" , po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"                  )
-        ("syst_type" , po::value<std::string>(&syst_type_name)          , "systematic type (default is none)"                              )
-        ("charge"    , po::value<std::string>(&charge_option)           , "charge option (ss, sf, df, os, all)"                            )
-        ("print_list", po::value<bool>(&print_list)                     , "print the event lists (default is true)"                        )
-        ("do_beff_sf", po::value<bool>(&do_beff_sf)                     , "beff scale factor flag (mc only, default is true)"              )
-        ("sparm0"    , po::value<float>(&sparm0)                        , "sparm0 is required to be this value"                            )
-        ("sparm1"    , po::value<float>(&sparm1)                        , "sparm1 is required to be this value"                            )
-        ("sparm2"    , po::value<float>(&sparm2)                        , "sparm2 is required to be this value"                            )
-        ("sparm3"    , po::value<float>(&sparm3)                        , "sparm3 is required to be this value"                            )
+        ("help"         , "print this menu")
+        ("sample"      , po::value<std::string>(&sample_name)             , "sample to run on (from at/Samples.h)"                    )
+        ("input"       , po::value<std::string>(&input_file)               , "name of input root file (optional)"                     )
+        ("output"      , po::value<std::string>(&output_file)             , "output file name for lists (blank means print to screen)")
+        ("sr"          , po::value<std::string>(&signal_region_name)      , "signal region number (default is 0)"                     )
+        ("sr_type"     , po::value<std::string>(&signal_region_type_name) , "signal region type (default is exclusive)"               )
+        ("anal_type"   , po::value<std::string>(&analysis_type_name)      , "name of input sample (from at/AnalysisType.h)"           )
+        ("syst_type"   , po::value<std::string>(&syst_type_name)          , "systematic type (default is none)"                       )
+        ("charge"      , po::value<std::string>(&charge_option)           , "charge option (ss, sf, df, os, all)"                     )
+        ("print_list"  , po::value<bool>(&print_list)                     , "print the event lists (default is true)"                 )
+        ("do_beff_sf"  , po::value<bool>(&do_beff_sf)                     , "beff scale factor flag (mc only, default is true)"       )
+        ("3lep_veto"   , po::value<bool>(&do_3lep_veto)                   , "apply veto to the third lepton in the event"             )
+        ("sparm0"      , po::value<float>(&sparm0)                        , "sparm0 is required to be this value"                     )
+        ("sparm1"      , po::value<float>(&sparm1)                        , "sparm1 is required to be this value"                     )
+        ("sparm2"      , po::value<float>(&sparm2)                        , "sparm2 is required to be this value"                     )
+        ("sparm3"      , po::value<float>(&sparm3)                        , "sparm3 is required to be this value"                     )
         ;
 
     po::variables_map vm;
@@ -458,28 +466,28 @@ try
         chain.Add(Form("babies/%s/%s.root", ss::GetAnalysisTypeInfo(at).short_name.c_str(), sample_info.name.c_str()));
     }
 
-    CTable counts = EventCounts(chain, sample, at, sr, srt, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
+    CTable counts = EventCounts(chain, sample, at, sr, srt, syst_type, do_beff_sf, do_3lep_veto, sparm0, sparm1, sparm2, sparm3);
     out << "total yields:\n" << counts << endl; 
     if (print_list)
     {
         if (charge_option == "all" or charge_option =="ss")
         {
-            CTable ss_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SS, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
+            CTable ss_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SS, syst_type, do_beff_sf, do_3lep_veto, sparm0, sparm1, sparm2, sparm3);
             out << "printing SS events:\n" << ss_lists << endl;
         }
         if (charge_option == "all" or charge_option =="sf")
         {
-            CTable sf_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SF, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
+            CTable sf_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::SF, syst_type, do_beff_sf, do_3lep_veto, sparm0, sparm1, sparm2, sparm3);
             out << "printing SF events:\n" << sf_lists << endl;
         }
         if (charge_option == "all" or charge_option =="df")
         {
-            CTable df_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::DF, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
+            CTable df_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::DF, syst_type, do_beff_sf, do_3lep_veto, sparm0, sparm1, sparm2, sparm3);
             out << "printing DF events:\n" << df_lists << endl;
         }
         if (charge_option == "all" or charge_option =="os")
         {
-            CTable os_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::OS, syst_type, do_beff_sf, sparm0, sparm1, sparm2, sparm3);
+            CTable os_lists = EventLists(chain, sample, at, sr, srt, at::DileptonChargeType::OS, syst_type, do_beff_sf, do_3lep_veto, sparm0, sparm1, sparm2, sparm3);
             out << "printing OS events:\n" << os_lists << endl;
         }
     }
