@@ -14,21 +14,13 @@ echo destination: $dest
 mkdir -p $dest
 pushd $dest
 
-# pull from git
-echo "git init CORE"
-git init CORE
-pushd CORE
-
-echo "git remote add origin https://github.com/cmstas/CORE.git"
-git remote add origin https://github.com/cmstas/CORE.git
-
-echo "git pull https://github.com/cmstas/CORE.git master"
-git pull https://github.com/cmstas/CORE.git master
-
+# clone from git
+echo "git clone https://github.com/cmstas/CORE.git"
+git clone https://github.com/cmstas/CORE.git
 if [ "$tag" != "master" ]; then
-    echo "git pull https://github.com/cmstas/CORE.git tag $tag"
-    git pull https://github.com/cmstas/CORE.git tag $tag
+    pushd CORE
+    git checkout $tag
+    popd
 fi
 
-popd # CORE
 popd # $dest

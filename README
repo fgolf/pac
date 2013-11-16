@@ -44,10 +44,7 @@ Setup:
 ----------------------------------------------------------------
 
 To check out the code:
-git init pac
-cd pac
-git remote add origin git@github.com:fgolf/pac.git
-git pull git@github.com:fgolf/pac.git master
+git clone https://github.com/fgolf/pac pac
 
 We will refer to the directory you chose to install PAC to as simply PAC (e.g.
 /home/users/rwkelley/Development/pac == PAC).
