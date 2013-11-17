@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
         ("input"    , po::value<std::string>(&input_file)->required() , "name of input ROOT file"                                  )
         ("output"   , po::value<std::string>(&output_file)            , "name of output ROOT file"                                 )
         ("run_list" , po::value<std::string>(&good_run_list)          , "good Run list (no default)"                               )
-        ("jetcorr"  , po::value<std::string>(&good_run_list)          , "path to jet correction files (default is \"data\")"       )
+        ("jetcorr"  , po::value<std::string>(&jetcorr_path)           , "path to jet correction files (default is \"data\")"       )
         ("nev"      , po::value<long>(&number_of_events)              , "number of events to run on (-1 == all)"                   )
         ("eormu"    , po::value<short>(&e_or_mu)                      , "electron or muon (11 == electron, 13 == muon, -1 == both)")
         ("filter"   , po::value<bool>(&apply_filter)                  , "apply filter (default == false)"                          )
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 
 
     // inputs
-    cout << "inputs:" << endl;
+    cout << "[create_fake_rate_baby] inputs:" << endl;
     cout << "input_file       :\t" << input_file       << endl;
     cout << "output_file      :\t" << output_file      << endl;
     cout << "jetcorr_path     :\t" << jetcorr_path     << endl;
@@ -117,11 +117,16 @@ int main(int argc, char* argv[])
     babymaker.SetVerbose(verbose);
     if (!good_run_list.empty())
     {
+        cout << "[create_fake_rate_baby] setting good run list to " << good_run_list << endl;
         babymaker.SetGoodRunList(good_run_list.c_str());
     }
-    cout << "running fake rate baby maker..." << endl;
+    else
+    {
+        cout << "[create_fake_rate_baby] no good run list given." << endl;
+    }
+    cout << "[create_fake_rate_baby] running fake rate baby maker..." << endl;
     babymaker.ScanChain(&chain, output_file.c_str(), e_or_mu, apply_filter, jetcorr_path.c_str());
-    cout << "finished fake rate baby maker..." << endl;
+    cout << "[create_fake_rate_baby] finished fake rate baby maker..." << endl;
 
     // done 
     return 0;
