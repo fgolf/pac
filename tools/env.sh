@@ -33,7 +33,7 @@ export CMS2TOOLS_TAG=master
 export CMS2TOOLS=$PAC/externals/source/cms2_tools/$CMS2CORE_TAG/
 
 #set the path to CMS2 FRB
-export CMS2FRB_TAG=FakeRate14May2013
+export CMS2FRB_TAG=FakeRate16Nov2013
 export CMS2FRB=$PAC/externals/source/cms2_frb/$CMS2FRB_TAG/
 
 # convenience
