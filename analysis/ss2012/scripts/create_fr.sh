@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 #version=11Apr2013
-version=11Apr2013_btagged
+version=16Nov2013
 nev=-1
 
 # create output dir

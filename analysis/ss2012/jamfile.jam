@@ -416,23 +416,6 @@ exe ss2012_make_single_lep_tree
 # simple test
 # -------------------------------------------------------------- #
 
-exe test_frb
-  : # sources
-    ./source/test_frb.cc
-    # dependent packages
-    /ROOT
-    /CMS2_FRB//cms2_frb/<link>static
-    /FakeRateBabyTools//FakeRateBabyTools/<link>static
-    /MiniFWLite//libMiniFWLite/<link>shared
-    /RootTools//RootTools/<link>static
-    /AnalysisTools//AnalysisTools/<link>static
-  : # requirements
-    <include>./include
-    <include>./source
-  : # default-build
-  : # usage-requirements
-  ;
-
 exe test_btagsf
  : # sources
    ./source/test_btagsf.cc
@@ -471,5 +454,4 @@ default-install ss2012_postprocess_signal_baby ;
 default-install ss2012_interp_hists ;
 default-install ss2012_create_card ;
 default-install ss2012_fr_closure ;
-default-install test_frb ;
 default-install test_btagsf ;
