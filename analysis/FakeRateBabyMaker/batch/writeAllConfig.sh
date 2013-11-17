@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NUMEVENTS=100
+NUMEVENTS=-1
 EORMU=-1
 # GOODRUNLIST=final_19p49fb_cms2.txt
 GOODRUNLIST="\\\"\\\""

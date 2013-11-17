@@ -4,7 +4,8 @@
 UNIVERSE="vanilla"
 EXE="wrapper.sh"
 INPUT="wrapper.sh, job_input/input.tgz"
-SITE="UCSD"
+# SITE="UCSD"                                                                    
+SITE="uaf"                                                                    
 PROXY="/tmp/x509up_u10194"
 
 DIR=$PWD

@@ -23,13 +23,12 @@ echo "[wrapper] COPYDIR   = " ${COPYDIR}
 #
 
 echo "[wrapper] setting env"
-export CMS_PATH=/code/osgcode/cmssoft/cms
-export SCRAM_ARCH=slc5_amd64_gcc462
-source /code/osgcode/cmssoft/cmsset_default.sh
 source /code/osgcode/fgolf/5.30-patches/bin/thisroot.sh
-export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
-export PATH=$HOME/bin:$ROOTSYS/bin:$PATH
-export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD
+export PATH=:$PATH:$PWD
+export PAC=$PWD
+env
+# export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH                                     
 
 #
 # untar input sandbox
