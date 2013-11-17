@@ -11,6 +11,7 @@ exe create_fake_rate_baby
     /MiniFWLite//libMiniFWLite/<link>shared
     /RootTools//RootTools/<link>static
     /AnalysisTools//AnalysisTools/<link>static
+    /boost//program_options/<link>static
   : # requirements
     <include>./include
     <include>./source
