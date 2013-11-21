@@ -447,14 +447,20 @@ void PlotLooper::EndJob()
     SetPredictionAndUncertainty(m_sample, hc, "pas_met"           ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_nbtags"        ,"# btags;# btags;Events"                                               , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_njets"         ,"# jets;# jets;Events"                                                 , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_pt1"           ,"Higher p_{T} lepton (X);p_{T} (GeV);Events"                           , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_pt2"           ,"Lower p_{T} lepton (X);p_{T} (GeV);Events"                            , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_ht"      ,"H_{T};H_{T} (GeV);Events"                                             , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_met"     ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_nbtags"  ,"# btags;# btags;Events"                                               , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_njets"   ,"# jets;# jets;Events"                                                 , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_pt1"     ,"Higher p_{T} lepton (X);p_{T} (GeV);Events"                           , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_htlow_pt2"     ,"Lower p_{T} lepton (X);p_{T} (GeV);Events"                            , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_ht"     ,"H_{T};H_{T} (GeV);Events"                                             , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_met"    ,"MET;E_{T}^{miss} (GeV);Events"                                        , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_nbtags" ,"# btags;# btags;Events"                                               , 0.0, 0.0, 0.0, m_sf_flip);
     SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_njets"  ,"# jets;# jets;Events"                                                 , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_pt1"    ,"Higher p_{T} lepton (X);p_{T} (GeV);Events"                           , 0.0, 0.0, 0.0, m_sf_flip);
+    SetPredictionAndUncertainty(m_sample, hc, "pas_hthigh_pt2"    ,"Lower p_{T} lepton (X);p_{T} (GeV);Events"                            , 0.0, 0.0, 0.0, m_sf_flip);
 
     for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
     {
@@ -657,20 +663,26 @@ void PlotLooper::BookHists()
             hc.Add(new TH1F(Form("h_pt2_mu%s"        , ns.c_str()), Form("Lower p_{T} muons%s;p_{T} (GeV);Events"                        , ts.c_str()), 20 , 0   , 200 ));
 
             // plots for the PAS
-            hc.Add(new TH1F(Form("h_pas_ht%s"     , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"     , ts.c_str()), 13 , 80.0 , 600.0));
-            hc.Add(new TH1F(Form("h_pas_met%s"    , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events", ts.c_str()), 10 , 0.0  , 250.0));
-            hc.Add(new TH1F(Form("h_pas_njets%s"  , ns.c_str()), Form("# jets%s;# jets;Events"         , ts.c_str()), 7  , 2.0  , 9.0  ));
-            hc.Add(new TH1F(Form("h_pas_nbtags%s" , ns.c_str()), Form("# btags%s;# btags;Events"       , ts.c_str()), 5  , 0.0  , 5.0  ));
+            hc.Add(new TH1F(Form("h_pas_ht%s"     , ns.c_str()), Form("H_{T}%s;H_{T} (GeV);Events"              , ts.c_str()), 13 , 80.0 , 600.0));
+            hc.Add(new TH1F(Form("h_pas_met%s"    , ns.c_str()), Form("MET%s;E_{T}^{miss} (GeV);Events"         , ts.c_str()), 10 , 0.0  , 250.0));
+            hc.Add(new TH1F(Form("h_pas_njets%s"  , ns.c_str()), Form("# jets%s;# jets;Events"                  , ts.c_str()), 7  , 2.0  , 9.0  ));
+            hc.Add(new TH1F(Form("h_pas_nbtags%s" , ns.c_str()), Form("# btags%s;# btags;Events"                , ts.c_str()), 5  , 0.0  , 5.0  ));
+            hc.Add(new TH1F(Form("h_pas_pt1%s"    , ns.c_str()), Form("Higher p_{T} lepton%s;p_{T} (GeV);Events", ts.c_str()), 20 , 0.0  , 200.0));
+            hc.Add(new TH1F(Form("h_pas_pt2%s"    , ns.c_str()), Form("Lower p_{T} lepton%s;p_{T} (GeV);Events" , ts.c_str()), 10 , 0.0  , 100.0));
 
-            hc.Add(new TH1F(Form("h_pas_htlow_ht%s"     , ns.c_str()), Form("H_{T}%s (H_{T} < 200 GeV);H_{T} (GeV);Events"     , ts.c_str()), 13 , 80.0 , 600.0));
-            hc.Add(new TH1F(Form("h_pas_htlow_met%s"    , ns.c_str()), Form("MET%s (H_{T} < 200 GeV);E_{T}^{miss} (GeV);Events", ts.c_str()), 10 , 0.0  , 250.0));
-            hc.Add(new TH1F(Form("h_pas_htlow_njets%s"  , ns.c_str()), Form("# jets%s (H_{T} < 200 GeV);# jets;Events"         , ts.c_str()), 7  , 2.0  , 9.0  ));
-            hc.Add(new TH1F(Form("h_pas_htlow_nbtags%s" , ns.c_str()), Form("# btags%s (H_{T} < 200 GeV);# btags;Events"       , ts.c_str()), 5  , 0.0  , 5.0  ));
+            hc.Add(new TH1F(Form("h_pas_htlow_ht%s"     , ns.c_str()), Form("H_{T}%s (H_{T} < 200 GeV);H_{T} (GeV);Events"              , ts.c_str()), 13 , 80.0 , 600.0));
+            hc.Add(new TH1F(Form("h_pas_htlow_met%s"    , ns.c_str()), Form("MET%s (H_{T} < 200 GeV);E_{T}^{miss} (GeV);Events"         , ts.c_str()), 10 , 0.0  , 250.0));
+            hc.Add(new TH1F(Form("h_pas_htlow_njets%s"  , ns.c_str()), Form("# jets%s (H_{T} < 200 GeV);# jets;Events"                  , ts.c_str()), 7  , 2.0  , 9.0  ));
+            hc.Add(new TH1F(Form("h_pas_htlow_nbtags%s" , ns.c_str()), Form("# btags%s (H_{T} < 200 GeV);# btags;Events"                , ts.c_str()), 5  , 0.0  , 5.0  ));
+            hc.Add(new TH1F(Form("h_pas_htlow_pt1%s"    , ns.c_str()), Form("Higher p_{T} lepton%s (H_{T} < 200 GeV);p_{T} (GeV);Events", ts.c_str()), 20 , 0.0  , 200.0));
+            hc.Add(new TH1F(Form("h_pas_htlow_pt2%s"    , ns.c_str()), Form("Lower p_{T} lepton%s (H_{T} < 200 GeV);p_{T} (GeV);Events" , ts.c_str()), 10 , 0.0  , 100.0));
 
-            hc.Add(new TH1F(Form("h_pas_hthigh_ht%s"    , ns.c_str()), Form("H_{T}%s (H_{T} > 200 GeV);H_{T} (GeV);Events"     , ts.c_str()), 13 , 80.0 , 600.0));
-            hc.Add(new TH1F(Form("h_pas_hthigh_met%s"   , ns.c_str()), Form("MET%s (H_{T} > 200 GeV);E_{T}^{miss} (GeV);Events", ts.c_str()), 10 , 0.0  , 250.0));
-            hc.Add(new TH1F(Form("h_pas_hthigh_njets%s" , ns.c_str()), Form("# jets%s (H_{T} > 200 GeV);# jets;Events"         , ts.c_str()), 7  , 2.0  , 9.0  ));
-            hc.Add(new TH1F(Form("h_pas_hthigh_nbtags%s", ns.c_str()), Form("# btags%s (H_{T} > 200 GeV);# btags;Events"       , ts.c_str()), 5  , 0.0  , 5.0  ));
+            hc.Add(new TH1F(Form("h_pas_hthigh_ht%s"    , ns.c_str()), Form("H_{T}%s (H_{T} > 200 GeV);H_{T} (GeV);Events"              , ts.c_str()), 13 , 80.0 , 600.0));
+            hc.Add(new TH1F(Form("h_pas_hthigh_met%s"   , ns.c_str()), Form("MET%s (H_{T} > 200 GeV);E_{T}^{miss} (GeV);Events"         , ts.c_str()), 10 , 0.0  , 250.0));
+            hc.Add(new TH1F(Form("h_pas_hthigh_njets%s" , ns.c_str()), Form("# jets%s (H_{T} > 200 GeV);# jets;Events"                  , ts.c_str()), 7  , 2.0  , 9.0  ));
+            hc.Add(new TH1F(Form("h_pas_hthigh_nbtags%s", ns.c_str()), Form("# btags%s (H_{T} > 200 GeV);# btags;Events"                , ts.c_str()), 5  , 0.0  , 5.0  ));
+            hc.Add(new TH1F(Form("h_pas_hthigh_pt1%s"   , ns.c_str()), Form("Higher p_{T} lepton%s (H_{T} > 200 GeV);p_{T} (GeV);Events", ts.c_str()), 20 , 0.0  , 200.0));
+            hc.Add(new TH1F(Form("h_pas_hthigh_pt2%s"   , ns.c_str()), Form("Lower p_{T} lepton%s (H_{T} > 200 GeV);p_{T} (GeV);Events" , ts.c_str()), 10 , 0.0  , 100.0));
 
             for (size_t i = 1; i != at::DileptonHypType::static_size; i++)
             {
@@ -1165,12 +1177,16 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_pas_met"   +qs], pfmet()  , evt_weight);
         rt::Fill(hc["h_pas_njets" +qs], njets()  , evt_weight);
         rt::Fill(hc["h_pas_nbtags"+qs], num_btags, evt_weight);
+        rt::Fill(hc["h_pas_pt1"   +qs], p41.pt() , evt_weight);
+        rt::Fill(hc["h_pas_pt2"   +qs], p42.pt() , evt_weight);
         if (ht() > 200) // because UFL didn't keep the right triggers
         {
             rt::Fill(hc["h_pas_hthigh_ht"    +qs], ht()     , evt_weight);
             rt::Fill(hc["h_pas_hthigh_met"   +qs], pfmet()  , evt_weight);
             rt::Fill(hc["h_pas_hthigh_njets" +qs], njets()  , evt_weight);
             rt::Fill(hc["h_pas_hthigh_nbtags"+qs], num_btags, evt_weight);
+            rt::Fill(hc["h_pas_hthigh_pt1"   +qs], p41.pt() , evt_weight);
+            rt::Fill(hc["h_pas_hthigh_pt2"   +qs], p42.pt() , evt_weight);
         }
         if (ht() < 200) // because UFL didn't keep the right triggers
         {
@@ -1178,6 +1194,8 @@ int PlotLooper::operator()(long event)
             rt::Fill(hc["h_pas_htlow_met"   +qs], pfmet()  , evt_weight);
             rt::Fill(hc["h_pas_htlow_njets" +qs], njets()  , evt_weight);
             rt::Fill(hc["h_pas_htlow_nbtags"+qs], num_btags, evt_weight);
+            rt::Fill(hc["h_pas_htlow_pt1"   +qs], p41.pt() , evt_weight);
+            rt::Fill(hc["h_pas_htlow_pt2"   +qs], p42.pt() , evt_weight);
         }
 
         // dilep

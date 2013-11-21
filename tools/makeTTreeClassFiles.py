@@ -1,5 +1,40 @@
 #!/usr/bin/python
 
+# ---------------------------------------------------------------------------------- #
+#  
+#  	Python macro to make C++ wrapper to the ROOT TTree to faciliate basic
+#  	branch excessing (e.g. CMS2.h/cc). For example if a branch has a branch
+#  	named "track_p4", a function wrapper called track_p4() will be produced to
+#  	access the data in this branch via a looper. This is an extention to the
+#  	"makeCMS2ClassFiles.C" and will work on CMS2 ntuples and simple baby ntuples.
+#  	Also, if the TTree was produced by CMSSW, an option can be toggled to produce
+#  	code that can be compiled in CMSSW (and thus use an EDAnalyzer, etc.).
+#   
+#   Usage:
+#   ./makeTTreeClassFiles.py --file_name=<filename>
+#   
+#   Required:
+#   --file_name : The name of the ROOT file with the TTree (required)
+#   
+#   Options:
+#   --tree_name : The name of the TTree (default: "Events")
+#   --namespace : The namespace to use (default: "tas")
+#   --obj_name  : The object name to use (default: "cms2")
+#   --class_name: The class name to use (default: "CMS2")
+#   
+#   CMSSW Options (off by default)
+#   --use_cmssw : Toggle to support CMSSW (default: false)
+#   --no_trig   : Toggle to not include the trigger functions (default: false)
+#   
+#   Example CMS2.h with CMSSW:
+#    ./makeTTreeClassFiles.py --file_name=cms2_ntuple_postprocessed.root --use_cmssw --no_trig
+#   
+#   Example for baby: 
+#   ./makeTTreeClassFiles.py --file_name=baby.root --no_trig --tree_name tree --namespace ssb --class_name SSB2012 --obj_name samesignbtag
+#  
+# ---------------------------------------------------------------------------------- #
+
+
 import os
 import sys
 from optparse import OptionParser
