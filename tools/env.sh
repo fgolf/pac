@@ -26,7 +26,7 @@ alias cdpac="cd $PAC"
 
 # set the path to CMS2 CORE 
 export CMS2CORE_TAG=ss2012_V03-02-03
-export CMS2CORE=$PAC/externals/source/cms2_core/$CMS2CORE_TAG/CORE
+export CMS2CORE=$PAC/externals/source/cms2_core/CORE
 
 # set the path to CMS2 CORE 
 export CMS2TOOLS_TAG=master
