@@ -10,7 +10,9 @@ function merge
 }
 # data
 
-tag=FakeRate19March2013
+mkdir -p logs
+
+tag=FakeRate16Nov2013
 input_path=/hadoop/cms/store/user/rwkelley/babies/fr/$tag
 output_path=/nfs-7/userdata/rwkelley/babies/fr/${tag}
 
@@ -18,7 +20,7 @@ output_path=/nfs-7/userdata/rwkelley/babies/fr/${tag}
 #merge "\"$input_path/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root\""              $output_path/DoubleMu_Run2012C-PromptReco-v2_AOD/merged_frbaby.root              > logs/merge_fr_dml2.txt 2>&1 & 
 #merge "\"$input_path/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root\""              $output_path/DoubleMu_Run2012D-PromptReco-v1_AOD/merged_frbaby.root              > logs/merge_fr_dml3.txt 2>&1 & 
 #merge "\"$input_path/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root\""       $output_path/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/merged_frbaby.root       > logs/merge_fr_dml4.txt 2>&1 & 
-#merge "\"$input_path/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root\""               $output_path/DoubleMu_Run2012A-13Jul2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_dml5.txt 2>&1 & 
+merge "\"$input_path/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root\""               $output_path/DoubleMu_Run2012A-13Jul2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_dml5.txt 2>&1 & 
 #merge "\"$input_path/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root\""               $output_path/DoubleMu_Run2012B-13Jul2012-v4_AOD/merged_frbaby.root               > logs/merge_fr_dml6.txt 2>&1 & 
 #
 #merge "\"$input_path/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root\""               $output_path/SingleMu_Run2012C-24Aug2012-v1_AOD/merged_frbaby.root               > logs/merge_fr_sml1.txt 2>&1 & 
@@ -56,7 +58,7 @@ output_path=/nfs-7/userdata/rwkelley/babies/fr/${tag}
 #merge "\"$input_path/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_ttjets.log &
 #merge "\"$input_path/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1/*.root\"" $output_path/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1/merged_frbaby.root >& logs/merge_fr_ttjets_semi.log &
 #merge "\"$input_path/TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1/*.root\"" $output_path/TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1/merged_frbaby.root >& logs/merge_fr_ttjets_semi.log &
-merge "\"$input_path//W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w1jets.log &
-merge "\"$input_path//W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w2jets.log &
-merge "\"$input_path//W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w3jets.log &
-merge "\"$input_path//W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w4jets.log &
+# merge "\"$input_path//W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w1jets.log &
+# merge "\"$input_path//W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w2jets.log &
+# merge "\"$input_path//W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w3jets.log &
+# merge "\"$input_path//W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root\"" $output_path/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/merged_frbaby.root >& logs/merge_fr_w4jets.log &

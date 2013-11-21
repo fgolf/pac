@@ -38,21 +38,18 @@ Also, you must have the BOOST c++ libraries installed somewhere. We have only
 tested PAC with version 1-49-0. On the uaf, there is a version checked out at
 /home/users/rwkelley/code/boost/1.49.0 so you won't need to install this. If
 you are installing PAC on a different system or your laptop, you will need to
-install the BOOST c++ libraries. Instuctions to setup boost are below.
+install the BOOST c++ libraries. Instructions to setup boost are below.
 
 Setup:
 ----------------------------------------------------------------
 
 To check out the code:
-git init pac
-cd pac
-git remote add origin git@github.com:fgolf/pac.git
-git pull git@github.com:fgolf/pac.git master
+git clone https://github.com/fgolf/pac pac
 
 We will refer to the directory you chose to install PAC to as simply PAC (e.g.
 /home/users/rwkelley/Development/pac == PAC).
 
-If you need to intall the BOOST c++ libraries, then run the following script:
+If you need to install the BOOST c++ libraries, then run the following script:
 
 cd PAC
 ./tools/setup_boost.sh
@@ -85,7 +82,7 @@ cd PAC
 source tools/env.sh
 
 In order to use PAC interactively in ROOT, you will need to call the following
-whevever you launch ROOT (or put it in your root logon script):
+whenever you launch ROOT (or put it in your root logon script):
 
 .x $PAC/tools/load_pac.C
 
@@ -191,7 +188,7 @@ Directory to hold the object files and executables.
 
 There are two ways to build this code: using GNU Make an BOOST Build.
 
-GNU Make (depricated)
+GNU Make (deprecated)
 ----------------------------------------------------------------
 
 There makefiles are organized hierarchically starting with the Makefile in the
