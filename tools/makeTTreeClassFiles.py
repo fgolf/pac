@@ -125,7 +125,8 @@ class BranchInfo:
 		class_type = class_type.replace("vector", "std::vector")
 
 		# replace LorentzVectors
-		class_type = class_type.replace("ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >", "LorentzVector")
+		class_type = class_type.replace("ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> >" , "LorentzVector")
+		class_type = class_type.replace("ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> >", "LorentzVectorD")
 
 		# test if its a edm::Wapper type
 		# TODO: do this better --> REGEX?
@@ -232,6 +233,7 @@ def HeaderString(branch_infos, use_cmssw):
 #include <string>          
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
+typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVectorD;
 
 // ################################################################################################# //
 // CMSSW independent
@@ -606,6 +608,7 @@ extern CLASSNAME OBJNAME;
 #include <string>          
 
 typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > LorentzVector;
+typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVectorD;
 
 // Handle Classes to handle branch loading 
 // ------------------------------------------------------------------------------------------------- //
