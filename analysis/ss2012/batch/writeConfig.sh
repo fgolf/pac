@@ -5,7 +5,7 @@ UNIVERSE="vanilla"
 EXE="wrapper.sh"
 INPUT="wrapper.sh, job_input/input.tgz, appendTimeStamp.sh"
 SITE="UCSD"
-PROXY="/tmp/x509up_u10194"
+PROXY="/tmp/x509up_u$(id -u)"
 
 DIR=$PWD
 SUBMITLOGDIR="${DIR}/submit_logs"

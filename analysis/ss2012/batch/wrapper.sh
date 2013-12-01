@@ -37,7 +37,8 @@ echo "[wrapper] setting env" | ./appendTimeStamp.sh
 export CMS_PATH=/code/osgcode/cmssoft/cms
 export SCRAM_ARCH=slc5_amd64_gcc462
 source /code/osgcode/cmssoft/cmsset_default.sh
-source /code/osgcode/fgolf/5.30-patches/bin/thisroot.sh
+# source /code/osgcode/fgolf/5.30-patches/bin/thisroot.sh                        
+source /code/osgcode/imacneill/root/05.34.07/bin/thisroot.sh                        
 export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
 export PYTHONPATH=$ROOTSYS/lib:$PYTHONPATH
 echo
