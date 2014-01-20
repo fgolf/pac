@@ -27,7 +27,9 @@ FakeRateBabyLooper::FakeRateBabyLooper
     float away_jet_pt,
     float away_jet_dphi,
     float mu_iso_denom,
-    bool btag_away_jet
+    bool btag_away_jet,
+    bool absolute_iso,
+    bool only_invert_isocut_mu
     )
     : at::AnalysisWithHist(root_file_name, print, suffix)
     , m_sample(sample)
@@ -42,6 +44,8 @@ FakeRateBabyLooper::FakeRateBabyLooper
     , m_away_jet_dphi(away_jet_dphi)
     , m_mu_iso_denom(mu_iso_denom)
     , m_btag_away_jet(btag_away_jet)
+    , m_absolute_iso(absolute_iso)
+    , m_only_invert_isocut_mu(only_invert_isocut_mu)
 {
     // begin job
     BeginJob();
@@ -170,25 +174,25 @@ void FakeRateBabyLooper::EndJob()
         hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num40c"],hc["h_mu_fo40c"], "h_mufr40c", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40);|#eta|;p_{T} (GeV)"));
         hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num60c"],hc["h_mu_fo60c"], "h_mufr60c", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60);|#eta|;p_{T} (GeV)"));
 
-        // FR(# vertices)
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num20c_iso_vs_nvtxs"],hc["h_mu_fo20c_iso_vs_nvtxs"], "h_mufr20c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, p_{T} > 5, iso);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num40c_iso_vs_nvtxs"],hc["h_mu_fo40c_iso_vs_nvtxs"], "h_mufr40c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, p_{T} > 5, iso);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num60c_iso_vs_nvtxs"],hc["h_mu_fo60c_iso_vs_nvtxs"], "h_mufr60c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, p_{T} > 5, iso);# vtxs"));
-
-        // FR(pt)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "y", "h_mufr20c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, iso);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "y", "h_mufr40c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, iso);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "y", "h_mufr60c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, iso);p_{T}"));
-                                                                                                                                                      
-        // FR(eta)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "x", "h_mufr20c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, p_{T} > 5, iso);|#eta|", 5, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "x", "h_mufr40c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, p_{T} > 5, iso);|#eta|", 5, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "x", "h_mufr60c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, p_{T} > 5, iso);|#eta|", 5, 100));
-
-        // FR(eta, pT)
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "h_mufr20c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, iso);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "h_mufr40c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, iso);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "h_mufr60c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, iso);|#eta|;p_{T} (GeV)"));
+//        // FR(# vertices)
+//        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num20c_iso_vs_nvtxs"],hc["h_mu_fo20c_iso_vs_nvtxs"], "h_mufr20c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, p_{T} > 5, iso);# vtxs"));
+//        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num40c_iso_vs_nvtxs"],hc["h_mu_fo40c_iso_vs_nvtxs"], "h_mufr40c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, p_{T} > 5, iso);# vtxs"));
+//        hc.Add(rt::MakeEfficiencyPlot(hc["h_mu_num60c_iso_vs_nvtxs"],hc["h_mu_fo60c_iso_vs_nvtxs"], "h_mufr60c_iso_vs_nvtxs", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, p_{T} > 5, iso);# vtxs"));
+//
+//        // FR(pt)
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "y", "h_mufr20c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, iso);p_{T}"));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "y", "h_mufr40c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, iso);p_{T}"));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "y", "h_mufr60c_iso_vs_pt", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, iso);p_{T}"));
+//                                                                                                                                                      
+//        // FR(eta)
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "x", "h_mufr20c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, p_{T} > 5, iso);|#eta|", 5, 100));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "x", "h_mufr40c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, p_{T} > 5, iso);|#eta|", 5, 100));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "x", "h_mufr60c_iso_vs_eta", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, p_{T} > 5, iso);|#eta|", 5, 100));
+//
+//        // FR(eta, pT)
+//        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num20c_iso"],hc["h_mu_fo20c_iso"], "h_mufr20c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 20, iso);|#eta|;p_{T} (GeV)"));
+//        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num40c_iso"],hc["h_mu_fo40c_iso"], "h_mufr40c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 40, iso);|#eta|;p_{T} (GeV)"));
+//        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_mu_num60c_iso"],hc["h_mu_fo60c_iso"], "h_mufr60c_iso", "#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > 60, iso);|#eta|;p_{T} (GeV)"));
     }
 
     // electrons
@@ -214,25 +218,25 @@ void FakeRateBabyLooper::EndJob()
         hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num40c"],hc["h_el_fo40c"], "h_elfr40c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40);|#eta|;p_{T} (GeV)"));
         hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num60c"],hc["h_el_fo60c"], "h_elfr60c", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60);|#eta|;p_{T} (GeV)"));
 
-        // FR(# vertices)
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num20c_noiso_vs_nvtxs"],hc["h_el_fo20c_noiso_vs_nvtxs"], "h_elfr20c_noiso_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>10, no iso);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num40c_noiso_vs_nvtxs"],hc["h_el_fo40c_noiso_vs_nvtxs"], "h_elfr40c_noiso_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>10, no iso);# vtxs"));
-        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num60c_noiso_vs_nvtxs"],hc["h_el_fo60c_noiso_vs_nvtxs"], "h_elfr60c_noiso_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>10, no iso);# vtxs"));
-
-        // FR(pt)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num20c_noiso"],hc["h_el_fo20c_noiso"], "y", "h_elfr20c_noiso_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, no iso);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num40c_noiso"],hc["h_el_fo40c_noiso"], "y", "h_elfr40c_noiso_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, no iso);p_{T}"));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num60c_noiso"],hc["h_el_fo60c_noiso"], "y", "h_elfr60c_noiso_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, no iso);p_{T}"));
-                                                                                                                                                      
-        // FR(eta)
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num20c_noiso"],hc["h_el_fo20c_noiso"], "x", "h_elfr20c_noiso_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>20, no iso);|#eta|", 10, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num40c_noiso"],hc["h_el_fo40c_noiso"], "x", "h_elfr40c_noiso_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>20, no iso);|#eta|", 10, 100));
-        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num60c_noiso"],hc["h_el_fo60c_noiso"], "x", "h_elfr60c_noiso_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>20, no iso);|#eta|", 10, 100));
-
-        // FR(eta, pT)
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num20c_noiso"],hc["h_el_fo20c_noiso"], "h_elfr20c_noiso", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, no iso);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num40c_noiso"],hc["h_el_fo40c_noiso"], "h_elfr40c_noiso", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, no iso);|#eta|;p_{T} (GeV)"));
-        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num60c_noiso"],hc["h_el_fo60c_noiso"], "h_elfr60c_noiso", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, no iso);|#eta|;p_{T} (GeV)"));
+//        // FR(# vertices)
+//        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num20c_noiso_vs_nvtxs"],hc["h_el_fo20c_noiso_vs_nvtxs"], "h_elfr20c_noiso_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>10, no iso);# vtxs"));
+//        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num40c_noiso_vs_nvtxs"],hc["h_el_fo40c_noiso_vs_nvtxs"], "h_elfr40c_noiso_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>10, no iso);# vtxs"));
+//        hc.Add(rt::MakeEfficiencyPlot(hc["h_el_num60c_noiso_vs_nvtxs"],hc["h_el_fo60c_noiso_vs_nvtxs"], "h_elfr60c_noiso_vs_nvtxs", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>10, no iso);# vtxs"));
+//
+//        // FR(pt)
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num20c_noiso"],hc["h_el_fo20c_noiso"], "y", "h_elfr20c_noiso_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, no iso);p_{T}"));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num40c_noiso"],hc["h_el_fo40c_noiso"], "y", "h_elfr40c_noiso_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, no iso);p_{T}"));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num60c_noiso"],hc["h_el_fo60c_noiso"], "y", "h_elfr60c_noiso_vs_pt", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, no iso);p_{T}"));
+//                                                                                                                                                      
+//        // FR(eta)
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num20c_noiso"],hc["h_el_fo20c_noiso"], "x", "h_elfr20c_noiso_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, p_{T}>20, no iso);|#eta|", 10, 100));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num40c_noiso"],hc["h_el_fo40c_noiso"], "x", "h_elfr40c_noiso_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, p_{T}>20, no iso);|#eta|", 10, 100));
+//        hc.Add(rt::MakeEfficiencyProjectionPlot(hc["h_el_num60c_noiso"],hc["h_el_fo60c_noiso"], "x", "h_elfr60c_noiso_vs_eta", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, p_{T}>20, no iso);|#eta|", 10, 100));
+//
+//        // FR(eta, pT)
+//        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num20c_noiso"],hc["h_el_fo20c_noiso"], "h_elfr20c_noiso", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 20, no iso);|#eta|;p_{T} (GeV)"));
+//        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num40c_noiso"],hc["h_el_fo40c_noiso"], "h_elfr40c_noiso", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 40, no iso);|#eta|;p_{T} (GeV)"));
+//        hc.Add(rt::MakeEfficiencyPlot2D(hc["h_el_num60c_noiso"],hc["h_el_fo60c_noiso"], "h_elfr60c_noiso", "electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > 60, no iso);|#eta|;p_{T} (GeV)"));
     }
 
     //if (m_verbose)
@@ -295,6 +299,91 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH2F("h_mu_fo40c_iso", "fo #mu (away jet p_{T} > 40, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
         hc.Add(new TH2F("h_mu_fo60c_iso", "fo #mu (away jet p_{T} > 60, cpfiso03 < 0.4 (#Delta#beta), iso);|#eta|;p_{T} (GeV)", m_fr_bin_info.num_mu_eta_bins(), m_fr_bin_info.mu_eta_bins(), m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()), "texte");
 
+
+	// GZ
+        hc.Add(new TH1F("h_mu_fo_iso", "fo muon; cpfiso03 (#Delta#beta)",50,0,5), "texte");
+        hc.Add(new TH1F("h_mu_fo_isoGeV", "fo muon; cpfiso03 (#Delta#beta) (GeV)",100,0,10), "texte");
+        hc.Add(new TH1F("h_mu_fo_chiso", "fo muon; chiso03",50,0,5), "texte");
+        hc.Add(new TH1F("h_mu_fo_caloiso", "fo muon; caloiso03(#Delta#beta)",50,0,5), "texte");
+        hc.Add(new TH1F("h_mu_fo_chisoGeV", "fo muon; chiso03 (GeV)",100,0,10), "texte");
+        hc.Add(new TH1F("h_mu_fo_caloisoGeV", "fo muon; caloiso03(#Delta#beta) (GeV)",50,0,5), "texte");
+        hc.Add(new TH1F("h_mu_fo_d0", "fo muon; d_{0}",50,0,0.25), "texte");
+        hc.Add(new TH1F("h_mu_fo_jetPt", "fo muon; p_{T}^{jet}",50,0,250), "texte");
+        hc.Add(new TH1F("h_mu_fo_lepPt", "fo muon; p_{T}^{lep}",50,0,150), "texte");
+        hc.Add(new TH2F("h_mu_fo_iso_vs_chiso", "fo muon; chiso03;cpfiso03 (#Delta#beta);",50,0,5, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_iso_vs_caloiso", "fo muon; caloiso03(#Delta#beta);cpfiso03 (#Delta#beta);",50,0,5, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_chiso_vs_caloiso", "fo muon; caloiso03(#Delta#beta);chiso03;",50,0,5, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_chisoGeV_vs_caloisoGeV", "fo muon; caloiso03(#Delta#beta);chiso03;",100,0,10, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_iso_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);cpfiso03 (#Delta#beta);",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_isoGeV_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);cpfiso03 (#Delta#beta) (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_chiso_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);chiso03;",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_caloiso_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);caloiso03(#Delta#beta);",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_chisoGeV_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);chiso03 (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_caloisoGeV_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);caloiso03(#Delta#beta) (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_chiso_vs_jetPt_caloiso01", "fo muon; p_{T}^{jet} (GeV);chiso03;",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_caloiso_vs_jetPt_chiso01", "fo muon; p_{T}^{jet} (GeV);caloiso03(#Delta#beta);",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_chisoGeV_vs_jetPt_caloiso2", "fo muon; p_{T}^{jet} (GeV);chiso03 (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_caloisoGeV_vs_jetPt_chiso2", "fo muon; p_{T}^{jet} (GeV);caloiso03(#Delta#beta) (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_iso_vs_lepPt", "fo muon; p_{T}^{lep} (GeV);cpfiso03 (#Delta#beta);",50,0,150, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_isoGeV_vs_lepPt", "fo muon; p_{T}^{lep} (GeV);cpfiso03 (#Delta#beta) (GeV);",50,0,150, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_chiso_vs_lepPt", "fo muon; p_{T}^{lep} (GeV);chiso03;",50,0,150, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_caloiso_vs_lepPt", "fo muon; p_{T}^{lep} (GeV);caloiso03(#Delta#beta);",50,0,150, 50,0,5), "texte");
+        hc.Add(new TH2F("h_mu_fo_chisoGeV_vs_lepPt", "fo muon; p_{T}^{lep} (GeV);chiso03 (GeV);",50,0,150, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_caloisoGeV_vs_lepPt", "fo muon; p_{T}^{lep} (GeV);caloiso03(#Delta#beta) (GeV);",50,0,150, 100,0,10), "texte");
+        hc.Add(new TH2F("h_mu_fo_d0_vs_jetPt", "fo muon;p_{T}^{jet} (GeV);d_{0};", 50,0,250,50,0,0.25), "texte");
+        hc.Add(new TH2F("h_mu_fo_d0_vs_jetPt_iso04", "fo muon;p_{T}^{jet} (GeV);d_{0};", 50,0,250,50,0,0.25), "texte");
+        hc.Add(new TH2F("h_mu_fo_d0_vs_iso", "fo muon;p_{T}^{jet} (GeV);d_{0};", 50,0,5,50,0,0.25), "texte");
+
+	hc.Add(new TH2F("h_mu_fo_ecal_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);ecal (GeV);",50,0,250, 50,0,50), "texte");
+	hc.Add(new TH2F("h_mu_fo_hcal_vs_jetPt", "fo muon; p_{T}^{jet} (GeV);hcal (GeV);",50,0,250, 50,0,50), "texte");
+	hc.Add(new TH2F("h_mu_fo_ecal_vs_iso", "fo muon; cpfiso03 (#Delta#beta);ecal (GeV);",50,0,5, 50,0,50), "texte");
+	hc.Add(new TH2F("h_mu_fo_hcal_vs_iso", "fo muon; cpfiso03 (#Delta#beta);hcal (GeV);",50,0,5, 50,0,50), "texte");
+	hc.Add(new TH1F("h_mu_fo_ecal","ecal (GeV);", 50,0,50), "texte");
+	hc.Add(new TH1F("h_mu_fo_hcal","ecal (GeV);", 50,0,50), "texte");
+	
+	hc.Add(new TH1F("h_mu_fo_jetPt_num"             , "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_num_iso01"	, "fo muon; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_num_iso04"	, "fo muon; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_qPt_num_iso01"	        , "fo muon; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_qPt_num_iso04"	        , "fo muon; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_num_iso02"	, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_num_iso03"	, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_num_iso04_ch01"	, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_num_iso04_nu01"	, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_num_iso04_chnu01", "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_nonum"           , "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_nonum_iso01"	, "fo muon; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_nonum_iso04"	, "fo muon; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_qPt_nonum_iso01"	, "fo muon; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_qPt_nonum_iso04"	, "fo muon; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_iso01"		, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_iso04"		, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_nonum_iso04_d0"	, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_nonum_iso04_nod0", "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_nonum_iso04_MIP"	, "fo muon; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fo_jetPt_nonum_iso04_noMIP", "fo muon; p_{T}^{jet}",50,0,250), "texte");
+
+	hc.Add(new TH1F("h_mu_fojet_jetPt_num_iso01"	, "fo muonjet; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet_jetPt_num_iso04"	, "fo muonjet; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet_jetPt_nonum_iso01"	, "fo muonjet; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet_jetPt_nonum_iso04"	, "fo muonjet; p_{T}^{jet}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet_qPt_num_iso01"      , "fo muonjet; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet_qPt_num_iso04"      , "fo muonjet; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet_qPt_nonum_iso01"	, "fo muonjet; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet_qPt_nonum_iso04"	, "fo muonjet; p_{T}^{mother}",100,0,250), "texte");
+
+	hc.Add(new TH1F("h_mu_fo_ecal_denominator"	, "fo muon; ecal (GeV)",50,0,50), "texte");
+	hc.Add(new TH1F("h_mu_fo_hcal_denominator"	, "fo muon; hcal (GeV)",50,0,50), "texte");
+	hc.Add(new TH1F("h_mu_fo_ecal_numerator"	, "num muon; ecal (GeV)",50,0,50), "texte");
+	hc.Add(new TH1F("h_mu_fo_hcal_numerator"	, "num muon; hcal (GeV)",50,0,50), "texte");
+
+
+
+
+
+
+	// End GZ
+
         // MET distribution denominator
         hc.Add(new TH1F("h_mu_fo20c_met", "h_mu_fo20c_met", nbins, min_val, max_val));
         hc.Add(new TH1F("h_mu_fo40c_met", "h_mu_fo40c_met", nbins, min_val, max_val));
@@ -311,9 +400,9 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH1F("h_mu_fo60c_mt_met20lt", "h_mu_fo60c_mt_met20lt", nbins, min_val, max_val));
 
         // muon FO pt distribution
-        hc.Add(new TH1F("h_mu_fo20c_pt", "h_mu_fo20c_pt", 12, 0., 60.));
-        hc.Add(new TH1F("h_mu_fo40c_pt", "h_mu_fo40c_pt", 12, 0., 60.));
-        hc.Add(new TH1F("h_mu_fo60c_pt", "h_mu_fo60c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_mu_fo20c_pt", "h_mu_fo20c_pt", m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()));
+        hc.Add(new TH1F("h_mu_fo40c_pt", "h_mu_fo40c_pt", m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()));
+        hc.Add(new TH1F("h_mu_fo60c_pt", "h_mu_fo60c_pt", m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()));
 
         // muon FO eta distribution
         hc.Add(new TH1F("h_mu_fo20c_eta", "h_mu_fo20c_eta", 10, -2.5, 2.5));
@@ -336,9 +425,9 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH1F("h_mu_num60c_mt_met20lt", "h_mu_num60c_mt_met20lt", nbins, min_val, max_val));
 
         // muon NUM pt distribution
-        hc.Add(new TH1F("h_mu_num20c_pt", "h_mu_num20c_pt", 12, 0., 60.));
-        hc.Add(new TH1F("h_mu_num40c_pt", "h_mu_num40c_pt", 12, 0., 60.));
-        hc.Add(new TH1F("h_mu_num60c_pt", "h_mu_num60c_pt", 12, 0., 60.));
+        hc.Add(new TH1F("h_mu_num20c_pt", "h_mu_num20c_pt", m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()));
+        hc.Add(new TH1F("h_mu_num40c_pt", "h_mu_num40c_pt", m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()));
+        hc.Add(new TH1F("h_mu_num60c_pt", "h_mu_num60c_pt", m_fr_bin_info.num_mu_pt_bins(), m_fr_bin_info.mu_pt_bins()));
 
         // muon NUM eta distribution
         hc.Add(new TH1F("h_mu_num20c_eta", "h_mu_num20c_eta", 10, -2.5, 2.5));
@@ -394,6 +483,9 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH1F("h_mu_iso_num20c_eta", "h_mu_iso_num20c_eta", 10, -2.5, 2.5));
         hc.Add(new TH1F("h_mu_iso_num40c_eta", "h_mu_iso_num40c_eta", 10, -2.5, 2.5));
         hc.Add(new TH1F("h_mu_iso_num60c_eta", "h_mu_iso_num60c_eta", 10, -2.5, 2.5));
+
+
+
     }
 
     // electrons
@@ -419,6 +511,38 @@ void FakeRateBabyLooper::BookHists()
         hc.Add(new TH2F("h_el_fo20c", "fo electron (away jet p_{T} > 20, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
         hc.Add(new TH2F("h_el_fo40c", "fo electron (away jet p_{T} > 40, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
         hc.Add(new TH2F("h_el_fo60c", "fo electron (away jet p_{T} > 60, cpfiso03 < 0.6 (#rho * A_{eff}));|#eta|;p_{T} (GeV)", m_fr_bin_info.num_el_eta_bins(), m_fr_bin_info.el_eta_bins(), m_fr_bin_info.num_el_pt_bins(), m_fr_bin_info.el_pt_bins()), "texte");
+
+
+        hc.Add(new TH1F("h_el_fo_iso", "fo electron; cpfiso03 (#rho * A_{eff})",50,0,5), "texte");
+        hc.Add(new TH1F("h_el_fo_chiso", "fo electron; chiso03",50,0,5), "texte");
+        hc.Add(new TH1F("h_el_fo_caloiso", "fo electron; caloiso03(#rho * A_{eff})",50,0,5), "texte");
+        hc.Add(new TH1F("h_el_fo_chisoGeV", "fo electron; chiso03 (GeV)",100,0,10), "texte");
+        hc.Add(new TH1F("h_el_fo_caloisoGeV", "fo electron; caloiso03(#rho * A_{eff}) (GeV)",100,0,10), "texte");
+        hc.Add(new TH1F("h_el_fo_d0", "fo electron; d_{0}",50,0,1), "texte");
+        hc.Add(new TH1F("h_el_fo_jetPt", "fo electron; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_el_fo_jetPt_q5_15","fo electron; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_el_fo_jetPt_q15_30","fo electron; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_el_fo_jetPt_q30_50","fo electron; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_el_fo_jetPt_q50_80","fo electron; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_el_fo_jetPt_q80_120","fo electron; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_el_fo_jetPt_q120_170","fo electron; p_{T}^{jet}",50,0,250), "texte");
+	hc.Add(new TH1F("h_el_fo_jetPt_q170_300","fo electron; p_{T}^{jet}",50,0,250), "texte");
+
+        hc.Add(new TH2F("h_el_fo_iso_vs_chiso", "fo electron; chiso03;cpfiso03 (#rho * A_{eff});",50,0,5, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_iso_vs_caloiso", "fo electron; caloiso03(#rho * A_{eff});cpfiso03 (#rho * A_{eff});",50,0,5, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_chiso_vs_caloiso", "fo electron; caloiso03(#rho * A_{eff});chiso03;",50,0,5, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_chisoGeV_vs_caloisoGeV", "fo electron; caloiso03(#rho * A_{eff}) (GeV);chiso03 (GeV);",100,0,10, 100,0,10), "texte");
+        hc.Add(new TH2F("h_el_fo_iso_vs_jetPt", "fo electron; p_{T}^{jet} (GeV);cpfiso03 (#rho * A_{eff});",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_chiso_vs_jetPt", "fo electron; p_{T}^{jet} (GeV);chiso03;",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_caloiso_vs_jetPt", "fo electron; p_{T}^{jet} (GeV);caloiso03(#rho * A_{eff});",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_chisoGeV_vs_jetPt", "fo electron; p_{T}^{jet} (GeV);chiso03 (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_el_fo_caloisoGeV_vs_jetPt", "fo electron; p_{T}^{jet} (GeV);caloiso03(#rho * A_{eff}) (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_el_fo_iso_vs_lepPt", "fo electron; p_{T}^{lep} (GeV);cpfiso03 (#rho * A_{eff});",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_chiso_vs_lepPt", "fo electron; p_{T}^{lep} (GeV);chiso03;",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_caloiso_vs_lepPt", "fo electron; p_{T}^{lep} (GeV);caloiso03(#rho * A_{eff});",50,0,250, 50,0,5), "texte");
+        hc.Add(new TH2F("h_el_fo_chisoGeV_vs_lepPt", "fo electron; p_{T}^{lep} (GeV);chiso03 (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_el_fo_caloisoGeV_vs_lepPt", "fo electron; p_{T}^{lep} (GeV);caloiso03(#rho * A_{eff}) (GeV);",50,0,250, 100,0,10), "texte");
+        hc.Add(new TH2F("h_el_fo_d0_vs_jetPt", "fo electron;p_{T}^{jet} (GeV);d_{0};", 50,0,250,50,0,1), "texte");
 
         // numerator (no iso)
         hc.Add(new TH1F("h_el_num20c_noiso_vs_nvtxs", "num electron (away jet p_{T} > 20, no iso, cpfiso03 < 0.09 (#rho * A_{eff}));# vtxs", m_fr_bin_info.num_el_vtx_bins(), m_fr_bin_info.el_vtx_bins()), "texte");
@@ -564,6 +688,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         const bool is_data  = (fr::GetSampleInfo(m_sample).type == fr::SampleType::data);
         const bool is_qcd   = (m_sample==fr::Sample::qcd);
         const bool is_ttbar = (m_sample==fr::Sample::ttbar);
+        const bool is_ttbarhad = (m_sample==fr::Sample::tthad);
         const bool is_mu    = ((m_lepton=="mu") ? abs(id())==13 : false);
         const bool is_el    = ((m_lepton=="el") ? abs(id())==11 : false);
         const bool is_wjets = (m_sample==fr::Sample::wjets);
@@ -590,6 +715,11 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             return 0;
         }
 
+	// Get rid of useless samples with no statistics at all.
+	if (rt::string_contains(current_file_name, "5to15_TuneZ2star")  || rt::string_contains(current_file_name, "15to30_TuneZ2star")  )
+	  return 0;
+
+
         // check the charge
         switch (m_charge)
         {
@@ -601,7 +731,9 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         // pT cut
         float min_mu_pt = m_fr_bin_info.mu_pt_bins()[0];
-        float max_mu_pt = m_fr_bin_info.mu_pt_bins()[m_fr_bin_info.num_mu_pt_bins()];
+	float max_mu_pt = m_fr_bin_info.mu_pt_bins()[m_fr_bin_info.num_mu_pt_bins()];
+	//float min_mu_pt = 20.0;
+	//float max_mu_pt = 150.0;
         float min_el_pt = m_fr_bin_info.el_pt_bins()[0];
         float max_el_pt = m_fr_bin_info.el_pt_bins()[m_fr_bin_info.num_el_pt_bins()];
 
@@ -689,7 +821,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             jet_cut = is_data ? (npfc50L1Fj1res_eth() > 0) : (npfc50L1Fj1_eth() > 0); // actually a jet 50 cut
         }
 
-        if (is_ttbar)
+        if (is_ttbar || is_ttbarhad)
         {
             jet_dwn_cut  = true;
             jet_cut      = true;
@@ -781,17 +913,41 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         // vertex reweight for ttbar
         float evt_weight = (is_data ? 1.0 : (weight() * m_lumi));
+	// Fix wrong normalization in specific sample
+	if (rt::string_contains(current_file_name, "15to30_TuneZ2star") && !is_data) {
+	  //cout<<"Found event in file "<<current_file_name<<": adjusting weight. Old weight "<<evt_weight;
+	  evt_weight *= ( 9.8828742E8 / 4.2639499E10 );
+	  //cout<<" new weight "<<evt_weight<<endl;
+	}
 
         // isolation
         float iso = ((m_lepton == "mu") ? cpfiso03_db() : pfiso03_corr_rho()); // new effective area
         // float iso = ((m_lepton == "mu") ? cpfiso03_db() : cpfiso03_rho());  // old effective area
         // float iso = ((m_lepton == "mu") ? cpfiso03_db_truncated() : cpfiso03_rho_truncated()); // new effective area
+	float chiso =  ch_pfiso03()/pt(); // (all isolations are relative. probably a good idea for the pT one)
+	float chisoGeV =  ch_pfiso03(); 
+	float caloiso =  iso - chiso;
+	float caloisoGeV = iso*pt() - chisoGeV;
+	float isoGeV = iso*pt();
+
 
         float num_mu_iso_cut = 0.1;
         float den_mu_iso_cut = m_mu_iso_denom;
 
         float num_el_iso_cut = 0.09;
         float den_el_iso_cut = ((m_fr_type == ss::FakeRateType::eth) ? 1.0 : 0.6);
+	
+	float num_mu_iso_cutAbs = 2.0;
+	float den_mu_iso_cutAbs = 8.0;
+	
+	bool isNumIso = false;
+	bool isDenIso = false;
+	if (m_lepton == "mu") {
+	  isNumIso = m_absolute_iso ? isoGeV < num_mu_iso_cutAbs : iso < num_mu_iso_cut;
+	  //isDenIso = m_absolute_iso ? isoGeV < den_mu_iso_cutAbs : iso < den_mu_iso_cut;
+	  isDenIso =  iso < den_mu_iso_cut;
+	}
+
         
         // Fill some plots
         // -------------------------------------------------------------------------------------- //
@@ -801,7 +957,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // numerator
             if (num_lep_sel)
             {
-                if (iso < num_mu_iso_cut)
+                if (isNumIso)
                 {
                     if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_num20c_met"], pfmet(), evt_weight); }
                     if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_num40c_met"], pfmet(), evt_weight); }
@@ -824,7 +980,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             }
             if (fo_lep_sel)
             {
-                if (iso < den_mu_iso_cut)
+	      if ( (num_lep_sel || !m_only_invert_isocut_mu)  && isDenIso) // if "m_only_invert_isocut_mu", require the numerator selection to pass
                 {
                     if (jet_dwn_cut && pt() > 20) { rt::Fill( hc["h_mu_fo20c_met"], pfmet(), evt_weight); }
                     if (jet_cut     && pt() > 20) { rt::Fill( hc["h_mu_fo40c_met"], pfmet(), evt_weight); }
@@ -998,7 +1154,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             return 0;
         }
 
-        // muons
+        // muons after MET and WmT cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
 
         // Fill Fake Rates
@@ -1007,7 +1163,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // numerator
             if (num_lep_sel)
             {
-                if (iso < num_mu_iso_cut)
+                if (isNumIso)
                 {
                     if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_mu_num20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
                     if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_num40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
@@ -1030,23 +1186,119 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // denominator
             if (fo_lep_sel)
             {
-                if (iso < den_mu_iso_cut)
+	      if (pt() > 20.0 && pt() < 22.0) {		
+		rt::Fill( hc["h_mu_fo_iso"], iso, evt_weight);
+		rt::Fill( hc["h_mu_fo_isoGeV"], isoGeV, evt_weight);
+		rt::Fill( hc["h_mu_fo_chiso"], chiso, evt_weight);
+		rt::Fill( hc["h_mu_fo_chisoGeV"], chisoGeV, evt_weight);
+		rt::Fill( hc["h_mu_fo_caloiso"], caloiso, evt_weight);
+		rt::Fill( hc["h_mu_fo_caloisoGeV"], caloisoGeV, evt_weight);
+		rt::Fill( hc["h_mu_fo_d0"], fabs(d0()), evt_weight);
+		rt::Fill( hc["h_mu_fo_jetPt"], ptpfcL1Fj1(), evt_weight);
+
+		rt::Fill( hc["h_mu_fo_ecal"], mu_ecal_veto_dep(), evt_weight);
+		rt::Fill( hc["h_mu_fo_hcal"], mu_hcal_veto_dep(), evt_weight);
+		rt::Fill2D( hc["h_mu_fo_ecal_vs_jetPt"], ptpfcL1Fj1(), mu_ecal_veto_dep(), evt_weight);
+		rt::Fill2D( hc["h_mu_fo_hcal_vs_jetPt"], ptpfcL1Fj1(), mu_hcal_veto_dep(), evt_weight);
+		rt::Fill2D( hc["h_mu_fo_ecal_vs_iso"], iso, mu_ecal_veto_dep(), evt_weight);
+		rt::Fill2D( hc["h_mu_fo_hcal_vs_iso"], iso, mu_hcal_veto_dep(), evt_weight);
+
+		bool isoNum = (iso < 0.1);
+		bool isoDen = (iso > 0.1 && iso < 0.4);
+		bool chisoNum = chiso < 0.1;
+		bool caloisoNum = caloiso < 0.1;
+		bool d0num = fabs(d0()) < 0.005;
+		bool hcal = (mu_hcal_veto_dep() < 6.0);
+		bool ecal = (mu_ecal_veto_dep() < 4.0);
+
+		if (num_lep_sel) rt::Fill( hc["h_mu_fo_jetPt_num"], ptpfcL1Fj1(), evt_weight);
+		if (num_lep_sel && isoNum) rt::Fill( hc["h_mu_fo_jetPt_num_iso01"], ptpfcL1Fj1(), evt_weight);
+		if (num_lep_sel && isoDen) rt::Fill( hc["h_mu_fo_jetPt_num_iso04"], ptpfcL1Fj1(), evt_weight);
+		if (num_lep_sel && isoNum) rt::Fill( hc["h_mu_fo_qPt_num_iso01"], mc3pt(), evt_weight);
+		if (num_lep_sel && isoDen) rt::Fill( hc["h_mu_fo_qPt_num_iso04"], mc3pt(), evt_weight);
+		if (num_lep_sel && !isoNum && iso < 0.2) rt::Fill( hc["h_mu_fo_jetPt_num_iso02"], ptpfcL1Fj1(), evt_weight);
+		if (num_lep_sel && !isoNum && iso < 0.3) rt::Fill( hc["h_mu_fo_jetPt_num_iso03"], ptpfcL1Fj1(), evt_weight);
+		if (num_lep_sel && isoDen && chisoNum) rt::Fill( hc["h_mu_fo_jetPt_num_iso04_ch01"], ptpfcL1Fj1(), evt_weight); // pass ID, fail iso, low charged iso
+		if (num_lep_sel && isoDen && caloisoNum) rt::Fill( hc["h_mu_fo_jetPt_num_iso04_nu01"], ptpfcL1Fj1(), evt_weight); // pass ID, fail iso, low neutral iso
+		if (num_lep_sel && isoDen && (chisoNum || caloisoNum)) rt::Fill( hc["h_mu_fo_jetPt_num_iso04_chnu01"], ptpfcL1Fj1(), evt_weight); // pass ID, fail iso, low charged or neutral iso
+		if (!num_lep_sel) rt::Fill( hc["h_mu_fo_jetPt_nonum"], ptpfcL1Fj1(), evt_weight);
+		if (!num_lep_sel && isoNum) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso01"], ptpfcL1Fj1(), evt_weight);
+		if (!num_lep_sel && isoDen) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso04"], ptpfcL1Fj1(), evt_weight);
+		if (!num_lep_sel && isoNum) rt::Fill( hc["h_mu_fo_qPt_nonum_iso01"], mc3pt(), evt_weight);
+		if (!num_lep_sel && isoDen) rt::Fill( hc["h_mu_fo_qPt_nonum_iso04"], mc3pt(), evt_weight);
+		if (isoNum) rt::Fill( hc["h_mu_fo_jetPt_iso01"], ptpfcL1Fj1(), evt_weight);
+		if (isoDen) rt::Fill( hc["h_mu_fo_jetPt_iso04"], ptpfcL1Fj1(), evt_weight);
+		if (!num_mu_ssV5_noIso() && isoDen && d0num) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso04_d0"], ptpfcL1Fj1(), evt_weight);
+		if (!num_mu_ssV5_noIso() && isoDen && !d0num) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso04_nod0"], ptpfcL1Fj1(), evt_weight);
+		if (!num_mu_ssV5_noIso() && isoDen && hcal && ecal) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso04_MIP"], ptpfcL1Fj1(), evt_weight);
+		if (!num_mu_ssV5_noIso() && isoDen && !(hcal && ecal)) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso04_noMIP"], ptpfcL1Fj1(), evt_weight);
+
+		if ( (!num_lep_sel && isoNum) || isoDen ) rt::Fill( hc["h_mu_fo_ecal_denominator"	 ], mu_ecal_veto_dep(), evt_weight);
+		if ( (!num_lep_sel && isoNum) || isoDen ) rt::Fill( hc["h_mu_fo_hcal_denominator"	 ], mu_hcal_veto_dep(), evt_weight);
+		if ( num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fo_ecal_numerator"	 ], mu_ecal_veto_dep(), evt_weight);
+		if ( num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fo_hcal_numerator"	 ], mu_hcal_veto_dep(), evt_weight);
+		
+		//cout<<"num_lep_sel "<<num_lep_sel<<" , num_mu_ssV5_noIso "<<num_mu_ssV5_noIso()<<" , d0num "<<d0num<<" , hcal "<<hcal<<" , ecal "<<ecal<<" , tric_cut "<<trig_cut<<endl;
+
+
+		rt::Fill( hc["h_mu_fo_lepPt"], pt(), evt_weight);
+		rt::Fill2D( hc["h_mu_fo_iso_vs_chiso"], chiso, iso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_iso_vs_caloiso"], caloiso, iso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_chiso_vs_caloiso"], caloiso, chiso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_chisoGeV_vs_caloisoGeV"], caloisoGeV, chisoGeV, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_iso_vs_jetPt"], ptpfcL1Fj1(), iso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_isoGeV_vs_jetPt"], ptpfcL1Fj1(), isoGeV, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_caloiso_vs_jetPt"], ptpfcL1Fj1(), caloiso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_chisoGeV_vs_jetPt"], ptpfcL1Fj1(), chisoGeV, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_caloisoGeV_vs_jetPt"], ptpfcL1Fj1(), caloisoGeV, evt_weight);
+		if (caloiso < 0.1) rt::Fill2D( hc["h_mu_fo_chiso_vs_jetPt_caloiso01"], ptpfcL1Fj1(), chiso, evt_weight);
+		if (chiso < 0.1) rt::Fill2D( hc["h_mu_fo_caloiso_vs_jetPt_chiso01"], ptpfcL1Fj1(), caloiso, evt_weight);
+		if (caloisoGeV < 2.0) rt::Fill2D( hc["h_mu_fo_chisoGeV_vs_jetPt_caloiso2"], ptpfcL1Fj1(), chisoGeV, evt_weight);
+		if (chisoGeV < 2.0) rt::Fill2D( hc["h_mu_fo_caloisoGeV_vs_jetPt_chiso2"], ptpfcL1Fj1(), caloisoGeV, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_iso_vs_lepPt"], pt(), iso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_isoGeV_vs_lepPt"], pt(), isoGeV, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_chiso_vs_lepPt"], pt(), chiso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_caloiso_vs_lepPt"], pt(), caloiso, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_chisoGeV_vs_lepPt"], pt(), chisoGeV, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_caloisoGeV_vs_lepPt"], pt(), caloisoGeV, evt_weight);
+		rt::Fill2D( hc["h_mu_fo_d0_vs_jetPt"], ptpfcL1Fj1(), fabs(d0()), evt_weight);
+		if (isoDen) rt::Fill2D( hc["h_mu_fo_d0_vs_jetPt_iso04"], ptpfcL1Fj1(), fabs(d0()), evt_weight);
+		rt::Fill2D( hc["h_mu_fo_d0_vs_iso"], iso, fabs(d0()), evt_weight);
+	      }
+
+	      // Special plots, based on comparing a muon pT bin with a FO pT bin, where the FO pT can be defined in different ways		
+	      float FOpt = pt() + iso*pt() + max(0.0, mu_ecal_veto_dep() - 4.0) + max(0.0, mu_ecal_veto_dep() - 6.0);
+	      if ( (num_lep_sel && iso < 0.1 && pt() > 20.0 && pt() < 22.0) || (num_lep_sel && iso > 0.1 && iso < 0.4 && FOpt > 20.0 && FOpt < 22.0) ) {
+		bool isoNum = (iso < 0.1);
+		bool isoDen = (iso > 0.1 && iso < 0.4);
+		if ( num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fojet_jetPt_num_iso01"	 ], ptpfcL1Fj1(), evt_weight);
+		if ( num_lep_sel && isoDen ) rt::Fill( hc["h_mu_fojet_jetPt_num_iso04"	 ], ptpfcL1Fj1(), evt_weight);
+		if (!num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fojet_jetPt_nonum_iso01" ], ptpfcL1Fj1(), evt_weight);
+		if (!num_lep_sel && isoDen ) rt::Fill( hc["h_mu_fojet_jetPt_nonum_iso04" ], ptpfcL1Fj1(), evt_weight);
+		if ( num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fojet_qPt_num_iso01"     ], mc3pt(), evt_weight);
+		if ( num_lep_sel && isoDen ) rt::Fill( hc["h_mu_fojet_qPt_num_iso04"     ], mc3pt(), evt_weight);
+		if (!num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fojet_qPt_nonum_iso01"	 ], mc3pt(), evt_weight);
+		if (!num_lep_sel && isoDen ) rt::Fill( hc["h_mu_fojet_qPt_nonum_iso04"	 ], mc3pt(), evt_weight);
+	      } // end of special FOpt plots
+	      
+	      //	      if (iso < den_mu_iso_cut)
+	      if ( (num_lep_sel || !m_only_invert_isocut_mu)  && isDenIso) // if "m_only_invert_isocut_mu", require the numerator selection to pass
                 {
-                    if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-                    if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
-
-                    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
-                    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
-
-                    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_pt"], pt(), evt_weight); }
-                    if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_pt"], pt(), evt_weight); }
-                    if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_pt"], pt(), evt_weight); }
-
-                    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_eta"], eta(), evt_weight); }
-                    if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_eta"], eta(), evt_weight); }
-                    if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_eta"], eta(), evt_weight); }
+		  if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_mu_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+		  if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+		  if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
+		  
+		  if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
+		  if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
+		  if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
+		  
+		  if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_pt"], pt(), evt_weight); }
+		  if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_pt"], pt(), evt_weight); }
+		  if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_pt"], pt(), evt_weight); }
+		  
+		  if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_eta"], eta(), evt_weight); }
+		  if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_eta"], eta(), evt_weight); }
+		  if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_eta"], eta(), evt_weight); }
                 }
             }
 
@@ -1098,7 +1350,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
 
-        // Electrons
+        // Electrons after MET and WmT cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
 
         // Fill Fake Rates 
@@ -1125,11 +1377,38 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                     if (jet_cut     ) { rt::Fill( hc["h_el_num40c_eta"], eta(), evt_weight); }
                     if (jet_up_cut  ) { rt::Fill( hc["h_el_num60c_eta"], eta(), evt_weight); }
                 }
+
             }
 
             // denominator 
             if (fo_lep_sel)
             {
+	      // GZ // Very basic start: Plot recoil jet pT for different values of isolation
+	      // Actually, easier to make 2D plot first
+	      rt::Fill( hc["h_el_fo_iso"], iso, evt_weight);
+	      rt::Fill( hc["h_el_fo_chiso"], chiso, evt_weight);
+	      rt::Fill( hc["h_el_fo_caloiso"], caloiso, evt_weight);
+	      rt::Fill( hc["h_el_fo_d0"], fabs(d0()), evt_weight);
+	      if (rt::string_contains(current_file_name, "5to15_TuneZ2star")  )  rt::Fill( hc["h_el_fo_jetPt_q5_15"], ptpfcL1Fj1(), evt_weight);
+	      if (rt::string_contains(current_file_name, "15to30_TuneZ2star")  ) rt::Fill( hc["h_el_fo_jetPt_q15_30"], ptpfcL1Fj1(), evt_weight);
+	      if (rt::string_contains(current_file_name, "30to50_TuneZ2star")  ) rt::Fill( hc["h_el_fo_jetPt_q30_50"], ptpfcL1Fj1(), evt_weight);
+	      if (rt::string_contains(current_file_name, "50to80_TuneZ2star")  ) rt::Fill( hc["h_el_fo_jetPt_q50_80"], ptpfcL1Fj1(), evt_weight);
+	      if (rt::string_contains(current_file_name, "80to120_TuneZ2star") ) rt::Fill (hc["h_el_fo_jetPt_q80_120"], ptpfcL1Fj1(), evt_weight);
+	      if (rt::string_contains(current_file_name, "120to170_TuneZ2star")) rt::Fill( hc["h_el_fo_jetPt_q120_170"], ptpfcL1Fj1(), evt_weight);
+	      if (rt::string_contains(current_file_name, "170to300_TuneZ2star")) rt::Fill( hc["h_el_fo_jetPt_q170_300"], ptpfcL1Fj1(), evt_weight);
+	      rt::Fill2D( hc["h_el_fo_iso_vs_chiso"], chiso, iso, evt_weight);
+	      rt::Fill2D( hc["h_el_fo_iso_vs_caloiso"], caloiso, iso, evt_weight);
+	      rt::Fill2D( hc["h_el_fo_chiso_vs_caloiso"], caloiso, chiso, evt_weight);
+	      rt::Fill2D( hc["h_el_fo_iso_vs_jetPt"], ptpfcL1Fj1(), iso, evt_weight);
+	      rt::Fill2D( hc["h_el_fo_chiso_vs_jetPt"], ptpfcL1Fj1(), chiso, evt_weight);
+	      rt::Fill2D( hc["h_el_fo_caloiso_vs_jetPt"], ptpfcL1Fj1(), caloiso, evt_weight);
+	      rt::Fill2D( hc["h_el_fo_d0_vs_jetPt"], ptpfcL1Fj1(), fabs(d0()), evt_weight);
+	      
+	      //TString pTisoName = h_el_fo_jetPt_iso;
+	      //pTisoName += (Long_t) iso;
+	      
+
+
                 if (iso < den_el_iso_cut)
                 {
                     if (jet_dwn_cut && pt()>20) { rt::Fill( hc["h_el_fo20c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
