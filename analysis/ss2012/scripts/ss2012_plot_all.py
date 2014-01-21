@@ -65,7 +65,8 @@ excl_signal_regions = [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, \
 
 parser = OptionParser()
 
-default_fr_file = "data/fake_rates/ssFR_data_ewkcor_17Apr2013.root"
+#default_fr_file = "data/fake_rates/ssFR_data_ewkcor_17Apr2013.root
+default_fr_file = "data/fake_rates/ssFR_data_ewkcor_18Dec2013abs.root"
 default_fl_file = "data/flip_rates/ssFL_data_standard_02222013.root"
 
 # parameter options
@@ -81,6 +82,7 @@ parser.add_option("--charge"    , dest="charge"      , default=0              , 
 parser.add_option("--sr"        , dest="sr"          , default=0              , help="signal region"                                            )
 parser.add_option("--fr_file"   , dest="fr_file"     , default=default_fr_file, help="fake rate file to use"                                    )
 parser.add_option("--fl_file"   , dest="fl_file"     , default=default_fl_file, help="flip rate file to use"                                    )
+parser.add_option("--FR_opt"    , dest="FR_opt"      , default=0              , help="FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both)")
 
 # boolean options
 parser.add_option("--test"       , action="store_true"  , dest="test"        , default=False , help="test script -- print commands but do nothing"   )
@@ -149,6 +151,7 @@ def make_hist(signal_region, sample):
 	cmd += " --charge %d"     % int(options.charge)
 	cmd += " --ht %1.3f"      % float(options.min_ht)
 	cmd += " --anal_type %s"  % options.anal_type 
+	cmd += " --FR_opt %s"     % int(options.FR_opt) 
 	if (options.excl):
 		cmd += " --excl 1"
 	else:

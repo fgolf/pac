@@ -51,6 +51,7 @@ int main(int argc, char* argv[])
     float lumi                      = 1.0;
     float min_ht                    = 80.0;
     bool verbose                    = false;
+    int FR_option                   = 0;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -87,7 +88,8 @@ int main(int argc, char* argv[])
         ("excl"     , po::value<bool>(&exclusive)                             , "use exclusive signal region"                                                   )
         ("ht"       , po::value<float>(&min_ht)                               , "min HT"                                                                        )
         ("verbose"  , po::value<bool>(&verbose)                               , "verbosity"                                                                     )
-        ;
+        ("FR_opt"   , po::value<int>(&FR_option)                              , "FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both)"                  )
+      ;
 
     // parse it
     try
@@ -159,6 +161,7 @@ int main(int argc, char* argv[])
     cout << "exclusive           :\t" << exclusive           << endl;
     cout << "min_ht              :\t" << min_ht              << endl;
     cout << "verbose             :\t" << verbose             << endl;
+    cout << "FR_opt              :\t" << FR_option           << endl;
 
     // do the main analysis
     // -------------------------------------------------------------------------------------------------//
@@ -259,7 +262,8 @@ int main(int argc, char* argv[])
             mc_sys_unc,
             lumi,
             min_ht,
-            verbose
+            verbose,
+	    FR_option
         ),
         samesignbtag,
         number_of_events,

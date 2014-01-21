@@ -27,7 +27,10 @@ public:
         float away_jet_pt = -1.,
         float away_jet_dphi = -1.,
         float mu_iso_denom = -1.,
-        bool btag_away_jet = false
+        bool btag_away_jet = false,
+        bool absolute_iso = false,
+	bool only_invert_isocut_mu = false,
+	bool use_FOpt = false
         );
 
     // destroy:
@@ -56,6 +59,9 @@ private:
     float m_away_jet_dphi;
     float m_mu_iso_denom;
     bool m_btag_away_jet;
+    bool m_absolute_iso;
+    bool m_only_invert_isocut_mu;
+    bool m_use_FOpt;
 };
 
 #endif // SS_FAKERATEBABYLOOPER_HPP

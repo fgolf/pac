@@ -63,6 +63,9 @@ int main(int argc, char* argv[])
     float away_jet_dphi        = -1.;
     float mu_iso_denom         = 0.4;
     bool btag_away_jet         = false;
+    bool absolute_iso          = false;
+    bool only_invert_isocut_mu = false;
+    bool use_FOpt              = false;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -84,6 +87,9 @@ int main(int argc, char* argv[])
         ("jet_dphi"      , po::value<float>(&away_jet_dphi)        , "minimum away jet dphi cut"                        )
         ("mu_iso"        , po::value<float>(&mu_iso_denom)         , "muon isolation extrapolation"                     )
         ("btag"          , po::value<bool>(&btag_away_jet)         , "b-tag away jet"                                   )
+        ("abs_iso"       , po::value<bool>(&absolute_iso)          , "use absolute isolation (muons only)"              )
+        ("invert_iso_only",po::value<bool>(&only_invert_isocut_mu) , "only iso cut distinguishes NUM/FO (muons only)"   )
+        ("FOpt"          ,po::value<bool>(&use_FOpt)               , "Bin in FOpt instead of muon pt"                   )
         ;
 
     po::variables_map vm;
@@ -141,7 +147,7 @@ int main(int argc, char* argv[])
     at::ScanChainWithFilename<FakeRateBaby>
     (
         /*input chain ptr =*/chain.get(), 
-        FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix, away_jet_pt, away_jet_dphi, mu_iso_denom, btag_away_jet), 
+        FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix, away_jet_pt, away_jet_dphi, mu_iso_denom, btag_away_jet, absolute_iso, only_invert_isocut_mu, use_FOpt ), 
         fake_rate_baby,
         number_of_events,
         good_run_list,

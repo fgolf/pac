@@ -66,11 +66,13 @@ PlotLooper::PlotLooper
     //const float l2_min_pt,
     //const float l2_max_pt,
     const float min_ht,
-    const bool verbose
+    const bool verbose,
+    const int FR_option
 )
     : at::AnalysisWithHist(root_file_name)
     , m_lumi(lumi)
     , m_verbose(verbose)
+    , m_FR_option(FR_option)
     , m_is_data(at::SampleIsData(sample))
     , m_do_vtx_reweight(not vtxreweight_file_name.empty())
     , m_do_scale_factors(do_scale_factors)
@@ -140,6 +142,9 @@ PlotLooper::PlotLooper
             elfr_name = "h_elfr40c";
             break;
     }
+    cout<< " *** CAREFUL *** Using muon FR histogram also for electrons. Can't trust any electron plot"<<endl; // GZ
+    elfr_name = mufr_name; //GZ
+
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
     if (not h_mufr) {throw std::runtime_error(Form("ERROR: PlotLooper: %s doesn't exist", mufr_name.c_str()));}
@@ -756,12 +761,34 @@ int PlotLooper::operator()(long event)
             }
         }
 
+	// GZ: modify num and denom definition
+	// change is_ss() to is_ss_mod, etc
+	bool is_ss_mod = is_ss();
+	bool is_sf_mod = is_sf();
+	bool is_df_mod = is_df();
+	bool is_os_mod = is_os();
+	if (m_FR_option == 1 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Use absolute isolation 2 GeV in numerator (muon only)
+	  if (is_ss_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_ss_mod=false; is_sf_mod=true;} // downgrade from SS to SF
+	  if (is_sf_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 && lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_sf_mod=false; is_df_mod=true;} // downgrade from SF to DF
+	  if (is_os_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_os_mod=false; }
+	}
+	if (m_FR_option == 2 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection (muon only)
+	  if ( (is_sf_mod || is_df_mod) && (!lep1_passes_id() || !lep2_passes_id()) ) {is_sf_mod=false; is_df_mod=false;} // remove event from FO
+	}
+	if (m_FR_option == 3 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection AND abs iso in numerator (muon only)
+	  if (is_ss_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_ss_mod=false; is_sf_mod=true;} 
+	  if (is_sf_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 && lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_sf_mod=false; is_df_mod=true;}
+	  if (is_os_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_os_mod=false; }
+	  if ( (is_sf_mod || is_df_mod) && (!lep1_passes_id() || !lep2_passes_id()) ) {is_sf_mod=false; is_df_mod=false;}
+	}
+
+
         // charge type
         DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
-        if (is_ss()) {charge_type = DileptonChargeType::SS;}
-        if (is_sf()) {charge_type = DileptonChargeType::SF;}
-        if (is_df()) {charge_type = DileptonChargeType::DF;}
-        if (is_os()) {charge_type = DileptonChargeType::OS;}
+        if (is_ss_mod) {charge_type = DileptonChargeType::SS;}
+        if (is_sf_mod) {charge_type = DileptonChargeType::SF;}
+        if (is_df_mod) {charge_type = DileptonChargeType::DF;}
+        if (is_os_mod) {charge_type = DileptonChargeType::OS;}
         if (ssb::charge_type() < 0)
         {
             if (m_verbose) {cout << "failing valid hypothesis requirement" << endl;}
@@ -970,31 +997,31 @@ int PlotLooper::operator()(long event)
         // count events
         if (dilep_type()==DileptonHypType::MUMU)
         {
-            if(is_ss()) m_count_ss[0] += 1.0;
-            if(is_sf()) m_count_sf[0] += 1.0;
-            if(is_df()) m_count_df[0] += 1.0;
-            if(is_os()) m_count_os[0] += 1.0;
+            if(is_ss_mod) m_count_ss[0] += 1.0;
+            if(is_sf_mod) m_count_sf[0] += 1.0;
+            if(is_df_mod) m_count_df[0] += 1.0;
+            if(is_os_mod) m_count_os[0] += 1.0;
         }
         else if (dilep_type()==DileptonHypType::EMU)
         {
-            if(is_ss()) m_count_ss[1] += 1.0;
-            if(is_sf()) m_count_sf[1] += 1.0;
-            if(is_df()) m_count_df[1] += 1.0;
-            if(is_os()) m_count_os[1] += 1.0;
+            if(is_ss_mod) m_count_ss[1] += 1.0;
+            if(is_sf_mod) m_count_sf[1] += 1.0;
+            if(is_df_mod) m_count_df[1] += 1.0;
+            if(is_os_mod) m_count_os[1] += 1.0;
         }
         else if (dilep_type()==DileptonHypType::EE)
         {
-            if(is_ss()) m_count_ss[2] += 1.0;
-            if(is_sf()) m_count_sf[2] += 1.0;
-            if(is_df()) m_count_df[2] += 1.0;
-            if(is_os()) m_count_os[2] += 1.0;
+            if(is_ss_mod) m_count_ss[2] += 1.0;
+            if(is_sf_mod) m_count_sf[2] += 1.0;
+            if(is_df_mod) m_count_df[2] += 1.0;
+            if(is_os_mod) m_count_os[2] += 1.0;
         }
         // count all 
         {
-            if(is_ss()) m_count_ss[3] += 1.0;
-            if(is_sf()) m_count_sf[3] += 1.0;
-            if(is_df()) m_count_df[3] += 1.0;
-            if(is_os()) m_count_os[3] += 1.0;
+            if(is_ss_mod) m_count_ss[3] += 1.0;
+            if(is_sf_mod) m_count_sf[3] += 1.0;
+            if(is_df_mod) m_count_df[3] += 1.0;
+            if(is_os_mod) m_count_os[3] += 1.0;
         }
 
         // Weight Factors
@@ -1023,7 +1050,7 @@ int PlotLooper::operator()(long event)
         string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
 
         // SS
-        if (is_ss())
+        if (is_ss_mod)
         {
             rt::Fill(hc["h_yield_ll"], 1, evt_weight);
             rt::Fill(hc["h_yield"+hs], 1, evt_weight);
@@ -1053,7 +1080,7 @@ int PlotLooper::operator()(long event)
         }
 
         // SF 
-        if (is_sf())
+        if (is_sf_mod)
         {
             const LorentzVector& p4  = lep1_is_fo() ? lep1_p4()    : lep2_p4();
             const int id             = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
@@ -1065,7 +1092,7 @@ int PlotLooper::operator()(long event)
         }
 
         // DF 
-        if (is_df())
+        if (is_df_mod)
         {
             const LorentzVector& l1_p4 = lep1_p4();
             const LorentzVector& l2_p4 = lep2_p4();
@@ -1079,7 +1106,7 @@ int PlotLooper::operator()(long event)
         }
 
         // OS
-        if (is_os())
+        if (is_os_mod)
         {
 
             const LorentzVector& l1_p4 = lep1_p4();
@@ -1105,7 +1132,7 @@ int PlotLooper::operator()(long event)
         }
 
         //// dont't fill hists for MC if they are not truth matched (SS or DF only)
-        //if ((not is_real_data()) && (not is_mc_matched) && (is_sf() || is_df()))
+        //if ((not is_real_data()) && (not is_mc_matched) && (is_sf_mod || is_df_mod))
         //{
         //    if (m_verbose) {cout << "leptons failing truth matching (MC only)" << endl;}
         //    //return 0;

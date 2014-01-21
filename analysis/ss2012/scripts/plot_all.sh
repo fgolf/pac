@@ -17,7 +17,9 @@ if [ $anal_type == "low_pt" ]; then
 else
     min_ht=80
 fi
-options=" --nbtags $nbtags --njets $njets --sr $signal_region --excl $exclusive --lumi $lumi --fr_file data/fake_rates/ssFR_data_standard_16Dec2012.root --charge $charge_option --l2_min_pt $min_pt --l2_max_pt $max_pt --ht $min_ht --anal_type $anal_type"
+options=" --nbtags $nbtags --njets $njets --sr $signal_region --excl $exclusive --lumi $lumi --fr_file data/fake_rates/ssFR_data_standard_18Dec2013abs.root --charge $charge_option --l2_min_pt $min_pt --l2_max_pt $max_pt --ht $min_ht --anal_type $anal_type"
+#options=" --nbtags $nbtags --njets $njets --sr $signal_region --excl $exclusive --lumi $lumi --fr_file data/fake_rates/ssFR_data_standard_16Dec2012.root --charge $charge_option --l2_min_pt $min_pt --l2_max_pt $max_pt --ht $min_ht --anal_type $anal_type"
+
 
 charge_stem=
 if [ $charge_option -eq 1 ]; then

@@ -47,11 +47,13 @@ FRClosureLooper::FRClosureLooper
     const float ht_cut,
     const int charge_option,
     const float lumi,
-    const bool verbose
+    const bool verbose,
+    const int FR_option
     )
     : at::AnalysisWithHist(root_file_name, false, "")
     , m_lumi(lumi)
     , m_verbose(verbose)
+    , m_FR_option(FR_option)
     , m_is_data(at::SampleIsData(sample))
     , m_do_vtx_reweight(not vtxreweight_file_name.empty())
     , m_do_scale_factors(do_scale_factors)
@@ -532,8 +534,42 @@ int FRClosureLooper::operator()(long event)
         const string hs = Form("_%s", GetDileptonHypTypeName(hyp_type).c_str());
         const string qs = Form("_%s", GetDileptonChargeTypeName(charge_type).c_str());
 
+	// Alternative definitions for numerator and denominator (used if FR_option != 0)
+	bool is_ss_mod = is_ss();
+	bool is_sf_mod = is_sf();
+	bool is_df_mod = is_df();
+//	if (m_FR_option == 1 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Use absolute isolation 2 GeV in numerator (muon only)
+//	  if (is_ss_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_ss_mod=false; is_sf_mod=true;} // downgrade from SS to SF
+//	  if (is_sf_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 && lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_sf_mod=false; is_df_mod=true;} // downgrade from SF to DF
+//	}
+//	if (m_FR_option == 2 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection (muon only)
+//	  if ( (is_sf_mod || is_df_mod) && (!lep1_passes_id() || !lep2_passes_id()) ) {is_sf_mod=false; is_df_mod=false;} // remove event from FO
+//	}
+//	if (m_FR_option == 3 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection AND abs iso in numerator (muon only)
+//	  if (is_ss_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_ss_mod=false; is_sf_mod=true;} 
+//	  if (is_sf_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 && lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_sf_mod=false; is_df_mod=true;}
+//	  if ( (is_sf_mod || is_df_mod) && (!lep1_passes_id() || !lep2_passes_id()) ) {is_sf_mod=false; is_df_mod=false;}
+//	}
+
+	if (m_FR_option == 1 || m_FR_option == 3) {
+	  int downgrade = 0;
+	  if ( abs(lep1_pdgid())==13 && lep1_corpfiso()*lep1_p4().pt() > 2 && !lep1_is_fo() ) downgrade++;
+	  if ( abs(lep2_pdgid())==13 && lep2_corpfiso()*lep2_p4().pt() > 2 && !lep2_is_fo() ) downgrade++;
+	  if (is_ss_mod && downgrade >= 1)  {is_ss_mod=false; is_sf_mod=true; downgrade--;} // downgrade from SS to SF
+	  if (is_sf_mod && downgrade >= 1)  {is_sf_mod=false; is_df_mod=true; downgrade--;} // downgrade from SF to DF
+	}
+	if (m_FR_option == 2 || m_FR_option == 3) {
+	  int remove = 0;
+	  if ( abs(lep1_pdgid())==13 && !lep1_passes_id() ) remove++;
+	  if ( abs(lep2_pdgid())==13 && !lep2_passes_id() ) remove++;
+	  if (remove > 0) {is_sf_mod=false; is_df_mod=false;}
+	}
+
+
+
+
         // SS
-        if (is_ss())
+        if (is_ss_mod)
         {
             rt::Fill(hc["h_yield_ll"], 1, evt_weight);
             rt::Fill(hc["h_yield"+hs], 1, evt_weight);
@@ -545,11 +581,17 @@ int FRClosureLooper::operator()(long event)
         }
 
         // SF 
-        if (is_sf())
+        if (is_sf_mod)
         {
-            const LorentzVector& p4 = lep1_is_fo() ? lep1_p4()    : lep2_p4();
-            int id                  = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
-            if ((lep1_is_fo() && not_fromw_l1 && fromw_l2) || (lep2_is_fo() && fromw_l1 && not_fromw_l2))
+	  bool lep1_is_fo_mod = lep1_is_fo();
+	  bool lep2_is_fo_mod = lep2_is_fo();
+	  if (m_FR_option == 1 || m_FR_option == 3) {
+	    if ( abs(lep1_pdgid())==13 && lep1_corpfiso()*lep1_p4().pt() > 2 ) lep1_is_fo_mod = true; // if lepton fails abs. iso., it is a FO
+	    if ( abs(lep2_pdgid())==13 && lep2_corpfiso()*lep2_p4().pt() > 2 ) lep2_is_fo_mod = true; // if lepton fails abs. iso., it is a FO
+	  }
+            const LorentzVector& p4 = lep1_is_fo_mod ? lep1_p4()    : lep2_p4();
+            int id                  = lep1_is_fo_mod ? lep1_pdgid() : lep2_pdgid();
+            if ((lep1_is_fo_mod && not_fromw_l1 && fromw_l2) || (lep2_is_fo_mod && fromw_l1 && not_fromw_l2))
             {
                 if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
                 if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
@@ -557,7 +599,7 @@ int FRClosureLooper::operator()(long event)
         }
 
         // DF 
-        if (is_df())
+        if (is_df_mod)
         {
             const LorentzVector& l1_p4 = lep1_p4();
             const LorentzVector& l2_p4 = lep2_p4();

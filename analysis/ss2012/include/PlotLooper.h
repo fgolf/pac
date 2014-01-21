@@ -51,7 +51,8 @@ public:
         //const float l2_min_pt = 20.0,
         //const float l2_max_pt = 10000000.0,
         const float min_ht = 80.0,
-        const bool verbose = false
+        const bool verbose = false,
+        const int FR_option = 0
     );
 
     // destroy:
@@ -69,6 +70,7 @@ private:
     // members
     float m_lumi;
     const bool m_verbose;
+    const int m_FR_option;
     const bool m_is_data;
     const bool m_do_vtx_reweight;
     const bool m_do_scale_factors;

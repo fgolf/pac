@@ -23,7 +23,7 @@ try
     long number_of_events           = -1;
     std::string input_file          = "";
     std::string output_file         = "";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_standard_29Jan2013_d0Cut.root";
+    std::string fake_rate_file_name = "data/fake_rates/ssFR_qcd_standard_26Feb2013.root";
     std::string mufr_hist_name      = "h_mufr40c";
     std::string elfr_hist_name      = "h_elfr40c";
     std::string vtxreweight_file    = "";
@@ -40,6 +40,7 @@ try
     unsigned int signal_region_num  = 0;
     float lumi                      = 1.0;
     bool verbose                    = false;
+    int FR_option                   = 0;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -65,6 +66,7 @@ try
         ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
         ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
+        ("FR_opt"   , po::value<int>(&FR_option)                  , "FR_option (0 standard, 1 abs iso num, 2 iso only FO)"      )
         ;
 
     po::variables_map vm;
@@ -188,7 +190,8 @@ try
             ht_cut,
             charge_option,
             lumi,
-            verbose
+            verbose,
+	    FR_option
         ),
         samesignbtag,
         number_of_events,

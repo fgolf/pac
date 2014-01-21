@@ -35,7 +35,8 @@ public:
         const float ht_cut = -99999,
         const int charge_option = 0,
         const float lumi = 1.0,
-        const bool verbose = false
+        const bool verbose = false,
+	const int  FR_option = 0
     );
 
     // destroy:
@@ -53,6 +54,7 @@ private:
     // members
     float m_lumi;
     bool m_verbose;
+    int  m_FR_option;
     bool m_is_data;
     bool m_do_vtx_reweight;
     bool m_do_scale_factors;

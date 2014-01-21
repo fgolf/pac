@@ -29,7 +29,8 @@ FakeRateBabyLooper::FakeRateBabyLooper
     float mu_iso_denom,
     bool btag_away_jet,
     bool absolute_iso,
-    bool only_invert_isocut_mu
+    bool only_invert_isocut_mu,
+    bool use_FOpt
     )
     : at::AnalysisWithHist(root_file_name, print, suffix)
     , m_sample(sample)
@@ -46,6 +47,7 @@ FakeRateBabyLooper::FakeRateBabyLooper
     , m_btag_away_jet(btag_away_jet)
     , m_absolute_iso(absolute_iso)
     , m_only_invert_isocut_mu(only_invert_isocut_mu)
+    , m_use_FOpt(use_FOpt)
 {
     // begin job
     BeginJob();
@@ -371,6 +373,13 @@ void FakeRateBabyLooper::BookHists()
 	hc.Add(new TH1F("h_mu_fojet_qPt_num_iso04"      , "fo muonjet; p_{T}^{mother}",100,0,250), "texte");
 	hc.Add(new TH1F("h_mu_fojet_qPt_nonum_iso01"	, "fo muonjet; p_{T}^{mother}",100,0,250), "texte");
 	hc.Add(new TH1F("h_mu_fojet_qPt_nonum_iso04"	, "fo muonjet; p_{T}^{mother}",100,0,250), "texte");
+
+	hc.Add(new TH1F("h_mu_fojet20_qPt_num_iso01"      , "fo muonjet, 20 GeV; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet20_qPt_num_iso04"      , "fo muonjet, 20 GeV; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet40_qPt_num_iso01"      , "fo muonjet, 40 GeV; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet40_qPt_num_iso04"      , "fo muonjet, 40 GeV; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet60_qPt_num_iso01"      , "fo muonjet, 60 GeV; p_{T}^{mother}",100,0,250), "texte");
+	hc.Add(new TH1F("h_mu_fojet60_qPt_num_iso04"      , "fo muonjet, 60 GeV; p_{T}^{mother}",100,0,250), "texte");
 
 	hc.Add(new TH1F("h_mu_fo_ecal_denominator"	, "fo muon; ecal (GeV)",50,0,50), "texte");
 	hc.Add(new TH1F("h_mu_fo_hcal_denominator"	, "fo muon; hcal (GeV)",50,0,50), "texte");
@@ -1233,8 +1242,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 		if (!num_mu_ssV5_noIso() && isoDen && hcal && ecal) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso04_MIP"], ptpfcL1Fj1(), evt_weight);
 		if (!num_mu_ssV5_noIso() && isoDen && !(hcal && ecal)) rt::Fill( hc["h_mu_fo_jetPt_nonum_iso04_noMIP"], ptpfcL1Fj1(), evt_weight);
 
-		if ( (!num_lep_sel && isoNum) || isoDen ) rt::Fill( hc["h_mu_fo_ecal_denominator"	 ], mu_ecal_veto_dep(), evt_weight);
-		if ( (!num_lep_sel && isoNum) || isoDen ) rt::Fill( hc["h_mu_fo_hcal_denominator"	 ], mu_hcal_veto_dep(), evt_weight);
+		if ( !(num_lep_sel && isoNum) && isoDen ) rt::Fill( hc["h_mu_fo_ecal_denominator"	 ], mu_ecal_veto_dep(), evt_weight);
+		if ( !(num_lep_sel && isoNum) && isoDen ) rt::Fill( hc["h_mu_fo_hcal_denominator"	 ], mu_hcal_veto_dep(), evt_weight);
 		if ( num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fo_ecal_numerator"	 ], mu_ecal_veto_dep(), evt_weight);
 		if ( num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fo_hcal_numerator"	 ], mu_hcal_veto_dep(), evt_weight);
 		
@@ -1267,8 +1276,15 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 	      }
 
 	      // Special plots, based on comparing a muon pT bin with a FO pT bin, where the FO pT can be defined in different ways		
-	      float FOpt = pt() + iso*pt() + max(0.0, mu_ecal_veto_dep() - 4.0) + max(0.0, mu_ecal_veto_dep() - 6.0);
-	      if ( (num_lep_sel && iso < 0.1 && pt() > 20.0 && pt() < 22.0) || (num_lep_sel && iso > 0.1 && iso < 0.4 && FOpt > 20.0 && FOpt < 22.0) ) {
+	      float FOpt = pt() + (iso-0.1)*pt();// + max(0.0, mu_ecal_veto_dep() - 4.0) + max(0.0, mu_ecal_veto_dep() - 6.0);
+	      // _B_:  pt() + iso*pt() + max(0.0, mu_ecal_veto_dep() - 4.0) + max(0.0, mu_ecal_veto_dep() - 6.0);
+	      // _C_:  pt() + iso*pt();
+	      bool hcal = (mu_hcal_veto_dep() < 6.0);
+	      bool ecal = (mu_ecal_veto_dep() < 4.0);
+	      // _D_: added hcal and ecal num requirements to denom
+	      // _E_: added !qcd_mu_low to avoid skewed sample (but this limits pT down to 16 GeV, while it should go down to 14.3
+	      // _F_: pt() + (iso-0.1)*pt()
+	      if ( (num_lep_sel && iso < 0.1 && pt() > 20.0 && pt() < 22.0) || ( iso < 0.4 && !(num_lep_sel && iso < 0.1) && FOpt > 20.0 && FOpt < 22.0 && ecal && hcal && !qcd_mu_low) ) {
 		bool isoNum = (iso < 0.1);
 		bool isoDen = (iso > 0.1 && iso < 0.4);
 		if ( num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fojet_jetPt_num_iso01"	 ], ptpfcL1Fj1(), evt_weight);
@@ -1279,6 +1295,15 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 		if ( num_lep_sel && isoDen ) rt::Fill( hc["h_mu_fojet_qPt_num_iso04"     ], mc3pt(), evt_weight);
 		if (!num_lep_sel && isoNum ) rt::Fill( hc["h_mu_fojet_qPt_nonum_iso01"	 ], mc3pt(), evt_weight);
 		if (!num_lep_sel && isoDen ) rt::Fill( hc["h_mu_fojet_qPt_nonum_iso04"	 ], mc3pt(), evt_weight);
+
+		if ( num_lep_sel && isoNum && jet_dwn_cut) rt::Fill( hc["h_mu_fojet20_qPt_num_iso01"     ], mc3pt(), evt_weight);
+		if ( num_lep_sel && isoDen && jet_dwn_cut) rt::Fill( hc["h_mu_fojet20_qPt_num_iso04"     ], mc3pt(), evt_weight);
+		if ( num_lep_sel && isoNum && jet_cut) rt::Fill( hc["h_mu_fojet40_qPt_num_iso01"     ], mc3pt(), evt_weight);
+		if ( num_lep_sel && isoDen && jet_cut) rt::Fill( hc["h_mu_fojet40_qPt_num_iso04"     ], mc3pt(), evt_weight);
+		if ( num_lep_sel && isoNum && jet_up_cut) rt::Fill( hc["h_mu_fojet60_qPt_num_iso01"     ], mc3pt(), evt_weight);
+		if ( num_lep_sel && isoDen && jet_up_cut) rt::Fill( hc["h_mu_fojet60_qPt_num_iso04"     ], mc3pt(), evt_weight);
+
+
 	      } // end of special FOpt plots
 	      
 	      //	      if (iso < den_mu_iso_cut)
@@ -1288,13 +1313,23 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 		  if (jet_cut     && pt()>20) { rt::Fill( hc["h_mu_fo40c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 		  if (jet_up_cut  && pt()>20) { rt::Fill( hc["h_mu_fo60c_vs_nvtxs"], evt_nvtxs(), evt_weight); } 
 		  
-		  if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
-		  if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
-		  if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
-		  
-		  if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_pt"], pt(), evt_weight); }
-		  if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_pt"], pt(), evt_weight); }
-		  if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_pt"], pt(), evt_weight); }
+		  if (!m_use_FOpt) {
+		    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 
+		    if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), pt(), evt_weight); } 
+		    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), pt(), evt_weight); } 
+		    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_pt"], pt(), evt_weight); }
+		    if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_pt"], pt(), evt_weight); }
+		    if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_pt"], pt(), evt_weight); }
+		  }
+		  else {
+		    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), isNumIso ? pt() : FOpt, evt_weight); } 
+		    if (jet_cut               ) { rt::Fill2D(hc["h_mu_fo40c"], fabs(eta()), isNumIso ? pt() : FOpt, evt_weight); } 
+		    if (jet_up_cut            ) { rt::Fill2D(hc["h_mu_fo60c"], fabs(eta()), isNumIso ? pt() : FOpt, evt_weight); } 
+		    if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_pt"], isNumIso ? pt() : FOpt, evt_weight); }
+		    if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_pt"], isNumIso ? pt() : FOpt, evt_weight); }
+		    if (jet_up_cut  ) { rt::Fill( hc["h_mu_fo60c_pt"], isNumIso ? pt() : FOpt, evt_weight); }
+		  }
+
 		  
 		  if (jet_dwn_cut ) { rt::Fill( hc["h_mu_fo20c_eta"], eta(), evt_weight); }
 		  if (jet_cut     ) { rt::Fill( hc["h_mu_fo40c_eta"], eta(), evt_weight); }
