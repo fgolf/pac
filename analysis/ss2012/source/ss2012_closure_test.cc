@@ -66,7 +66,7 @@ try
         ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
         ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
-        ("FR_opt"   , po::value<int>(&FR_option)                  , "FR_option (0 standard, 1 abs iso num, 2 iso only FO)"      )
+        ("FR_opt"   , po::value<int>(&FR_option)                  , "FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both, 4 FOpt and iso only)"      )
         ;
 
     po::variables_map vm;

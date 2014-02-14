@@ -142,8 +142,8 @@ PlotLooper::PlotLooper
             elfr_name = "h_elfr40c";
             break;
     }
-    cout<< " *** CAREFUL *** Using muon FR histogram also for electrons. Can't trust any electron plot"<<endl; // GZ
-    elfr_name = mufr_name; //GZ
+ //   cout<< " *** CAREFUL *** Using muon FR histogram also for electrons. Can't trust any electron plot"<<endl; // GZ
+ //   elfr_name = mufr_name; //GZ
 
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
@@ -772,7 +772,7 @@ int PlotLooper::operator()(long event)
 	  if (is_sf_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 && lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_sf_mod=false; is_df_mod=true;} // downgrade from SF to DF
 	  if (is_os_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_os_mod=false; }
 	}
-	if (m_FR_option == 2 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection (muon only)
+	if ((m_FR_option == 2 || m_FR_option == 4) ) {  // Require ID cuts in FO selection (muon only)
 	  if ( (is_sf_mod || is_df_mod) && (!lep1_passes_id() || !lep2_passes_id()) ) {is_sf_mod=false; is_df_mod=false;} // remove event from FO
 	}
 	if (m_FR_option == 3 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection AND abs iso in numerator (muon only)
@@ -814,8 +814,8 @@ int PlotLooper::operator()(long event)
         switch(m_analysis_type)
         {
             case AnalysisType::high_pt:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
+	        mu_min_pt = 10.0; // GZ // the 20 GeV cut is implemented after PassesSignalRegion
+                el_min_pt = 10.0;
                 break;
             case AnalysisType::high_pt_eth:
                 mu_min_pt = 20.0;
@@ -884,7 +884,7 @@ int PlotLooper::operator()(long event)
             bool passes_trigger = true;
             switch (hyp_type)
             {
-                case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
+	        case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
                 case DileptonHypType::EMU : passes_trigger = trig_em(); break;
                 case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
                 default: passes_trigger = false; break;
@@ -904,6 +904,8 @@ int PlotLooper::operator()(long event)
             return 0;
         }
 
+
+
         // two btagged jets
         const unsigned int num_btags = ((not is_real_data() && m_do_scale_factors) ? nbtags_reweighted() : nbtags());
         if (num_btags < m_nbtags)
@@ -918,6 +920,28 @@ int PlotLooper::operator()(long event)
             if (m_verbose) {cout << "failing signal region cut" << endl;}
             return 0;
         }
+
+	// GZ Do the lepton cuts by hand: pt > 20 for numerator, FOpt > 20 for non-iso denominator
+	float FOpt1 = 0;
+	float FOpt2 = 0; 
+	float isocut1 = abs(lep1_pdgid())==13 ? 0.1 : 0.09;
+	float isocut2 = abs(lep2_pdgid())==13 ? 0.1 : 0.09;
+	if ( m_FR_option == 4 && lep1_corpfiso() > isocut1) FOpt1 = lep1_p4().pt()*(lep1_corpfiso()-isocut1);
+	if ( m_FR_option == 4 && lep2_corpfiso() > isocut2) FOpt2 = lep2_p4().pt()*(lep2_corpfiso()-isocut2);
+	if ( m_analysis_type== AnalysisType::high_pt && (lep1_p4().pt()+FOpt1<20.0 || lep2_p4().pt()+FOpt2<20.0) ) {
+	  return 0;
+	}
+
+//	// GZ new overlap removal with 3rd lepton down to 10 GeV, to study the effects...
+//	if (lep3_p4().pt() > 10 ) {
+//	  //	  cout<<"This event has njets="<<njets()<<", vjets="<<vjets_p4().size()<<", and a third lepton with pT "<<lep3_p4().pt()<<endl;
+//	  for (unsigned int i = 0; i < vjets_p4().size(); i++) {
+//	    float dr = rt::DeltaR(vjets_p4().at(i), lep3_p4());
+//	    //cout<<"vjet "<<i<<" has pt = "<<vjets_p4().at(i).pt()<<" and DeltaR with 3rd lepton "<<dr<<endl;
+//	    if (lep3_p4().pt() <20 && dr < 0.4 && is_ss()) 
+//	      cout<<"This "<<njets()<<" jets SS event will lose a jet when the lepton threshold goes from 20 to 10 GeV. Lepton passes num: "<<lep3_is_num()<<endl;;
+//	    }
+//	}
 
         // if the value of m_m_sparm0 negative, this check is skipped
         if (m_sparm0 >= 0.0f && not rt::is_equal(m_sparm0, sparm0()))
@@ -1078,17 +1102,18 @@ int PlotLooper::operator()(long event)
                      num_btags) << endl;
             }
         }
-
+	  
         // SF 
         if (is_sf_mod)
         {
             const LorentzVector& p4  = lep1_is_fo() ? lep1_p4()    : lep2_p4();
             const int id             = lep1_is_fo() ? lep1_pdgid() : lep2_pdgid();
-            if (is_real_data() || (!is_real_data() && is_mc_matched))
-            {
-                if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
-                if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt(), evt_weight);}
-            }
+      
+	    if (is_real_data() || (!is_real_data() && is_mc_matched))
+	      {
+                if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOpt1+FOpt2, evt_weight);}
+                if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOpt1+FOpt2, evt_weight);}
+	      }
         }
 
         // DF 
@@ -1098,10 +1123,11 @@ int PlotLooper::operator()(long event)
             const LorentzVector& l2_p4 = lep2_p4();
             const int l1_id            = lep1_pdgid();
             const int l2_id            = lep2_pdgid();
+
             if (is_real_data() || (!is_real_data() && is_mc_matched))
             {
-                at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
-                at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt(), l1_p4.eta(), l2_id, l2_p4.pt(), l2_p4.eta(), evt_weight);
+                at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt()+FOpt1, l1_p4.eta(), l2_id, l2_p4.pt()+FOpt2, l2_p4.eta(), evt_weight);
+                at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt()+FOpt1, l1_p4.eta(), l2_id, l2_p4.pt()+FOpt2, l2_p4.eta(), evt_weight);
             }
         }
 
@@ -1148,13 +1174,13 @@ int PlotLooper::operator()(long event)
             case DileptonChargeType::SS: 
                 break;
             case DileptonChargeType::SF: 
-                fr1 = lep1_is_fo() * GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
-                fr2 = lep2_is_fo() * GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+                fr1 = lep1_is_fo() * GetFakeRateValue(lep1_pdgid(), lep1_p4().pt()+FOpt1, lep1_p4().eta());
+                fr2 = lep2_is_fo() * GetFakeRateValue(lep2_pdgid(), lep2_p4().pt()+FOpt2, lep2_p4().eta());
                 evt_weight *= fr1/(1.0 - fr1) + fr2/(1.0 - fr2); 
                 break;
             case DileptonChargeType::DF:
-                fr1 = GetFakeRateValue(lep1_pdgid(), lep1_p4().pt(), lep1_p4().eta());
-                fr2 = GetFakeRateValue(lep2_pdgid(), lep2_p4().pt(), lep2_p4().eta());
+                fr1 = GetFakeRateValue(lep1_pdgid(), lep1_p4().pt()+FOpt1, lep1_p4().eta());
+                fr2 = GetFakeRateValue(lep2_pdgid(), lep2_p4().pt()+FOpt2, lep2_p4().eta());
                 evt_weight *= fr1/(1.0 - fr1) * fr2/(1.0 - fr2); 
                 break;
             case DileptonChargeType::OS:
@@ -1181,20 +1207,22 @@ int PlotLooper::operator()(long event)
         // SS kinematic plots
         const LorentzVector& p41 = lep1_p4();
         const LorentzVector& p42 = lep2_p4();
+	// GZ corrected MT for fakeable objects
+	float mtCorr = rt::Mt(p41, pfmet(), pfmet_phi());  // calculated against the higher pT lepton
 
         rt::Fill(hc["h_nvtxs" +qs], nvtxs()     , evt_weight);
-        rt::Fill(hc["h_pt1"   +qs], p41.pt()    , evt_weight);
-        rt::Fill(hc["h_pt2"   +qs], p42.pt()    , evt_weight);
+        rt::Fill(hc["h_pt1"   +qs], p41.pt()+FOpt1    , evt_weight);
+        rt::Fill(hc["h_pt2"   +qs], p42.pt()+FOpt2    , evt_weight);
         rt::Fill(hc["h_ht"    +qs], ht()        , evt_weight);
-        rt::Fill(hc["h_mt"    +qs], lep1_mt()   , evt_weight);
+        rt::Fill(hc["h_mt"    +qs], mtCorr      , evt_weight);//lep1_mt()   , evt_weight);
         rt::Fill(hc["h_met"   +qs], pfmet()     , evt_weight);
         rt::Fill(hc["h_nbtags"+qs], num_btags   , evt_weight);
         rt::Fill(hc["h_njets" +qs], njets()     , evt_weight);
 
-        rt::Fill(hc["h_pt1"   +hs+qs], p41.pt()    , evt_weight);
-        rt::Fill(hc["h_pt2"   +hs+qs], p42.pt()    , evt_weight);
+        rt::Fill(hc["h_pt1"   +hs+qs], p41.pt()+FOpt1    , evt_weight);
+        rt::Fill(hc["h_pt2"   +hs+qs], p42.pt()+FOpt2    , evt_weight);
         rt::Fill(hc["h_ht"    +hs+qs], ht()        , evt_weight);
-        rt::Fill(hc["h_mt"    +hs+qs], lep1_mt()   , evt_weight);
+        rt::Fill(hc["h_mt"    +hs+qs], mtCorr      , evt_weight);//, lep1_mt()   , evt_weight);
         rt::Fill(hc["h_met"   +hs+qs], pfmet()     , evt_weight);
         rt::Fill(hc["h_nbtags"+hs+qs], num_btags   , evt_weight);
         rt::Fill(hc["h_njets" +hs+qs], njets()     , evt_weight);
@@ -1204,8 +1232,8 @@ int PlotLooper::operator()(long event)
         rt::Fill(hc["h_pas_met"   +qs], pfmet()  , evt_weight);
         rt::Fill(hc["h_pas_njets" +qs], njets()  , evt_weight);
         rt::Fill(hc["h_pas_nbtags"+qs], num_btags, evt_weight);
-        rt::Fill(hc["h_pas_pt1"   +qs], p41.pt() , evt_weight);
-        rt::Fill(hc["h_pas_pt2"   +qs], p42.pt() , evt_weight);
+        rt::Fill(hc["h_pas_pt1"   +qs], p41.pt()+FOpt1 , evt_weight);
+        rt::Fill(hc["h_pas_pt2"   +qs], p42.pt()+FOpt2 , evt_weight);
         if (ht() > 200) // because UFL didn't keep the right triggers
         {
             rt::Fill(hc["h_pas_hthigh_ht"    +qs], ht()     , evt_weight);

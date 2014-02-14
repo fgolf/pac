@@ -1,9 +1,9 @@
 #!/bin/bash
 
-verbose=0
+verbose=1
 njets=2
 tag=V03-02-02
-path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
+path=/nfs-7/userdata/gzevi/babies/ss2012/$tag
 
 
 # make the output dirs
@@ -65,8 +65,8 @@ function merge2
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/${tag}/mc
 output_path=$path/hpt
 #merge high_pt dy             DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge high_pt wjets_v1       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge high_pt wjets_v2       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v2
+#GZmerge high_pt wjets_v1       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
+#GZmerge high_pt wjets_v2       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v2
 #merge high_pt wz             WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 #merge high_pt zz             ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 #merge high_pt ww             WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
@@ -102,8 +102,8 @@ merge high_pt wjets_v2       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer1
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/mc
 output_path=$path/lpt
 #merge low_pt dy             DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge low_pt wjets_v1       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge low_pt wjets_v2       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v2
+#GZmerge low_pt wjets_v1       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
+#GZmerge low_pt wjets_v2       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v2
 #merge low_pt wz             WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 #merge low_pt zz             ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 #merge low_pt ww             WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
@@ -139,8 +139,8 @@ merge low_pt wjets_v2       WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12
 input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/mc
 output_path=$path/vpt
 # merge vlow_pt dy            DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge vlow_pt wjets_v1      WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
-merge vlow_pt wjets_v2      WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v2
+#GZmerge vlow_pt wjets_v1      WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
+#GZmerge vlow_pt wjets_v2      WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v2
 # merge vlow_pt wz            WZJetsTo3LNu_TuneZ2_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 # merge vlow_pt zz            ZZJetsTo4L_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 # merge vlow_pt ww            WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
@@ -186,20 +186,20 @@ merge vlow_pt wjets_v2      WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12
 #merge_nofilter vlow_pt t1tttt SMS-T1tttt_Mgluino-350to1200_mLSP-0to850_8TeV-Pythia6Z_StoreResults-PU_START52_V9_FastSim-v1 
 
 #tag=V02-05-13
-#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/${tag}/mc
+input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/${tag}/mc
 #path=/nfs-7/userdata/rwkelley/babies/ss2012/${tag}
-#output_path=$path/mc
-#input_files="${input_path}/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
-#input_files=$input_files,"${input_path}/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
-#input_files=$input_files,"${input_path}/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
-#input_files=$input_files,"${input_path}/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
-##echo ${input_files}
-#merge2 vlow_pt wjets_large "${input_files}"
+output_path=$path/hpt
+input_files="${input_path}/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
+input_files=$input_files,"${input_path}/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
+input_files=$input_files,"${input_path}/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
+input_files=$input_files,"${input_path}/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
+echo ${input_files}
+merge2 high_pt wjets_large "${input_files}"
 ##merge_nofilter2 vlow_pt wjets_large "${input_files}"
-#merge high_pt w1jets W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge high_pt w2jets W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge high_pt w3jets W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
-#merge high_pt w4jets W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge high_pt w1jets W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge high_pt w2jets W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge high_pt w3jets W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge high_pt w4jets W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 
 #input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/${tag}/mc
 #path=/nfs-7/userdata/rwkelley/babies/ss2012/${tag}

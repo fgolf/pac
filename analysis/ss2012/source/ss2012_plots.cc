@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
         ("excl"     , po::value<bool>(&exclusive)                             , "use exclusive signal region"                                                   )
         ("ht"       , po::value<float>(&min_ht)                               , "min HT"                                                                        )
         ("verbose"  , po::value<bool>(&verbose)                               , "verbosity"                                                                     )
-        ("FR_opt"   , po::value<int>(&FR_option)                              , "FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both)"                  )
+        ("FR_opt"   , po::value<int>(&FR_option)                              , "FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both, 4 iso only and FOpt)")
       ;
 
     // parse it
@@ -207,7 +207,12 @@ int main(int argc, char* argv[])
         is_signal = (at::GetSampleInfo(sample).type == at::SampleType::susy);
         if (input_file.empty())
         {
-            const string short_name = ati.short_name.c_str();
+	  //const string short_name = ati.short_name.c_str();
+	    string short_name = ati.short_name.c_str();
+	    // GZ use lpt samples when trying FR_opt 4, since we want to have access to pT < 20
+	    if (FR_option==4 && short_name=="hpt" && sample_name=="data") short_name="hpt2";
+	    else if (FR_option==4 && short_name=="hpt") short_name="lpt";
+
             input_file = Form("babies/%s/%s.root", (is_signal ? "signal" : short_name.c_str()), sample_name.c_str());
             switch (sample)
             {

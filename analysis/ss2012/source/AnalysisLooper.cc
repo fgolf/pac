@@ -812,8 +812,8 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         switch(m_analysis_type)
         {
             case AnalysisType::high_pt:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
+                mu_min_pt = 10.0; // GZ lowered from 20 to 10 for testing the new FR
+                el_min_pt = 10.0; // GZ lowered from 20 to 10 for testing the new FR
                 break;
             case AnalysisType::high_pt_eth:
                 mu_min_pt = 20.0;

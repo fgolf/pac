@@ -34,11 +34,13 @@ FakeScalingStruct GetPromptSF (TH1* h_data, TH1* h_mc, double cut_lower, double 
 
     double sf = y_data / y_mc;
     double unc_stat = sf * sqrt(pow(sqrt(y_data)/y_data,2) + pow(sqrt(y_mc_err)/y_mc,2));
-    double unc_syst = fabs(sf - 1.) / 2.;
+    //GZ    double unc_syst = fabs(sf - 1.) / 2.;
+    double unc_syst = fabs(sf - 1.) / 1000.;
 
     if (verbose)
     {
         cout << endl;
+	cout<<"Looking at histogram "<<h_data->GetName()<<endl;
         printf("Calculating SF in mass window [%4.2f,%4.2f]...\n\n", cut_lower, cut_upper);
         printf("data yield: %4.2f\n", y_data);
         printf("MC yield: %4.2f\n", y_mc);
@@ -222,10 +224,10 @@ try
         // get data/MC scale factors
         const float mt_cut_min = 60.1f;
         const float mt_cut_max = 99.9f;
-//        TH1* h_data_el_num_mt_met30gt = dynamic_cast<TH1*>(hc_data[Form("h_el_num%s_mt_met30gt", jpt.c_str())]);
-//        TH1* h_mc_el_num_mt_met30gt   = dynamic_cast<TH1*>(hc_mc  [Form("h_el_num%s_mt_met30gt", jpt.c_str())]);
-//        h_mc_el_num_mt_met30gt->Scale(ele_lumi);
-//        FakeScalingStruct el_sf = GetPromptSF(h_data_el_num_mt_met30gt, h_mc_el_num_mt_met30gt, mt_cut_min, mt_cut_max, verbose);    
+        TH1* h_data_el_num_mt_met30gt = dynamic_cast<TH1*>(hc_data[Form("h_el_num%s_mt_met30gt", jpt.c_str())]);
+        TH1* h_mc_el_num_mt_met30gt   = dynamic_cast<TH1*>(hc_mc  [Form("h_el_num%s_mt_met30gt", jpt.c_str())]);
+        h_mc_el_num_mt_met30gt->Scale(ele_lumi);
+        FakeScalingStruct el_sf = GetPromptSF(h_data_el_num_mt_met30gt, h_mc_el_num_mt_met30gt, mt_cut_min, mt_cut_max, verbose);    
 
         TH1* h_data_mu_num_mt_met30gt = dynamic_cast<TH1*>(hc_data[Form("h_mu_num%s_mt_met30gt", jpt.c_str())]);
         TH1* h_mc_mu_num_mt_met30gt   = dynamic_cast<TH1*>(hc_mc  [Form("h_mu_num%s_mt_met30gt", jpt.c_str())]);
@@ -246,29 +248,29 @@ try
         // ----------------------------------------------------------------------------------------------------- //
 
 
-//        TH2* h_data_el_num       = dynamic_cast<TH2*>(hc_data[Form("h_el_num%s"      , jpt.c_str())]->Clone(Form("h_data_el_num%s_ewkcor"      , jpt.c_str())));
-//        TH2* h_data_el_fo        = dynamic_cast<TH2*>(hc_data[Form("h_el_fo%s"       , jpt.c_str())]->Clone(Form("h_data_el_fo%s_ewkcor"       , jpt.c_str())));
+        TH2* h_data_el_num       = dynamic_cast<TH2*>(hc_data[Form("h_el_num%s"      , jpt.c_str())]->Clone(Form("h_data_el_num%s_ewkcor"      , jpt.c_str())));
+        TH2* h_data_el_fo        = dynamic_cast<TH2*>(hc_data[Form("h_el_fo%s"       , jpt.c_str())]->Clone(Form("h_data_el_fo%s_ewkcor"       , jpt.c_str())));
 //        TH2* h_data_el_noiso_num = dynamic_cast<TH2*>(hc_data[Form("h_el_num%s_noiso", jpt.c_str())]->Clone(Form("h_data_el_num%s_noiso_ewkcor", jpt.c_str())));
 //        TH2* h_data_el_noiso_fo  = dynamic_cast<TH2*>(hc_data[Form("h_el_fo%s_noiso" , jpt.c_str())]->Clone(Form("h_data_el_fo%s_noiso_ewkcor" , jpt.c_str())));
 //
-//        // create an artificial histogram for scaling
-//        TH2* h_ele_scaling = dynamic_cast<TH2*>(h_data_el_num->Clone(Form("h_el%s_scaling", jpt.c_str())));
-//        SetScalingHistValues(h_ele_scaling, el_sf);
-//        TH2* h_mc_el_num = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_num%s", jpt.c_str())]), h_ele_scaling, ele_lumi);
-//        TH2* h_mc_el_fo  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_fo%s" , jpt.c_str())]), h_ele_scaling, ele_lumi);
+        // create an artificial histogram for scaling
+        TH2* h_ele_scaling = dynamic_cast<TH2*>(h_data_el_num->Clone(Form("h_el%s_scaling", jpt.c_str())));
+        SetScalingHistValues(h_ele_scaling, el_sf);
+        TH2* h_mc_el_num = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_num%s", jpt.c_str())]), h_ele_scaling, ele_lumi);
+        TH2* h_mc_el_fo  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_fo%s" , jpt.c_str())]), h_ele_scaling, ele_lumi);
 //
 //        TH2* h_ele_noiso_scaling = dynamic_cast<TH2*>(h_data_el_noiso_num->Clone(Form("h_el%s_noiso_scaling", jpt.c_str())));
 //        SetScalingHistValues(h_ele_noiso_scaling, el_noiso_sf);
 //        TH2* h_mc_el_noiso_num = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_num%s_noiso", jpt.c_str())]), h_ele_noiso_scaling, ele_noiso_lumi);
 //        TH2* h_mc_el_noiso_fo  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_fo%s_noiso" , jpt.c_str())]), h_ele_noiso_scaling, ele_noiso_lumi);
 //
-//        // subtract contamination
-//        h_data_el_num->Add(h_mc_el_num, -1);
-//        h_data_el_fo->Add(h_mc_el_fo, -1);
-//        h_data_el_num->SetName(Form("h_data_el_num%s", jpt.c_str()));
-//        h_data_el_fo ->SetName(Form("h_data_el_fo%s" , jpt.c_str()));
-//        h_mc_el_num->SetName(Form("h_mc_el_num%s_corr", jpt.c_str()));
-//        h_mc_el_fo ->SetName(Form("h_mc_el_fo%s_corr" , jpt.c_str()));
+        // subtract contamination
+        h_data_el_num->Add(h_mc_el_num, -1);
+        h_data_el_fo->Add(h_mc_el_fo, -1);
+        h_data_el_num->SetName(Form("h_data_el_num%s", jpt.c_str()));
+        h_data_el_fo ->SetName(Form("h_data_el_fo%s" , jpt.c_str()));
+        h_mc_el_num->SetName(Form("h_mc_el_num%s_corr", jpt.c_str()));
+        h_mc_el_fo ->SetName(Form("h_mc_el_fo%s_corr" , jpt.c_str()));
 //
 //        h_data_el_noiso_num->Add(h_mc_el_noiso_num, -1);
 //        h_data_el_noiso_fo->Add(h_mc_el_noiso_fo, -1);
@@ -277,11 +279,11 @@ try
 //        h_mc_el_noiso_num->SetName(Form("h_mc_el_noiso_num%s_corr", jpt.c_str()));
 //        h_mc_el_noiso_fo ->SetName(Form("h_mc_el_noiso_fo%s_corr" , jpt.c_str()));
 //
-//        // create fake rates and projections
-//        TH2* h_elfr_ewkcor        = rt::MakeEfficiencyPlot2D(        h_data_el_num, h_data_el_fo,      Form("h_elfr%s_ewkcor"       , jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]));
-//        TH1* h_elfr_vs_pt_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_el_num, h_data_el_fo, "y", Form("h_elfr%s_ewkcor_vs_pt" , jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]));
-//        TH1* h_elfr_vs_eta_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_el_num, h_data_el_fo, "x", Form("h_elfr%s_ewkcor_vs_eta", jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]), 20.0f , 9999.0f);
-//
+        // create fake rates and projections
+        TH2* h_elfr_ewkcor        = rt::MakeEfficiencyPlot2D(        h_data_el_num, h_data_el_fo,      Form("h_elfr%s_ewkcor"       , jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]));
+        TH1* h_elfr_vs_pt_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_el_num, h_data_el_fo, "y", Form("h_elfr%s_ewkcor_vs_pt" , jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]));
+        TH1* h_elfr_vs_eta_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_el_num, h_data_el_fo, "x", Form("h_elfr%s_ewkcor_vs_eta", jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]), 20.0f , 9999.0f);
+
 //        TH2* h_elfr_noiso_ewkcor        = rt::MakeEfficiencyPlot2D(        h_data_el_noiso_num, h_data_el_noiso_fo,      Form("h_elfr%s_noiso_ewkcor"       , jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]));
 //        TH1* h_elfr_vs_pt_noiso_ewkcor  = rt::MakeEfficiencyProjectionPlot(h_data_el_noiso_num, h_data_el_noiso_fo, "y", Form("h_elfr%s_noiso_ewkcor_vs_pt" , jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]));
 //        TH1* h_elfr_vs_eta_noiso_ewkcor = rt::MakeEfficiencyProjectionPlot(h_data_el_noiso_num, h_data_el_noiso_fo, "x", Form("h_elfr%s_noiso_ewkcor_vs_eta", jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]), 10.0f , 9999.0f);
@@ -341,13 +343,13 @@ try
         // ----------------------------------------------------------------------------------------------------- //
 
 //         hc_new.Add(h_above20c);
-//        hc_new.Add(h_elfr_ewkcor);
-//        hc_new.Add(h_elfr_vs_pt_ewkcor);
-//        hc_new.Add(h_elfr_vs_eta_ewkcor);
+        hc_new.Add(h_elfr_ewkcor);
+        hc_new.Add(h_elfr_vs_pt_ewkcor);
+        hc_new.Add(h_elfr_vs_eta_ewkcor);
         hc_new.Add(h_mufr_ewkcor);
         hc_new.Add(h_mufr_vs_pt_ewkcor);
         hc_new.Add(h_mufr_vs_eta_ewkcor);
-//        hc_new.Add(h_ele_scaling);
+        hc_new.Add(h_ele_scaling);
         hc_new.Add(h_mu_scaling);
 //        hc_new.Add(h_elfr_noiso_ewkcor);
 //        hc_new.Add(h_elfr_vs_pt_noiso_ewkcor);
@@ -359,8 +361,8 @@ try
 //        hc_new.Add(h_mu_iso_scaling);
 //        hc_new.Add(h_data_mu_iso_num);
 //        hc_new.Add(h_data_mu_iso_fo);
-//        hc_new.Add(h_mc_el_num);
-//        hc_new.Add(h_mc_el_fo);
+        hc_new.Add(h_mc_el_num);
+        hc_new.Add(h_mc_el_fo);
 //        hc_new.Add(h_mc_el_noiso_num);
 //        hc_new.Add(h_mc_el_noiso_fo);
         hc_new.Add(h_mc_mu_num);

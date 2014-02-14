@@ -2,8 +2,8 @@
 
 verbose=0
 njets=2
-tag=V03-02-02
-path=/nfs-7/userdata/rwkelley/babies/ss2012/$tag
+tag=V03-02-05
+path=/nfs-7/userdata/gzevi/babies/ss2012/$tag
 
 # make the output dirs
 
@@ -22,7 +22,7 @@ function merge
 run_list=json/final_19p49fb_cms2.txt # 19.49 
 
 # high_pt 
-input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/high_pt
+input_path=/hadoop/cms/store/user/gzevi/babies/ss2012/$tag/high_pt
 output_path=$path/hpt
 input_files="${input_path}/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root"
 input_files="${input_files},${input_path}/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root"
@@ -44,36 +44,36 @@ input_files="${input_files},${input_path}/DoubleMu_Run2012C-PromptReco-v2_AOD/*.
 input_files="${input_files},${input_path}/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root"
 merge data_hpt_19p5 high_pt $input_files
 
-# low pt 
-input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/low_pt
-output_path=$path/lpt
-input_files="${input_path}/ElectronHad_Run2012A-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012B-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012C-24Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012C-PromptReco-v2_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012D-PromptReco-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012A-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_lpt_19p5 low_pt $input_files
-
-# very low pt 
-input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/vlow_pt
-output_path=$path/vpt
-input_files="${input_path}/ElectronHad_Run2012A-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012B-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012C-24Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012C-PromptReco-v2_AOD/*.root"
-input_files="${input_files},${input_path}/ElectronHad_Run2012D-PromptReco-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012A-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
-input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
-merge data_vpt_19p5 vlow_pt $input_files
+## low pt 
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/low_pt
+#output_path=$path/lpt
+#input_files="${input_path}/ElectronHad_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012C-24Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012D-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
+#merge data_lpt_19p5 low_pt $input_files
+#
+## very low pt 
+#input_path=/hadoop/cms/store/user/rwkelley/babies/ss2012/$tag/vlow_pt
+#output_path=$path/vpt
+#input_files="${input_path}/ElectronHad_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012C-24Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/ElectronHad_Run2012D-PromptReco-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012A-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012A-recover-06Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012B-13Jul2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012C-24Aug2012-v1_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012C-PromptReco-v2_AOD/*.root"
+#input_files="${input_files},${input_path}/MuHad_Run2012D-PromptReco-v1_AOD/*.root"
+#merge data_vpt_19p5 vlow_pt $input_files

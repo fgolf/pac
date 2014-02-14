@@ -28,8 +28,10 @@ struct simple_skim
         switch(m_at)
         {
             case AnalysisType::high_pt:
-                mu_min_pt = 20.0;
-                el_min_pt = 20.0;
+//GZ                mu_min_pt = 20.0;
+//GZ                el_min_pt = 20.0;
+                mu_min_pt = 10.0;
+                el_min_pt = 10.0;
                 break;
             case AnalysisType::high_pt_eth:
                 mu_min_pt = 20.0;

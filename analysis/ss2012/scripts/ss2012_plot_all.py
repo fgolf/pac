@@ -82,7 +82,7 @@ parser.add_option("--charge"    , dest="charge"      , default=0              , 
 parser.add_option("--sr"        , dest="sr"          , default=0              , help="signal region"                                            )
 parser.add_option("--fr_file"   , dest="fr_file"     , default=default_fr_file, help="fake rate file to use"                                    )
 parser.add_option("--fl_file"   , dest="fl_file"     , default=default_fl_file, help="flip rate file to use"                                    )
-parser.add_option("--FR_opt"    , dest="FR_opt"      , default=0              , help="FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both)")
+parser.add_option("--FR_opt"    , dest="FR_opt"      , default=0              , help="FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both, 4 iso only and FOpt)")
 
 # boolean options
 parser.add_option("--test"       , action="store_true"  , dest="test"        , default=False , help="test script -- print commands but do nothing"   )

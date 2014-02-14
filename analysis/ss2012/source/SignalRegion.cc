@@ -2051,8 +2051,8 @@ namespace ss
         switch(anal_type)
         {
             case AnalysisType::high_pt:
-                if (l1_pt < 20.0) return false;
-                if (l2_pt < 20.0) return false;
+	      if (l1_pt < 10.0) return false;//GZ was 20, set to 10
+	      if (l2_pt < 10.0) return false;// GZ was 20, set to 10
                 break;
             case AnalysisType::high_pt_eth:
                 if (l1_pt < 20.0) return false;
