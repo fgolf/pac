@@ -109,6 +109,13 @@ namespace frb {
 	const float &mz_ctf_iso() { return fake_rate_baby.mz_ctf_iso(); }
 	const float &mupsilon_fo_mu() { return fake_rate_baby.mupsilon_fo_mu(); }
 	const float &mupsilon_mu_iso() { return fake_rate_baby.mupsilon_mu_iso(); }
+	const float &mu_nchi2global() { return fake_rate_baby.mu_nchi2global(); }
+	const bool &mu_isGlobal() { return fake_rate_baby.mu_isGlobal(); }
+	const bool &mu_isPF() { return fake_rate_baby.mu_isPF(); }
+	const int &mu_numberOfValidMuonHits() { return fake_rate_baby.mu_numberOfValidMuonHits(); }
+	const int &mu_numberOfMatchedStations() { return fake_rate_baby.mu_numberOfMatchedStations(); }
+	const int &mu_trackerLayersWithMeasurement() { return fake_rate_baby.mu_trackerLayersWithMeasurement(); }
+	const int &mu_numberOfValidPixelHits() { return fake_rate_baby.mu_numberOfValidPixelHits(); }
 	const bool &num_el_ssV7() { return fake_rate_baby.num_el_ssV7(); }
 	const bool &num_el_ssV7_noIso() { return fake_rate_baby.num_el_ssV7_noIso(); }
 	const bool &v1_el_ssV7() { return fake_rate_baby.v1_el_ssV7(); }
@@ -320,20 +327,24 @@ namespace frb {
 	const int &npfcL1Fj1() { return fake_rate_baby.npfcL1Fj1(); }
 	const int &npfc30L1Fj1() { return fake_rate_baby.npfc30L1Fj1(); }
 	const int &npfc40L1Fj1() { return fake_rate_baby.npfc40L1Fj1(); }
+	const int &nbpfc40L1Fj1() { return fake_rate_baby.nbpfc40L1Fj1(); }
 	const float &ptpfcL1Fj1_b2b() { return fake_rate_baby.ptpfcL1Fj1_b2b(); }
 	const float &dphipfcL1Fj1_b2b() { return fake_rate_baby.dphipfcL1Fj1_b2b(); }
 	const bool &btagpfcL1F() { return fake_rate_baby.btagpfcL1F(); }
 	const int &npfc50L1Fj1_eth() { return fake_rate_baby.npfc50L1Fj1_eth(); }
+	const int &npfc65L1Fj1_eth() { return fake_rate_baby.npfc65L1Fj1_eth(); }
 	const float &emfpfcL1Fj1res() { return fake_rate_baby.emfpfcL1Fj1res(); }
 	const float &ptpfcL1Fj1res() { return fake_rate_baby.ptpfcL1Fj1res(); }
 	const float &dphipfcL1Fj1res() { return fake_rate_baby.dphipfcL1Fj1res(); }
 	const int &npfcL1Fj1res() { return fake_rate_baby.npfcL1Fj1res(); }
 	const int &npfc30L1Fj1res() { return fake_rate_baby.npfc30L1Fj1res(); }
 	const int &npfc40L1Fj1res() { return fake_rate_baby.npfc40L1Fj1res(); }
+	const int &nbpfc40L1Fj1res() { return fake_rate_baby.nbpfc40L1Fj1res(); }
 	const float &ptpfcL1Fj1res_b2b() { return fake_rate_baby.ptpfcL1Fj1res_b2b(); }
 	const float &dphipfcL1Fj1res_b2b() { return fake_rate_baby.dphipfcL1Fj1res_b2b(); }
 	const bool &btagpfcL1Fres() { return fake_rate_baby.btagpfcL1Fres(); }
 	const int &npfc50L1Fj1res_eth() { return fake_rate_baby.npfc50L1Fj1res_eth(); }
+	const int &npfc65L1Fj1res_eth() { return fake_rate_baby.npfc65L1Fj1res_eth(); }
 	const float &ptbtagpfcL1Fj1() { return fake_rate_baby.ptbtagpfcL1Fj1(); }
 	const float &dphibtagpfcL1Fj1() { return fake_rate_baby.dphibtagpfcL1Fj1(); }
 	const float &ptbtagpfcL1Fj1res() { return fake_rate_baby.ptbtagpfcL1Fj1res(); }

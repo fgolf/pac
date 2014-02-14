@@ -16,24 +16,30 @@ namespace fr
             // title,
             "2012 data", 
             // baby_path
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-PromptReco-v2_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012D-PromptReco-v1_AOD/*.root",
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyDM*.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyA.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyB.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyC.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyD.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/DoubleElectronSmallFRbaby.root",
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-PromptReco-v2_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012D-PromptReco-v1_AOD/*.root",
             // output file 
             "plots/data/data.root",
             // SampleType
@@ -47,18 +53,23 @@ namespace fr
             // title,
             "2012 data", 
             // baby_path
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-PromptReco-v2_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012D-PromptReco-v1_AOD/*.root",
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyDM*.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyA.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyB.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyC.root,"
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/SingleMuonSmallFRbabyD.root",
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012B-13Jul2012-v4_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012C-PromptReco-v2_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012B-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-24Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012C-PromptReco-v2_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012D-PromptReco-v1_AOD/*.root",
             // output file 
             "plots/data/data_mu.root",
             // SampleType
@@ -72,14 +83,44 @@ namespace fr
             // title,
             "2012 data", 
             // baby_path
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root",
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/miniFRbabies/DoubleElectronSmallFRbaby.root",
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012A-recover-06Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012B-13Jul2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-24Aug2012-v1_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012C-PromptReco-v2_AOD/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root",
             // output file 
             "plots/data/data_el.root",
+            // SampleType
+            SampleType::data,
+            // color
+            kBlack
+        },
+        {
+            // name
+            "data_mu_D", 
+            // title,
+            "2012 data", 
+            // baby_path
+            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleMu_Run2012D-PromptReco-v1_AOD/*.root,"
+            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/SingleMu_Run2012D-PromptReco-v1_AOD/*.root",
+            // output file 
+            "plots/data/data_mu_D.root",
+            // SampleType
+            SampleType::data,
+            // color
+            kBlack
+        },
+        {
+            // name
+            "data_el_D", 
+            // title,
+            "2012 data", 
+            // baby_path
+            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DoubleElectron_Run2012D-PromptReco-v1_AOD/*.root",
+            // output file 
+            "plots/data/data_el_D.root",
             // SampleType
             SampleType::data,
             // color
@@ -163,6 +204,20 @@ namespace fr
             "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", 
             // output file
             "plots/dy/dy.root",
+            // SampleType
+            SampleType::bkgd,
+            // color
+            kBlue
+        },
+        {
+            // name
+            "synch", 
+            // title,
+            "Muon Synchronization", 
+            // baby_path
+            "/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchMuNtuple*.root", 
+            // output file
+            "plots/synch/synch.root",
             // SampleType
             SampleType::bkgd,
             // color

@@ -14,11 +14,14 @@ namespace fr
             data,
             data_mu,
             data_el,
+            data_mu_D,
+            data_el_D,
             qcd,
             ttbar,
             tthad,
             wjets,
             dy,
+	    synch,
             static_size
         };
     };
