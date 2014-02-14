@@ -770,26 +770,26 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         };
 	
 	// Synchronization
-//	if (is_mu && pt() > 10. && fabs(eta())<2.4) {
-//	  //passes_id : PF && globalMuon, global->normChi2 < 10, validMuonHits > 0, MatchedStations > 1, 
-//	  //            innerTrack( trackerLayersWithMeasurement > 5, ValidPixelHits > 0), innerTrack( dxy(vtx) < 0.2, dz(vtx)<0.5)
-//	  bool passChi2 = (mu_nchi2global() < 10);
-//	  bool passMuHits = (mu_numberOfValidMuonHits() > 0);
-//	  bool passStations = (mu_numberOfMatchedStations() > 1);
-//	  bool passLayers = (mu_trackerLayersWithMeasurement() > 5);
-//	  bool passPixel = (mu_numberOfValidPixelHits() > 0);
-//	  bool passD0_l = (fabs(d0()) < 0.2);
-//	  bool passD0_t = (fabs(d0()) < 0.01);
-//	  bool passDZ = (fabs(dz()) < 0.2);
-//	  bool passIso_l = (cpfiso03_db() < 1.);
-//	  bool passIso_t = (cpfiso03_db() < 0.1);
-//	  bool passes_id = mu_isGlobal() && mu_isPF() && passChi2 && passMuHits && passStations && passLayers && passPixel && passDZ;
-//	  bool is_loose = passes_id && passD0_l && passIso_l;
-//	  bool is_tight = passes_id && passD0_t && passIso_t;
-//			
-//	  //	printf("%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%4.2f\n", run, lumi, event, pt, eta, phi, is_loose, is_tight)
-//	  printf("%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%d\n", ls(), evt(), pt(), eta(), phi(), is_loose, is_tight);
-//	}
+	if (is_mu && pt() > 10. && fabs(eta())<2.4) {
+	  //passes_id : PF && globalMuon, global->normChi2 < 10, validMuonHits > 0, MatchedStations > 1, 
+	  //            innerTrack( trackerLayersWithMeasurement > 5, ValidPixelHits > 0), innerTrack( dxy(vtx) < 0.2, dz(vtx)<0.5)
+	  bool passChi2 = (mu_nchi2global() < 10);
+	  bool passMuHits = (mu_numberOfValidMuonHits() > 0);
+	  bool passStations = (mu_numberOfMatchedStations() > 1);
+	  bool passLayers = (mu_trackerLayersWithMeasurement() > 5);
+	  bool passPixel = (mu_numberOfValidPixelHits() > 0);
+	  bool passD0_l = (fabs(d0()) < 0.2);
+	  bool passD0_t = (fabs(d0()) < 0.01);
+	  bool passDZ = (fabs(dz()) < 0.2);
+	  bool passIso_l = (cpfiso03_db() < 1.);
+	  bool passIso_t = (cpfiso03_db() < 0.1);
+	  bool passes_id = mu_isGlobal() && mu_isPF() && passChi2 && passMuHits && passStations && passLayers && passPixel && passDZ;
+	  bool is_loose = passes_id && passD0_l && passIso_l;
+	  bool is_tight = passes_id && passD0_t && passIso_t;
+			
+	  //	printf("%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%4.2f\n", run, lumi, event, pt, eta, phi, is_loose, is_tight)
+	  printf("%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%d\n", ls(), evt(), pt(), eta(), phi(), is_loose, is_tight);
+	}
 
         // pT cut
         float min_mu_pt = m_fr_bin_info.mu_pt_bins()[0];
