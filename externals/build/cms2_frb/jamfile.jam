@@ -18,11 +18,11 @@ lib cms2_frb
   : # requirements
     <include>$(CMS2_FRB)
     <define>__NON_ROOT_BUILD__  
-    #<define>__CMS2_SLIM__  
   : # default-build
   : # usage-requirements
     <include>$(CMS2_FRB)
     <define>__NON_ROOT_BUILD__  
+    <define>__CMS2_SLIM__  
   ;
 
 default-install /CMS2_FRB//cms2_frb : <link>shared ;

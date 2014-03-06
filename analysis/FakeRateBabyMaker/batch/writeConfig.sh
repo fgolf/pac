@@ -3,8 +3,10 @@
 #UNIVERSE="grid"
 UNIVERSE="vanilla"
 EXE="wrapper.sh"
-INPUT="wrapper.sh, job_input/input.tgz, appendTimeStamp.sh"
-SITE="UCSD"
+INPUT="wrapper.sh, job_input/input.tgz"
+SITE="UCSD"                                                                    
+#SITE="uaf"                                                                    
+PROXY="/tmp/x509up_u10194"
 PROXY="/tmp/x509up_u$(id -u)"
 
 DIR=$PWD
@@ -26,22 +28,19 @@ mv ../sweepRoot .
 tar -czf input.tgz --exclude='*CVS*' *
 cd ${DIR}
 
-#
-# arguments to run the script
-#
-SAMPLE="$1"
-ATYPE="$2"
-RUNLIST="$3"
-OPTIONS="$4"
-DATADIR="$5"
-COPYDIRBASE="$6"
-COPYDIR="/hadoop/cms/store/user/$USER/${COPYDIRBASE}"
+
+    DATATYPE=$1
+    REALDATA=$2
+    RUNLIST=$3
+    DATADIR=$4
+    COPYDIRBASE=$5
+    COPYDIR=/hadoop/cms/store/user/$USER/${COPYDIRBASE}
 
 #
 # write configuration
 #
 
-#Grid_Resource=gt2 osg-gw-7.t2.ucsd.edu:2119/jobmanager-condor
+#Grid_Resource=gt2 osg-gw-2.t2.ucsd.edu:2119/jobmanager-condor
 echo "
 universe=${UNIVERSE}
 when_to_transfer_output = ON_EXIT
@@ -54,6 +53,7 @@ log=${LOG}
 output=${OUT}
 error =${ERR}
 notification=Never
+should_transfer_files=yes
 x509userproxy=${PROXY}
 " > condor_${COPYDIRBASE##*/}.cmd
 
@@ -69,9 +69,10 @@ x509userproxy=${PROXY}
         echo "
 executable=${EXE}
 transfer_executable=True
-arguments=\"`echo ${FILE##*/} | sed 's/\.root//g'` ${FILE} ${SAMPLE} ${ATYPE} ${RUNLIST} ${OPTIONS} ${COPYDIR}\"
+arguments=`echo ${FILE##*/} | sed 's/\.root//g'` ${DATATYPE} ${FILE} ${REALDATA} ${RUNLIST} ${COPYDIR}
 queue
 " >> condor_${COPYDIRBASE##*/}.cmd
     done
 
 echo "[writeConfig] wrote condor_${COPYDIRBASE##*/}.cmd" 
+

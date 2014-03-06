@@ -2,9 +2,6 @@
 #include <fstream>
 #include <string>
 #include "TChain.h"
-#include "InterpLooper.h"
-#include "SSB2012Wrapper.h"
-#include "at/ScanChain.h"
 #include "at/Sample.h"
 #include "at/YieldType.h"
 #include "rt/RootTools.h"
@@ -112,19 +109,12 @@ try
     // inputs
     // -------------------------------------------------------------------------------------------------//
 
-    long number_of_events           = -1;
     std::string output_file         = "";
     std::string syst_file           = "";
     std::string yield_file          = "";
-    std::string fake_rate_file_name = "data/fake_rates/ssFR_data_ewkcor_17Apr2013.root";
-    std::string flip_rate_file_name = "data/flip_rates/ssFL_data_standard_02222013.root";
     std::string analysis_type_name  = "high_pt";
     std::string sr_string           = "-1";
     bool exclusive                  = true;
-    float ngen_sf                   = 1.0;
-    float fake_sys_unc              = 0.5;
-    float flip_sys_unc              = 0.3;
-    float rare_sys_unc              = 0.5;
     float lumi                      = 1.0;
     bool verbose                    = false;
     float sparm0                    = -999999.0;
@@ -143,14 +133,7 @@ try
         ("yield"     , po::value<std::string>(&yield_file)->required() , "REQUIRED: file to get the yields and predictions"                               )
         ("output"    , po::value<std::string>(&output_file)            , "name of output root file"                                                       )
         ("anal_type" , po::value<std::string>(&analysis_type_name)     , "name of analysis type (from AnalysisType.h)"                                    )
-        ("fr_file"   , po::value<std::string>(&fake_rate_file_name)    , Form("fake rate file name (default: %s)", fake_rate_file_name.c_str())           )
-        ("fl_file"   , po::value<std::string>(&flip_rate_file_name)    , Form("flip rate file name (default: %s)", flip_rate_file_name.c_str())           )
         ("sr"        , po::value<std::string>(&sr_string)              , "comma seperated list of SRs to run on (any < 0 means all -- default)"           )
-        ("ngen_sf"   , po::value<float>(&ngen_sf)                      , Form("scale factor for the # generated events (default is %f)", ngen_sf)         )
-        ("fr_unc"    , po::value<float>(&fake_sys_unc)                 , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc) )
-        ("fr_unc"    , po::value<float>(&fake_sys_unc)                 , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc) )
-        ("fl_unc"    , po::value<float>(&flip_sys_unc)                 , Form("systematic uncertainty for flip prediction (default is %f)", flip_sys_unc) )
-        ("rare_unc"  , po::value<float>(&rare_sys_unc)                 , Form("systematic uncertainty for MC prediction (default is %f)", rare_sys_unc)   )
         ("sparm0"    , po::value<float>(&sparm0)                       , "sparm0 is required to be this value"                                            )
         ("sparm1"    , po::value<float>(&sparm1)                       , "sparm1 is required to be this value"                                            )
         ("sparm2"    , po::value<float>(&sparm2)                       , "sparm2 is required to be this value"                                            )
@@ -193,14 +176,7 @@ try
         cout << "output_file         :\t" << output_file         << endl;
         cout << "syst_file           :\t" << syst_file           << endl;
         cout << "analysis_type_name  :\t" << analysis_type_name  << endl;
-        cout << "fake_rate_file_name :\t" << fake_rate_file_name << endl;
-        cout << "flip_rate_file_name :\t" << flip_rate_file_name << endl;
-        cout << "number_of_events    :\t" << number_of_events    << endl;
         cout << "sr                  :\t" << sr_string           << endl;
-        cout << "ngen_sf             :\t" << ngen_sf             << endl;
-        cout << "fake_sys_unc        :\t" << fake_sys_unc        << endl;
-        cout << "flip_sys_unc        :\t" << flip_sys_unc        << endl;
-        cout << "rare_sys_unc        :\t" << rare_sys_unc        << endl;
         cout << "lumi                :\t" << lumi                << endl;
         cout << "exclusive           :\t" << exclusive           << endl;
         cout << "verbose             :\t" << verbose             << endl;

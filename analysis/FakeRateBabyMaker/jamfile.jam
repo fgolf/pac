@@ -1,0 +1,25 @@
+# jamfile for the FakeRateBabyMaker 
+# -------------------------------------------------------------------- #
+
+exe create_fake_rate_baby
+  : # sources
+    ./source/create_fake_rate_baby.cc
+    # dependent packages
+    /ROOT
+    /CMS2_FRB//cms2_frb/<link>static
+    /FakeRateBabyTools//FakeRateBabyTools/<link>static
+    /MiniFWLite//libMiniFWLite/<link>shared
+    /RootTools//RootTools/<link>static
+    /AnalysisTools//AnalysisTools/<link>static
+    /boost//program_options/<link>static
+  : # requirements
+    <include>./include
+    <include>./source
+  : # default-build
+  : # usage-requirements
+  ;
+
+# install libs/exes
+# -------------------------------------------------------------- #
+
+default-install create_fake_rate_baby ;
