@@ -46,6 +46,8 @@ public:
     //
     // dilepton specific info
     //
+
+    // dilep type
     LorentzVector dilep_p4;
     bool os;
     bool ss;
@@ -53,12 +55,32 @@ public:
     bool ee;
     bool em;
     at::DileptonHypType::value_type dilep_type;
-    at::DileptonHypType::value_type dilep_gen_type;
     Fiduciality::value_type fiduciality;
     float dilep_mass;
     float dilep_dphi;
     float dilep_deta;
     float dilep_dr;    
+
+    // gen lep1 info
+    LorentzVector gen_lep1_p4;
+    int gen_lep1_pdgid;
+    
+    // gen lep2 info
+    LorentzVector gen_lep2_p4;
+    int gen_lep2_pdgid;
+    
+    // gen dilep hyp info
+    LorentzVector gen_dilep_p4;
+    bool gen_os;
+    bool gen_ss;
+    bool gen_mm;
+    bool gen_ee;
+    bool gen_em;
+    at::DileptonHypType::value_type gen_dilep_type;
+    float gen_dilep_mass;
+    float gen_dilep_dphi;
+    float gen_dilep_deta;
+    float gen_dilep_dr;
 };
 
 #endif
