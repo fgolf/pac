@@ -3,14 +3,22 @@
 #include "TChain.h"
 #include "TCut.h"
 #include <iostream> 
+#include "at/Sample.h"
+
+
+TChain* GetTChain(const at::Sample::value_type sample)
+{
+    TChain* chain_ptr = new TChain("tree");
+    chain_ptr->Add(Form("babies/%s.root", at::GetSampleInfo(sample).name.c_str()));
+    return chain_ptr;
+}
 
 // Print the generator acceptance
 // akin to table 10 from AN-12-067
 // http://cms.cern.ch/iCMS/jsp/openfile.jsp?tp=draft&files=AN2012_067_v6.pdf
 void PrintAcceptance()
 {
-    TChain ch_dy("tree");
-    ch_dy.Add("babies/dy.root");
+    TChain& ch_dy = *GetTChain(at::Sample::dy);
 
     // aliases
     ch_dy.SetAlias("z_mass"  , "gen_z_p4.mass()"); 
@@ -75,8 +83,6 @@ void PrintAcceptance()
     // done
     return;
 }
-
-#include "at/Sample.h"
 
 // samples for the yield:
 at::Sample::value_type s_Samples[] =
@@ -143,8 +149,7 @@ void PrintYield()
     for (size_t sidx = 0; sidx != s_SamplesCount; sidx++)
     {
         const at::Sample::value_type sample = s_Samples[sidx];
-        chain_map[sample] = new TChain("tree");
-        chain_map.at(sample)->Add(Form("babies/%s.root", at::GetSampleInfo(sample).name.c_str()));
+        chain_map[sample] = GetTChain(sample);
         if (verbose) {rt::PrintFilesFromTChain(chain_map[sample]);}
     }
 
