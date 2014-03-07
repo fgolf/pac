@@ -15,38 +15,9 @@ samples = [
 	"dy",
 	"wjets",
 	"ttjets",
-	#"ww",
-	#"wz",
-	#"zz",
-	#"ttg",
-	#"ttw",
-	#"ttz",
-	#"tbz",
-	#"ttww",
-	#"wwg",
-	#"www",
-	#"wwz",
-	#"wzz",
-	#"zzz",
-	#"wmwmqq",
-	#"wpwpqq",
-	#"wgstar2e",
-	#"wgstar2m",
-	#"wgstar2t",
-	#"ww_ds",
-	#"dy",
-	#"wjets",
-	#"ttjets",
-	#"ttdil",
-	#"ttotr",
-	#"ttslb",
-	#"ttslo",
-	#"t_schan",
-	#"t_tchan",
-	#"t_tw",
-	#"wh_zh_tth_hww",
-	#"wh_zh_tth_hzz",
-	#"wh_zh_tth_htt",
+	"ww",
+	"wz",
+	"zz",
 ]
 
 # parse inputs
@@ -94,9 +65,15 @@ def GetInputFilenameForUaf(sample):
 	elif sample == "dy":
 		path = "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/merged_ntuple_1[0-9].root"
 	elif sample == "ttjets":
-		path = "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1/V05-03-24/merged_ntuple_1[0-9].root"
+		path = "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/TTJets_FullLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-24/merged_ntuple_1[0-9].root"
 	elif sample == "wjets":
 		path = "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-28/merged_ntuple_1[0-9].root"
+	elif sample == "wz":
+		path = "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/WZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/merged_ntuple_1[0-9].root"
+	elif sample == "ww":
+		path = "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/WWJetsTo2L2Nu_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/merged_ntuple_1[0-9].root"
+	elif sample == "zz":
+		path = "/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC/ZZJetsTo2L2Q_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/merged_ntuple_1[0-9].root"
 	else:
 		path = ""
 	return path

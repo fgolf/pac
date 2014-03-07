@@ -323,25 +323,26 @@ bool dy::passesTrigger(const int flavor_type)
     // triggers for dilepton datasets
     //---------------------------------
 
-    // mm
-    if (flavor_type == 0)
-    {
-        if (passUnprescaledHLTTriggerPattern("HLT_Mu15_eta2p1_v")) {return true;}
-    }
-
-    // em
-    else if ((flavor_type == 1 || flavor_type == 2))
-    {
-        return false;
-    }
-
-    // ee
-    else if (flavor_type == 3)
-    {
-        if (passUnprescaledHLTTriggerPattern("HLT_Ele22_CaloIdL_CaloIsoVL_v")) {return true;}
-    }
-    
-    return false;
+//     // mm                                                                      
+//     if (flavor_type == 0)                                                      
+//     {                                                                          
+//         if (passUnprescaledHLTTriggerPattern("HLT_Mu15_eta2p1_v")) {return true;}
+//     }                                                                          
+//                                                                                
+//     // em                                                                      
+//     else if ((flavor_type == 1 || flavor_type == 2))                           
+//     {                                                                          
+//         return false;                                                          
+//     }                                                                          
+//                                                                                
+//     // ee                                                                      
+//     else if (flavor_type == 3)                                                 
+//     {                                                                          
+//         if (passUnprescaledHLTTriggerPattern("HLT_Ele22_CaloIdL_CaloIsoVL_v")) {return true;}
+//     }                                                                          
+//                                                                                
+//     return false;                                                              
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////     

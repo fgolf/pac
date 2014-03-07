@@ -85,14 +85,28 @@ void PrintAcceptance()
 }
 
 // samples for the yield:
-at::Sample::value_type s_Samples[] =
+static const size_t s_SamplesCount = 7;//sizeof(s_Samples)/sizeof(s_SamplesCount);
+static const at::Sample::value_type s_Samples[s_SamplesCount] =
 {
     at::Sample::data,
     at::Sample::dy,
     at::Sample::wjets,
-    at::Sample::ttjets
+    at::Sample::ttjets,
+    at::Sample::ww,
+    at::Sample::wz,
+    at::Sample::zz
 };
-const size_t s_SamplesCount = 4;//sizeof(s_Samples)/sizeof(s_SamplesCount);
+
+//static const double s_SDEfficiency[s_SamplesCount] =
+//{
+//    /*data   =*/ (1.0                  ), 
+//    /*dy     =*/ (27137253.0/30459500.0),
+//    /*wjets  =*/ (14890630.0/18393090.0),
+//    /*ttjets =*/ (6923750.0 /6923750.0 ),
+//    /*ww     =*/ (1933235.0 /1933235.0 ), 
+//    /*wz     =*/ (2937874.0 /3215990.0 ),
+//    /*zz     =*/ (857982.0  /954911.0  )
+//};
 
 struct Channel
 {
@@ -109,6 +123,7 @@ struct Yield
 {
     unsigned int raw;
     double scaled;
+    const char* const fmt() const {return Form("%1.2f", scaled);}
 };
 
 struct DrellYanYield
@@ -119,19 +134,33 @@ struct DrellYanYield
 
 DrellYanYield GetYield
 (
-    TChain& chain,
+    const at::Sample::value_type sample,
     const double lumi
 )
 {
+    TChain& chain = *GetTChain(sample);
+
     DrellYanYield y;
     y.yield[Channel::ee].raw = chain.GetEntries("is_ee");
     y.yield[Channel::mm].raw = chain.GetEntries("is_mm");
     y.yield[Channel::ll].raw = chain.GetEntries("(is_ee || is_mm)");
 
-    const double scale1fb      = chain.GetMaximum("scale1fb");
-    const double nevts_full    = chain.GetMaximum("nevts");
-    const double nevts_actual  = chain.GetEntries();
-    const double scale_entries = nevts_actual/nevts_full; 
+
+    const double scale1fb     = chain.GetMaximum("scale1fb");
+    const double nevts_full   = chain.GetMaximum("nevts");
+    const double nevts_actual = chain.GetEntries();
+    double scale_entries      = (nevts_full/nevts_actual);
+    switch (sample)
+    {
+        case at::Sample::data   : scale_entries *= (1.0                  ); break; 
+        case at::Sample::dy     : scale_entries *= (27137253.0/30459500.0); break;
+        case at::Sample::wjets  : scale_entries *= (14890630.0/18393090.0); break;
+        case at::Sample::ttjets : scale_entries *= (6923750.0 /6923750.0 ); break;
+        case at::Sample::ww     : scale_entries *= (1933235.0 /1933235.0 ); break; 
+        case at::Sample::wz     : scale_entries *= (2937874.0 /3215990.0 ); break;
+        case at::Sample::zz     : scale_entries *= (857982.0  /954911.0  ); break;
+        default: {/*do nothing*/}
+    };
 
     y.yield[Channel::ee].scaled = scale1fb * lumi * scale_entries * y.yield[Channel::ee].raw;
     y.yield[Channel::mm].scaled = scale1fb * lumi * scale_entries * y.yield[Channel::mm].raw;
@@ -140,40 +169,101 @@ DrellYanYield GetYield
     return y;
 }
 
-void PrintYield()
+void PrintYield(const bool latex = false)
 {
+    using namespace at;
     const double lumi = 0.082; //fb^-1
-    const bool verbose = true;
-
-    std::map<at::Sample::value_type, TChain*> chain_map;
-    for (size_t sidx = 0; sidx != s_SamplesCount; sidx++)
-    {
-        const at::Sample::value_type sample = s_Samples[sidx];
-        chain_map[sample] = GetTChain(sample);
-        if (verbose) {rt::PrintFilesFromTChain(chain_map[sample]);}
-    }
 
     // get the yields
     std::map<at::Sample::value_type, DrellYanYield> yield_map;
     for (size_t sidx = 0; sidx != s_SamplesCount; sidx++)
     {
         const at::Sample::value_type sample = s_Samples[sidx];
-        const std::string& name = at::GetSampleInfo(sample).name;
-        yield_map[sample] = GetYield(*chain_map[sample], lumi); 
+        yield_map[sample] = GetYield(sample, lumi); 
+    }
 
-        if (verbose)
-        {
-        cout << Form("%s has raw yield: %u %u %u", 
-            name.c_str(),
-            yield_map[sample].yield[Channel::ee].raw,
-            yield_map[sample].yield[Channel::mm].raw,
-            yield_map[sample].yield[Channel::ll].raw) << endl;
+    CTable t1;
+    t1.useTitle();
+    t1.setTitle("Yields raw");
+    t1.setTable() (                                                                           "$ee$",                                     "$\\mu\\mu$",                                    "$\\ell\\ell$")
+                  ( "$DY \\rightarrow \\ell\\ell$", yield_map[Sample::dy    ].yield[Channel::ee].raw, yield_map[Sample::dy    ].yield[Channel::mm].raw, yield_map[Sample::dy    ].yield[Channel::ll].raw )
+                  ( "W + jets"                    , yield_map[Sample::wjets ].yield[Channel::ee].raw, yield_map[Sample::wjets ].yield[Channel::mm].raw, yield_map[Sample::wjets ].yield[Channel::ll].raw )
+                  ( "$t\\bar{t} + jets$"          , yield_map[Sample::ttjets].yield[Channel::ee].raw, yield_map[Sample::ttjets].yield[Channel::mm].raw, yield_map[Sample::ttjets].yield[Channel::ll].raw )
+                  ( "WW"                          , yield_map[Sample::ww    ].yield[Channel::ee].raw, yield_map[Sample::ww    ].yield[Channel::mm].raw, yield_map[Sample::ww    ].yield[Channel::ll].raw )
+                  ( "WZ"                          , yield_map[Sample::wz    ].yield[Channel::ee].raw, yield_map[Sample::wz    ].yield[Channel::mm].raw, yield_map[Sample::wz    ].yield[Channel::ll].raw )
+                  ( "ZZ"                          , yield_map[Sample::zz    ].yield[Channel::ee].raw, yield_map[Sample::zz    ].yield[Channel::mm].raw, yield_map[Sample::zz    ].yield[Channel::ll].raw )
+                  ( "data"                        , yield_map[Sample::data  ].yield[Channel::ee].raw, yield_map[Sample::data  ].yield[Channel::mm].raw, yield_map[Sample::data  ].yield[Channel::ll].raw )
+                  ;
 
-        cout << Form("%s has scaled yield: %1.3f %1.3f %1.3f", 
-            name.c_str(),
-            yield_map[sample].yield[Channel::ee].scaled,
-            yield_map[sample].yield[Channel::mm].scaled,
-            yield_map[sample].yield[Channel::ll].scaled) << endl;
-        }
+    CTable t2;
+    t2.useTitle();
+    t2.setTitle("Yields scaled");
+    t2.setTable() (                                                                              "$ee$",                                        "$\\mu\\mu$",                                      "$\\ell\\ell$")
+                  ( "$DY \\rightarrow \\ell\\ell$", yield_map[Sample::dy    ].yield[Channel::ee].fmt(), yield_map[Sample::dy    ].yield[Channel::mm].fmt(), yield_map[Sample::dy    ].yield[Channel::ll].fmt())
+                  ( "W + jets"                    , yield_map[Sample::wjets ].yield[Channel::ee].fmt(), yield_map[Sample::wjets ].yield[Channel::mm].fmt(), yield_map[Sample::wjets ].yield[Channel::ll].fmt())
+                  ( "$t\\bar{t} + jets$"          , yield_map[Sample::ttjets].yield[Channel::ee].fmt(), yield_map[Sample::ttjets].yield[Channel::mm].fmt(), yield_map[Sample::ttjets].yield[Channel::ll].fmt())
+                  ( "WW"                          , yield_map[Sample::ww    ].yield[Channel::ee].fmt(), yield_map[Sample::ww    ].yield[Channel::mm].fmt(), yield_map[Sample::ww    ].yield[Channel::ll].fmt())
+                  ( "WZ"                          , yield_map[Sample::wz    ].yield[Channel::ee].fmt(), yield_map[Sample::wz    ].yield[Channel::mm].fmt(), yield_map[Sample::wz    ].yield[Channel::ll].fmt())
+                  ( "ZZ"                          , yield_map[Sample::zz    ].yield[Channel::ee].fmt(), yield_map[Sample::zz    ].yield[Channel::mm].fmt(), yield_map[Sample::zz    ].yield[Channel::ll].fmt())
+                  ( "data"                        , yield_map[Sample::data  ].yield[Channel::ee].raw   , yield_map[Sample::data  ].yield[Channel::mm].raw   , yield_map[Sample::data  ].yield[Channel::ll].raw   )
+                  ;
+    // get TChains
+    TChain& chain = *GetTChain(Sample::dy);
+    const double lumi_nb = lumi * 1e6; // nb^-1
+
+    // cross section
+    const double acc_zmm   = (float)chain.GetEntries("is_mm")/
+                             (float)chain.GetEntries("is_z_mm && (60 < gen_z_p4.mass() && gen_z_p4.mass() < 120)");
+    const double N_bkg_zmm = yield_map[Sample::wjets ].yield[Channel::mm].scaled + 
+                             yield_map[Sample::wjets ].yield[Channel::mm].scaled +
+                             yield_map[Sample::ttjets].yield[Channel::mm].scaled +
+                             yield_map[Sample::ww    ].yield[Channel::mm].scaled +
+                             yield_map[Sample::wz    ].yield[Channel::mm].scaled;
+    const double N_obs_zmm = yield_map[Sample::data].yield[Channel::mm].raw;
+    const double N_sig_zmm = N_obs_zmm - N_bkg_zmm;
+    const double sigma_zmm = N_sig_zmm / (lumi_nb * acc_zmm);
+
+    const double acc_zee   = (float)chain.GetEntries("is_ee")/
+                             (float)chain.GetEntries("is_z_ee && (60 < gen_z_p4.mass() && gen_z_p4.mass() < 120)");
+    const double N_bkg_zee = yield_map[Sample::wjets ].yield[Channel::ee].scaled + 
+                             yield_map[Sample::wjets ].yield[Channel::ee].scaled +
+                             yield_map[Sample::ttjets].yield[Channel::ee].scaled +
+                             yield_map[Sample::ww    ].yield[Channel::ee].scaled +
+                             yield_map[Sample::wz    ].yield[Channel::ee].scaled;
+    const double N_obs_zee = yield_map[Sample::data].yield[Channel::ee].raw;
+    const double N_sig_zee = N_obs_zee - N_bkg_zee;
+    const double sigma_zee = N_sig_zee / (lumi_nb * acc_zee);
+
+    // print results
+    if (latex)
+    {
+        t1.printTex();
+        t2.printTex();
+
+        cout << endl;
+        cout << "\\sigma(pp \\rightarrow Z) \\times BR(Z \\rightarrow \\mu\\mu) = "
+             << "\\frac{N_{obs} - N_{bkg}}{lumi \\times A} = "
+             << Form("\\frac{%1.2f - %1.2f}{%1.2f \\times %1.2f}", N_obs_zmm, N_bkg_zmm, lumi_nb, acc_zmm)
+             << " = " << std::setprecision(3) << sigma_zmm << "\\rm{\\ nb} \\\\" << endl;
+        cout << "\\sigma(pp \\rightarrow Z) \\times BR(Z \\rightarrow ee) = "
+             << "\\frac{N_{obs} - N_{bkg}}{lumi \\times A} = "
+             << Form("\\frac{%1.2f - %1.2f}{%1.2f \\times %1.2f}", N_obs_zee, N_bkg_zee, lumi_nb, acc_zee)
+             << " = " << std::setprecision(3) << sigma_zee << "\\rm{\\ nb} \\\\" << endl;
+    }
+    else
+    {
+        cout << t1 << endl;
+        cout << endl;
+        cout << t2 << endl;
+
+        cout << endl;
+        cout << "Sigma(pp --> Z) * BR(Z --> mm) = "
+             << "(N_obs - N_bkg)/(lumi * A) = "
+             << Form("(%1.2f - %1.2f)/(%1.2f * %1.2f)", N_obs_zmm, N_bkg_zmm, lumi_nb, acc_zmm)
+             << " = " << std::setprecision(3) << sigma_zmm << " nb" << endl;
+        cout << "Sigma(pp --> Z) * BR(Z --> ee) = "
+             << "(N_obs - N_bkg)/(lumi * A) = "
+             << Form("(%1.2f - %1.2f)/(%1.2f * %1.2f)", N_obs_zee, N_bkg_zee, lumi_nb, acc_zee)
+             << " = " << std::setprecision(3) << sigma_zee << " nb" << endl;
     }
 }
