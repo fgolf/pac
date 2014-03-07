@@ -1,0 +1,27 @@
+# jamfile for the ss 2012 analysis 
+# -------------------------------------------------------------------- #
+
+exe dy_create_ntuple
+ : # sources
+   ./source/DrellYanTree.cc
+   ./source/dy_create_ntuple.cc
+   ./source/dySelections.cc
+   # dependent packages
+   /ROOT
+   /MiniFWLite//libMiniFWLite/<link>shared
+   /RootTools//RootTools/<link>static
+   /boost//program_options/<link>static
+   /AnalysisTools//AnalysisTools/<link>static
+   /SimpleTable//SimpleTable/<link>static
+   /FGTools//FGTools/<link>static
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
+
+# install libs/exes
+# -------------------------------------------------------------- #
+
+default-install dy_create_ntuple ;

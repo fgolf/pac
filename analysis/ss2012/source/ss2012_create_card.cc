@@ -115,10 +115,6 @@ try
     std::string analysis_type_name  = "high_pt";
     std::string sr_string           = "-1";
     bool exclusive                  = true;
-    float ngen_sf                   = 1.0;
-    float fake_sys_unc              = 0.5;
-    float flip_sys_unc              = 0.3;
-    float rare_sys_unc              = 0.5;
     float lumi                      = 1.0;
     bool verbose                    = false;
     float sparm0                    = -999999.0;
@@ -138,11 +134,6 @@ try
         ("output"    , po::value<std::string>(&output_file)            , "name of output root file"                                                       )
         ("anal_type" , po::value<std::string>(&analysis_type_name)     , "name of analysis type (from AnalysisType.h)"                                    )
         ("sr"        , po::value<std::string>(&sr_string)              , "comma seperated list of SRs to run on (any < 0 means all -- default)"           )
-        ("ngen_sf"   , po::value<float>(&ngen_sf)                      , Form("scale factor for the # generated events (default is %f)", ngen_sf)         )
-        ("fr_unc"    , po::value<float>(&fake_sys_unc)                 , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc) )
-        ("fr_unc"    , po::value<float>(&fake_sys_unc)                 , Form("systematic uncertainty for fake prediction (default is %f)", fake_sys_unc) )
-        ("fl_unc"    , po::value<float>(&flip_sys_unc)                 , Form("systematic uncertainty for flip prediction (default is %f)", flip_sys_unc) )
-        ("rare_unc"  , po::value<float>(&rare_sys_unc)                 , Form("systematic uncertainty for MC prediction (default is %f)", rare_sys_unc)   )
         ("sparm0"    , po::value<float>(&sparm0)                       , "sparm0 is required to be this value"                                            )
         ("sparm1"    , po::value<float>(&sparm1)                       , "sparm1 is required to be this value"                                            )
         ("sparm2"    , po::value<float>(&sparm2)                       , "sparm2 is required to be this value"                                            )
@@ -186,10 +177,6 @@ try
         cout << "syst_file           :\t" << syst_file           << endl;
         cout << "analysis_type_name  :\t" << analysis_type_name  << endl;
         cout << "sr                  :\t" << sr_string           << endl;
-        cout << "ngen_sf             :\t" << ngen_sf             << endl;
-        cout << "fake_sys_unc        :\t" << fake_sys_unc        << endl;
-        cout << "flip_sys_unc        :\t" << flip_sys_unc        << endl;
-        cout << "rare_sys_unc        :\t" << rare_sys_unc        << endl;
         cout << "lumi                :\t" << lumi                << endl;
         cout << "exclusive           :\t" << exclusive           << endl;
         cout << "verbose             :\t" << verbose             << endl;
