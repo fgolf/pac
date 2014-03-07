@@ -44,7 +44,6 @@ public:
         const std::string& root_file_name,
         const at::Sample::value_type& sample,
         const std::string& vtxreweight_file_name = "",
-        const std::string& goodrun_file_name = "",
         const double luminosity = 1.0,
         const bool verbose = false
     );
@@ -81,7 +80,6 @@ ZAnalysisNtupler::ZAnalysisNtupler
     const std::string& root_file_name,
     const Sample::value_type& sample,
     const std::string& vtxreweight_file_name,
-    const std::string& goodrun_file_name,
     const double luminosity,
     const bool verbose
 )
@@ -100,12 +98,6 @@ ZAnalysisNtupler::ZAnalysisNtupler
     {
         cout << "[ZAnalysisNtupler] using vertex reweight file : " << vtxreweight_file_name << endl;
         set_vtxreweight_rootfile(vtxreweight_file_name.c_str(), m_verbose);
-    }
-
-    // set the "good run" list 
-    if (!goodrun_file_name.empty())
-    {
-        set_goodrun_file(goodrun_file_name.c_str());
     }
 
     // begin job
@@ -593,7 +585,6 @@ try
             output_file,
             sample,
             vtxreweight_file, 
-            good_run_list,
             luminosity,
             verbose
         ),
