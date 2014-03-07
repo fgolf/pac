@@ -28,6 +28,8 @@ void DrellYanTree::Reset()
     is_z_mm      = false;
     is_z_tt      = false;
     is_acc       = false;
+    is_acc_ee    = false;
+    is_acc_mm    = false;
 }
 
 void DrellYanTree::SetBranches(TTree &tree)
@@ -53,4 +55,6 @@ void DrellYanTree::SetBranches(TTree &tree)
     tree.Branch("is_z_mm"      , &is_z_mm        , "is_z_mm/O"      ); 
     tree.Branch("is_z_tt"      , &is_z_tt        , "is_z_tt/O"      ); 
     tree.Branch("is_acc"       , &is_acc         , "is_acc/O"       ); 
+    tree.Branch("is_acc_ee"    , &is_acc_ee      , "is_acc_ee/O"    ); 
+    tree.Branch("is_acc_mm"    , &is_acc_mm      , "is_acc_mm/O"    ); 
 }

@@ -78,31 +78,34 @@ void DileptonTree::FillCommon (int idx)
     fiduciality = GetFiduciality(v1, v2);
 
     // matched gen objects
-    gen_lep1_p4    = tas::hyp_lt_mc_p4().at(idx);
-    gen_lep1_pdgid = tas::hyp_lt_mc_id().at(idx);
-    gen_lep2_p4    = tas::hyp_ll_mc_p4().at(idx);
-    gen_lep2_pdgid = tas::hyp_ll_mc_id().at(idx);
-    if (gen_lep1_p4.pt() < gen_lep2_p4.pt())
+    if (not tas::evt_isRealData())
     {
-        std::swap(gen_lep1_p4   , gen_lep2_p4   );
-        std::swap(gen_lep1_pdgid, gen_lep2_pdgid);
+        gen_lep1_p4    = tas::hyp_lt_mc_p4().at(idx);
+        gen_lep1_pdgid = tas::hyp_lt_mc_id().at(idx);
+        gen_lep2_p4    = tas::hyp_ll_mc_p4().at(idx);
+        gen_lep2_pdgid = tas::hyp_ll_mc_id().at(idx);
+        if (gen_lep1_p4.pt() < gen_lep2_p4.pt())
+        {
+            std::swap(gen_lep1_p4   , gen_lep2_p4   );
+            std::swap(gen_lep1_pdgid, gen_lep2_pdgid);
+        }
+
+        // matched gen dilepton hyp
+        gen_dilep_p4   = gen_lep1_p4 + gen_lep2_p4;
+        gen_os         = (gen_lep1_pdgid*gen_lep2_pdgid < 0);
+        gen_ss         = (gen_lep1_pdgid*gen_lep2_pdgid > 0);
+        gen_ee         = (abs(gen_lep1_pdgid*gen_lep2_pdgid) == /*11*11=*/121);
+        gen_em         = (abs(gen_lep1_pdgid*gen_lep2_pdgid) == /*11*13=*/143);
+        gen_mm         = (abs(gen_lep1_pdgid*gen_lep2_pdgid) == /*13*13=*/169);
+        gen_dilep_mass = gen_dilep_p4.mass();
+        gen_dilep_dphi = ROOT::Math::VectorUtil::DeltaPhi(gen_lep1_p4, gen_lep2_p4);
+        gen_dilep_deta = gen_lep1_p4.eta() - gen_lep2_p4.eta();
+        gen_dilep_dr   = ROOT::Math::VectorUtil::DeltaR  (gen_lep1_p4, gen_lep2_p4);
+
+        if (gen_ee) {gen_dilep_type = at::DileptonHypType::EE;  }
+        if (gen_mm) {gen_dilep_type = at::DileptonHypType::MUMU;}
+        if (gen_em) {gen_dilep_type = at::DileptonHypType::EMU; }
     }
-
-    // matched gen dilepton hyp
-    gen_dilep_p4   = gen_lep1_p4 + gen_lep2_p4;
-    gen_os         = (gen_lep1_pdgid*gen_lep2_pdgid < 0);
-    gen_ss         = (gen_lep1_pdgid*gen_lep2_pdgid > 0);
-    gen_ee         = (abs(gen_lep1_pdgid*gen_lep2_pdgid) == /*11*11=*/121);
-    gen_em         = (abs(gen_lep1_pdgid*gen_lep2_pdgid) == /*11*13=*/143);
-    gen_mm         = (abs(gen_lep1_pdgid*gen_lep2_pdgid) == /*13*13=*/169);
-    gen_dilep_mass = gen_dilep_p4.mass();
-    gen_dilep_dphi = ROOT::Math::VectorUtil::DeltaPhi(gen_lep1_p4, gen_lep2_p4);
-    gen_dilep_deta = gen_lep1_p4.eta() - gen_lep2_p4.eta();
-    gen_dilep_dr   = ROOT::Math::VectorUtil::DeltaR  (gen_lep1_p4, gen_lep2_p4);
-
-    if (gen_ee) {gen_dilep_type = at::DileptonHypType::EE;  }
-    if (gen_mm) {gen_dilep_type = at::DileptonHypType::MUMU;}
-    if (gen_em) {gen_dilep_type = at::DileptonHypType::EMU; }
 }
 
 void DileptonTree::Reset()

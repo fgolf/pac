@@ -52,6 +52,8 @@ public:
     bool is_z_mm;
     bool is_z_tt;
     bool is_acc;
+    bool is_acc_ee;
+    bool is_acc_mm;
 };
 
 #endif

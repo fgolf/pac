@@ -64,6 +64,8 @@ private:
     // members:
     const at::Sample::value_type m_sample;
     const double m_lumi;
+    const double m_min_pt1;
+    const double m_min_pt2;
     const bool m_verbose;
     unsigned int m_hyp_count;
     unsigned int m_count_ee;
@@ -86,6 +88,8 @@ ZAnalysisNtupler::ZAnalysisNtupler
     : AnalysisWithTree(root_file_name, "tree", "baby tree for Z tutorial analysis")
     , m_sample(sample)
     , m_lumi(luminosity)
+    , m_min_pt1(25.0)
+    , m_min_pt2(25.0)
     , m_verbose(verbose)
     , m_hyp_count(0)
     , m_count_ee(0)
@@ -155,6 +159,9 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
         // Event Cleaning
         // --------------------------------------------------------------------------------------------------------- //
 
+        // event level info
+        m_evt.event_info.FillCommon(m_sample, filename);
+
         // require at least 3 tracks in the event
         if (trks_trk_p4().size() < 3)
         {
@@ -178,13 +185,12 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
         {
             // is this a Drell-yan MC event? 
             const bool is_gen_z = (m_sample == at::Sample::dy); 
-            //         std::vector<int>::const_iterator z_iter = std::find(genps_id().begin(), genps_id().end(), 23);
             if (is_gen_z)
             {
                 // index of generator level Z
-                size_t gen_z_idx  = -999999;
-                size_t gen_d1_idx = -999999;
-                size_t gen_d2_idx = -999999;
+                int gen_z_idx  = -999999;
+                int gen_d1_idx = -999999;
+                int gen_d2_idx = -999999;
                 for (size_t i = 0; i != genps_id().size(); i++)
                 {
                     if (genps_status().at(i) != 3) {continue;}
@@ -232,77 +238,22 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
                 m_evt.is_z_ee      = (m_evt.gen_d1_pdgid*m_evt.gen_d2_pdgid == -121);
                 m_evt.is_z_mm      = (m_evt.gen_d1_pdgid*m_evt.gen_d2_pdgid == -169);
                 m_evt.is_z_tt      = (m_evt.gen_d1_pdgid*m_evt.gen_d2_pdgid == -225);
-                m_evt.is_acc       = (m_evt.gen_d1_p4.pt()<25 && m_evt.gen_d1_p4.pt()<25) &&
-                                     (fabs(m_evt.gen_d1_p4.eta())<2.5 && fabs(m_evt.gen_d1_p4.eta())<2.5);
+                m_evt.is_acc_ee    = (m_evt.gen_d1_p4.pt()>m_min_pt1 && m_evt.gen_d2_p4.pt()>m_min_pt2) &&
+                                     (fabs(m_evt.gen_d1_p4.eta())<1.4442 or (1.566 < fabs(m_evt.gen_d1_p4.eta()) && fabs(m_evt.gen_d1_p4.eta()) < 2.5)) &&
+                                     (fabs(m_evt.gen_d2_p4.eta())<1.4442 or (1.566 < fabs(m_evt.gen_d2_p4.eta()) && fabs(m_evt.gen_d2_p4.eta()) < 2.5));
+                m_evt.is_acc_mm    = (m_evt.gen_d1_p4.pt()>m_min_pt1 && m_evt.gen_d2_p4.pt()>m_min_pt2) &&
+                                     (fabs(m_evt.gen_d1_p4.eta())<2.1 && fabs(m_evt.gen_d2_p4.eta())<2.1);
+                m_evt.is_acc       = (m_evt.is_z_ee and m_evt.is_acc_ee) or (m_evt.is_z_mm and m_evt.is_acc_mm); 
             }
-
         }
 
-        // gen level hyps
-//         if (not evt_isRealData())
-//         {
-//             for   
-// 
-//         }
-
-
-
-
-//         // lepton variables
-//         std::pair<GenParticleStruct, GenParticleStruct> best_gen_hyp = efftools::getGenHyp(25, 25, DileptonChargeType::static_size);
-//         if (best_gen_hyp.first.id_ == 0 || best_gen_hyp.second.id_ == 0)
-//         {
-//             if (m_verbose) {cout << "does not have a good gen hyp" << endl;} 
-//             m_evt.gen_dilep_type = at::DileptonHypType::static_size; 
-//         }
-//         else
-//         {
-//             int   id1  = abs(best_gen_hyp.first.id_ ) == 15 ? best_gen_hyp.first.did_   : best_gen_hyp.first.id_;
-//             int   idx1 = abs(best_gen_hyp.first.id_ ) == 15 ? best_gen_hyp.first.didx_  : best_gen_hyp.first.idx_;
-//             int   id2  = abs(best_gen_hyp.second.id_) == 15 ? best_gen_hyp.second.did_  : best_gen_hyp.second.id_;
-//             int   idx2 = abs(best_gen_hyp.second.id_) == 15 ? best_gen_hyp.second.didx_ : best_gen_hyp.second.idx_;
-// 
-//             // get LorenzVectors
-//             LorentzVector p41;
-//             if (abs(best_gen_hyp.first.id_) == 15)
-//             { 
-//                 p41 = genps_lepdaughter_p4().at(best_gen_hyp.first.idx_).at(idx1);
-//             }
-//             else
-//             {
-//                 p41 = genps_p4().at(idx1);
-//             }
-// 
-//             LorentzVector p42;
-//             if (abs(best_gen_hyp.second.id_) == 15)
-//             {
-//                 p42 = genps_lepdaughter_p4().at(best_gen_hyp.second.idx_).at(idx2);
-//             }
-//             else
-//             {
-//                 p42 = genps_p4().at(idx2);
-//             }
-// 
-//             m_evt.is_gen_pp      = id1<0 && id2<0;  // -11 is a positron, 11 is an electron
-//             m_evt.is_gen_mm      = id1>0 && id2>0;  // -11 is a positron, 11 is an electron
-//             m_evt.gen_lep1_p4    = p41.pt() > p42.pt() ? p41 : p42;
-//             m_evt.gen_lep1_pdgid = p41.pt() > p42.pt() ? id1 : id1;
-//             m_evt.gen_lep2_p4    = p41.pt() > p42.pt() ? p42 : p41;
-//             m_evt.gen_lep2_pdgid = p41.pt() > p42.pt() ? id2 : id1;
-//             m_evt.gen_dilep_p4   = (p41 + p42);
-//             m_evt.gen_dilep_type = efftools::getHypType(id1, id2);
-//             m_evt.gen_dilep_mass = m_evt.gen_dilep_p4.mass();
-//             m_evt.gen_dilep_dphi = rt::DeltaPhi(p41, p42); 
-//             m_evt.gen_dilep_deta = rt::DeltaEta(p41, p42); 
-//             m_evt.gen_dilep_dr   = rt::DeltaR(p41, p42); 
-//         }
-
-        // Analysis Selections
+        // hypothesis Selections
         // --------------------------------------------------------------------------------------------------------- //
 
         int best_hyp = -99999;
 
         // loop over hypotheses
+        if (m_verbose) {std::cout << Form("begin hyp loop [size = %lu] on event: %u %u %u", hyp_type().size(), evt_run(), evt_lumiBlock(), evt_event()) << std::endl;}
         for (size_t hyp_idx = 0; hyp_idx != hyp_type().size(); hyp_idx++)
         {                
             // leptons variables
@@ -311,54 +262,54 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
             int lt_idx = hyp_lt_index().at(hyp_idx);
             int ll_idx = hyp_ll_index().at(hyp_idx);
 
-            //// check if hyp passes trigger
-            //if (evt_isRealData() && !dy::passesTrigger(hyp_type().at(hyp_idx)))
-            //{
-            //    if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
-            //    continue;
-            //}            
+            // check if hyp passes trigger
+            if (evt_isRealData() && !dy::passesTrigger(hyp_type().at(hyp_idx)))
+            {
+                if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
+                continue;
+            }            
 
-            //// check that they are opposite sign
-            //if ((hyp_lt_charge().at(hyp_idx) * hyp_ll_charge().at(hyp_idx)) > 0)
-            //{
-            //    if (m_verbose) {std::cout << "fails opposite sign requirement" << std::endl;}
-            //    continue;
-            //}
+            // check that they are opposite sign
+            if ((hyp_lt_charge().at(hyp_idx) * hyp_ll_charge().at(hyp_idx)) > 0)
+            {
+                if (m_verbose) {std::cout << "fails opposite sign requirement" << std::endl;}
+                continue;
+            }
 
-            //// check that they are the same flavor
-            //const DileptonHypType::value_type flavor_type = hyp_typeToHypType(hyp_type().at(hyp_idx));
-            //if (not(flavor_type == DileptonHypType::EE or flavor_type == DileptonHypType::MUMU))
-            //{
-            //    if (m_verbose) {std::cout << "fails same flavor requirement" << std::endl;}
-            //    continue;
-            //}
+            // check that they are the same flavor
+            const DileptonHypType::value_type flavor_type = hyp_typeToHypType(hyp_type().at(hyp_idx));
+            if (not(flavor_type == DileptonHypType::EE or flavor_type == DileptonHypType::MUMU))
+            {
+                if (m_verbose) {std::cout << "fails same flavor requirement" << std::endl;}
+                continue;
+            }
 
-            //// check hyp mass (no low mass resonances)
-            //const float dilep_mass = sqrt(fabs(hyp_p4().at(hyp_idx).mass2()));
-            //if (not (60 < dilep_mass && dilep_mass < 120.0))
-            //{
-            //    if (m_verbose) {std::cout << "fails dilepton invariant mass requirement" << std::endl;}
-            //    continue;
-            //}
+            // check hyp mass (no low mass resonances)
+            const float dilep_mass = sqrt(fabs(hyp_p4().at(hyp_idx).mass2()));
+            if (not (60 < dilep_mass && dilep_mass < 120.0))
+            {
+                if (m_verbose) {std::cout << "fails dilepton invariant mass requirement" << std::endl;}
+                continue;
+            }
 
-            //// check that lepton pass selections
-            //if (not dy::isSelectedLepton(lt_id, lt_idx))
-            //{
-            //    if (m_verbose) {std::cout << "lt fails lepton selection" << std::endl;}
-            //    continue;
-            //}
-            //if (not dy::isSelectedLepton(ll_id, ll_idx))
-            //{
-            //    if (m_verbose) {std::cout << "ll fails lepton selection" << std::endl;}
-            //    continue;
-            //}
+            // check that lepton pass selections
+            if (not dy::isSelectedLepton(lt_id, lt_idx))
+            {
+                if (m_verbose) {std::cout << "lt fails lepton selection" << std::endl;}
+                continue;
+            }
+            if (not dy::isSelectedLepton(ll_id, ll_idx))
+            {
+                if (m_verbose) {std::cout << "ll fails lepton selection" << std::endl;}
+                continue;
+            }
 
-            //// check that leptons are from the same vertex
-            //if (!hypsFromFirstGoodVertex(hyp_idx))
-            //{
-            //    if (m_verbose) {std::cout << "fails leptons are from the first good vertex requirement" << std::endl;}
-            //    continue;
-            //}
+            // check that leptons are from the same vertex
+            if (!hypsFromFirstGoodVertex(hyp_idx))
+            {
+                if (m_verbose) {std::cout << "fails leptons are from the first good vertex requirement" << std::endl;}
+                continue;
+            }
 
             // choose the best hypothesis
             best_hyp = dy::ChooseBetterHypothesis(best_hyp, hyp_idx);
@@ -390,12 +341,11 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
         // event wieghts 
 
         //const float vtxw  = evt_isRealData() ? 1.0 : vtxweight_n(numberOfGoodVertices(), evt_isRealData(), false);
-//         const float vtxw  = 1.0;
-//         const float scale1fb = evt_isRealData() ? 1.0 : m_evt.event_info.scale1fb;
-        //float scale          = evt_isRealData() ? 1.0 : m_lumi * scale1fb * vtxw; 
+        //const float vtxw  = 1.0;
+        //const float scale1fb = evt_isRealData() ? 1.0 : m_evt.event_info.scale1fb;
+        //float scale       = evt_isRealData() ? 1.0 : m_lumi * scale1fb * vtxw; 
 
         // fill event level info 
-        m_evt.event_info.FillCommon(m_sample, filename);
         m_evt.event_info.uncorpfmet     = evt_pfmet();
         m_evt.event_info.uncorpfmet_phi = evt_pfmetPhi();
         const float met                 = m_evt.event_info.pfmet;
@@ -455,10 +405,10 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
         m_evt.lep2.passes_iso  = dy::isIsolatedLepton(lep2_id, lep2_idx);
 
         // electron isolation correction variables
-        m_evt.rho_iso = evt_kt6pf_foregiso_rho();
-        m_evt.rho     = evt_ww_rho_vor(); 
-//         m_evt.event_info.vtwx    = vtxw;
-//         m_evt.event_info.lumi    = m_lumi;
+        m_evt.rho_iso         = evt_kt6pf_foregiso_rho();
+        m_evt.rho             = evt_ww_rho_vor();
+        //m_evt.event_info.lumi = m_lumi;
+        //m_evt.event_info.vtwx = vtxw;
 
         // flavor
         m_evt.is_mm = (flavor_type==DileptonHypType::MUMU);

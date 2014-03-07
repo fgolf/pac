@@ -22,6 +22,70 @@
 /////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////     
+// 2012 lepton impact parameters 
+// uses CTF track for muons and GSF tracks for elections
+// if no matching track found, return bogus value of -999999
+// calc w.r.t first good vertex
+////////////////////////////////////////////////////////////////////////////////////////////     
+float dy::leptonD0(const int id, const int idx)
+{
+    const int vtxidx = firstGoodVertex();
+    if (vtxidx < 0)
+    {
+        std::cout << "[dy::leptonD0] WARNING - first good vertex index < 0.  Returning bogus value 999999" << std::endl;
+        return 999999.0;
+    }
+    if (abs(id)==13)
+    {
+        const int trkidx = tas::mus_trkidx().at(idx);
+        if (trkidx >= 0)
+        {
+            return trks_d0_pv(trkidx, vtxidx).first;
+        }
+    }
+    else if (abs(id)==11)
+    {
+        const int gsfidx = tas::els_gsftrkidx().at(idx);
+        if (gsfidx >= 0) 
+        {
+            return gsftrks_d0_pv(gsfidx, vtxidx).first;
+        }
+    }
+
+    // return bogus for non electon/muon
+    return -999999.0;
+}
+
+float dy::leptonDz(const int id, const int idx)
+{
+    const int vtxidx = firstGoodVertex();
+    if (vtxidx < 0)
+    {
+        std::cout << "[dy::leptonDz] WARNING - first good vertex index < 0.  Returning bogus value 999999" << std::endl;
+        return 999999.0;
+    }
+    if (abs(id)==13)
+    {
+        const int trkidx = tas::mus_trkidx().at(idx);
+        if (trkidx >= 0)
+        {
+            return trks_dz_pv(trkidx, vtxidx).first;
+        }
+    }
+    else if (abs(id)==11)
+    {
+        const int gsfidx = tas::els_gsftrkidx().at(idx);
+        if (gsfidx >= 0)
+        {
+            return gsftrks_dz_pv(gsfidx, vtxidx).first;
+        }
+    }
+
+    // return bogus for non electon/muon
+    return -999999.0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////     
 // good lepton (passes ID)
 ////////////////////////////////////////////////////////////////////////////////////////////     
 bool dy::isGoodLepton(const int id, const int idx)
@@ -102,90 +166,6 @@ bool dy::isGoodLepton(const int id, const int idx)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////     
-// 2012 lepton impact parameters 
-// uses CTF track for muons and GSF tracks for elections
-// if no matching track found, return bogus value of -999999
-// calc w.r.t first good vertex
-////////////////////////////////////////////////////////////////////////////////////////////     
-float dy::leptonD0(const int id, const int idx)
-{
-    const int vtxidx = firstGoodVertex();
-    if (vtxidx < 0)
-    {
-        std::cout << "[dy::leptonD0] WARNING - first good vertex index < 0.  Returning bogus value 999999" << std::endl;
-        return 999999.0;
-    }
-    if (abs(id)==13)
-    {
-        const int trkidx = tas::mus_trkidx().at(idx);
-        if (trkidx >= 0)
-        {
-            return trks_d0_pv(trkidx, vtxidx).first;
-        }
-    }
-    else if (abs(id)==11)
-    {
-        const int gsfidx = tas::els_gsftrkidx().at(idx);
-        if (gsfidx >= 0) 
-        {
-            return gsftrks_d0_pv(gsfidx, vtxidx).first;
-        }
-    }
-
-    // return bogus for non electon/muon
-    return -999999.0;
-}
-
-float dy::leptonDz(const int id, const int idx)
-{
-    const int vtxidx = firstGoodVertex();
-    if (vtxidx < 0)
-    {
-        std::cout << "[dy::leptonDz] WARNING - first good vertex index < 0.  Returning bogus value 999999" << std::endl;
-        return 999999.0;
-    }
-    if (abs(id)==13)
-    {
-        const int trkidx = tas::mus_trkidx().at(idx);
-        if (trkidx >= 0)
-        {
-            return trks_dz_pv(trkidx, vtxidx).first;
-        }
-    }
-    else if (abs(id)==11)
-    {
-        const int gsfidx = tas::els_gsftrkidx().at(idx);
-        if (gsfidx >= 0)
-        {
-            return gsftrks_dz_pv(gsfidx, vtxidx).first;
-        }
-    }
-
-    // return bogus for non electon/muon
-    return -999999.0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////     
-// 2012 lepton isolation value
-////////////////////////////////////////////////////////////////////////////////////////////     
-double dy::leptonIsolation(const int id, const int idx)
-{
-    // electrons
-    if (abs(id) == 11)
-    {
-        return dy::electronIsolationPF2012(idx);
-    }
-
-    // muons
-    if (abs(id) == 13)
-    {
-        return dy::muonIsoValuePF2012(idx);
-    }
-
-    return -999999.0;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////     
 // 2012 isolated lepton
 ////////////////////////////////////////////////////////////////////////////////////////////     
 bool dy::isIsolatedLepton(const int id, const int idx)
@@ -208,6 +188,26 @@ bool dy::isIsolatedLepton(const int id, const int idx)
     }
 
     return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////     
+// 2012 lepton isolation value
+////////////////////////////////////////////////////////////////////////////////////////////     
+double dy::leptonIsolation(const int id, const int idx)
+{
+    // electrons
+    if (abs(id) == 11)
+    {
+        return dy::electronIsolationPF2012(idx);
+    }
+
+    // muons
+    if (abs(id) == 13)
+    {
+        return dy::muonIsoValuePF2012(idx);
+    }
+
+    return -999999.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////     
@@ -239,7 +239,110 @@ float dy::EffectiveArea04(int id, int idx)
     //return fastJetEffArea04_v1(eta);  // used for HCP and ICHEP
     return fastJetEffArea04_v2(eta);    // 2013
 }
+///////////////////////////////////////////////////////////////////////////////////////////
+// calculate PF-based isolation for electrons with rho*Aeff correction
+// using cone size 03
+///////////////////////////////////////////////////////////////////////////////////////////
+float dy::electronIsolationPF2012(const int idx)
+{
+    return dy::electronIsolationPF2012_cone03(idx);
+}
 
+float dy::electronIsolationPF2012_cone03(const int idx)
+{
+    // electron pT
+    const float pt = tas::els_p4().at(idx).pt();
+
+    // get effective area
+    const float AEff = EffectiveArea03(11, idx);
+
+    // pf iso
+    const float pfiso_ch = tas::els_iso03_pf2012ext_ch().at(idx);
+    const float pfiso_em = tas::els_iso03_pf2012ext_em().at(idx);
+    const float pfiso_nh = tas::els_iso03_pf2012ext_nh().at(idx);
+
+    // rho
+    const float rhoPrime = std::max(tas::evt_kt6pf_foregiso_rho(), 0.0f);
+    const float pfiso_n = std::max(pfiso_em + pfiso_nh - rhoPrime * AEff, 0.0f);
+    const float pfiso = (pfiso_ch + pfiso_n) / pt;
+
+    return pfiso;
+}
+
+float dy::electronIsolationPF2012_cone04(const int idx)
+{
+    // electron pT
+    const float pt = tas::els_p4().at(idx).pt();
+
+    // get effective area
+    const float AEff = EffectiveArea04(11, idx);
+
+    // pf iso
+    const float pfiso_ch = tas::els_iso04_pf2012ext_ch().at(idx);
+    const float pfiso_em = tas::els_iso04_pf2012ext_em().at(idx);
+    const float pfiso_nh = tas::els_iso04_pf2012ext_nh().at(idx);
+
+    // rho
+    const float rhoPrime = std::max(tas::evt_kt6pf_foregiso_rho(), 0.0f);
+    const float pfiso_n = std::max(pfiso_em + pfiso_nh - rhoPrime * AEff, 0.0f);
+    const float pfiso = (pfiso_ch + pfiso_n) / pt;
+
+    return pfiso;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// calculate PF-based isolation for muon with Delta-Beta correction using cone size 04
+///////////////////////////////////////////////////////////////////////////////////////////
+float dy::muonIsoValuePF2012(const unsigned int imu)
+{
+    const float chiso     = tas::mus_isoR04_pf_ChargedHadronPt().at(imu);
+    const float nhiso     = tas::mus_isoR04_pf_NeutralHadronEt().at(imu);
+    const float emiso     = tas::mus_isoR04_pf_PhotonEt().at(imu);
+    const float deltaBeta = tas::mus_isoR04_pf_PUPt().at(imu);
+    const float pt        = tas::mus_p4().at(imu).pt();
+    const float absiso    = chiso + max(0.0, nhiso + emiso - 0.5 * deltaBeta);
+    return (absiso / pt);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// passes dilepton trigger
+///////////////////////////////////////////////////////////////////////////////////////////
+
+bool dy::passesTrigger(const int flavor_type)
+{
+    //----------------------------------------
+    // no trigger requirements applied to MC
+    //----------------------------------------
+
+    if (not tas::evt_isRealData())
+    {
+        return true; 
+    }
+
+    //---------------------------------
+    // triggers for dilepton datasets
+    //---------------------------------
+
+    // mm
+    if (flavor_type == 0)
+    {
+        if (passUnprescaledHLTTriggerPattern("HLT_Mu15_eta2p1_v")) {return true;}
+    }
+
+    // em
+    else if ((flavor_type == 1 || flavor_type == 2))
+    {
+        return false;
+    }
+
+    // ee
+    else if (flavor_type == 3)
+    {
+        if (passUnprescaledHLTTriggerPattern("HLT_Ele22_CaloIdL_CaloIsoVL_v")) {return true;}
+    }
+    
+    return false;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////     
 // 2012 selected lepton (passes ID and isolation)
@@ -248,7 +351,6 @@ bool dy::isSelectedLepton(const int id, const int idx)
 {
     return (dy::isGoodLepton(id, idx) && dy::isIsolatedLepton(id, idx));
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////     
 // 2012 selected hypothesis (passes ID and isolation)
@@ -334,109 +436,4 @@ int dy::ChooseBetterHypothesis(const int hyp1_idx, const int hyp2_idx)
 
     // if we're here, give bogus value
     return -99999;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////
-// calculate PF-based isolation for electrons with rho*Aeff correction
-// using cone size 03
-///////////////////////////////////////////////////////////////////////////////////////////
-float dy::electronIsolationPF2012(const int idx)
-{
-    return dy::electronIsolationPF2012_cone03(idx);
-}
-
-float dy::electronIsolationPF2012_cone03(const int idx)
-{
-    // electron pT
-    const float pt = tas::els_p4().at(idx).pt();
-
-    // get effective area
-    const float AEff = EffectiveArea03(11, idx);
-
-    // pf iso
-    const float pfiso_ch = tas::els_iso03_pf2012ext_ch().at(idx);
-    const float pfiso_em = tas::els_iso03_pf2012ext_em().at(idx);
-    const float pfiso_nh = tas::els_iso03_pf2012ext_nh().at(idx);
-
-    // rho
-    const float rhoPrime = std::max(tas::evt_kt6pf_foregiso_rho(), 0.0f);
-    const float pfiso_n = std::max(pfiso_em + pfiso_nh - rhoPrime * AEff, 0.0f);
-    const float pfiso = (pfiso_ch + pfiso_n) / pt;
-
-    return pfiso;
-}
-
-float dy::electronIsolationPF2012_cone04(const int idx)
-{
-    // electron pT
-    const float pt = tas::els_p4().at(idx).pt();
-
-    // get effective area
-    const float AEff = EffectiveArea04(11, idx);
-
-    // pf iso
-    const float pfiso_ch = tas::els_iso04_pf2012ext_ch().at(idx);
-    const float pfiso_em = tas::els_iso04_pf2012ext_em().at(idx);
-    const float pfiso_nh = tas::els_iso04_pf2012ext_nh().at(idx);
-
-    // rho
-    const float rhoPrime = std::max(tas::evt_kt6pf_foregiso_rho(), 0.0f);
-    const float pfiso_n = std::max(pfiso_em + pfiso_nh - rhoPrime * AEff, 0.0f);
-    const float pfiso = (pfiso_ch + pfiso_n) / pt;
-
-    return pfiso;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////
-// calculate PF-based isolation for muon with Delta-Beta correction using cone size 04
-///////////////////////////////////////////////////////////////////////////////////////////
-float dy::muonIsoValuePF2012(const unsigned int imu)
-{
-    const float chiso     = tas::mus_isoR04_pf_ChargedHadronPt().at(imu);
-    const float nhiso     = tas::mus_isoR04_pf_NeutralHadronEt().at(imu);
-    const float emiso     = tas::mus_isoR04_pf_PhotonEt().at(imu);
-    const float deltaBeta = tas::mus_isoR04_pf_PUPt().at(imu);
-    const float pt        = tas::mus_p4().at(imu).pt();
-    const float absiso    = chiso + max(0.0, nhiso + emiso - 0.5 * deltaBeta);
-    return (absiso / pt);
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////
-// passes dilepton trigger
-///////////////////////////////////////////////////////////////////////////////////////////
-
-bool dy::passesTrigger(const int flavor_type)
-{
-    //----------------------------------------
-    // no trigger requirements applied to MC
-    //----------------------------------------
-
-    if (!tas::evt_isRealData())
-    {
-        return true; 
-    }
-
-    //---------------------------------
-    // triggers for dilepton datasets
-    //---------------------------------
-
-    // mm
-    if (flavor_type == 0)
-    {
-        if (passUnprescaledHLTTriggerPattern("HLT_Mu15_eta2p1_v")) {return true;}
-    }
-
-    // em
-    else if ((flavor_type == 1 || flavor_type == 2))
-    {
-        return false;
-    }
-
-    // ee
-    else if (flavor_type == 3)
-    {
-        if (passUnprescaledHLTTriggerPattern("HLT_Ele22_CaloIdL_CaloIsoVL_v")) {return true;}
-    }
-    
-    return false;
 }
