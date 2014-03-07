@@ -34,7 +34,8 @@ run_bjam $PAC/packages/AnalysisTools       $option
 run_bjam $PAC/packages/FGTools             $option
 run_bjam $PAC/analysis/ss2012              $option
 run_bjam $PAC/analysis/ewkino2012          $option
-run_bjam $PAC/analysis/FakeRateStudy2011   $option
+# run_bjam $PAC/analysis/FakeRateStudy2011   $option
+run_bjam $PAC/analysis/FakeRateBabyMaker   $option
 
 echo ""
 echo -e ########################################

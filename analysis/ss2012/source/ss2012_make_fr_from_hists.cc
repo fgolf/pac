@@ -261,14 +261,21 @@ try
         SetScalingHistValues(h_ele_noiso_scaling, el_noiso_sf);
         TH2* h_mc_el_noiso_num = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_num%s_noiso", jpt.c_str())]), h_ele_noiso_scaling, ele_noiso_lumi);
         TH2* h_mc_el_noiso_fo  = ApplyScalingHist(dynamic_cast<TH2*>(hc_mc[Form("h_el_fo%s_noiso" , jpt.c_str())]), h_ele_noiso_scaling, ele_noiso_lumi);
-        h_mc_el_noiso_num->SetName(Form("h_mc_el_noiso_num%s", jpt.c_str()));
-        h_mc_el_noiso_fo ->SetName(Form("h_mc_el_noiso_fo%s" , jpt.c_str()));
 
         // subtract contamination
         h_data_el_num->Add(h_mc_el_num, -1);
         h_data_el_fo->Add(h_mc_el_fo, -1);
+        h_data_el_num->SetName(Form("h_data_el_num%s", jpt.c_str()));
+        h_data_el_fo ->SetName(Form("h_data_el_fo%s" , jpt.c_str()));
+        h_mc_el_num->SetName(Form("h_mc_el_num%s_corr", jpt.c_str()));
+        h_mc_el_fo ->SetName(Form("h_mc_el_fo%s_corr" , jpt.c_str()));
+
         h_data_el_noiso_num->Add(h_mc_el_noiso_num, -1);
         h_data_el_noiso_fo->Add(h_mc_el_noiso_fo, -1);
+        h_data_el_noiso_num->SetName(Form("h_data_el_noiso_num%s", jpt.c_str()));
+        h_data_el_noiso_fo ->SetName(Form("h_data_el_noiso_fo%s" , jpt.c_str()));
+        h_mc_el_noiso_num->SetName(Form("h_mc_el_noiso_num%s_corr", jpt.c_str()));
+        h_mc_el_noiso_fo ->SetName(Form("h_mc_el_noiso_fo%s_corr" , jpt.c_str()));
 
         // create fake rates and projections
         TH2* h_elfr_ewkcor        = rt::MakeEfficiencyPlot2D(        h_data_el_num, h_data_el_fo,      Form("h_elfr%s_ewkcor"       , jpt.c_str()), Form("electron FR cpfiso03 #rho * A_{eff} (0.09, 0.6) (away jet p_{T} > %d), corrected for prompt EWK contamination", ajetpt[i]));
@@ -309,10 +316,17 @@ try
         // subtract contamination
         h_data_mu_num->Add(h_mc_mu_num, -1);
         h_data_mu_fo->Add(h_mc_mu_fo, -1);
+        h_data_mu_num->SetName(Form("h_data_mu_num%s", jpt.c_str()));
+        h_data_mu_fo ->SetName(Form("h_data_mu_fo%s" , jpt.c_str()));
+        h_mc_mu_num->SetName(Form("h_mc_mu_num%s_corr", jpt.c_str()));
+        h_mc_mu_fo ->SetName(Form("h_mc_mu_fo%s_corr" , jpt.c_str()));
+
         h_data_mu_iso_num->Add(h_mc_mu_iso_num, -1);
         h_data_mu_iso_fo->Add(h_mc_mu_iso_fo, -1);
         h_data_mu_iso_num->SetName(Form("h_data_mu_iso_num%s", jpt.c_str()));
         h_data_mu_iso_fo ->SetName(Form("h_data_mu_iso_fo%s" , jpt.c_str()));
+        h_mc_mu_iso_num->SetName(Form("h_mc_mu_iso_num%s_corr", jpt.c_str()));
+        h_mc_mu_iso_fo ->SetName(Form("h_mc_mu_iso_fo%s_corr" , jpt.c_str()));
 
         // create fake rates and projections
         TH2* h_mufr_ewkcor        = rt::MakeEfficiencyPlot2D(        h_data_mu_num, h_data_mu_fo,      Form("h_mufr%s_ewkcor"       , jpt.c_str()), Form("#mu FR cpfiso03 #Delta#beta (0.1, 0.4) (away jet p_{T} > %d, corrected for prompt EWK contamination", ajetpt[i]));
@@ -343,10 +357,16 @@ try
         hc_new.Add(h_mufr_vs_eta_iso_ewkcor);
 //         hc_new.Add(h_ele_noiso_scaling);
         hc_new.Add(h_mu_iso_scaling);
-        hc_new.Add(h_mc_mu_iso_num);
-        hc_new.Add(h_mc_mu_iso_fo);
         hc_new.Add(h_data_mu_iso_num);
         hc_new.Add(h_data_mu_iso_fo);
+        hc_new.Add(h_mc_el_num);
+        hc_new.Add(h_mc_el_fo);
+        hc_new.Add(h_mc_el_noiso_num);
+        hc_new.Add(h_mc_el_noiso_fo);
+        hc_new.Add(h_mc_mu_num);
+        hc_new.Add(h_mc_mu_fo);
+        hc_new.Add(h_mc_mu_iso_num);
+        hc_new.Add(h_mc_mu_iso_fo);
 
     } // end ajetpt loop
 

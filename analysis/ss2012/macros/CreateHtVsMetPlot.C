@@ -38,8 +38,8 @@ void CreateHtVsMetPlot
     ss::SetSignalRegionAliases(e1, at, /*apply beff sf*/false);
 
     // book
-    const string cms_title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi);
-/*     const std::string cms_title = Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi); */
+/*     const string cms_title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi); */
+    const std::string cms_title = Form("CMS, #sqrt{s} = 8 TeV, L_{int} = %2.1f fb^{-1};H_{T} (GeV); E_{T}^{miss} (GeV)", lumi);
 
     TH2F* h2_ht_vs_pfmet_baseline_njlt4_mm = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_mm", cms_title.c_str(), 1500, 0, 1500, 600, 0, 600);
     TH2F* h2_ht_vs_pfmet_baseline_njlt4_em = new TH2F("h2_ht_vs_pfmet_baseline_njlt4_em", cms_title.c_str(), 1500, 0, 1500, 600, 0, 600);
@@ -412,10 +412,10 @@ void CreateHtVsMetPlot
 
 void CreateAllHtVsMetPlots()
 {
-    CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr0" , "high_pt", "pdf");
-/*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr20", "high_pt", "pdf"); */
-    CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr0" , "low_pt" , "pdf");
-/*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr20", "low_pt" , "pdf"); */
-/*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr0" , "vlow_pt", "pdf"); */
-/*     CreateHtVsMetPlot("AN_draft_19p5fb_v5", "sr20", "vlow_pt", "pdf"); */
+    CreateHtVsMetPlot("AN_draft_19p5fb_v4", "sr0" , "high_pt", "pdf");
+/*     CreateHtVsMetPlot("AN_draft_19p5fb_v4", "sr20", "high_pt", "pdf"); */
+    CreateHtVsMetPlot("AN_draft_19p5fb_v4", "sr0" , "low_pt" , "pdf");
+/*     CreateHtVsMetPlot("AN_draft_19p5fb_v4", "sr20", "low_pt" , "pdf"); */
+/*     CreateHtVsMetPlot("AN_draft_19p5fb_v4", "sr0" , "vlow_pt", "pdf"); */
+/*     CreateHtVsMetPlot("AN_draft_19p5fb_v4", "sr20", "vlow_pt", "pdf"); */
 }

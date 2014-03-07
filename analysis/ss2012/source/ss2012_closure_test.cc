@@ -164,6 +164,7 @@ try
         }
         cout << "input file(s) = " << input_file << endl;
     }
+    rt::PrintFilesFromTChain(chain);
 
     // scan the chain
     ScanChain

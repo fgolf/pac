@@ -942,3 +942,67 @@ void PrintFRDiffPlot(const std::string& suffix = "png")
     hc.Print(path, suffix);
     //rt::Print(p, path, suffix);
 }
+
+void PrintFRBtagComparePlot(const std::string& suffix = "png")
+{
+	rt::TH1Container hc1("data/fake_rates/ssFR_data_ewkcor_17Apr2013.root");
+	rt::TH1Container hc2("data/fake_rates/ssFR_data_ewkcor_11Apr2013_btagged.root");
+    std::string path = "plots/fake_rates/thesis";
+	float lumi = 19.5;
+
+	std::map<std::string, rt::TH1Overlay> p;
+
+	// set style
+	rt::SetTDRStyle();
+	gStyle->SetTitleBorderSize(0);
+    hc1.SetMarkerSize(1.8);
+    hc2.SetMarkerSize(1.8);
+
+	//std::string title = Form("QCD derived FR, #sqrt{s} = 8 TeV", lumi);
+	//std::string title = Form("CMS Preliminary, #sqrt{s} = 8 TeV, #scale[0.6]{#int}Ldt = %3.1f fb^{-1}", lumi);
+	//std::string title = Form("#mu^{+} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+	//std::string title = Form("#mu^{-} fake rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+
+    // Fake Rates
+    float max = 0.5;
+    Color_t c20 = kRed;
+    Color_t c40 = kBlack;
+/*     Color_t c60 = kBlue; */
+
+    Style_t s20 = 20;
+    Style_t s40 = 22;
+/*     Style_t s60 = 24; */
+
+	std::string title = Form("Muon Fake Rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+
+    p["p_mufr_btag_compare_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_mufr_btag_compare_vs_pt"].Add(hc1["h_mufr40c_vs_pt"], "away jet p_{T} > 40 GeV"         , c40, 2, s40);
+    p["p_mufr_btag_compare_vs_pt"].Add(hc2["h_mufr40c_vs_pt"], "away jet p_{T} > 40 GeV, btagged", c20, 2, s20);
+    p["p_mufr_btag_compare_vs_pt"].SetYAxisRange(0, max);
+    p["p_mufr_btag_compare_vs_pt"].SetLegendOption("p");
+    p["p_mufr_btag_compare_vs_pt"].SetLegendTextSize(0.042);
+    p["p_mufr_btag_compare_vs_pt"].AddText("Muons", 0.25, 0.835);
+
+	title = Form("Electron Fake Rate, #sqrt{s} = 8 TeV, L_{int} = %3.1f fb^{-1}", lumi);
+
+    p["p_elfr_btag_compare_vs_pt"] = rt::TH1Overlay(Form("%s;p_{T} (GeV);TL ratio", title.c_str()), "sb::off lg::top");
+    p["p_elfr_btag_compare_vs_pt"].Add(hc1["h_elfr40c_vs_pt"], "away jet p_{T} > 40 GeV"         , c40, 2, s40);
+    p["p_elfr_btag_compare_vs_pt"].Add(hc2["h_elfr40c_vs_pt"], "away jet p_{T} > 40 GeV, btagged", c20, 2, s20);
+    p["p_elfr_btag_compare_vs_pt"].SetYAxisRange(0, max);
+    p["p_elfr_btag_compare_vs_pt"].SetLegendOption("p");
+    p["p_elfr_btag_compare_vs_pt"].SetLegendTextSize(0.042);
+    p["p_elfr_btag_compare_vs_pt"].AddText("Muons", 0.25, 0.835);
+
+    // print
+    if (suffix=="all")
+    {
+        rt::Print(p, path, "png");
+        rt::Print(p, path, "pdf");
+        rt::Print(p, path, "eps");
+    }
+    else
+    {
+        rt::Print(p, path, suffix);
+    }
+}
+

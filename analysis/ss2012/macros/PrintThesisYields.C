@@ -182,10 +182,21 @@ void PrintThesisYields
     // print tex
     std::vector<unsigned int> sr_nums;
     sr_nums.clear();
-    const unsigned int values[] = { 1,  2,  3,  4,  5,  6,  7,  8,
-                                   11, 12, 13, 14, 15, 16, 17, 18,
-                                   21, 22, 23, 24, 25, 26, 27, 28};
-    sr_nums.assign(values, values+24);
+    const unsigned int lpt_values[] = { 1,  2,  3,  4,  5,  6,  7,  8,
+                                       11, 12, 13, 14, 15, 16, 17, 18,
+                                       21, 22, 23, 24, 25, 26, 27, 28};
+    const unsigned int hpt_values[] = { 1,  2,  3,  4,  5,  6,  7,  8,
+                                       11, 12, 13, 14, 15, 16, 17, 18,
+                                       21, 22, 23, 24, 25, 26, 27, 28,
+                                       30, 31, 32, 33, 34, 35};
+    if (analysis_type == ss::AnalysisType::high_pt)
+    {
+        sr_nums.assign(hpt_values, hpt_values+30);
+    }
+    else
+    {
+        sr_nums.assign(lpt_values, lpt_values+24);
+    }
 
     string latex;
     latex.append("\\begin{tabular}{c|c|ccc|c}\n");
