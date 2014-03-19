@@ -46,16 +46,6 @@ pushd externals/build/cms2_frb
 pushd
 echo
  
-# check out SimpleTable 
-# --------------------------------------------------------------- #
-
-tag=HEAD
-echo Checking out Ian\'s table class with tag $tag
-pushd externals/build/SimpleTable
-./checkout.sh
-pushd
-echo
-
 echo externals install complete
 
 # build all 
