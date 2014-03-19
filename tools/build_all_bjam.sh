@@ -28,7 +28,7 @@ run_bjam $PAC/packages/cms2                $option
 run_bjam $PAC/externals/build/cms2_core    $option
 run_bjam $PAC/externals/build/cms2_frb     $option
 run_bjam $PAC/externals/build/MiniFWLite   $option
-run_bjam $PAC/externals/build/SimpleTable  $option
+run_bjam $PAC/packages/SimpleTable         $option
 run_bjam $PAC/packages/RootTools           $option
 run_bjam $PAC/packages/AnalysisTools       $option
 run_bjam $PAC/packages/FGTools             $option

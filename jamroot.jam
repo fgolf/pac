@@ -81,10 +81,6 @@ use-project /ROOT       : ./externals/build/root ;
 path-constant ROOFIT_PATH : $(rootsys) ;
 use-project /RooFit       : ./externals/build/RooFit ;
 
-# SimpleTable
-path-constant SIMPLETABLE_PATH : ./externals/source/SimpleTable ;
-use-project /SimpleTable       : ./externals/build/SimpleTable ;
-
 # CMS2_CORE
 #local cms2_core_tag = HEAD ;
 local cms2_core_tag = [ os.environ CMS2CORE_TAG ] ;
@@ -105,6 +101,10 @@ use-project /CMS2_FRB  : ./externals/build/cms2_frb ;
 
 # reusable packages 
 # ----------------------------------------------------------------------#
+
+# SimpleTable
+path-constant SIMPLETABLE_PATH : ./packages/SimpleTable ;
+use-project /SimpleTable       : ./packages/SimpleTable ;
 
 # ROOT tools
 path-constant ROOTTOOLS : ./packages/RootTools ;

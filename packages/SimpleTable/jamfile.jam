@@ -2,29 +2,31 @@
 
 lib SimpleTable
   : # sources
-    $(SIMPLETABLE_PATH)/CNumBase.cpp
-    $(SIMPLETABLE_PATH)/CTable.cpp
+    ./source/CNumBase.cc
+    ./source/CTable.cc
     [
       rootcint Dict
         : # sources
-          $(SIMPLETABLE_PATH)/CTable.h
-          $(SIMPLETABLE_PATH)/CNumBase.h
+          ./include/CTable.h
         : # requriements
-          <include>$(SIMPLETABLE_PATH)
-          <linkdef>$(SIMPLETABLE_PATH)/LinkDef.h
+          <include>./include
+          <include>./source
+          <linkdef>./source/LinkDef.h
     ]
     # dependent packages
     /ROOT
   : # requirements 
-    <include>$(SIMPLETABLE_PATH)
+    <include>./include
+    <include>./source
   : # default-build
   : # usage-requirements
-    <include>$(SIMPLETABLE_PATH)
+    <include>./include
+    <include>./source
   ;
 
 exe test_ctable
   : # sources
-    $(SIMPLETABLE_PATH)/test.cpp
+    ./source/test.cc
     SimpleTable/<link>static
     # dependent packages
     /ROOT

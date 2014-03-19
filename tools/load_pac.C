@@ -55,7 +55,7 @@
     gSystem->Load(Form("%s/libcms2_core.so", pac_path.c_str()));
 
     // Ian's Simple table
-    gSystem->AddIncludePath("-I$PAC/externals/source/SimpleTable");
+    gSystem->AddIncludePath("-I$PAC/packages/SimpleTable/include");
     gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
 
     // RootTools
