@@ -339,6 +339,7 @@ bool dy::passesTrigger(const int flavor_type)
     else if (flavor_type == 3)
     {
         if (passUnprescaledHLTTriggerPattern("HLT_Ele22_CaloIdL_CaloIsoVL_v")) {return true;}
+//         if (passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdL_CaloIsoVL_v")) {return true;}
     }
     
     return false;
