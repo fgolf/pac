@@ -201,34 +201,34 @@ void print_dilep_plots()
     // formatting
     rt::TH1Overlay::legend_height_per_entry_default = 0.050;
     rt::TH1Overlay::legend_text_size_default        = 0.025;
-    const float ymin = 1e-5;
+    const float ymin = 1e0;
     const float ymax = 3e4;
     const std::string option = "sb::off dt::stack lg::top_left";
 
     rt::TH1Overlay p1("Generator Level Dimuon distributions - #intL = 82 pb^{-1};m_{#mu^{+}#mu^{-}} (GeV/c^{2});Events/1.0 GeV/c^{2}", option);
-    p1.Add(hc["h_mmm_dyll"   ],  "DY #rightarrow #mu#mu"        , kOrange-2); 
-    p1.Add(hc["h_mmm_ttdil"  ],  "t#bar{t} #rightarrow 2l2#nu2b", kOrange+7); 
-    p1.Add(hc["h_mmm_ww"     ],  "WW #rightarrow 2l2#nu"        , kGreen+2 ); 
-    p1.Add(hc["h_mmm_wz2l2q" ],  "WZ #rightarrow 2l2q"          , kRed+2   ); 
-    p1.Add(hc["h_mmm_wz3l"   ],  "WZ #rightarrow 3l#nu"         , kRed-7   ); 
-    p1.Add(hc["h_mmm_zz2l2q" ],  "ZZ #rightarrow 2l2q"          , kBlue    ); 
-    p1.Add(hc["h_mmm_zz2l2nu"],  "ZZ #rightarrow 2l#nu"         , kBlue+2  ); 
-    p1.Add(hc["h_mmm_zz4l"   ],  "ZZ #rightarrow 4l"            , kBlue-5  ); 
-    p1.Add(hc["h_mmm_wjets"  ],  "W #rightarrow l#nu"           , kGray+1  ); 
-    p1.Add(hc["h_mmm_qcd"    ],  "QCD"                          , kMagenta ); 
+    p1.Add(hc["h_mmm_dyll"   ],  "DY #rightarrow #mu#mu"        , kOrange-2);
+    p1.Add(hc["h_mmm_wz2l2q" ],  "WZ #rightarrow 2l2q"          , kRed+2   );
+    p1.Add(hc["h_mmm_wz3l"   ],  "WZ #rightarrow 3l#nu"         , kRed-7   );
+    p1.Add(hc["h_mmm_zz2l2q" ],  "ZZ #rightarrow 2l2q"          , kBlue    );
+    p1.Add(hc["h_mmm_zz2l2nu"],  "ZZ #rightarrow 2l#nu"         , kBlue+2  );
+    p1.Add(hc["h_mmm_zz4l"   ],  "ZZ #rightarrow 4l"            , kBlue-5  );
+    p1.Add(hc["h_mmm_ttdil"  ],  "t#bar{t} #rightarrow 2l2#nu2b", kOrange+7);
+    p1.Add(hc["h_mmm_ww"     ],  "WW #rightarrow 2l2#nu"        , kGreen+2 );
+    p1.Add(hc["h_mmm_wjets"  ],  "W #rightarrow l#nu"           , kGray+1  );
+    p1.Add(hc["h_mmm_qcd"    ],  "QCD"                          , kMagenta );
     p1.SetYAxisRange(ymin, ymax);
 
     rt::TH1Overlay p2("Generator Level Dielectron distributions - #intL = 82 pb^{-1};m_{e^{+}e^{-}} (GeV/c^{2});Events/1.0 GeV/c^{2}", option);
-    p2.Add(hc["h_mmm_dyll"   ],  "DY #rightarrow ee"            , kOrange-2); 
-    p2.Add(hc["h_mmm_ttdil"  ],  "t#bar{t} #rightarrow 2l2#nu2b", kOrange+7); 
-    p2.Add(hc["h_mmm_ww"     ],  "WW #rightarrow 2l2#nu"        , kGreen+2 ); 
-    p2.Add(hc["h_mmm_wz2l2q" ],  "WZ #rightarrow 2l2q"          , kRed+2   ); 
-    p2.Add(hc["h_mmm_wz3l"   ],  "WZ #rightarrow 3l#nu"         , kRed-7   ); 
-    p2.Add(hc["h_mmm_zz2l2q" ],  "ZZ #rightarrow 2l2q"          , kBlue    ); 
-    p2.Add(hc["h_mmm_zz2l2nu"],  "ZZ #rightarrow 2l#nu"         , kBlue+2  ); 
-    p2.Add(hc["h_mmm_zz4l"   ],  "ZZ #rightarrow 4l"            , kBlue-5  ); 
-    p2.Add(hc["h_mmm_wjets"  ],  "W #rightarrow l#nu"           , kGray+1  ); 
-    p2.Add(hc["h_mmm_qcd"    ],  "QCD"                          , kMagenta ); 
+    p2.Add(hc["h_mmm_dyll"   ],  "DY #rightarrow ee"            , kOrange-2);
+    p2.Add(hc["h_mmm_wz2l2q" ],  "WZ #rightarrow 2l2q"          , kRed+2   );
+    p2.Add(hc["h_mmm_wz3l"   ],  "WZ #rightarrow 3l#nu"         , kRed-7   );
+    p2.Add(hc["h_mmm_zz2l2q" ],  "ZZ #rightarrow 2l2q"          , kBlue    );
+    p2.Add(hc["h_mmm_zz2l2nu"],  "ZZ #rightarrow 2l#nu"         , kBlue+2  );
+    p2.Add(hc["h_mmm_zz4l"   ],  "ZZ #rightarrow 4l"            , kBlue-5  );
+    p2.Add(hc["h_mmm_ttdil"  ],  "t#bar{t} #rightarrow 2l2#nu2b", kOrange+7);
+    p2.Add(hc["h_mmm_ww"     ],  "WW #rightarrow 2l2#nu"        , kGreen+2 );
+    p2.Add(hc["h_mmm_wjets"  ],  "W #rightarrow l#nu"           , kGray+1  );
+    p2.Add(hc["h_mmm_qcd"    ],  "QCD"                          , kMagenta );
     p2.SetYAxisRange(ymin, ymax);
 
     // output
