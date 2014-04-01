@@ -56,6 +56,7 @@
 
     // Ian's Simple table
     gSystem->AddIncludePath("-I$PAC/packages/SimpleTable/include");
+    gSystem->AddIncludePath("-I$PAC/packages/SimpleTable/source");
     gSystem->Load(Form("%s/libSimpleTable.so", pac_path.c_str()));
 
     // RootTools
