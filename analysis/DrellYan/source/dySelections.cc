@@ -323,24 +323,14 @@ bool dy::passesTrigger(const int flavor_type)
     // triggers for dilepton datasets
     //---------------------------------
 
-    // mm
-    if (flavor_type == 0)
+    switch(flavor_type)
     {
-        if (passUnprescaledHLTTriggerPattern("HLT_Mu15_eta2p1_v")) {return true;}
+        /*mu mu*/case 0: return passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v"); break;
+        /*e mu*/ case 1: return false; break;
+        /*e mu*/ case 2: return false; break;
+        /*e e*/  case 3: return passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v"); break;
+        default: return false;
     }
-
-    // em
-    else if ((flavor_type == 1 || flavor_type == 2))
-    {
-        return false;
-    }
-
-    // ee
-    else if (flavor_type == 3)
-    {
-        if (passUnprescaledHLTTriggerPattern("HLT_Ele22_CaloIdL_CaloIsoVL_v")) {return true;}
-    }
-    
     return false;
 }
 

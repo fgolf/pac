@@ -248,19 +248,6 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
         if (m_verbose) {std::cout << Form("begin hyp loop [size = %lu] on event: %u %u %u", hyp_type().size(), evt_run(), evt_lumiBlock(), evt_event()) << std::endl;}
         for (size_t hyp_idx = 0; hyp_idx != hyp_type().size(); hyp_idx++)
         {                
-            // leptons variables
-            int lt_id  = hyp_lt_id().at(hyp_idx);
-            int ll_id  = hyp_ll_id().at(hyp_idx);
-            int lt_idx = hyp_lt_index().at(hyp_idx);
-            int ll_idx = hyp_ll_index().at(hyp_idx);
-
-            // check if hyp passes trigger
-            if (evt_isRealData() && !dy::passesTrigger(hyp_type().at(hyp_idx)))
-            {
-                if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
-                continue;
-            }            
-
             // check that they are opposite sign
             if ((hyp_lt_charge().at(hyp_idx) * hyp_ll_charge().at(hyp_idx)) > 0)
             {
@@ -275,7 +262,7 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
                 if (m_verbose) {std::cout << "fails same flavor requirement" << std::endl;}
                 continue;
             }
-
+ 
             // check hyp mass (no low mass resonances)
             const float dilep_mass = sqrt(fabs(hyp_p4().at(hyp_idx).mass2()));
             if (not (60 < dilep_mass && dilep_mass < 120.0))
@@ -284,22 +271,24 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
                 continue;
             }
 
-            // check that lepton pass selections
-            if (not dy::isSelectedLepton(lt_id, lt_idx))
-            {
-                if (m_verbose) {std::cout << "lt fails lepton selection" << std::endl;}
-                continue;
-            }
-            if (not dy::isSelectedLepton(ll_id, ll_idx))
-            {
-                if (m_verbose) {std::cout << "ll fails lepton selection" << std::endl;}
-                continue;
-            }
-
             // check that leptons are from the same vertex
             if (!hypsFromFirstGoodVertex(hyp_idx))
             {
                 if (m_verbose) {std::cout << "fails leptons are from the first good vertex requirement" << std::endl;}
+                continue;
+            }
+
+            // check if hyp passes trigger
+            if (evt_isRealData() && !dy::passesTrigger(hyp_type().at(hyp_idx)))
+            {
+                if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
+                continue;
+            }            
+
+            // check that lepton pass selections
+            if (not dy::isSelectedHypothesis(hyp_idx))
+            {
+                if (m_verbose) {std::cout << "lt fails lepton selection" << std::endl;}
                 continue;
             }
 
@@ -450,7 +439,7 @@ try
     std::string ntuple_type_name    = "cms2";
     std::string sample_name         = "";
     std::string vtxreweight_file    = "";
-    std::string good_run_list       = "";
+    std::string good_run_list       = "json/Cert_190782-190949_8TeV_06Aug2012ReReco_Collisions12_cms2.txt";
     int run                         = -1;
     int lumi                        = -1;
     int event                       = -1;

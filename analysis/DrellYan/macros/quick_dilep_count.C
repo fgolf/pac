@@ -14,7 +14,7 @@ static const double s_SDEfficiency[] =
      /*ttdil   =*/ (11902045.0/12119013.0),
      /*ttslq   =*/ (23453443.0/25384818.0),
      /*ttotr   =*/ (21211839.0/31223821.0),
-     /*qcd     =*/ (19770457  /20614602  ),
+     /*qcd     =*/ (19770457.0/20614602.0),
      /*ww2l2q  =*/ (1933235.0 /1933235.0 ),
      /*wz2l2q  =*/ (2937874.0 /3215990.0 ),
      /*wz3l    =*/ (2017979.0 /2017979.0 ),
@@ -194,7 +194,7 @@ void print_dilep_count()
     std::cout << t1 << std::endl;
 }
 
-void print_dilep_plots()
+void print_dilep_plots(const std::string& suffix = "png")
 {
     rt::TH1Container hc("plots/dilep_counts.root");
 
@@ -232,14 +232,14 @@ void print_dilep_plots()
     p2.SetYAxisRange(ymin, ymax);
 
     // output
-    rt::Print(p1, "plots/p_gen_mmm", "png");
-    rt::Print(p2, "plots/p_gen_mee", "png");
+    rt::Print(p1, "plots/p_gen_mmm", suffix);
+    rt::Print(p2, "plots/p_gen_mee", suffix);
 
     // log output
     p1.SetLogy(true);
-    rt::Print(p1, "plots/p_gen_mmm_log", "png");
+    rt::Print(p1, "plots/p_gen_mmm_log", suffix);
     p2.SetLogy(true);
-    rt::Print(p2, "plots/p_gen_mee_log", "png");
+    rt::Print(p2, "plots/p_gen_mee_log", suffix);
 }
 
 void quick_dilep_count(const long num_events = std::numeric_limits<long>::max())
