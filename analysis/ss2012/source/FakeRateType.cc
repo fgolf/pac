@@ -118,10 +118,13 @@ namespace ss
 	    const float tmp_el_pt_bins[]  = {10.0, 15.0, 20.0, 25.0, 35.0, 55.0};
 	    //            const float tmp_el_pt_bins[]  = {10.0, 15.0, 20.0, 22.0, 25.0, 30.0, 35.0, 55.0};
 
-            const float tmp_mu_vtx_bins[] = {0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0};
-            const float tmp_mu_eta_bins[] = {0.0, 1.0, 1.479, 2.0, 2.5};
+	    //            const float tmp_mu_vtx_bins[] = {0.0,  3.0, 6.0, 9.0, 12.0, 15.0, 18.0, 21.0, 30.0};
+            const float tmp_mu_vtx_bins[] = {0.0,  5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 31.0}; // SYNC
+	    //            const float tmp_mu_eta_bins[] = {0.0, 1.0, 1.479, 2.0, 2.5};
+            const float tmp_mu_eta_bins[] = {0.0, 0.5, 1.0, 1.5, 2.0, 2.5}; // SYNC
 	    //	    const float tmp_mu_pt_bins[]  = {5.0, 10.0, 15.0, 20.0, 25.0, 35.0, 60.0};
-	    const float tmp_mu_pt_bins[]  = {5.0, 10.0, 15.0, 20.0, 22.0, 25.0, 30.0, 35.0, 60.0};
+	    //	    const float tmp_mu_pt_bins[]  = {5.0, 10.0, 15.0, 20.0, 22.0, 25.0, 30.0, 35.0, 60.0};
+	    const float tmp_mu_pt_bins[]  = {10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 45.0, 50.0}; // SYNC
 
             size_t tmp_num_el_vtx_bins = (sizeof(tmp_el_vtx_bins) / sizeof(tmp_el_vtx_bins[0]));
             size_t tmp_num_el_eta_bins = (sizeof(tmp_el_eta_bins) / sizeof(tmp_el_eta_bins[0]));

@@ -23,7 +23,8 @@ echo "[wrapper] COPYDIR   = " ${COPYDIR}
 #
 
 echo "[wrapper] setting env"
-source /code/osgcode/fgolf/5.30-patches/bin/thisroot.sh
+#source /code/osgcode/fgolf/5.30-patches/bin/thisroot.sh
+source /code/osgcode/imacneill/root/05.34.07/bin/thisroot.sh
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD
 export PATH=:$PATH:$PWD
 export PAC=$PWD
@@ -85,7 +86,7 @@ echo ./sweepRoot -o tree $OUTPUT
 if [ $(./sweepRoot -o tree $OUTPUT 2>&1 | grep SUMMARY | awk '{print $2}') == 0 ]; 
 then 
     echo "[wrapper] preparing to transfer $OUTPUT to ${COPYDIR}/${OUTPUT}..."
-    lcg-cp -b -D srmv2 --vo cms -t 2400 --verbose file:`pwd`/${OUTPUT} srm://bsrm-1.t2.ucsd.edu:8443/srm/v2/server?SFN=${COPYDIR}/${OUTPUT}
+    lcg-cp -b -D srmv2 --vo cms -t 2400 --verbose file:`pwd`/${OUTPUT} srm://bsrm-3.t2.ucsd.edu:8443/srm/v2/server?SFN=${COPYDIR}/${OUTPUT}
 else
     echo "[wrapper] $OUTPUT is considered bad by sweepRoot..."
 fi

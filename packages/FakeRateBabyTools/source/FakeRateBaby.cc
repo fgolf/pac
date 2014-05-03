@@ -17,6 +17,7 @@ namespace frb {
 	const int &nmus() { return fake_rate_baby.nmus(); }
 	const int &nvetoels() { return fake_rate_baby.nvetoels(); }
 	const int &nvetomus() { return fake_rate_baby.nvetomus(); }
+	const int &nloosemus() { return fake_rate_baby.nloosemus(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4() { return fake_rate_baby.lp4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4() { return fake_rate_baby.mc3p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4() { return fake_rate_baby.foel_p4(); }
@@ -314,6 +315,7 @@ namespace frb {
 	const int &hltps_relIso1p0Mu5_vstar() { return fake_rate_baby.hltps_relIso1p0Mu5_vstar(); }
 	const float &ptpfj1() { return fake_rate_baby.ptpfj1(); }
 	const int &npfj1() { return fake_rate_baby.npfj1(); }
+	const float &csvpfj1() { return fake_rate_baby.csvpfj1(); }
 	const float &ptpfj1_b2b() { return fake_rate_baby.ptpfj1_b2b(); }
 	const float &dphipfj1_b2b() { return fake_rate_baby.dphipfj1_b2b(); }
 	const float &ptpfcj1() { return fake_rate_baby.ptpfcj1(); }

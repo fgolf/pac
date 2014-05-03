@@ -25,7 +25,8 @@ namespace at
         const bool verbose = false,
         const int evt_run = -1,
         const int evt_lumi = -1,
-        const int evt_event = -1
+        const int evt_event = -1,
+	const bool remove_duplicate = true
      );
 
     // Peform an analysis on a chain.
@@ -42,7 +43,8 @@ namespace at
         const bool verbose = false,
         const int evt_run = -1,
         const int evt_lumi = -1,
-        const int evt_event = -1
+        const int evt_event = -1,
+	const bool remove_duplicate = true
      );
 
 } // namespace at

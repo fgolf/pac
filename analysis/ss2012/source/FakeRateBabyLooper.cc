@@ -8,6 +8,9 @@
 #include <tr1/array>
 #include <cmath>
 
+#include "jetSelections.h"
+
+
 typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > vecLorentzVector;
 
 // construct:
@@ -56,6 +59,7 @@ FakeRateBabyLooper::FakeRateBabyLooper
 // destroy:
 FakeRateBabyLooper::~FakeRateBabyLooper()
 {
+
 }
 
 // methods:
@@ -87,14 +91,12 @@ void FakeRateBabyLooper::BeginJob()
 
     assert(not (m_away_jet_pt < 0.));
     printf("minimum away jet pt cut: %4.2f GeV\n", m_away_jet_pt);
-
     // figure out muon isolation extrapolation
     if (m_mu_iso_denom < 0.)
     {
-        if (m_fr_type == ss::FakeRateType::hpt || m_fr_type == ss::FakeRateType::truncated) m_mu_iso_denom = 0.4;
+      if (m_fr_type == ss::FakeRateType::hpt || m_fr_type == ss::FakeRateType::truncated) m_mu_iso_denom = 0.4;
         else if (m_fr_type == ss::FakeRateType::eth) m_mu_iso_denom = 1.0;
     }
-
     assert(not (m_mu_iso_denom < 0.));
     printf("muon isolation extrapolation: %4.2f\n", m_mu_iso_denom);
 
@@ -103,6 +105,45 @@ void FakeRateBabyLooper::BeginJob()
 
     // book histos
     BookHists();
+
+    // ALL USELESS: CAN'T APPLY THE JET CORRECTIONS ON THE FLY BECAUSE WE DON'T HAVE THE JET ETA AND PHI, AND DON'T HAVE ALL JETS.
+    // NEED TO DO IT IN MYBABYMAKER.CC
+
+//    std::string jetcorrPath        = "./jetcorr/";//rt::getenv("PAC") + "/externals/source/cms2_core/CORE/jetcorr/data";
+//
+//    // set up on-the-fly L1FastJetL2L3 JEC
+//    std::vector<std::string> jetcorr_pf_L1FastJetL2L3_filenames;
+//    jetcorr_pf_L1FastJetL2L3_filenames.push_back(Form("%s/FT_P_V42_AN3_L1FastJet_AK5PF.txt"   , jetcorrPath.empty() ? "." : jetcorrPath.c_str()));
+//    jetcorr_pf_L1FastJetL2L3_filenames.push_back(Form("%s/FT_P_V42_AN3_L2Relative_AK5PF.txt"  , jetcorrPath.empty() ? "." : jetcorrPath.c_str()));
+//    jetcorr_pf_L1FastJetL2L3_filenames.push_back(Form("%s/FT_P_V42_AN3_L3Absolute_AK5PF.txt"  , jetcorrPath.empty() ? "." : jetcorrPath.c_str()));
+//
+//    std::cout << "making MC jet corrector with the following files: " << std::endl;
+//    for (unsigned int idx = 0; idx < jetcorr_pf_L1FastJetL2L3_filenames.size(); idx++)
+//      std::cout << jetcorr_pf_L1FastJetL2L3_filenames.at(idx) << std::endl;
+//    jet_pf_L1FastJetL2L3_corrector = makeJetCorrector(jetcorr_pf_L1FastJetL2L3_filenames); 
+//    if (not jet_pf_L1FastJetL2L3_corrector)
+//      {
+//	throw std::runtime_error("ERROR: FakeRateBabyLooper: unable to create jet_pf_L1FastJetL2L3_corrector");
+//      }
+//
+//
+//    // set up on-the-fly L1FastJetL2L3 residual JEC
+//    std::vector<std::string> jetcorr_pf_L1FastJetL2L3Residual_filenames;
+//    jetcorr_pf_L1FastJetL2L3Residual_filenames.push_back(Form("%s/START53_v20_L1FastJet_AK5PF.txt"   , jetcorrPath.empty() ? "." : jetcorrPath.c_str()));
+//    jetcorr_pf_L1FastJetL2L3Residual_filenames.push_back(Form("%s/START53_v20_L2Relative_AK5PF.txt"  , jetcorrPath.empty() ? "." : jetcorrPath.c_str()));
+//    jetcorr_pf_L1FastJetL2L3Residual_filenames.push_back(Form("%s/START53_v20_L3Absolute_AK5PF.txt"  , jetcorrPath.empty() ? "." : jetcorrPath.c_str()));
+//    jetcorr_pf_L1FastJetL2L3Residual_filenames.push_back(Form("%s/START53_v20_L2L3Residual_AK5PF.txt", jetcorrPath.empty() ? "." : jetcorrPath.c_str()));
+//
+//    std::cout << "making Data jet corrector with the following files: " << std::endl;
+//    for (unsigned int idx = 0; idx < jetcorr_pf_L1FastJetL2L3Residual_filenames.size(); idx++)
+//      std::cout << jetcorr_pf_L1FastJetL2L3Residual_filenames.at(idx) << std::endl;
+//    jet_pf_L1FastJetL2L3Residual_corrector = makeJetCorrector(jetcorr_pf_L1FastJetL2L3Residual_filenames); 
+//    if (not jet_pf_L1FastJetL2L3Residual_corrector)
+//      {
+//	throw std::runtime_error("ERROR: FakeRateBabyLooper: unable to create jet_pf_L1FastJetL2L3Residual_corrector");
+//      }
+
+
 }
 
 // selection functions (to be moved to another file maybe)
@@ -152,7 +193,7 @@ void FakeRateBabyLooper::EndJob()
 {
     // convenience alias
     rt::TH1Container& hc = m_hist_container;
-
+ 
     // muons
     if (m_lepton == "mu")
     {   
@@ -257,7 +298,7 @@ void FakeRateBabyLooper::BookHists()
     // binning for MET, MT histograms
     const unsigned int nbins = 20;
     const float min_val = 0.;
-    const float max_val = 100.;
+    const float max_val = 200.;
 
     // muons
     // --------------------------------------------------------------------------------------------------------------------------- //    
@@ -303,7 +344,8 @@ void FakeRateBabyLooper::BookHists()
 
 
 	// GZ
-        hc.Add(new TH1F("h_mu_fo_iso", "fo muon; cpfiso03 (#Delta#beta)",50,0,5), "texte");
+        hc.Add(new TH1F("h_mu_fo_iso", "fo muon; cpfiso03 (#Delta#beta)",20,0,1.0), "texte");
+        hc.Add(new TH1F("h_mu_fo_nvtxs", "fo muon; nvtxs",40,0,40), "texte");
         hc.Add(new TH1F("h_mu_fo_isoGeV", "fo muon; cpfiso03 (#Delta#beta) (GeV)",100,0,10), "texte");
         hc.Add(new TH1F("h_mu_fo_chiso", "fo muon; chiso03",50,0,5), "texte");
         hc.Add(new TH1F("h_mu_fo_caloiso", "fo muon; caloiso03(#Delta#beta)",50,0,5), "texte");
@@ -720,7 +762,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         // convenience alias
         rt::TH1Container& hc = m_hist_container;
-
+//	if (evt() == 690388356 /*231972086*/) cout<<"Found event "<<231972086<<endl;
+//	else return 0;
         // FO selection cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
 
@@ -769,27 +812,6 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             default: /*do nothing*/ break;
         };
 	
-	// Synchronization
-	if (is_mu && pt() > 10. && fabs(eta())<2.4) {
-	  //passes_id : PF && globalMuon, global->normChi2 < 10, validMuonHits > 0, MatchedStations > 1, 
-	  //            innerTrack( trackerLayersWithMeasurement > 5, ValidPixelHits > 0), innerTrack( dxy(vtx) < 0.2, dz(vtx)<0.5)
-	  bool passChi2 = (mu_nchi2global() < 10);
-	  bool passMuHits = (mu_numberOfValidMuonHits() > 0);
-	  bool passStations = (mu_numberOfMatchedStations() > 1);
-	  bool passLayers = (mu_trackerLayersWithMeasurement() > 5);
-	  bool passPixel = (mu_numberOfValidPixelHits() > 0);
-	  bool passD0_l = (fabs(d0()) < 0.2);
-	  bool passD0_t = (fabs(d0()) < 0.01);
-	  bool passDZ = (fabs(dz()) < 0.2);
-	  bool passIso_l = (cpfiso03_db() < 1.);
-	  bool passIso_t = (cpfiso03_db() < 0.1);
-	  bool passes_id = mu_isGlobal() && mu_isPF() && passChi2 && passMuHits && passStations && passLayers && passPixel && passDZ;
-	  bool is_loose = passes_id && passD0_l && passIso_l;
-	  bool is_tight = passes_id && passD0_t && passIso_t;
-			
-	  //	printf("%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%4.2f\n", run, lumi, event, pt, eta, phi, is_loose, is_tight)
-	  printf("%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%d\n", ls(), evt(), pt(), eta(), phi(), is_loose, is_tight);
-	}
 
         // pT cut
         float min_mu_pt = m_fr_bin_info.mu_pt_bins()[0];
@@ -799,7 +821,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         float min_el_pt = m_fr_bin_info.el_pt_bins()[0];
         float max_el_pt = m_fr_bin_info.el_pt_bins()[m_fr_bin_info.num_el_pt_bins()];
 
-        if (is_mu && (pt()<min_mu_pt || pt()>max_mu_pt))
+        if (is_mu && (pt()<min_mu_pt || pt()>20000)) // GZ SYNCH max_mu_pt))
         {
             if (m_verbose) {cout << "fails pt cut with pt " << pt() << endl;}
             return 0;
@@ -842,7 +864,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 //                trig_cut = ((pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
 //                            (pt() > 17 && (mu17_vstar()>1 || mu8_vstar()>1)) || 
 //                            (pt() > 8  && (mu8_vstar()>1)));
-	      trig_cut = (pt() > 17  && (mu17_vstar()>1)); // easiest way to deal with differently prescaled triggers!
+//	      trig_cut = (pt() > 17  && (mu17_vstar()>1)); // easiest way to deal with differently prescaled triggers!
+	      trig_cut = ((mu17_vstar()>0)); // SYNCH --> 1 means pass, 2 or 3 means match
 //	      trig_cut = (pt() > 8  && (mu8_vstar()>1)); // easiest way to deal with differently prescaled triggers!
 
                 // trigger with isolation
@@ -862,6 +885,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                 // triggers without isolation
                 trig_cut_noiso = (pt() > 8 && (ele8_CaloIdT_TrkIdVL_Jet30_vstar()>1 || ele8_CaloIdT_TrkIdVL_vstar()>1));
             }
+	    //	    else if (is_mu /* also MC */ ) trig_cut = ((mu17_vstar()>0)); // SYNCH --> 1 means pass, 2 or 3 means match
         }
 
         // away jet cut
@@ -902,6 +926,28 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             return 0;
         }
 
+	// Synchronization
+	bool is_loose = false;
+	bool is_tight = false;
+	if (is_mu && pt() > 10. && fabs(eta())<2.4) {
+	  //passes_id : PF && globalMuon, global->normChi2 < 10, validMuonHits > 0, MatchedStations > 1, 
+	  //            innerTrack( trackerLayersWithMeasurement > 5, ValidPixelHits > 0), innerTrack( dxy(vtx) < 0.2, dz(vtx)<0.5)
+	  bool passChi2 = (mu_nchi2global() < 10);
+	  bool passMuHits = (mu_numberOfValidMuonHits() > 0);
+	  bool passStations = (mu_numberOfMatchedStations() > 1);
+	  bool passLayers = (mu_trackerLayersWithMeasurement() > 5);
+	  bool passPixel = (mu_numberOfValidPixelHits() > 0);
+	  bool passD0_l = (fabs(d0()) < 0.2);
+	  bool passD0_t = (fabs(d0()) < 0.01);
+	  bool passDZ = (fabs(dz()) < 0.2);
+	  bool passIso_l = (cpfiso03_db() < 1.);
+	  bool passIso_t = (cpfiso03_db() < 0.1);
+	  bool passes_id = mu_isGlobal() && mu_isPF() && passChi2 && passMuHits && passStations && passLayers && passPixel && passDZ;
+	  is_loose = passes_id && passD0_l && passIso_l;
+	  is_tight = passes_id && passD0_t && passIso_t;
+	}		
+	//printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%d\t%4.3f\t%4.3f\n", run(), ls(), evt(), pt(), eta(), phi(), is_loose, is_tight, cpfiso03_db(), d0());
+
         // no resonance's (Z or upsilon), no extra leptons in event
         if (m_fr_type == ss::FakeRateType::eth)
         {
@@ -913,35 +959,59 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
         else
         {
-            if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()<12)))
-            {
-                if (m_verbose) {cout << "fails no Z cut" << endl;}
-                return 0;
-            }
-            else if (is_el && (76<mz_fo_gsf() && mz_fo_gsf()<106))
-            {
-                if (m_verbose) {cout << "fails no Z cut" << endl;}
-                return 0;
-            }
+//SYNCH            if (is_mu && ((76<mz_fo_ctf() && mz_fo_ctf()<106) || (8<mupsilon_fo_mu() && mupsilon_fo_mu()<12)))
+//SYNCH            {
+//SYNCH                if (m_verbose) {cout << "fails no Z cut" << endl;}
+//SYNCH                return 0;
+//SYNCH            }
+//SYNCH            else if (is_el && (76<mz_fo_gsf() && mz_fo_gsf()<106))
+//SYNCH            {
+//SYNCH                if (m_verbose) {cout << "fails no Z cut" << endl;}
+//SYNCH                return 0;
+//SYNCH            }
 
             // no additional FO's in event
-            if (is_mu && (nFOmus()>0))
+	  if (is_mu && nloosemus()>0)//SYNCH (nFOmus()>0))
             {
                 if (m_verbose) {cout << "fails no addition muon FO cut" << endl;}
                 return 0;
             }
-            else if(is_el && (nFOels()>0))
-            {
-                if (m_verbose) {cout << "fails no addition FO cut" << endl;}
-                return 0;
-            }
-        }
+//SYNCH            else if(is_el && (nFOels()>0))
+//SYNCH            {
+//SYNCH                if (m_verbose) {cout << "fails no addition FO cut" << endl;}
+//SYNCH                return 0;
+//SYNCH            }
+         }
+
+	float pt_corr = is_data ?  ptpfcL1Fj1res() : ptpfcL1Fj1();
+	float dphi_corr = is_data ?  dphipfcL1Fj1res() : dphipfcL1Fj1();
+	if (pt() > 20) {
+//	if (is_loose ) printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
+//	if (is_loose && pt_corr > 40. ) 
+//	  printf("PASS JET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//	if (is_loose && pt_corr > 40. && pfmet() < 20.) 
+//	  printf("PASS MET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//	  if (is_loose && pt_corr > 40. && pfmet() < 20. && mt() < 20.) 
+//	  printf("PASS MT  %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//
+//	if (is_loose && trig_cut) printf("PASS SINGLELEPTONHLT %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
+//	if (is_loose && pt_corr > 40.  && trig_cut) 
+//	  printf("PASS JETHLT %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//	if (is_loose && pt_corr > 40. && pfmet() < 20. && trig_cut) 
+//	  printf("PASS METHLT %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//	if (is_loose && pt_corr > 40. && pfmet() < 20. && mt() < 20. && trig_cut) 
+//	  printf("PASS MTHLT  %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
+//	if (is_loose && pt_corr > 40. && pfmet() < 20. && mt() < 20. && trig_cut) 
+//	  printf("PASS MTHLT  %d\t%d\t%d\t%4.2f\t%4.4f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\t%4.4f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt(), fabs(eta()));
+	}
 
         // numerator cut
         bool num_lep_cut = false;
         if (is_mu)
         {
-            num_lep_cut = num_mu_ssV5_noIso();
+	  num_lep_cut = is_tight; //num_mu_ssV5_noIso(); // SYNC
             if (m_apply_tight_d0_cut) num_lep_cut = num_lep_cut && (fabs(d0()) < 0.005);
         }
         else if(is_el)
@@ -954,7 +1024,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         bool fo_lep_cut = false;
         if (is_mu)
         {
-            fo_lep_cut = ((m_fr_type == ss::FakeRateType::eth) ? num_mu_ssV5_noIso() : fo_mu_ssV5_noIso());
+	  fo_lep_cut = is_loose; //((m_fr_type == ss::FakeRateType::eth) ? num_mu_ssV5_noIso() : fo_mu_ssV5_noIso()); //SYNC
         }
         else if(is_el)
         {
@@ -1009,7 +1079,6 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         float num_mu_iso_cut = 0.1;
         float den_mu_iso_cut = m_mu_iso_denom;
-
         float num_el_iso_cut = 0.09;
         float den_el_iso_cut = ((m_fr_type == ss::FakeRateType::eth) ? 1.0 : 0.6);
 	
@@ -1029,6 +1098,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 	}
         // Fill some plots
         // -------------------------------------------------------------------------------------- //
+	if (pt() < 20.0 ) return 0;
 
         if (m_lepton == "mu")
         {
@@ -1266,7 +1336,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             if (fo_lep_sel)
             {		  
 	      if (pt() > 20.0 && pt() < 25.0) {		
-		rt::Fill( hc["h_mu_fo_iso"], iso, evt_weight);
+		//		rt::Fill( hc["h_mu_fo_iso"], iso, evt_weight);
 		rt::Fill( hc["h_mu_fo_isoGeV"], isoGeV, evt_weight);
 		rt::Fill( hc["h_mu_fo_chiso"], chiso, evt_weight);
 		rt::Fill( hc["h_mu_fo_chisoGeV"], chisoGeV, evt_weight);
@@ -1382,7 +1452,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 		  rt::Fill( hc["h_mu_fo_lepPtSpectrum"], pt(), evt_weight);
 		  rt::Fill( hc["h_mu_fo_lepFOSpectrum"], isNumIso ? pt() : FOpt, evt_weight);
 
-
+		rt::Fill( hc["h_mu_fo_iso"], iso, evt_weight);
+		rt::Fill( hc["h_mu_fo_nvtxs"], evt_nvtxs(), evt_weight);
 		  
 		  if (!m_use_FOpt) {
 		    if (jet_dwn_cut           ) { rt::Fill2D(hc["h_mu_fo20c"], fabs(eta()), pt(), evt_weight); } 

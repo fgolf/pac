@@ -32,10 +32,10 @@ protected:
 	bool	is_real_data_;
 	TBranch *is_real_data_branch;
 	bool is_real_data_isLoaded;
-	TString *dataset_;
+	TString * dataset_;
 	TBranch *dataset_branch;
 	bool dataset_isLoaded;
-	TString *filename_;
+	TString * filename_;
 	TBranch *filename_branch;
 	bool filename_isLoaded;
 	int	pu_nPUvertices_;
@@ -65,6 +65,9 @@ protected:
 	int	nvetomus_;
 	TBranch *nvetomus_branch;
 	bool nvetomus_isLoaded;
+	int	nloosemus_;
+	TBranch *nloosemus_branch;
+	bool nloosemus_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lp4_;
 	TBranch *lp4_branch;
 	bool lp4_isLoaded;
@@ -956,6 +959,9 @@ protected:
 	int	npfj1_;
 	TBranch *npfj1_branch;
 	bool npfj1_isLoaded;
+	float	csvpfj1_;
+	TBranch *csvpfj1_branch;
+	bool csvpfj1_isLoaded;
 	float	ptpfj1_b2b_;
 	TBranch *ptpfj1_b2b_branch;
 	bool ptpfj1_b2b_isLoaded;
@@ -1175,6 +1181,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("nvetomus") != 0) {
 		nvetomus_branch = tree->GetBranch("nvetomus");
 		if (nvetomus_branch) {nvetomus_branch->SetAddress(&nvetomus_);}
+	}
+	nloosemus_branch = 0;
+	if (tree->GetBranch("nloosemus") != 0) {
+		nloosemus_branch = tree->GetBranch("nloosemus");
+		if (nloosemus_branch) {nloosemus_branch->SetAddress(&nloosemus_);}
 	}
 	foel_id_branch = 0;
 	if (tree->GetBranch("foel_id") != 0) {
@@ -2641,6 +2652,11 @@ void Init(TTree *tree) {
 		npfj1_branch = tree->GetBranch("npfj1");
 		if (npfj1_branch) {npfj1_branch->SetAddress(&npfj1_);}
 	}
+	csvpfj1_branch = 0;
+	if (tree->GetBranch("csvpfj1") != 0) {
+		csvpfj1_branch = tree->GetBranch("csvpfj1");
+		if (csvpfj1_branch) {csvpfj1_branch->SetAddress(&csvpfj1_);}
+	}
 	ptpfj1_b2b_branch = 0;
 	if (tree->GetBranch("ptpfj1_b2b") != 0) {
 		ptpfj1_b2b_branch = tree->GetBranch("ptpfj1_b2b");
@@ -2858,6 +2874,7 @@ void GetEntry(unsigned int idx)
 		nmus_isLoaded = false;
 		nvetoels_isLoaded = false;
 		nvetomus_isLoaded = false;
+		nloosemus_isLoaded = false;
 		lp4_isLoaded = false;
 		mc3p4_isLoaded = false;
 		foel_p4_isLoaded = false;
@@ -3155,6 +3172,7 @@ void GetEntry(unsigned int idx)
 		hltps_relIso1p0Mu5_vstar_isLoaded = false;
 		ptpfj1_isLoaded = false;
 		npfj1_isLoaded = false;
+		csvpfj1_isLoaded = false;
 		ptpfj1_b2b_isLoaded = false;
 		dphipfj1_b2b_isLoaded = false;
 		ptpfcj1_isLoaded = false;
@@ -3215,6 +3233,7 @@ void LoadAllBranches()
 	if (nmus_branch != 0) nmus();
 	if (nvetoels_branch != 0) nvetoels();
 	if (nvetomus_branch != 0) nvetomus();
+	if (nloosemus_branch != 0) nloosemus();
 	if (lp4_branch != 0) lp4();
 	if (mc3p4_branch != 0) mc3p4();
 	if (foel_p4_branch != 0) foel_p4();
@@ -3512,6 +3531,7 @@ void LoadAllBranches()
 	if (hltps_relIso1p0Mu5_vstar_branch != 0) hltps_relIso1p0Mu5_vstar();
 	if (ptpfj1_branch != 0) ptpfj1();
 	if (npfj1_branch != 0) npfj1();
+	if (csvpfj1_branch != 0) csvpfj1();
 	if (ptpfj1_b2b_branch != 0) ptpfj1_b2b();
 	if (dphipfj1_b2b_branch != 0) dphipfj1_b2b();
 	if (ptpfcj1_branch != 0) ptpfcj1();
@@ -3760,6 +3780,19 @@ void LoadAllBranches()
 			nvetomus_isLoaded = true;
 		}
 		return nvetomus_;
+	}
+	int &nloosemus()
+	{
+		if (not nloosemus_isLoaded) {
+			if (nloosemus_branch != 0) {
+				nloosemus_branch->GetEntry(index);
+			} else { 
+				printf("branch nloosemus_branch does not exist!\n");
+				exit(1);
+			}
+			nloosemus_isLoaded = true;
+		}
+		return nloosemus_;
 	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4()
 	{
@@ -7622,6 +7655,19 @@ void LoadAllBranches()
 		}
 		return npfj1_;
 	}
+	float &csvpfj1()
+	{
+		if (not csvpfj1_isLoaded) {
+			if (csvpfj1_branch != 0) {
+				csvpfj1_branch->GetEntry(index);
+			} else { 
+				printf("branch csvpfj1_branch does not exist!\n");
+				exit(1);
+			}
+			csvpfj1_isLoaded = true;
+		}
+		return csvpfj1_;
+	}
 	float &ptpfj1_b2b()
 	{
 		if (not ptpfj1_b2b_isLoaded) {
@@ -8173,6 +8219,7 @@ namespace frb {
 	const int &nmus();
 	const int &nvetoels();
 	const int &nvetomus();
+	const int &nloosemus();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4();
@@ -8470,6 +8517,7 @@ namespace frb {
 	const int &hltps_relIso1p0Mu5_vstar();
 	const float &ptpfj1();
 	const int &npfj1();
+	const float &csvpfj1();
 	const float &ptpfj1_b2b();
 	const float &dphipfj1_b2b();
 	const float &ptpfcj1();

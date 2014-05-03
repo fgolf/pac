@@ -132,20 +132,21 @@ namespace fr
             // title,
             "QCD", 
             // baby_path
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root," 
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-15to20_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-20to30_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-30to50_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-50to80_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-80to120_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-120to170_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-5to15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-15to30_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root,"
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-170to300_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root",
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root," 
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-15to20_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-20to30_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-30to50_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-50to80_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-80to120_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-120to170_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-5to15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-15to30_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root,"
+//            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-170to300_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root",
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root" ,
             // output file
             "plots/qcd/qcd.root",
             // SampleType
@@ -187,7 +188,8 @@ namespace fr
             // title,
             "$W+jets$", 
             // baby_path
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", 
+	    //            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", 
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/WJetsToLNu_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", 
             // output file
             "plots/wjets/wjets.root",
             // SampleType
@@ -201,7 +203,8 @@ namespace fr
             // title,
             "$DY \\rightarrow \\ell\\ell$", 
             // baby_path
-            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", 
+	    //            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", 
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root", 
             // output file
             "plots/dy/dy.root",
             // SampleType
@@ -213,13 +216,18 @@ namespace fr
             // name
             "synch", 
             // title,
-            "Muon Synchronization", 
+	    //            "Muon Synchronization", 
+            "Muon Data Synchronization", 
             // baby_path
-            "/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchMuNtuple*.root", 
-            // output file
+	    //            "/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchMuNtupleJEC*.root", 
+	    //            "/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchTestDataNtuple.root", 
+	    //	    "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/DoubleMu_Run2012D-PromptReco-v1_AOD/merged_frbaby*.root",
+	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/macros/SyncMuonSmallFRbaby.root",
+	    // output file
             "plots/synch/synch.root",
             // SampleType
-            SampleType::bkgd,
+            //SampleType::bkgd,
+	    SampleType::data,
             // color
             kBlue
         },

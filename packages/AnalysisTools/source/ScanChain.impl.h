@@ -30,7 +30,8 @@ namespace at
         const bool verbose,
         const int evt_run,
         const int evt_lumi,
-        const int evt_event
+        const int evt_event,
+	const bool remove_duplicate
     )
     {
         using namespace std;
@@ -183,7 +184,7 @@ namespace at
 
                     // check for dupiclate run and events
                     DorkyEventIdentifier id = {run, evt, ls};
-                    if (is_duplicate(id))
+                    if (is_duplicate(id) && remove_duplicate)
                     {
                         if (verbose) {cout << "good run file = " << goodrun_file_name << endl;}
                         duplicates++;
@@ -251,7 +252,8 @@ namespace at
         const bool verbose,
         const int evt_run,
         const int evt_lumi,
-        const int evt_event
+        const int evt_event,
+	const bool remove_duplicate
     )
     {
         using namespace std;
@@ -404,7 +406,7 @@ namespace at
 
                     // check for dupiclate run and events
                     DorkyEventIdentifier id = {run, evt, ls};
-                    if (is_duplicate(id))
+                    if (is_duplicate(id) && remove_duplicate)
                     {
                         if (verbose) {cout << "Duplicate event:\t" << run << ", " << ls << ", " << evt << endl;}
                         duplicates++;

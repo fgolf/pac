@@ -152,7 +152,11 @@ int main(int argc, char* argv[])
         number_of_events,
         good_run_list,
         /*fast=*/true,
-        verbose
+        verbose,
+	-1,
+	-1,
+	-1,
+	false /* DON'T REMOVE DUPLICATES, even when running on data!!*/
     ); 
 
     // done 

@@ -7,6 +7,7 @@
 #include "fr/Sample.h"
 #include <string>
 
+
 class FakeRateBabyLooper : public at::AnalysisWithHist
 {
 public:
@@ -62,6 +63,7 @@ private:
     bool m_absolute_iso;
     bool m_only_invert_isocut_mu;
     bool m_use_FOpt;
+
 };
 
 #endif // SS_FAKERATEBABYLOOPER_HPP
