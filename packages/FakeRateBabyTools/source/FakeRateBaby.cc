@@ -18,6 +18,7 @@ namespace frb {
 	const int &nvetoels() { return fake_rate_baby.nvetoels(); }
 	const int &nvetomus() { return fake_rate_baby.nvetomus(); }
 	const int &nloosemus() { return fake_rate_baby.nloosemus(); }
+	const int &nlooseels() { return fake_rate_baby.nlooseels(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4() { return fake_rate_baby.lp4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4() { return fake_rate_baby.mc3p4(); }
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4() { return fake_rate_baby.foel_p4(); }
@@ -64,6 +65,7 @@ namespace frb {
 	const float &el_id_sieie() { return fake_rate_baby.el_id_sieie(); }
 	const float &el_id_detain() { return fake_rate_baby.el_id_detain(); }
 	const float &el_id_dphiin() { return fake_rate_baby.el_id_dphiin(); }
+	const float &el_id_ooemoop() { return fake_rate_baby.el_id_ooemoop(); }
 	const bool &el_id_smurfV5() { return fake_rate_baby.el_id_smurfV5(); }
 	const bool &el_id_vbtf80() { return fake_rate_baby.el_id_vbtf80(); }
 	const bool &el_id_vbtf90() { return fake_rate_baby.el_id_vbtf90(); }
@@ -326,6 +328,7 @@ namespace frb {
 	const float &emfpfcL1Fj1() { return fake_rate_baby.emfpfcL1Fj1(); }
 	const float &ptpfcL1Fj1() { return fake_rate_baby.ptpfcL1Fj1(); }
 	const float &dphipfcL1Fj1() { return fake_rate_baby.dphipfcL1Fj1(); }
+	const float &csvpfcL1Fj1() { return fake_rate_baby.csvpfcL1Fj1(); }
 	const int &npfcL1Fj1() { return fake_rate_baby.npfcL1Fj1(); }
 	const int &npfc30L1Fj1() { return fake_rate_baby.npfc30L1Fj1(); }
 	const int &npfc40L1Fj1() { return fake_rate_baby.npfc40L1Fj1(); }
@@ -338,6 +341,7 @@ namespace frb {
 	const float &emfpfcL1Fj1res() { return fake_rate_baby.emfpfcL1Fj1res(); }
 	const float &ptpfcL1Fj1res() { return fake_rate_baby.ptpfcL1Fj1res(); }
 	const float &dphipfcL1Fj1res() { return fake_rate_baby.dphipfcL1Fj1res(); }
+	const float &csvpfcL1Fj1res() { return fake_rate_baby.csvpfcL1Fj1res(); }
 	const int &npfcL1Fj1res() { return fake_rate_baby.npfcL1Fj1res(); }
 	const int &npfc30L1Fj1res() { return fake_rate_baby.npfc30L1Fj1res(); }
 	const int &npfc40L1Fj1res() { return fake_rate_baby.npfc40L1Fj1res(); }

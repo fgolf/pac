@@ -217,12 +217,15 @@ namespace fr
             "synch", 
             // title,
 	    //            "Muon Synchronization", 
-            "Muon Data Synchronization", 
+	    //            "Muon Data Synchronization", 
+            "Ele Synchronization", 
             // baby_path
 	    //            "/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchMuNtupleJEC*.root", 
 	    //            "/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchTestDataNtuple.root", 
+	    //"/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchEleNtupleMC.root", 
+            "/home/users/gzevi/FakeLepton/pac/analysis/FakeRateBabyMaker/SynchEleNtupleData.root", 
 	    //	    "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/DoubleMu_Run2012D-PromptReco-v1_AOD/merged_frbaby*.root",
-	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/macros/SyncMuonSmallFRbaby.root",
+	    //	    "/home/users/gzevi/FakeLepton/pac/analysis/ss2012/macros/SyncMuonSmallFRbaby.root",
 	    // output file
             "plots/synch/synch.root",
             // SampleType

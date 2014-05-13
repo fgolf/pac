@@ -32,10 +32,10 @@ protected:
 	bool	is_real_data_;
 	TBranch *is_real_data_branch;
 	bool is_real_data_isLoaded;
-	TString * dataset_;
+	TString *dataset_;
 	TBranch *dataset_branch;
 	bool dataset_isLoaded;
-	TString * filename_;
+	TString *filename_;
 	TBranch *filename_branch;
 	bool filename_isLoaded;
 	int	pu_nPUvertices_;
@@ -68,6 +68,9 @@ protected:
 	int	nloosemus_;
 	TBranch *nloosemus_branch;
 	bool nloosemus_isLoaded;
+	int	nlooseels_;
+	TBranch *nlooseels_branch;
+	bool nlooseels_isLoaded;
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > *lp4_;
 	TBranch *lp4_branch;
 	bool lp4_isLoaded;
@@ -206,6 +209,9 @@ protected:
 	float	el_id_dphiin_;
 	TBranch *el_id_dphiin_branch;
 	bool el_id_dphiin_isLoaded;
+	float	el_id_ooemoop_;
+	TBranch *el_id_ooemoop_branch;
+	bool el_id_ooemoop_isLoaded;
 	bool	el_id_smurfV5_;
 	TBranch *el_id_smurfV5_branch;
 	bool el_id_smurfV5_isLoaded;
@@ -992,6 +998,9 @@ protected:
 	float	dphipfcL1Fj1_;
 	TBranch *dphipfcL1Fj1_branch;
 	bool dphipfcL1Fj1_isLoaded;
+	float	csvpfcL1Fj1_;
+	TBranch *csvpfcL1Fj1_branch;
+	bool csvpfcL1Fj1_isLoaded;
 	int	npfcL1Fj1_;
 	TBranch *npfcL1Fj1_branch;
 	bool npfcL1Fj1_isLoaded;
@@ -1028,6 +1037,9 @@ protected:
 	float	dphipfcL1Fj1res_;
 	TBranch *dphipfcL1Fj1res_branch;
 	bool dphipfcL1Fj1res_isLoaded;
+	float	csvpfcL1Fj1res_;
+	TBranch *csvpfcL1Fj1res_branch;
+	bool csvpfcL1Fj1res_isLoaded;
 	int	npfcL1Fj1res_;
 	TBranch *npfcL1Fj1res_branch;
 	bool npfcL1Fj1res_isLoaded;
@@ -1186,6 +1198,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("nloosemus") != 0) {
 		nloosemus_branch = tree->GetBranch("nloosemus");
 		if (nloosemus_branch) {nloosemus_branch->SetAddress(&nloosemus_);}
+	}
+	nlooseels_branch = 0;
+	if (tree->GetBranch("nlooseels") != 0) {
+		nlooseels_branch = tree->GetBranch("nlooseels");
+		if (nlooseels_branch) {nlooseels_branch->SetAddress(&nlooseels_);}
 	}
 	foel_id_branch = 0;
 	if (tree->GetBranch("foel_id") != 0) {
@@ -1396,6 +1413,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("el_id_dphiin") != 0) {
 		el_id_dphiin_branch = tree->GetBranch("el_id_dphiin");
 		if (el_id_dphiin_branch) {el_id_dphiin_branch->SetAddress(&el_id_dphiin_);}
+	}
+	el_id_ooemoop_branch = 0;
+	if (tree->GetBranch("el_id_ooemoop") != 0) {
+		el_id_ooemoop_branch = tree->GetBranch("el_id_ooemoop");
+		if (el_id_ooemoop_branch) {el_id_ooemoop_branch->SetAddress(&el_id_ooemoop_);}
 	}
 	el_id_smurfV5_branch = 0;
 	if (tree->GetBranch("el_id_smurfV5") != 0) {
@@ -2707,6 +2729,11 @@ void Init(TTree *tree) {
 		dphipfcL1Fj1_branch = tree->GetBranch("dphipfcL1Fj1");
 		if (dphipfcL1Fj1_branch) {dphipfcL1Fj1_branch->SetAddress(&dphipfcL1Fj1_);}
 	}
+	csvpfcL1Fj1_branch = 0;
+	if (tree->GetBranch("csvpfcL1Fj1") != 0) {
+		csvpfcL1Fj1_branch = tree->GetBranch("csvpfcL1Fj1");
+		if (csvpfcL1Fj1_branch) {csvpfcL1Fj1_branch->SetAddress(&csvpfcL1Fj1_);}
+	}
 	npfcL1Fj1_branch = 0;
 	if (tree->GetBranch("npfcL1Fj1") != 0) {
 		npfcL1Fj1_branch = tree->GetBranch("npfcL1Fj1");
@@ -2766,6 +2793,11 @@ void Init(TTree *tree) {
 	if (tree->GetBranch("dphipfcL1Fj1res") != 0) {
 		dphipfcL1Fj1res_branch = tree->GetBranch("dphipfcL1Fj1res");
 		if (dphipfcL1Fj1res_branch) {dphipfcL1Fj1res_branch->SetAddress(&dphipfcL1Fj1res_);}
+	}
+	csvpfcL1Fj1res_branch = 0;
+	if (tree->GetBranch("csvpfcL1Fj1res") != 0) {
+		csvpfcL1Fj1res_branch = tree->GetBranch("csvpfcL1Fj1res");
+		if (csvpfcL1Fj1res_branch) {csvpfcL1Fj1res_branch->SetAddress(&csvpfcL1Fj1res_);}
 	}
 	npfcL1Fj1res_branch = 0;
 	if (tree->GetBranch("npfcL1Fj1res") != 0) {
@@ -2875,6 +2907,7 @@ void GetEntry(unsigned int idx)
 		nvetoels_isLoaded = false;
 		nvetomus_isLoaded = false;
 		nloosemus_isLoaded = false;
+		nlooseels_isLoaded = false;
 		lp4_isLoaded = false;
 		mc3p4_isLoaded = false;
 		foel_p4_isLoaded = false;
@@ -2921,6 +2954,7 @@ void GetEntry(unsigned int idx)
 		el_id_sieie_isLoaded = false;
 		el_id_detain_isLoaded = false;
 		el_id_dphiin_isLoaded = false;
+		el_id_ooemoop_isLoaded = false;
 		el_id_smurfV5_isLoaded = false;
 		el_id_vbtf80_isLoaded = false;
 		el_id_vbtf90_isLoaded = false;
@@ -3183,6 +3217,7 @@ void GetEntry(unsigned int idx)
 		emfpfcL1Fj1_isLoaded = false;
 		ptpfcL1Fj1_isLoaded = false;
 		dphipfcL1Fj1_isLoaded = false;
+		csvpfcL1Fj1_isLoaded = false;
 		npfcL1Fj1_isLoaded = false;
 		npfc30L1Fj1_isLoaded = false;
 		npfc40L1Fj1_isLoaded = false;
@@ -3195,6 +3230,7 @@ void GetEntry(unsigned int idx)
 		emfpfcL1Fj1res_isLoaded = false;
 		ptpfcL1Fj1res_isLoaded = false;
 		dphipfcL1Fj1res_isLoaded = false;
+		csvpfcL1Fj1res_isLoaded = false;
 		npfcL1Fj1res_isLoaded = false;
 		npfc30L1Fj1res_isLoaded = false;
 		npfc40L1Fj1res_isLoaded = false;
@@ -3234,6 +3270,7 @@ void LoadAllBranches()
 	if (nvetoels_branch != 0) nvetoels();
 	if (nvetomus_branch != 0) nvetomus();
 	if (nloosemus_branch != 0) nloosemus();
+	if (nlooseels_branch != 0) nlooseels();
 	if (lp4_branch != 0) lp4();
 	if (mc3p4_branch != 0) mc3p4();
 	if (foel_p4_branch != 0) foel_p4();
@@ -3280,6 +3317,7 @@ void LoadAllBranches()
 	if (el_id_sieie_branch != 0) el_id_sieie();
 	if (el_id_detain_branch != 0) el_id_detain();
 	if (el_id_dphiin_branch != 0) el_id_dphiin();
+	if (el_id_ooemoop_branch != 0) el_id_ooemoop();
 	if (el_id_smurfV5_branch != 0) el_id_smurfV5();
 	if (el_id_vbtf80_branch != 0) el_id_vbtf80();
 	if (el_id_vbtf90_branch != 0) el_id_vbtf90();
@@ -3542,6 +3580,7 @@ void LoadAllBranches()
 	if (emfpfcL1Fj1_branch != 0) emfpfcL1Fj1();
 	if (ptpfcL1Fj1_branch != 0) ptpfcL1Fj1();
 	if (dphipfcL1Fj1_branch != 0) dphipfcL1Fj1();
+	if (csvpfcL1Fj1_branch != 0) csvpfcL1Fj1();
 	if (npfcL1Fj1_branch != 0) npfcL1Fj1();
 	if (npfc30L1Fj1_branch != 0) npfc30L1Fj1();
 	if (npfc40L1Fj1_branch != 0) npfc40L1Fj1();
@@ -3554,6 +3593,7 @@ void LoadAllBranches()
 	if (emfpfcL1Fj1res_branch != 0) emfpfcL1Fj1res();
 	if (ptpfcL1Fj1res_branch != 0) ptpfcL1Fj1res();
 	if (dphipfcL1Fj1res_branch != 0) dphipfcL1Fj1res();
+	if (csvpfcL1Fj1res_branch != 0) csvpfcL1Fj1res();
 	if (npfcL1Fj1res_branch != 0) npfcL1Fj1res();
 	if (npfc30L1Fj1res_branch != 0) npfc30L1Fj1res();
 	if (npfc40L1Fj1res_branch != 0) npfc40L1Fj1res();
@@ -3793,6 +3833,19 @@ void LoadAllBranches()
 			nloosemus_isLoaded = true;
 		}
 		return nloosemus_;
+	}
+	int &nlooseels()
+	{
+		if (not nlooseels_isLoaded) {
+			if (nlooseels_branch != 0) {
+				nlooseels_branch->GetEntry(index);
+			} else { 
+				printf("branch nlooseels_branch does not exist!\n");
+				exit(1);
+			}
+			nlooseels_isLoaded = true;
+		}
+		return nlooseels_;
 	}
 	ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4()
 	{
@@ -4391,6 +4444,19 @@ void LoadAllBranches()
 			el_id_dphiin_isLoaded = true;
 		}
 		return el_id_dphiin_;
+	}
+	float &el_id_ooemoop()
+	{
+		if (not el_id_ooemoop_isLoaded) {
+			if (el_id_ooemoop_branch != 0) {
+				el_id_ooemoop_branch->GetEntry(index);
+			} else { 
+				printf("branch el_id_ooemoop_branch does not exist!\n");
+				exit(1);
+			}
+			el_id_ooemoop_isLoaded = true;
+		}
+		return el_id_ooemoop_;
 	}
 	bool &	el_id_smurfV5()
 	{
@@ -7798,6 +7864,19 @@ void LoadAllBranches()
 		}
 		return dphipfcL1Fj1_;
 	}
+	float &csvpfcL1Fj1()
+	{
+		if (not csvpfcL1Fj1_isLoaded) {
+			if (csvpfcL1Fj1_branch != 0) {
+				csvpfcL1Fj1_branch->GetEntry(index);
+			} else { 
+				printf("branch csvpfcL1Fj1_branch does not exist!\n");
+				exit(1);
+			}
+			csvpfcL1Fj1_isLoaded = true;
+		}
+		return csvpfcL1Fj1_;
+	}
 	int &npfcL1Fj1()
 	{
 		if (not npfcL1Fj1_isLoaded) {
@@ -7953,6 +8032,19 @@ void LoadAllBranches()
 			dphipfcL1Fj1res_isLoaded = true;
 		}
 		return dphipfcL1Fj1res_;
+	}
+	float &csvpfcL1Fj1res()
+	{
+		if (not csvpfcL1Fj1res_isLoaded) {
+			if (csvpfcL1Fj1res_branch != 0) {
+				csvpfcL1Fj1res_branch->GetEntry(index);
+			} else { 
+				printf("branch csvpfcL1Fj1res_branch does not exist!\n");
+				exit(1);
+			}
+			csvpfcL1Fj1res_isLoaded = true;
+		}
+		return csvpfcL1Fj1res_;
 	}
 	int &npfcL1Fj1res()
 	{
@@ -8220,6 +8312,7 @@ namespace frb {
 	const int &nvetoels();
 	const int &nvetomus();
 	const int &nloosemus();
+	const int &nlooseels();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &lp4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &mc3p4();
 	const ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > &foel_p4();
@@ -8266,6 +8359,7 @@ namespace frb {
 	const float &el_id_sieie();
 	const float &el_id_detain();
 	const float &el_id_dphiin();
+	const float &el_id_ooemoop();
 	const bool &el_id_smurfV5();
 	const bool &el_id_vbtf80();
 	const bool &el_id_vbtf90();
@@ -8528,6 +8622,7 @@ namespace frb {
 	const float &emfpfcL1Fj1();
 	const float &ptpfcL1Fj1();
 	const float &dphipfcL1Fj1();
+	const float &csvpfcL1Fj1();
 	const int &npfcL1Fj1();
 	const int &npfc30L1Fj1();
 	const int &npfc40L1Fj1();
@@ -8540,6 +8635,7 @@ namespace frb {
 	const float &emfpfcL1Fj1res();
 	const float &ptpfcL1Fj1res();
 	const float &dphipfcL1Fj1res();
+	const float &csvpfcL1Fj1res();
 	const int &npfcL1Fj1res();
 	const int &npfc30L1Fj1res();
 	const int &npfc40L1Fj1res();

@@ -762,7 +762,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         // convenience alias
         rt::TH1Container& hc = m_hist_container;
-//	if (evt() == 690388356 /*231972086*/) cout<<"Found event "<<231972086<<endl;
+//	if (evt()== 271789635) cout<<"Found event "<<271789635<<endl;
 //	else return 0;
         // FO selection cuts
         // ----------------------------------------------------------------------------------------------------------------------------//
@@ -826,14 +826,14 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             if (m_verbose) {cout << "fails pt cut with pt " << pt() << endl;}
             return 0;
         }
-        if (is_el && (pt()<min_el_pt || pt()>max_el_pt))
+        if (is_el && (pt()<min_el_pt || pt()>20000)) // GZ SYNCH pt()>max_el_pt))
         {
             if (m_verbose) {cout << "fails pt cut with pt " << pt() << endl;}
             return 0;
         }
 
         // eta cut
-        if (fabs(eta()) > 2.4)
+        if ( (is_mu && fabs(eta()) > 2.4) || (is_mu && fabs(eta()) > 2.5))
         {
             if (m_verbose) {cout << "fails eta cut" << endl;}
             return 0;
@@ -946,7 +946,45 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 	  is_loose = passes_id && passD0_l && passIso_l;
 	  is_tight = passes_id && passD0_t && passIso_t;
 	}		
-	//printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%d\t%4.3f\t%4.3f\n", run(), ls(), evt(), pt(), eta(), phi(), is_loose, is_tight, cpfiso03_db(), d0());
+      if (is_el && pt() > 10. && fabs(eta())<2.5) {
+        bool isEB = fabs(sceta())<1.479;
+        bool passSieie = isEB ? (el_id_sieie() < 0.01) :  (el_id_sieie() < 0.03);
+        bool passDetain = isEB ? (fabs(el_id_detain()) < 0.004) : (fabs(el_id_detain()) < 0.007);
+        bool passDphiin = isEB ? (fabs(el_id_dphiin()) < 0.06) : (fabs(el_id_dphiin()) < 0.03);
+        bool passHovere = isEB ? (hoe() < 0.12) : (hoe() < 0.10);
+        bool passOoemoop = isEB ? (fabs(el_id_ooemoop()) < 0.05) : (fabs(el_id_ooemoop()) < 0.05);
+        bool passMHits = (els_exp_innerlayers() < 2);
+        bool passMITconv = !convMIT();
+        bool passD0_l = true;
+        bool passD0_t = (fabs(d0()) < 0.02);
+        bool passDZ = (fabs(dz()) < 0.1);
+        bool passIso_l = (pfiso03_corr_rho() < 0.6);
+        bool passIso_t = (isEB || pt() > 20) ? (pfiso03_corr_rho() < 0.15) : (pfiso03_corr_rho() < 0.10);
+        bool passes_id = passSieie && passDetain && passDphiin && passHovere && passOoemoop && passMHits && passMITconv && passDZ;
+//        cout<<passSieie <<" "<< passDetain <<" "<< passDphiin <<" "<< passHovere <<" "<< passOoemoop <<" "<< passMHits <<" "<< passMITconv <<" "<< passDZ <<" "<< passD0_l <<" "<< passIso_l <<endl;
+//        cout<<"pt="<<pt()<<" eta="<<eta()<<" sceta="<<sceta()<<" sieie="
+//        << el_id_sieie() <<" detain="
+//        << el_id_detain() <<" dphiin="
+//        << el_id_dphiin() <<" hoe="
+//        << hoe() <<" ooemoop="
+//        << el_id_ooemoop() <<" mhits="
+//        << els_exp_innerlayers() <<" mitconv="
+//        << convMIT() <<" d0="
+//        << d0() <<" dz="
+//        << dz() <<" iso="
+//        << pfiso03_corr_rho() <<" rho="
+//        << rho() <<" eff_area=" 
+//        << fastJetEffArea03_v2(sceta()) <<" isoch="
+//        << ch_pfiso03() <<" isonh="
+//        << nh_pfiso03() <<" isoem="
+//        << em_pfiso03() <<endl;
+
+        is_loose = passes_id && passD0_l && passIso_l;
+        is_tight = passes_id && passD0_t && passIso_t;
+      }	   
+   
+      
+//	printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%d\t%4.3f\t%4.3f\n", run(), ls(), evt(), pt(), eta(), phi(), is_loose, is_tight, cpfiso03_db(), d0());
 
         // no resonance's (Z or upsilon), no extra leptons in event
         if (m_fr_type == ss::FakeRateType::eth)
@@ -971,30 +1009,31 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 //SYNCH            }
 
             // no additional FO's in event
-	  if (is_mu && nloosemus()>0)//SYNCH (nFOmus()>0))
+            if (is_mu && nloosemus()>0)//SYNCH (nFOmus()>0))
             {
                 if (m_verbose) {cout << "fails no addition muon FO cut" << endl;}
                 return 0;
             }
-//SYNCH            else if(is_el && (nFOels()>0))
-//SYNCH            {
-//SYNCH                if (m_verbose) {cout << "fails no addition FO cut" << endl;}
-//SYNCH                return 0;
-//SYNCH            }
+            else if(is_el && ( nlooseels()>0 || nloosemus()>0))
+            {
+                if (m_verbose) {cout << "fails no addition electron FO cut " <<nlooseels()<<" "<<nloosemus()<< endl;}
+                return 0;
+            }
          }
 
 	float pt_corr = is_data ?  ptpfcL1Fj1res() : ptpfcL1Fj1();
 	float dphi_corr = is_data ?  dphipfcL1Fj1res() : dphipfcL1Fj1();
-	if (pt() > 20) {
-//	if (is_loose ) printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
-//	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
-//	if (is_loose && pt_corr > 40. ) 
-//	  printf("PASS JET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
-//	if (is_loose && pt_corr > 40. && pfmet() < 20.) 
-//	  printf("PASS MET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
-//	  if (is_loose && pt_corr > 40. && pfmet() < 20. && mt() < 20.) 
-//	  printf("PASS MT  %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
-//
+  float csv_corr = is_data ? csvpfcL1Fj1res() : csvpfcL1Fj1();
+	if (is_el && pt() > 20) {
+	if (is_loose ) printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
+	if (is_loose && pt_corr > 40. ) 
+	  printf("PASS JET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+	if (is_loose && pt_corr > 40. && pfmet() < 20.) 
+	  printf("PASS MET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+	  if (is_loose && pt_corr > 40. && pfmet() < 20. && mt() < 20.) 
+	  printf("PASS MT  %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+
 //	if (is_loose && trig_cut) printf("PASS SINGLELEPTONHLT %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
 //	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
 //	if (is_loose && pt_corr > 40.  && trig_cut) 
