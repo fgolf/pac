@@ -212,7 +212,7 @@ void PrintYield(const bool latex = false)
     const double lumi_nb = lumi * 1e6; // nb^-1
 
     // cross section
-    const double acc_zmm   = (float)chain.GetEntries("is_mm")/
+    const double acc_zmm   = (float)chain.GetEntries("is_mm && is_z_mm && (60 < gen_z_p4.mass() && gen_z_p4.mass() < 120)")/
                              (float)chain.GetEntries("is_z_mm && (60 < gen_z_p4.mass() && gen_z_p4.mass() < 120)");
     const double N_bkg_zmm = yield_map[Sample::wjets ].yield[Channel::mm].scaled + 
                              yield_map[Sample::wjets ].yield[Channel::mm].scaled +
@@ -223,7 +223,7 @@ void PrintYield(const bool latex = false)
     const double N_sig_zmm = N_obs_zmm - N_bkg_zmm;
     const double sigma_zmm = N_sig_zmm / (lumi_nb * acc_zmm);
 
-    const double acc_zee   = (float)chain.GetEntries("is_ee")/
+    const double acc_zee   = (float)chain.GetEntries("is_ee && is_z_ee && (60 < gen_z_p4.mass() && gen_z_p4.mass() < 120)")/
                              (float)chain.GetEntries("is_z_ee && (60 < gen_z_p4.mass() && gen_z_p4.mass() < 120)");
     const double N_bkg_zee = yield_map[Sample::wjets ].yield[Channel::ee].scaled + 
                              yield_map[Sample::wjets ].yield[Channel::ee].scaled +

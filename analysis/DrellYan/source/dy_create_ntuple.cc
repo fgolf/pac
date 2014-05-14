@@ -272,17 +272,17 @@ int ZAnalysisNtupler::Analyze(const long event, const std::string& filename)
             }
 
             // check that leptons are from the same vertex
-            if (!hypsFromFirstGoodVertex(hyp_idx))
+            if (not hypsFromFirstGoodVertex(hyp_idx))
             {
                 if (m_verbose) {std::cout << "fails leptons are from the first good vertex requirement" << std::endl;}
                 continue;
             }
 
             // check if hyp passes trigger
-            if (evt_isRealData() && !dy::passesTrigger(hyp_type().at(hyp_idx)))
+            if (not dy::passesTrigger(hyp_type().at(hyp_idx)))
             {
                 if (m_verbose) {std::cout << "fails trigger requirement" << std::endl;}
-                continue;
+                continue;                                                      
             }            
 
             // check that lepton pass selections

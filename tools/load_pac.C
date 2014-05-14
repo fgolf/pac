@@ -74,14 +74,14 @@
     gSystem->Load(Form("%s/libAnalysisTools.so", pac_path.c_str()));
 
     // SS2012 Tools
-    gSystem->AddIncludePath("-I$PAC/analysis/ss2012/include");
-    gSystem->Load(Form("%s/libssb2012.so"     , pac_path.c_str()));
-    gSystem->Load(Form("%s/libss2012_tools.so", pac_path.c_str()));
+    //gSystem->AddIncludePath("-I$PAC/analysis/ss2012/include");
+    //gSystem->Load(Form("%s/libssb2012.so"     , pac_path.c_str()));
+    //gSystem->Load(Form("%s/libss2012_tools.so", pac_path.c_str()));
 
     // EWKINO2012 Tools
-    //gSystem->AddIncludePath("-I$PAC/analysis/ewkino2012/include");
-    //gSystem->Load(Form("%s/libewkino2012.so"     , pac_path.c_str()));
-    //gSystem->Load(Form("%s/libewkino2012_tools.so", pac_path.c_str()));
+    gSystem->AddIncludePath("-I$PAC/analysis/ewkino2012/include");
+    gSystem->Load(Form("%s/libewkino2012.so"     , pac_path.c_str()));
+    gSystem->Load(Form("%s/libewkino2012_tools.so", pac_path.c_str()));
 
     // load mini FW lite
     if (!cmssw)
