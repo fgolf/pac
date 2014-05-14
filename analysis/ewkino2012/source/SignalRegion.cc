@@ -175,11 +175,12 @@ namespace ewkino
             {
                 switch (signal_region)
                 {
-                case SignalRegion::sr0 : return (pass_sr0);
-                case SignalRegion::sr1 : return (pass_sr1);
-                case SignalRegion::sr2 : return (pass_sr2);
-                case SignalRegion::sr3 : return (pass_sr3);
-                case SignalRegion::sr4 : return (pass_sr4);
+                    case SignalRegion::sr0 : return (pass_sr0);
+                    case SignalRegion::sr1 : return (pass_sr1);
+                    case SignalRegion::sr2 : return (pass_sr2);
+                    case SignalRegion::sr3 : return (pass_sr3);
+                    case SignalRegion::sr4 : return (pass_sr4);
+                    default                : return false;
                 };
             }
 
@@ -296,7 +297,7 @@ namespace ewkino
             case AnalysisType::ss:
                 tree.SetAlias("trig", "((em && trig_em) || (mm && trig_mm) || (ee && trig_ee))");
                 break;
-            case AnalysisType::static_size:
+            default:
                 /*do nothing*/
                 break;
         }
@@ -310,8 +311,8 @@ namespace ewkino
                 tree.SetAlias("sr2" , "sr1 && jjl_p4.mass() < 120.");
                 tree.SetAlias("sr3" , "sr1 && jjl_p4.mass() > 120.");
                 tree.SetAlias("sr4" , "sr0 && max(lep1_mt,lep2_mt) > 110 && nlbtags_pv_reweighted < 2 && ntbtags_pv_reweighted == 0 && passes_tau_veto && abs(lep1_p4.eta()-lep2_p4.eta()) < 1.6 && max_ml3l < 30. && jjl_p4.mass() < 120."); 
-               break;
-            case AnalysisType::static_size:
+                break;
+            default:
                 /*do nothing*/
                 break;
         }
@@ -319,7 +320,7 @@ namespace ewkino
         // exclusive
         switch (anal_type)
         {
-            case AnalysisType::static_size:
+            default:
                 /*do nothing*/
                 break;
         }
@@ -423,8 +424,8 @@ namespace ewkino
         std::vector<LorentzVector> ret;
         for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
         {
-            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), tightness));
-            ret.push_back(vjets_p4().at(idx));                
+            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), tightness)) continue;
+            ret.push_back(vjets_p4().at(idx)); 
         }
 
         return ret;
@@ -435,8 +436,8 @@ namespace ewkino
         int ret = 0;
         for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
         {
-            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), mva_tightness));
-            if (btag_tightness == 0 && vjets_bdisc().at(idx) > 0.244) ++ret;
+            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), mva_tightness)) continue;
+            if      (btag_tightness == 0 && vjets_bdisc().at(idx) > 0.244) ++ret;
             else if (btag_tightness == 1 && vjets_bdisc().at(idx) > 0.679) ++ret;
             else if (btag_tightness == 2 && vjets_bdisc().at(idx) > 0.898) ++ret;
         }

@@ -5,7 +5,7 @@
 #include "at/DileptonHypType.h"
 #include "PredSummary.h"
 #include <string>
-#include <tr1/memory>
+#include "boost/shared_ptr.hpp" 
 
 namespace at
 {
@@ -28,17 +28,12 @@ namespace at
             FlipRatePrediction(TH2* flip_rate, float scale = 1.0);
 
             // methods:
-            void ComputeAllFlipPredictions
-                (
-                 TH2F* h_ee, 
-                 TH2F* h_em 
-                );
-
+            void ComputeAllFlipPredictions(TH2F* h_ee, TH2F* h_em);
             PredSummary GetFlipPrediction(float scale_factor = 1.0) const;
 
         private:
             // members: 
-            std::tr1::shared_ptr<TH2> h_flip_rate;
+            boost::shared_ptr<TH2> h_flip_rate;
             float m_scale;
             PredSummary flip;
 

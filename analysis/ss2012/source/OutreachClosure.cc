@@ -2,7 +2,6 @@
 #include "OutreachBaby.h"
 #include <iostream>
 #include <algorithm>
-#include <tr1/array>
 #include <cmath>
 #include "rt/RootTools.h"
 #include "rt/is_equal.h"
@@ -390,8 +389,8 @@ void OutreachClosure::BookHists()
         hc.Add(new TH2F("h_sparm_pred_v3", "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV; m(#tilde{b}_{1}) GeV", 16, 325, 1125, 22, 325, 1425));
 
         // sparms projection 
-        bins_t s0_bins;
-        bins_t s1_bins;
+        bins_t s0_bins = {-99999, 1.0, -1.0};
+        bins_t s1_bins = {-99999, 1.0, -1.0};
         string title = "";
         if (m_sample == at::Sample::sbottomtop) 
 		{
@@ -506,9 +505,9 @@ int OutreachClosure::operator()(long event)
         float l2_id_weight  = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_id.get())  : GetPtEfficiencyWeight(l2_pt, h_mu_id.get()); 
         float l1_iso_weight = abs(l1_id)==11 ? GetPtEfficiencyWeight(l1_pt, h_el_iso.get()) : GetPtEfficiencyWeight(l1_pt, h_mu_iso.get()); 
         float l2_iso_weight = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_iso.get()) : GetPtEfficiencyWeight(l2_pt, h_mu_iso.get()); 
-        float weight        = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
-        float weight1       = btag_weight * ht200_weight * met50_weight * l1_pt_weight;
-        float weight2       = btag_weight * ht200_weight * met50_weight * l2_pt_weight;
+//         float weight        = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
+//         float weight1       = btag_weight * ht200_weight * met50_weight * l1_pt_weight;
+//         float weight2       = btag_weight * ht200_weight * met50_weight * l2_pt_weight;
         float weight_sr6    = btag_weight * ht320_weight * met120_weight * l1_pt_weight * l2_pt_weight;
 
         // ht test

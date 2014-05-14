@@ -9,7 +9,6 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <tr1/array>
 #include <boost/program_options.hpp>
 
 using namespace std;
@@ -209,7 +208,10 @@ try
     }
 
     // away jets
-    const std::tr1::array<unsigned int, 3> ajetpt = {{20, 40, 60}};
+    std::vector<unsigned int> ajetpt;
+    ajetpt.push_back(20);
+    ajetpt.push_back(40);
+    ajetpt.push_back(60);
 
     // output hist containter
     rt::TH1Container hc_new(hc_data);

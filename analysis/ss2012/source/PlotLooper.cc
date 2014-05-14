@@ -3,7 +3,6 @@
 #include <fstream>
 #include <algorithm>
 #include <numeric>
-#include <tr1/array>
 #include <cmath>
 #include "mcSelections.h"
 #include "SSB2012.h"
@@ -163,10 +162,10 @@ PlotLooper::PlotLooper
     cout << "njets  >= " << m_njets  << endl;
 
     // initialize counters
-    for (size_t i = 0; i != m_count_ss.size(); i++) {m_count_ss[i]=0.0;}
-    for (size_t i = 0; i != m_count_sf.size(); i++) {m_count_sf[i]=0.0;}
-    for (size_t i = 0; i != m_count_df.size(); i++) {m_count_df[i]=0.0;}
-    for (size_t i = 0; i != m_count_os.size(); i++) {m_count_os[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_ss[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_sf[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_df[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_os[i]=0.0;}
 
     // event list
     if (!event_list_name.empty())
@@ -297,11 +296,13 @@ void PlotLooper::EndJob()
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll
-    //std::tr1::array<float, 4> yield_ss;
-    //yield_ss[0] = rt::Integral(hc["h_yield_mm"]);
-    //yield_ss[1] = rt::Integral(hc["h_yield_ee"]);
-    //yield_ss[2] = rt::Integral(hc["h_yield_em"]);
-    //yield_ss[3] = rt::Integral(hc["h_yield_ll"]);
+//     const float yield_ss[4]
+//     {
+//         rt::Integral(hc["h_yield_mm"]),
+//         rt::Integral(hc["h_yield_ee"]),
+//         rt::Integral(hc["h_yield_em"]),
+//         rt::Integral(hc["h_yield_ll"])
+//     };
 
     PredSummary yield;
     yield.mm.value = rt::IntegralAndError(hc["h_yield_mm"]).first;

@@ -5,7 +5,6 @@
 #include "rt/RootTools.h"
 #include <iostream>
 #include <algorithm>
-#include <tr1/array>
 #include <cmath>
 
 typedef std::vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > > vecLorentzVector;

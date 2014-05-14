@@ -405,15 +405,15 @@ EwkinoSSAnalysisLooper::EwkinoSSAnalysisLooper
     }
 
     // initialize counters
-    for (size_t i = 0; i != m_count_ss.size(); i++) {m_count_ss[i]=0.0;}
-    for (size_t i = 0; i != m_count_sf.size(); i++) {m_count_sf[i]=0.0;}
-    for (size_t i = 0; i != m_count_df.size(); i++) {m_count_df[i]=0.0;}
-    for (size_t i = 0; i != m_count_os.size(); i++) {m_count_os[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_ss[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_sf[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_df[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_os[i]=0.0;}
 
-    for (size_t i = 0; i != m_count_nobtag_ss.size(); i++) {m_count_nobtag_ss[i]=0.0;}
-    for (size_t i = 0; i != m_count_nobtag_sf.size(); i++) {m_count_nobtag_sf[i]=0.0;}
-    for (size_t i = 0; i != m_count_nobtag_df.size(); i++) {m_count_nobtag_df[i]=0.0;}
-    for (size_t i = 0; i != m_count_nobtag_os.size(); i++) {m_count_nobtag_os[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_nobtag_ss[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_nobtag_sf[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_nobtag_df[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_nobtag_os[i]=0.0;}
 
     cout << "sample: " << m_sample << endl;
     cout << "analysis: " << m_analysis_type << endl;
@@ -2464,19 +2464,19 @@ int EwkinoSSAnalysisLooper::Analyze(const long event, const std::string& filenam
 
         if (vjets_matched_p4_up.size() > 1)
         {
-            LorentzVector p4_dijet = vjets_matched_p4_up.at(0) + vjets_matched_p4_up.at(1);
+//             LorentzVector p4_dijet = vjets_matched_p4_up.at(0) + vjets_matched_p4_up.at(1);
             m_evt.mt2j_up       = MT2J(m_evt.pfmet_up, m_evt.pfmet_phi_up, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4_up);
         }
 
         if (vjets_matched_p4_dn.size() > 1)
         {
-            LorentzVector p4_dijet = vjets_matched_p4_dn.at(0) + vjets_matched_p4_dn.at(1);
+//             LorentzVector p4_dijet = vjets_matched_p4_dn.at(0) + vjets_matched_p4_dn.at(1);
             m_evt.mt2j_dn       = MT2J(m_evt.pfmet_dn, m_evt.pfmet_phi_dn, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4_dn);
         }
 
         if (vjets_matched_p4_jer.size() > 1)
         {
-            LorentzVector p4_dijet = vjets_matched_p4_jer.at(0) + vjets_matched_p4_jer.at(1);
+//             LorentzVector p4_dijet = vjets_matched_p4_jer.at(0) + vjets_matched_p4_jer.at(1);
             m_evt.mt2j_jer      = MT2J(m_evt.pfmet_jer, m_evt.pfmet_phi_jer, m_evt.lep1.p4, m_evt.lep2.p4, vjets_matched_p4_jer);
         }
 

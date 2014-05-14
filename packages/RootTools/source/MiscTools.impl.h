@@ -216,7 +216,7 @@ namespace rt
     Container filter_container(const Container &c, Predicate p)
     {
         Container result;
-        copy_if(c.begin(), c.end(), std::back_inserter(result), p);
+        rt::copy_if(c.begin(), c.end(), std::back_inserter(result), p);
         return result;
     }
 

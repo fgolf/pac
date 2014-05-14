@@ -4,8 +4,8 @@
 #include "at/AnalysisWithHist.h"
 #include "at/Sample.h"
 #include <string>
-#include <tr1/memory>
 #include "TH1F.h"
+#include "boost/shared_ptr.hpp"
 
 class OutreachClosure : public at::AnalysisWithHist
 {
@@ -39,18 +39,18 @@ class OutreachClosure : public at::AnalysisWithHist
         bool m_verbose;
 
         // fake/flip rate hists
-        std::tr1::shared_ptr<TH1F> h_btagpt;
-        std::tr1::shared_ptr<TH1F> h_el_pt;
-        std::tr1::shared_ptr<TH1F> h_mu_pt;
-        std::tr1::shared_ptr<TH1F> h_el_id;
-        std::tr1::shared_ptr<TH1F> h_mu_id;
-        std::tr1::shared_ptr<TH1F> h_el_iso;
-        std::tr1::shared_ptr<TH1F> h_mu_iso;
-        std::tr1::shared_ptr<TH1F> h_genmet30;
-        std::tr1::shared_ptr<TH1F> h_genmet50;
-        std::tr1::shared_ptr<TH1F> h_genmet120;
-        std::tr1::shared_ptr<TH1F> h_ht200;
-        std::tr1::shared_ptr<TH1F> h_ht320;
+        boost::shared_ptr<TH1F> h_btagpt;
+        boost::shared_ptr<TH1F> h_el_pt;
+        boost::shared_ptr<TH1F> h_mu_pt;
+        boost::shared_ptr<TH1F> h_el_id;
+        boost::shared_ptr<TH1F> h_mu_id;
+        boost::shared_ptr<TH1F> h_el_iso;
+        boost::shared_ptr<TH1F> h_mu_iso;
+        boost::shared_ptr<TH1F> h_genmet30;
+        boost::shared_ptr<TH1F> h_genmet50;
+        boost::shared_ptr<TH1F> h_genmet120;
+        boost::shared_ptr<TH1F> h_ht200;
+        boost::shared_ptr<TH1F> h_ht320;
 };
 
 #endif // OUTREACHCLOSURE_H

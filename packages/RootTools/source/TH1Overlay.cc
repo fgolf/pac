@@ -293,24 +293,24 @@ namespace rt
         void SetProfileAttributes(Style_t profile_marker_style, float profile_marker_size);
 
         // data members
-        shared_ptr<TH1> hist;
-        string          legend_value;
-        Color_t         color;
-        Width_t         width;
-        Style_t         style;
-        Style_t         fill;
-        bool            nostack;
+        boost::shared_ptr<TH1> hist;
+        string legend_value;
+        Color_t color;
+        Width_t width;
+        Style_t style;
+        Style_t fill;
+        bool nostack;
     };
 
 
     HistAttributes::HistAttributes()
         : hist()
-          , legend_value("")
-          , color(gStyle->GetHistLineColor())
-          , width(gStyle->GetHistLineWidth())
-          , style(gStyle->GetHistLineStyle())
-          , fill (gStyle->GetHistFillStyle())
-          , nostack(false)
+        , legend_value("")
+        , color(gStyle->GetHistLineColor())
+        , width(gStyle->GetHistLineWidth())
+        , style(gStyle->GetHistLineStyle())
+        , fill (gStyle->GetHistFillStyle())
+        , nostack(false)
     {
     }
 
@@ -462,11 +462,11 @@ namespace rt
         Style_t profile_marker_style;
 
         // holds the drawable things
-        shared_ptr<THStack> hist_stack;
+        boost::shared_ptr<THStack> hist_stack;
         vector<HistAttributes> hist_vec;
-        shared_ptr<TLegend> legend;
-        vector<shared_ptr<TLatex> > text_vector;
-        vector<shared_ptr<TLine> > line_vector;
+        boost::shared_ptr<TLegend> legend;
+        vector<boost::shared_ptr<TLatex> > text_vector;
+        vector<boost::shared_ptr<TLine> > line_vector;
 
         // handle the colors
         Color_t unique_hist_color(Color_t color);
@@ -853,7 +853,7 @@ namespace rt
         cout <<  "-----------------------------------------------------------------------" << endl; 
         for (vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin(); iter != m_pimpl->hist_vec.end(); iter++)
         {
-            const shared_ptr<TH1>& hist = iter->hist;
+            const boost::shared_ptr<TH1>& hist = iter->hist;
             cout <<  "  " << setw(15) << left << hist->ClassName() << "\t" << setw(15) << left << hist->GetName() << "\t" << hist->GetTitle() << endl;
         }
     }
@@ -882,7 +882,7 @@ namespace rt
             {
                 if (m_pimpl->title.find(";") == string::npos)
                 {
-                    shared_ptr<TH1>& temp_hist = m_pimpl->hist_vec.begin()->hist;
+                    boost::shared_ptr<TH1>& temp_hist = m_pimpl->hist_vec.begin()->hist;
                     if (temp_hist->GetXaxis()) m_pimpl->title += string(";") + temp_hist->GetXaxis()->GetTitle();
                     if (temp_hist->GetYaxis()) m_pimpl->title += string(";") + temp_hist->GetYaxis()->GetTitle();
                 }
@@ -890,7 +890,7 @@ namespace rt
             }
             else
             {
-                shared_ptr<TH1>& temp_hist = m_pimpl->hist_vec.begin()->hist;
+                boost::shared_ptr<TH1>& temp_hist = m_pimpl->hist_vec.begin()->hist;
                 string temp_string = temp_hist->GetTitle();
                 if (temp_hist->GetXaxis()) temp_string += string(";") + temp_hist->GetXaxis()->GetTitle();
                 if (temp_hist->GetYaxis()) temp_string += string(";") + temp_hist->GetYaxis()->GetTitle();
@@ -1152,7 +1152,7 @@ namespace rt
              iter++
             )
             {
-                const shared_ptr<TH1>& hist_ptr = iter->hist;
+                const boost::shared_ptr<TH1>& hist_ptr = iter->hist;
 
                 // check if disabled
                 if(m_pimpl->StatBoxPlacement == StatBoxPlacement::disabled)
@@ -1189,7 +1189,7 @@ namespace rt
     {
         double max_height = m_pimpl->hist_stack ? m_pimpl->hist_stack->GetMaximum() : 0.0;
         double min_height = m_pimpl->hist_stack ? m_pimpl->hist_stack->GetMinimum() : 0.0;
-        vector< shared_ptr<TH1> > hists_to_draw;
+        vector< boost::shared_ptr<TH1> > hists_to_draw;
         for (vector<HistAttributes>::const_iterator iter = m_pimpl->hist_vec.begin();iter != m_pimpl->hist_vec.end();iter++)
         {
             if ((m_pimpl->DrawType==DrawType::stack or m_pimpl->DrawType==DrawType::stack_norm) && iter->nostack)

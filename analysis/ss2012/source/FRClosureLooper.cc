@@ -1,7 +1,6 @@
 #include "FRClosureLooper.h"
 #include <iostream>
 #include <algorithm>
-#include <tr1/array>
 #include <cmath>
 #include "mcSelections.h"
 #include "SSB2012.h"
@@ -48,7 +47,7 @@ FRClosureLooper::FRClosureLooper
     const int charge_option,
     const float lumi,
     const bool verbose
-    )
+)
     : at::AnalysisWithHist(root_file_name, false, "")
     , m_lumi(lumi)
     , m_verbose(verbose)
@@ -178,17 +177,21 @@ void FRClosureLooper::EndJob()
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll
-    std::tr1::array<float, 4> yield_ss;
-    yield_ss[0] = rt::Integral(hc["h_yield_ee"]);
-    yield_ss[1] = rt::Integral(hc["h_yield_mm"]);
-    yield_ss[2] = rt::Integral(hc["h_yield_em"]);
-    yield_ss[3] = rt::Integral(hc["h_yield_ll"]);
+    const float yield_ss[4] =
+    {
+        rt::Integral(hc["h_yield_ee"]),
+        rt::Integral(hc["h_yield_mm"]),
+        rt::Integral(hc["h_yield_em"]),
+        rt::Integral(hc["h_yield_ll"])
+    };
 
-    std::tr1::array<float, 4> yield_ss_error;
-    yield_ss_error[0] = rt::IntegralAndError(hc["h_yield_ee"]).second;
-    yield_ss_error[1] = rt::IntegralAndError(hc["h_yield_mm"]).second;
-    yield_ss_error[2] = rt::IntegralAndError(hc["h_yield_em"]).second;
-    yield_ss_error[3] = rt::IntegralAndError(hc["h_yield_ll"]).second;
+    const float yield_ss_error[4] =
+    {
+        rt::IntegralAndError(hc["h_yield_ee"]).second,
+        rt::IntegralAndError(hc["h_yield_mm"]).second,
+        rt::IntegralAndError(hc["h_yield_em"]).second,
+        rt::IntegralAndError(hc["h_yield_ll"]).second
+    };
 
     // set the error to the lumi*scale1fb if the yield < weight*0.5 
     //float weight = (m_lumi * m_scale1fb);

@@ -3,7 +3,6 @@
 
 // c++
 #include <string>
-#include <tr1/memory>
 #include "TTree.h"
 #include "at/AnalysisBase.h"
 #include "rt/TH1Container.h"

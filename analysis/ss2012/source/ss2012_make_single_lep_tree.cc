@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <numeric>
 #include <cmath>
-#include <tr1/memory>
 
 // ROOT
 #include "TChain.h"
@@ -15,6 +14,7 @@
 
 // BOOST
 #include <boost/program_options.hpp>
+#include <boost/shared_ptr.hpp>
 
 // CMS2
 #include "CMS2Wrapper.h"
@@ -157,9 +157,9 @@ class SingleLeptonTreeLooper : public AnalysisWithTree
         unsigned int m_num_pass;
 
         // fake rate hists
-        std::tr1::shared_ptr<TH2F> h_mufr;
-        std::tr1::shared_ptr<TH2F> h_elfr;
-        std::tr1::shared_ptr<TH2F> h_flip;
+        boost::shared_ptr<TH2F> h_mufr;
+        boost::shared_ptr<TH2F> h_elfr;
+        boost::shared_ptr<TH2F> h_flip;
 
 };
 

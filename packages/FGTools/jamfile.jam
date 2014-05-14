@@ -14,7 +14,6 @@ lib FGTools
 		./source/eff2.cc
 		./source/fliprate_egun.cc
 		./source/getMyHistosNames.cc
-		./source/goodrun.cc
 		./source/histio.cc
 		./source/histtools.cc
 		./source/makeChain.cc

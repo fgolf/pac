@@ -181,7 +181,7 @@ namespace at
         for (size_t i = 0; i != jet_infos.size(); i++)
         {
             JetInfo nearest_jet = NearestBtaggedJet(jet_infos.at(i).CorrP4(), jet_args, jet_selection);
-            const float dr = ROOT::Math::VectorUtil::DeltaR(nearest_jet, jet_infos.at(i).CorrP4());
+            const float dr = rt::DeltaR(nearest_jet.CorrP4(), jet_infos.at(i).CorrP4());
             results.push_back(dr);
         }
         return results;

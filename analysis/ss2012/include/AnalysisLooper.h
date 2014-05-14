@@ -3,8 +3,7 @@
 
 #include "at/AnalysisWithTreeAndHist.h"
 #include "Math/LorentzVector.h"
-#include <tr1/array>
-#include <tr1/memory>
+#include <memory>
 #include <vector>
 #include <string>
 #include "SameSignTree.h"
@@ -12,6 +11,7 @@
 #include "metSelections.h"
 #include "jetcorr/FactorizedJetCorrector.h"
 #include "jetcorr/JetCorrectionUncertainty.h"
+#include "boost/shared_ptr.hpp"
 
 class TH2F;
 
@@ -76,26 +76,26 @@ private:
     int m_hyp_count;
 
     // fake rate hists
-    std::tr1::shared_ptr<TH2F> h_mufr;
-    std::tr1::shared_ptr<TH2F> h_elfr;
-    std::tr1::shared_ptr<TH2F> h_flip;
+    boost::shared_ptr<TH2F> h_mufr;
+    boost::shared_ptr<TH2F> h_elfr;
+    boost::shared_ptr<TH2F> h_flip;
 
     // on-the-fly JEC
-    std::tr1::shared_ptr<FactorizedJetCorrector> m_jet_corrector;
-    std::tr1::shared_ptr<MetCorrector> m_met_corrector;
-    std::tr1::shared_ptr<JetCorrectionUncertainty> m_jet_corr_unc;
+    boost::shared_ptr<FactorizedJetCorrector> m_jet_corrector;
+    boost::shared_ptr<MetCorrector> m_met_corrector;
+    boost::shared_ptr<JetCorrectionUncertainty> m_jet_corr_unc;
     std::vector<std::string> m_list_of_jec_filenames;
 
     // 0 mm, 1 em, 2 ee
-    std::tr1::array<float, 4> m_count_ss;
-    std::tr1::array<float, 4> m_count_sf;
-    std::tr1::array<float, 4> m_count_df;
-    std::tr1::array<float, 4> m_count_os;
+    float m_count_ss[4];
+    float m_count_sf[4];
+    float m_count_df[4];
+    float m_count_os[4];
 
-    std::tr1::array<float, 4> m_count_nobtag_ss;
-    std::tr1::array<float, 4> m_count_nobtag_sf;
-    std::tr1::array<float, 4> m_count_nobtag_df;
-    std::tr1::array<float, 4> m_count_nobtag_os;
+    float m_count_nobtag_ss[4];
+    float m_count_nobtag_sf[4];
+    float m_count_nobtag_df[4];
+    float m_count_nobtag_os[4];
 
     // struct to hold tree values
     SameSignTree m_evt;

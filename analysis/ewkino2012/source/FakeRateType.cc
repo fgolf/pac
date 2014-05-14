@@ -2,7 +2,6 @@
 #include "EWKINO2012_SS.h"
 #include "TTree.h"
 #include <stdexcept>
-#include <tr1/array>
 
 ewkino::FakeRateTypeInfo s_FakeRateTypeInfos[] = 
 {
