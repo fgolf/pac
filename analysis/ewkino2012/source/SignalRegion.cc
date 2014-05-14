@@ -424,8 +424,8 @@ namespace ewkino
         std::vector<LorentzVector> ret;
         for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
         {
-            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), tightness));
-            ret.push_back(vjets_p4().at(idx));                
+            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), tightness)) continue;
+                ret.push_back(vjets_p4().at(idx)); 
         }
 
         return ret;
@@ -436,8 +436,8 @@ namespace ewkino
         int ret = 0;
         for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
         {
-            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), mva_tightness));
-            if (btag_tightness == 0 && vjets_bdisc().at(idx) > 0.244) ++ret;
+            if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), mva_tightness)) continue;
+            if      (btag_tightness == 0 && vjets_bdisc().at(idx) > 0.244) ++ret;
             else if (btag_tightness == 1 && vjets_bdisc().at(idx) > 0.679) ++ret;
             else if (btag_tightness == 2 && vjets_bdisc().at(idx) > 0.898) ++ret;
         }
