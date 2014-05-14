@@ -425,7 +425,7 @@ namespace ewkino
         for (unsigned int idx = 0; idx < vjets_p4().size(); idx++)
         {
             if (!passesMVAJetId(vjets_p4().at(idx), pfjets_mva5xPUid().at(idx), tightness)) continue;
-                ret.push_back(vjets_p4().at(idx)); 
+            ret.push_back(vjets_p4().at(idx)); 
         }
 
         return ret;
