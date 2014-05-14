@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <tr1/array>
 #include <cmath>
 #include "mcSelections.h"
 #include "rt/RootTools.h"
@@ -110,10 +109,10 @@ InterpLooper::InterpLooper
     h_flip->SetDirectory(0);
 
     // initialize counters
-    for (size_t i = 0; i != m_count_ss.size(); i++) {m_count_ss[i]=0.0;}
-    for (size_t i = 0; i != m_count_sf.size(); i++) {m_count_sf[i]=0.0;}
-    for (size_t i = 0; i != m_count_df.size(); i++) {m_count_df[i]=0.0;}
-    for (size_t i = 0; i != m_count_os.size(); i++) {m_count_os[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_ss[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_sf[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_df[i]=0.0;}
+    for (size_t i = 0; i != 4; i++) {m_count_os[i]=0.0;}
 
     // fake and flip rate binning
     m_fr_bin_info = GetFakeRateBinInfo();

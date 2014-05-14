@@ -9,7 +9,8 @@ export HOSTNAME=`hostname`
 
 # setup boost (if its not already setup)
 if [ -z $BOOST_CURRENT ]; then
-    export BOOST_CURRENT=/home/users/rwkelley/code/boost/1.49.0/
+#     export BOOST_CURRENT=/home/users/rwkelley/code/boost/1.49.0/
+    export BOOST_CURRENT=/home/users/rwkelley/code/boost/1.55.0/
     export BOOST_BUILD_PATH=$BOOST_CURRENT/tools/build/v2
     export PATH=$PATH:$BOOST_CURRENT
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$BOOST_CURRENT/stage/lib

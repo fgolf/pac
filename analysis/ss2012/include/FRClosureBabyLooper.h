@@ -3,8 +3,6 @@
 
 #include "at/AnalysisWithTree.h"
 #include "Math/LorentzVector.h"
-#include <tr1/array>
-#include <tr1/memory>
 #include <vector>
 #include <string>
 #include "SameSignTree.h"
@@ -63,8 +61,8 @@ private:
     int m_hyp_count;
 
     // fake rate hists
-    std::tr1::shared_ptr<TH2F> h_mufr;
-    std::tr1::shared_ptr<TH2F> h_elfr;
+    boost::shared_ptr<TH2F> h_mufr;
+    boost::shared_ptr<TH2F> h_elfr;
 
     // on-the-fly JEC
     FactorizedJetCorrector* m_jet_corrector;
@@ -72,15 +70,15 @@ private:
     std::vector<std::string> m_list_of_jec_filenames;
 
     // 0 mm, 1 em, 2 ee
-    std::tr1::array<float, 4> m_count_ss;
-    std::tr1::array<float, 4> m_count_sf;
-    std::tr1::array<float, 4> m_count_df;
-    std::tr1::array<float, 4> m_count_os;
+    float m_count_ss[4];
+    float m_count_sf[4];
+    float m_count_df[4];
+    float m_count_os[4];
 
-    std::tr1::array<float, 4> m_count_nobtag_ss;
-    std::tr1::array<float, 4> m_count_nobtag_sf;
-    std::tr1::array<float, 4> m_count_nobtag_df;
-    std::tr1::array<float, 4> m_count_nobtag_os;
+    float m_count_nobtag_ss[4];
+    float m_count_nobtag_sf[4];
+    float m_count_nobtag_df[4];
+    float m_count_nobtag_os[4];
 
     // struct to hold tree values
     SameSignTree m_evt;

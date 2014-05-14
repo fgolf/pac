@@ -3,12 +3,8 @@
 
 #include "at/AnalysisWithTree.h"
 #include "Math/LorentzVector.h"
-//#include <tr1/array>
-//#include <tr1/memory>
-//#include <vector>
 #include "at/Sample.h"
 #include <string>
-#include <tr1/memory>
 #include "TH1F.h"
 #include "Math/LorentzVector.h"
 #include "at/DileptonHypType.h"

@@ -2,7 +2,6 @@
 #include "SSB2012.h"
 #include "TTree.h"
 #include <stdexcept>
-#include <tr1/array>
 
 ss::FakeRateTypeInfo s_FakeRateTypeInfos[] = 
 {

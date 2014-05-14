@@ -1,6 +1,5 @@
 #include "at/FakeRatePrediction.h"
 #include "rt/RootTools.h"
-#include <tr1/array>
 
 using namespace rt;
 using namespace std;

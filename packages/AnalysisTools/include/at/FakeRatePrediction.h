@@ -5,7 +5,7 @@
 #include "at/DileptonHypType.h"
 #include "PredSummary.h"
 #include <string>
-#include <tr1/memory>
+#include "boost/shared_ptr.hpp"
 
 namespace at
 {
@@ -52,8 +52,8 @@ namespace at
 
         private:
             // members: 
-            std::tr1::shared_ptr<TH2> h_mufr;
-            std::tr1::shared_ptr<TH2> h_elfr;
+            boost::shared_ptr<TH2> h_mufr;
+            boost::shared_ptr<TH2> h_elfr;
             float m_ele_max;
             float m_mu_max;
             PredSummary sf_raw;

@@ -10,11 +10,10 @@
 #include "SignalRegion.h"
 #include "AnalysisType.h"
 #include <string>
-#include <tr1/array>
-#include <tr1/memory>
 #include <vector>
 #include "TH2F.h"
 #include "FakeRateType.h"
+#include "boost/shared_ptr.hpp"
 
 class InterpLooper : public at::AnalysisWithHist
 {
@@ -83,18 +82,18 @@ private:
     bool m_is_fast_sim;
 
     // fake/flip rate hists
-    std::tr1::shared_ptr<TH2F> h_mufr;
-    std::tr1::shared_ptr<TH2F> h_elfr;
-    std::tr1::shared_ptr<TH2F> h_flip;
+    boost::shared_ptr<TH2F> h_mufr;
+    boost::shared_ptr<TH2F> h_elfr;
+    boost::shared_ptr<TH2F> h_flip;
 
     // den
-    std::tr1::shared_ptr<TH2F> h_den;
+    boost::shared_ptr<TH2F> h_den;
 
     // quick count check
-    std::tr1::array<float, 4> m_count_ss;
-    std::tr1::array<float, 4> m_count_sf;
-    std::tr1::array<float, 4> m_count_df;
-    std::tr1::array<float, 4> m_count_os;
+    float m_count_ss[4];
+    float m_count_sf[4];
+    float m_count_df[4];
+    float m_count_os[4];
 
     // methods
     float GetFakeRateValue(int lep_id, float pt, float eta) const;

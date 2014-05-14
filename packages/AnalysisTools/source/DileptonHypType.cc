@@ -1,8 +1,6 @@
 #include "at/DileptonHypType.h"
 #include <stdexcept> 
-#include <cmath> 
-
-using std::abs;
+#include <cstdlib> 
 
 namespace at 
 {
@@ -24,8 +22,8 @@ namespace at
 
     DileptonHypType::value_type PdgidToHypType (int id1, int id2)
     {
-        id1 = abs(id1);
-        id2 = abs(id2);
+        id1 = std::abs(id1);
+        id2 = std::abs(id2);
 
         if      (id1 == 13 && id2 == 13) {return DileptonHypType::MUMU;}
         else if (id1 == 13 && id2 == 11) {return DileptonHypType::EMU; }

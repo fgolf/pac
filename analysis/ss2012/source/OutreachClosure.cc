@@ -2,7 +2,6 @@
 #include "OutreachBaby.h"
 #include <iostream>
 #include <algorithm>
-#include <tr1/array>
 #include <cmath>
 #include "rt/RootTools.h"
 #include "rt/is_equal.h"
@@ -506,9 +505,9 @@ int OutreachClosure::operator()(long event)
         float l2_id_weight  = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_id.get())  : GetPtEfficiencyWeight(l2_pt, h_mu_id.get()); 
         float l1_iso_weight = abs(l1_id)==11 ? GetPtEfficiencyWeight(l1_pt, h_el_iso.get()) : GetPtEfficiencyWeight(l1_pt, h_mu_iso.get()); 
         float l2_iso_weight = abs(l2_id)==11 ? GetPtEfficiencyWeight(l2_pt, h_el_iso.get()) : GetPtEfficiencyWeight(l2_pt, h_mu_iso.get()); 
-        float weight        = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
-        float weight1       = btag_weight * ht200_weight * met50_weight * l1_pt_weight;
-        float weight2       = btag_weight * ht200_weight * met50_weight * l2_pt_weight;
+//         float weight        = btag_weight * ht200_weight * met50_weight * l1_pt_weight * l2_pt_weight;
+//         float weight1       = btag_weight * ht200_weight * met50_weight * l1_pt_weight;
+//         float weight2       = btag_weight * ht200_weight * met50_weight * l2_pt_weight;
         float weight_sr6    = btag_weight * ht320_weight * met120_weight * l1_pt_weight * l2_pt_weight;
 
         // ht test

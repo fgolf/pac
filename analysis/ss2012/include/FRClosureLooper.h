@@ -6,11 +6,11 @@
 #include "at/DileptonHypType.h"
 #include "SignalRegion.h"
 #include <string>
-#include <tr1/array>
-#include <tr1/memory>
+#include <memory>
 #include <vector>
 #include "TH2F.h"
 #include "FakeRateType.h"
+#include "boost/shared_ptr.hpp"
 
 class FRClosureLooper : public at::AnalysisWithHist
 {
@@ -70,8 +70,8 @@ private:
     at::FakeRateBinInfo m_fr_bin_info;
 
     // fake/flip rate hists
-    std::tr1::shared_ptr<TH2F> h_mufr;
-    std::tr1::shared_ptr<TH2F> h_elfr;
+    boost::shared_ptr<TH2F> h_mufr;
+    boost::shared_ptr<TH2F> h_elfr;
 
     // methods
     float GetFakeRateValue(int lep_id, float pt, float eta) const;

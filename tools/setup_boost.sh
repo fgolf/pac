@@ -4,7 +4,7 @@ install_path=${1:-${HOME}/code}
 echo '********************************************************************'
 echo '*                         BOOST Setup                              *'
 echo '********************************************************************'
-boost_version=1_49_0
+boost_version=1_55_0
 boost_version_local=`echo ${boost_version} | sed s/_/\./g`
 boost_source=http://svn.boost.org/svn/boost/tags/release/Boost_${boost_version} 
 boost_dest=${install_path}/boost/${boost_version_local}
