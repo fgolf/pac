@@ -389,8 +389,8 @@ void OutreachClosure::BookHists()
         hc.Add(new TH2F("h_sparm_pred_v3", "CMS #sqrt{s} = 8 TeV, L_{int} = 10.5 fb^{-1};m(#tilde{g}) GeV; m(#tilde{b}_{1}) GeV", 16, 325, 1125, 22, 325, 1425));
 
         // sparms projection 
-        bins_t s0_bins;
-        bins_t s1_bins;
+        bins_t s0_bins = {-99999, 1.0, -1.0};
+        bins_t s1_bins = {-99999, 1.0, -1.0};
         string title = "";
         if (m_sample == at::Sample::sbottomtop) 
 		{

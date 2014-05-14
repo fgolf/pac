@@ -271,13 +271,13 @@ void PlotLooper::EndJob()
     }
 
     // 0 ee, 1 mm, 2 em, 3 ll
-    const float yield_ss[4] = 
-    {
-        rt::Integral(hc["h_yield_mm"]),
-        rt::Integral(hc["h_yield_ee"]),
-        rt::Integral(hc["h_yield_em"]),
-        rt::Integral(hc["h_yield_ll"])
-    };
+//    const float yield_ss[4] = 
+//    {
+//        rt::Integral(hc["h_yield_mm"]),
+//        rt::Integral(hc["h_yield_ee"]),
+//        rt::Integral(hc["h_yield_em"]),
+//        rt::Integral(hc["h_yield_ll"])
+//    };
 
     PredSummary yield;
     yield.mm.value = rt::IntegralAndError(hc["h_yield_mm"]).first;
