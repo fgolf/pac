@@ -129,6 +129,9 @@ FRClosureLooper::FRClosureLooper
   cout << "njets  >= " << m_njets  << endl;
   cout << "met    >= " << m_met_cut << endl;
   cout << "ht     >= " << m_ht_cut << endl;
+
+  m_crossSectionFix = 245.8 / 234;
+  cout<<"PATCH: fixing cross section by 245.8 / 234 for ttbar: "<<m_crossSectionFix<<endl;
   
   // begin job
   BeginJob();
@@ -371,6 +374,11 @@ void FRClosureLooper::BookHists()
     
     hc.Add(new TH1F("h_yield_em_efake", "yields_em_efake;yield;Events", 3, -0.5, 2.5));
     hc.Add(new TH1F("h_yield_em_mfake", "yields_em_mfake;yield;Events", 3, -0.5, 2.5));
+
+    hc.Add(new TH1F("h_FO_ID_efake", "FO_ID_efake;Fake Ele ID;Events", 10, -4.5, 5.5));
+    hc.Add(new TH1F("h_FO_ID_mfake", "FO_ID_mfake;Fake Mu ID;Events",  10, -4.5, 5.5));
+
+
     
     // basic yield plots
     for (size_t i = 0; i != at::DileptonHypType::static_size; i++)
@@ -496,39 +504,6 @@ int FRClosureLooper::operator()(long event)
        }
    }
 
-    // two jet events
-    if (njets() < static_cast<int>(m_njets))
-    {
-      return 0;
-    }
-    
-    // # btagged jets
-    const int num_btags = (is_real_data() ? nbtags() : nbtags_reweighted());
-    if (num_btags < static_cast<int>(m_nbtags))
-      //if (num_btags != 0)
-    {
-      return 0;
-    }
-    
-    // ht cut
-    if (ht() < m_ht_cut)
-    {
-      return 0;
-    }
-    
-    // met cut
-    if (pfmet() < m_met_cut)
-    {
-      return 0;
-    }
-    
- 
-    // passes signal region
-    if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*do_btag_sf=*/true))
-    {
-      return 0;
-    }
-
     // GZ Do the lepton cuts by hand: pt > 20 for numerator, FOpt > 20 for non-iso denominator
     float FOpt1 = lep1_p4().pt();
     float FOpt2 = lep2_p4().pt(); 
@@ -539,6 +514,58 @@ int FRClosureLooper::operator()(long event)
     if ( m_analysis_type== AnalysisType::high_pt && (FOpt1<20.0 || FOpt2<20.0) ) {
       return 0;
     }
+    cout<<"PASS LEPTON"<<dilep_type()<<endl;
+    if (is_ss()) cout<<"PASS SSLEPTON"<<dilep_type()<<endl;
+
+    // met cut
+    if (pfmet() < m_met_cut)
+    {
+      return 0;
+    }
+    if (is_ss()) cout<<"PASS MET"<<dilep_type()<<endl;
+	
+
+    // two jet events
+    //GZ if (njets() < static_cast<int>(m_njets))
+    // GZ: need to count jet on our own, removing the closes one to each lepton if DR < 0.4
+    int nVetoedJets = 0;
+    if (lep1_nearjet_dr() < 0.4) nVetoedJets++;
+    if (lep2_nearjet_dr() < 0.4) nVetoedJets++;
+    if ( (njets() - nVetoedJets) < static_cast<int>(m_njets))
+    {
+      return 0;
+    }
+    if (is_ss()) cout<<"PASS JETS"<<dilep_type()<<endl;
+
+    // # btagged jets
+    //GZ const int num_btags = (is_real_data() ? nbtags() : nbtags_reweighted());
+    //GZ if (num_btags < static_cast<int>(m_nbtags))
+    //GZ   //if (num_btags != 0)
+    int nVetoedBJets = 0;
+    if (lep1_nearbjet_dr() < 0.4) nVetoedBJets++;
+    if (lep2_nearbjet_dr() < 0.4) nVetoedBJets++;
+    if ( (nbtags() - nVetoedBJets) < static_cast<int>(m_nbtags))
+    {
+      return 0;
+    }
+    if (is_ss()) cout<<"PASS BJETS"<<dilep_type()<<endl;
+
+
+    // ht cut
+    // GZ currently broken due to the new jet selection
+    if (ht() < m_ht_cut)
+    {
+      return 0;
+    }
+    
+    // GZ currently broken due to the new jet selection
+    //// passes signal region
+    //if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*do_btag_sf=*/true))
+    //{
+    //  return 0;
+    //}
+
+
 
     // ttbar breakdown 
     const TTbarBreakDown::value_type ttbar_breakdown = GetTTbarBreakDown(m_sample, lep1_is_fromw(), lep2_is_fromw()); 
@@ -563,7 +590,7 @@ int FRClosureLooper::operator()(long event)
     // ----------------------------------------------------------------------------------------------------------------------------//
     
     // scale
-    float evt_weight = (m_do_scale1fb ? scale1fb()*m_lumi : 1.0);
+    float evt_weight = (m_do_scale1fb ? scale1fb()*m_lumi*m_crossSectionFix : 1.0);
     if (m_do_vtx_reweight)
     {
       evt_weight = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
@@ -641,6 +668,9 @@ int FRClosureLooper::operator()(long event)
       {
         if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOcorr, evt_weight);}
         if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOcorr, evt_weight);}
+	int fakeID = lep1_is_fo_mod ? lep1_is_fromw() : lep2_is_fromw();
+	if (abs(id) == 11 ) rt::Fill(hc["h_FO_ID_efake"], fakeID, evt_weight);
+	if (abs(id) == 13 ) rt::Fill(hc["h_FO_ID_mfake"], fakeID, evt_weight);
       }
     }
     
@@ -659,6 +689,11 @@ int FRClosureLooper::operator()(long event)
       {
         at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt()+FOcorr1, l1_p4.eta(), l2_id, l2_p4.pt()+FOcorr2, l2_p4.eta(), evt_weight);
         at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta"+hs]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt()+FOcorr1, l1_p4.eta(), l2_id, l2_p4.pt()+FOcorr2, l2_p4.eta(), evt_weight);
+
+	if (abs(l1_id) == 11 ) rt::Fill(hc["h_FO_ID_efake"], lep1_is_fromw(), evt_weight);
+	if (abs(l1_id) == 13 ) rt::Fill(hc["h_FO_ID_mfake"], lep1_is_fromw(), evt_weight);
+	if (abs(l2_id) == 11 ) rt::Fill(hc["h_FO_ID_efake"], lep2_is_fromw(), evt_weight);
+	if (abs(l2_id) == 13 ) rt::Fill(hc["h_FO_ID_mfake"], lep2_is_fromw(), evt_weight);	
       }
     }
   }
