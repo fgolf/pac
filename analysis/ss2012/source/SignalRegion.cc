@@ -286,9 +286,9 @@ const ss::SignalRegionInfo s_HptInclSignalRegionInfos[] =
         // name
         "sr34",
         // title
-        "SSTop2: # jets #geq 2, # btags = 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        "SSTop2: # jets #geq 2, # btags >= 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
         // latex
-        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
+        "$\\#jets\\geq2,\\# btags >= 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
     },
     {
         // name
@@ -1237,9 +1237,9 @@ const ss::SignalRegionInfo s_HptExclSignalRegionInfos[] =
         // name
         "sr34",
         // title
-        "SSTop2: # jets #geq 2, # btags = 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
+        "SSTop2: # jets #geq 2, # btags >= 1, H_{T} > 80 GeV, E_{T}^{miss} > 30 GeV",
         // latex
-        "$\\#jets\\geq2,\\# btags = 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
+        "$\\#jets\\geq2,\\# btags >= 1,\\ H_T>80\\ \\text{GeV},\\ E_T^{miss}>30\\ \\text{GeV}$"
     },
     {
         // name
@@ -2122,7 +2122,7 @@ namespace ss
                     case SignalRegion::sr31: return (njets>=2 && nbtags>=2 && ht>80  && met>30 && ssb::is_pp());
                     case SignalRegion::sr32: return (njets>=2 && nbtags>=0 && ht>500 && met>0                 );
                     case SignalRegion::sr33: return (njets>=2 && nbtags>=2 && ht>500 && met>0                 );
-                    case SignalRegion::sr34: return (njets>=2 && nbtags==1 && ht>80  && met>30                );
+                    case SignalRegion::sr34: return (njets>=2 && nbtags>=1 && ht>80  && met>30                );
                     case SignalRegion::sr35: return (njets>=2 && nbtags==1 && ht>80  && met>30 && ssb::is_pp() );
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };
@@ -2165,7 +2165,7 @@ namespace ss
                     case SignalRegion::sr31: return (njets>=2 && nbtags>=2 && ht>80  && met>30 && ssb::is_pp());
                     case SignalRegion::sr32: return (njets>=2 && nbtags>=0 && ht>500 && met>0                 );
                     case SignalRegion::sr33: return (njets>=2 && nbtags>=2 && ht>500 && met>0                 );
-                    case SignalRegion::sr34: return (njets>=2 && nbtags==1 && ht>80  && met>30                );
+                    case SignalRegion::sr34: return (njets>=2 && nbtags>=1 && ht>80  && met>30                );
                     case SignalRegion::sr35: return (njets>=2 && nbtags==1 && ht>80  && met>30 && ssb::is_pp() );
                     case SignalRegion::static_size: {throw std::domain_error("ERROR: ss::PassesSignalRegion(): argument out of bounds!");}
                 };

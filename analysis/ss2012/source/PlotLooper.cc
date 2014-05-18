@@ -118,8 +118,11 @@ PlotLooper::PlotLooper
     switch (m_analysis_type)
     {
         case AnalysisType::high_pt:
-            mufr_name = "h_mufr40c_ewkcor";
-            elfr_name = "h_elfr40c_ewkcor";
+//            mufr_name = "h_mufr40c_ewkcor";
+//            elfr_name = "h_elfr40c_ewkcor";
+	  mufr_name = "h_mufr40c"; //GZ
+            elfr_name = "h_elfr40c"; //GZ
+	    cout<< " *** CAREFUL *** Using non-EWK-corrected plot!!!"<<endl; //GZ
             break;
         case AnalysisType::high_pt_eth:
             mufr_name = "h_mufr40c";
@@ -142,8 +145,8 @@ PlotLooper::PlotLooper
             elfr_name = "h_elfr40c";
             break;
     }
- //   cout<< " *** CAREFUL *** Using muon FR histogram also for electrons. Can't trust any electron plot"<<endl; // GZ
- //   elfr_name = mufr_name; //GZ
+    cout<< " *** CAREFUL *** Using muon FR histogram also for electrons. Can't trust any electron plot"<<endl; // GZ
+    elfr_name = mufr_name; //GZ
 
     h_mufr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(mufr_name.c_str())->Clone()));
     h_elfr.reset(dynamic_cast<TH2F*>(fake_rate_file->Get(elfr_name.c_str())->Clone()));
@@ -751,7 +754,7 @@ int PlotLooper::operator()(long event)
         const bool not_from_borc = not is_real_data() ? ((lep1_is_fromw()>=0) && (lep2_is_fromw()>=0) && (lep1_mc3id()*lep2_mc3id()>0)) : false;
         const bool is_rare_mc    = (at::GetSampleInfo(m_sample).type == at::SampleType::rare);
         const bool is_signal_mc  = (at::GetSampleInfo(m_sample).type == at::SampleType::susy);
-        const bool is_mc_matched = (m_sample==at::Sample::ttg ? not_from_borc : true_ss_event);
+        const bool is_mc_matched =  m_do_truth_matching ? (m_sample==at::Sample::ttg ? not_from_borc : true_ss_event) : true;
         if (m_do_truth_matching)
         {
             if ((not is_real_data()) && (not is_mc_matched) && (is_rare_mc || is_signal_mc))
@@ -903,8 +906,6 @@ int PlotLooper::operator()(long event)
             if (m_verbose) {cout << "failing # jets cut" << endl;}
             return 0;
         }
-
-
 
         // two btagged jets
         const unsigned int num_btags = ((not is_real_data() && m_do_scale_factors) ? nbtags_reweighted() : nbtags());

@@ -36,7 +36,9 @@ public:
         const int charge_option = 0,
         const float lumi = 1.0,
         const bool verbose = false,
-	const int  FR_option = 0
+	const int  FR_option = 0,
+	const int truth_match_option = 0,
+	const bool do_mc_trigger = false
     );
 
     // destroy:
@@ -70,6 +72,8 @@ private:
     ss::SignalRegionType::value_type m_signal_region_type;
     float m_scale1fb;
     at::FakeRateBinInfo m_fr_bin_info;
+    int m_truth_match_option;
+    bool m_do_mc_trigger; 
 
     // fake/flip rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;

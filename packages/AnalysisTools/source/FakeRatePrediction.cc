@@ -173,7 +173,7 @@ namespace at
     {
         unsigned int MIN_XBIN = 1;
         unsigned int MIN_YBIN = 1;
-        const unsigned int NETA_BINS = 4;
+        const unsigned int NETA_BINS = 5;
 
         Float_t pred_total       = 0.0;
         Float_t pred_error_total = 0.0;

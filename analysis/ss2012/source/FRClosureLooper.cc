@@ -48,7 +48,9 @@ FRClosureLooper::FRClosureLooper
  const int charge_option,
  const float lumi,
  const bool verbose,
- const int FR_option
+ const int FR_option,
+ const int truth_match_option,
+ const bool do_mc_trigger
  )
 : at::AnalysisWithHist(root_file_name, false, "")
 , m_lumi(lumi)
@@ -67,6 +69,8 @@ FRClosureLooper::FRClosureLooper
 , m_signal_region(signal_region)
 , m_analysis_type(analysis_type)
 , m_signal_region_type(signal_region_type)
+, m_truth_match_option(truth_match_option)
+, m_do_mc_trigger(do_mc_trigger)
 {
   // set vertex weight file
   if (m_do_vtx_reweight)
@@ -231,18 +235,18 @@ void FRClosureLooper::EndJob()
   hc["h_sf_pred_raw"]->SetBinError(5, sf_raw.em_mufo.error);
   hc["h_sf_pred_raw"]->SetBinError(6, sf_raw.em_elfo.error);
   
-  //// DF
-  //PredSummary df = frp.GetDoubleFakePrediction();
-  //hc.Add(new TH1F("h_df_pred", "DF prediction", 4, 0, 4));
-  //hc["h_df_pred"]->SetBinContent(1, df.ee.value);
-  //hc["h_df_pred"]->SetBinContent(2, df.mm.value);
-  //hc["h_df_pred"]->SetBinContent(3, df.em.value);
-  //hc["h_df_pred"]->SetBinContent(4, df.ll.value);
-  //hc["h_df_pred"]->SetBinError(1, df.ee.error);
-  //hc["h_df_pred"]->SetBinError(2, df.mm.error);
-  //hc["h_df_pred"]->SetBinError(3, df.em.error);
-  //hc["h_df_pred"]->SetBinError(4, df.ll.error);
-  //PredSummary df_count = frp.GetDoubleFakeCount();
+  // DF
+  PredSummary df = frp.GetDoubleFakePrediction();
+  hc.Add(new TH1F("h_df_pred", "DF prediction", 4, 0, 4));
+  hc["h_df_pred"]->SetBinContent(1, df.ee.value);
+  hc["h_df_pred"]->SetBinContent(2, df.mm.value);
+  hc["h_df_pred"]->SetBinContent(3, df.em.value);
+  hc["h_df_pred"]->SetBinContent(4, df.ll.value);
+  hc["h_df_pred"]->SetBinError(1, df.ee.error);
+  hc["h_df_pred"]->SetBinError(2, df.mm.error);
+  hc["h_df_pred"]->SetBinError(3, df.em.error);
+  hc["h_df_pred"]->SetBinError(4, df.ll.error);
+  PredSummary df_count = frp.GetDoubleFakeCount();
   
   //// SF 
   //PredSummary sf = frp.GetSingleFakePrediction();
@@ -342,7 +346,9 @@ void FRClosureLooper::EndJob()
   string f = "1.2";
   string o = (m_do_scale1fb ? "1.2f" : "1.0f");
   t_yields.setTable() (                              "ee",                   "mm",                   "em",               "em (e fake)",               "em (m fake)",                   "ll")
-  ("SF count", (int)sf_count.ee.value, (int)sf_count.mm.value, (int)sf_count.em.value, (int)sf_count.em_elfo.value, (int)sf_count.em_mufo.value, (int)sf_count.ll.value)
+    //  ("SF count", (int)sf_count.ee.value, (int)sf_count.mm.value, (int)sf_count.em.value, (int)sf_count.em_elfo.value, (int)sf_count.em_mufo.value, (int)sf_count.ll.value)
+  ("SF count",fmt(sf_count.ee.value, o),fmt(sf_count.mm.value, o),fmt(sf_count.em.value, o),fmt(sf_count.em_elfo.value, o),fmt(sf_count.em_mufo.value, o),fmt(sf_count.ll.value, o))
+  ("DF count",fmt(df_count.ee.value, o),fmt(df_count.mm.value, o),fmt(df_count.em.value, o),fmt(df_count.em_elfo.value, o),fmt(df_count.em_mufo.value, o),fmt(df_count.ll.value, o))
   ("pred"    ,         pred.ee.str(f),         pred.mm.str(f),         pred.em.str(f),         pred.em_elfo.str(f),         pred.em_mufo.str(f),         pred.ll.str(f))
   ("obs"     ,         fmt(obs_ee, o),          fmt(obs_mm,o),          fmt(obs_em,o),         fmt(obs_em_efake,o),         fmt(obs_em_mfake,o),          fmt(obs_ll,o))
   ("pred/obs",               ee_ratio,               mm_ratio,               em_ratio,              em_efake_ratio,              em_mfake_ratio,               ll_ratio)
@@ -436,7 +442,7 @@ int FRClosureLooper::operator()(long event)
     // only one gen level lepton
     // only keep events with one real status 3 lepton
     //if (gen_nleps()!=1)
-    if (gen_nleps_with_fromtau()!=1)
+    if (gen_nleps_with_fromtau()!=1 && m_truth_match_option!=0)
     {
       return 0;
     }
@@ -450,14 +456,14 @@ int FRClosureLooper::operator()(long event)
     {
       return 0;
     }
-    
+
     // dilepton hyp type: 1 mm, 2 em, 3ee
     DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
     if (hyp_type == DileptonHypType::static_size)
     {
       return 0;
     }
-    
+
     // charge option (1 == ++, -1 == --)
     switch (m_charge_option)
     {
@@ -465,7 +471,31 @@ int FRClosureLooper::operator()(long event)
       case -1: if (not is_mm()) return 0; break;
       default: {/*do nothing*/}
     }
-    
+    if (lep3_is_den() && lep3_p4().pt() > 10.0)
+    {
+      if (m_verbose) {cout << "failing 3rd lepton vetom, lepton pt "<< lep3_p4().pt() << endl;}
+	return 0;
+   }
+
+   // check that it passes the trigger requirement
+   if (is_real_data() || m_do_mc_trigger)
+   {
+     bool passes_trigger = true;
+     switch (hyp_type)
+       {
+       case DileptonHypType::MUMU: passes_trigger = trig_mm(); break;
+       case DileptonHypType::EMU : passes_trigger = trig_em(); break;
+       case DileptonHypType::EE  : passes_trigger = trig_ee(); break;
+       default: passes_trigger = false; break;
+       };
+     // return if fails trigger
+     if (not passes_trigger)
+       {
+	 if (m_verbose) {cout << "failing trigger requirement" << endl;}
+	 return 0;
+       }
+   }
+
     // two jet events
     if (njets() < static_cast<int>(m_njets))
     {
@@ -492,6 +522,7 @@ int FRClosureLooper::operator()(long event)
       return 0;
     }
     
+ 
     // passes signal region
     if (not PassesSignalRegion(m_signal_region, m_analysis_type, m_signal_region_type, /*do_btag_sf=*/true))
     {
@@ -523,16 +554,16 @@ int FRClosureLooper::operator()(long event)
     }
     
     // letpon info
-    const bool fromw_l1     = is_real_data() ? true : (lep1_is_fromw()==1);
-    const bool fromw_l2     = is_real_data() ? true : (lep2_is_fromw()==1);
-    const bool not_fromw_l1 = is_real_data() ? true : (lep1_is_fromw()<1);
-    const bool not_fromw_l2 = is_real_data() ? true : (lep2_is_fromw()<1);
+    const bool fromw_l1     = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()==1);
+    const bool fromw_l2     = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()==1);
+    const bool not_fromw_l1 = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()<1);
+    const bool not_fromw_l2 = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()<1);
     
     // Weight Factors
     // ----------------------------------------------------------------------------------------------------------------------------//
     
     // scale
-    float evt_weight = (m_do_scale1fb ? scale1fb() : 1.0);
+    float evt_weight = (m_do_scale1fb ? scale1fb()*m_lumi : 1.0);
     if (m_do_vtx_reweight)
     {
       evt_weight = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);
@@ -554,20 +585,7 @@ int FRClosureLooper::operator()(long event)
 //    cout<<"Lepton pT: "<<lep1_p4().pt()<<" "<<lep2_p4().pt()<<endl;
 //    cout<<"Lepton iso: "<<lep1_corpfiso()<<" "<<lep2_corpfiso()<<endl;
 //    cout<<"Lepton ID: "<<lep1_passes_id()<<" "<<lep2_passes_id()<<endl;
-//    }
-    //	if (m_FR_option == 1 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Use absolute isolation 2 GeV in numerator (muon only)
-    //	  if (is_ss_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_ss_mod=false; is_sf_mod=true;} // downgrade from SS to SF
-    //	  if (is_sf_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 && lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_sf_mod=false; is_df_mod=true;} // downgrade from SF to DF
-    //	}
-    //	if (m_FR_option == 2 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection (muon only)
-    //	  if ( (is_sf_mod || is_df_mod) && (!lep1_passes_id() || !lep2_passes_id()) ) {is_sf_mod=false; is_df_mod=false;} // remove event from FO
-    //	}
-    //	if (m_FR_option == 3 && abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) {  // Require ID cuts in FO selection AND abs iso in numerator (muon only)
-    //	  if (is_ss_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 || lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_ss_mod=false; is_sf_mod=true;} 
-    //	  if (is_sf_mod && (lep1_corpfiso()*lep1_p4().pt() > 2 && lep2_corpfiso()*lep2_p4().pt() > 2 ) ) {is_sf_mod=false; is_df_mod=true;}
-    //	  if ( (is_sf_mod || is_df_mod) && (!lep1_passes_id() || !lep2_passes_id()) ) {is_sf_mod=false; is_df_mod=false;}
-    //	}
-    
+//    }    
     if (m_FR_option == 1 || m_FR_option == 3) {
       int downgrade = 0;
       if ( abs(lep1_pdgid())==13 && lep1_corpfiso()*lep1_p4().pt() > 2 && !lep1_is_fo() ) downgrade++;

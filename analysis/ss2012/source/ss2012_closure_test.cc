@@ -41,6 +41,8 @@ try
     float lumi                      = 1.0;
     bool verbose                    = false;
     int FR_option                   = 0;
+    int truth_option                = 1;
+    bool do_mc_trigger              = false;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -67,6 +69,8 @@ try
         ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
         ("FR_opt"   , po::value<int>(&FR_option)                  , "FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both, 4 FOpt and iso only)"      )
+        ("truth_opt", po::value<int>(&truth_option)               , "truth_option (0 don't use, 1 Prompt-nonPrompt matched (std))")
+        ("mc_trig"  , po::value<bool>(&do_mc_trigger)             , "require trigger on MC"                                     )
         ;
 
     po::variables_map vm;
@@ -191,7 +195,9 @@ try
             charge_option,
             lumi,
             verbose,
-	    FR_option
+	    FR_option,
+	    truth_option,
+	    do_mc_trigger
         ),
         samesignbtag,
         number_of_events,

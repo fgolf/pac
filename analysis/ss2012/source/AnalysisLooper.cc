@@ -132,7 +132,7 @@ bool passesETHfo(const int lep_id, const int lep_idx, const bool use_el_eta)
 // set then numerator bool
 bool SSAnalysisLooper::IsNumerator(const int lep_id, const int lep_idx)
 {
-    return samesign::isNumeratorLepton(lep_id, lep_idx, m_use_el_eta);
+    return samesign2014::isNumeratorLepton(lep_id, lep_idx, m_use_el_eta);
 }
 
 // set then denominator bool
@@ -144,7 +144,7 @@ bool SSAnalysisLooper::IsDenominator(const int lep_id, const int lep_idx)
     }
     else
     {
-        return samesign::isDenominatorLepton(lep_id, lep_idx, m_use_el_eta);
+        return samesign2014::isDenominatorLepton(lep_id, lep_idx, m_use_el_eta);
     }
 }
 
@@ -377,7 +377,7 @@ void PrintForSync
 
     //printf("%11d %7.3f  %6.3f  %5.3f %11d %7.3f %6.3f  %5.3f %13.3f %5d %6d %11.3f \n", ll_id, ll_p4.pt(), ll_p4.eta(), ll_iso, lt_id, lt_p4.pt(), lt_p4.eta(), lt_iso, met, num_jets, num_btags, ht);
 
-    if (samesign::isNumeratorHypothesis(ihyp), use_el_eta)
+    if (samesign2014::isNumeratorHypothesis(ihyp), use_el_eta)
         //if (samesign::isDenominatorHypothesis(ihyp))
     {
         //cout << "Run | LS | Event | channel | Lep1Pt | Lep1Eta | Lep1Phi | Lep1ID | Lep1Iso | Lep2Pt | Lep2Eta | Lep2Phi | Lep2ID | Lep1Iso | MET | HT | nJets | nbJets" << endl;
@@ -641,16 +641,16 @@ SSAnalysisLooper::SSAnalysisLooper
     JetCorrectionUncertainty* const jcu = m_jet_corr_unc.get();
 
     // base level selection
-    m_jet_args        = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE    , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
-    m_jet_args_jec_up = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_UP  , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
-    m_jet_args_jec_dn = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_DOWN, /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
-    m_jet_args_jer    = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JER     , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4);
+    m_jet_args        = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE    , /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
+    m_jet_args_jec_up = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_UP  , /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
+    m_jet_args_jec_dn = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_DOWN, /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
+    m_jet_args_jer    = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JER     , /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
 
     // jets
-    m_uncorrected_jet_args = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.4, /*min_pt=*/10.0, /*max_eta=*/5.0);
+    m_uncorrected_jet_args = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.004, /*min_pt=*/10.0, /*max_eta=*/5.0); //GZ was 0.4
 
     // jet with pT > 30
-    m_jet_args_pt30 = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.4, /*min_pt=*/30, /*max_eta=*/2.4);
+    m_jet_args_pt30 = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.004, /*min_pt=*/30, /*max_eta=*/2.4); //GZ was 0.4
 
     // begin job
     BeginJob();
@@ -969,6 +969,8 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
             const float lt_min_pt = abs(lt_id)==11 ? el_min_pt : mu_min_pt;
             const float ll_min_pt = abs(ll_id)==11 ? el_min_pt : mu_min_pt;
+	    const float lt_max_eta = abs(lt_id)==11 ? 2.5 : 2.4;
+	    const float ll_max_eta = abs(ll_id)==11 ? 2.5 : 2.4;
 
             // print for syncing
             if (m_sync_print)
@@ -978,12 +980,12 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
 
             // check if hyp passes lepton kinematics
-            if (fabs(lt_p4.Eta())>2.4 || lt_p4.pt()<lt_min_pt) 
+            if (fabs(lt_p4.Eta())>lt_max_eta || lt_p4.pt()<lt_min_pt) 
             {
                 if (m_verbose) {std::cout << "lt fails lepton kinematics cut" << std::endl;}
                 continue;
             }
-            if (fabs(ll_p4.Eta())>2.4 || ll_p4.pt()<ll_min_pt) 
+            if (fabs(ll_p4.Eta())>ll_max_eta || ll_p4.pt()<ll_min_pt) 
             {
                 if (m_verbose) {std::cout << "ll fails lepton kinematics cut" << std::endl;}
                 continue;
@@ -991,7 +993,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
             // check hyp mass (no low mass resonances)
             float dilep_mass = sqrt(fabs(hyp_p4().at(ihyp).mass2()));
-            if (dilep_mass < 8.0) 
+            if (dilep_mass < 12.0) //GZ was 8
             {
                 if (m_verbose) {std::cout << "fails dilepton invariant mass requirement" << std::endl;}
                 continue;
@@ -1011,14 +1013,16 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 continue;
             }
 
-            // check extra Z veto
-            if (samesign::makesExtraZ(ihyp))
-            {
-                if (m_verbose) {std::cout << "fails extra Z veto requirement" << std::endl;}
-                continue;
-            }
+            //GZ // check extra Z veto
+            //GZ if (samesign::makesExtraZ(ihyp))
+            //GZ {
+            //GZ     if (m_verbose) {std::cout << "fails extra Z veto requirement" << std::endl;}
+            //GZ     continue;
+            //GZ }
 
             // check if event passes num_jet cut (hard coded)
+	    // GZ: weird, this is uncorrected pt and only does DR with numerator lepton
+	    // GZ: njets is rechecked later, more carefully. why then check it now?
             int num_jets = samesign::nJets(ihyp, jet_type, /*dR=*/0.4, /*jet_pt>*/m_jet_pt_cut, /*|eta|<*/2.4, mu_min_pt, el_min_pt);
             if (evt_isRealData() && num_jets < m_njets)
             {
@@ -1026,12 +1030,12 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 continue;
             }
 
-            // check extra Gamma* veto
-            if (samesign::makesExtraGammaStar(ihyp) && m_analysis_type != ss::AnalysisType::higgsino)
-            {
-                if (m_verbose) {std::cout << "fails extra Gamma* veto requirement" << std::endl;}
-                continue;
-            }
+            //GZ // check extra Gamma* veto
+            //GZ if (samesign::makesExtraGammaStar(ihyp) && m_analysis_type != ss::AnalysisType::higgsino)
+            //GZ {
+            //GZ     if (m_verbose) {std::cout << "fails extra Gamma* veto requirement" << std::endl;}
+            //GZ     continue;
+            //GZ }
 
             // skip if both are not denominators
             if (m_analysis_type == AnalysisType::high_pt_eth)
@@ -1044,7 +1048,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             }
             else
             {
-                if (!samesign::isDenominatorHypothesis(ihyp, m_use_el_eta))
+                if (!samesign2014::isDenominatorHypothesis(ihyp, m_use_el_eta))
                 {
                     if (m_verbose) {std::cout << "fails both leptons are at least denominator requirement" << std::endl;}
                     continue;
@@ -1060,7 +1064,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             if (hyp_q < 0)
             {
                 if (m_verbose) {std::cout << "selected OS hyp" << std::endl;}
-                if (!samesign::isNumeratorHypothesis(ihyp, m_use_el_eta))
+                if (!samesign2014::isNumeratorHypothesis(ihyp, m_use_el_eta))
                 {
                     if (m_verbose) {std::cout << "OS hyp doesn't pass ID/ISO requirement" << std::endl;}
                     continue; 
@@ -1070,14 +1074,14 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             else if (hyp_q > 0)
             {
                 // same sign event (SS)
-                if (samesign::isNumeratorHypothesis(ihyp, m_use_el_eta))
+                if (samesign2014::isNumeratorHypothesis(ihyp, m_use_el_eta))
                 {
                     m_hyp_count++;
                     if (m_verbose) {std::cout << "selected SS hyp" << std::endl;}
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SS, type));
                 }
                 // single fake event (SF)
-                else if (samesign::isNumeratorLepton(lt_id, lt_idx, m_use_el_eta) || samesign::isNumeratorLepton(ll_id, ll_idx, m_use_el_eta))
+                else if (samesign2014::isNumeratorLepton(lt_id, lt_idx, m_use_el_eta) || samesign2014::isNumeratorLepton(ll_id, ll_idx, m_use_el_eta))
                 {
                     if (m_verbose) {std::cout << "selected SF hyp" << std::endl;}
                     best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::SF, type));
@@ -1246,7 +1250,10 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         m_evt.vtxw = vtxw;
 
         // lepton overlap removal
-        RemoveLeptonsSSID jet_selection(hyp_idx, m_jet_args.deltaR, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
+	// GZ: either don't do DR until later, or modify RemoveLeptonSSID to only remove closest (any pT??) jet to lepton
+	// GZ: Actually can't do the latter, because the RemoveLeptonSSID works on a single jet, so doesn't know about the others
+        //GZ RemoveLeptonsSSID jet_selection(hyp_idx, m_jet_args.deltaR, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
+	RemoveLeptonsSSID jet_selection(hyp_idx, m_jet_args.deltaR, /*mu_pt>*/mu_min_pt, /*el_pt>*/el_min_pt);
 
         // fill the jet info
         m_evt.jet_info.FillCommon       (m_sample, m_is_fast_sim, m_jet_args       , jet_selection);
@@ -1576,7 +1583,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         }
 
         vector<LorentzVector> temp_jets_p4 = m_evt.jet_info.vjets_p4;
-        if (!m_evt.jet_info.vbjets_p4.empty())
+        if (!m_evt.jet_info.vjets_p4.empty())
         {
             // nearest to lep1
             std::sort(temp_jets_p4.begin(), temp_jets_p4.end(), SortByDeltaR<LorentzVector>(m_evt.lep1.p4));
