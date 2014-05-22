@@ -130,8 +130,6 @@ FRClosureLooper::FRClosureLooper
   cout << "met    >= " << m_met_cut << endl;
   cout << "ht     >= " << m_ht_cut << endl;
 
-  m_crossSectionFix = 245.8 / 234;
-  cout<<"PATCH: fixing cross section by 245.8 / 234 for ttbar: "<<m_crossSectionFix<<endl;
   
   // begin job
   BeginJob();
@@ -483,7 +481,7 @@ int FRClosureLooper::operator()(long event)
     {
       if (m_verbose) {cout << "failing 3rd lepton vetom, lepton pt "<< lep3_p4().pt() << endl;}
 	return 0;
-   }
+    }
 
    // check that it passes the trigger requirement
    if (is_real_data() || m_do_mc_trigger)
@@ -514,41 +512,41 @@ int FRClosureLooper::operator()(long event)
     if ( m_analysis_type== AnalysisType::high_pt && (FOpt1<20.0 || FOpt2<20.0) ) {
       return 0;
     }
-    cout<<"PASS LEPTON"<<dilep_type()<<endl;
-    if (is_ss()) cout<<"PASS SSLEPTON"<<dilep_type()<<endl;
+    //    cout<<"PASS LEPTON"<<dilep_type()<<endl;
+    //    if (is_ss()) cout<<"PASS SSLEPTON"<<dilep_type()<<endl;
 
     // met cut
     if (pfmet() < m_met_cut)
     {
       return 0;
     }
-    if (is_ss()) cout<<"PASS MET"<<dilep_type()<<endl;
+    //    if (is_ss()) cout<<"PASS MET"<<dilep_type()<<endl;
 	
 
     // two jet events
     //GZ if (njets() < static_cast<int>(m_njets))
     // GZ: need to count jet on our own, removing the closes one to each lepton if DR < 0.4
     int nVetoedJets = 0;
-    if (lep1_nearjet_dr() < 0.4) nVetoedJets++;
-    if (lep2_nearjet_dr() < 0.4) nVetoedJets++;
+    if (lep1_nearjet_p4().pt() > 40 && lep1_nearjet_dr() < 0.4) nVetoedJets++;
+    if (lep2_nearjet_p4().pt() > 40 && lep2_nearjet_dr() < 0.4) nVetoedJets++;
     if ( (njets() - nVetoedJets) < static_cast<int>(m_njets))
     {
       return 0;
     }
-    if (is_ss()) cout<<"PASS JETS"<<dilep_type()<<endl;
+    //    if (is_ss()) cout<<"PASS JETS"<<dilep_type()<<endl;
 
     // # btagged jets
     //GZ const int num_btags = (is_real_data() ? nbtags() : nbtags_reweighted());
     //GZ if (num_btags < static_cast<int>(m_nbtags))
     //GZ   //if (num_btags != 0)
     int nVetoedBJets = 0;
-    if (lep1_nearbjet_dr() < 0.4) nVetoedBJets++;
-    if (lep2_nearbjet_dr() < 0.4) nVetoedBJets++;
-    if ( (nbtags() - nVetoedBJets) < static_cast<int>(m_nbtags))
+    if (lep1_nearbjet_p4().pt() > 40 && lep1_nearbjet_dr() < 0.4) nVetoedBJets++;
+    if (lep2_nearbjet_p4().pt() > 40 && lep2_nearbjet_dr() < 0.4) nVetoedBJets++;
+    if ( (nbtags() - nVetoedBJets) != static_cast<int>(m_nbtags))
     {
       return 0;
     }
-    if (is_ss()) cout<<"PASS BJETS"<<dilep_type()<<endl;
+    //    if (is_ss()) cout<<"PASS BJETS"<<dilep_type()<<endl;
 
 
     // ht cut
@@ -590,7 +588,7 @@ int FRClosureLooper::operator()(long event)
     // ----------------------------------------------------------------------------------------------------------------------------//
     
     // scale
-    float evt_weight = (m_do_scale1fb ? scale1fb()*m_lumi*m_crossSectionFix : 1.0);
+    float evt_weight = (m_do_scale1fb ? scale1fb()*m_lumi : 1.0);
     if (m_do_vtx_reweight)
     {
       evt_weight = is_real_data() ? 1.0 : vtxweight_n(nvtxs(), is_real_data(), false);

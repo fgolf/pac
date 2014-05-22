@@ -74,7 +74,6 @@ private:
     at::FakeRateBinInfo m_fr_bin_info;
     int m_truth_match_option;
     bool m_do_mc_trigger; 
-    float m_crossSectionFix;
 
     // fake/flip rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;

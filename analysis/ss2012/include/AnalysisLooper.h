@@ -42,7 +42,8 @@ public:
         const std::string apply_jec_otf = "",
         const std::string apply_jec_unc = "",
         const double jet_pt_cut = -1,
-        const bool switch_signs = false
+        const bool switch_signs = false,
+	const bool treatOSasSS = false
     );
 
     // destroy:
@@ -74,6 +75,7 @@ private:
     float m_jet_pt_cut;
     bool m_switch_signs;
     int m_hyp_count;
+    bool m_treatOSasSS;
 
     // fake rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;

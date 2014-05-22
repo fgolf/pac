@@ -47,6 +47,7 @@ try
     bool sparms                     = false;
     bool use_el_eta                 = true;
     bool switchSigns                = false;
+    bool treatOSasSS                = false;
     int num_jets                    = 2;
     int jetMetScale                 = 0;
     bool isFastSim                  = false;
@@ -84,9 +85,10 @@ try
         ("apply_jec_unc" , po::value<std::string>(&apply_jec_unc)          , "apply JEC uncertainty using the specified global tag"                                  )
         ("jet_pt_cut"    , po::value<double>(&jet_pt_cut)                  , "jet pt threshold"                                                                      )
         ("run"           , po::value<int>(&run)                            , "select a specific run (negative numbers == all)"                                       )
-        ("ls"            , po::value<int>(&lumi)                           , "sselect a specific lumi (negative numbers == all)"                                      )
+        ("ls"            , po::value<int>(&lumi)                           , "sselect a specific lumi (negative numbers == all)"                                     )
         ("event"         , po::value<int>(&event)                          , "select a specific event (negative numbers == all)"                                     )
-        ("switchSigns"   , po::value<bool>(&switchSigns)                   , "switch the meaning of SS and OS"                                                   )
+        ("switchSigns"   , po::value<bool>(&switchSigns)                   , "switch the meaning of SS and OS"                                                       )
+        ("treatOSasSS"   , po::value<bool>(&treatOSasSS)                   , "treating OS as if it were SS to get OS+SS"                                             )
         ;
 
     // parse it
@@ -139,6 +141,7 @@ try
     cout << "apply_jec_unc      :\t" << apply_jec_unc       << endl;
     cout << "jet_pt_cut         :\t" << jet_pt_cut          << endl;
     cout << "switchSigns        :\t" << switchSigns         << endl;
+    cout << "treatOSasSS        :\t" << treatOSasSS         << endl;
     cout << "run                :\t" << run                 << endl;
     cout << "lumi               :\t" << lumi                << endl;
     cout << "event              :\t" << event               << endl;
@@ -272,7 +275,8 @@ try
             apply_jec_otf,
             apply_jec_unc,
             jet_pt_cut,
-            switchSigns
+            switchSigns,
+	    treatOSasSS
         ),
         cms2,
         number_of_events,

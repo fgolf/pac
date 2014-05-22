@@ -28,7 +28,8 @@
 #TAG=V03-02-06 # 05-12-2014
 #TAG=V03-02-07 # 05-16-2014
 #TAG=V03-02-08 # 05-17-2014
-TAG=V03-02-09 # 05-18-2014 no jet-lep overlap
+#TAG=V03-02-09 # 05-18-2014 no jet-lep overlap
+TAG=V03-02-10 # 05-18-2014 SS+OS for WJets, add TkMu8 and double-ele triggers
 
 #~/~/~/~~/~/~/~~/~/~/~~/~/~/~~/~/
 # DATA TAG V05-03-24 (slimCMS2) # 
@@ -305,7 +306,17 @@ OPTIONS="--apply_jec_unc#START53_V20"
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 CMS2TAG="V05-03-23"                                                                                                                            
 
- ./writeConfig.sh ttjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1/$CMS2TAG/  $OUTPUT_PATH/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1
+./writeConfig.sh ttjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1/$CMS2TAG/  $OUTPUT_PATH/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1
+
+OPTIONS="--apply_jec_unc#START53_V20#--treatOSasSS#1#"
+CMS2TAG="V05-03-25"
+./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG   $OUTPUT_PATH/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
+./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG   $OUTPUT_PATH/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
+./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG   $OUTPUT_PATH/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
+./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG   $OUTPUT_PATH/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
+
+
+
 
 mkdir -p sync
 mv *.cmd sync/.

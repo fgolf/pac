@@ -436,7 +436,8 @@ SSAnalysisLooper::SSAnalysisLooper
     const std::string apply_jec_otf,
     const std::string apply_jec_unc,
     const double jet_pt_cut,
-    const bool switch_signs
+    const bool switch_signs,
+    const bool treatOSasSS
 )
     : AnalysisWithTreeAndHist(root_file_name, "tree", "baby tree for SS2012 analysis")
     , m_sample(sample)
@@ -453,6 +454,7 @@ SSAnalysisLooper::SSAnalysisLooper
     , m_jet_pt_cut(jet_pt_cut) 
     , m_switch_signs(switch_signs)
     , m_hyp_count(0)
+    , m_treatOSasSS(treatOSasSS)
 {
     // set vertex weight file
     if (!vtxreweight_file_name.empty())
@@ -633,6 +635,11 @@ SSAnalysisLooper::SSAnalysisLooper
     if (m_switch_signs)
     {
         cout << "[SSAnalysisLooper] switching the meaing of SS and OS (for OS selection)" << endl;
+    }
+    // are we checking the sign?
+    if (m_treatOSasSS)
+    {
+        cout << "[SSAnalysisLooper] treating OS as if it were SS (for OS+SS selection)" << endl;
     }
 
     // Jet Selection arguments
@@ -1061,7 +1068,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             // OS (Here a kludge by Claudio to quickly change the meaning of SS and OS .... useful for ttbar as sstop)
             int dummy = (m_switch_signs ? -1 : 1);
             int hyp_q = dummy * hyp_lt_charge().at(ihyp) * hyp_ll_charge().at(ihyp);
-            if (hyp_q < 0)
+            if (hyp_q < 0 && !m_treatOSasSS)
             {
                 if (m_verbose) {std::cout << "selected OS hyp" << std::endl;}
                 if (!samesign2014::isNumeratorHypothesis(ihyp, m_use_el_eta))
@@ -1071,7 +1078,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 }
                 best_hyp = std::min(best_hyp, HypInfo(ihyp, DileptonChargeType::OS, type));
             }
-            else if (hyp_q > 0)
+            else if (hyp_q > 0 || m_treatOSasSS)
             {
                 // same sign event (SS)
                 if (samesign2014::isNumeratorHypothesis(ihyp, m_use_el_eta))
@@ -1144,10 +1151,12 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         switch(m_analysis_type)
         {
             case AnalysisType::high_pt:
-                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
+                m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v") ||
+		                passUnprescaledHLTTriggerPattern("HLT_Mu17_TkMu8_v");
                 m_evt.trig_em = passUnprescaledHLTTriggerPattern("HLT_Mu17_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v") || 
                                 passUnprescaledHLTTriggerPattern("HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
-                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
+                m_evt.trig_ee = passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_Ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_v") || 
+		                passUnprescaledHLTTriggerPattern("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v");
                 break;
             case AnalysisType::high_pt_eth:
                 m_evt.trig_mm = passUnprescaledHLTTriggerPattern("HLT_Mu17_Mu8_v");
