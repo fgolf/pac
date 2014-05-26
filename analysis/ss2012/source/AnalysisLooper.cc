@@ -648,16 +648,17 @@ SSAnalysisLooper::SSAnalysisLooper
     JetCorrectionUncertainty* const jcu = m_jet_corr_unc.get();
 
     // base level selection
-    m_jet_args        = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE    , /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
-    m_jet_args_jec_up = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_UP  , /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
-    m_jet_args_jec_dn = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_DOWN, /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
-    m_jet_args_jer    = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JER     , /*dr=*/0.004, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ was 0.4
+    //    m_jet_args        = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE    , /*dr=*/0.4, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.4); //GZ: this was the original
+    m_jet_args        = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE    , /*dr=*/0.0001, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.5); //GZ
+    m_jet_args_jec_up = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_UP  , /*dr=*/0.0001, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.5); //GZ
+    m_jet_args_jec_dn = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JEC_DOWN, /*dr=*/0.0001, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.5); //GZ
+    m_jet_args_jer    = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::JER     , /*dr=*/0.0001, /*min_pt=*/m_jet_pt_cut, /*max_eta=*/2.5); //GZ
 
     // jets
-    m_uncorrected_jet_args = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.004, /*min_pt=*/10.0, /*max_eta=*/5.0); //GZ was 0.4
+    m_uncorrected_jet_args = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.0001, /*min_pt=*/10.0, /*max_eta=*/5.0); //GZ
 
     // jet with pT > 30
-    m_jet_args_pt30 = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.004, /*min_pt=*/30, /*max_eta=*/2.4); //GZ was 0.4
+    m_jet_args_pt30 = at::JetBaseSelectionArgs(jc, jcu, at_jet_type, at::JetBtagType::CSVM, at::JetScaleType::NONE, /*dr=*/0.0001, /*min_pt=*/30, /*max_eta=*/2.5); //GZ
 
     // begin job
     BeginJob();
@@ -1581,12 +1582,12 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
         if (!m_evt.jet_info.vbjets_p4.empty())
         {
             // nearest to lep1
-            std::sort(temp_bjets_p4.begin(), temp_bjets_p4.begin(), SortByDeltaR<LorentzVector>(m_evt.lep1.p4));
+            std::sort(temp_bjets_p4.begin(), temp_bjets_p4.end(), SortByDeltaR<LorentzVector>(m_evt.lep1.p4));
             m_evt.lep1_nearbjet_p4 = temp_bjets_p4.front();
             m_evt.lep1_nearbjet_dr = rt::DeltaR(m_evt.lep1.p4, temp_bjets_p4.front());
 
             // nearest to lep2
-            std::sort(temp_bjets_p4.begin(), temp_bjets_p4.begin(), SortByDeltaR<LorentzVector>(m_evt.lep2.p4));
+            std::sort(temp_bjets_p4.begin(), temp_bjets_p4.end(), SortByDeltaR<LorentzVector>(m_evt.lep2.p4));
             m_evt.lep2_nearbjet_p4 = temp_bjets_p4.front();
             m_evt.lep2_nearbjet_dr = rt::DeltaR(m_evt.lep2.p4, temp_bjets_p4.front());
         }
@@ -1725,7 +1726,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
         // fill common branches for lep3
         const float min_3lep_pt = (m_analysis_type==AnalysisType::high_pt ? 10.0 : 20.0);
-        std::pair <int, int> highest_addtional_lep = samesign::highestPtAdditionalLepton(hyp_idx, min_3lep_pt);
+        std::pair <int, int> highest_addtional_lep = samesign2014::highestPtAdditionalLepton(hyp_idx, min_3lep_pt);
         int lep3_id   = highest_addtional_lep.first; 
         int lep3_idx  = highest_addtional_lep.second; 
         if (lep3_idx >= 0)

@@ -953,14 +953,15 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         bool passDphiin = isEB ? (fabs(el_id_dphiin()) < 0.06) : (fabs(el_id_dphiin()) < 0.03);
         bool passHovere = isEB ? (hoe() < 0.12) : (hoe() < 0.10);
         bool passOoemoop = isEB ? (fabs(el_id_ooemoop()) < 0.05) : (fabs(el_id_ooemoop()) < 0.05);
-        bool passMHits = (els_exp_innerlayers() < 2);
+        bool passMHits = (els_exp_innerlayers() <1); //< 2);
         bool passMITconv = !convMIT();
+	bool passCharge  = q3();
         bool passD0_l = true;
         bool passD0_t = (fabs(d0()) < 0.02);
         bool passDZ = (fabs(dz()) < 0.1);
         bool passIso_l = (pfiso03_corr_rho() < 0.6);
         bool passIso_t = (isEB || pt() > 20) ? (pfiso03_corr_rho() < 0.15) : (pfiso03_corr_rho() < 0.10);
-        bool passes_id = passSieie && passDetain && passDphiin && passHovere && passOoemoop && passMHits && passMITconv && passDZ;
+        bool passes_id = passSieie && passDetain && passDphiin && passHovere && passOoemoop && passMHits && passMITconv && passDZ && passCharge;
 //        cout<<passSieie <<" "<< passDetain <<" "<< passDphiin <<" "<< passHovere <<" "<< passOoemoop <<" "<< passMHits <<" "<< passMITconv <<" "<< passDZ <<" "<< passD0_l <<" "<< passIso_l <<endl;
 //        cout<<"pt="<<pt()<<" eta="<<eta()<<" sceta="<<sceta()<<" sieie="
 //        << el_id_sieie() <<" detain="

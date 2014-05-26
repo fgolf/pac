@@ -2,7 +2,7 @@
 
 verbose=1
 njets=2
-tag=V03-02-10
+tag=V03-02-11
 path=/nfs-7/userdata/gzevi/babies/ss2012/$tag
 
 
@@ -224,10 +224,10 @@ output_path=$path/vpt
 #merge_nofilter high_pt ttjets_os         TTJets_FullLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v2 
 
 # sync ttjets
-tag=V03-02-10
+tag=V03-02-11
 input_path=/hadoop/cms/store/user/gzevi/babies/ss2012/$tag/sync
 output_path=$path/sync
-#merge high_pt ttjets         TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+merge high_pt ttjets         TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 
 
 njets=1

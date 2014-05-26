@@ -29,7 +29,9 @@
 #TAG=V03-02-07 # 05-16-2014
 #TAG=V03-02-08 # 05-17-2014
 #TAG=V03-02-09 # 05-18-2014 no jet-lep overlap
-TAG=V03-02-10 # 05-18-2014 SS+OS for WJets, add TkMu8 and double-ele triggers
+#TAG=V03-02-10 # 05-18-2014 SS+OS for WJets, add TkMu8 and double-ele triggers
+#TAG=V03-02-11 # 05-22-2014 Added nHits and chargeMatch requirements to electron
+TAG=V03-02-12 # 05-26-2014 Synchronized ttW (fixed rho, njets, nbtag, on-the-fly jec and many other things)
 
 #~/~/~/~~/~/~/~~/~/~/~~/~/~/~~/~/
 # DATA TAG V05-03-24 (slimCMS2) # 
@@ -302,13 +304,13 @@ ATYPE=high_pt
 NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Summer12_53X_MC
 OUTPUT_PATH=babies/ss2012/$TAG/sync
 #OPTIONS="\"\"\"\""
-OPTIONS="--apply_jec_unc#START53_V20"
+OPTIONS="--apply_jec_otf#START53_V20"
 CAMPAIGN=Summer12_DR53X-PU_S10_START53_V7A
 CMS2TAG="V05-03-23"                                                                                                                            
 
 ./writeConfig.sh ttjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1/$CMS2TAG/  $OUTPUT_PATH/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_${CAMPAIGN}-v1
 
-OPTIONS="--apply_jec_unc#START53_V20#--treatOSasSS#1#"
+OPTIONS="--apply_jec_otf#START53_V20#--treatOSasSS#1#"
 CMS2TAG="V05-03-25"
 ./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG   $OUTPUT_PATH/W1JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1
 ./writeConfig.sh wjets   $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG   $OUTPUT_PATH/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_${CAMPAIGN}-v1

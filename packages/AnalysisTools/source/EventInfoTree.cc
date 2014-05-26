@@ -36,20 +36,20 @@ void EventInfoTree::FillCommon (Sample::value_type sample_, const std::string& r
     filt_ecaltp       = passECALDeadCellFilter();
     filt_trkfail      = passTrackingFailureFilter();
     filt_eebadsc      = passeeBadScFilter();
-    if (at::GetCMS2Tag().version >= 23)
-    {
+//    if (at::GetCMS2Tag().version >= 23)
+//    {
         filt_ecallaser    = passECALLaserFilter();
         passes_metfilters = passMETFilters();
-    }
-    else
-    {
-        passes_metfilters = passCSCBeamHaloFilter() &&
-                            passHBHEFilter() &&
-                            passHCALLaserFilter() &&
-                            passECALDeadCellFilter() &&
-                            passTrackingFailureFilter() &&
-                            passeeBadScFilter();
-    }
+//    }
+//    else
+//    {
+//        passes_metfilters = passCSCBeamHaloFilter() &&
+//                            passHBHEFilter() &&
+//                            passHCALLaserFilter() &&
+//                            passECALDeadCellFilter() &&
+//                            passTrackingFailureFilter() &&
+//                            passeeBadScFilter();
+//    }
 
     if (!cms2.evt_isRealData()) 
     {

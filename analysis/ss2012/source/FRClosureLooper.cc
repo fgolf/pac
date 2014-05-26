@@ -426,12 +426,14 @@ int FRClosureLooper::operator()(long event)
     
     // convenience alias
     rt::TH1Container& hc = m_hist_container;
-    
+    if (m_verbose) {cout << "Checking event "<< evt() << endl;}
+
     // good lumi
     if (is_real_data())
     {
       if (not is_good_lumi())
       {
+	if (m_verbose) {cout << " failing is_good_lumi()" << endl;}
         return 0;
       }
     }
@@ -450,6 +452,7 @@ int FRClosureLooper::operator()(long event)
     //if (gen_nleps()!=1)
     if (gen_nleps_with_fromtau()!=1 && m_truth_match_option!=0)
     {
+      if (m_verbose) {cout << " failing gen lepton cut" << endl;}
       return 0;
     }
     
@@ -460,6 +463,7 @@ int FRClosureLooper::operator()(long event)
     if (is_df()) {charge_type = DileptonChargeType::DF;}
     if (charge_type == DileptonChargeType::static_size)
     {
+      if (m_verbose) {cout << " failing DileptonChargeType cut" << endl;}
       return 0;
     }
 
@@ -467,6 +471,7 @@ int FRClosureLooper::operator()(long event)
     DileptonHypType::value_type hyp_type = static_cast<DileptonHypType::value_type>(dilep_type());
     if (hyp_type == DileptonHypType::static_size)
     {
+      if (m_verbose) {cout << " failing DileptonHypType cut" << endl;}
       return 0;
     }
 
@@ -479,7 +484,7 @@ int FRClosureLooper::operator()(long event)
     }
     if (lep3_is_den() && lep3_p4().pt() > 10.0)
     {
-      if (m_verbose) {cout << "failing 3rd lepton vetom, lepton pt "<< lep3_p4().pt() << endl;}
+      if (m_verbose) {cout << "failing 3rd lepton veto, lepton pt "<< lep3_p4().pt() << endl;}
 	return 0;
     }
 
@@ -510,6 +515,7 @@ int FRClosureLooper::operator()(long event)
     if ( m_FR_option == 4 && lep1_corpfiso() > isocut1) FOpt1 += lep1_p4().pt()*(lep1_corpfiso()-isocut1);
     if ( m_FR_option == 4 && lep2_corpfiso() > isocut2) FOpt2 += lep2_p4().pt()*(lep2_corpfiso()-isocut2);
     if ( m_analysis_type== AnalysisType::high_pt && (FOpt1<20.0 || FOpt2<20.0) ) {
+      if (m_verbose) {cout << " failing lepton pt cut " <<FOpt1<<" "<<FOpt2<< endl;}
       return 0;
     }
     //    cout<<"PASS LEPTON"<<dilep_type()<<endl;
@@ -518,6 +524,7 @@ int FRClosureLooper::operator()(long event)
     // met cut
     if (pfmet() < m_met_cut)
     {
+      if (m_verbose) {cout << " failing MET cut " <<pfmet()<< endl;}
       return 0;
     }
     //    if (is_ss()) cout<<"PASS MET"<<dilep_type()<<endl;
@@ -528,9 +535,12 @@ int FRClosureLooper::operator()(long event)
     // GZ: need to count jet on our own, removing the closes one to each lepton if DR < 0.4
     int nVetoedJets = 0;
     if (lep1_nearjet_p4().pt() > 40 && lep1_nearjet_dr() < 0.4) nVetoedJets++;
-    if (lep2_nearjet_p4().pt() > 40 && lep2_nearjet_dr() < 0.4) nVetoedJets++;
-    if ( (njets() - nVetoedJets) < static_cast<int>(m_njets))
+    if (lep2_nearjet_p4().pt() > 40 && lep2_nearjet_dr() < 0.4) {
+      if (nVetoedJets==1 && lep1_nearjet_p4().pt() != lep2_nearjet_p4().pt()) nVetoedJets++; // Only allow the second ++ if we're not dealing with the same jet twice
+      if (nVetoedJets==0) nVetoedJets++; // If it's the first ++, then go ahead
+    }    if ( (njets() - nVetoedJets) < static_cast<int>(m_njets))
     {
+      if (m_verbose) {cout << " failing njet cut " <<njets() - nVetoedJets<< endl;}
       return 0;
     }
     //    if (is_ss()) cout<<"PASS JETS"<<dilep_type()<<endl;
@@ -541,9 +551,13 @@ int FRClosureLooper::operator()(long event)
     //GZ   //if (num_btags != 0)
     int nVetoedBJets = 0;
     if (lep1_nearbjet_p4().pt() > 40 && lep1_nearbjet_dr() < 0.4) nVetoedBJets++;
-    if (lep2_nearbjet_p4().pt() > 40 && lep2_nearbjet_dr() < 0.4) nVetoedBJets++;
-    if ( (nbtags() - nVetoedBJets) != static_cast<int>(m_nbtags))
+    if (lep2_nearbjet_p4().pt() > 40 && lep2_nearbjet_dr() < 0.4) {
+      if (nVetoedBJets==1 && lep1_nearbjet_p4().pt() != lep2_nearbjet_p4().pt()) nVetoedBJets++; // Only allow the second ++ if we're not dealing with the same jet twice
+      if (nVetoedBJets==0) nVetoedBJets++; // If it's the first ++, then go ahead
+    }
+    if ( (nbtags() - nVetoedBJets) < static_cast<int>(m_nbtags))
     {
+      if (m_verbose) {cout << " failing nbjet cut " <<nbtags() - nVetoedBJets<< endl;}
       return 0;
     }
     //    if (is_ss()) cout<<"PASS BJETS"<<dilep_type()<<endl;
@@ -553,6 +567,7 @@ int FRClosureLooper::operator()(long event)
     // GZ currently broken due to the new jet selection
     if (ht() < m_ht_cut)
     {
+      if (m_verbose) {cout << " failing HT cut " <<ht()<< endl;}
       return 0;
     }
     
@@ -627,8 +642,10 @@ int FRClosureLooper::operator()(long event)
 //    if (abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) 
 //      cout<<"... event is now classified as SS SF DF"<<is_ss_mod<<" "<<is_sf_mod<<" "<<is_df_mod<<endl;
     
-    
-    
+    int nj = njets() - nVetoedJets;
+    int nb = nbtags() - nVetoedBJets;
+    cout << Form("FULL %15d\t%+2d\t%6.2f\t%1d\t%+2d\t%6.2f\t%1d\t%d\t%d",evt(), lep1_pdgid(), lep1_p4().pt(), lep1_is_num(), lep2_pdgid(), lep2_p4().pt(), lep2_is_num(), nj, nb) << endl;
+
     
     // SS
     if (is_ss_mod)
