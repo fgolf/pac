@@ -147,6 +147,14 @@ void FRClosureLooper::BeginJob()
 {
   m_fr_bin_info = GetFakeRateBinInfo();
   BookHists();
+  nTightMus = 0;
+  nLooseMus = 0;
+  nTightMusFromW = 0;
+  nLooseMusFromW = 0;
+  nTightEle = 0;
+  nLooseEle = 0;
+  nTightEleFromW = 0;
+  nLooseEleFromW = 0;
 }
 
 at::FakeRateBinInfo FRClosureLooper::GetFakeRateBinInfo()
@@ -357,6 +365,13 @@ void FRClosureLooper::EndJob()
   ;
   t_yields.print();
   t_yields.printTex();
+
+  cout<<"Truth Matching Report:"<<endl;
+  cout<<"nTightEle "<<nTightEle<<" nTightEleFromW "<<nTightEleFromW<<" ratio "<< 1.0 * nTightEleFromW / nTightEle<<endl;
+  cout<<"nLooseEle "<<nLooseEle<<" nLooseEleFromW "<<nLooseEleFromW<<" ratio "<< 1.0 * nLooseEleFromW / nLooseEle<<endl;
+  cout<<"nTightMus "<<nTightMus<<" nTightMusFromW "<<nTightMusFromW<<" ratio "<< 1.0 * nTightMusFromW / nTightMus<<endl;
+  cout<<"nLooseMus "<<nLooseMus<<" nLooseMusFromW "<<nLooseMusFromW<<" ratio "<< 1.0 * nLooseMusFromW / nLooseMus<<endl;
+  
 }
 
 // book hists 
@@ -450,11 +465,12 @@ int FRClosureLooper::operator()(long event)
     // only one gen level lepton
     // only keep events with one real status 3 lepton
     //if (gen_nleps()!=1)
-    if (gen_nleps_with_fromtau()!=1 && m_truth_match_option!=0)
-    {
-      if (m_verbose) {cout << " failing gen lepton cut" << endl;}
-      return 0;
-    }
+    //GZ do this later, using the isFromW variable
+    //GZif (gen_nleps_with_fromtau()!=1 && m_truth_match_option!=0)
+    //GZ{
+    //GZ  if (m_verbose) {cout << " failing gen lepton cut" << endl;}
+    //GZ  return 0;
+    //GZ}
     
     // charge type
     DileptonChargeType::value_type charge_type = DileptonChargeType::static_size;
@@ -538,7 +554,8 @@ int FRClosureLooper::operator()(long event)
     if (lep2_nearjet_p4().pt() > 40 && lep2_nearjet_dr() < 0.4) {
       if (nVetoedJets==1 && lep1_nearjet_p4().pt() != lep2_nearjet_p4().pt()) nVetoedJets++; // Only allow the second ++ if we're not dealing with the same jet twice
       if (nVetoedJets==0) nVetoedJets++; // If it's the first ++, then go ahead
-    }    if ( (njets() - nVetoedJets) < static_cast<int>(m_njets))
+    }    
+    if ( (njets() - nVetoedJets) < static_cast<int>(m_njets))
     {
       if (m_verbose) {cout << " failing njet cut " <<njets() - nVetoedJets<< endl;}
       return 0;
@@ -560,6 +577,15 @@ int FRClosureLooper::operator()(long event)
       if (m_verbose) {cout << " failing nbjet cut " <<nbtags() - nVetoedBJets<< endl;}
       return 0;
     }
+    if ( static_cast<int>(m_nbtags) == 0 ) 
+    {
+      if ( (nbtags() - nVetoedBJets) != static_cast<int>(m_nbtags))
+      {
+	if (m_verbose) {cout << " failing nbjet==0 cut " <<nbtags() - nVetoedBJets<< endl;}
+	return 0;
+      }
+    }
+
     //    if (is_ss()) cout<<"PASS BJETS"<<dilep_type()<<endl;
 
 
@@ -594,10 +620,44 @@ int FRClosureLooper::operator()(long event)
     }
     
     // letpon info
-    const bool fromw_l1     = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()==1);
-    const bool fromw_l2     = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()==1);
+    const bool fromw_l1     = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()>=1); //==1 for charge match
+    const bool fromw_l2     = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()>=1); //==1 for charge match
     const bool not_fromw_l1 = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()<1);
     const bool not_fromw_l2 = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()<1);
+
+    // Truth matching synchronization
+    // Need four counters: #Tight, #Loose, #Tight&FromW, #Loose&FromW
+    if ( abs(lep1_pdgid())==13) {
+      if ( lep1_is_num() ) nTightMus++;
+      if ( lep1_is_fo() ) nLooseMus++;
+      if ( lep1_is_num() && fromw_l1) nTightMusFromW++;
+      if ( lep1_is_fo() && fromw_l1) nLooseMusFromW++;
+    }
+    else {
+      if ( lep1_is_num() ) nTightEle++;
+      if ( lep1_is_fo() ) nLooseEle++;
+      if ( lep1_is_num() && fromw_l1) nTightEleFromW++;
+      if ( lep1_is_fo() && fromw_l1) nLooseEleFromW++;
+    }
+    if ( abs(lep2_pdgid())==13) {
+      if ( lep2_is_num() ) nTightMus++;
+      if ( lep2_is_fo() ) nLooseMus++;
+      if ( lep2_is_num() && fromw_l2) nTightMusFromW++;
+      if ( lep2_is_fo() && fromw_l2) nLooseMusFromW++;
+    }
+    else {
+      if ( lep2_is_num() ) nTightEle++;
+      if ( lep2_is_fo() ) nLooseEle++;
+      if ( lep2_is_num() && fromw_l2) nTightEleFromW++;
+      if ( lep2_is_fo() && fromw_l2) nLooseEleFromW++;
+    }
+
+    if ( ((fromw_l1 && fromw_l2) || (not_fromw_l1 && not_fromw_l2)) && m_truth_match_option)
+    {
+      if (m_verbose) {cout << " failing truth cut " <<fromw_l1<<" "<<fromw_l2<< endl;}
+      return 0;
+    }
+
     
     // Weight Factors
     // ----------------------------------------------------------------------------------------------------------------------------//
@@ -642,9 +702,10 @@ int FRClosureLooper::operator()(long event)
 //    if (abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) 
 //      cout<<"... event is now classified as SS SF DF"<<is_ss_mod<<" "<<is_sf_mod<<" "<<is_df_mod<<endl;
     
-    int nj = njets() - nVetoedJets;
-    int nb = nbtags() - nVetoedBJets;
-    cout << Form("FULL %15d\t%+2d\t%6.2f\t%1d\t%+2d\t%6.2f\t%1d\t%d\t%d",evt(), lep1_pdgid(), lep1_p4().pt(), lep1_is_num(), lep2_pdgid(), lep2_p4().pt(), lep2_is_num(), nj, nb) << endl;
+    //int nj = njets() - nVetoedJets;
+    //int nb = nbtags() - nVetoedBJets;
+    //cout << Form("FULL %15d\t%+2d\t%6.2f\t%1d\t%+2d\t%6.2f\t%1d\t%d\t%d",evt(), lep1_pdgid(), lep1_p4().pt(), lep1_is_num(), lep2_pdgid(), lep2_p4().pt(), lep2_is_num(), nj, nb) << endl;
+
 
     
     // SS

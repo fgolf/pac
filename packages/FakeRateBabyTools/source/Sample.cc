@@ -146,7 +146,13 @@ namespace fr
 //            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root,"
 //            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root,"
 //            "/nfs-7/userdata/fgolf/babies/fr/FakeRate14May2013/QCD_Pt-170to300_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/*.root",
-            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root" ,
+            //"/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/*.root, " 
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_20_30_BCtoE_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root, " 
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_30_80_BCtoE_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root, " 
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_80_170_BCtoE_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root, "
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_20_30_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root, " 
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_30_80_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root, " 
+            "/nfs-7/userdata/gzevi/babies/fr/FakeRateSynch11Mar2014/QCD_Pt_80_170_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root" ,
             // output file
             "plots/qcd/qcd.root",
             // SampleType

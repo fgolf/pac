@@ -2,7 +2,7 @@
 
 verbose=1
 njets=2
-tag=V03-02-11
+tag=V03-02-12
 path=/nfs-7/userdata/gzevi/babies/ss2012/$tag
 
 
@@ -224,10 +224,10 @@ output_path=$path/vpt
 #merge_nofilter high_pt ttjets_os         TTJets_FullLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v2 
 
 # sync ttjets
-tag=V03-02-11
+tag=V03-02-12
 input_path=/hadoop/cms/store/user/gzevi/babies/ss2012/$tag/sync
 output_path=$path/sync
-merge high_pt ttjets         TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+#merge high_pt ttjets         TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
 
 
 njets=1
@@ -236,9 +236,11 @@ input_files=$input_files,"${input_path}/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Sum
 input_files=$input_files,"${input_path}/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
 input_files=$input_files,"${input_path}/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/*.root"
 #echo ${input_files}
-merge2 high_pt wjets_large "${input_files}"
+#merge2 high_pt wjets_large "${input_files}"
 ####merge_nofilter2 vlow_pt wjets_large "${input_files}"
 ##merge high_pt w1jets W1JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 ##merge high_pt w2jets W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 ##merge high_pt w3jets W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 ##merge high_pt w4jets W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+
+merge high_pt ttw            TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1

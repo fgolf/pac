@@ -75,6 +75,15 @@ private:
     int m_truth_match_option;
     bool m_do_mc_trigger; 
 
+    int nTightMus;
+    int nLooseMus;
+    int nTightMusFromW;
+    int nLooseMusFromW;
+    int nTightEle;
+    int nLooseEle;
+    int nTightEleFromW;
+    int nLooseEleFromW;
+
     // fake/flip rate hists
     std::tr1::shared_ptr<TH2F> h_mufr;
     std::tr1::shared_ptr<TH2F> h_elfr;

@@ -858,7 +858,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
         else
         {
-            if (is_data && is_mu)
+            if (is_mu)//is_data && is_mu)
             {
                 // trigger without isolation
 //                trig_cut = ((pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
@@ -872,18 +872,18 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                 trig_cut_iso = ((pt() > 20 && (relIso1p0Mu20_vstar()>1 || relIso1p0Mu5_vstar()>1)) || 
                                 (pt() > 5  && (relIso1p0Mu5_vstar()>1)));
             }
-            else if(is_data && is_el)
+            else if(is_el) //is_data && is_el)
             {
                 // triggers with isolation
 //                trig_cut = ((pt()>17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 1 ||
 //                                         ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 1  || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 1 ))
 //                            || (pt()>8 && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()>1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()>1)));
 
-	      trig_cut = (pt()>17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 1 ));
+	      trig_cut = (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 0 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 0 );
 //	      trig_cut = (pt()>8 && (ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 1 || ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 1 ));
 
                 // triggers without isolation
-                trig_cut_noiso = (pt() > 8 && (ele8_CaloIdT_TrkIdVL_Jet30_vstar()>1 || ele8_CaloIdT_TrkIdVL_vstar()>1));
+               // trig_cut_noiso = (pt() > 8 && (ele8_CaloIdT_TrkIdVL_Jet30_vstar()>1 || ele8_CaloIdT_TrkIdVL_vstar()>1));
             }
 	    //	    else if (is_mu /* also MC */ ) trig_cut = ((mu17_vstar()>0)); // SYNCH --> 1 means pass, 2 or 3 means match
         }
@@ -1026,14 +1026,14 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 	float dphi_corr = is_data ?  dphipfcL1Fj1res() : dphipfcL1Fj1();
   float csv_corr = is_data ? csvpfcL1Fj1res() : csvpfcL1Fj1();
 	if (is_el && pt() > 20) {
-	if (is_loose ) printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+	//if (is_loose ) printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
 	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
-	if (is_loose && pt_corr > 40. ) 
-	  printf("PASS JET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
-	if (is_loose && pt_corr > 40. && pfmet() < 20.) 
-	  printf("PASS MET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
-	  if (is_loose && pt_corr > 40. && pfmet() < 20. && mt() < 20.) 
-	  printf("PASS MT  %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+	//if (is_loose && pt_corr > 40. ) 
+	//  printf("PASS JET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+	//if (is_loose && pt_corr > 40. && pfmet() < 20.) 
+	//  printf("PASS MET %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
+	//  if (is_loose && pt_corr > 40. && pfmet() < 20. && mt() < 20.) 
+	//  printf("PASS MT  %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
 
 //	if (is_loose && trig_cut) printf("PASS SINGLELEPTONHLT %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csvpfj1(), pfmet(), mt());
 //	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
@@ -1056,7 +1056,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
         else if(is_el)
         {
-            num_lep_cut = num_el_ssV7_noIso();
+            num_lep_cut = is_tight; //num_el_ssV7_noIso(); //SYNC
             if (m_apply_tight_d0_cut) num_lep_cut = num_lep_cut && (fabs(d0()) < 0.01);
         }
 
@@ -1068,7 +1068,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
         else if(is_el)
         {
-            fo_lep_cut = ((m_fr_type == ss::FakeRateType::eth) ? v3_el_ssV7() : v3_el_ssV7()); // THIS IS WRONG!!! STILL NEED TO IMPLEMENT ETH FO DEFINITION FOR ELECTRONS
+            fo_lep_cut = is_loose; //((m_fr_type == ss::FakeRateType::eth) ? v3_el_ssV7() : v3_el_ssV7()); // SYNC
         }
 
         // passes selection (no isolaiton)
@@ -1090,11 +1090,12 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         // vertex reweight for ttbar
         float evt_weight = (is_data ? 1.0 : (weight() * m_lumi));
-	// Fix wrong normalization in specific sample
+	// Fix wrong normalization in specific samples
 	if (rt::string_contains(current_file_name, "15to30_TuneZ2star") && !is_data) {
-	  //cout<<"Found event in file "<<current_file_name<<": adjusting weight. Old weight "<<evt_weight;
 	  evt_weight *= ( 9.8828742E8 / 4.2639499E10 );
-	  //cout<<" new weight "<<evt_weight<<endl;
+	}	
+	if (rt::string_contains(current_file_name, "20_30_EMEnriched") && !is_data) {
+	  evt_weight *= ( 0.0101 / 0.0005799 ); // Filter efficiency is wrong
 	}
 
 	// GZ : Deal with prescales better --> Doesn't work.
@@ -1119,7 +1120,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         float num_mu_iso_cut = 0.1;
         float den_mu_iso_cut = m_mu_iso_denom;
-        float num_el_iso_cut = 0.09;
+        float num_el_iso_cut = 0.15;
         float den_el_iso_cut = ((m_fr_type == ss::FakeRateType::eth) ? 1.0 : 0.6);
 	
 	float num_mu_iso_cutAbs = 2.0;

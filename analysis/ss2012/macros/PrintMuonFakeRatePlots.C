@@ -55,19 +55,23 @@
   
   // 2D Plots
 
-  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
-                        "h_mufr40c", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/data");
-  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_qcd_standard_sync16Apr2014f.root", 
-                       "h_mufr40c", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/qcd");
-  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
-                       "h_mufr40c_fullMC", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/mc");
-  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
-                       "h_mufr40c_ewkcor", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/dataewkcor");
-  PrintMuonSynchPlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
-                      "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/");
-//  PrintFakeRatePlotsEWKCor("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync.root", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/");
-//  PrintFakeRatePlotsEWKCor("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_syncFOpt.root", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/FOpt");
-//  PrintFakeRatePlotsEWKCor("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_syncFOpt04.root", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/FOpt04");
-  Print1DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_qcd_standard_sync16Apr2014f.root", 
-                       "h_mufr40c_vs_pt", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/");
+//  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
+//                        "h_mufr40c", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/data");
+//  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_qcd_standard_sync16Apr2014f.root", 
+//                       "h_mufr40c", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/qcd");
+//  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
+//                       "h_mufr40c_fullMC", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/mc");
+//  Print2DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
+//                       "h_mufr40c_ewkcor", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/dataewkcor");
+//  PrintMuonSynchPlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync16Apr2014f.root", 
+//                      "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/");
+////  PrintFakeRatePlotsEWKCor("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_sync.root", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/");
+////  PrintFakeRatePlotsEWKCor("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_syncFOpt.root", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/FOpt");
+////  PrintFakeRatePlotsEWKCor("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_data_ewkcor_syncFOpt04.root", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/FOpt04");
+//  Print1DFakeRatePlots("pdf", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/rootfiles/ssFR_qcd_standard_sync16Apr2014f.root", 
+//                       "h_mufr40c_vs_pt", "/Users/giovannizevidellaporta/UCSD/FakeRate/synchronization/plots/");
+
+  Print2DFakeRatePlots("pdf", "plots/fake_rates/test28May2014c.root", 
+                       "h_elfr40c", "plots/prettyplots/QCD_ele_c");
+
 }
