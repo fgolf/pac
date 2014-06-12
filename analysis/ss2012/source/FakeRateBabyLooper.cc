@@ -33,7 +33,8 @@ FakeRateBabyLooper::FakeRateBabyLooper
     bool btag_away_jet,
     bool absolute_iso,
     bool only_invert_isocut_mu,
-    bool use_FOpt
+    bool use_FOpt,
+    bool use_trigger
     )
     : at::AnalysisWithHist(root_file_name, print, suffix)
     , m_sample(sample)
@@ -51,6 +52,7 @@ FakeRateBabyLooper::FakeRateBabyLooper
     , m_absolute_iso(absolute_iso)
     , m_only_invert_isocut_mu(only_invert_isocut_mu)
     , m_use_FOpt(use_FOpt)
+    , m_use_trigger(use_trigger)
 {
     // begin job
     BeginJob();
@@ -344,7 +346,23 @@ void FakeRateBabyLooper::BookHists()
 
 
 	// GZ
-        hc.Add(new TH1F("h_mu_fo_iso", "fo muon; cpfiso03 (#Delta#beta)",20,0,1.0), "texte");
+	// June 2014
+	hc.Add(new TH1F("h_mu_fo_ID", "Muon FO ID, lep gt 20 GeV;Truth Match ID;Events", 10, -4.5, 5.5));
+	hc.Add(new TH1F("h_mu_fo_ID_40c", "Muon FO ID, lep gt 20 GeV, recoil 40 GeV;Truth Match ID;Events", 10, -4.5, 5.5));
+	hc.Add(new TH1F("h_mu_fo_iso", "Muon FO isolation, lep 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso_40c", "Muon FO isolation, lep 20-25 GeV, recoil 40 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso_ParPtCut", "Muon FO isolation, lep 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso_FOptCut", "Muon FO isolation (NEW), lep+iso 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso_FOptCut_ParPtCut", "Muon FO isolation (NEW), lep+iso 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso2022", "Muon FO isolation, lep 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso2022_40c", "Muon FO isolation, lep 20-25 GeV, recoil 40 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso2022_ParPtCut", "Muon FO isolation, lep 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso2022_FOptCut", "Muon FO isolation (NEW), lep+iso 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_iso2022_FOptCut_ParPtCut", "Muon FO isolation (NEW), lep+iso 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_mu_fo_ParPt", "Muon FO mother parton pt, lep 20-25 GeV;pT mother;Events", 20, 0, 100));
+
+	// Previous
+        //hc.Add(new TH1F("h_mu_fo_iso", "fo muon; cpfiso03 (#Delta#beta)",20,0,1.0), "texte");
         hc.Add(new TH1F("h_mu_fo_nvtxs", "fo muon; nvtxs",40,0,40), "texte");
         hc.Add(new TH1F("h_mu_fo_isoGeV", "fo muon; cpfiso03 (#Delta#beta) (GeV)",100,0,10), "texte");
         hc.Add(new TH1F("h_mu_fo_chiso", "fo muon; chiso03",50,0,5), "texte");
@@ -567,7 +585,18 @@ void FakeRateBabyLooper::BookHists()
 
 	// Start GZ
 
-        hc.Add(new TH1F("h_el_fo_iso", "fo electron; cpfiso03 (#rho * A_{eff})",50,0,5), "texte");
+	// June 2014
+	hc.Add(new TH1F("h_el_fo_ID", "Electron FO ID, lep gt 20 GeV;Truth Match ID;Events", 10, -4.5, 5.5));
+	hc.Add(new TH1F("h_el_fo_ID_40c", "Electron FO ID, lep gt 20 GeV, recoil 40 GeV;Truth Match ID;Events", 10, -4.5, 5.5));
+	hc.Add(new TH1F("h_el_fo_iso", "Electron FO isolation, lep 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_el_fo_iso_40c", "Electron FO isolation, lep 20-25 GeV, recoil jet 40;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_el_fo_iso_ParPtCut", "Electron FO isolation, lep 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_el_fo_iso_FOptCut", "Electron FO isolation (NEW), lep+iso 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_el_fo_iso_FOptCut_ParPtCut", "Electron FO isolation (NEW), lep+iso 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+	hc.Add(new TH1F("h_el_fo_ParPt", "Electron FO mother parton pt, lep 20-25 GeV;pT mother;Events", 20, 0, 100));
+	
+	// Older
+        //hc.Add(new TH1F("h_el_fo_iso", "fo electron; cpfiso03 (#rho * A_{eff})",50,0,5), "texte");
         hc.Add(new TH1F("h_el_fo_chiso", "fo electron; chiso03",50,0,5), "texte");
         hc.Add(new TH1F("h_el_fo_caloiso", "fo electron; caloiso03(#rho * A_{eff})",50,0,5), "texte");
         hc.Add(new TH1F("h_el_fo_chisoGeV", "fo electron; chiso03 (GeV)",100,0,10), "texte");
@@ -786,9 +815,10 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
 
         // qcd muon cuts (for the different qcd samples)
-        const bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 16.0; 
-        const bool qcd_mu_high = rt::string_contains(current_file_name, "MuEnrichedPt_15") && pt() >= 16.0; 
-        const bool qcd_el      = not (qcd_mu_low or qcd_mu_high); 
+        const bool qcd_mu_low  = rt::string_contains(current_file_name, "MuEnrichedPt5"  ) && pt() < 15.0; 
+        const bool qcd_mu_high = rt::string_contains(current_file_name, "MuEnrichedPt_15") && pt() >= 15.0; 
+	const bool qcd_el      = (rt::string_contains(current_file_name, "EMEnriched") || rt::string_contains(current_file_name, "BCtoE") ) && pt() >= 15.0; 
+        //const bool qcd_el      = (rt::string_contains(current_file_name, "BCtoE") ) && pt() >= 15.0; 
         if (is_mu && is_qcd && not (qcd_mu_low || qcd_mu_high))
         {
             return 0;
@@ -858,7 +888,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         }
         else
         {
-            if (is_mu)//is_data && is_mu)
+	  if ( (is_data || m_use_trigger) && is_mu)
             {
                 // trigger without isolation
 //                trig_cut = ((pt() > 24 && (mu24_eta2p1_vstar() > 1 || mu17_vstar()>1 || mu8_vstar()>1)) || 
@@ -872,7 +902,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
                 trig_cut_iso = ((pt() > 20 && (relIso1p0Mu20_vstar()>1 || relIso1p0Mu5_vstar()>1)) || 
                                 (pt() > 5  && (relIso1p0Mu5_vstar()>1)));
             }
-            else if(is_el) //is_data && is_el)
+	  else if( (is_data || m_use_trigger) && is_el)
             {
                 // triggers with isolation
 //                trig_cut = ((pt()>17 && (ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Jet30_vstar()> 1 || ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_vstar()> 1 ||
@@ -929,6 +959,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 	// Synchronization
 	bool is_loose = false;
 	bool is_tight = false;
+	bool passD0_t = false;
 	if (is_mu && pt() > 10. && fabs(eta())<2.4) {
 	  //passes_id : PF && globalMuon, global->normChi2 < 10, validMuonHits > 0, MatchedStations > 1, 
 	  //            innerTrack( trackerLayersWithMeasurement > 5, ValidPixelHits > 0), innerTrack( dxy(vtx) < 0.2, dz(vtx)<0.5)
@@ -938,7 +969,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 	  bool passLayers = (mu_trackerLayersWithMeasurement() > 5);
 	  bool passPixel = (mu_numberOfValidPixelHits() > 0);
 	  bool passD0_l = (fabs(d0()) < 0.2);
-	  bool passD0_t = (fabs(d0()) < 0.01);
+	  passD0_t = (fabs(d0()) < 0.01);
 	  bool passDZ = (fabs(dz()) < 0.2);
 	  bool passIso_l = (cpfiso03_db() < 1.);
 	  bool passIso_t = (cpfiso03_db() < 0.1);
@@ -957,7 +988,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         bool passMITconv = !convMIT();
 	bool passCharge  = q3();
         bool passD0_l = true;
-        bool passD0_t = (fabs(d0()) < 0.02);
+        passD0_t = (fabs(d0()) < 0.02);
         bool passDZ = (fabs(dz()) < 0.1);
         bool passIso_l = (pfiso03_corr_rho() < 0.6);
         bool passIso_t = (isEB || pt() > 20) ? (pfiso03_corr_rho() < 0.15) : (pfiso03_corr_rho() < 0.10);
@@ -983,7 +1014,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
         is_loose = passes_id && passD0_l && passIso_l;
         is_tight = passes_id && passD0_t && passIso_t;
       }	   
-   
+      //if ( !passD0_t ) return 0;
       
 //	printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%4.2f\t%d\t%d\t%4.3f\t%4.3f\n", run(), ls(), evt(), pt(), eta(), phi(), is_loose, is_tight, cpfiso03_db(), d0());
 
@@ -1024,7 +1055,8 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
 	float pt_corr = is_data ?  ptpfcL1Fj1res() : ptpfcL1Fj1();
 	float dphi_corr = is_data ?  dphipfcL1Fj1res() : dphipfcL1Fj1();
-  float csv_corr = is_data ? csvpfcL1Fj1res() : csvpfcL1Fj1();
+	float csv_corr = 0;
+	if (is_el) csv_corr = is_data ? csvpfcL1Fj1res() : csvpfcL1Fj1();
 	if (is_el && pt() > 20) {
 	//if (is_loose ) printf("PASS SINGLELEPTON %d\t%d\t%d\t%4.2f\t%4.2f\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.2f\n", run(), ls(), evt(), pt(), pt_corr, is_tight, dphi_corr, csv_corr, pfmet(), mt());
 	//muonpt, jetpt, is_tight, dphi, CSV, met, mt
@@ -1120,7 +1152,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 
         float num_mu_iso_cut = 0.1;
         float den_mu_iso_cut = m_mu_iso_denom;
-        float num_el_iso_cut = 0.15;
+        float num_el_iso_cut = 0.15; //pt() > 20 ? 0.15 : 0.10;
         float den_el_iso_cut = ((m_fr_type == ss::FakeRateType::eth) ? 1.0 : 0.6);
 	
 	float num_mu_iso_cutAbs = 2.0;
@@ -1139,7 +1171,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 	}
         // Fill some plots
         // -------------------------------------------------------------------------------------- //
-	if (pt() < 20.0 ) return 0;
+	//if (pt() < 20.0 ) return 0;
 
         if (m_lepton == "mu")
         {
@@ -1376,6 +1408,30 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
             // denominator
             if (fo_lep_sel)
             {		  
+
+	      bool  pt2025 = pt() > 20. && pt() < 25.;
+	      bool  pt2025iso = pt2025 && iso < num_mu_iso_cut;
+	      float ParPt = mc3pt();
+	      bool  ParPtCut = ParPt > 40 && ParPt < 50;
+	      bool  FOpt2025 = (1.+iso-num_mu_iso_cut) * pt() > 20. && (1.+iso-num_mu_iso_cut) * pt() < 25. && iso > num_mu_iso_cut;
+	      if (!num_lep_sel && pt() > 20.) rt::Fill(hc["h_mu_fo_ID"], leptonIsFromW(), evt_weight);
+	      if (!num_lep_sel && pt() > 20. && jet_cut) rt::Fill(hc["h_mu_fo_ID_40c"], leptonIsFromW(), evt_weight);
+	      if ( pt2025 ) rt::Fill(hc["h_mu_fo_iso"], iso, evt_weight);
+	      if ( pt2025 && jet_cut) rt::Fill(hc["h_mu_fo_iso_40c"], iso, evt_weight);
+	      if ( pt2025 && ParPtCut ) rt::Fill(hc["h_mu_fo_iso_ParPtCut"], iso, evt_weight);
+	      if ( (FOpt2025 || pt2025iso) ) rt::Fill(hc["h_mu_fo_iso_FOptCut"], iso, evt_weight);
+	      if ( (FOpt2025 || pt2025iso) && ParPtCut ) rt::Fill(hc["h_mu_fo_iso_FOptCut_ParPtCut"], iso, evt_weight);
+	      if ( pt2025 ) rt::Fill(hc["h_mu_fo_ParPt"], ParPt, evt_weight);
+	      rt::Fill( hc["h_mu_fo_lepPt"], pt(), evt_weight);
+	      bool  pt2022 = pt() > 20. && pt() < 22.;
+	      bool  pt2022iso = pt2025 && iso < num_mu_iso_cut;
+	      bool  FOpt2022 = (1.+iso-num_mu_iso_cut) * pt() > 20. && (1.+iso-num_mu_iso_cut) * pt() < 22. && iso > num_mu_iso_cut;
+	      if ( pt2022 ) rt::Fill(hc["h_mu_fo_iso2022"], iso, evt_weight);
+	      if ( pt2022 && jet_cut) rt::Fill(hc["h_mu_fo_iso2022_40c"], iso, evt_weight);
+	      if ( pt2022 && ParPtCut ) rt::Fill(hc["h_mu_fo_iso2022_ParPtCut"], iso, evt_weight);
+	      if ( (FOpt2022 || pt2022iso) ) rt::Fill(hc["h_mu_fo_iso2022_FOptCut"], iso, evt_weight);
+	      if ( (FOpt2022 || pt2022iso) && ParPtCut ) rt::Fill(hc["h_mu_fo_iso2022_FOptCut_ParPtCut"], iso, evt_weight);
+
 	      if (pt() > 20.0 && pt() < 25.0) {		
 		//		rt::Fill( hc["h_mu_fo_iso"], iso, evt_weight);
 		rt::Fill( hc["h_mu_fo_isoGeV"], isoGeV, evt_weight);
@@ -1431,7 +1487,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 		//cout<<"num_lep_sel "<<num_lep_sel<<" , num_mu_ssV5_noIso "<<num_mu_ssV5_noIso()<<" , d0num "<<d0num<<" , hcal "<<hcal<<" , ecal "<<ecal<<" , tric_cut "<<trig_cut<<endl;
 
 
-		rt::Fill( hc["h_mu_fo_lepPt"], pt(), evt_weight);
+		//rt::Fill( hc["h_mu_fo_lepPt"], pt(), evt_weight);
 		rt::Fill2D( hc["h_mu_fo_iso_vs_chiso"], chiso, iso, evt_weight);
 		rt::Fill2D( hc["h_mu_fo_iso_vs_caloiso"], caloiso, iso, evt_weight);
 		rt::Fill2D( hc["h_mu_fo_chiso_vs_caloiso"], caloiso, chiso, evt_weight);
@@ -1493,7 +1549,7 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 		  rt::Fill( hc["h_mu_fo_lepPtSpectrum"], pt(), evt_weight);
 		  rt::Fill( hc["h_mu_fo_lepFOSpectrum"], isNumIso ? pt() : FOpt, evt_weight);
 
-		rt::Fill( hc["h_mu_fo_iso"], iso, evt_weight);
+		  //rt::Fill( hc["h_mu_fo_iso"], iso, evt_weight);
 		rt::Fill( hc["h_mu_fo_nvtxs"], evt_nvtxs(), evt_weight);
 		  
 		  if (!m_use_FOpt) {
@@ -1619,8 +1675,24 @@ int FakeRateBabyLooper::operator()(long event, const std::string& current_file_n
 		if (rt::string_contains(current_file_name, "170to300_TuneZ2star")) rt::Fill( hc["h_el_fo_jetPt_q170_300"], ptpfcL1Fj1(), evt_weight);
 		bool isoNum = (iso < num_el_iso_cut);
 		bool isoDen = (iso > num_el_iso_cut && iso < den_el_iso_cut);
+
+		bool  pt2025 = pt() > 20. && pt() < 25.;
+		bool  pt2025iso = pt2025 && isoNum;
+		float ParPt = mc3pt();
+		bool  ParPtCut = ParPt > 40 && ParPt < 50;
+		bool  FOpt2025 = (1.+iso-num_el_iso_cut) * pt() > 20. && (1.+iso-num_el_iso_cut) * pt() < 25. && iso > num_el_iso_cut;
+		if ( !num_lep_sel && pt() > 20. ) rt::Fill(hc["h_el_fo_ID"], leptonIsFromW(), evt_weight);
+		if ( !num_lep_sel && pt() > 20. && jet_cut) rt::Fill(hc["h_el_fo_ID_40c"], leptonIsFromW(), evt_weight);
+		if ( pt2025 ) rt::Fill(hc["h_el_fo_iso"], iso, evt_weight);
+		if ( pt2025 && jet_cut) rt::Fill(hc["h_el_fo_iso_40c"], iso, evt_weight);
+		if ( pt2025 && ParPtCut ) rt::Fill(hc["h_el_fo_iso_ParPtCut"], iso, evt_weight);
+		if ( (FOpt2025 || pt2025iso) ) rt::Fill(hc["h_el_fo_iso_FOptCut"], iso, evt_weight);
+		if ( (FOpt2025 || pt2025iso) && ParPtCut ) rt::Fill(hc["h_el_fo_iso_FOptCut_ParPtCut"], iso, evt_weight);
+		if ( pt2025 ) rt::Fill(hc["h_el_fo_ParPt"], ParPt, evt_weight);
+
+
 		if (pt() > 20.0 && pt() < 25.0) {	
-		  rt::Fill( hc["h_el_fo_iso"], iso, evt_weight);
+		  //rt::Fill( hc["h_el_fo_iso"], iso, evt_weight);
 		  rt::Fill( hc["h_el_fo_chiso"], chiso, evt_weight);
 		  rt::Fill( hc["h_el_fo_caloiso"], caloiso, evt_weight);
 		  rt::Fill( hc["h_el_fo_d0"], fabs(d0()), evt_weight);

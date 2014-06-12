@@ -31,7 +31,9 @@
 #TAG=V03-02-09 # 05-18-2014 no jet-lep overlap
 #TAG=V03-02-10 # 05-18-2014 SS+OS for WJets, add TkMu8 and double-ele triggers
 #TAG=V03-02-11 # 05-22-2014 Added nHits and chargeMatch requirements to electron
-TAG=V03-02-12 # 05-26-2014 Synchronized ttW (fixed rho, njets, nbtag, on-the-fly jec and many other things)
+#TAG=V03-02-12 # 05-26-2014 Synchronized ttW (fixed rho, njets, nbtag, on-the-fly jec and many other things)
+#TAG=V03-02-13 # 06-09-2014 updated isolation variable to make isolation plots. running on new ttbar
+TAG=V03-02-14 # 06-10-2014 post-processed new ttbar
 
 #~/~/~/~~/~/~/~~/~/~/~~/~/~/~~/~/
 # DATA TAG V05-03-24 (slimCMS2) # 
@@ -319,7 +321,14 @@ CMS2TAG="V05-03-25"
 
 OPTIONS="--apply_jec_otf#START53_V20"
 CMS2TAG="V05-03-23"
-./writeConfig.sh ttw     $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTWJets_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/                 $OUTPUT_PATH/TTWJets_8TeV-madgraph_${CAMPAIGN}-v1
+#./writeConfig.sh ttw     $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTWJets_8TeV-madgraph_${CAMPAIGN}-v1/$CMS2TAG/                 $OUTPUT_PATH/TTWJets_8TeV-madgraph_${CAMPAIGN}-v1
+
+#NOT POSTPROCESSED
+#./writeConfig.sh ttjets $ATYPE $RUNLIST $OPTIONS /hadoop/cms/store/user/fgolf/CMS2_V05-03-23/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1 $OUTPUT_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1
+#./writeConfig.sh ttjets $ATYPE $RUNLIST $OPTIONS /hadoop/cms/store/user/fgolf/CMS2_V05-03-23/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1 $OUTPUT_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1
+
+./writeConfig.sh ttjets $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1/$CMS2TAG/ $OUTPUT_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1
+./writeConfig.sh ttjets $ATYPE $RUNLIST $OPTIONS $NTUPLE_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1/$CMS2TAG/ $OUTPUT_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1
 
 
 mkdir -p sync

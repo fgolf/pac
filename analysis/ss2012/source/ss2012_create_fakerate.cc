@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
     bool absolute_iso          = false;
     bool only_invert_isocut_mu = false;
     bool use_FOpt              = false;
+    bool use_trigger           = false;
 
     namespace po = boost::program_options;
     po::options_description desc("Allowed options");
@@ -90,6 +91,7 @@ int main(int argc, char* argv[])
         ("abs_iso"       , po::value<bool>(&absolute_iso)          , "use absolute isolation (muons only)"              )
         ("invert_iso_only",po::value<bool>(&only_invert_isocut_mu) , "only iso cut distinguishes NUM/FO (muons only)"   )
         ("FOpt"          ,po::value<bool>(&use_FOpt)               , "Bin in FOpt instead of muon pt"                   )
+        ("trig"          ,po::value<bool>(&use_trigger)            , "Require trigger even in MC"                       )
         ;
 
     po::variables_map vm;
@@ -147,7 +149,7 @@ int main(int argc, char* argv[])
     at::ScanChainWithFilename<FakeRateBaby>
     (
         /*input chain ptr =*/chain.get(), 
-        FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix, away_jet_pt, away_jet_dphi, mu_iso_denom, btag_away_jet, absolute_iso, only_invert_isocut_mu, use_FOpt ), 
+        FakeRateBabyLooper(full_output_path, sample, channel, fr_type, apply_tight_d0_cut, use_eth_binning, lumi, charge, verbose, !suffix.empty(), suffix, away_jet_pt, away_jet_dphi, mu_iso_denom, btag_away_jet, absolute_iso, only_invert_isocut_mu, use_FOpt , use_trigger), 
         fake_rate_baby,
         number_of_events,
         good_run_list,

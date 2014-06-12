@@ -320,8 +320,8 @@ void PrintForSync
     const int ll_idx           = hyp_ll_index().at(ihyp);
     const bool lt_passes_id    = samesign::isGoodLepton(lt_id, lt_idx, use_el_eta);
     const bool ll_passes_id    = samesign::isGoodLepton(ll_id, ll_idx, use_el_eta);
-    const float lt_iso         = samesign::leptonIsolation(lt_id, lt_idx);
-    const float ll_iso         = samesign::leptonIsolation(ll_id, ll_idx);
+    const float lt_iso         = samesign2014::leptonIsolation(lt_id, lt_idx);
+    const float ll_iso         = samesign2014::leptonIsolation(ll_id, ll_idx);
     const float inv_mass       = (lt_p4 + ll_p4).M();
 
     // channel names
@@ -1355,7 +1355,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
         m_evt.lep1.cordetiso   = m_evt.lep1.detiso   - (log(m_evt.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep1.p4.pt()); // check that I have the correct formula 
         m_evt.lep1.cordetiso04 = m_evt.lep1.detiso04 - (log(m_evt.lep1.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep1.p4.pt()); // check that I have the correct formula 
-        m_evt.lep1.corpfiso    = samesign::leptonIsolation(lep1_id, lep1_idx);
+        m_evt.lep1.corpfiso    = samesign2014::leptonIsolation(lep1_id, lep1_idx);
         m_evt.lep1.corpfiso04  = (lep1_is_el) ? samesign::electronIsolationPF2012_cone04(lep1_idx) : -999999.0;  
         m_evt.lep1.effarea     = samesign::EffectiveArea03(lep1_id, lep1_idx); 
         m_evt.lep1.effarea04   = samesign::EffectiveArea04(lep1_id, lep1_idx);
@@ -1373,7 +1373,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
 
         m_evt.lep2.cordetiso   = m_evt.lep2.detiso   - (log(m_evt.lep2.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep2.p4.pt()); // check that I have the correct formula 
         m_evt.lep2.cordetiso04 = m_evt.lep2.detiso04 - (log(m_evt.lep2.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep2.p4.pt()); // check that I have the correct formula 
-        m_evt.lep2.corpfiso    = samesign::leptonIsolation(lep2_id, lep2_idx);
+        m_evt.lep2.corpfiso    = samesign2014::leptonIsolation(lep2_id, lep2_idx);
         m_evt.lep2.corpfiso04  = (lep2_is_el) ? samesign::electronIsolationPF2012_cone04(lep2_idx) : -999999.0;  
         m_evt.lep2.effarea     = samesign::EffectiveArea03(lep2_id, lep2_idx);
         m_evt.lep2.effarea04   = samesign::EffectiveArea04(lep2_id, lep2_idx);
@@ -1736,7 +1736,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
             const bool lep3_is_el  = abs(lep3_id)==11;
             m_evt.lep3.cordetiso   = m_evt.lep3.detiso   - (log(m_evt.lep3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep3.p4.pt()); // check that I have the correct formula 
             m_evt.lep3.cordetiso04 = m_evt.lep3.detiso04 - (log(m_evt.lep3.p4.pt())*numberOfGoodVertices())/(30.0*m_evt.lep3.p4.pt()); // check that I have the correct formula 
-            m_evt.lep3.corpfiso    = samesign::leptonIsolation(lep3_id, lep3_idx);
+            m_evt.lep3.corpfiso    = samesign2014::leptonIsolation(lep3_id, lep3_idx);
             m_evt.lep3.corpfiso04  = (lep3_is_el) ? samesign::electronIsolationPF2012_cone04(lep3_idx) : -999999.0;  
             m_evt.lep3.effarea     = samesign::EffectiveArea03(lep3_id, lep3_idx);
             m_evt.lep3.effarea04   = samesign::EffectiveArea04(lep3_id, lep3_idx);

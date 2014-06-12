@@ -68,7 +68,7 @@ try
         ("charge"   , po::value<int>(&charge_option)              , "charge option (1 is ++ events, -1 is -- events, 0 is both)")
         ("excl"     , po::value<bool>(&exclusive)                 , "use exclusive signal region"                               )
         ("verbose"  , po::value<bool>(&verbose)                   , "verbosity"                                                 )
-        ("FR_opt"   , po::value<int>(&FR_option)                  , "FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both, 4 FOpt and iso only)"      )
+        ("FR_opt"   , po::value<int>(&FR_option)                  , "FR_option (0 standard, 1 abs iso num, 2 iso only FO, 3 both, 4 FOpt and iso only, 5 FOpt)"      )
         ("truth_opt", po::value<int>(&truth_option)               , "truth_option (0 don't use, 1 Prompt-nonPrompt matched (std))")
         ("mc_trig"  , po::value<bool>(&do_mc_trigger)             , "require trigger on MC"                                     )
         ;

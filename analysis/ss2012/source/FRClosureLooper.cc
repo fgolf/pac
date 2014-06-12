@@ -391,8 +391,18 @@ void FRClosureLooper::BookHists()
     hc.Add(new TH1F("h_FO_ID_efake", "FO_ID_efake;Fake Ele ID;Events", 10, -4.5, 5.5));
     hc.Add(new TH1F("h_FO_ID_mfake", "FO_ID_mfake;Fake Mu ID;Events",  10, -4.5, 5.5));
 
+    hc.Add(new TH1F("h_mu_fo_iso", "Muon FO isolation, lep 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_el_fo_iso", "Electron FO isolation, lep 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_mu_fo_iso_ParPtCut", "Muon FO isolation, lep 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_el_fo_iso_ParPtCut", "Electron FO isolation, lep 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_mu_fo_iso_FOptCut", "Muon FO isolation (NEW), lep+iso 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_el_fo_iso_FOptCut", "Electron FO isolation (NEW), lep+iso 20-25 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_mu_fo_iso_FOptCut_ParPtCut", "Muon FO isolation (NEW), lep+iso 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_el_fo_iso_FOptCut_ParPtCut", "Electron FO isolation (NEW), lep+iso 20-25 GeV, mother parton 40-50 GeV;RelIso;Events", 20, 0, 1.0));
+    hc.Add(new TH1F("h_mu_fo_ParPt", "Muon FO mother parton pt, lep 20-25 GeV;pT mother;Events", 20, 0, 100));
+    hc.Add(new TH1F("h_el_fo_ParPt", "Electron FO mother parton pt, lep 20-25 GeV;pT mother;Events", 20, 0, 100));
 
-    
+
     // basic yield plots
     for (size_t i = 0; i != at::DileptonHypType::static_size; i++)
     {
@@ -526,14 +536,26 @@ int FRClosureLooper::operator()(long event)
     // GZ Do the lepton cuts by hand: pt > 20 for numerator, FOpt > 20 for non-iso denominator
     float FOpt1 = lep1_p4().pt();
     float FOpt2 = lep2_p4().pt(); 
-    float isocut1 = abs(lep1_pdgid())==13 ? 0.1 : 0.09;
-    float isocut2 = abs(lep2_pdgid())==13 ? 0.1 : 0.09;
-    if ( m_FR_option == 4 && lep1_corpfiso() > isocut1) FOpt1 += lep1_p4().pt()*(lep1_corpfiso()-isocut1);
-    if ( m_FR_option == 4 && lep2_corpfiso() > isocut2) FOpt2 += lep2_p4().pt()*(lep2_corpfiso()-isocut2);
+    float isocut1 = (abs(lep1_pdgid())==13 /*|| FOpt1 < 20*/) ? 0.1 : 0.15; // cut is 0.1 for electrons < 20 GeV --> that's irrelevant: we don't want to select them!
+    float isocut2 = (abs(lep2_pdgid())==13 /*|| FOpt2 < 20*/) ? 0.1 : 0.15;
+    if ( m_FR_option >= 4 && lep1_corpfiso() > isocut1) FOpt1 += lep1_p4().pt()*(lep1_corpfiso()-isocut1);
+    if ( m_FR_option >= 4 && lep2_corpfiso() > isocut2) FOpt2 += lep2_p4().pt()*(lep2_corpfiso()-isocut2);
     if ( m_analysis_type== AnalysisType::high_pt && (FOpt1<20.0 || FOpt2<20.0) ) {
       if (m_verbose) {cout << " failing lepton pt cut " <<FOpt1<<" "<<FOpt2<< endl;}
       return 0;
     }
+    // ALSO 15 GeV hard cut for muons, since we use MuEnriched_15 for the QCD
+    if ( m_FR_option == 5 ) {// Can't use more sideband for muons because QCD sample has pT > 15 GeV
+      if ( (abs(lep1_pdgid())==13 && lep1_p4().pt() < 15) || 
+	   (abs(lep2_pdgid())==13 && lep2_p4().pt() < 15) )
+	return 0; 
+      if ( (abs(lep1_pdgid())==11 && lep1_p4().pt() < 15) || // Trying a 15 GeV cut for electrons
+	   (abs(lep2_pdgid())==11 && lep2_p4().pt() < 15) )
+	return 0; 
+//float d0cut1 = (abs(lep1_pdgid())==13) ? 0.01 : 0.02; // enforcing a d0 cut
+//float d0cut2 = (abs(lep2_pdgid())==13) ? 0.01 : 0.02;
+//if ( lep1_d0() > d0cut1 || lep2_d0() > d0cut2 ) return 0;
+    } 
     //    cout<<"PASS LEPTON"<<dilep_type()<<endl;
     //    if (is_ss()) cout<<"PASS SSLEPTON"<<dilep_type()<<endl;
 
@@ -622,8 +644,8 @@ int FRClosureLooper::operator()(long event)
     // letpon info
     const bool fromw_l1     = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()>=1); //==1 for charge match
     const bool fromw_l2     = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()>=1); //==1 for charge match
-    const bool not_fromw_l1 = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()<1);
-    const bool not_fromw_l2 = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()<1);
+    const bool not_fromw_l1 = (is_real_data() || m_truth_match_option==0) ? true : (lep1_is_fromw()<1); //<1 is standard, <0 to look at non-prompt leptons and avoid fakes
+    const bool not_fromw_l2 = (is_real_data() || m_truth_match_option==0) ? true : (lep2_is_fromw()<1); //<1 is standard, <0 to look at non-prompt leptons and avoid fakes
 
     // Truth matching synchronization
     // Need four counters: #Tight, #Loose, #Tight&FromW, #Loose&FromW
@@ -652,7 +674,10 @@ int FRClosureLooper::operator()(long event)
       if ( lep2_is_fo() && fromw_l2) nLooseEleFromW++;
     }
 
-    if ( ((fromw_l1 && fromw_l2) || (not_fromw_l1 && not_fromw_l2)) && m_truth_match_option)
+    //    if ( ((fromw_l1 && fromw_l2) || (not_fromw_l1 && not_fromw_l2)) && m_truth_match_option) // change this to account for leptons NOT classified as either from or not_from
+    if ( m_truth_match_option 
+	 && !(fromw_l1 && not_fromw_l2)  
+	 && !(fromw_l2 && not_fromw_l1))
     {
       if (m_verbose) {cout << " failing truth cut " <<fromw_l1<<" "<<fromw_l2<< endl;}
       return 0;
@@ -693,12 +718,13 @@ int FRClosureLooper::operator()(long event)
       if (is_ss_mod && downgrade >= 1)  {is_ss_mod=false; is_sf_mod=true; downgrade--;} // downgrade from SS to SF
       if (is_sf_mod && downgrade >= 1)  {is_sf_mod=false; is_df_mod=true; downgrade--;} // downgrade from SF to DF
     }
-    if (m_FR_option == 2 || m_FR_option == 3 || m_FR_option == 4) {
+    if (m_FR_option == 2 || m_FR_option == 3 || m_FR_option == 4) { // AntiIsoOnly (can't fail ID)
       int remove = 0;
       if (  !lep1_passes_id() ) remove++;
       if (  !lep2_passes_id() ) remove++;
       if (remove > 0) {is_sf_mod=false; is_df_mod=false;}
     }
+
 //    if (abs(lep1_pdgid())==13 && abs(lep2_pdgid())==13) 
 //      cout<<"... event is now classified as SS SF DF"<<is_ss_mod<<" "<<is_sf_mod<<" "<<is_df_mod<<endl;
     
@@ -706,8 +732,60 @@ int FRClosureLooper::operator()(long event)
     //int nb = nbtags() - nVetoedBJets;
     //cout << Form("FULL %15d\t%+2d\t%6.2f\t%1d\t%+2d\t%6.2f\t%1d\t%d\t%d",evt(), lep1_pdgid(), lep1_p4().pt(), lep1_is_num(), lep2_pdgid(), lep2_p4().pt(), lep2_is_num(), nj, nb) << endl;
 
+    // Isolation plots 
+    // Lepton 1
+    const LorentzVector& p4_1 = lep1_p4();
+    int id            = lep1_pdgid();
+    float iso         = lep1_corpfiso();
+    float isocut      = (abs(id)==13 /*|| p4_1.pt() < 20*/) ? 0.1 : 0.15;
+    bool  pt2025 = p4_1.pt() > 20. && p4_1.pt() < 25.;
+    bool  pt2025iso = pt2025 && iso < isocut;
+    float ParPt = lep1_mc3p4().pt();
+    bool  ParPtCut = ParPt > 40 && ParPt < 50;
+    bool  FOpt2025 = (1.+iso-isocut) * p4_1.pt() > 20. && (1.+iso-isocut) * p4_1.pt() < 25. && iso > isocut;
+    if  (abs(id) == 11 && not_fromw_l1) {
+      if ( pt2025 ) rt::Fill(hc["h_el_fo_iso"], iso, evt_weight);
+      if ( pt2025 && ParPtCut ) rt::Fill(hc["h_el_fo_iso_ParPtCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) ) rt::Fill(hc["h_el_fo_iso_FOptCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) && ParPtCut ) rt::Fill(hc["h_el_fo_iso_FOptCut_ParPtCut"], iso, evt_weight);
+      if ( pt2025 ) rt::Fill(hc["h_el_fo_ParPt"], ParPt, evt_weight);
+    }
+    if  (abs(id) == 13 && not_fromw_l1) {
+      if ( pt2025 ) rt::Fill(hc["h_mu_fo_iso"], iso, evt_weight);
+      if ( pt2025 && ParPtCut ) rt::Fill(hc["h_mu_fo_iso_ParPtCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) ) rt::Fill(hc["h_mu_fo_iso_FOptCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) && ParPtCut ) rt::Fill(hc["h_mu_fo_iso_FOptCut_ParPtCut"], iso, evt_weight);
+      if ( pt2025 ) rt::Fill(hc["h_mu_fo_ParPt"], ParPt, evt_weight);
+    }
+    const LorentzVector& p4_2 = lep2_p4();
+    id          = lep2_pdgid();
+    iso         = lep2_corpfiso();
+    isocut      = (abs(id)==13 /*|| p4_2.pt() < 20*/) ? 0.1 : 0.15;
+    pt2025 = p4_2.pt() > 20. && p4_2.pt() < 25.;
+    pt2025iso = pt2025 && iso < isocut;
+    ParPt = lep2_mc3p4().pt();
+    ParPtCut = ParPt > 40 && ParPt < 50;
+    FOpt2025 = (1.+iso-isocut) * p4_2.pt() > 20. && (1.+iso-isocut) * p4_2.pt() < 25. && iso > isocut;
+    if  (abs(id) == 11 && not_fromw_l2) {
+      if ( pt2025 ) rt::Fill(hc["h_el_fo_iso"], iso, evt_weight);
+      if ( pt2025 && ParPtCut ) rt::Fill(hc["h_el_fo_iso_ParPtCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) ) rt::Fill(hc["h_el_fo_iso_FOptCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) && ParPtCut ) rt::Fill(hc["h_el_fo_iso_FOptCut_ParPtCut"], iso, evt_weight);
+      if ( pt2025 ) rt::Fill(hc["h_el_fo_ParPt"], ParPt, evt_weight);
+    }
+    if  (abs(id) == 13 && not_fromw_l2) {
+      if ( pt2025 ) rt::Fill(hc["h_mu_fo_iso"], iso, evt_weight);
+      if ( pt2025 && ParPtCut ) rt::Fill(hc["h_mu_fo_iso_ParPtCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) ) rt::Fill(hc["h_mu_fo_iso_FOptCut"], iso, evt_weight);
+      if ( (FOpt2025 || pt2025iso) && ParPtCut ) rt::Fill(hc["h_mu_fo_iso_FOptCut_ParPtCut"], iso, evt_weight);
+      if ( pt2025 ) rt::Fill(hc["h_mu_fo_ParPt"], ParPt, evt_weight);
+    }
+    //    if ( (FOpt2025 || pt2025iso) ) cout<<lep2_pdgid()<<" "<<lep2_p4().pt()<<" "<<iso<<endl;
 
-    
+
+
+
+
     // SS
     if (is_ss_mod)
     {
@@ -732,9 +810,9 @@ int FRClosureLooper::operator()(long event)
       const LorentzVector& p4 = lep1_is_fo_mod ? lep1_p4()    : lep2_p4();
       int id                  = lep1_is_fo_mod ? lep1_pdgid() : lep2_pdgid();
       float iso               = lep1_is_fo_mod ? lep1_corpfiso() : lep2_corpfiso();
-      float isocut            = abs(id)==13 ? 0.1 : 0.09;
+      float isocut            = (abs(id)==13 /*|| p4.pt() < 20*/) ? 0.1 : 0.15;
       float FOcorr = 0; // Add isolation energy to FO. Only use with AntiIso FO!!
-      if (m_FR_option == 4 && iso > isocut ) FOcorr = (iso-isocut) * p4.pt();
+      if (m_FR_option >= 4 && iso > isocut ) FOcorr = (iso-isocut) * p4.pt();
 //      if (abs(id)==13) {
 //        cout<<"SF event: PDG "<<lep1_pdgid() <<" "<<lep2_pdgid()<<", FO "<<lep1_is_fo()<<" "<<lep2_is_fo()<<", pt "<<lep1_p4().pt()<<" "<<lep2_p4().pt()<<", iso "<<lep1_corpfiso()<<" "<<lep2_corpfiso()<<", ID "<<lep1_passes_id()<<" "<<lep2_passes_id()<<endl;
 //        cout<<"Taking FO with iso "<<iso<<" and pt "<<p4.pt()<<" and adding "<<FOcorr<<endl;  
@@ -743,10 +821,11 @@ int FRClosureLooper::operator()(long event)
       if ((lep1_is_fo_mod && not_fromw_l1 && fromw_l2) || (lep2_is_fo_mod && fromw_l1 && not_fromw_l2))
       {
         if (abs(id)==13) {rt::Fill2D(hc["h_sf_mufo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOcorr, evt_weight);}
-        if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOcorr, evt_weight);}
+        if (abs(id)==11) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOcorr, evt_weight);} 
+	//if (abs(id)==11 && iso > isocut) {rt::Fill2D(hc["h_sf_elfo_pt_vs_eta"+ hs], fabs(p4.eta()), p4.pt()+FOcorr, evt_weight);} // add requirement to avoid leptons < 20 with iso in 0.1-0.15 range  (this also removes pure antid0 leptons
 	int fakeID = lep1_is_fo_mod ? lep1_is_fromw() : lep2_is_fromw();
-	if (abs(id) == 11 ) rt::Fill(hc["h_FO_ID_efake"], fakeID, evt_weight);
-	if (abs(id) == 13 ) rt::Fill(hc["h_FO_ID_mfake"], fakeID, evt_weight);
+	if (abs(id) == 11 && p4.pt()>20 ) rt::Fill(hc["h_FO_ID_efake"], fakeID, evt_weight);
+	if (abs(id) == 13 && p4.pt()>20 ) rt::Fill(hc["h_FO_ID_mfake"], fakeID, evt_weight);
       }
     }
     
@@ -759,8 +838,8 @@ int FRClosureLooper::operator()(long event)
       int l2_id                  = lep2_pdgid();
       float FOcorr1 = 0;
       float FOcorr2 = 0; // Add isolation energy to FO. Only use with AntiIso FO!!
-      if (m_FR_option == 4 && lep1_corpfiso() > isocut1) FOcorr1 = l1_p4.pt()*(lep1_corpfiso()-isocut1);
-      if (m_FR_option == 4 && lep2_corpfiso() > isocut2) FOcorr2 = l2_p4.pt()*(lep2_corpfiso()-isocut2);
+      if (m_FR_option >= 4 && lep1_corpfiso() > isocut1) FOcorr1 = l1_p4.pt()*(lep1_corpfiso()-isocut1);
+      if (m_FR_option >= 4 && lep2_corpfiso() > isocut2) FOcorr2 = l2_p4.pt()*(lep2_corpfiso()-isocut2);
       if (not_fromw_l1 && not_fromw_l2)
       {
         at::FillDoubleFakeHist(*dynamic_cast<TH2F*>(hc["h_df_fo_pt_vs_eta_ll"]), *h_mufr, *h_elfr, hyp_type, l1_id, l1_p4.pt()+FOcorr1, l1_p4.eta(), l2_id, l2_p4.pt()+FOcorr2, l2_p4.eta(), evt_weight);

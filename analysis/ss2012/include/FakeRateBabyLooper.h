@@ -31,7 +31,8 @@ public:
         bool btag_away_jet = false,
         bool absolute_iso = false,
 	bool only_invert_isocut_mu = false,
-	bool use_FOpt = false
+	bool use_FOpt = false,
+	bool use_trigger = false
         );
 
     // destroy:
@@ -63,6 +64,7 @@ private:
     bool m_absolute_iso;
     bool m_only_invert_isocut_mu;
     bool m_use_FOpt;
+    bool m_use_trigger;
 
 };
 

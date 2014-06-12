@@ -243,4 +243,10 @@ input_files=$input_files,"${input_path}/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Sum
 ##merge high_pt w3jets W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 ##merge high_pt w4jets W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 
-merge high_pt ttw            TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+#merge high_pt ttw            TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
+
+tag=V03-02-14
+input_path=/hadoop/cms/store/user/gzevi/babies/ss2012/$tag/sync
+input_files="${input_path}/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1/*.root"
+input_files=$input_files,"${input_path}/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1/*.root"
+merge2 high_pt ttslqPP "${input_files}"
