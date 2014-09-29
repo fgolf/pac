@@ -9,7 +9,8 @@ GOODRUNLIST="\\\"\\\""
 # ---------------------------------------------------------#
 
 NTUPLE_PATH=/hadoop/cms/store/group/snt/papers2012/Data2012/CMSSW_5_3_2_patch4_V05-03-24
-TAG=FakeRateSynch11Mar2014
+#TAG=FakeRateSynch11Mar2014
+TAG=FakeRateSynch29Sep2014
 
 # Double Mu
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/DoubleMu_Run2012A-13Jul2012-v1_AOD/merged          babies/fr/$TAG/DoubleMu_Run2012A-13Jul2012-v1_AOD
@@ -77,7 +78,10 @@ OUTPUT_PATH=babies/fr/${TAG}/
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1/V05-03-24 babies/fr/$TAG/TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1/V05-03-20_slim/SingleOrDiLepton babies/fr/$TAG/TTJets_SemiLeptMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-18_slim babies/fr/$TAG/TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1
+#testing this other ttbar
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-13_slim babies/fr/$TAG/TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v2
+#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-25 babies/fr/$TAG/TT_CT10_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v2
+
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-5to15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-18_slim babies/fr/$TAG/QCD_Pt-5to15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-15to30_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-18_slim babies/fr/$TAG/QCD_Pt-15to30_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-18_slim/                 babies/fr/$TAG/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
@@ -92,10 +96,15 @@ OUTPUT_PATH=babies/fr/${TAG}/
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt_20_30_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/     babies/fr/$TAG/QCD_Pt_20_30_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt_30_80_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/     babies/fr/$TAG/QCD_Pt_30_80_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt_80_170_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/    babies/fr/$TAG/QCD_Pt_80_170_EMEnriched_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
-./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-18_slim/                 babies/fr/$TAG/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
-./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-18_slim/                 babies/fr/$TAG/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
-./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/V05-03-18_slim/                babies/fr/$TAG/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3
-./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/V05-03-18_slim/               babies/fr/$TAG/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3
+#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-18_slim/                 babies/fr/$TAG/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
+#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-18_slim/                 babies/fr/$TAG/QCD_Pt-50to80_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
+#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/V05-03-18_slim/                babies/fr/$TAG/QCD_Pt-80to120_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3
+#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/V05-03-18_slim/               babies/fr/$TAG/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3
+
+# new ttbar semilep sample used for synchronization
+#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1/V05-03-23               babies/fr/$TAG/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1
+#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1/V05-03-23               babies/fr/$TAG/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1
+
 
 
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-15to20_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-18_slim/   babies/fr/$TAG/QCD_Pt-15to20_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
@@ -104,7 +113,7 @@ OUTPUT_PATH=babies/fr/${TAG}/
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-50to80_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-18_slim/   babies/fr/$TAG/QCD_Pt-50to80_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-80to120_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-18_slim/  babies/fr/$TAG/QCD_Pt-80to120_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-120to170_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-18_slim/ babies/fr/$TAG/QCD_Pt-120to170_MuEnrichedPt5_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
-#DONE# ./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/V05-03-18_slim/     babies/fr/$TAG/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3
+#STANDARD#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/V05-03-18_slim/     babies/fr/$TAG/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/V05-03-18_slim/     babies/fr/$TAG/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3
 # ./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-15to30_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2/V05-03-28         babies/fr/$TAG/QCD_Pt-15to30_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v2
 # ./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-28         babies/fr/$TAG/QCD_Pt-30to50_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1
@@ -132,3 +141,7 @@ OUTPUT_PATH=babies/fr/${TAG}/
 #./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-25/ $OUTPUT_PATH/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1
 #
 #DONE#./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1/V05-03-23/ $OUTPUT_PATH/DYJetsToLL_M-50_TuneZ2Star_8TeV-madgraph-tarball_Summer12_DR53X-PU_S10_START53_V7A-v1
+
+NTUPLE_PATH=/hadoop/cms/store/user/gzevi/CMS2_V05-03-32X
+
+./writeConfig.sh $EORMU $NUMEVENTS $GOODRUNLIST $NTUPLE_PATH/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3/     babies/fr/$TAG/QCD_Pt_20_MuEnrichedPt_15_TuneZ2star_8TeV_pythia6_Summer12_DR53X-PU_S10_START53_V7A-v3

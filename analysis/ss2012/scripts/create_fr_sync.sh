@@ -8,8 +8,11 @@
 #version=30Jan2014  # 
 #version=sync16Apr2014f
 #version=closure10Jun2014trigBCtoE #--trig 1
-version=closure10Jun2014trig #--trig 1, new plot for flavor comp
+#version=closure10Jun2014trig #--trig 1, new plot for flavor comp
 #version=closure10Jun2014 # --trig 0
+#version=flavor28Jul2014 # --trig 0, new plots to study flavor dependence of isolation distribution
+#version=pTb4Aug2014_directB_noD0_ER_w_EAmu_PowhegTT  # --trig 0, study FR vs pTb, ER=eta restricted, w=reweighted QCD for ttbar pTb
+version=pTb4Aug2014_directB_noD0_ER_w_EAmu  # --trig 0, study FR vs pTb, ER=eta restricted, w=reweighted QCD for ttbar pTb, EAmu=EffArea on muons
 nev=-1
 
 # create output dir
@@ -36,12 +39,19 @@ mkdir -p plots/fake_rates/${version}
 ##hadd -f plots/fake_rates/${version}/ssFR_wjets_standard_${version}.root plots/fake_rates/muons_wjets_${version}/muons_wjets_${version}.root plots/fake_rates/electrons_wjets_${version}/electrons_wjets_${version}.root 
 #hadd -f plots/fake_rates/${version}/ssFR_wjets_standard_${version}.root plots/fake_rates/muons_wjets_${version}/muons_wjets_${version}.root 
 
-# run qcd
+## run ttbar
 run_list=\"\"
-ss2012_create_fakerate --nev $nev --sample qcd --channel el --root_file_name electrons_qcd_${version}.root --run_list $run_list --tight_ip false --trig 1
-ss2012_create_fakerate --nev $nev --sample qcd --channel mu --root_file_name muons_qcd_${version}.root     --run_list $run_list --mu_iso 1.0 --tight_ip false --trig 1
-hadd -f plots/fake_rates/${version}/ssFR_qcd_standard_${version}.root plots/fake_rates/muons_qcd_${version}/muons_qcd_${version}.root plots/fake_rates/electrons_qcd_${version}/electrons_qcd_${version}.root 
-#hadd -f plots/fake_rates/${version}/ssFR_qcd_standard_${version}.root plots/fake_rates/muons_qcd_${version}/muons_qcd_${version}.root 
+#ss2012_create_fakerate --nev $nev --sample ttbar --channel el --root_file_name electrons_ttbar_${version}.root --run_list $run_list --tight_ip false --trig 0
+ss2012_create_fakerate --nev $nev --sample ttbar --channel mu --root_file_name muons_ttbar_${version}.root     --run_list $run_list --mu_iso 1.0 --tight_ip false --trig 0
+#hadd -f plots/fake_rates/${version}/ssFR_ttbar_standard_${version}.root plots/fake_rates/muons_ttbar_${version}/muons_ttbar_${version}.root plots/fake_rates/electrons_ttbar_${version}/electrons_ttbar_${version}.root 
+hadd -f plots/fake_rates/${version}/ssFR_ttbar_standard_${version}.root plots/fake_rates/muons_ttbar_${version}/muons_ttbar_${version}.root 
+
+## run qcd
+#run_list=\"\"
+#ss2012_create_fakerate --nev $nev --sample qcd --channel el --root_file_name electrons_qcd_${version}.root --run_list $run_list --tight_ip false --trig 0
+#ss2012_create_fakerate --nev $nev --sample qcd --channel mu --root_file_name muons_qcd_${version}.root     --run_list $run_list --mu_iso 1.0 --tight_ip false --trig 0
+#hadd -f plots/fake_rates/${version}/ssFR_qcd_standard_${version}.root plots/fake_rates/muons_qcd_${version}/muons_qcd_${version}.root plots/fake_rates/electrons_qcd_${version}/electrons_qcd_${version}.root 
+##hadd -f plots/fake_rates/${version}/ssFR_qcd_standard_${version}.root plots/fake_rates/muons_qcd_${version}/muons_qcd_${version}.root 
 
 
 # Also create MC mix (can't use for FR! need to divide NUM and DEN!)
