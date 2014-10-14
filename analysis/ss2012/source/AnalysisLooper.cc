@@ -913,7 +913,7 @@ int SSAnalysisLooper::Analyze(const long event, const std::string& filename)
                 m_evt.is_gen_pp      = id1<0 && id2<0;  // -11 is a positron, 11 is an electron
                 m_evt.is_gen_mm      = id1>0 && id2>0;  // -11 is a positron, 11 is an electron
                 m_evt.gen_lep1_p4    = p41.pt() > p42.pt() ? p41 : p42;
-                m_evt.gen_lep1_pdgid = p41.pt() > p42.pt() ? id1 : id1;
+                m_evt.gen_lep1_pdgid = p41.pt() > p42.pt() ? id1 : id2;
                 m_evt.gen_lep2_p4    = p41.pt() > p42.pt() ? p42 : p41;
                 m_evt.gen_lep2_pdgid = p41.pt() > p42.pt() ? id2 : id1;
                 m_evt.gen_dilep_p4   = (p41 + p42);

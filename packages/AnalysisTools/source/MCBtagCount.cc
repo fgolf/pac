@@ -723,6 +723,7 @@ namespace at
                         };
 
                         vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
+                        break;
                     }
                 case JETS_BTAG_CSVM:
                     {
@@ -748,6 +749,7 @@ namespace at
                         };
 
                         vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
+                        break;
                     }
                 case JETS_BTAG_CSVT:
                     {
@@ -773,10 +775,12 @@ namespace at
                         };
 
                         vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
+                        break;
                     }
                 default: // no scale factor defined
                     {
                         return 1.0;
+                        break;
                     }
             } // end switch(btag_type)
 
@@ -818,6 +822,7 @@ namespace at
                         };
 
                         vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
+                        break;
                     }
                 case JETS_BTAG_CSVM:
                     {
@@ -843,6 +848,7 @@ namespace at
                         };
 
                         vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
+                        break;
                     }
                 case JETS_BTAG_CSVT:
                     {
@@ -868,10 +874,12 @@ namespace at
                         };
 
                         vecErr.assign(SFb_error, SFb_error + sizeof(SFb_error) / sizeof(SFb_error[0]));
+                        break;
                     }
                 default: // no scale factor defined
                     {
                         return 1.0;
+                        break;
                     }
             } // end switch(btag_type)
 
@@ -994,7 +1002,7 @@ namespace at
             default: {btype = JETS_BTAG_CSVM;}
         }
 
-        return MCBtagCount(JETS_BTAG_CSVL, vjets_p4, vjets_btags, vjets_mcflavor, sample, is_fastsim, yield_type, seed);
+        return MCBtagCount(btype, vjets_p4, vjets_btags, vjets_mcflavor, sample, is_fastsim, yield_type, seed);
     }
 
 } // namespace at

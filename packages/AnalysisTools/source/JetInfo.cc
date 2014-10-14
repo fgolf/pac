@@ -347,8 +347,8 @@ namespace at
                 {
                     switch (ja.jet_type)
                     {
-                        case JetType::PF_CORR:      jet_corr = 1.0;                   break;
-                        case JetType::PF_UNCORR:    jet_corr = pfjets_cor().at(jidx); break;
+                        case JetType::PF_CORR:      jet_corr = pfjets_cor().at(jidx);                   break;
+                        case JetType::PF_UNCORR:    jet_corr = 1.0; break;
                         case JetType::PF_FAST_CORR: 
                                                     jet_corr = (evt_isRealData() ? pfjets_corL1FastL2L3residual().at(jidx) : pfjets_corL1FastL2L3().at(jidx)); 
                                                     break;
