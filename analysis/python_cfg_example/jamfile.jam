@@ -1,0 +1,22 @@
+# jamfile for the python_cfg_example 
+# -------------------------------------------------------------------- #
+
+exe python_cfg_example
+ : # sources
+   ./source/main.cc
+   # dependent packages
+   /ROOT
+	 #/CMSSW/<link>shared # if you want all of CMSSW (see PAC/externals/build/cmssw/jamfile.jam)
+	 /CMSSW//libFWCoreParameterSet/<link>shared                  
+	 /CMSSW//libFWCorePythonParameterSet/<link>shared                  
+ : # requirements
+   <include>./include
+   <include>./source
+ : # default-build
+ : # usage-requirements
+ ;
+
+# install libs/exes
+# -------------------------------------------------------------- #
+
+default-install python_cfg_example ;
