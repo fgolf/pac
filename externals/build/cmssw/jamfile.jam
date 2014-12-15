@@ -1,0 +1,78 @@
+# jamfile for CMSSW including FWLite
+
+# need to import some files
+import os ;
+
+# env variables and other derived paths
+# ------------------------------------------------------------------------------------------------- #
+
+# CMSSW variables (4.2 ish)
+local CMS_PATH            = [ os.environ CMS_PATH           ] ;
+local CMSSW_RELEASE_BASE  = [ os.environ CMSSW_RELEASE_BASE ] ;
+local CMSSW_BASE          = [ os.environ CMSSW_BASE         ] ;
+local CMSSW_VERSION       = [ os.environ CMSSW_VERSION      ] ;
+local CMSSW_SEARCH_PATH   = [ os.environ CMSSW_SEARCH_PATH  ] ;
+local CMSSW_DATA_PATH     = [ os.environ CMSSW_DATA_PATH    ] ;
+local SCRAM_ARCH          = [ os.environ SCRAM_ARCH         ] ;
+
+# derived variables paths
+# NOT robust -- might need more logic if the release name is more complicated
+# (e.g. CMSSW_5_3_14_LHAPDF590)
+local CMSSW_EXTERNAL_BASE        = $(CMS_PATH)/$(SCRAM_ARCH)/external ;
+local CMSSW_RELEASE_NOPATCH_BASE = [ SHELL "echo -ne $CMSSW_RELEASE_BASE | sed 's/-patch//g' | sed 's/_patch4//g'" ] ;
+#ECHO "CMSSW_RELEASE_NOPATCH_BASE is set: " $(CMSSW_RELEASE_NOPATCH_BASE) "\n" ;
+
+# library paths
+local LIBS_LOCAL        = $(CMSSW_BASE)/lib/$(SCRAM_ARCH)                  ;
+local LIBS_BASE         = $(CMSSW_RELEASE_BASE)/lib/$(SCRAM_ARCH)          ;
+local LIBS_NOPATCH_BASE = $(CMSSW_RELEASE_NOPATCH_BASE)/lib/$(SCRAM_ARCH)  ;
+
+# External to CMSSW 
+# needed by FWLite and are CMSSW version dependent
+# (see env var $CMSSW_FWLITE_INCLUDE_PATH)
+local SHERPA = $(CMSSW_EXTERNAL_BASE)/sherpa/1.3.1-cms2 ;
+local HEPMC  = $(CMSSW_EXTERNAL_BASE)/hepmc/2.06.07 ;
+local CLHEP  = $(CMSSW_EXTERNAL_BASE)/clhep/2.0.4.6 ;
+
+# CMSSW search paths
+# ------------------------------------------------------------------------------------------------- #
+project CMSSW
+ : usage-requirements
+   # CMSSW Local
+   <include>$(CMSSW_SEARCH_PATH)
+   <include>$(CMSSW_BASE)/src
+   <include>$(CMSSW_BASE)/external/$(SCRAM_ARCH)/data
+   # CMSSW Release
+   <include>$(CMSSW_RELEASE_BASE)/src
+   <include>$(CMSSW_RELEASE_BASE)/external/$(SCRAM_ARCH)/data
+   # CMSSW Nopatch Release
+   <include>$(CMSSW_RELEASE_NOPATCH_BASE)/src
+   <include>$(CMSSW_RELEASE_NOPATCH_BASE)/external/$(SCRAM_ARCH)/data
+   # CMSSW Externals
+   <include>$(SHERPA)/include
+   <include>$(HEPMC)/include
+   <include>$(CLHEP)/include
+ ;
+
+# CMSSW libs
+# ------------------------------------------------------------------------------------------------- #
+lib libFWCoreFWLite                     : : <name>FWCoreFWLite                     <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+lib libFWCoreFramework                  : : <name>FWCoreFramework                  <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+lib libFWCoreParameterSet               : : <name>FWCoreParameterSet               <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+lib libFWCorePythonParameterSet         : : <name>FWCorePythonParameterSet         <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+
+# these are out of date -- add as need from LIBS_LOCAL, LIBS_BASE, or LIBS_NOPATCH_BASE
+#lib libFWCoreVersion                    : : <name>FWCoreVersion                    <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libDQMServicesClientConfig          : : <name>DQMServicesClientConfig          <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libCommonToolsCandAlgos             : : <name>CommonToolsCandAlgos             <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libDataFormatsFWLite                : : <name>DataFormatsFWLite                <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libDataFormatsMath                  : : <name>DataFormatsMath                  <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libPhysicsToolsFWLite               : : <name>PhysicsToolsFWLite               <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libDataFormatsTrackReco             : : <name>DataFormatsTrackReco             <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libDataFormatsCLHEP                 : : <name>DataFormatsCLHEP                 <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libSimDataFormatsTrackingAnalysis   : : <name>SimDataFormatsTrackingAnalysis   <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libCommonToolsUtilAlgos             : : <name>CommonToolsUtilAlgos             <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libCalibCalorimetryEcalTPGTools     : : <name>CalibCalorimetryEcalTPGTools     <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libPhysicsToolsPFCandProducer       : : <name>PhysicsToolsPFCandProducer       <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+#lib libRecoEgammaElectronIdentification : : <name>RecoEgammaElectronIdentification <search>$(LIBS_LOCAL) <search>$(LIBS_BASE) <search>$(LIBS_NOPATCH_BASE) <link>shared ;
+
